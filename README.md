@@ -1,6 +1,6 @@
 这是一个极其轻量级的B站客户端，使用Java写成，支持至安卓5.0，借鉴了WearBili和腕上哔哩的部分开源代码和它们项目中收集的API，程序逻辑和数据处理还是自己写的，界面暂时使用WearBili的布局。
 
-播放视频需要使用小电视播放器（一个开源的手表端视频播放器，作者：心想事成，开源链接https://github.com/xinxiangshiicheng/xinxiangshicheng_wearbili_player，同时推荐下我的B站主页里有对它进行优化的修改版）
+播放视频需要使用小电视播放器（一个开源的手表端视频播放器，作者：心想事成，开源链接 https://github.com/xinxiangshiicheng/xinxiangshicheng_wearbili_player ，同时推荐下我的B站主页里有对它进行优化的修改版）
 
 我尽量不往里面塞太多东西，优先保证可用性、流畅性，字体啥的我再怎么说也不会放进去40M（
 我也尽量把代码写得好看了，该分类的地方都有分类，重要部分都有注释。自学的安卓开发，代码可能有很多问题/暗病，我尽力了，轻喷QwQ。
