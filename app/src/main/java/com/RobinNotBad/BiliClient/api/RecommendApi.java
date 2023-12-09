@@ -18,6 +18,7 @@ import okhttp3.Response;
 //推荐API 自己写的
 //#如果想要增/删/改内容，可以直接把url复制到浏览器里，把得到的一大串东西交给json解析软件就能缕清结构了，然后就是拆拆拆
 //2023-07-12
+//2023-12-09
 
 public class RecommendApi {
     public static void getRecommend(ArrayList<VideoCard> videoCardList) throws IOException, JSONException {
