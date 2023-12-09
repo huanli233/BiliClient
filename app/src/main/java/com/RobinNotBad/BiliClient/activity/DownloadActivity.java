@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
+import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -41,12 +42,14 @@ public class DownloadActivity extends BaseActivity {
     View progressView;
     TextView progressText;
 
-    File rootPath, downPath;
+    File rootPath, downPath, downFile;
     String link;
     int scrHeight;
 
     String dldText = "";
     float dldPercent = 0;
+
+    int type;
 
     Timer timer = new Timer();
     TimerTask showText = new TimerTask() {
@@ -70,7 +73,7 @@ public class DownloadActivity extends BaseActivity {
 
         Intent intent = getIntent();
 
-        int type = intent.getIntExtra("type",0);  //0=单个文件，1=视频，2=分页视频
+        type = intent.getIntExtra("type",0);  //0=单个文件，1=视频，2=分页视频
         String title = LittleToolsUtil.stringToFile(intent.getStringExtra("title"));
         link = intent.getStringExtra("link");
 
@@ -89,7 +92,8 @@ public class DownloadActivity extends BaseActivity {
             if(type == 0){
                 rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"BiliClient");
                 if(!rootPath.exists()) rootPath.mkdirs();
-                download(link, new File(rootPath,title),"下载文件中",true);
+                downFile = new File(rootPath,title);
+                download(link,downFile,"下载文件中",true);
             }
             else{
                 rootPath = ConfInfoApi.getDownloadPath(this);
@@ -225,6 +229,8 @@ public class DownloadActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         timer.cancel();
+        if(type!=0) FileUtil.deleteFolder(downPath);
+        else downFile.delete();
         super.onDestroy();
     }
 }
