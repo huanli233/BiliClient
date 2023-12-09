@@ -1,0 +1,77 @@
+package com.RobinNotBad.BiliClient.api;
+
+import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Objects;
+
+import okhttp3.Response;
+
+
+//推荐API 自己写的
+//#如果想要增/删/改内容，可以直接把url复制到浏览器里，把得到的一大串东西交给json解析软件就能缕清结构了，然后就是拆拆拆
+//2023-07-12
+
+public class RecommendApi {
+    public static void getRecommend(ArrayList<VideoCard> videoCardList) throws IOException, JSONException {
+        String url;
+        String accesskey = SharedPreferencesUtil.getString(SharedPreferencesUtil.access_key,"");
+
+        if(SharedPreferencesUtil.getBoolean("setup",false)) url = "http://app.bilibili.com/x/v2/feed/index?access_key=" + accesskey + "&actionKey=appkey&appkey=27eb53fc9058f8c3&build=70000100&c_locale=zh-Hans_CN&column=1&disable_rcmd=0&flush=0&fnval=976&fnver=0&force_host=0&fourk=1&guidance=1&https_url_req=0&login_event=2&pull=1&qn=32&recsys_mode=0&s_locale=zh-Hans_CH&screen_window_type=0";
+        else url = "http://app.bilibili.com/x/v2/feed/index?column=1";
+
+        Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
+        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());  //得到一整个json
+
+        JSONObject data = result.getJSONObject("data");  //推荐列表中的data项又是一个json，把它提出来
+
+        JSONArray items = data.getJSONArray("items");  //data里面的items是视频卡片列表，把它提出来
+
+        for (int i = 0; i < items.length(); i++) {    //遍历所有的视频卡片
+            JSONObject card = items.getJSONObject(i);
+            if(card.has("bvid")){                        //没bvid的是广告...
+                String bvid = card.getString("bvid");    //bv号
+                long aid = card.getLong("param");    //av号
+                String cover = card.getString("cover");    //封面图片
+                String title = card.getString("title");    //标题
+                JSONObject args = card.getJSONObject("args");
+                String upName = args.getString("up_name");  //up主名字
+                String playTimes = card.getString("cover_left_text_2");    //播放量
+                videoCardList.add(new VideoCard(title,upName,playTimes,cover,aid,bvid));
+            }
+        }
+    }
+
+    public static ArrayList<VideoCard> getRelated(long aid) throws JSONException, IOException {
+        String url = "https://api.bilibili.com/x/web-interface/archive/related?aid=" + aid;
+
+        Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
+        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());  //得到一整个json
+
+        ArrayList<VideoCard> videoList = new ArrayList<>();
+        if(result.has("data") && !result.isNull("data")) {
+            JSONArray data = result.getJSONArray("data");
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject card = data.getJSONObject(i);
+                VideoCard videoCard = new VideoCard();
+                videoCard.aid = card.getLong("aid");
+                videoCard.view = LittleToolsUtil.toWan(card.getJSONObject("stat").getLong("view")) + "观看";
+                videoCard.cover = card.getString("pic");
+                videoCard.title = card.getString("title");
+                videoCard.upName = card.getJSONObject("owner").getString("name");
+                videoList.add(videoCard);
+            }
+
+        }
+
+        return videoList;
+    }
+}

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
+    <application
+        android:name=".BiliClient"
+        android:allowBackup="true"
+        android:icon="@mipmap/icon"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/icon_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.BiliClient"
+        android:usesCleartextTraffic="true"
+        tools:ignore="LockedOrientationActivity"
+        tools:targetApi="m">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.RobinNotBad.BiliClient.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <activity
+            android:name=".activity.settings.SettingPrefActivity"
+            android:exported="true"
+            android:label="偏好设置"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.video.local.LocalPageChooseActivity"
+            android:exported="true"
+            android:label="缓存分页"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.video.local.LocalListActivity"
+            android:exported="true"
+            android:label="缓存"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.DownloadActivity"
+            android:exported="true"
+            android:label="下载"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.dynamic.DynamicInfoActivity"
+            android:exported="true"
+            android:label="动态详情"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.dynamic.DynamicActivity"
+            android:exported="true"
+            android:label="动态"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.settings.UIPreviewActivity"
+            android:exported="true"
+            android:label="界面预览"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.settings.SetupUIActivity"
+            android:exported="true"
+            android:label="初始设置"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.settings.IntroductionActivity"
+            android:exported="true"
+            android:label="介绍"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.settings.SpecialLoginActivity"
+            android:exported="true"
+            android:label="特殊登录"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.FollowListActivity"
+            android:exported="true"
+            android:label="关注"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ShowTextActivity"
+            android:exported="true"
+            android:label="文本显示"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:mimeType="video/*"/>
+
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.APP_BROWSER"/>
+            </intent-filter>
+            <intent-filter tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="video/*"/>
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".activity.user.favorite.AddFavoriteActivity"
+            android:exported="true"
+            android:label="添加收藏"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.settings.SettingPlayerActivity"
+            android:exported="true"
+            android:label="选择播放器"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.video.JumpToPlayerActivity"
+            android:exported="true"
+            android:label="跳转播放"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.video.WriteReplyActivity"
+            android:exported="true"
+            android:label="写评论"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.HistoryActivity"
+            android:exported="true"
+            android:label="历史记录"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.WatchLaterActivity"
+            android:exported="true"
+            android:label="稍后再看"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.favorite.FavoriteVideoListActivity"
+            android:exported="true"
+            android:label="收藏夹详情"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.favorite.FavoriteFolderListActivity"
+            android:exported="true"
+            android:label="收藏夹列表"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.UserInfoActivity"
+            android:exported="true"
+            android:label="用户信息"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ImageViewerActivity"
+            android:exported="true"
+            android:label="图片查看"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.NoSwipe" />
+        <activity
+            android:name=".activity.video.ReplyInfoActivity"
+            android:exported="true"
+            android:label="评论详情"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.video.MultiPageActivity"
+            android:exported="true"
+            android:label="分页视频选集"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.MySpaceActivity"
+            android:exported="true"
+            android:label="我的"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.settings.SettingUIActivity"
+            android:exported="true"
+            android:label="界面设置"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.settings.SettingMainActivity"
+            android:exported="true"
+            android:label="设置"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.video.SearchActivity"
+            android:exported="true"
+            android:label="搜索"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.video.info.VideoInfoActivity"
+            android:exported="true"
+            android:label="视频详情"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MenuActivity"
+            android:exported="true"
+            android:label="菜单"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.video.RecommendActivity"
+            android:exported="true"
+            android:label="推荐"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.settings.QRLoginActivity"
+            android:exported="true"
+            android:label="登录"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SplashActivity"
+            android:exported="true"
+            android:label="哔哩终端"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
