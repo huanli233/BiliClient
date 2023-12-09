@@ -25,6 +25,7 @@ import java.util.ArrayList;
 public class LocalPageChooseActivity extends BaseActivity {
 
     private int longClickPosition = -1;
+    private boolean deleted = false;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -59,12 +60,12 @@ public class LocalPageChooseActivity extends BaseActivity {
 
                 if(pageList.size() == 0){
                     FileUtil.deleteFolder(videoPath);
-                    LocalListActivity.instance.refresh();
-                    finish();
                 }
 
                 MsgUtil.toast("删除成功",this);
                 longClickPosition = -1;
+
+                deleted = true;
             }
             else{
                 longClickPosition = position;
@@ -76,4 +77,9 @@ public class LocalPageChooseActivity extends BaseActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    @Override
+    protected void onDestroy() {
+        if(deleted && LocalListActivity.instance!=null) LocalListActivity.instance.refresh();
+        super.onDestroy();
+    }
 }

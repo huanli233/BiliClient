@@ -32,7 +32,7 @@ public class LocalListActivity extends BaseActivity {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
-    private ArrayList<LocalVideo> videoList = new ArrayList<>();
+    private final ArrayList<LocalVideo> videoList = new ArrayList<>();
     private LocalVideoAdapter adapter;
     public static LocalListActivity instance = null;
 
