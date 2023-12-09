@@ -22,11 +22,7 @@ import okhttp3.Response;
 
 public class RecommendApi {
     public static void getRecommend(ArrayList<VideoCard> videoCardList) throws IOException, JSONException {
-        String url;
-        String accesskey = SharedPreferencesUtil.getString(SharedPreferencesUtil.access_key,"");
-
-        if(SharedPreferencesUtil.getBoolean("setup",false)) url = "http://app.bilibili.com/x/v2/feed/index?access_key=" + accesskey + "&actionKey=appkey&appkey=27eb53fc9058f8c3&build=70000100&c_locale=zh-Hans_CN&column=1&disable_rcmd=0&flush=0&fnval=976&fnver=0&force_host=0&fourk=1&guidance=1&https_url_req=0&login_event=2&pull=1&qn=32&recsys_mode=0&s_locale=zh-Hans_CH&screen_window_type=0";
-        else url = "http://app.bilibili.com/x/v2/feed/index?column=1";
+        String url = "https://api.bilibili.com/x/web-interface/index/top/rcmd";
 
         Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());  //得到一整个json
@@ -37,16 +33,13 @@ public class RecommendApi {
 
         for (int i = 0; i < items.length(); i++) {    //遍历所有的视频卡片
             JSONObject card = items.getJSONObject(i);
-            if(card.has("bvid")){                        //没bvid的是广告...
-                String bvid = card.getString("bvid");    //bv号
-                long aid = card.getLong("param");    //av号
-                String cover = card.getString("cover");    //封面图片
-                String title = card.getString("title");    //标题
-                JSONObject args = card.getJSONObject("args");
-                String upName = args.getString("up_name");  //up主名字
-                String playTimes = card.getString("cover_left_text_2");    //播放量
-                videoCardList.add(new VideoCard(title,upName,playTimes,cover,aid,bvid));
-            }
+            String bvid = card.getString("bvid");    //bv号
+            String cover = card.getString("pic");    //封面图片
+            String title = card.getString("title");    //标题
+            String upName = card.getJSONObject("owner").getString("name");  //up主名字
+            String view = LittleToolsUtil.toWan(card.getJSONObject("stat").getInt("view")) + "观看";    //播放量
+            videoCardList.add(new VideoCard(title, upName, view, cover, 0, bvid));
+
         }
     }
 

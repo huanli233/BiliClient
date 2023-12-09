@@ -61,7 +61,7 @@ public class VideoInfoFragment extends Fragment {
     public static VideoInfoFragment newInstance(VideoInfo videoInfo) {
         VideoInfoFragment fragment = new VideoInfoFragment();
         Bundle args = new Bundle();
-        args.putSerializable("videoInfo", (Serializable) videoInfo);
+        args.putSerializable("videoInfo", videoInfo);
         fragment.setArguments(args);
         return fragment;
     }
