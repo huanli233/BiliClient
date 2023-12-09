@@ -15,10 +15,8 @@ import com.google.android.material.card.MaterialCardView;
 public class SettingUIActivity extends BaseActivity {
 
     private EditText uiScaleInput,uiPaddingH,uiPaddingV;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    private Switch startAnim;
 
-    @SuppressLint({"MissingInflatedId", "SetTextI18n"})
+    @SuppressLint({"UseSwitchCompatOrMaterialCode", "MissingInflatedId", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +33,6 @@ public class SettingUIActivity extends BaseActivity {
         uiPaddingV = findViewById(R.id.ui_padding_vertical);
         uiPaddingV.setText(String.valueOf(SharedPreferencesUtil.getInt("paddingV_percent",0)));
 
-        startAnim = findViewById(R.id.start_anim);
-        startAnim.setChecked(SharedPreferencesUtil.getBoolean("start_anim",false));
 
         MaterialCardView preview = findViewById(R.id.preview);
         preview.setOnClickListener(view -> {
@@ -67,7 +63,6 @@ public class SettingUIActivity extends BaseActivity {
             Log.e("paddingV", uiPaddingV.getText().toString());
         }
 
-        SharedPreferencesUtil.putBoolean("start_anim",startAnim.isChecked());
     }
 
     @Override

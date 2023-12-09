@@ -40,22 +40,6 @@ import java.util.TimerTask;
 public class SplashActivity extends Activity {
 
     private TextView splashText;
-    private int splashAnim = 0;
-    private final String[] splashTextA = {
-            "_",
-            "欢_",
-            "欢迎_",
-            "欢迎使_",
-            "欢迎使用_",
-            "欢迎使用"
-    };
-    private final String[] splashTextB = {    //我知道这是个笨方法，但是我懒得写啥算法了，这也不占多少空间
-            "欢迎使用\n_",
-            "欢迎使用\n哔_",
-            "欢迎使用\n哔哩_",
-            "欢迎使用\n哔哩终_",
-            "欢迎使用\n哔哩终端_"
-    };
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -100,39 +84,19 @@ public class SplashActivity extends Activity {
             if(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.setup,false)) {//判断是否设置完成
                 try {
 
-                    if(SharedPreferencesUtil.getLong("mid",0)!=0) {
+                    if (SharedPreferencesUtil.getLong("mid", 0) != 0) {
                         UserInfo userInfo = UserInfoApi.getCurrentUserInfo();
                         Log.e("mid", String.valueOf(userInfo.mid));
                         Log.e("accesskey", SharedPreferencesUtil.getString(SharedPreferencesUtil.access_key, ""));
                     }
 
-                    splashAnim = (SharedPreferencesUtil.getBoolean("start_anim",false) ? 0 : 20);
+                    Intent intent = new Intent();
+                    intent.setClass(SplashActivity.this, RecommendActivity.class);   //已登录且联网，去首页
+                    startActivity(intent);
 
-                    Timer timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            if (splashAnim == 20) {
-                                Intent intent = new Intent();
-                                intent.setClass(SplashActivity.this, RecommendActivity.class);   //已登录且联网，去首页
-                                startActivity(intent);
+                    new Thread(() -> ConfInfoApi.check(SplashActivity.this)).start();
 
-                                new Thread(()->ConfInfoApi.check(SplashActivity.this)).start();
-
-                                finish();
-                                this.cancel();
-                            } else {
-                                if (splashAnim < 5) {
-                                    runOnUiThread(() -> splashText.setText(splashTextA[splashAnim]));
-                                } else if (splashAnim > 7 && splashAnim < 12) {
-                                    runOnUiThread(() -> splashText.setText(splashTextB[splashAnim - 8]));
-                                } else if (splashAnim >= 12) {
-                                    runOnUiThread(() -> splashText.setText(splashTextB[4]));
-                                }
-                            }
-                            splashAnim++;
-                        }
-                    }, 120, 120);
+                    finish();
                 } catch (IOException e) {
                     runOnUiThread(()-> {
                         MsgUtil.quickErr(MsgUtil.err_net,this);

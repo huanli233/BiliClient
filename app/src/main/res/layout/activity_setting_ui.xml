@@ -59,30 +59,6 @@
             android:paddingBottom="20dp"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-
-                <Switch
-                    android:id="@+id/start_anim"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="6dp"
-                    android:background="@drawable/background_edit_text_setting"
-                    android:text="开屏动画"
-                    android:textColor="@color/textwhite" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/setting_startanim_desc"
-                    android:textSize="11sp" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
