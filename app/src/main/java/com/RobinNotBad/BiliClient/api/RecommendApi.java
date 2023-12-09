@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.api;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,10 +28,10 @@ public class RecommendApi {
 
         JSONObject data = result.getJSONObject("data");  //推荐列表中的data项又是一个json，把它提出来
 
-        JSONArray items = data.getJSONArray("items");  //data里面的items是视频卡片列表，把它提出来
+        JSONArray item = data.getJSONArray("item");  //data里面的items是视频卡片列表，把它提出来
 
-        for (int i = 0; i < items.length(); i++) {    //遍历所有的视频卡片
-            JSONObject card = items.getJSONObject(i);
+        for (int i = 0; i < item.length(); i++) {    //遍历所有的视频卡片
+            JSONObject card = item.getJSONObject(i);
             String bvid = card.getString("bvid");    //bv号
             String cover = card.getString("pic");    //封面图片
             String title = card.getString("title");    //标题

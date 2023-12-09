@@ -46,7 +46,7 @@ public class SpecialLoginActivity extends BaseActivity {
                     JSONObject jsonObject = new JSONObject(loginInfo);
                     String cookies = jsonObject.getString("cookies");
                     SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(LittleToolsUtil.getInfoFromCookie("DedeUserID", cookies)));
-                    SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, LittleToolsUtil.getInfoFromCookie("bili_jct", cookies.toString()));
+                    SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, LittleToolsUtil.getInfoFromCookie("bili_jct", cookies));
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.access_key, jsonObject.getString("accesskey"));
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies);
                     runOnUiThread(() -> Toast.makeText(SpecialLoginActivity.this, "登录成功！", Toast.LENGTH_SHORT).show());
