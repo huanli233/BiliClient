@@ -31,6 +31,8 @@ public class JumpToPlayerActivity extends BaseActivity {
 
     int download;
 
+    boolean destroyed = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,21 +91,24 @@ public class JumpToPlayerActivity extends BaseActivity {
                 Log.e("debug-哔哩终端-跳转页", "得到链接：" + videourl);
 
                 Log.e("debug-哔哩终端-传出cookie",SharedPreferencesUtil.getString("cookies", ""));
-                if(download != 0){
-                    Intent intent = new Intent();
-                    intent.setClass(this, DownloadActivity.class);
-                    intent.putExtra("type",download);
-                    intent.putExtra("link",videourl);
-                    intent.putExtra("danmaku",danmakuurl);
-                    intent.putExtra("title", title);
-                    intent.putExtra("cover",getIntent().getStringExtra("cover"));
-                    if(download == 2) intent.putExtra("parent_title",getIntent().getStringExtra("parent_title"));
-                    startActivity(intent);
+
+                if(!destroyed) {
+                    if (download != 0) {
+                        Intent intent = new Intent();
+                        intent.setClass(this, DownloadActivity.class);
+                        intent.putExtra("type", download);
+                        intent.putExtra("link", videourl);
+                        intent.putExtra("danmaku", danmakuurl);
+                        intent.putExtra("title", title);
+                        intent.putExtra("cover", getIntent().getStringExtra("cover"));
+                        if (download == 2)
+                            intent.putExtra("parent_title", getIntent().getStringExtra("parent_title"));
+                        startActivity(intent);
+                    } else {
+                        PlayerApi.jumpToPlayer(JumpToPlayerActivity.this, videourl, danmakuurl, title, false);
+                    }
+                    finish();
                 }
-                else{
-                    PlayerApi.jumpToPlayer(JumpToPlayerActivity.this,videourl,danmakuurl,title,false);
-                }
-                finish();
             } catch (IOException e) {
                 runOnUiThread(()->textView.setText("网络错误！\n请检查你的网络连接是否正常"));
                 e.printStackTrace();
@@ -115,5 +120,16 @@ public class JumpToPlayerActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        destroyed = true;
+        super.onDestroy();
     }
 }

@@ -46,7 +46,7 @@ public class SettingUIActivity extends BaseActivity {
     private void save() {
         if(!uiScaleInput.getText().toString().equals("")) {
             float dpiTimes = Float.parseFloat(uiScaleInput.getText().toString());
-            if (dpiTimes >= 0.1F && dpiTimes <= 10.0F)
+            if (dpiTimes >= 0.25F && dpiTimes <= 5.0F)
                 SharedPreferencesUtil.putFloat("dpi", dpiTimes);
             Log.e("dpi", uiScaleInput.getText().toString());
         }

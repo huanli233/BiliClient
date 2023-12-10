@@ -51,6 +51,8 @@ public class DownloadActivity extends BaseActivity {
 
     int type;
 
+    boolean finish = false;
+
     Timer timer = new Timer();
     TimerTask showText = new TimerTask() {
         @SuppressLint("SetTextI18n")
@@ -153,6 +155,7 @@ public class DownloadActivity extends BaseActivity {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
+                        finish = true;
                         finish();
                     }
                 },200);
@@ -229,8 +232,15 @@ public class DownloadActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         timer.cancel();
-        if(type!=0) FileUtil.deleteFolder(downPath);
-        else downFile.delete();
+        if(!finish) {
+            if (type != 0) FileUtil.deleteFolder(downPath);
+            else downFile.delete();
+        }
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

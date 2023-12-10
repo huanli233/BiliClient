@@ -66,7 +66,7 @@ public class VideoInfoActivity extends BaseActivity {
                 fragmentList.add(viFragment);
                 VideoReplyFragment vpFragment = VideoReplyFragment.newInstance(videoInfo.aid,1);
                 fragmentList.add(vpFragment);
-                VideoRcmdFragment vrFragment = VideoRcmdFragment.newInstance(aid);
+                VideoRcmdFragment vrFragment = VideoRcmdFragment.newInstance(videoInfo.aid);
                 fragmentList.add(vrFragment);
 
                 ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
