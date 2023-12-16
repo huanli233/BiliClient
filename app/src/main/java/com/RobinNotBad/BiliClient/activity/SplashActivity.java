@@ -40,7 +40,6 @@ public class SplashActivity extends Activity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-
         SharedPreferencesUtil.initSharedPrefs(newBase);
 
         float dpiTimes = SharedPreferencesUtil.getFloat("dpi", 1.0F);
@@ -71,8 +70,6 @@ public class SplashActivity extends Activity {
 
         splashText = findViewById(R.id.splashText);
 
-
-
         new Thread(()->{
 
             //FileUtil.clearCache(this);  //先清个缓存（为了防止占用过大）
@@ -80,11 +77,9 @@ public class SplashActivity extends Activity {
 
             if(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.setup,false)) {//判断是否设置完成
                 try {
-
                     if (SharedPreferencesUtil.getLong("mid", 0) != 0) {
                         UserInfo userInfo = UserInfoApi.getCurrentUserInfo();
                         Log.e("mid", String.valueOf(userInfo.mid));
-                        Log.e("accesskey", SharedPreferencesUtil.getString(SharedPreferencesUtil.access_key, ""));
                     }
 
                     Intent intent = new Intent();
@@ -116,6 +111,10 @@ public class SplashActivity extends Activity {
                     runOnUiThread(()-> {
                         MsgUtil.toast("获取用户信息失败",this);
                         splashText.setText("获取用户信息失败");
+                        Intent intent = new Intent();
+                        intent.setClass(SplashActivity.this, RecommendActivity.class);
+                        startActivity(intent);
+                        finish();
                     });
                     e.printStackTrace();
                 }

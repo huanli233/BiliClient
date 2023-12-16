@@ -70,9 +70,7 @@ public class SearchActivity extends BaseActivity {
         EditText keywordInput = findViewById(R.id.keywordInput);
         searchBar = findViewById(R.id.searchbar);
 
-        searchBtn.setOnClickListener(view -> {
-            searchKeyword(keywordInput.getText().toString());
-        });
+        searchBtn.setOnClickListener(view -> searchKeyword(keywordInput.getText().toString()));
         keywordInput.setOnEditorActionListener((textView, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEND || actionId == EditorInfo.IME_ACTION_DONE || event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction()) {
                 searchKeyword(keywordInput.getText().toString());
@@ -130,31 +128,33 @@ public class SearchActivity extends BaseActivity {
                 return;
             }
         }
+
         if(!refreshing) {
             refreshing = true;
             bottom = false;
-            runOnUiThread(() -> {
-                InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            });
+
+            InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+
 
             if (str.equals("")) {
                 runOnUiThread(() -> Toast.makeText(this, "你还木有输入内容哦~", Toast.LENGTH_SHORT).show());
             } else {
                 keyword = str;
+
+                if (firstRun) {
+                    recyclerView.setAdapter(searchAdapter);
+                    firstRun = false;
+                } else {
+                    int size = videoCardList.size();
+                    videoCardList.clear();
+                    searchAdapter.notifyItemRangeRemoved(0,size);
+                    Log.e("debug", "清空");
+                }
+
                 new Thread(() -> {
                     try {
-                        if (firstRun) runOnUiThread(() -> {
-                            recyclerView.setAdapter(searchAdapter);
-                            firstRun = false;
-                        });
-                        else runOnUiThread(() -> {
-                            int size = videoCardList.size();
-                            videoCardList.clear();
-                            searchAdapter.notifyItemRangeRemoved(0,size);
-                            Log.e("debug", "清空");
-                        });
-
                         page = 1;
                         JSONArray result = SearchApi.search(keyword, 1);
                         if (result != null) {

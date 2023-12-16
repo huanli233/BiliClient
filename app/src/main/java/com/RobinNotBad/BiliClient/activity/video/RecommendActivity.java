@@ -63,23 +63,21 @@ public class RecommendActivity extends BaseActivity {
 
     @SuppressLint("NotifyDataSetChanged")
     private void refreshRecommend() {
-        Log.e("debug","刷新");
-        new Thread(()->{
-            if (firstRefresh) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(RecommendActivity.this));
-                videoCardList = new ArrayList<>();
-                videoCardAdapter = new VideoCardAdapter(this,videoCardList);
-                recyclerView.setAdapter(videoCardAdapter);
-            } else {
-                videoCardList.clear();
-                videoCardAdapter.notifyDataSetChanged();
-            }
-            runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
+        Log.e("debug", "刷新");
+        if (firstRefresh) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(RecommendActivity.this));
+            videoCardList = new ArrayList<>();
+            videoCardAdapter = new VideoCardAdapter(this, videoCardList);
+            recyclerView.setAdapter(videoCardAdapter);
+        } else {
+            videoCardList.clear();
+            videoCardAdapter.notifyDataSetChanged();
+        }
+        swipeRefreshLayout.setRefreshing(true);
 
-            refreshing = true;
-            addRecommend();
+        refreshing = true;
+        new Thread(this::addRecommend).start();
 
-        }).start();
     }
 
     private void addRecommend() {

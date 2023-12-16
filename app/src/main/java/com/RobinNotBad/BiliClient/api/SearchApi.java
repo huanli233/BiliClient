@@ -5,6 +5,7 @@ import android.util.Log;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,14 +23,23 @@ import java.util.Objects;
 
 public class SearchApi {
 
-    public static JSONArray search(String keyword,int page) throws IOException , JSONException {
+    public static String seid = "";
+    public static String search_keyword = "";
 
-        String url = "https://api.bilibili.com/x/web-interface/search/all/v2?context=&page=" + page + "&order=&keyword=" + URLEncoder.encode(keyword, "UTF-8") + "&duration=&tids_1=&tids_2=&__refresh__=true&highlight=1&single_column=0";
+    public static JSONArray search(String keyword,int page) throws IOException , JSONException {
+        if(!search_keyword.equals(keyword)) {
+            search_keyword = keyword;
+            seid = "";
+        }
+
+        String url = (SharedPreferencesUtil.getLong("mid",0) == 0 ? "https://api.bilibili.com/x/web-interface/wbi/search/all/v2" :"https://api.bilibili.com/x/web-interface/search/all/v2") + "?page=" + page + "&keyword=" + URLEncoder.encode(search_keyword, "UTF-8") + "&seid=" + seid;
         Log.e("debug-搜索链接",url);
 
         JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.defHeaders).body()).string());  //得到一整个json
 
         JSONObject data = all.getJSONObject("data");  //搜索列表中的data项又是一个json，把它提出来
+
+        seid = data.getString("seid");
 
         if(data.has("result") && !data.isNull("result")) return data.getJSONArray("result");  //其实这还不是我们要的结果，下面的函数对它进行再次拆解  这里做了判空
         else return null;
