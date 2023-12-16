@@ -31,7 +31,9 @@
         <item>呐呐？这里没有更多彩蛋了呢＞﹏＜\n\n欢迎你的投稿哦？</item>
     </string-array>
 
+    <string name="player_aliang_package">com.aliangmaker.media</string>
+    <string name="player_mtv_package">com.xinxiangshicheng.wearbiliplayer.cn</string>
 
-    <string name="update_log">###公告###\n\n哔哩终端现在有交流群啦！群号：482091687，欢迎来玩呀~\n\n2.2版本更新内容：\n0.更换了登录API，新用户会出现推荐不准问题，暂时无法解决\n1.添加了动态功能\n2.添加了缓存功能\n3.搜索页-搜索框更改显示方式\n4.界面设置-边距设置改为百分比式\n4.对于可以左右滑动的页面，首次进入弹出提示\n5.修复了极少部分设备的花屏问题\n6.彩蛋现在变得更容易发现一些，更新了彩蛋内容</string>
+    <string name="update_log">###更新内容###\n\n2.3版本更新内容：\n1.更换了推荐API，现在推荐不准的问题解决了\n2.增加了跳过登录的功能，但搜索暂不可用\n3.视频详情页中，评论区右侧新增了相关推荐\n4.一些小改动和bug修复\n5.可能增加了新的bug</string>
 
 </resources>

@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.api;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.util.Log;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
@@ -133,6 +134,7 @@ public class ConfInfoApi
             int curr = calendar.get(Calendar.YEAR) * 10000 + calendar.get(Calendar.MONTH) * 100 + calendar.get(Calendar.DATE);
 
             if(SharedPreferencesUtil.getInt("last_check",0) < curr) {    //限制一天一次
+                Log.e("debug","检查更新");
                 SharedPreferencesUtil.putInt("last_check", curr);
 
                 String url = "https://biliclient.rth1.link/check.json";

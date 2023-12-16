@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
+import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -21,9 +22,8 @@ public class PlayerApi {
         Intent intent = new Intent();
         switch (SharedPreferencesUtil.getString("player", "null")) {
             case "mtvPlayer":
-                intent.setClassName("com.xinxiangshicheng.wearbiliplayer.cn", "com.xinxiangshicheng.wearbiliplayer.cn.player.PlayerActivity");
+                intent.setClassName(context.getString(R.string.player_mtv_package), "com.xinxiangshicheng.wearbiliplayer.cn.player.PlayerActivity");
                 intent.setAction(Intent.ACTION_VIEW);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("cookie", SharedPreferencesUtil.getString("cookies", ""));
                 intent.putExtra("mode", (local ? "2" : "0"));
                 intent.putExtra("url", videourl);
@@ -33,18 +33,16 @@ public class PlayerApi {
 
             case "aliangPlayer":
                 if(local) {
-                    intent.setClassName("com.aliangmaker.media", "com.aliangmaker.meida.VideoPlayerActivity");
+                    intent.setClassName(context.getString(R.string.player_aliang_package), "com.aliangmaker.meida.VideoPlayerActivity");
                     File videoFile = new File(videourl);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("getVideoPath",videoFile.getPath());
                     intent.putExtra("internet",false);
                     intent.putExtra("activity",true);
                     intent.putExtra("videoName", title);
                 }
                 else {
-                    intent.setClassName("com.aliangmaker.media", "com.aliangmaker.meida.GetIntentActivity");
+                    intent.setClassName(context.getString(R.string.player_aliang_package), "com.aliangmaker.meida.GetIntentActivity");
                     intent.setData(Uri.parse(videourl));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("cookie", SharedPreferencesUtil.getString("cookies", ""));
                     intent.putExtra("danmaku_url", danmakuurl);
                     intent.putExtra("title", title);
