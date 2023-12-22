@@ -156,16 +156,11 @@ public class QRLoginActivity extends BaseActivity {
                             this.cancel();
                             break;
                         case 0:
-                            StringBuilder cookies = new StringBuilder();
-                            List<String> cookiesList = response.headers("Set-Cookie");
-                            for (int i = 0; i < cookiesList.size(); i++)
-                                cookies.append(cookiesList.get(i).split("; ")[0]).append("; ");
-                            cookies = new StringBuilder(cookies.substring(0, cookies.length() - 2));
+                            String cookies = UserLoginApi.getCookies(response);
 
-                            SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(LittleToolsUtil.getInfoFromCookie("DedeUserID", cookies.toString())));
-                            SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, LittleToolsUtil.getInfoFromCookie("bili_jct", cookies.toString()));
-                            //SharedPreferencesUtil.putString(SharedPreferencesUtil.access_key, UserLoginApi.getAccessKey(cookies.toString()));
-                            SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies.toString());
+                            SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(LittleToolsUtil.getInfoFromCookie("DedeUserID", cookies)));
+                            SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, LittleToolsUtil.getInfoFromCookie("bili_jct", cookies));
+                            SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies);
 
                             Log.e("accesskey",SharedPreferencesUtil.getString(SharedPreferencesUtil.access_key,""));
 

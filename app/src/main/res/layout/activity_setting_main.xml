@@ -540,7 +540,6 @@
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
                 app:cardMaxElevation="0dp"
-                android:visibility="gone"
                 app:strokeColor="#70707070"
                 app:strokeWidth="0.1dp">
 

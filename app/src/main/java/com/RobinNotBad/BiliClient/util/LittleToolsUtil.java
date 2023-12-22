@@ -61,6 +61,15 @@ public class LittleToolsUtil {
         return "fail";
     }
 
+    public static String getFileFirstName(String file){
+        for (int i = 0; i < file.length(); i++) {
+            if(file.charAt(i)=='.'){
+                return file.substring(0,i-1);
+            }
+        }
+        return "fail";
+    }
+
     public static String getInfoFromCookie(String name, String cookie)
     {
         String[] cookies = cookie.split("; ");

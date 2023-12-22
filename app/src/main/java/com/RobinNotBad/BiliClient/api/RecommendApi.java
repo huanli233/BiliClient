@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.api;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,7 +23,7 @@ import okhttp3.Response;
 
 public class RecommendApi {
     public static void getRecommend(ArrayList<VideoCard> videoCardList) throws IOException, JSONException {
-        String url = "https://api.bilibili.com/x/web-interface/index/top/rcmd";
+        String url = (SharedPreferencesUtil.getLong("mid",0) == 0 ? "https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd" : "https://api.bilibili.com/x/web-interface/index/top/rcmd");
 
         Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());  //得到一整个json

@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.util.Log;
+import android.webkit.URLUtil;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
+import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -16,7 +18,10 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -71,26 +76,50 @@ public class ConfInfoApi
         put("app_secret", "25bdede4e1581c836cab73a48790ca6e");
     }};
 
-    public static String getConf(String key)
-    {
-        return conf.get(key);
+
+    /*
+    这里是WBI签名校验
+    https://socialsisteryi.github.io/bilibili-API-collect/docs/misc/sign/wbi.html#wbi-%E7%AD%BE%E5%90%8D%E7%AE%97%E6%B3%95
+     */
+    private static final int[] MIXIN_KEY_ENC_TAB = {46, 47, 18, 2, 53, 8, 23, 32, 15, 50, 10, 31, 58, 3, 45, 35, 27, 43, 5, 49,
+        33, 9, 42, 19, 29, 28, 14, 39, 12, 38, 41, 13, 37, 48, 7, 16, 24, 55, 40,
+        61, 26, 17, 0, 1, 60, 51, 30, 4, 22, 25, 54, 21, 56, 59, 6, 63, 57, 62, 11,
+        36, 20, 34, 44, 52};
+
+    public static String getWBIRawKey() throws IOException, JSONException {
+        JSONObject getJson = new JSONObject(Objects.requireNonNull(NetWorkUtil.get("https://api.bilibili.com/x/web-interface/nav", defHeaders).body()).string());
+        JSONObject wbi_img = getJson.getJSONObject("data").getJSONObject("wbi_img");  //不要被名称骗了，这玩意是签名用的
+        String img_key = LittleToolsUtil.getFileFirstName(LittleToolsUtil.getFileNameFromLink(wbi_img.getString("img_url")));  //得到文件名
+        String sub_key = LittleToolsUtil.getFileFirstName(LittleToolsUtil.getFileNameFromLink(wbi_img.getString("sub_url")));
+
+        return img_key + sub_key;  //相连
     }
 
-    public static String getTVConf(String key)
-    {
-        return tvConf.get(key);
+    public static String getWBIMixinKey(String raw_key){
+        StringBuilder key = new StringBuilder();
+        for (int i = 0; i < 32; i++) {
+            key.append(raw_key.charAt(MIXIN_KEY_ENC_TAB[i]));
+        }
+
+        return key.toString();
     }
 
-    public static String getBConf(String key)
-    {
-        return bConf.get(key);
+    //计算时需要按字母顺序排列   //未完成
+    public static String signWBI(String url_query_before_wts,String url_query_after_wts ,String mixin_key) throws UnsupportedEncodingException {
+        String wts = "1702204169";//String.valueOf(System.currentTimeMillis());
+        String calc_str = URLEncoder.encode(url_query_before_wts, "UTF-8") + "&wts=" + wts + URLEncoder.encode(url_query_after_wts, "UTF-8") + mixin_key;
+        Log.e("calc_str",calc_str);
+
+        String w_rid = md5(calc_str);
+
+        return url_query_before_wts + url_query_after_wts + "&w_rid=" + w_rid + "&wts=" + wts;
     }
 
-    public static String calc_sign(String str, String salt)
-    {
-        str += salt;
-        return md5(str);
-    }
+
+
+
+
+
 
     private static String md5(String plainText) {
         byte[] secretBytes;

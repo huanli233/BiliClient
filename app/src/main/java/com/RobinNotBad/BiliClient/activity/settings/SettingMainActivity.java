@@ -138,8 +138,17 @@ public class SettingMainActivity extends BaseActivity {
             }).start();
         });
 
-        MaterialCardView test = findViewById(R.id.test);
+        MaterialCardView test = findViewById(R.id.test);    //未完成
         test.setOnClickListener(view -> {
+            try {
+                String mmm = ConfInfoApi.getWBIMixinKey("7cd084941338484aae1ad9425b84077c4932caff0ff746eab6f01bf08b70ac45");
+                Log.e("mmm",mmm);
+                String args = ConfInfoApi.signWBI("bar=514&foo=114", "&zab=1919810", mmm);
+                MsgUtil.showText(this,"test",args);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+                /*
             new Thread(()->{
                 try {
                     JSONArray input = SearchApi.search("纳西妲", 0);
@@ -157,6 +166,7 @@ public class SettingMainActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }).start();
+                 */
         });
     }
 }

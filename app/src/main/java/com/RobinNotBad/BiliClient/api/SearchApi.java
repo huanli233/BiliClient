@@ -32,7 +32,7 @@ public class SearchApi {
             seid = "";
         }
 
-        String url = (SharedPreferencesUtil.getLong("mid",0) == 0 ? "https://api.bilibili.com/x/web-interface/wbi/search/all/v2" :"https://api.bilibili.com/x/web-interface/search/all/v2") + "?page=" + page + "&keyword=" + URLEncoder.encode(search_keyword, "UTF-8") + "&seid=" + seid;
+        String url = "https://api.bilibili.com/x/web-interface/wbi/search/all/v2?page=" + page + "&keyword=" + URLEncoder.encode(search_keyword, "UTF-8") + "&seid=" + seid;
         Log.e("debug-搜索链接",url);
 
         JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.defHeaders).body()).string());  //得到一整个json

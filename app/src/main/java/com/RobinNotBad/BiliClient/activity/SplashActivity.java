@@ -20,8 +20,10 @@ import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
+import com.RobinNotBad.BiliClient.api.UserLoginApi;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONException;
@@ -29,6 +31,8 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.Response;
 
 //启动页面
 //一切的一切的开始
@@ -77,10 +81,14 @@ public class SplashActivity extends Activity {
 
             if(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.setup,false)) {//判断是否设置完成
                 try {
-                    if (SharedPreferencesUtil.getLong("mid", 0) != 0) {
-                        UserInfo userInfo = UserInfoApi.getCurrentUserInfo();
-                        Log.e("mid", String.valueOf(userInfo.mid));
+
+                    Response response = NetWorkUtil.get("https://bilibili.com",ConfInfoApi.defHeaders);
+                    if (SharedPreferencesUtil.getLong("mid", 0) == 0) {
+                        String cookies = UserLoginApi.getCookies(response);
+                        Log.e("cookies",cookies);
+                        if(!cookies.equals("")) SharedPreferencesUtil.putString("cookies",cookies);
                     }
+
 
                     Intent intent = new Intent();
                     intent.setClass(SplashActivity.this, RecommendActivity.class);   //已登录且联网，去首页
@@ -105,16 +113,6 @@ public class SplashActivity extends Activity {
                                 }
                             },200);
                         }
-                    });
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    runOnUiThread(()-> {
-                        MsgUtil.toast("获取用户信息失败",this);
-                        splashText.setText("获取用户信息失败");
-                        Intent intent = new Intent();
-                        intent.setClass(SplashActivity.this, RecommendActivity.class);
-                        startActivity(intent);
-                        finish();
                     });
                     e.printStackTrace();
                 }
