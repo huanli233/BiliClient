@@ -21,6 +21,7 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,7 +58,10 @@ public class VideoInfoActivity extends BaseActivity {
 
                 //ErrorUtil.showText(requireContext(),"调试",data.toString());
 
-                VideoInfo videoInfo = VideoInfoApi.getInfoByJson(data);
+                JSONArray tagList;
+                if (bvid==null || bvid.equals("")) tagList = VideoInfoApi.getTagJsonByAid(aid);
+                else tagList = VideoInfoApi.getTagJsonByBvid(bvid);
+                VideoInfo videoInfo = VideoInfoApi.getInfoByJson(data,tagList);
 
                 viewPager.setOffscreenPageLimit(3);
 

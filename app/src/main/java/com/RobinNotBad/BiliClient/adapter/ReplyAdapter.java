@@ -139,7 +139,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             if (replyList.get(realPosition).upLiked) replyHolder.upLiked.setVisibility(View.VISIBLE);
             else replyHolder.upLiked.setVisibility(View.GONE);
-            replyHolder.pubDate.setText(replyList.get(realPosition).pubTime);
+            replyHolder.pubDate.setText("Lv" + String.valueOf(replyList.get(realPosition).senderLevel) + " " + replyList.get(realPosition).pubTime);
 
             if (replyList.get(realPosition).pictureList != null && replyList.get(realPosition).pictureList.size() > 0) {  //图片显示相关
                 replyHolder.imageCard.setVisibility(View.VISIBLE);

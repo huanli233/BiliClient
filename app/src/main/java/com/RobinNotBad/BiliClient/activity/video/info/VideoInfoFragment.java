@@ -50,7 +50,7 @@ public class VideoInfoFragment extends Fragment {
     private VideoInfo videoInfo;
 
     private ImageView cover,upIcon;
-    private TextView title,description,upName,views,timeText,bvidText,danmakuCount;
+    private TextView title,description,tagDesc,upName,views,timeText,durationText,bvidText,danmakuCount;
 
 
     public VideoInfoFragment() {
@@ -87,9 +87,11 @@ public class VideoInfoFragment extends Fragment {
         upIcon = view.findViewById(R.id.upInfo_Icon);
         title = view.findViewById(R.id.title);
         description = view.findViewById(R.id.description);
+        tagDesc = view.findViewById(R.id.tagDesc);
         upName = view.findViewById(R.id.upInfo_Name);
         views = view.findViewById(R.id.viewsCount);
         timeText = view.findViewById(R.id.timeText);
+        durationText = view.findViewById(R.id.durationText);
         MaterialCardView play = view.findViewById(R.id.play);
         MaterialCardView addWatchlater = view.findViewById(R.id.addWatchlater);
         MaterialCardView upCard = view.findViewById(R.id.upInfo);
@@ -123,8 +125,10 @@ public class VideoInfoFragment extends Fragment {
                     danmakuCount.setText(String.valueOf(videoInfo.danmaku));
                     bvidText.setText(videoInfo.bvid);
                     description.setText(videoInfo.description);
+                    tagDesc.setText("标签：" + videoInfo.tagsDesc);
                     title.setText(videoInfo.title);
                     timeText.setText(videoInfo.timeDesc);
+                    durationText.setText("视频时长：" + videoInfo.duration);
 
                     play.setOnClickListener(view1 -> {
                         Glide.get(requireContext()).clearMemory();

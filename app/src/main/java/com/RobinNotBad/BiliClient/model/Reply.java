@@ -11,6 +11,7 @@ public class Reply {
     public long senderID;
     public String senderName;
     public String senderAvatar;
+    public int senderLevel;
     public String message;
     public JSONArray emote;
     public ArrayList<String> pictureList;

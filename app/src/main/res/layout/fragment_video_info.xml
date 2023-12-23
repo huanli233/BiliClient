@@ -1,329 +1,378 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activity.video.info.VideoInfoFragment">
+<androidx.constraintlayout.widget.ConstraintLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     tools:context=".activity.video.info.VideoInfoFragment">
 
     <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+         android:layout_height="0dp"
+         android:layout_width="0dp"
+         app:layout_constraintTop_toTopOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintBottom_toBottomOf="parent"
+         android:id="@+id/scrollView2">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:paddingBottom="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:paddingBottom="4dp">
 
             <ImageView
-                android:id="@+id/cover"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="10dp"
-                android:adjustViewBounds="true"
-                android:clickable="true"
-                android:focusable="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/placeholder"
-                tools:ignore="ImageContrastCheck,SpeakableTextPresentCheck" />
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:layout_marginEnd="10dp"
+                 android:adjustViewBounds="true"
+                 android:src="@drawable/placeholder"
+                 android:clickable="true"
+                 android:layout_marginTop="8dp"
+                 android:layout_marginStart="10dp"
+                 android:focusable="true"
+                 tools:ignore="ImageContrastCheck,SpeakableTextPresentCheck"
+                 app:layout_constraintTop_toTopOf="parent"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 android:id="@+id/cover" />
 
             <TextView
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="10dp"
-                android:text="正在加载中..."
-                android:textSize="13sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cover" />
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:layout_marginEnd="10dp"
+                 app:layout_constraintStart_toStartOf="parent"
+                 android:textSize="13sp"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 android:layout_marginTop="6dp"
+                 android:layout_marginStart="10dp"
+                 app:layout_constraintTop_toBottomOf="@+id/cover"
+                 android:id="@+id/title"
+                 android:text="正在加载中..." />
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/upInfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 app:cardMaxElevation="0dp"
+                 android:layout_marginEnd="10dp"
+                 app:strokeColor="#70707070"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="#78242424"
+                 android:layout_marginTop="6dp"
+                 android:layout_marginStart="10dp"
+                 app:layout_constraintTop_toBottomOf="@+id/title"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:strokeWidth="0.1dp"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:cardCornerRadius="8dp"
+                 android:id="@+id/upInfo">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp">
+                     android:layout_height="60dp"
+                     android:layout_width="match_parent">
 
                     <ImageView
-                        android:id="@+id/upInfo_Icon"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="6dp"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/default_avatar"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintDimensionRatio="1:1"
-                        app:layout_constraintHeight_percent="0.7"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="0dp"
+                         android:layout_width="0dp"
+                         android:adjustViewBounds="true"
+                         android:src="@drawable/default_avatar"
+                         app:layout_constraintHeight_percent="0.7"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintDimensionRatio="1:1"
+                         app:layout_constraintStart_toStartOf="parent"
+                         app:layout_constraintBottom_toBottomOf="parent"
+                         android:layout_marginStart="6dp"
+                         android:id="@+id/upInfo_Icon" />
 
                     <TextView
-                        android:id="@+id/upInfo_Name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:ellipsize="marquee"
-                        android:singleLine="true"
-                        android:text="UP主名字"
-                        android:textColor="#fff"
-                        android:textSize="13sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintBottom_toBottomOf="@+id/upInfo_Icon"
-                        app:layout_constraintStart_toEndOf="@+id/upInfo_Icon"
-                        app:layout_constraintTop_toTopOf="@id/upInfo_Icon" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="wrap_content"
+                         android:ellipsize="marquee"
+                         app:autoSizeTextType="uniform"
+                         android:textSize="13sp"
+                         android:singleLine="true"
+                         android:textColor="#fff"
+                         app:layout_constraintStart_toEndOf="@+id/upInfo_Icon"
+                         app:layout_constraintBottom_toBottomOf="@+id/upInfo_Icon"
+                         android:layout_marginStart="6dp"
+                         app:layout_constraintTop_toTopOf="@id/upInfo_Icon"
+                         android:id="@+id/upInfo_Name"
+                         android:text="UP主名字" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.card.MaterialCardView>
 
+            <ImageView
+                 android:layout_height="0dp"
+                 android:layout_width="wrap_content"
+                 android:adjustViewBounds="true"
+                 android:src="@drawable/icon_play"
+                 android:alpha="0.5"
+                 app:layout_constraintTop_toTopOf="@+id/viewsCount"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintBottom_toBottomOf="@+id/viewsCount"
+                 android:layout_marginStart="10dp"
+                 android:id="@+id/viewsIcon" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:alpha="0.5"
+                 android:textSize="12sp"
+                 android:textColor="#fff"
+                 app:layout_constraintStart_toEndOf="@+id/viewsIcon"
+                 android:layout_marginTop="6dp"
+                 android:layout_marginStart="2dp"
+                 app:layout_constraintTop_toBottomOf="@+id/upInfo"
+                 android:id="@+id/viewsCount"
+                 android:text="114514" />
 
             <ImageView
-                android:id="@+id/viewsIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginStart="10dp"
-
-                android:adjustViewBounds="true"
-                android:alpha="0.5"
-                android:src="@drawable/icon_play"
-                app:layout_constraintBottom_toBottomOf="@+id/viewsCount"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/viewsCount" />
+                 android:layout_height="0dp"
+                 android:layout_width="wrap_content"
+                 android:adjustViewBounds="true"
+                 android:src="@drawable/icon_danmaku"
+                 android:alpha="0.5"
+                 app:layout_constraintTop_toTopOf="@+id/danmakuCount"
+                 app:layout_constraintStart_toEndOf="@+id/viewsCount"
+                 app:layout_constraintBottom_toBottomOf="@+id/danmakuCount"
+                 android:layout_marginStart="6dp"
+                 android:id="@+id/danmakuIcon" />
 
             <TextView
-                android:id="@+id/viewsCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="6dp"
-                android:alpha="0.5"
-                android:text="114514"
-                android:textColor="#fff"
-                android:textSize="12sp"
-                app:layout_constraintStart_toEndOf="@+id/viewsIcon"
-                app:layout_constraintTop_toBottomOf="@+id/upInfo" />
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:alpha="0.5"
+                 android:textSize="12sp"
+                 android:textColor="#fff"
+                 app:layout_constraintStart_toEndOf="@+id/danmakuIcon"
+                 android:layout_marginTop="6dp"
+                 app:layout_constraintTop_toBottomOf="@+id/upInfo"
+                 android:id="@+id/danmakuCount"
+                 android:text="1919" />
 
             <ImageView
-                android:id="@+id/danmakuIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginStart="6dp"
-                android:adjustViewBounds="true"
-                android:alpha="0.5"
-                android:src="@drawable/icon_danmaku"
-                app:layout_constraintBottom_toBottomOf="@+id/danmakuCount"
-                app:layout_constraintStart_toEndOf="@+id/viewsCount"
-                app:layout_constraintTop_toTopOf="@+id/danmakuCount" />
+                 android:layout_height="0dp"
+                 android:layout_width="wrap_content"
+                 android:adjustViewBounds="true"
+                 android:src="@drawable/icon_time"
+                 android:alpha="0.5"
+                 app:layout_constraintTop_toTopOf="@+id/timeText"
+                 app:layout_constraintStart_toStartOf="@+id/viewsIcon"
+                 app:layout_constraintBottom_toBottomOf="@+id/timeText"
+                 android:id="@+id/timeIcon" />
 
             <TextView
-                android:id="@+id/danmakuCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:alpha="0.5"
-                android:text="1919"
-                android:textColor="#fff"
-                android:textSize="12sp"
-                app:layout_constraintStart_toEndOf="@+id/danmakuIcon"
-                app:layout_constraintTop_toBottomOf="@+id/upInfo" />
-
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:layout_marginEnd="10dp"
+                 app:layout_constraintHorizontal_bias="0.0"
+                 app:autoSizeTextType="uniform"
+                 android:textSize="12sp"
+                 android:textColor="#fff"
+                 app:layout_constraintStart_toEndOf="@+id/timeIcon"
+                 android:layout_marginTop="4dp"
+                 android:layout_marginStart="2dp"
+                 app:layout_constraintTop_toBottomOf="@+id/viewsIcon"
+                 android:alpha="0.5"
+                 android:lines="1"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 android:id="@+id/timeText"
+                 android:text="9999-13-32 25:61" />
 
             <ImageView
-                android:id="@+id/timeIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:adjustViewBounds="true"
-                android:alpha="0.5"
-                android:src="@drawable/icon_time"
-                app:layout_constraintBottom_toBottomOf="@+id/timeText"
-                app:layout_constraintStart_toStartOf="@+id/viewsIcon"
-                app:layout_constraintTop_toTopOf="@+id/timeText" />
+                 android:layout_height="0dp"
+                 android:layout_width="wrap_content"
+                 android:adjustViewBounds="true"
+                 android:src="@drawable/icon_time"
+                 android:alpha="0.5"
+                 app:layout_constraintTop_toTopOf="@+id/durationText"
+                 app:layout_constraintStart_toStartOf="@+id/viewsIcon"
+                 app:layout_constraintBottom_toBottomOf="@+id/durationText"
+                 android:id="@+id/durationIcon" />
 
             <TextView
-                android:id="@+id/timeText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="10dp"
-                android:alpha="0.5"
-                android:lines="1"
-                android:text="9999-13-32 25:61"
-                android:textColor="#fff"
-                android:textSize="12sp"
-                app:autoSizeTextType="uniform"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/timeIcon"
-                app:layout_constraintTop_toBottomOf="@+id/viewsIcon" />
-
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:layout_marginEnd="10dp"
+                 app:layout_constraintHorizontal_bias="0.0"
+                 app:autoSizeTextType="uniform"
+                 android:textSize="12sp"
+                 android:textColor="#fff"
+                 app:layout_constraintStart_toEndOf="@+id/durationIcon"
+                 android:layout_marginTop="24dp"
+                 android:layout_marginStart="2dp"
+                 app:layout_constraintTop_toBottomOf="@+id/viewsIcon"
+                 android:alpha="0.5"
+                 android:lines="1"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 android:id="@+id/durationText"
+                 android:text="视频时长：11分45秒" />
+            
             <ImageView
-                android:id="@+id/bvidIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:adjustViewBounds="true"
-                android:alpha="0.5"
-                android:src="@drawable/icon_bv"
-                app:layout_constraintBottom_toBottomOf="@+id/bvidText"
-                app:layout_constraintStart_toStartOf="@+id/viewsIcon"
-                app:layout_constraintTop_toTopOf="@+id/bvidText" />
+                 android:layout_height="0dp"
+                 android:layout_width="wrap_content"
+                 android:adjustViewBounds="true"
+                 android:src="@drawable/icon_bv"
+                 android:alpha="0.5"
+                 app:layout_constraintTop_toTopOf="@+id/bvidText"
+                 app:layout_constraintStart_toStartOf="@+id/viewsIcon"
+                 app:layout_constraintBottom_toBottomOf="@+id/bvidText"
+                 android:id="@+id/bvidIcon" />
 
             <TextView
-                android:id="@+id/bvidText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="10dp"
-                android:alpha="0.5"
-                android:lines="1"
-                android:text="BV114514"
-                android:textColor="#fff"
-                android:textSize="12sp"
-                app:autoSizeTextType="uniform"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/bvidIcon"
-                app:layout_constraintTop_toBottomOf="@+id/viewsIcon" />
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:layout_marginEnd="10dp"
+                 app:layout_constraintHorizontal_bias="0.0"
+                 app:autoSizeTextType="uniform"
+                 android:textSize="12sp"
+                 android:textColor="#fff"
+                 app:layout_constraintStart_toEndOf="@+id/bvidIcon"
+                 android:layout_marginTop="45dp"
+                 android:layout_marginStart="2dp"
+                 app:layout_constraintTop_toBottomOf="@+id/viewsIcon"
+                 android:alpha="0.5"
+                 android:lines="1"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 android:id="@+id/bvidText"
+                 android:text="BV114514" />
 
             <TextView
-                android:id="@+id/description"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="10dp"
-                android:text="简介简介简介简介简介简介简介"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/bvidIcon"
-                tools:layout_editor_absoluteY="442dp" />
-
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:layout_marginEnd="10dp"
+                 app:layout_constraintHorizontal_bias="0.0"
+                 app:autoSizeTextType="uniform"
+                 android:textSize="12sp"
+                 android:textColor="#fff"
+                 app:layout_constraintStart_toEndOf="@+id/bvidIcon"
+                 android:layout_marginTop="63dp"
+                 android:layout_marginStart="2dp"
+                 app:layout_constraintTop_toBottomOf="@+id/viewsIcon"
+                 android:alpha="0.5"
+                 android:lines="2"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 android:id="@+id/tagDesc"
+                 android:text="标签：鸡你太美" />
+            
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:layout_marginEnd="10dp"
+                 app:layout_constraintStart_toStartOf="parent"
+                 android:textSize="12sp"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 tools:layout_editor_absoluteY="442dp"
+                 android:layout_marginTop="32dp"
+                 android:layout_marginStart="10dp"
+                 app:layout_constraintTop_toBottomOf="@id/bvidIcon"
+                 android:id="@+id/description"
+                 android:text="简介简介简介简介简介简介简介" />
+            
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/play"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/description"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 app:cardMaxElevation="0dp"
+                 android:layout_marginEnd="10dp"
+                 app:strokeColor="#70707070"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="#78242424"
+                 android:layout_marginTop="6dp"
+                 android:layout_marginStart="10dp"
+                 app:layout_constraintTop_toBottomOf="@id/description"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:strokeWidth="0.1dp"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:cardCornerRadius="8dp"
+                 android:id="@+id/play">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="42sp"
-                    android:gravity="center"
-                    android:text="播放" />
-            </com.google.android.material.card.MaterialCardView>
+                     android:layout_height="42sp"
+                     android:layout_width="match_parent"
+                     android:gravity="center"
+                     android:text="播放" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/addWatchlater"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/play"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="42sp"
-                    android:gravity="center"
-                    android:text="稍后再看" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/addFavorite"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/addWatchlater"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="42sp"
-                    android:gravity="center"
-                    android:text="添加收藏" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/download"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/addFavorite"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 app:cardMaxElevation="0dp"
+                 android:layout_marginEnd="10dp"
+                 app:strokeColor="#70707070"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="#78242424"
+                 android:layout_marginTop="4dp"
+                 android:layout_marginStart="10dp"
+                 app:layout_constraintTop_toBottomOf="@id/play"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:strokeWidth="0.1dp"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:cardCornerRadius="8dp"
+                 android:id="@+id/addWatchlater">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="42sp"
-                    android:gravity="center"
-                    android:text="缓存到本地" />
+                     android:layout_height="42sp"
+                     android:layout_width="match_parent"
+                     android:gravity="center"
+                     android:text="稍后再看" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 app:cardMaxElevation="0dp"
+                 android:layout_marginEnd="10dp"
+                 app:strokeColor="#70707070"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="#78242424"
+                 android:layout_marginTop="4dp"
+                 android:layout_marginStart="10dp"
+                 app:layout_constraintTop_toBottomOf="@id/addWatchlater"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:strokeWidth="0.1dp"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:cardCornerRadius="8dp"
+                 android:id="@+id/addFavorite">
+
+                <TextView
+                     android:layout_height="42sp"
+                     android:layout_width="match_parent"
+                     android:gravity="center"
+                     android:text="添加收藏" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 app:cardMaxElevation="0dp"
+                 android:layout_marginEnd="10dp"
+                 app:strokeColor="#70707070"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="#78242424"
+                 android:layout_marginTop="4dp"
+                 android:layout_marginStart="10dp"
+                 app:layout_constraintTop_toBottomOf="@id/addFavorite"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:strokeWidth="0.1dp"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:cardCornerRadius="8dp"
+                 android:id="@+id/download">
+
+                <TextView
+                     android:layout_height="42sp"
+                     android:layout_width="match_parent"
+                     android:gravity="center"
+                     android:text="缓存到本地" />
+
             </com.google.android.material.card.MaterialCardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
 
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,7 +35,22 @@ public class VideoInfoApi {
         return new JSONObject(result.getJSONObject("data").toString());
     }
 
-    public static VideoInfo getInfoByJson(JSONObject data) throws JSONException {  //项目实在太多qwq 拆就完事了
+    
+    public static JSONArray getTagJsonByBvid(String bvid) throws IOException, JSONException {  //通过bvid获取json
+        String url = "https://api.bilibili.com/x/tag/archive/tags?bvid=" + bvid;
+        Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
+        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
+        return new JSONArray(result.getJSONArray("data").toString());
+    }
+
+    public static JSONArray getTagJsonByAid(long aid) throws IOException, JSONException {  //通过aid获取json
+        String url = "https://api.bilibili.com/x/tag/archive/tags?aid=" + aid;
+        Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
+        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
+        return new JSONArray(result.getJSONArray("data"));
+    }
+    
+    public static VideoInfo getInfoByJson(JSONObject data,JSONArray tagJson) throws JSONException {  //项目实在太多qwq 拆就完事了
         VideoInfo videoInfo = new VideoInfo();
         Log.e("视频信息","--------");
         videoInfo.title = data.getString("title");
@@ -52,6 +67,9 @@ public class VideoInfoApi {
         videoInfo.timeDesc = sdf.format(data.getLong("ctime") * 1000);
         Log.e("发布时间",String.valueOf(videoInfo.timeDesc));
 
+        videoInfo.duration = String.valueOf(data.getLong("duration")/60) + "分" + String.valueOf(data.getLong("duration") % 60) + "秒";
+        Log.e("视频时长",videoInfo.duration);
+        
         JSONObject owner = data.getJSONObject("owner");
         videoInfo.upName = owner.getString("name");
         Log.e("UP主",videoInfo.upName);
@@ -88,6 +106,13 @@ public class VideoInfoApi {
         }
         videoInfo.pagenames = pagenames;
         videoInfo.cids = cids;
+        
+        String tags = "";
+        for (int i = 0;i<tagJson.length();i++){
+            if(i>0) tags += "/ ";
+            tags += ((JSONObject)tagJson.get(i)).getString("tag_name");
+        }
+        videoInfo.tagsDesc = tags;
 
         return videoInfo;
     }

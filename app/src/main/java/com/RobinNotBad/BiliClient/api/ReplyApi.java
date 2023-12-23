@@ -66,12 +66,15 @@ public class ReplyApi {
             String uname = member.getString("uname");
             long mid = member.getLong("mid");
             String avatar = member.getString("avatar");
+            int level = member.getJSONObject("level_info").getInt("current_level");
             Log.e("debug-发送者", uname);
             Log.e("debug-发送者id", String.valueOf(mid));
             Log.e("debug-发送者头像", avatar);
+            Log.e("debug-发送者等级", String.valueOf(level));
             replyReturn.senderName = uname;
             replyReturn.senderID = mid;
             replyReturn.senderAvatar = avatar;
+            replyReturn.senderLevel = level;
 
             JSONObject content = reply.getJSONObject("content");
             String message = LittleToolsUtil.htmlToString(content.getString("message"));
@@ -109,13 +112,13 @@ public class ReplyApi {
             //up主觉得很淦
 
             JSONObject replyCtrl = reply.getJSONObject("reply_control");
-            String ctime;
+            String ctime = "";
             Log.e("debug-评论时间戳", String.valueOf(reply.getLong("ctime")));
+            if(replyCtrl.has("location")) ctime += replyCtrl.getString("location").substring(0,2) + "\n";  //这字符串还是切割一下吧不然太长了，只留个地址，前缀去了
             if(SharedPreferencesUtil.getBoolean("fav_timesec",false)) { //判断一下是显示具体日期还是“xx天前”
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                ctime = sdf.format(reply.getLong("ctime") * 1000) + "\n";
-            }else ctime = replyCtrl.getString("time_desc") + "  ";
-            if(replyCtrl.has("location")) ctime += replyCtrl.getString("location");
+                ctime += sdf.format(reply.getLong("ctime") * 1000);
+            }else ctime += replyCtrl.getString("time_desc");
 
             if(replyCtrl.has("is_up_top")){
                 if(replyCtrl.getBoolean("is_up_top")) replyReturn.message = "[置顶]" + replyReturn.message;

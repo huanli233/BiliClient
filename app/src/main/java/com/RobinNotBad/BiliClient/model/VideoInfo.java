@@ -12,12 +12,14 @@ public class VideoInfo implements Serializable {    //自定义类需要加这�
     public String cover;
     public String description;
     public String upAvatar;
+    public String duration;
     public long upMid;
     public int view;
     public int like;
     public int coin;
     public int reply;
     public String timeDesc;
+    public String tagsDesc;
     public int danmaku;
     public int favorite;
     public ArrayList<String> pagenames;
