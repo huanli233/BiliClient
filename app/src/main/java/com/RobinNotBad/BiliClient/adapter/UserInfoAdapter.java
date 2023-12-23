@@ -70,7 +70,8 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder instanceof UserInfoHolder){
             UserInfoHolder userInfoHolder = (UserInfoHolder) holder;
             userInfoHolder.userName.setText(userInfo.name);
-            userInfoHolder.userDesc.setText(userInfo.sign);
+            if(userInfo.notice.length() > 1) userInfoHolder.userDesc.setText(userInfo.sign + "\n\n------\n空间公告：\n" + userInfo.notice);
+            else userInfoHolder.userDesc.setText(userInfo.sign);
             userInfoHolder.userFans.setText(LittleToolsUtil.toWan(userInfo.fans) + "粉丝");
             Glide.with(this.context).load(userInfo.avatar)
                     .placeholder(R.drawable.akari)

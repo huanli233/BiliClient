@@ -8,8 +8,9 @@ public class UserInfo {
     public int fans;
     public int level;
     public boolean followed;
+    public String notice;
 
-    public UserInfo(long mid, String name, String avatar, String sign, int fans, int level, boolean followed) {
+    public UserInfo(long mid, String name, String avatar, String sign, int fans, int level, boolean followed, String notice) {
         this.mid = mid;
         this.name = name;
         this.avatar = avatar;
@@ -17,6 +18,7 @@ public class UserInfo {
         this.fans = fans;
         this.level = level;
         this.followed = followed;
+        this.notice = notice;
     }
 
     public UserInfo(){}

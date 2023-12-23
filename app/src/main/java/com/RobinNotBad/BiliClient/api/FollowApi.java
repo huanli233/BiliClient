@@ -32,7 +32,7 @@ public class FollowApi {
                 long uid = userInfo.getLong("mid");
                 String avatar = userInfo.getString("face");
                 String sign = userInfo.getString("sign");
-                userList.add(new UserInfo(uid,name,avatar,sign,0,0,true));
+                userList.add(new UserInfo(uid,name,avatar,sign,0,0,true,""));
             }
             return 0;
         }

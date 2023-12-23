@@ -23,6 +23,10 @@ public class UserInfoApi {
         String url = "https://api.bilibili.com/x/web-interface/card?mid=" + mid;
         JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.defHeaders).body()).string());
         if(all.has("data") && !all.isNull("data")) {
+            JSONObject notice_all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get("https://api.bilibili.com/x/space/notice?mid=" + mid, ConfInfoApi.defHeaders).body()).string());
+            String notice;
+            if(notice_all.has("data") && !notice_all.isNull("data")) notice = notice_all.getString("data");
+            else notice = "";
             JSONObject data = all.getJSONObject("data");
             boolean followed = data.getBoolean("following");
             int fans = data.getInt("follower");
@@ -34,7 +38,7 @@ public class UserInfoApi {
             JSONObject levelInfo = card.getJSONObject("level_info");
             int level = levelInfo.getInt("current_level");
 
-            return new UserInfo(mid,name,avatar,sign,fans,level,followed);
+            return new UserInfo(mid,name,avatar,sign,fans,level,followed,notice);
         }
         else return null;
 
@@ -51,9 +55,9 @@ public class UserInfoApi {
             String sign = data.getString("sign");
             int fans = data.getInt("follower");
             int level = data.getInt("level");
-            return new UserInfo(mid,name,avatar,sign,fans,level,false);
+            return new UserInfo(mid,name,avatar,sign,fans,level,false,"");
         }
-        else return new UserInfo(0,"加载失败","","",0,0,false);
+        else return new UserInfo(0,"加载失败","","",0,0,false,"");
     }
 
 
