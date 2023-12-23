@@ -50,7 +50,7 @@ public class VideoInfoFragment extends Fragment {
     private VideoInfo videoInfo;
 
     private ImageView cover,upIcon;
-    private TextView title,description,upName,views,bvidText,danmakuCount;
+    private TextView title,description,upName,views,timeText,bvidText,danmakuCount;
 
 
     public VideoInfoFragment() {
@@ -89,6 +89,7 @@ public class VideoInfoFragment extends Fragment {
         description = view.findViewById(R.id.description);
         upName = view.findViewById(R.id.upInfo_Name);
         views = view.findViewById(R.id.viewsCount);
+        timeText = view.findViewById(R.id.timeText);
         MaterialCardView play = view.findViewById(R.id.play);
         MaterialCardView addWatchlater = view.findViewById(R.id.addWatchlater);
         MaterialCardView upCard = view.findViewById(R.id.upInfo);
@@ -123,6 +124,7 @@ public class VideoInfoFragment extends Fragment {
                     bvidText.setText(videoInfo.bvid);
                     description.setText(videoInfo.description);
                     title.setText(videoInfo.title);
+                    timeText.setText(videoInfo.timeDesc);
 
                     play.setOnClickListener(view1 -> {
                         Glide.get(requireContext()).clearMemory();

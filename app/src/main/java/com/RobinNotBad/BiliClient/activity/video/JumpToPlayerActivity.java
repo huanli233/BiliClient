@@ -61,7 +61,7 @@ public class JumpToPlayerActivity extends BaseActivity {
 
     private void requestVideo(long aid,String bvid, int cid) {
         new Thread(()->{
-            String url;
+//            String url;
             /*if(SharedPreferencesUtil.getBoolean("high_res",false)){
                 if (aid == 0) {
                     url = "https://api.bilibili.com/x/player/playurl?bvid=" + bvid + "&cid=" + cid + "&qn=80&type=mp4";

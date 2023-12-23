@@ -14,7 +14,7 @@ import com.google.android.material.card.MaterialCardView;
 public class SettingPrefActivity extends BaseActivity {
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
-    private Switch back_disable,fav_single,fav_notice;
+    private Switch back_disable,fav_single,fav_notice,fav_timesec;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -33,12 +33,16 @@ public class SettingPrefActivity extends BaseActivity {
 
         fav_notice = findViewById(R.id.fav_notice);
         fav_notice.setChecked(SharedPreferencesUtil.getBoolean("fav_notice",false));
+
+        fav_timesec = findViewById(R.id.fav_timesec);
+        fav_timesec.setChecked(SharedPreferencesUtil.getBoolean("fav_timesec",false));
     }
 
     private void save() {
         SharedPreferencesUtil.putBoolean("back_disable", back_disable.isChecked());
         SharedPreferencesUtil.putBoolean("fav_single", fav_single.isChecked());
         SharedPreferencesUtil.putBoolean("fav_notice", fav_notice.isChecked());
+        SharedPreferencesUtil.putBoolean("fav_timesec", fav_timesec.isChecked());
     }
 
     @Override

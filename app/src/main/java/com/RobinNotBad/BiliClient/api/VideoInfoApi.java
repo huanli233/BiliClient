@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -46,6 +47,10 @@ public class VideoInfoApi {
 
         videoInfo.bvid = data.getString("bvid");
         videoInfo.aid = data.getLong("aid");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        videoInfo.timeDesc = sdf.format(data.getLong("ctime") * 1000);
+        Log.e("发布时间",String.valueOf(videoInfo.timeDesc));
 
         JSONObject owner = data.getJSONObject("owner");
         videoInfo.upName = owner.getString("name");

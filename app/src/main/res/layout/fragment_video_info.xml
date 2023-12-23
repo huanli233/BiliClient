@@ -155,6 +155,35 @@
 
 
             <ImageView
+                android:id="@+id/timeIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:alpha="0.5"
+                android:src="@drawable/icon_time"
+                app:layout_constraintBottom_toBottomOf="@+id/timeText"
+                app:layout_constraintStart_toStartOf="@+id/viewsIcon"
+                app:layout_constraintTop_toTopOf="@+id/timeText" />
+
+            <TextView
+                android:id="@+id/timeText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="10dp"
+                android:alpha="0.5"
+                android:lines="1"
+                android:text="9999-13-32 25:61"
+                android:textColor="#fff"
+                android:textSize="12sp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/timeIcon"
+                app:layout_constraintTop_toBottomOf="@+id/viewsIcon" />
+
+            <ImageView
                 android:id="@+id/bvidIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
@@ -170,7 +199,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="10dp"
                 android:alpha="0.5"
                 android:lines="1"
@@ -188,7 +217,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="10dp"
                 android:text="简介简介简介简介简介简介简介"
                 android:textSize="12sp"

@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -109,8 +110,13 @@ public class ReplyApi {
 
             JSONObject replyCtrl = reply.getJSONObject("reply_control");
             String ctime;
-            if(replyCtrl.has("location")) ctime = replyCtrl.getString("time_desc") + "  " + replyCtrl.getString("location");
-            else ctime = replyCtrl.getString("time_desc");
+            Log.e("debug-评论时间戳", String.valueOf(reply.getLong("ctime")));
+            if(SharedPreferencesUtil.getBoolean("fav_timesec",false)) { //判断一下是显示具体日期还是“xx天前”
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                ctime = sdf.format(reply.getLong("ctime") * 1000) + "\n";
+            }else ctime = replyCtrl.getString("time_desc") + "  ";
+            if(replyCtrl.has("location")) ctime += replyCtrl.getString("location");
+
             if(replyCtrl.has("is_up_top")){
                 if(replyCtrl.getBoolean("is_up_top")) replyReturn.message = "[置顶]" + replyReturn.message;
             }
