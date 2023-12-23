@@ -62,7 +62,7 @@ public class JumpToPlayerActivity extends BaseActivity {
     private void requestVideo(long aid,String bvid, int cid) {
         new Thread(()->{
             String url;
-            if(SharedPreferencesUtil.getBoolean("high_res",false)){
+            /*if(SharedPreferencesUtil.getBoolean("high_res",false)){
                 if (aid == 0) {
                     url = "https://api.bilibili.com/x/player/playurl?bvid=" + bvid + "&cid=" + cid + "&qn=80&type=mp4";
                 } else {
@@ -75,7 +75,10 @@ public class JumpToPlayerActivity extends BaseActivity {
                 } else {
                     url = "https://api.bilibili.com/x/player/playurl?platform=html5&avid=" + aid + "&cid=" + cid + "&qn=16&type=mp4";
                 }
-            }
+            }*/ //原来的方法看起来太多if else 闲的没事的ic改了改
+
+            String url = "https://api.bilibili.com/x/player/playurl?"+ (aid == 0 ? ("bvid=" + bvid): ("avid=" + aid)) + "&cid=" + cid + "&type=mp4" + (SharedPreferencesUtil.getBoolean("high_res",false) ? "&qn=80" : "&qn=16");
+            //顺便把platform html5给删了,实测删除后放和番剧相关的东西不会404了 (不到为啥)
             Log.e("debug-哔哩终端-跳转页","请求链接：" + url);
 
             try {
