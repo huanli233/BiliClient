@@ -1,7 +1,9 @@
 package com.RobinNotBad.BiliClient.util;
 
 import android.content.Context;
+import android.webkit.URLUtil;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 //2023-07-25
@@ -36,6 +38,10 @@ public class LittleToolsUtil {
                 .replace(">", "＞")
                 .replace("/", "／")
                 .replace("\\", "＼");    //文件名里不能包含非法字符
+    }
+
+    public static String unEscape(String str){
+        return str.replaceAll("\\\\(.)","$1");
     }
 
     public static int dp2px(float dpValue, Context context)

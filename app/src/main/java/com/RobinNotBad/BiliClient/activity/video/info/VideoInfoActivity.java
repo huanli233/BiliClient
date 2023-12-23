@@ -84,7 +84,7 @@ public class VideoInfoActivity extends BaseActivity {
             }catch (JSONException e){
                 runOnUiThread(() -> {
                     loading.setImageResource(R.drawable.loading_2233_error);
-                    MsgUtil.quickErr(MsgUtil.err_json,this);
+                    MsgUtil.jsonErr(e, this);
                 });
                 e.printStackTrace();
             }catch (IOException e){

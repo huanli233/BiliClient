@@ -6,6 +6,8 @@ import android.widget.Toast;
 
 import com.RobinNotBad.BiliClient.activity.ShowTextActivity;
 
+import org.json.JSONException;
+
 public class MsgUtil {
     public static int err_other = 0;
     public static int err_net = 1;
@@ -16,6 +18,11 @@ public class MsgUtil {
         Toast toast = Toast.makeText(context, str, Toast.LENGTH_SHORT);
             toast.show();
     }
+
+    public static void jsonErr(JSONException e, Context context){
+        toast("数据解析错误(＃°Д°)\n" + e.toString(),context);
+    }
+
     public static void quickErr(int err,Context context){
         toast(texts[err],context);
     }

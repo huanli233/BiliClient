@@ -2,12 +2,11 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
-import android.webkit.URLUtil;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.SplashActivity;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -18,10 +17,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -104,16 +100,17 @@ public class ConfInfoApi
         return key.toString();
     }
 
-    //计算时需要按字母顺序排列   //未完成
-    public static String signWBI(String url_query_before_wts,String url_query_after_wts ,String mixin_key) throws UnsupportedEncodingException {
-        String wts = "1702204169";//String.valueOf(System.currentTimeMillis());
-        String calc_str = URLEncoder.encode(url_query_before_wts, "UTF-8") + "&wts=" + wts + URLEncoder.encode(url_query_after_wts, "UTF-8") + mixin_key;
+    //计算时需要按字母顺序排列
+    public static String signWBI(String url_query_before_wts,String url_query_after_wts ,String mixin_key) {
+        String wts = String.valueOf(System.currentTimeMillis() / 1000);
+        String calc_str = Uri.encode(url_query_before_wts, "@#&=*+-_.,:!?()/~'%") + "&wts=" + wts + Uri.encode(url_query_after_wts, "@#&=*+-_.,:!?()/~'%") + mixin_key;
         Log.e("calc_str",calc_str);
 
         String w_rid = md5(calc_str);
 
         return url_query_before_wts + url_query_after_wts + "&w_rid=" + w_rid + "&wts=" + wts;
     }
+
 
 
 
@@ -159,8 +156,8 @@ public class ConfInfoApi
     public static void check(Context context){
         try {
             int version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
-            Calendar calendar = Calendar.getInstance();
-            int curr = calendar.get(Calendar.YEAR) * 10000 + calendar.get(Calendar.MONTH) * 100 + calendar.get(Calendar.DATE);
+
+            int curr = getDateCurr();
 
             if(SharedPreferencesUtil.getInt("last_check",0) < curr) {    //限制一天一次
                 Log.e("debug","检查更新");
@@ -213,5 +210,10 @@ public class ConfInfoApi
         String title = result.getString("title");
         String content = result.getString("content");
         MsgUtil.showText(context,title,content);
+    }
+
+    public static int getDateCurr(){
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.YEAR) * 10000 + calendar.get(Calendar.MONTH) * 100 + calendar.get(Calendar.DATE);
     }
 }

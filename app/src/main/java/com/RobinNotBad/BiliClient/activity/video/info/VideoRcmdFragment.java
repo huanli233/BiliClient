@@ -75,10 +75,10 @@ public class VideoRcmdFragment extends Fragment {
                 });
 
             } catch (IOException e){
-                requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
+                if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
                 e.printStackTrace();
             } catch (JSONException e) {
-                requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,getContext()));
+                if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
                 e.printStackTrace();
             }
         }).start();

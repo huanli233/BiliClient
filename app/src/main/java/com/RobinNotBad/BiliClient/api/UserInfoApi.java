@@ -6,6 +6,7 @@ import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,10 +58,11 @@ public class UserInfoApi {
 
 
     public static int getUserVideos(long mid, int page, String searchKeyword,ArrayList<VideoCard> videoList) throws IOException, JSONException {
-        String url = "https://api.bilibili.com/x/space/wbi/arc/search?mid=" + mid + "&ps=30&tid=0&pn=" + page
-                + "&keyword=" + searchKeyword + "&order=pubdate&order_avoided=true";
+        String url = "https://api.bilibili.com/x/space/wbi/arc/search?";
+        String args = "keyword=" + searchKeyword + "&mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
+                + "&ps=30&tid=0";
         Log.e("debug",url);
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.defHeaders).body()).string());
+        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args,"", SharedPreferencesUtil.getString("wbi_mixin_key","")), ConfInfoApi.defHeaders).body()).string());
         if(all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
             JSONObject list = data.getJSONObject("list");

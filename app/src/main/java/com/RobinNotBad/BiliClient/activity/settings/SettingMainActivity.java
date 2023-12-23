@@ -140,6 +140,7 @@ public class SettingMainActivity extends BaseActivity {
 
         MaterialCardView test = findViewById(R.id.test);    //未完成
         test.setOnClickListener(view -> {
+
             try {
                 String mmm = ConfInfoApi.getWBIMixinKey("7cd084941338484aae1ad9425b84077c4932caff0ff746eab6f01bf08b70ac45");
                 Log.e("mmm",mmm);
@@ -148,25 +149,6 @@ public class SettingMainActivity extends BaseActivity {
             }catch (Exception e){
                 e.printStackTrace();
             }
-                /*
-            new Thread(()->{
-                try {
-                    JSONArray input = SearchApi.search("纳西妲", 0);
-                    for (int i = 0; i < Objects.requireNonNull(input).length(); i++) {  //遍历所有的分类，找到视频那一项
-                        JSONObject type = new JSONObject(input.getJSONObject(i).toString());
-                        if (type.getString("result_type").equals("video")) {
-                            JSONArray data = type.getJSONArray("data");    //把这个列表提出来，接着拆
-                            JSONObject card = new JSONObject(data.getJSONObject(0).toString());
-                            MsgUtil.showText(this,"测试","json正文：\n" + card + "尝试获取值：\n" + JsonUtil.searchString("aid",card) + "\n" + JsonUtil.searchString("bvid",card) + "\n");
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-                 */
         });
     }
 }

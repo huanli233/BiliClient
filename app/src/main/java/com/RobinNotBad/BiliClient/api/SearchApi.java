@@ -54,8 +54,8 @@ public class SearchApi {
                     JSONObject card = data.getJSONObject(j);    //获得视频卡片
 
                     String title = card.getString("title");
-                    title = title.replace("<em class=\"keyword\">","");  //标题里的红字，知道怎么显示但因为懒所以直接删（
-                    title = title.replace("</em>","");                   //显示方式可以用imagespan，参照表情包那部分程序（EmoteUtil），期待后人补齐（
+                    title = title.replace("<em class=\"keyword\">","").replace("</em>","");
+                    //标题里的红字，知道怎么显示但因为懒所以直接删（//显示方式可以用imagespan，参照表情包那部分程序（EmoteUtil），期待后人补齐（
                     title = LittleToolsUtil.htmlToString(title);
 
                     String bvid = card.getString("bvid");

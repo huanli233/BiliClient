@@ -101,7 +101,7 @@ public class UserVideoFragment extends Fragment {
                 if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,requireContext()));
                 e.printStackTrace();
             } catch (JSONException e) {
-                if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,requireContext()));
+                if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,requireContext()));
                 e.printStackTrace();
             }
         }).start();
@@ -126,7 +126,7 @@ public class UserVideoFragment extends Fragment {
             if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,requireContext()));
             e.printStackTrace();
         } catch (JSONException e) {
-            if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,requireContext()));
+            if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,requireContext()));
             e.printStackTrace();
         }
     }

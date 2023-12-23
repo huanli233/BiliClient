@@ -11,8 +11,12 @@ public class BiliClient extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ErrorCatch errorCatch = ErrorCatch.getInstance();
-        errorCatch.init(getApplicationContext());
-        if(context==null) context = getApplicationContext();
+        if(context==null && getApplicationContext()!=null){
+            context = getApplicationContext();
+            ErrorCatch errorCatch = ErrorCatch.getInstance();
+            errorCatch.init(getApplicationContext());
+        }
     }
+
+
 }

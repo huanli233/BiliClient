@@ -19,9 +19,7 @@ import com.RobinNotBad.BiliClient.activity.settings.SetupUIActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
-import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.api.UserLoginApi;
-import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -89,6 +87,8 @@ public class SplashActivity extends Activity {
                         if(!cookies.equals("")) SharedPreferencesUtil.putString("cookies",cookies);
                     }
 
+                    checkWBI();
+
 
                     Intent intent = new Intent();
                     intent.setClass(SplashActivity.this, RecommendActivity.class);   //已登录且联网，去首页
@@ -115,6 +115,9 @@ public class SplashActivity extends Activity {
                         }
                     });
                     e.printStackTrace();
+                } catch (JSONException e) {
+                    runOnUiThread(()->MsgUtil.jsonErr(e,this));
+                    e.printStackTrace();
                 }
             }
             else {
@@ -125,5 +128,17 @@ public class SplashActivity extends Activity {
             }
 
         }).start();
+    }
+
+
+    private void checkWBI() throws JSONException, IOException {
+        int curr = ConfInfoApi.getDateCurr();
+        if (SharedPreferencesUtil.getInt("last_wbi", 0) < curr) {    //限制一天一次
+            Log.e("debug", "检查WBI");
+            SharedPreferencesUtil.putInt("last_wbi", curr);
+
+            String mixin_key = ConfInfoApi.getWBIMixinKey(ConfInfoApi.getWBIRawKey());
+            SharedPreferencesUtil.putString("wbi_mixin_key",mixin_key);
+        }
     }
 }

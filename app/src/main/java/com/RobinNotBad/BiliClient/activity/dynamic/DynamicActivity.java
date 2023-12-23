@@ -133,7 +133,11 @@ public class DynamicActivity extends BaseActivity {
             });
             e.printStackTrace();
         } catch(JSONException e) {
-            runOnUiThread(() -> MsgUtil.quickErr(MsgUtil.err_json, this));
+            runOnUiThread(() -> {
+                MsgUtil.jsonErr(e, this);
+                swipeRefreshLayout.setRefreshing(false);
+                refreshing = false;
+            });
             e.printStackTrace();
         }
 

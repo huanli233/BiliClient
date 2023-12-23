@@ -53,7 +53,7 @@ public class FavoriteFolderListActivity extends BaseActivity {
                 runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
                 e.printStackTrace();
             } catch (JSONException e) {
-                runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,this));
+                runOnUiThread(()-> MsgUtil.jsonErr(e,this));
                 e.printStackTrace();
             }
         }).start();

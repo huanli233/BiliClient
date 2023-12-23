@@ -114,7 +114,7 @@ public class VideoReplyFragment extends Fragment {
                 requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
                 e.printStackTrace();
             } catch (JSONException e) {
-                requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,getContext()));
+                requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
                 e.printStackTrace();
             }
         }).start();
@@ -130,6 +130,7 @@ public class VideoReplyFragment extends Fragment {
                 Log.e("debug","下一页");
                 if(isAdded()) requireActivity().runOnUiThread(()-> replyAdapter.notifyItemRangeInserted(lastSize + 1, replyList.size() + 1 - lastSize));
                 if(result == 1) {
+                    MsgUtil.toast("到底啦QwQ",requireContext());
                     Log.e("debug","到底了");
                     bottom = true;
                 }
@@ -139,7 +140,7 @@ public class VideoReplyFragment extends Fragment {
             if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
             e.printStackTrace();
         } catch (JSONException e) {
-            if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,getContext()));
+            if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
             e.printStackTrace();
         }
     }
