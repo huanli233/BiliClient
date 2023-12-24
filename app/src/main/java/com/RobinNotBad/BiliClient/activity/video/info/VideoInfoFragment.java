@@ -135,13 +135,13 @@ public class VideoInfoFragment extends Fragment {
 
                     description.setOnClickListener(view1 -> {
                         if(desc_expand) description.setMaxLines(3);
-                        else description.setMaxLines(description.getLineCount());
+                        else description.setMaxLines(512);
                         desc_expand = !desc_expand;
                     });
 
                     tags.setOnClickListener(view1 -> {
                         if(tags_expand) tags.setMaxLines(3);
-                        else tags.setMaxLines(tags.getLineCount());
+                        else tags.setMaxLines(512);
                         tags_expand = !tags_expand;
                     });
 
