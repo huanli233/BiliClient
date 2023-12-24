@@ -94,8 +94,13 @@ public class SettingMainActivity extends BaseActivity {
 
         //关于
         MaterialCardView about = findViewById(R.id.about);
-        about.setOnClickListener(view -> MsgUtil.showText(this,"关于",getString(R.string.about)));
-
+        //about.setOnClickListener(view -> MsgUtil.showText(this,"关于",getString(R.string.about)));
+        about.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            intent.setClass(this, SettingAboutActivity.class);
+            startActivity(intent);
+        });
+        
         //彩蛋
         String[] eggList = getResources().getStringArray(R.array.eggs);
         about.setOnLongClickListener(view -> {

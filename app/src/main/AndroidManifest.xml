@@ -180,6 +180,11 @@
             android:label="界面设置"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.settings.SettingAboutActivity"
+            android:exported="true"
+            android:label="关于"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.settings.SettingMainActivity"
             android:exported="true"
             android:label="设置"
