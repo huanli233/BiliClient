@@ -8,8 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.SplashActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.SplashActivity;
 import com.RobinNotBad.BiliClient.api.UserLoginApi;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -133,6 +134,11 @@ public class QRLoginActivity extends BaseActivity {
                     assert response.body() != null;
 
                     JSONObject loginJson = new JSONObject(response.body().string());
+                    /*
+                    runOnUiThread(()->{
+                        scanStat.setText(loginJson.toString());
+                    });
+                     */
 
                     int code = loginJson.getJSONObject("data").getInt("code");
                     switch (code){
@@ -155,9 +161,8 @@ public class QRLoginActivity extends BaseActivity {
                             SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(LittleToolsUtil.getInfoFromCookie("DedeUserID", cookies)));
                             SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, LittleToolsUtil.getInfoFromCookie("bili_jct", cookies));
                             SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies);
-                            SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,loginJson.getJSONObject("data").getString("refresh_token"));
 
-                            Log.e("refresh_token",SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""));
+                            Log.e("accesskey",SharedPreferencesUtil.getString(SharedPreferencesUtil.access_key,""));
 
                             if(SharedPreferencesUtil.getBoolean("setup",false)) {
                                 if(SettingMainActivity.instance!=null) SettingMainActivity.instance.finish();
@@ -191,6 +196,6 @@ public class QRLoginActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
-        }, 2000, 500);
+        }, 500, 500);
     }
 }

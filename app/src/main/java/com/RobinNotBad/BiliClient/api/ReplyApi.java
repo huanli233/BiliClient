@@ -119,7 +119,7 @@ public class ReplyApi {
             Log.e("debug-评论时间戳", String.valueOf(ctime));
 
             String timeStr;
-            if(timeCurr - ctime < 259200000 && replyCtrl.has("time_desc")) timeStr = replyCtrl.getString("time_desc");  //大于3天变成日期
+            if(timeCurr - ctime < 259200000 && reply.has("time_desc")) timeStr = replyCtrl.getString("time_desc");  //大于3天变成日期
             else timeStr = sdf.format(ctime);
 
             if(replyCtrl.has("location")) timeStr += " | IP:" + replyCtrl.getString("location").substring(5);  //这字符串还是切割一下吧不然太长了，只留个地址，前缀去了
