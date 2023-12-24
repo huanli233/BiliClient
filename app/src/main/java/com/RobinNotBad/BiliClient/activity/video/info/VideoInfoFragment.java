@@ -30,6 +30,7 @@ import com.RobinNotBad.BiliClient.api.WatchLaterApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -102,6 +103,8 @@ public class VideoInfoFragment extends Fragment {
         MaterialCardView download = view.findViewById(R.id.download);
         bvidText = view.findViewById(R.id.bvidText);
         danmakuCount = view.findViewById(R.id.danmakuCount);
+
+        if(!SharedPreferencesUtil.getBoolean("tags_enabled",true)) tags.setVisibility(View.GONE);
 
         new Thread(()->{
             try {

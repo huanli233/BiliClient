@@ -63,15 +63,17 @@ public class VideoInfoActivity extends BaseActivity {
                 else tagList = VideoInfoApi.getTagsByBvid(bvid);
                 VideoInfo videoInfo = VideoInfoApi.getInfoByJson(data,tagList);
 
-                viewPager.setOffscreenPageLimit(3);
 
                 List<Fragment> fragmentList = new ArrayList<>();
                 VideoInfoFragment viFragment = VideoInfoFragment.newInstance(videoInfo);
                 fragmentList.add(viFragment);
                 VideoReplyFragment vpFragment = VideoReplyFragment.newInstance(videoInfo.aid,1);
                 fragmentList.add(vpFragment);
-                VideoRcmdFragment vrFragment = VideoRcmdFragment.newInstance(videoInfo.aid);
-                fragmentList.add(vrFragment);
+                if(SharedPreferencesUtil.getBoolean("related_enable",true)) {
+                    VideoRcmdFragment vrFragment = VideoRcmdFragment.newInstance(videoInfo.aid);
+                    fragmentList.add(vrFragment);
+                    viewPager.setOffscreenPageLimit(3);
+                }
 
                 ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
 
