@@ -47,7 +47,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
-         android:layout_height="0dp"
+         android:layout_height="match_parent"
          android:layout_width="match_parent"
          app:layout_constraintStart_toStartOf="parent"
          app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +59,46 @@
              android:layout_width="match_parent"
              android:orientation="vertical"
              android:paddingBottom="20dp">
-            
+
+            <ImageView
+                 android:layout_height="50dp"
+                 android:layout_width="50dp"
+                 android:src="@mipmap/icon"
+                 android:layout_marginTop="32dp"
+                 android:layout_gravity="center"
+                 android:id="@+id/app_icon" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:textSize="14sp"
+                 android:textAllCaps="false"
+                 android:textColor="@color/textwhite"
+                 android:layout_marginTop="5dp"
+                 android:id="@+id/app_name"
+                 android:layout_gravity="center"
+                 android:text="@string/app_name" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:textSize="13sp"
+                 android:textAllCaps="false"
+                 android:textColor="@color/lightdark"
+                 android:layout_marginTop="3dp"
+                 android:text="@string/about_description"
+                 android:layout_gravity="center" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:textSize="11sp"
+                 android:textAllCaps="false"
+                 android:textColor="@color/gray"
+                 android:layout_marginTop="-3dp"
+                 android:id="@+id/app_version"
+                 android:layout_gravity="center" />
+
         </LinearLayout>
 
     </ScrollView>
