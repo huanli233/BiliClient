@@ -47,8 +47,8 @@ public class SpecialLoginActivity extends BaseActivity {
                     String cookies = jsonObject.getString("cookies");
                     SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(LittleToolsUtil.getInfoFromCookie("DedeUserID", cookies)));
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, LittleToolsUtil.getInfoFromCookie("bili_jct", cookies));
-                    SharedPreferencesUtil.putString(SharedPreferencesUtil.access_key, jsonObject.getString("accesskey"));
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies);
+                    SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,jsonObject.getString("refresh_token"));
                     runOnUiThread(() -> Toast.makeText(SpecialLoginActivity.this, "登录成功！", Toast.LENGTH_SHORT).show());
                     SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup, true);
 
@@ -68,7 +68,7 @@ public class SpecialLoginActivity extends BaseActivity {
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("cookies",SharedPreferencesUtil.getString("cookies",""));
-                jsonObject.put("accesskey",SharedPreferencesUtil.getString("access_key",""));
+                jsonObject.put("refresh_token",SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
