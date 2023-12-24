@@ -1,8 +1,10 @@
 package com.RobinNotBad.BiliClient.api;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.model.Reply;
+import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -54,6 +56,9 @@ public class ReplyApi {
     }  //-1错误,0正常，1到底了
 
     public static void analizeReplyArray(boolean isRoot, JSONArray replies,ArrayList<Reply> replyArrayList) throws JSONException {
+        long timeCurr = System.currentTimeMillis();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
         for (int i = 0; i < replies.length(); i++) {
             Reply replyReturn = new Reply();
 
@@ -67,14 +72,12 @@ public class ReplyApi {
             long mid = member.getLong("mid");
             String avatar = member.getString("avatar");
             int level = member.getJSONObject("level_info").getInt("current_level");
-            Log.e("debug-发送者", uname);
-            Log.e("debug-发送者id", String.valueOf(mid));
-            Log.e("debug-发送者头像", avatar);
-            Log.e("debug-发送者等级", String.valueOf(level));
-            replyReturn.senderName = uname;
-            replyReturn.senderID = mid;
-            replyReturn.senderAvatar = avatar;
-            replyReturn.senderLevel = level;
+            UserInfo userInfo = new UserInfo();
+            userInfo.level = level;
+            userInfo.mid = mid;
+            userInfo.name = uname;
+            userInfo.avatar = avatar;
+            replyReturn.sender = userInfo;    //发送者
 
             JSONObject content = reply.getJSONObject("content");
             String message = LittleToolsUtil.htmlToString(content.getString("message"));
@@ -112,19 +115,20 @@ public class ReplyApi {
             //up主觉得很淦
 
             JSONObject replyCtrl = reply.getJSONObject("reply_control");
-            String ctime = "";
-            Log.e("debug-评论时间戳", String.valueOf(reply.getLong("ctime")));
-            if(replyCtrl.has("location")) ctime += replyCtrl.getString("location").substring(0,2) + "\n";  //这字符串还是切割一下吧不然太长了，只留个地址，前缀去了
-            if(SharedPreferencesUtil.getBoolean("fav_timesec",false)) { //判断一下是显示具体日期还是“xx天前”
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                ctime += sdf.format(reply.getLong("ctime") * 1000);
-            }else ctime += replyCtrl.getString("time_desc");
+            long ctime = reply.getLong("ctime") * 1000;
+            Log.e("debug-评论时间戳", String.valueOf(ctime));
+
+            String timeStr;
+            if(timeCurr - ctime < 259200000 && reply.has("time_desc")) timeStr = replyCtrl.getString("time_desc");  //大于3天变成日期
+            else timeStr = sdf.format(ctime);
+
+            if(replyCtrl.has("location")) timeStr += " | IP:" + replyCtrl.getString("location").substring(5);  //这字符串还是切割一下吧不然太长了，只留个地址，前缀去了
 
             if(replyCtrl.has("is_up_top")){
                 if(replyCtrl.getBoolean("is_up_top")) replyReturn.message = "[置顶]" + replyReturn.message;
             }
-            replyReturn.pubTime = ctime;
-            Log.e("debug-时间和IP",ctime);
+            Log.e("debug-时间和IP",timeStr);
+            replyReturn.pubTime = timeStr;
 
             if (isRoot) {
                 if (content.has("pictures") && !content.isNull("pictures")) {

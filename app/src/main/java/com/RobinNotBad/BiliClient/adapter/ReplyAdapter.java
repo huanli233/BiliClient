@@ -89,12 +89,12 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             int realPosition = position - 1;
             ReplyHolder replyHolder = (ReplyHolder) holder;
 
-            Glide.with(context).load(replyList.get(realPosition).senderAvatar)
+            Glide.with(context).load(replyList.get(realPosition).sender.avatar)
                     .placeholder(R.drawable.akari)
                     .apply(RequestOptions.circleCropTransform())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(replyHolder.replyAvatar);
-            replyHolder.userName.setText(replyList.get(realPosition).senderName);
+            replyHolder.userName.setText(replyList.get(realPosition).sender.name);
 
 
             String text = replyList.get(realPosition).message;
@@ -139,7 +139,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             if (replyList.get(realPosition).upLiked) replyHolder.upLiked.setVisibility(View.VISIBLE);
             else replyHolder.upLiked.setVisibility(View.GONE);
-            replyHolder.pubDate.setText("Lv" + String.valueOf(replyList.get(realPosition).senderLevel) + " " + replyList.get(realPosition).pubTime);
+            replyHolder.pubDate.setText(replyList.get(realPosition).pubTime);
 
             if (replyList.get(realPosition).pictureList != null && replyList.get(realPosition).pictureList.size() > 0) {  //图片显示相关
                 replyHolder.imageCard.setVisibility(View.VISIBLE);
@@ -167,7 +167,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             replyHolder.replyAvatar.setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(context, UserInfoActivity.class);
-                intent.putExtra("mid", replyList.get(realPosition).senderID);
+                intent.putExtra("mid", replyList.get(realPosition).sender.mid);
                 context.startActivity(intent);
             });
 
@@ -215,7 +215,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 intent.putExtra("oid",oid);
                 intent.putExtra("rpid",replyList.get(realPosition).rpid);
                 intent.putExtra("parent",replyList.get(realPosition).rpid);
-                if(root!=0) intent.putExtra("parentSender",replyList.get(realPosition).senderName);
+                if(root!=0) intent.putExtra("parentSender",replyList.get(realPosition).sender.name);
                 else intent.putExtra("parentSender","");
                 context.startActivity(intent);
             });

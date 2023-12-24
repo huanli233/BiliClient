@@ -1,6 +1,7 @@
 package com.RobinNotBad.BiliClient.activity.video.info;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -39,7 +40,6 @@ import org.json.JSONException;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Locale;
 
 //真正的视频详情页
@@ -50,7 +50,9 @@ public class VideoInfoFragment extends Fragment {
     private VideoInfo videoInfo;
 
     private ImageView cover,upIcon;
-    private TextView title,description,tagDesc,upName,views,timeText,durationText,bvidText,danmakuCount;
+    private TextView title,description, tags,upName,views,timeText,durationText,bvidText,danmakuCount;
+
+    private boolean desc_expand = false,tags_expand = false;
 
 
     public VideoInfoFragment() {
@@ -79,6 +81,7 @@ public class VideoInfoFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_video_info, container, false);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         super.onViewCreated(view,savedInstanceState);
@@ -87,7 +90,7 @@ public class VideoInfoFragment extends Fragment {
         upIcon = view.findViewById(R.id.upInfo_Icon);
         title = view.findViewById(R.id.title);
         description = view.findViewById(R.id.description);
-        tagDesc = view.findViewById(R.id.tagDesc);
+        tags = view.findViewById(R.id.tags);
         upName = view.findViewById(R.id.upInfo_Name);
         views = view.findViewById(R.id.viewsCount);
         timeText = view.findViewById(R.id.timeText);
@@ -125,10 +128,22 @@ public class VideoInfoFragment extends Fragment {
                     danmakuCount.setText(String.valueOf(videoInfo.danmaku));
                     bvidText.setText(videoInfo.bvid);
                     description.setText(videoInfo.description);
-                    tagDesc.setText("标签：" + videoInfo.tagsDesc);
+                    tags.setText("标签：" + videoInfo.tagsDesc);
                     title.setText(videoInfo.title);
                     timeText.setText(videoInfo.timeDesc);
-                    durationText.setText("视频时长：" + videoInfo.duration);
+                    durationText.setText(videoInfo.duration);
+
+                    description.setOnClickListener(view1 -> {
+                        if(desc_expand) description.setMaxLines(3);
+                        else description.setMaxLines(description.getLineCount());
+                        desc_expand = !desc_expand;
+                    });
+
+                    tags.setOnClickListener(view1 -> {
+                        if(tags_expand) tags.setMaxLines(3);
+                        else tags.setMaxLines(tags.getLineCount());
+                        tags_expand = !tags_expand;
+                    });
 
                     play.setOnClickListener(view1 -> {
                         Glide.get(requireContext()).clearMemory();

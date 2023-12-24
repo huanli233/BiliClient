@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.api;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.model.VideoInfo;
@@ -25,29 +26,29 @@ public class VideoInfoApi {
         String url = "https://api.bilibili.com/x/web-interface/view?bvid=" + bvid;
         Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
-        return new JSONObject(result.getJSONObject("data").toString());
+        return result.getJSONObject("data");
     }
 
     public static JSONObject getJsonByAid(long aid) throws IOException, JSONException {  //通过aid获取json
         String url = "https://api.bilibili.com/x/web-interface/view?aid=" + aid;
         Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
-        return new JSONObject(result.getJSONObject("data").toString());
+        return result.getJSONObject("data");
     }
 
     
-    public static JSONArray getTagJsonByBvid(String bvid) throws IOException, JSONException {  //通过bvid获取json
+    public static JSONArray getTagsByBvid(String bvid) throws IOException, JSONException {  //通过bvid获取tag
         String url = "https://api.bilibili.com/x/tag/archive/tags?bvid=" + bvid;
         Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
-        return new JSONArray(result.getJSONArray("data").toString());
+        return result.getJSONArray("data");
     }
 
-    public static JSONArray getTagJsonByAid(long aid) throws IOException, JSONException {  //通过aid获取json
+    public static JSONArray getTagsByAid(long aid) throws IOException, JSONException {  //通过aid获取tag
         String url = "https://api.bilibili.com/x/tag/archive/tags?aid=" + aid;
         Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
-        return new JSONArray(result.getJSONArray("data"));
+        return result.getJSONArray("data");
     }
     
     public static VideoInfo getInfoByJson(JSONObject data,JSONArray tagJson) throws JSONException {  //项目实在太多qwq 拆就完事了
@@ -63,11 +64,14 @@ public class VideoInfoApi {
         videoInfo.bvid = data.getString("bvid");
         videoInfo.aid = data.getLong("aid");
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         videoInfo.timeDesc = sdf.format(data.getLong("ctime") * 1000);
         Log.e("发布时间",String.valueOf(videoInfo.timeDesc));
 
-        videoInfo.duration = String.valueOf(data.getLong("duration")/60) + "分" + String.valueOf(data.getLong("duration") % 60) + "秒";
+        int duration = data.getInt("duration");
+        int min = duration / 60;
+        int sec = duration % 60;
+        videoInfo.duration = (min<10 ? "0" : "") + min + ":" + (sec<10 ? "0" : "") + sec;
         Log.e("视频时长",videoInfo.duration);
         
         JSONObject owner = data.getJSONObject("owner");
@@ -107,12 +111,12 @@ public class VideoInfoApi {
         videoInfo.pagenames = pagenames;
         videoInfo.cids = cids;
         
-        String tags = "";
+        StringBuilder tags = new StringBuilder();
         for (int i = 0;i<tagJson.length();i++){
-            if(i>0) tags += "/ ";
-            tags += ((JSONObject)tagJson.get(i)).getString("tag_name");
+            if(i>0) tags.append("/ ");
+            tags.append(((JSONObject) tagJson.get(i)).getString("tag_name"));
         }
-        videoInfo.tagsDesc = tags;
+        videoInfo.tagsDesc = tags.toString();
 
         return videoInfo;
     }

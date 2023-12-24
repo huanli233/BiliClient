@@ -59,8 +59,8 @@ public class VideoInfoActivity extends BaseActivity {
                 //ErrorUtil.showText(requireContext(),"调试",data.toString());
 
                 JSONArray tagList;
-                if (bvid==null || bvid.equals("")) tagList = VideoInfoApi.getTagJsonByAid(aid);
-                else tagList = VideoInfoApi.getTagJsonByBvid(bvid);
+                if (bvid==null || bvid.equals("")) tagList = VideoInfoApi.getTagsByAid(aid);
+                else tagList = VideoInfoApi.getTagsByBvid(bvid);
                 VideoInfo videoInfo = VideoInfoApi.getInfoByJson(data,tagList);
 
                 viewPager.setOffscreenPageLimit(3);

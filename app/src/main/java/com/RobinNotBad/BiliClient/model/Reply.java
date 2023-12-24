@@ -8,10 +8,7 @@ import java.util.ArrayList;
 public class Reply {
     public long rpid;
     public String pubTime;
-    public long senderID;
-    public String senderName;
-    public String senderAvatar;
-    public int senderLevel;
+    public UserInfo sender;
     public String message;
     public JSONArray emote;
     public ArrayList<String> pictureList;
