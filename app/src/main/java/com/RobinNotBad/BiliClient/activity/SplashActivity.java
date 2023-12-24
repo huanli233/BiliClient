@@ -19,16 +19,26 @@ import com.RobinNotBad.BiliClient.activity.settings.SetupUIActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
+import com.RobinNotBad.BiliClient.api.CookieRefreshApi;
 import com.RobinNotBad.BiliClient.api.UserLoginApi;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import okhttp3.Response;
 
@@ -88,6 +98,7 @@ public class SplashActivity extends Activity {
                     }
 
                     checkWBI();
+//                    checkCookie();
 
 
                     Intent intent = new Intent();
@@ -139,6 +150,15 @@ public class SplashActivity extends Activity {
 
             String mixin_key = ConfInfoApi.getWBIMixinKey(ConfInfoApi.getWBIRawKey());
             SharedPreferencesUtil.putString("wbi_mixin_key",mixin_key);
+        }
+    }
+
+    private void checkCookie() throws JSONException, IOException {
+        JSONObject cookieInfo = CookieRefreshApi.cookieInfo();
+        if(cookieInfo.getBoolean("refresh")){
+//        if(true){ //forDebug
+            String correspondPath = CookieRefreshApi.getCorrespondPath(cookieInfo.getLong("timestamp"));
+            //只写到了生成CorrespondPath算法，结果按照文档的写算出来的都不对，先不用这个函数了你们自己看着怎么改吧........
         }
     }
 }
