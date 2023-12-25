@@ -123,10 +123,6 @@ public class SearchActivity extends BaseActivity {
                 MsgUtil.showText(this,"特殊彩蛋",getString(R.string.egg_robin_nahida));
                 return;
             }
-            if(str.contains("芙宁娜")){
-                MsgUtil.showText(this,"特殊彩蛋",getString(R.string.egg_robin_furina));
-                return;
-            }
         }
 
         if(!refreshing) {
