@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONException;
@@ -49,6 +51,26 @@ public class VideoInfoActivity extends BaseActivity {
         pageName.setText("视频详情");
 
         ViewPager viewPager = findViewById(R.id.viewPager);
+        
+        
+        Log.e("VideoInfoActivity",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
+        new Thread(()->{
+            try {
+            	List<String> responseCookies = NetWorkUtil.get("https://www.bilibili.com/").networkResponse().headers("Set-Cookie");
+                            String buvid3 = "";
+                            for(int i = 0; i < responseCookies.size(); ++i) {
+                            	if(responseCookies.get(i).startsWith("buvid3")) {
+                            		buvid3 = responseCookies.get(i);
+                            	}
+                            }
+                    
+                            buvid3=buvid3.substring(buvid3.indexOf("buvid3"),buvid3.indexOf(";",buvid3.indexOf("buvid3"))+1);
+                            Log.e("buvid3",buvid3);
+            } catch(IOException err) {
+            	Log.e("","buvid3获取失败");
+            }
+        }).start();
+        
 
         new Thread(()->{
             JSONObject data;

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
 import com.RobinNotBad.BiliClient.activity.video.MultiPageActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
+import com.RobinNotBad.BiliClient.api.LikeCoinFavApi;
 import com.RobinNotBad.BiliClient.api.WatchLaterApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -103,6 +105,10 @@ public class VideoInfoFragment extends Fragment {
         MaterialCardView download = view.findViewById(R.id.download);
         bvidText = view.findViewById(R.id.bvidText);
         danmakuCount = view.findViewById(R.id.danmakuCount);
+        LinearLayout like = view.findViewById(R.id.layout_like);
+        LinearLayout coin = view.findViewById(R.id.layout_coin);
+        LinearLayout fav = view.findViewById(R.id.layout_fav);
+        
 
         if(!SharedPreferencesUtil.getBoolean("tags_enabled",true)) tags.setVisibility(View.GONE);
 
@@ -175,7 +181,35 @@ public class VideoInfoFragment extends Fragment {
                         startActivity(intent);
                         return true;
                     });
-
+                    like.setOnClickListener(view1 -> new Thread(()->{
+                        try {
+                            int result = LikeCoinFavApi.like(videoInfo.aid,1);
+                            if(result == 0) requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), "点赞成功", Toast.LENGTH_SHORT).show());
+                            else requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), "点赞失败，错误码：" + result, Toast.LENGTH_SHORT).show());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }).start());
+                    coin.setOnClickListener(view1 -> new Thread(()->{
+                        try {
+                            int result = LikeCoinFavApi.coin(videoInfo.aid,1);
+                            if(result == 0) requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), "投币成功", Toast.LENGTH_SHORT).show());
+                            else requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), "投币失败，错误码：" + result, Toast.LENGTH_SHORT).show());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }).start());
+                    fav.setOnClickListener(view1 -> {
+                        Intent intent = new Intent();
+                        intent.setClass(view.getContext(), AddFavoriteActivity.class);
+                        intent.putExtra("aid",videoInfo.aid);
+                        intent.putExtra("bvid",videoInfo.bvid);
+                        startActivity(intent);
+                    });
                     addWatchlater.setOnClickListener(view1 -> new Thread(()->{
                         try {
                             int result = WatchLaterApi.add(videoInfo.aid);

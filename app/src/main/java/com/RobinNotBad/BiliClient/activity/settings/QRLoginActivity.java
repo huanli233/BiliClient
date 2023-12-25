@@ -13,9 +13,11 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.UserLoginApi;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
 
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -152,9 +154,20 @@ public class QRLoginActivity extends BaseActivity {
                         case 0:
                             String cookies = UserLoginApi.getCookies(response);
 
+
+                            List<String> responseCookies = NetWorkUtil.get("https://www.bilibili.com/").networkResponse().headers("Set-Cookie");
+                            String buvid3 = "";
+                            for(int i = 0; i < responseCookies.size(); ++i) {
+                            	if(responseCookies.get(i).startsWith("buvid3")) {
+                            		buvid3 = responseCookies.get(i);
+                            	}
+                            }
+                            buvid3=buvid3.substring(buvid3.indexOf("buvid3"),buvid3.indexOf(";",buvid3.indexOf("buvid3"))+1);
+                            Log.e("buvid3",buvid3);//获取buvid3
+
                             SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(LittleToolsUtil.getInfoFromCookie("DedeUserID", cookies)));
                             SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, LittleToolsUtil.getInfoFromCookie("bili_jct", cookies));
-                            SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies);
+                            SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, buvid3 + cookies);
                             SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,loginJson.getJSONObject("data").getString("refresh_token"));
 
                             Log.e("refresh_token",SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""));
