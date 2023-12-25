@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.activity.video;
+package com.RobinNotBad.BiliClient.activity.video.info;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -54,7 +54,7 @@ public class WriteReplyActivity extends BaseActivity {
                             if (result == 0)
                                 runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, "发送成功>w<", Toast.LENGTH_SHORT).show());
                             else
-                                runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, "发送失败TAT", Toast.LENGTH_SHORT).show());
+                                runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, "发送失败TAT\n错误码："+result, Toast.LENGTH_SHORT).show());
                             finish();
                         } catch (IOException e) {
                             e.printStackTrace();

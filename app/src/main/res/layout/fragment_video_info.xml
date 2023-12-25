@@ -239,7 +239,7 @@
                 android:layout_marginEnd="10dp"
                 android:text="标签：???"
                 android:textSize="12sp"
-                android:maxLines="3"
+                android:maxLines="1"
                 android:ellipsize="end"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -284,13 +284,15 @@
                      android:text="播放" />
 
             </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/like_coin_fav"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="#78242424"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="0dp"
@@ -300,61 +302,69 @@
                 app:layout_constraintTop_toBottomOf="@id/play"
                 app:strokeColor="#70707070"
                 app:strokeWidth="0.1dp">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_height="50dp"
                     android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:layout_margin="5dp"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
                     <LinearLayout
                         android:id="@+id/layout_like"
-                        android:layout_height="50dp"
                         android:layout_width="wrap_content"
+                        android:layout_height="50dp"
                         android:orientation="vertical"
                         app:layout_constraintStart_toStartOf="parent">
+
                         <ImageButton
-                            android:layout_height="30dp"
                             android:layout_width="30dp"
-                            android:background="@drawable/icon_like_0"/>
+                            android:layout_height="30dp"
+                            android:background="@drawable/icon_like_0" />
+
                         <TextView
-                            android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:text="点赞"/>
+                            android:layout_height="wrap_content"
+                            android:text="点赞" />
                     </LinearLayout>
-                    
+
                     <LinearLayout
                         android:id="@+id/layout_coin"
-                        android:layout_height="50dp"
                         android:layout_width="wrap_content"
+                        android:layout_height="50dp"
                         android:orientation="vertical"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/layout_fav"
                         app:layout_constraintStart_toStartOf="@id/layout_like"
-                        app:layout_constraintEnd_toEndOf="@id/layout_fav">
+                        app:layout_constraintTop_toTopOf="parent">
+
                         <ImageButton
-                            android:layout_height="30dp"
                             android:layout_width="30dp"
-                            android:background="@drawable/icon_coin_0"/>
+                            android:layout_height="30dp"
+                            android:background="@drawable/icon_coin_0" />
+
                         <TextView
-                            android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:text="投币"/>
+                            android:layout_height="wrap_content"
+                            android:text="投币" />
                     </LinearLayout>
-                    
+
                     <LinearLayout
                         android:id="@+id/layout_fav"
-                        android:layout_height="50dp"
                         android:layout_width="wrap_content"
+                        android:layout_height="50dp"
                         android:orientation="vertical"
                         app:layout_constraintEnd_toEndOf="parent">
+
                         <ImageButton
-                            android:layout_height="30dp"
                             android:layout_width="30dp"
-                            android:background="@drawable/icon_favourite_0"/>
+                            android:layout_height="30dp"
+                            android:background="@drawable/icon_favourite_0" />
+
                         <TextView
-                            android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:text="收藏"/>
+                            android:layout_height="wrap_content"
+                            android:text="收藏" />
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>

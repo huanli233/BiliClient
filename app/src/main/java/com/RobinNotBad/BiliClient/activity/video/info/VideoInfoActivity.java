@@ -28,6 +28,7 @@ import org.json.JSONArray;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 //视频详情页，但这只是个壳，瓤是VideoInfoFragment、VideoReplyFragment、VideoRcmdFragment
 
@@ -54,9 +55,10 @@ public class VideoInfoActivity extends BaseActivity {
         
         
         Log.e("VideoInfoActivity",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
+        /*
         new Thread(()->{
             try {
-            	List<String> responseCookies = NetWorkUtil.get("https://www.bilibili.com/").networkResponse().headers("Set-Cookie");
+            	List<String> responseCookies = Objects.requireNonNull(Objects.requireNonNull(NetWorkUtil.get("https://www.bilibili.com/")).networkResponse()).headers("Set-Cookie");
                             String buvid3 = "";
                             for(int i = 0; i < responseCookies.size(); ++i) {
                             	if(responseCookies.get(i).startsWith("buvid3")) {
@@ -70,6 +72,8 @@ public class VideoInfoActivity extends BaseActivity {
             	Log.e("","buvid3获取失败");
             }
         }).start();
+
+         */
         
 
         new Thread(()->{

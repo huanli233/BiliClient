@@ -124,7 +124,7 @@
             android:label="跳转播放"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.video.WriteReplyActivity"
+            android:name=".activity.video.info.WriteReplyActivity"
             android:exported="true"
             android:label="写评论"
             android:screenOrientation="portrait" />
@@ -160,7 +160,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NoSwipe" />
         <activity
-            android:name=".activity.video.ReplyInfoActivity"
+            android:name=".activity.video.info.ReplyInfoActivity"
             android:exported="true"
             android:label="评论详情"
             android:screenOrientation="portrait" />

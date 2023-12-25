@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.activity.video;
+package com.RobinNotBad.BiliClient.activity.video.info;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -110,6 +110,7 @@ public class ReplyInfoActivity extends BaseActivity {
                 Log.e("debug","下一页");
                 runOnUiThread(()-> replyAdapter.notifyItemRangeInserted(lastSize + 1,replyList.size() + 1 - lastSize));
                 if(result == 1) {
+                    runOnUiThread(()-> MsgUtil.toast("到底啦QwQ",this));
                     Log.e("debug","到底了");
                     bottom = true;
                 }

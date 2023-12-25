@@ -130,8 +130,7 @@ public class VideoReplyFragment extends Fragment {
                 Log.e("debug","下一页");
                 if(isAdded()) requireActivity().runOnUiThread(()-> replyAdapter.notifyItemRangeInserted(lastSize + 1, replyList.size() + 1 - lastSize));
                 if(result == 1) {
-                    MsgUtil.toast("到底啦QwQ",requireContext());
-                    Log.e("debug","到底了");
+                    requireActivity().runOnUiThread(()-> MsgUtil.toast("到底啦QwQ",requireContext()));
                     bottom = true;
                 }
             }

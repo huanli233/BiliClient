@@ -59,7 +59,6 @@ public class VideoInfoFragment extends Fragment {
 
 
     public VideoInfoFragment() {
-
     }
 
 
@@ -110,7 +109,7 @@ public class VideoInfoFragment extends Fragment {
         LinearLayout fav = view.findViewById(R.id.layout_fav);
         
 
-        if(!SharedPreferencesUtil.getBoolean("tags_enabled",true)) tags.setVisibility(View.GONE);
+        if(!SharedPreferencesUtil.getBoolean("tags_enable",true)) tags.setVisibility(View.GONE);
 
         new Thread(()->{
             try {
@@ -149,7 +148,7 @@ public class VideoInfoFragment extends Fragment {
                     });
 
                     tags.setOnClickListener(view1 -> {
-                        if(tags_expand) tags.setMaxLines(3);
+                        if(tags_expand) tags.setMaxLines(1);
                         else tags.setMaxLines(512);
                         tags_expand = !tags_expand;
                     });
