@@ -1,12 +1,20 @@
 package com.RobinNotBad.BiliClient.activity.settings;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.user.UserInfoActivity;
+import com.RobinNotBad.BiliClient.model.UserInfo;
+import com.google.android.material.card.MaterialCardView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 public class SettingAboutActivity extends BaseActivity {
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
@@ -23,5 +31,44 @@ public class SettingAboutActivity extends BaseActivity {
         }catch(PackageManager.NameNotFoundException e){
             e.printStackTrace();
         }
+        
+        Glide.with(this).load(R.drawable.avatar_robin)
+                .placeholder(R.drawable.akari)
+                .apply(RequestOptions.circleCropTransform())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into((ImageView)findViewById(R.id.robinAvatar));
+        Glide.with(this).load(R.drawable.avatar_dudu)
+                .placeholder(R.drawable.akari)
+                .apply(RequestOptions.circleCropTransform())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into((ImageView)findViewById(R.id.duduAvatar));
+        Glide.with(this).load(R.drawable.avatar_dada)
+                .placeholder(R.drawable.akari)
+                .apply(RequestOptions.circleCropTransform())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into((ImageView)findViewById(R.id.dadaAvatar));
+        Glide.with(this).load(R.drawable.avatar_moye)
+                .placeholder(R.drawable.akari)
+                .apply(RequestOptions.circleCropTransform())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into((ImageView)findViewById(R.id.moyeAvatar));
+        ((MaterialCardView)findViewById(R.id.robin_card)).setOnClickListener(view -> {
+            Intent intent = new Intent()
+                    .setClass(this, UserInfoActivity.class)
+                    .putExtra("mid", (long)646521226);
+            startActivity(intent);
+        });
+        ((MaterialCardView)findViewById(R.id.dudu_card)).setOnClickListener(view -> {
+            Intent intent = new Intent()
+                    .setClass(this, UserInfoActivity.class)
+                    .putExtra("mid", (long)517053179);
+            startActivity(intent);
+        });
+        ((MaterialCardView)findViewById(R.id.moye_card)).setOnClickListener(view -> {
+            Intent intent = new Intent()
+                    .setClass(this, UserInfoActivity.class)
+                    .putExtra("mid", (long)394675616);
+            startActivity(intent);
+        });
     }
 }

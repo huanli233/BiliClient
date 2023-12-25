@@ -1,72 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<androidx.constraintlayout.widget.ConstraintLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent">
 
     <ImageView
-        android:id="@+id/userAvatar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="12dp"
-        android:adjustViewBounds="true"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/akari" />
+         android:layout_height="0dp"
+         android:layout_width="0dp"
+         android:adjustViewBounds="true"
+         android:src="@drawable/akari"
+         app:layout_constraintTop_toTopOf="parent"
+         app:layout_constraintDimensionRatio="1:1"
+         app:layout_constraintStart_toStartOf="parent"
+         android:layout_marginTop="12dp"
+         android:layout_marginStart="10dp"
+         android:id="@+id/userAvatar" />
 
     <TextView
-        android:id="@+id/userName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="1dp"
-        android:singleLine="true"
-        android:text="蔡徐坤"
-        app:layout_constraintBottom_toTopOf="@+id/userFans"
-        app:layout_constraintStart_toEndOf="@id/userAvatar"
-        app:layout_constraintTop_toTopOf="@id/userAvatar" />
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_marginBottom="1dp"
+         app:layout_constraintTop_toTopOf="@id/userAvatar"
+         android:singleLine="true"
+         app:layout_constraintStart_toEndOf="@id/userAvatar"
+         android:layout_marginTop="2dp"
+         android:layout_marginStart="6dp"
+         app:layout_constraintBottom_toTopOf="@+id/userFans"
+         android:id="@+id/userName"
+         android:text="蔡徐坤" />
 
     <TextView
-        android:id="@+id/userFans"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="-1dp"
-        android:layout_marginBottom="2dp"
-        android:alpha="0.7"
-        android:text="Lv7  已关注\n2.5万粉丝"
-        android:textSize="11sp"
-        app:layout_constraintBottom_toBottomOf="@+id/userAvatar"
-        app:layout_constraintStart_toEndOf="@id/userAvatar"
-        app:layout_constraintTop_toBottomOf="@id/userName" />
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_marginBottom="2dp"
+         android:alpha="0.7"
+         android:textSize="11sp"
+         app:layout_constraintStart_toEndOf="@id/userAvatar"
+         android:layout_marginTop="-1dp"
+         app:layout_constraintBottom_toBottomOf="@+id/userAvatar"
+         android:layout_marginStart="6dp"
+         app:layout_constraintTop_toBottomOf="@id/userName"
+         android:id="@+id/userFans"
+         android:text="Lv7  已关注\n2.5万粉丝" />
 
     <TextView
-        android:id="@+id/userDesc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="10dp"
-        android:text="只因你太美！"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userAvatar"
-        tools:ignore="TouchTargetSizeCheck" />
+         android:layout_height="wrap_content"
+         android:layout_width="0dp"
+         android:layout_marginEnd="10dp"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         android:layout_marginTop="2dp"
+         android:layout_marginStart="10dp"
+         app:layout_constraintTop_toBottomOf="@id/userAvatar"
+         tools:ignore="TouchTargetSizeCheck"
+         android:id="@+id/userDesc"
+         android:text="只因你太美！" />
 
     <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginVertical="4dp"
-        android:layout_marginHorizontal="8dp"
-        android:background="#318C8C8C"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userDesc" />
+         android:layout_height="1dp"
+         android:layout_width="match_parent"
+         android:layout_marginVertical="4dp"
+         android:background="#318C8C8C"
+         android:layout_marginHorizontal="8dp"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintTop_toBottomOf="@id/userDesc"
+         android:id="@+id/divider" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
