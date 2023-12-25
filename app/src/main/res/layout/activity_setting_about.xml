@@ -383,7 +383,7 @@
                          android:textSize="11sp"
                          android:singleLine="true"
                          android:textColor="#fff"
-                         app:layout_constraintStart_toEndOf="@id/dragStart"
+                         app:layout_constraintStart_toEndOf="@id/dadaAvatar"
                          android:layout_marginTop="1dp"
                          app:layout_constraintBottom_toBottomOf="@+id/dadaAvatar"
                          android:layout_marginStart="6dp"
