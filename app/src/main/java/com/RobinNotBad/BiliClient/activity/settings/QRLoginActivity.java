@@ -30,6 +30,7 @@ import okhttp3.Response;
 //登录页面，参考了腕上哔哩和WearBili的代码
 
 public class QRLoginActivity extends BaseActivity {
+    public static QRLoginActivity instance = null;
     private ImageView qrImageView;
     private TextView scanStat;
     private int clickCount = 0;
@@ -40,7 +41,8 @@ public class QRLoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Log.e("debug","进入登录页面");
-
+        instance = this;
+        
         findViewById(R.id.top).setOnClickListener(view -> finish());
 
         qrImageView = findViewById(R.id.qrImage);
