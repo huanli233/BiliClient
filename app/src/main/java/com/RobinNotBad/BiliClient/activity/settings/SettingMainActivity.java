@@ -88,10 +88,6 @@ public class SettingMainActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        //开源
-        MaterialCardView openSource = findViewById(R.id.openSource);
-        openSource.setOnClickListener(view -> MsgUtil.showText(this,"开源信息",getString(R.string.opensource)));
-
         //关于
         MaterialCardView about = findViewById(R.id.about);
         //about.setOnClickListener(view -> MsgUtil.showText(this,"关于",getString(R.string.about)));
