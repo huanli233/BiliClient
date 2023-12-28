@@ -23,7 +23,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 
 import okhttp3.Response;
 
@@ -41,7 +43,7 @@ public class ConfInfoApi
 
     public static final String USER_AGENT_DEF = "Mozilla/5.0 BiliDroid/4.34.0 (bbcallen@gmail.com)";
     public static final String USER_AGENT_OWN = "BiliClient/2.2 (robin_0229@qq.com; bilibili@RobinNotBad;)";
-    public static final String USER_AGENT_WEB = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36";
+    public static final String USER_AGENT_WEB = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0";
     private static final HashMap<String, String> conf = new HashMap<String, String>(){{
         put("appkey", "1d8b6e7d45233436");  //27eb53fc9058f8c3
         put("actionKey", "appkey");
@@ -101,22 +103,46 @@ public class ConfInfoApi
     }
 
     //计算时需要按字母顺序排列
+    //使用时记得切换web的请求头
     public static String signWBI(String url_query_before_wts,String url_query_after_wts ,String mixin_key) {
         String wts = String.valueOf(System.currentTimeMillis() / 1000);
-        String calc_str = Uri.encode(url_query_before_wts, "@#&=*+-_.,:!?()/~'%") + "&wts=" + wts + Uri.encode(url_query_after_wts, "@#&=*+-_.,:!?()/~'%") + mixin_key;
+        String calc_str = sortUrlParams(Uri.encode(url_query_before_wts, "@#&=*+-_.,:!?()/~'%") + "&wts=" + wts + Uri.encode(url_query_after_wts, "@#&=*+-_.,:!?()/~'%") + mixin_key);
         Log.e("calc_str",calc_str);
 
         String w_rid = md5(calc_str);
 
         return url_query_before_wts + url_query_after_wts + "&w_rid=" + w_rid + "&wts=" + wts;
     }
+    public static String sortUrlParams(String url) {
+        // 解析URL参数
+        Map<String, String> paramMap = new HashMap<>();
+        String[] params = url.split("&");
+        for (String param : params) {
+            String[] keyValue = param.split("=");
+            if (keyValue.length == 2) {
+                paramMap.put(keyValue[0], keyValue[1]);
+            }else if (keyValue.length == 1) {
+                paramMap.put(keyValue[0], "");
+            }
+        }
 
+        // 使用TreeMap对参数进行排序
+        Map<String, String> sortedMap = new TreeMap<>(paramMap);
 
+        // 构建排序后的URL
+        StringBuilder sortedUrl = new StringBuilder();
+        boolean isFirst = true;
+        for (Map.Entry<String, String> entry : sortedMap.entrySet()) {
+            if (!isFirst) {
+                sortedUrl.append("&");
+            } else {
+                isFirst = false;
+            }
+            sortedUrl.append(entry.getKey()).append("=").append(entry.getValue());
+        }
 
-
-
-
-
+        return sortedUrl.toString();
+    }
 
     private static String md5(String plainText) {
         byte[] secretBytes;

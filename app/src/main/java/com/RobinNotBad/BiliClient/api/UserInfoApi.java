@@ -66,7 +66,7 @@ public class UserInfoApi {
         String args = "keyword=" + searchKeyword + "&mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
                 + "&ps=30&tid=0";
         Log.e("debug",url);
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args,"", SharedPreferencesUtil.getString("wbi_mixin_key","")), ConfInfoApi.defHeaders).body()).string());
+        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args,"", SharedPreferencesUtil.getString("wbi_mixin_key","")), ConfInfoApi.webHeaders).body()).string());
         if(all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
             JSONObject list = data.getJSONObject("list");

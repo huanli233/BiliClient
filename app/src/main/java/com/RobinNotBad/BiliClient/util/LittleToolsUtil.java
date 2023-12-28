@@ -70,7 +70,7 @@ public class LittleToolsUtil {
     public static String getFileFirstName(String file){
         for (int i = 0; i < file.length(); i++) {
             if(file.charAt(i)=='.'){
-                return file.substring(0,i-1);
+                return file.substring(0,i);
             }
         }
         return "fail";
