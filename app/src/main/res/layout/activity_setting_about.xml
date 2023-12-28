@@ -502,6 +502,79 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+                        <com.google.android.material.card.MaterialCardView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 app:cardMaxElevation="0dp"
+                 android:layout_marginEnd="6dp"
+                 app:strokeColor="#70707070"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="#78242424"
+                 android:layout_marginTop="2dp"
+                 app:layout_constraintBottom_toBottomOf="parent"
+                 android:layout_marginStart="6dp"
+                 android:layout_marginBottom="2dp"
+                 app:layout_constraintTop_toTopOf="parent"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:strokeWidth="0.1dp"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:cardCornerRadius="4dp"
+                 android:id="@+id/silent_card">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent">
+
+                    <ImageView
+                         android:layout_height="0dp"
+                         android:layout_width="0dp"
+                         android:adjustViewBounds="true"
+                         app:layout_constraintHeight_percent="0.7"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintDimensionRatio="1:1"
+                         app:layout_constraintStart_toStartOf="parent"
+                         app:layout_constraintBottom_toBottomOf="parent"
+                         android:layout_marginStart="8dp"
+                         android:id="@+id/silentAvatar" />
+
+                    <TextView
+                         android:layout_height="wrap_content"
+                         android:layout_width="wrap_content"
+                         android:ellipsize="end"
+                         android:singleLine="true"
+                         android:textColor="#fff"
+                         app:layout_constraintStart_toEndOf="@id/silentAvatar"
+                         android:layout_marginTop="2dp"
+                         android:layout_marginStart="6dp"
+                         app:layout_constraintBottom_toTopOf="@+id/silentDesc"
+                         android:layout_marginBottom="1dp"
+                         app:layout_constraintTop_toTopOf="@id/silentAvatar"
+                         android:id="@+id/silentName"
+                         android:text="silent碎月" />
+
+                    <TextView
+                         android:layout_height="wrap_content"
+                         android:layout_width="0dp"
+                         android:ellipsize="end"
+                         android:textSize="11sp"
+                         android:singleLine="true"
+                         android:textColor="#fff"
+                         app:layout_constraintStart_toEndOf="@id/silentAvatar"
+                         android:layout_marginTop="1dp"
+                         app:layout_constraintBottom_toBottomOf="@+id/silentAvatar"
+                         android:layout_marginStart="6dp"
+                         app:layout_constraintTop_toBottomOf="@id/silentName"
+                         android:layout_marginBottom="2dp"
+                         android:alpha="0.7"
+                         app:layout_constraintEnd_toEndOf="parent"
+                         android:id="@+id/silentDesc"
+                         android:text="我是镜流小姐的狗" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
             <View
                  android:layout_height="1dp"
                  android:layout_width="match_parent"
