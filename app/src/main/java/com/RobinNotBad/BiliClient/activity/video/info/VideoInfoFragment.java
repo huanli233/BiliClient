@@ -2,12 +2,14 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,6 +56,7 @@ public class VideoInfoFragment extends Fragment {
 
     private ImageView cover,upIcon;
     private TextView title,description, tags,upName,views,timeText,durationText,bvidText,danmakuCount;
+    private ImageButton fav;
 
     private boolean desc_expand = false,tags_expand = false;
 
@@ -104,9 +107,9 @@ public class VideoInfoFragment extends Fragment {
         MaterialCardView download = view.findViewById(R.id.download);
         bvidText = view.findViewById(R.id.bvidText);
         danmakuCount = view.findViewById(R.id.danmakuCount);
-        LinearLayout like = view.findViewById(R.id.layout_like);
-        LinearLayout coin = view.findViewById(R.id.layout_coin);
-        LinearLayout fav = view.findViewById(R.id.layout_fav);
+        ImageButton like = view.findViewById(R.id.btn_like);
+        ImageButton coin = view.findViewById(R.id.btn_coin);
+        fav = view.findViewById(R.id.btn_fav);
         
 
         if(!SharedPreferencesUtil.getBoolean("tags_enable",true)) tags.setVisibility(View.GONE);
@@ -183,7 +186,13 @@ public class VideoInfoFragment extends Fragment {
                     like.setOnClickListener(view1 -> new Thread(()->{
                         try {
                             int result = LikeCoinFavApi.like(videoInfo.aid,1);
-                            if(result == 0) requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), "点赞成功", Toast.LENGTH_SHORT).show());
+                            if(result == 0) {
+                                requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), "点赞成功", Toast.LENGTH_SHORT).show());
+                                like.setBackground(ContextCompat.getDrawable(requireContext(),R.drawable.icon_like_1));
+                                like.setOnClickListener(view2 -> new Thread(()->{
+                                    Toast.makeText(requireContext(),"暂未完成",Toast.LENGTH_SHORT).show();
+                                }));                               
+                            }
                             else requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), "点赞失败，错误码：" + result, Toast.LENGTH_SHORT).show());
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -194,7 +203,13 @@ public class VideoInfoFragment extends Fragment {
                     coin.setOnClickListener(view1 -> new Thread(()->{
                         try {
                             int result = LikeCoinFavApi.coin(videoInfo.aid,1);
-                            if(result == 0) requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), "投币成功", Toast.LENGTH_SHORT).show());
+                            if(result == 0) {
+                                requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), "投币成功,长按可投2币", Toast.LENGTH_SHORT).show());
+                                like.setBackground(ContextCompat.getDrawable(requireContext(),R.drawable.icon_coin_1));
+                                like.setOnClickListener(view2 -> new Thread(()->{
+                                    Toast.makeText(requireContext(),"暂未完成",Toast.LENGTH_SHORT).show();
+                                }));
+                            }
                             else requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), "投币失败，错误码：" + result, Toast.LENGTH_SHORT).show());
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -207,7 +222,7 @@ public class VideoInfoFragment extends Fragment {
                         intent.setClass(view.getContext(), AddFavoriteActivity.class);
                         intent.putExtra("aid",videoInfo.aid);
                         intent.putExtra("bvid",videoInfo.bvid);
-                        startActivity(intent);
+                        startActivityForResult(intent,114514);
                     });
                     addWatchlater.setOnClickListener(view1 -> new Thread(()->{
                         try {
@@ -280,4 +295,13 @@ public class VideoInfoFragment extends Fragment {
             }
         }).start();
     }
+    @Override
+    @Deprecated
+    public void onActivityResult(int request, int result, Intent data) {
+        super.onActivityResult(request,result ,data);
+        if(request==114514&&result==Activity.RESULT_OK) {
+        	fav.setBackgroundResource(R.drawable.icon_favourite_1);
+        }
+    }
+    
 }

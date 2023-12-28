@@ -318,6 +318,7 @@
                         app:layout_constraintStart_toStartOf="parent">
 
                         <ImageButton
+                            android:id="@+id/btn_like"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:background="@drawable/icon_like_0" />
@@ -339,6 +340,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageButton
+                            android:id="@+id/btn_coin"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:background="@drawable/icon_coin_0" />
@@ -357,6 +359,7 @@
                         app:layout_constraintEnd_toEndOf="parent">
 
                         <ImageButton
+                            android:id="@+id/btn_fav"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:background="@drawable/icon_favourite_0" />
