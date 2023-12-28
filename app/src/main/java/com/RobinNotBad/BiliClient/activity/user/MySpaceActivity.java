@@ -62,13 +62,14 @@ public class MySpaceActivity extends BaseActivity {
         new Thread(()->{
             try {
                 UserInfo userInfo = UserInfoApi.getCurrentUserInfo();
+                int userCoin = UserInfoApi.getCurrentUserCoin();
                 runOnUiThread(() -> {
                     Glide.with(MySpaceActivity.this).load(userInfo.avatar)
                             .placeholder(R.drawable.akari).apply(RequestOptions.circleCropTransform())
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(userAvatar);
                     userName.setText(userInfo.name);
-                    userFans.setText(LittleToolsUtil.toWan(userInfo.fans) + "粉丝");
+                    userFans.setText(LittleToolsUtil.toWan(userInfo.fans) + "粉丝 " + String.valueOf(userCoin) + "硬币");
                     userDesc.setText(userInfo.sign);
 
                     myInfo.setOnClickListener(view -> {

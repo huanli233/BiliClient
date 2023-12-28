@@ -59,6 +59,25 @@ public class UserInfoApi {
         }
         else return new UserInfo(0,"加载失败","","",0,0,false,"");
     }
+    
+    public static int getCurrentUserCoin()  {
+        try{
+            String url = "https://account.bilibili.com/site/getCoin";
+            JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.defHeaders).body()).string());
+            if(all.has("data") && !all.isNull("data")) {
+                JSONObject data = all.getJSONObject("data");
+                if(data.get("money") == null) return 0;
+                else return data.getInt("money");
+            }
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        catch(JSONException e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 
     public static int getUserVideos(long mid, int page, String searchKeyword,ArrayList<VideoCard> videoList) throws IOException, JSONException {
