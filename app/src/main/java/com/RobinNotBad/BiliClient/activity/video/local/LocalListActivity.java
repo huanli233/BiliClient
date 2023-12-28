@@ -49,7 +49,7 @@ public class LocalListActivity extends BaseActivity {
         findViewById(R.id.top).setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setClass(LocalListActivity.this, MenuActivity.class);
-            intent.putExtra("from",4);
+            intent.putExtra("from",5);
             startActivity(intent);
         });
 
