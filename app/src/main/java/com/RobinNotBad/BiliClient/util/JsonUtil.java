@@ -6,6 +6,9 @@ import androidx.annotation.Nullable;
 
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+
 /*
 2023-12-22 RobinNotBad
 这玩意是可以用来快速拆解的，但也许并没有什么用
@@ -60,5 +63,34 @@ public class JsonUtil {
             }
         }
         return defaultValue;
+    }
+
+    //json列项函数 用于表情包，自己写的以替换luern的库
+    public static ArrayList<String> getJsonKeys(JSONObject jsonObject){
+        ArrayList<String> list = new ArrayList<>();
+        String str = jsonObject.toString();
+
+
+        while (str.contains("\":")){    //先看有没有项，找到项的结束符 ":
+            int end_index = str.indexOf("\":");
+            int i = end_index-1;
+            while (str.charAt(i)!='\"' && i>1) i--;    //找到后，一直往后退格，直到找到 "
+            String key = str.substring(i+1,end_index);    //截取，添加到列表
+            list.add(key);
+
+            //还没结束喵！
+            if(str.charAt(end_index+2) == '{'){    //如果该项是jsonObject
+                int count=1;
+                for (int j = end_index+3; j < str.length(); j++) {  //找到这个jsonObject的结束位置，然后把它截掉，防止里面的项干扰下一次寻找
+                    if(str.charAt(j)=='{') count++;
+                    else if (str.charAt(j)=='}') count--;
+                    if(count==0) {
+                        str = str.substring(j+1);
+                        break;
+                    }
+                }
+            } else str = str.substring(end_index+2);  //如果不是，直接把 "项名:" 截了即可
+        }
+        return list;
     }
 }

@@ -11,8 +11,8 @@ android {
         minSdk 17
         //noinspection ExpiredTargetSdkVersion
         targetSdk 26
-        versionCode 20231224
-        versionName "2.3.3"
+        versionCode 20231229
+        versionName "2.3.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -49,5 +49,4 @@ dependencies {
     //noinspection GradleCompatible
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
-    implementation 'cn.luern0313.lson:Lson:0.90'
 }

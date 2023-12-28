@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="textwhite">#FEFEFE</color>
-    <color name="lightdark">#808080</color>
     <color name="bgblack">#000000</color>
     <color name="pink">#FBFB8799</color>
     <color name="gray">#70707070</color>

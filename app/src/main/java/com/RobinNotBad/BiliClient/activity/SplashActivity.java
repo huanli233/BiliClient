@@ -29,16 +29,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import okhttp3.Response;
 
@@ -97,7 +89,6 @@ public class SplashActivity extends Activity {
                         if(!cookies.equals("")) SharedPreferencesUtil.putString("cookies",cookies);
                     }
 
-                    checkWBI();
 //                    checkCookie();
 
 
@@ -126,9 +117,6 @@ public class SplashActivity extends Activity {
                         }
                     });
                     e.printStackTrace();
-                } catch (JSONException e) {
-                    runOnUiThread(()->MsgUtil.jsonErr(e,this));
-                    e.printStackTrace();
                 }
             }
             else {
@@ -139,18 +127,6 @@ public class SplashActivity extends Activity {
             }
 
         }).start();
-    }
-
-
-    private void checkWBI() throws JSONException, IOException {
-        int curr = ConfInfoApi.getDateCurr();
-        if (SharedPreferencesUtil.getInt("last_wbi", 0) < curr) {    //限制一天一次
-            Log.e("debug", "检查WBI");
-            SharedPreferencesUtil.putInt("last_wbi", curr);
-
-            String mixin_key = ConfInfoApi.getWBIMixinKey(ConfInfoApi.getWBIRawKey());
-            SharedPreferencesUtil.putString("wbi_mixin_key",mixin_key);
-        }
     }
 
     private void checkCookie() throws JSONException, IOException {

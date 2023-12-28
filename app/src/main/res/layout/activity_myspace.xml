@@ -138,7 +138,7 @@
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
                 app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="8dp"
+                app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
                 app:cardMaxElevation="0dp"
                 app:strokeColor="#70707070"
@@ -155,10 +155,10 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="16dp"
+                        android:src="@drawable/arrow_forward"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:src="@drawable/arrow_forward" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:id="@+id/myinfo_icon"
@@ -166,12 +166,12 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
+                        android:src="@drawable/icon_info"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5"
-                        android:src="@drawable/icon_info" />
+                        app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
                         android:id="@+id/myinfo_title"
@@ -200,7 +200,7 @@
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
                 app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="8dp"
+                app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
                 app:cardMaxElevation="0dp"
                 app:strokeColor="#70707070"
@@ -217,10 +217,10 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="16dp"
+                        android:src="@drawable/arrow_forward"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:src="@drawable/arrow_forward" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:id="@+id/follow_icon"
@@ -228,12 +228,12 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
+                        android:src="@drawable/icon_person"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5"
-                        android:src="@drawable/icon_person" />
+                        app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
                         android:id="@+id/follow_title"
@@ -263,7 +263,7 @@
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
                 app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="8dp"
+                app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
                 app:cardMaxElevation="0dp"
                 app:strokeColor="#70707070"
@@ -280,10 +280,10 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="16dp"
+                        android:src="@drawable/arrow_forward"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:src="@drawable/arrow_forward" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:id="@+id/watchlater_icon"
@@ -291,12 +291,12 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
+                        android:src="@drawable/icon_play"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5"
-                        android:src="@drawable/icon_play" />
+                        app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
                         android:id="@+id/watchlater_title"
@@ -326,7 +326,7 @@
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
                 app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="8dp"
+                app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
                 app:cardMaxElevation="0dp"
                 app:strokeColor="#70707070"
@@ -343,10 +343,10 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="16dp"
+                        android:src="@drawable/arrow_forward"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:src="@drawable/arrow_forward" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:id="@+id/favorite_icon"
@@ -354,12 +354,12 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
+                        android:src="@drawable/icon_star"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5"
-                        android:src="@drawable/icon_star" />
+                        app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
                         android:id="@+id/favorite_title"
@@ -388,7 +388,7 @@
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
                 app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="8dp"
+                app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
                 app:cardMaxElevation="0dp"
                 app:strokeColor="#70707070"
@@ -405,10 +405,10 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="16dp"
+                        android:src="@drawable/arrow_forward"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:src="@drawable/arrow_forward" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:id="@+id/history_icon"
@@ -416,12 +416,12 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
+                        android:src="@drawable/icon_history"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5"
-                        android:src="@drawable/icon_history" />
+                        app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
                         android:id="@+id/history_title"

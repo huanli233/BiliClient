@@ -104,15 +104,27 @@ public class ConfInfoApi
 
     //计算时需要按字母顺序排列
     //使用时记得切换web的请求头
-    public static String signWBI(String url_query_before_wts,String url_query_after_wts ,String mixin_key) {
+    public static String signWBI(String url_query) throws JSONException, IOException {
+        String mixin_key;
+        int curr = getDateCurr();
+        if (SharedPreferencesUtil.getInt("last_wbi", 0) < curr) {    //限制一天一次
+            Log.e("debug", "检查WBI");
+            SharedPreferencesUtil.putInt("last_wbi", curr);
+
+            mixin_key = ConfInfoApi.getWBIMixinKey(ConfInfoApi.getWBIRawKey());
+            SharedPreferencesUtil.putString("wbi_mixin_key",mixin_key);
+        }
+        else mixin_key = SharedPreferencesUtil.getString("wbi_mixin_key","");
+
         String wts = String.valueOf(System.currentTimeMillis() / 1000);
-        String calc_str = sortUrlParams(Uri.encode(url_query_before_wts, "@#&=*+-_.,:!?()/~'%") + "&wts=" + wts + Uri.encode(url_query_after_wts, "@#&=*+-_.,:!?()/~'%") + mixin_key);
+        String calc_str = sortUrlParams(Uri.encode(url_query, "@#&=*+-_.,:!?()/~'%") + "&wts=" + wts) + mixin_key;
         Log.e("calc_str",calc_str);
 
         String w_rid = md5(calc_str);
 
-        return url_query_before_wts + url_query_after_wts + "&w_rid=" + w_rid + "&wts=" + wts;
+        return url_query + "&w_rid=" + w_rid + "&wts=" + wts;
     }
+
     public static String sortUrlParams(String url) {
         // 解析URL参数
         Map<String, String> paramMap = new HashMap<>();
@@ -166,7 +178,7 @@ public class ConfInfoApi
         add("Referer");
         add("https://www.bilibili.com/");
         add("User-Agent");
-        add(USER_AGENT_DEF);
+        add(USER_AGENT_WEB);
     }};
 
     public static ArrayList<String> webHeaders = new ArrayList<String>() {{

@@ -72,8 +72,6 @@
                  android:layout_height="wrap_content"
                  android:layout_width="wrap_content"
                  android:textSize="15sp"
-                 android:textAllCaps="false"
-                 android:textColor="@color/textwhite"
                  android:layout_marginTop="5dp"
                  android:id="@+id/app_name"
                  android:layout_gravity="center"
@@ -83,9 +81,7 @@
                  android:layout_height="wrap_content"
                  android:layout_width="wrap_content"
                  android:textSize="13sp"
-                 android:textAllCaps="false"
-                 android:textColor="@color/lightdark"
-                 android:layout_marginTop="1dp"
+                android:alpha="0.85"
                  android:text="@string/about_description"
                  android:layout_gravity="center" />
 
@@ -93,9 +89,9 @@
                  android:layout_height="wrap_content"
                  android:layout_width="wrap_content"
                  android:textSize="11sp"
-                 android:textAllCaps="false"
-                 android:textColor="@color/gray"
-                 android:layout_marginTop="-1dp"
+                 android:layout_marginTop="-2dp"
+                android:alpha="0.7"
+                android:text="版本号"
                  android:id="@+id/app_version"
                  android:layout_gravity="center" />
 

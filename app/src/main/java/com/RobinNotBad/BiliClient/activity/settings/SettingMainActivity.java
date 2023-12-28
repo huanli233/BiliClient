@@ -1,14 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.settings;
 
 
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
-import com.RobinNotBad.BiliClient.api.SearchApi;
-import com.RobinNotBad.BiliClient.util.JsonUtil;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.google.android.material.card.MaterialCardView;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,13 +11,17 @@ import android.view.View;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
+import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.api.ConfInfoApi;
+import com.RobinNotBad.BiliClient.util.JsonUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.google.android.material.card.MaterialCardView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class SettingMainActivity extends BaseActivity {
 
@@ -139,15 +135,13 @@ public class SettingMainActivity extends BaseActivity {
             }).start();
         });
 
-        MaterialCardView test = findViewById(R.id.test);    //未完成
+        MaterialCardView test = findViewById(R.id.test);    //用于测试
         test.setOnClickListener(view -> {
-
             try {
-                String mmm = ConfInfoApi.getWBIMixinKey("7cd084941338484aae1ad9425b84077c4932caff0ff746eab6f01bf08b70ac45");
-                Log.e("mmm",mmm);
-                String args = ConfInfoApi.signWBI("bar=514&foo=114", "&zab=1919810", mmm);
-                MsgUtil.showText(this,"test",args);
-            }catch (Exception e){
+                JSONObject jsonObject = new JSONObject("{\"arg1\":{\"id\":114514},\"arg2\":\"228028\"}");
+                Log.e("json",jsonObject.toString());
+                JsonUtil.getJsonKeys(jsonObject);
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         });

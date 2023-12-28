@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.UserInfo;
+import com.RobinNotBad.BiliClient.util.JsonUtil;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -17,9 +18,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Objects;
-
-import cn.luern0313.lson.LsonUtil;
-import cn.luern0313.lson.element.LsonObject;
 
 //腕上哔哩那边注释里写了一连串的麻烦麻烦麻烦，顿时预感不妙
 //其实还好
@@ -72,6 +70,7 @@ public class ReplyApi {
             long mid = member.getLong("mid");
             String avatar = member.getString("avatar");
             int level = member.getJSONObject("level_info").getInt("current_level");
+
             UserInfo userInfo = new UserInfo();
             userInfo.level = level;
             userInfo.mid = mid;
@@ -92,15 +91,17 @@ public class ReplyApi {
             if(content.has("emote") && !content.isNull("emote")) {
                 JSONArray emoteArray = new JSONArray();
                 JSONObject emote = content.getJSONObject("emote");
-                LsonObject lsonEmote = LsonUtil.parseAsObject(emote.toString());    //最终还是用了Lson的一个功能，因为原生方式确实难以解决，还好这个功能是github版已有的
-                String[] emoteKeys = lsonEmote.getKeys();                           //你看这多简单，唉，但是仅用这一处却引用整个库确实有些浪费，如果我有时间就自己写了。就当是致敬了罢（
-                for (String emoteKey : emoteKeys) {
+                Log.e("debug-emote",emote.toString());
+                ArrayList<String> emoteKeys = JsonUtil.getJsonKeys(emote);
+                //LsonObject lsonEmote = LsonUtil.parseAsObject(emote.toString());    //最终还是用了Lson的一个功能，因为原生方式确实难以解决，还好这个功能是github版已有的
+                //String[] emoteKeys = lsonEmote.getKeys();                           //你看这多简单，唉，但是仅用这一处却引用整个库确实有些浪费，如果我有时间就自己写了。就当是致敬了罢（
+                for (String emoteKey:emoteKeys) {
+                    Log.e("debug-key",emoteKey);
                     JSONObject key = emote.getJSONObject(emoteKey);
                     JSONObject emoteReturn = new JSONObject();
                     emoteReturn.put("name", emoteKey);
                     emoteReturn.put("url", key.getString("url"));
                     emoteReturn.put("size", key.getJSONObject("meta").getInt("size"));  //B站十分贴心的帮你把表情包大小都写好了，快说谢谢蜀黍
-
                     emoteArray.put(emoteReturn);
                 }
                 replyReturn.emote = emoteArray;
