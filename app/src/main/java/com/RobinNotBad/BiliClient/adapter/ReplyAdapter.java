@@ -31,7 +31,6 @@ import com.RobinNotBad.BiliClient.view.CustomListView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.card.MaterialCardView;
 
 import org.json.JSONException;
 
@@ -143,9 +142,11 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             if (replyList.get(realPosition).pictureList != null && replyList.get(realPosition).pictureList.size() > 0) {  //图片显示相关
                 replyHolder.imageCard.setVisibility(View.VISIBLE);
+                replyHolder.imageCount.setVisibility(View.VISIBLE);
                 Glide.with(context).load(replyList.get(realPosition).pictureList.get(0))
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .into(replyHolder.imageView);
+                        .into(replyHolder.imageCard);
+
                 replyHolder.imageCount.setText("共" + replyList.get(realPosition).pictureList.size() + "张图片");
                 replyHolder.imageCard.setOnClickListener(view -> {
                     Intent intent = new Intent();
@@ -153,7 +154,10 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     intent.putExtra("imageList", replyList.get(realPosition).pictureList);
                     context.startActivity(intent);
                 });
-            } else replyHolder.imageCard.setVisibility(View.GONE);
+            } else {
+                replyHolder.imageCount.setVisibility(View.GONE);
+                replyHolder.imageCard.setVisibility(View.GONE);
+            }
 
             replyHolder.childReplyCard.setOnClickListener(view -> {
                 Intent intent = new Intent();
@@ -237,8 +241,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         CustomListView childReplies;
         TextView message,userName,pubDate,childCount,likeCount,replyBtn,upLiked,imageCount;
         LinearLayout childReplyCard;
-        MaterialCardView imageCard;
-        ImageView imageView;
+        ImageView imageCard;
 
 
         public ReplyHolder(@NonNull View itemView) {
@@ -255,9 +258,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             replyBtn = itemView.findViewById(R.id.replyBtn);
             upLiked = itemView.findViewById(R.id.upLiked);
             childReplyCard = itemView.findViewById(R.id.repliesCard);
-            imageCard = itemView.findViewById(R.id.imageCard);
             imageCount = itemView.findViewById(R.id.imageCount);
-            imageView = itemView.findViewById(R.id.imageView);
+            imageCard = itemView.findViewById(R.id.imageCard);
         }
     }
 

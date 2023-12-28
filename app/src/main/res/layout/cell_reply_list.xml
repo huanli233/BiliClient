@@ -99,54 +99,37 @@
         app:layout_constraintVertical_bias="0.5"
         android:src="@drawable/icon_dislike" />
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/imageCard"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="6dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginTop="6dp"
+        app:round="4dp"
         android:visibility="gone"
-        app:cardBackgroundColor="#78161616"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="0dp"
-        app:cardMaxElevation="0dp"
+        tools:visibility="visible"
+        android:src="@drawable/loading_2233"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/replyText"
-        app:strokeColor="#70707070"
-        app:strokeWidth="0.1dp">
+    />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/loading_2233" />
+    <TextView
+            android:id="@+id/imageCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="#64555555"
+            android:text="共1张图片"
+            android:visibility="gone"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageCard"
+            app:layout_constraintEnd_toEndOf="@+id/imageCard"/>
 
-            <TextView
-                android:id="@+id/imageCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="2dp"
-                android:layout_marginBottom="2dp"
-                android:background="#64555555"
-                android:text="共1张图片"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/upLiked"
