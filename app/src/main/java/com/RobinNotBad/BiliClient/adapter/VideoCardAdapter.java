@@ -45,14 +45,22 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull VideoCardHolder holder, int position) {
-        holder.showVideoCard(videoCardList.get(position),context);    //此函数在VideoCardHolder里
+        VideoCard videoCard = videoCardList.get(position);
+        holder.showVideoCard(videoCard,context);    //此函数在VideoCardHolder里
 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent();
-            intent.setClass(context, VideoInfoActivity.class);
-            intent.putExtra("bvid", videoCardList.get(position).bvid);
-            intent.putExtra("aid", videoCardList.get(position).aid);
-            context.startActivity(intent);
+            switch (videoCard.type) {
+                case "video":
+                    intent.setClass(context, VideoInfoActivity.class);
+                    intent.putExtra("bvid", videoCard.bvid);
+                    intent.putExtra("aid", videoCard.aid);
+                    context.startActivity(intent);
+                    break;
+                case "media_bangumi":
+                    intent.putExtra("aid", videoCard.aid);
+                    context.startActivity(intent);
+            }
         });
 
         holder.itemView.setOnLongClickListener(view -> {

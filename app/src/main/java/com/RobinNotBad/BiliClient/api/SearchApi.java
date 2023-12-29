@@ -80,7 +80,7 @@ public class SearchApi {
                     title = LittleToolsUtil.htmlToString(title);
                     String cover = card.getString("cover");
                     String upName = card.getString("areas");
-                    long aid = 0;
+                    long aid = card.getLong("media_id");
                     String bvid = "";
                     String playTimesStr = "敬请期待" + "观看";
                     videoCardList.add(new VideoCard(title,upName,playTimesStr,cover,aid,bvid,type));
