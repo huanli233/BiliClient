@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.BoolRes;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,7 +37,8 @@ public class LocalListActivity extends BaseActivity {
     private LocalVideoAdapter adapter;
     public static LocalListActivity instance = null;
 
-    private int longClickPosition = -1;
+    private Boolean isDoubleClicked;
+    private int longClickPosition=-1;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -77,12 +79,14 @@ public class LocalListActivity extends BaseActivity {
                     Toast.makeText(this, "删除成功", Toast.LENGTH_SHORT).show();
                     videoList.remove(position);
                     adapter.notifyItemRemoved(position);
+                    adapter.notifyItemRangeChanged(position,videoList.size() - position);
                     longClickPosition = -1;
                 }
                 else{
                     longClickPosition = position;
                     Toast.makeText(this, "再次长按删除", Toast.LENGTH_SHORT).show();
                 }
+                        
             });
             runOnUiThread(()->{
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
