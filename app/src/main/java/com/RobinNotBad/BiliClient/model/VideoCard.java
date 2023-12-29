@@ -8,6 +8,7 @@ public class VideoCard {
     public String cover,type;
     public long aid;
     public String bvid;
+
     public VideoCard(String title, String upName, String view, String cover, long aid, String bvid,String type) {
         this.title = title;
         this.upName = upName;

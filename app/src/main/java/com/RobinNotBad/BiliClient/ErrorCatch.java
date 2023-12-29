@@ -33,5 +33,8 @@ public class ErrorCatch implements Thread.UncaughtExceptionHandler{
         throwable.printStackTrace(printWriter);
 
         MsgUtil.showText(context,"错误报告",writer.toString());
+        
+        throwable.printStackTrace();
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 }

@@ -22,12 +22,12 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.RobinNotBad.BiliClient.fileprovider"
+            android:authorities="com.RobinNotBad.BiliClient.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
+                android:resource="@xml/file_paths" />
         </provider>
 
         <activity
