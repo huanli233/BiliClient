@@ -2,11 +2,8 @@ package com.RobinNotBad.BiliClient.util;
 
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 /*
