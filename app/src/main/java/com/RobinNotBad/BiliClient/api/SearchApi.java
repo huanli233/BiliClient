@@ -73,22 +73,25 @@ public class SearchApi {
                 JSONArray data = typecard.getJSONArray("data");
                 for (int j = 0; j < data.length(); j++) {
                     JSONObject card = data.getJSONObject(j);    //获得番剧卡片
-/*
+
                     String title = card.getString("title");
+                    title = title.replace("<em class=\"keyword\">","").replace("</em>","");
+                    //标题里的红字,直接上面复制粘贴
                     title = LittleToolsUtil.htmlToString(title);
-
-                    String bvid = card.getString("bvid");
-                    long aid = card.getLong("aid");
-                    String cover = "http:" + card.getString("pic");  //离谱了嗷，前面甚至不肯加个http:
-                    String upName = card.getString("author");
-
-                    long play = card.getLong("play");
-                    String playTimesStr = LittleToolsUtil.toWan(play) + "观看";
-
-                    videoCardList.add(new VideoCard(title,upName,playTimesStr,cover,aid,bvid,type));*/
+                    String cover = card.getString("cover");
+                    String upName = card.getString("areas");
+                    long aid = 0;
+                    String bvid = "";
+                    String playTimesStr = "敬请期待" + "观看";
+                    videoCardList.add(new VideoCard(title,upName,playTimesStr,cover,aid,bvid,type));
                 }
             }
         }
+    }
+    public static JSONObject GetMain_section(long season_id)  throws IOException , JSONException{
+            String url = "https://api.bilibili.com/pgc/web/season/section?season_id=" + season_id;
+            JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.defHeaders).body()).string());  //得到一整个json
+            return all.getJSONObject("result");
     }
 
 }
