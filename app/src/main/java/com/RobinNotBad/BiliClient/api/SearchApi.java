@@ -47,9 +47,10 @@ public class SearchApi {
 
     public static void getVideosFromSearchResult(JSONArray input,ArrayList<VideoCard> videoCardList) throws JSONException {
         for (int i = 0; i < input.length(); i++) {  //遍历所有的分类，找到视频那一项
-            JSONObject type = input.getJSONObject(i);
-            if(type.getString("result_type").equals("video")){
-                JSONArray data = type.getJSONArray("data");    //把这个列表提出来，接着拆
+            JSONObject typecard = input.getJSONObject(i);
+            String type = typecard.getString("result_type");
+            if(type.equals("video")){
+                JSONArray data = typecard.getJSONArray("data");    //把这个列表提出来，接着拆
                 for (int j = 0; j < data.length(); j++) {
                     JSONObject card = data.getJSONObject(j);    //获得视频卡片
 
@@ -66,7 +67,25 @@ public class SearchApi {
                     long play = card.getLong("play");
                     String playTimesStr = LittleToolsUtil.toWan(play) + "观看";
 
-                    videoCardList.add(new VideoCard(title,upName,playTimesStr,cover,aid,bvid));
+                    videoCardList.add(new VideoCard(title,upName,playTimesStr,cover,aid,bvid,type));
+                }
+            }else if (type.equals("media_bangumi")){
+                JSONArray data = typecard.getJSONArray("data");
+                for (int j = 0; j < data.length(); j++) {
+                    JSONObject card = data.getJSONObject(j);    //获得番剧卡片
+/*
+                    String title = card.getString("title");
+                    title = LittleToolsUtil.htmlToString(title);
+
+                    String bvid = card.getString("bvid");
+                    long aid = card.getLong("aid");
+                    String cover = "http:" + card.getString("pic");  //离谱了嗷，前面甚至不肯加个http:
+                    String upName = card.getString("author");
+
+                    long play = card.getLong("play");
+                    String playTimesStr = LittleToolsUtil.toWan(play) + "观看";
+
+                    videoCardList.add(new VideoCard(title,upName,playTimesStr,cover,aid,bvid,type));*/
                 }
             }
         }
