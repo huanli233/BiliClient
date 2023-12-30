@@ -76,13 +76,19 @@ public class CookieRefreshApi {
         if (result.getInt("code") == 0) {
             String cookies = "buvid3=" + LittleToolsUtil.getInfoFromCookie("buvid3",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,"")) + "; " + UserLoginApi.getCookies(response);
             Log.e("新的Cookie",cookies);
-            SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies,cookies);
-            NetWorkUtil.post("https://passport.bilibili.com/x/passport-login/web/confirm/refresh","csrf=" + LittleToolsUtil.getInfoFromCookie("bili_jct",cookies) + "&refresh_token=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""),ConfInfoApi.defHeaders);
             Log.e("新的RefreshToken",result.getJSONObject("data").getString("refresh_token"));
-            SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,result.getJSONObject("data").getString("refresh_token"));
+            int confirmCode = new JSONObject(NetWorkUtil.post("https://passport.bilibili.com/x/passport-login/web/confirm/refresh","csrf=" + LittleToolsUtil.getInfoFromCookie("bili_jct",cookies) + "&refresh_token=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""),ConfInfoApi.defHeaders).body().string()).getInt("code");
+            if(confirmCode != 0){
+                Log.e("Cookie刷新失败","Confirm: " + String.valueOf(confirmCode));
+                return false;
+            }
+            SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies,cookies);
+            SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,result.getJSONObject("data").getString("refresh_token")); 
             return true;
-        }else Log.e("Cookie刷新失败",String.valueOf(result.getInt("code")));
-        return false;
+        }else{
+            Log.e("Cookie刷新失败","Refresh: "+String.valueOf(result.getInt("code")));
+            return false;
+        }
     }
     
     public static String base16Encode(byte src[])throws Exception {
