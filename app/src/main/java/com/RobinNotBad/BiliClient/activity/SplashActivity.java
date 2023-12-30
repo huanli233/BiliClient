@@ -87,9 +87,7 @@ public class SplashActivity extends Activity {
                         String cookies = UserLoginApi.getCookies(response);
                         Log.e("cookies",cookies);
                         if(!cookies.equals("")) SharedPreferencesUtil.putString("cookies",cookies);
-                    }
-
-//                    checkCookie();
+                    }else checkCookie();
 
 
                     Intent intent = new Intent();
@@ -129,12 +127,21 @@ public class SplashActivity extends Activity {
         }).start();
     }
 
-    private void checkCookie() throws JSONException, IOException {
-        JSONObject cookieInfo = CookieRefreshApi.cookieInfo();
-        if(cookieInfo.getBoolean("refresh")){
-//        if(true){ //forDebug
-            String correspondPath = CookieRefreshApi.getCorrespondPath(cookieInfo.getLong("timestamp"));
-            //只写到了生成CorrespondPath算法，结果按照文档的写算出来的都不对，先不用这个函数了你们自己看着怎么改吧........
+    private void checkCookie() {
+        try{
+            JSONObject cookieInfo = CookieRefreshApi.cookieInfo();
+            if(cookieInfo.getBoolean("refresh")){
+//            if(true){ //forDebug
+                Log.e("Cookie","需要刷新");
+                String correspondPath = CookieRefreshApi.getCorrespondPath(cookieInfo.getLong("timestamp"));
+//                String correspondPath = CookieRefreshApi.getCorrespondPath(System.currentTimeMillis());
+                Log.e("CorrespondPath",correspondPath);
+                String refreshCsrf = CookieRefreshApi.getRefreshCsrf(correspondPath);
+                Log.e("RefreshCsrf",refreshCsrf);
+                CookieRefreshApi.refreshCookie(refreshCsrf);
+            }   
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }
