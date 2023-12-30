@@ -102,26 +102,6 @@ public class SettingMainActivity extends BaseActivity {
             return true;
         });
 
-        //刷新Cookie
-        MaterialCardView refreshCookie = findViewById(R.id.refresh_cookie);
-        refreshCookie.setOnClickListener(view -> {
-            MsgUtil.toast("准备刷新",this);
-            new Thread(() -> {
-                try {
-                    String correspondPath = CookieRefreshApi.getCorrespondPath(System.currentTimeMillis());
-                    Log.e("CorrespondPath",correspondPath);
-                    String refreshCsrf = CookieRefreshApi.getRefreshCsrf(correspondPath);
-                    Log.e("RefreshCsrf",refreshCsrf);
-                    if(CookieRefreshApi.refreshCookie(refreshCsrf)) runOnUiThread(()-> MsgUtil.toast("刷新成功",this));
-                    else runOnUiThread(()-> MsgUtil.toast("刷新失败",this));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e){
-                    e.printStackTrace();
-                }
-            }).start();
-        });
-
         //检查更新
         MaterialCardView checkUpdate = findViewById(R.id.checkupdate);
         checkUpdate.setOnClickListener(view -> {
