@@ -60,6 +60,7 @@ public class MessageApi {
                     replyInfo.upReplied = false;
                     replyInfo.liked = false;
                     replyInfo.childCount = 0;
+                    replyInfo.ofBvid = object.getJSONObject("item").getString("uri").replace("https://www.bilibili.com/video/","");
                     replyInfo.childMsgList = new ArrayList<>();
                     likeInfo.replyInfo = replyInfo;
                 }
@@ -105,6 +106,7 @@ public class MessageApi {
                     replyInfo.upReplied = false;
                     replyInfo.liked = false;
                     replyInfo.childCount = 0;
+                    replyInfo.ofBvid = object.getJSONObject("item").getString("uri").replace("https://www.bilibili.com/video/","");
                     replyInfo.childMsgList = new ArrayList<>();
                     likeInfo.replyInfo = replyInfo;
                 }

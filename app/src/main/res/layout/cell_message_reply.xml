@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     app:cardMaxElevation="0dp"
+     app:strokeColor="#70707070"
+     app:cardElevation="0dp"
+     app:cardBackgroundColor="#78242424"
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintTop_toTopOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:strokeWidth="0.1dp"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:cardCornerRadius="6dp"
+     android:id="@+id/cardView">
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="vertical">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginLeft="6dp"
+             android:layout_marginTop="5dp"
+             android:maxLines="3"
+             android:ellipsize="end"
+             android:id="@+id/content"
+             android:text="全体目光向我看齐！看我看我，我宣布个事！" />
+
+        <View
+             android:layout_height="1dp"
+             android:layout_width="match_parent"
+             android:layout_marginEnd="9dp"
+             android:background="#318C8C8C"
+             android:layout_marginTop="5dp"
+             android:layout_marginStart="9dp" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginBottom="4dp"
+             android:alpha="0.9"
+             android:textSize="11sp"
+             android:layout_marginTop="3dp"
+             android:layout_marginStart="7dp"
+             android:text="点击跳转到视频" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

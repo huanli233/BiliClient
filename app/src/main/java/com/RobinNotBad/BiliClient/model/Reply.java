@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class Reply {
     public long rpid;
+    public String ofBvid = "";
     public String pubTime;
     public UserInfo sender;
     public String message;

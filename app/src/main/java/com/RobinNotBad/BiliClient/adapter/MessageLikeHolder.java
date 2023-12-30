@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.model.MessageLikeInfo;
+import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.bumptech.glide.Glide;
@@ -38,6 +39,7 @@ public class MessageLikeHolder extends RecyclerView.ViewHolder{
     }
     @SuppressLint("SetTextI18n")
     public void showMessage(MessageLikeInfo message, Context context) {
+        avaterList.removeAllViews();
         for(int i = 0;i<3;i++){
             if(i >= message.userList.size()) break;
             ImageView imageView = new ImageView(context);
@@ -52,7 +54,7 @@ public class MessageLikeHolder extends RecyclerView.ViewHolder{
 
             //这个View什么都没有，用来当间隔的
             View view = new View(context);
-            view.setLayoutParams(new ViewGroup.LayoutParams(LittleToolsUtil.dp2px(2,context),LittleToolsUtil.dp2px(2,context)));
+            view.setLayoutParams(new ViewGroup.LayoutParams(LittleToolsUtil.dp2px(3,context),LittleToolsUtil.dp2px(32,context)));
             avaterList.addView(view);
         }
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -73,6 +75,16 @@ public class MessageLikeHolder extends RecyclerView.ViewHolder{
         }
         if(message.replyInfo != null){
             action.setText("等 " + message.userList.size() + "人点赞了你的评论");
+            Reply childReply = message.replyInfo;
+            ReplyCardHolder holder = new ReplyCardHolder(View.inflate(context,R.layout.cell_message_reply,extraCard));
+            holder.showReplyCard(childReply,context);
+            holder.itemView.findViewById(R.id.cardView).setOnClickListener(view -> {
+                Intent intent = new Intent();
+                intent.setClass(context, VideoInfoActivity.class);
+                intent.putExtra("bvid", childReply.ofBvid);
+                intent.putExtra("aid", 0);
+                context.startActivity(intent);
+            });
         }
     }
 }
