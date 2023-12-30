@@ -25,9 +25,10 @@ public class bangumi_to_card {
             String upname = array.getString("badge");
             String playTimesStr = "敬请期待" + "观看";
             String cover = array.getString("cover");
-            String cid = String.valueOf(array.getLong("cid"));
+            String bvid = BilibiliIDConverter.aidtobv(array.getLong("aid"));
             long aid = array.getLong("aid");
-            list.add(new VideoCard(title,upname,playTimesStr,cover,aid,cid));
+            long cid = array.getLong("cid");
+            list.add(new VideoCard(title,upname,playTimesStr,cover,aid,bvid,cid));
         }
         input.put("card",list);
         input.put("title",main_section.getString("title"));
@@ -44,9 +45,10 @@ public class bangumi_to_card {
                 String upname = array.getString("badge");
                 String playTimesStr = "敬请期待" + "观看";
                 String cover = array.getString("cover");
-                String cid = String.valueOf(array.getLong("cid"));
+                String bvid = BilibiliIDConverter.aidtobv(array.getLong("aid"));
                 long aid = array.getLong("aid");
-                list.add(new VideoCard(title,upname,playTimesStr,cover,aid,cid));
+                long cid = array.getLong("cid");
+                list.add(new VideoCard(title,upname,playTimesStr,cover,aid,bvid,cid));
             }
             input.put("card",list);
             input.put("title",card.getString("title"));

@@ -9,6 +9,7 @@ public class VideoCard {
     public String type = "video";
     public long aid;
     public String bvid;
+    public long cid = 0;
 
     public VideoCard(String title, String upName, String view, String cover, long aid, String bvid,String type) {
         this.title = title;
@@ -18,6 +19,15 @@ public class VideoCard {
         this.aid = aid;
         this.bvid = bvid;
         this.type = type;
+    }
+    public VideoCard(String title, String upName, String view, String cover, long aid, String bvid,Long cid) {
+        this.title = title;
+        this.upName = upName;
+        this.view = view;
+        this.cover = cover;
+        this.aid = aid;
+        this.bvid = bvid;
+        this.cid = cid;
     }
     public VideoCard(String title, String upName, String view, String cover, long aid, String bvid) {
         this.title = title;
