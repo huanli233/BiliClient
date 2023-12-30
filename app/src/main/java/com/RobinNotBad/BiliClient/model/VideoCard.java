@@ -5,7 +5,8 @@ public class VideoCard {
     public String title;
     public String upName;
     public String view;
-    public String cover,type;
+    public String cover;
+    public String type = "video";
     public long aid;
     public String bvid;
 
@@ -25,7 +26,6 @@ public class VideoCard {
         this.cover = cover;
         this.aid = aid;
         this.bvid = bvid;
-        this.type = "video";
     }
 
     public VideoCard(){}
