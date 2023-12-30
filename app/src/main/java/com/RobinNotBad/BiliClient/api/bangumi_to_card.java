@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class bangumi_to_card {
-    public JSONObject bangumi_to_car(String season_id) throws JSONException, IOException {
+    public static JSONArray bangumi_to_car(String season_id) throws JSONException, IOException {
         JSONObject result =  GetMain_section(season_id);
         JSONArray cardArray = new JSONArray();
         JSONObject main_section = result.getJSONObject("main_section");
@@ -25,7 +25,7 @@ public class bangumi_to_card {
             String upname = array.getString("badge");
             String playTimesStr = "敬请期待" + "观看";
             String cover = array.getString("cover");
-            String cid = array.getString("cid");
+            String cid = String.valueOf(array.getLong("cid"));
             long aid = array.getLong("aid");
             list.add(new VideoCard(title,upname,playTimesStr,cover,aid,cid));
         }
@@ -44,18 +44,19 @@ public class bangumi_to_card {
                 String upname = array.getString("badge");
                 String playTimesStr = "敬请期待" + "观看";
                 String cover = array.getString("cover");
-                String cid = array.getString("cid");
+                String cid = String.valueOf(array.getLong("cid"));
                 long aid = array.getLong("aid");
                 list.add(new VideoCard(title,upname,playTimesStr,cover,aid,cid));
             }
             input.put("card",list);
             input.put("title",card.getString("title"));
+            cardArray.put(input);
         }
-        return input;
+        return cardArray;
     }
     public static JSONObject GetMain_section(String season_id)  throws IOException, JSONException {
         String url = "https://api.bilibili.com/pgc/web/season/section?season_id=" + season_id;
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.defHeaders).body()).string());  //得到一整个json
+        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url).body()).string());  //得到一整个json
         return all.getJSONObject("result");
     }
 }
