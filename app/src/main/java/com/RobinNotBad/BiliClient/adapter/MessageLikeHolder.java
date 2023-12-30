@@ -61,7 +61,7 @@ public class MessageLikeHolder extends RecyclerView.ViewHolder{
         pubdate.setText(sdf.format(message.timeStamp * 1000));
 
         if (message.videoCard != null){
-            action.setText("等 " + message.userList.size() + "人点赞了你的视频");
+            action.setText("等 " + message.userList.size() + " 人点赞了你的视频");
             VideoCard childVideoCard = message.videoCard;
             VideoCardHolder holder = new VideoCardHolder(View.inflate(context,R.layout.cell_dynamic_video,extraCard));
             holder.showVideoCard(childVideoCard,context);
@@ -74,7 +74,7 @@ public class MessageLikeHolder extends RecyclerView.ViewHolder{
             });
         }
         if(message.replyInfo != null){
-            action.setText("等 " + message.userList.size() + "人点赞了你的评论");
+            action.setText("等 " + message.userList.size() + " 人点赞了你的评论");
             Reply childReply = message.replyInfo;
             ReplyCardHolder holder = new ReplyCardHolder(View.inflate(context,R.layout.cell_message_reply,extraCard));
             holder.showReplyCard(childReply,context);
