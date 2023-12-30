@@ -30,5 +30,5 @@ public class CenterThreadPool {
         getInstance().submit(runnable);
     }
 
-    public static requireNetWork(String url, )
+//    public static requireNetWork(String url, )
 }
