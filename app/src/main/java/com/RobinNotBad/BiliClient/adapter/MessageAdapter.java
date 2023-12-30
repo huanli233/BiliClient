@@ -11,35 +11,34 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.model.Dynamic;
-import com.RobinNotBad.BiliClient.model.MessageLikeInfo;
 
+import com.RobinNotBad.BiliClient.model.MessageCard;
 import java.util.ArrayList;
 
-public class MessageLikeAdapter extends RecyclerView.Adapter<MessageLikeHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<MessageHolder> {
     Context context;
-    ArrayList<MessageLikeInfo> messageList;
+    ArrayList<MessageCard> messageList;
 
-    public MessageLikeAdapter(Context context, ArrayList<MessageLikeInfo> messageList) {
+    public MessageAdapter(Context context, ArrayList<MessageCard> messageList) {
         this.context = context;
         this.messageList = messageList;
     }
 
     @NonNull
     @Override
-    public MessageLikeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MessageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(this.context).inflate(R.layout.cell_message,parent,false);
-        return new MessageLikeHolder(view);
+        return new MessageHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull MessageLikeHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MessageHolder holder, int position) {
         holder.showMessage(messageList.get(position),context);
     }
 
     @Override
-    public void onViewRecycled(@NonNull MessageLikeHolder holder) {
+    public void onViewRecycled(@NonNull MessageHolder holder) {
         holder.extraCard.removeAllViews();
         super.onViewRecycled(holder);
     }

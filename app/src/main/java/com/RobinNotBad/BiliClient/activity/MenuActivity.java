@@ -34,8 +34,8 @@ public class MenuActivity extends BaseActivity {
         add(SearchActivity.instance);
         add(DynamicActivity.instance);
         add(QRLoginActivity.instance);
-        add(MessageActivity.instance);
         add(MySpaceActivity.instance);
+        add(MessageActivity.instance);
         add(LocalListActivity.instance);
         add(SettingMainActivity.instance);
     }};
@@ -44,8 +44,8 @@ public class MenuActivity extends BaseActivity {
         add(SearchActivity.class);
         add(DynamicActivity.class);
         add(QRLoginActivity.class);
-        add(MessageActivity.class);
         add(MySpaceActivity.class);
+        add(MessageActivity.class);
         add(LocalListActivity.class);
         add(SettingMainActivity.class);
     }};
@@ -67,8 +67,8 @@ public class MenuActivity extends BaseActivity {
             add(findViewById(R.id.search));
             add(findViewById(R.id.dynamic));
             add(findViewById(R.id.login));
-            add(findViewById(R.id.message));
             add(findViewById(R.id.profile));
+            add(findViewById(R.id.message));
             add(findViewById(R.id.local));
             add(findViewById(R.id.settings));
             add(findViewById(R.id.exit));

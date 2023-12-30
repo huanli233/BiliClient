@@ -12,12 +12,14 @@ import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 
 public class ReplyCardHolder extends RecyclerView.ViewHolder{
-    TextView content,pubdate;
+    TextView content,pubdate,tiptext;
     public ReplyCardHolder(@NonNull View itemView) {
         super(itemView);
         content = itemView.findViewById(R.id.content);
+        tiptext = itemView.findViewById(R.id.tip);
     }
     public void showReplyCard(Reply replyInfo, Context context){
         content.setText(LittleToolsUtil.htmlToString(replyInfo.message));
+        if(replyInfo.isDynamic) tiptext.setText("不支持查看动态");
     }
 }

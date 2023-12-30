@@ -43,7 +43,7 @@ public class MySpaceActivity extends BaseActivity {
         findViewById(R.id.top).setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setClass(MySpaceActivity.this, MenuActivity.class);
-            intent.putExtra("from",5);
+            intent.putExtra("from",4);
             startActivity(intent);
         });
         userAvatar = findViewById(R.id.userAvatar);

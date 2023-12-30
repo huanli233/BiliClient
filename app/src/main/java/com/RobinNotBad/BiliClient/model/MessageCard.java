@@ -1,15 +1,14 @@
 package com.RobinNotBad.BiliClient.model;
-
 import java.util.List;
 
-public class MessageLikeInfo {
+public class MessageCard {
     public long id;
-    public List<UserInfo> userList;
-    public int count;
+    public List<UserInfo> user;
     public long timeStamp;
-    public String type;
+    public String content;
     public VideoCard videoCard = null;
     public Reply replyInfo = null;
-
-    public MessageLikeInfo(){}
+    public Reply dynamicInfo = null;
+    
+    public MessageCard(){}
 }

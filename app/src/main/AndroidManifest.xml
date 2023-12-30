@@ -91,6 +91,10 @@
             android:label="消息"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.message.MessageListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.ShowTextActivity"
             android:exported="true"
             android:label="文本显示"

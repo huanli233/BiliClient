@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
-import com.RobinNotBad.BiliClient.model.MessageLikeInfo;
+import com.RobinNotBad.BiliClient.model.MessageCard;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
@@ -24,12 +24,12 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.text.SimpleDateFormat;
 
-public class MessageLikeHolder extends RecyclerView.ViewHolder{
+public class MessageHolder extends RecyclerView.ViewHolder{
     public LinearLayout avaterList;
     public TextView action,pubdate;
     public ConstraintLayout extraCard;
     public View itemView;
-    public MessageLikeHolder(@NonNull View itemView) {
+    public MessageHolder(@NonNull View itemView) {
         super(itemView);
         this.itemView = itemView;
         avaterList = itemView.findViewById(R.id.avatar_list);
@@ -38,13 +38,13 @@ public class MessageLikeHolder extends RecyclerView.ViewHolder{
         extraCard = itemView.findViewById(R.id.extraCard);
     }
     @SuppressLint("SetTextI18n")
-    public void showMessage(MessageLikeInfo message, Context context) {
+    public void showMessage(MessageCard message, Context context) {
         avaterList.removeAllViews();
         for(int i = 0;i<3;i++){
-            if(i >= message.userList.size()) break;
+            if(i >= message.user.size()) break;
             ImageView imageView = new ImageView(context);
             Glide.with(context)
-                    .load(message.userList.get(i).avatar)
+                    .load(message.user.get(i).avatar)
                     .placeholder(R.drawable.akari)
                     .apply(RequestOptions.circleCropTransform())
                     .into(imageView);
@@ -60,8 +60,9 @@ public class MessageLikeHolder extends RecyclerView.ViewHolder{
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         pubdate.setText(sdf.format(message.timeStamp * 1000));
 
+        action.setText(message.content);
+        
         if (message.videoCard != null){
-            action.setText("等 " + message.userList.size() + " 人点赞了你的视频");
             VideoCard childVideoCard = message.videoCard;
             VideoCardHolder holder = new VideoCardHolder(View.inflate(context,R.layout.cell_dynamic_video,extraCard));
             holder.showVideoCard(childVideoCard,context);
@@ -74,7 +75,6 @@ public class MessageLikeHolder extends RecyclerView.ViewHolder{
             });
         }
         if(message.replyInfo != null){
-            action.setText("等 " + message.userList.size() + " 人点赞了你的评论");
             Reply childReply = message.replyInfo;
             ReplyCardHolder holder = new ReplyCardHolder(View.inflate(context,R.layout.cell_message_reply,extraCard));
             holder.showReplyCard(childReply,context);
@@ -85,6 +85,11 @@ public class MessageLikeHolder extends RecyclerView.ViewHolder{
                 intent.putExtra("aid", 0);
                 context.startActivity(intent);
             });
+        }
+        if(message.dynamicInfo != null){
+            Reply childReply = message.dynamicInfo;
+            ReplyCardHolder holder = new ReplyCardHolder(View.inflate(context,R.layout.cell_message_reply,extraCard));
+            holder.showReplyCard(childReply,context);
         }
     }
 }

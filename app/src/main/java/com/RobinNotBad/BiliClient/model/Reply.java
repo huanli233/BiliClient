@@ -18,6 +18,7 @@ public class Reply {
     public boolean upReplied;
     public boolean liked;
     public int childCount;
+    public boolean isDynamic = false;
     public ArrayList<String> childMsgList;
 
     public Reply(){}
