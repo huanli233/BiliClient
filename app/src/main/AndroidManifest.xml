@@ -86,6 +86,11 @@
             android:label="关注"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.message.MessageActivity"
+            android:exported="true"
+            android:label="消息"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.ShowTextActivity"
             android:exported="true"
             android:label="文本显示"

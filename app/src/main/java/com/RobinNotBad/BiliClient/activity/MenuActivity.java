@@ -10,6 +10,7 @@ import android.view.View;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
+import com.RobinNotBad.BiliClient.activity.message.MessageActivity;
 import com.RobinNotBad.BiliClient.activity.settings.QRLoginActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingMainActivity;
 import com.RobinNotBad.BiliClient.activity.user.MySpaceActivity;
@@ -33,6 +34,7 @@ public class MenuActivity extends BaseActivity {
         add(SearchActivity.instance);
         add(DynamicActivity.instance);
         add(QRLoginActivity.instance);
+        add(MessageActivity.instance);
         add(MySpaceActivity.instance);
         add(LocalListActivity.instance);
         add(SettingMainActivity.instance);
@@ -42,6 +44,7 @@ public class MenuActivity extends BaseActivity {
         add(SearchActivity.class);
         add(DynamicActivity.class);
         add(QRLoginActivity.class);
+        add(MessageActivity.class);
         add(MySpaceActivity.class);
         add(LocalListActivity.class);
         add(SettingMainActivity.class);
@@ -64,6 +67,7 @@ public class MenuActivity extends BaseActivity {
             add(findViewById(R.id.search));
             add(findViewById(R.id.dynamic));
             add(findViewById(R.id.login));
+            add(findViewById(R.id.message));
             add(findViewById(R.id.profile));
             add(findViewById(R.id.local));
             add(findViewById(R.id.settings));
@@ -73,6 +77,7 @@ public class MenuActivity extends BaseActivity {
         if(SharedPreferencesUtil.getLong("mid",0)==0) {
             findViewById(R.id.profile).setVisibility(View.GONE);
             findViewById(R.id.dynamic).setVisibility(View.GONE);
+            findViewById(R.id.message).setVisibility(View.GONE);
         }
         else findViewById(R.id.login).setVisibility(View.GONE);
 
