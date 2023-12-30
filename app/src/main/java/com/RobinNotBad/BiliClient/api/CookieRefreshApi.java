@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -30,12 +31,12 @@ https://socialsisteryi.github.io/bilibili-API-collect/docs/login/cookie_refresh.
 public class CookieRefreshApi {
     public static JSONObject cookieInfo() throws IOException, JSONException {
         String url = "https://passport.bilibili.com/x/passport-login/web/cookie/info";
-        Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
+        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
         return result.getJSONObject("data");
     }
 
-    public static String getCorrespondPath(long timestamp) {
+    public static String getCorrespondPath(long timestamp) { //时间戳要精准到毫秒！
         /*
         https://socialsisteryi.github.io/bilibili-API-collect/docs/login/cookie_refresh.html#%E7%94%9F%E6%88%90correspondpath%E7%AE%97%E6%B3%95
          */
@@ -56,10 +57,13 @@ public class CookieRefreshApi {
     }
     
     public static String getRefreshCsrf(String CorrespondPath) throws IOException {
-        if(CorrespondPath.equals("")) return "";
+        if(Objects.equals(CorrespondPath, "")) return "";
         String url = "https://www.bilibili.com/correspond/1/" + CorrespondPath;
         Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
-        String body = response.body().string();
+        String body = null;
+        if (response.body() != null) {
+            body = response.body().string();
+        }else return "";
         if (body.contains("<div id=\"1-name\">")){ //手动截断提取html
             body = body.substring(body.indexOf("<div id=\"1-name\">") + 17);
             body = body.substring(0,body.indexOf("</div>"));
@@ -68,25 +72,26 @@ public class CookieRefreshApi {
     }
     
     public static boolean refreshCookie(String RefreshCsrf) throws JSONException, IOException{
-        if(RefreshCsrf.equals("")) return false;
+        if(Objects.equals(RefreshCsrf, "")) return false;
+        if(Objects.equals(SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), "")) return false;
         String url = "https://passport.bilibili.com/x/passport-login/web/cookie/refresh";
         String args= "csrf=" + LittleToolsUtil.getInfoFromCookie("bili_jct",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,"")) + "&refresh_csrf=" + RefreshCsrf + "&source=main_web&refresh_token=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,"");
-        Response response = NetWorkUtil.post(url,args,ConfInfoApi.defHeaders);
+        Response response = NetWorkUtil.post(url,args,ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
         if (result.getInt("code") == 0) {
             String cookies = "buvid3=" + LittleToolsUtil.getInfoFromCookie("buvid3",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,"")) + "; " + UserLoginApi.getCookies(response);
             Log.e("新的Cookie",cookies);
             Log.e("新的RefreshToken",result.getJSONObject("data").getString("refresh_token"));
-            int confirmCode = new JSONObject(NetWorkUtil.post("https://passport.bilibili.com/x/passport-login/web/confirm/refresh","csrf=" + LittleToolsUtil.getInfoFromCookie("bili_jct",cookies) + "&refresh_token=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""),ConfInfoApi.defHeaders).body().string()).getInt("code");
-            if(confirmCode != 0){
-                Log.e("Cookie刷新失败","Confirm: " + String.valueOf(confirmCode));
+            int confirmCode = new JSONObject(NetWorkUtil.post("https://passport.bilibili.com/x/passport-login/web/confirm/refresh","csrf=" + LittleToolsUtil.getInfoFromCookie("bili_jct",cookies) + "&refresh_token=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""),ConfInfoApi.webHeaders).body().string()).getInt("code");
+            if(confirmCode != 0){ //必须要等确认更新Cookie成功，不然就无法完成Cookie的刷新
+                Log.e("Cookie刷新失败","确认刷新时返回:" + confirmCode);
                 return false;
             }
             SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies,cookies);
             SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,result.getJSONObject("data").getString("refresh_token")); 
             return true;
         }else{
-            Log.e("Cookie刷新失败","Refresh: "+String.valueOf(result.getInt("code")));
+            Log.e("Cookie刷新失败","刷新时返回:"+ result.getInt("code"));
             return false;
         }
     }

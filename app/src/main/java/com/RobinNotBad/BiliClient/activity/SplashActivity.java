@@ -29,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -131,14 +132,15 @@ public class SplashActivity extends Activity {
         try{
             JSONObject cookieInfo = CookieRefreshApi.cookieInfo();
             if(cookieInfo.getBoolean("refresh")){
-//            if(true){ //forDebug
                 Log.e("Cookie","需要刷新");
-                String correspondPath = CookieRefreshApi.getCorrespondPath(cookieInfo.getLong("timestamp"));
-//                String correspondPath = CookieRefreshApi.getCorrespondPath(System.currentTimeMillis());
-                Log.e("CorrespondPath",correspondPath);
-                String refreshCsrf = CookieRefreshApi.getRefreshCsrf(correspondPath);
-                Log.e("RefreshCsrf",refreshCsrf);
-                if(!CookieRefreshApi.refreshCookie(refreshCsrf)) runOnUiThread(()-> MsgUtil.toast("Cookie刷新失败",this));
+                if(Objects.equals(SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), "")) runOnUiThread(()-> MsgUtil.toast("无法刷新Cookie，请重新登录",this));
+                else{
+                    String correspondPath = CookieRefreshApi.getCorrespondPath(cookieInfo.getLong("timestamp"));
+                    Log.e("CorrespondPath",correspondPath);
+                    String refreshCsrf = CookieRefreshApi.getRefreshCsrf(correspondPath);
+                    Log.e("RefreshCsrf",refreshCsrf);
+                    if(!CookieRefreshApi.refreshCookie(refreshCsrf)) runOnUiThread(()-> MsgUtil.toast("Cookie刷新失败",this));
+                }
             }   
         }catch (Exception e){
             e.printStackTrace();
