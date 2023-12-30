@@ -83,17 +83,12 @@ public class SearchApi {
                     String cover = card.getString("cover");
                     String upName = card.getString("areas");
                     long aid = card.getLong("media_id");
-                    String bvid = "";
+                    String bvid = card.getString("season_id");
                     String playTimesStr = "敬请期待" + "观看";
                     videoCardList.add(new VideoCard(title,upName,playTimesStr,cover,aid,bvid,type));
                 }
             }
         }
-    }
-    public static JSONObject GetMain_section(long season_id)  throws IOException , JSONException{
-            String url = "https://api.bilibili.com/pgc/web/season/section?season_id=" + season_id;
-            JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.defHeaders).body()).string());  //得到一整个json
-            return all.getJSONObject("result");
     }
 
 }
