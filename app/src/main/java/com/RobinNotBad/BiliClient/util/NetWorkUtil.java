@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.Inflater;
 
 import okhttp3.MediaType;
@@ -22,13 +23,23 @@ import okhttp3.Response;
 
 public class NetWorkUtil
 {
+    private static AtomicReference<OkHttpClient> INSTANCE = new AtomicReference<>();
+    private static OkHttpClient getOkHttpInstance() {
+        while(INSTANCE.get() == null){
+            INSTANCE.compareAndSet(null, new OkHttpClient
+                    .Builder()
+                    .connectTimeout(15, TimeUnit.SECONDS)
+                    .readTimeout(15, TimeUnit.SECONDS).build());
+        }
+        return INSTANCE.get();
+    }
 
     public static Response get(String url) throws IOException
     {
         Log.e("debug-get","----------------");
         Log.e("debug-get-url",url);
         Log.e("debug-get","----------------");
-        OkHttpClient client = new OkHttpClient.Builder().connectTimeout(15, TimeUnit.SECONDS).readTimeout(15, TimeUnit.SECONDS).build();
+        OkHttpClient client = getOkHttpInstance();
         Request.Builder requestb = new Request.Builder().url(url).header("Referer", "https://www.bilibili.com/").addHeader("Accept", "*/*").addHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
         Request request = requestb.build();
         Response response = client.newCall(request).execute();
@@ -43,7 +54,7 @@ public class NetWorkUtil
         Log.e("debug-get","----------------");
         Log.e("debug-get-url",url);
         Log.e("debug-get","----------------");
-        OkHttpClient client = new OkHttpClient.Builder().connectTimeout(15, TimeUnit.SECONDS).readTimeout(15, TimeUnit.SECONDS).build();
+        OkHttpClient client = getOkHttpInstance();
         Request.Builder requestBuilder = new Request.Builder().url(url).get();
         for(int i = 0; i < headers.size(); i+=2)
             requestBuilder = requestBuilder.addHeader(headers.get(i), headers.get(i+1));
@@ -57,7 +68,7 @@ public class NetWorkUtil
         Log.e("debug-post-url",url);
         Log.e("debug-post-data",data);
         Log.e("debug-post","----------------");
-        OkHttpClient client = new OkHttpClient.Builder().connectTimeout(15, TimeUnit.SECONDS).readTimeout(15, TimeUnit.SECONDS).build();
+        OkHttpClient client = getOkHttpInstance();
         RequestBody body = RequestBody.create(MediaType.parse("application/x-www-form-urlencoded; charset=utf-8"), data);
         Request.Builder requestBuilder = new Request.Builder().url(url).post(body);
         for(int i = 0; i < headers.size(); i+=2)
@@ -101,5 +112,12 @@ public class NetWorkUtil
         byte[] output = outputStream.toByteArray();
         outputStream.close();
         return output;
+    }
+
+    public static interface Callback<T> {
+
+        public void onSuccess(T t);
+
+        public void onFailed(Exception e);
     }
 }
