@@ -17,6 +17,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.ReplyAdapter;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.model.Reply;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import org.json.JSONException;
@@ -76,7 +77,7 @@ public class VideoReplyFragment extends Fragment {
 
         replyList = new ArrayList<>();
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             try {
                 int result = ReplyApi.getReplies(aid,0,page,type,replyList);
                 if(result != -1) {
@@ -99,7 +100,7 @@ public class VideoReplyFragment extends Fragment {
                                 int itemCount = manager.getItemCount();
                                 if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                                     refreshing = true;
-                                    new Thread(() -> continueLoading()).start(); //加载第二页
+                                    CenterThreadPool.run(() -> continueLoading()); //加载第二页
                                 }
                             }
                         });
@@ -117,7 +118,7 @@ public class VideoReplyFragment extends Fragment {
                 requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     @SuppressLint("NotifyDataSetChanged")

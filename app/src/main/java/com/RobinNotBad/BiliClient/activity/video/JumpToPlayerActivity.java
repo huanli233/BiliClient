@@ -11,6 +11,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.DownloadActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -60,7 +61,7 @@ public class JumpToPlayerActivity extends BaseActivity {
     }
 
     private void requestVideo(long aid,String bvid, int cid) {
-        new Thread(()->{
+        CenterThreadPool.run(()->{
 //            String url;
             /*if(SharedPreferencesUtil.getBoolean("high_res",false)){
                 if (aid == 0) {
@@ -122,7 +123,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                 runOnUiThread(()->textView.setText("跳转失败！\n请安装对应的播放器\n或将哔哩终端和播放器同时更新到最新版本"));
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     @Override

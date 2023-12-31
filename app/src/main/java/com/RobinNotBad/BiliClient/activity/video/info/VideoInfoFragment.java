@@ -32,6 +32,7 @@ import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.LikeCoinFavApi;
 import com.RobinNotBad.BiliClient.api.WatchLaterApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -114,7 +115,7 @@ public class VideoInfoFragment extends Fragment {
 
         if(!SharedPreferencesUtil.getBoolean("tags_enable",true)) tags.setVisibility(View.GONE);
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             try {
 
                 HistoryApi.reportHistory(videoInfo.aid,videoInfo.cids.get(0), videoInfo.upMid, 0);
@@ -189,7 +190,7 @@ public class VideoInfoFragment extends Fragment {
                             if(result == 0) {
                                 requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), "点赞成功", Toast.LENGTH_SHORT).show());
                                 like.setBackground(ContextCompat.getDrawable(requireContext(),R.drawable.icon_like_1));
-                                like.setOnClickListener(view2 -> new Thread(()->{
+                                like.setOnClickListener(view2 -> CenterThreadPool.run(()->{
                                     Toast.makeText(requireContext(),"暂未完成",Toast.LENGTH_SHORT).show();
                                 }));                               
                             }
@@ -206,7 +207,7 @@ public class VideoInfoFragment extends Fragment {
                             if(result == 0) {
                                 requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), "投币成功,长按可投2币", Toast.LENGTH_SHORT).show());
                                 like.setBackground(ContextCompat.getDrawable(requireContext(),R.drawable.icon_coin_1));
-                                like.setOnClickListener(view2 -> new Thread(()->{
+                                like.setOnClickListener(view2 -> CenterThreadPool.run(()->{
                                     Toast.makeText(requireContext(),"暂未完成",Toast.LENGTH_SHORT).show();
                                 }));
                             }
@@ -293,7 +294,7 @@ public class VideoInfoFragment extends Fragment {
                 if(isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.quickErr(MsgUtil.err_net,view.getContext()));
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
     @Override
     @Deprecated

@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.google.android.material.card.MaterialCardView;
 
 import org.json.JSONException;
@@ -40,7 +41,7 @@ public class WriteReplyActivity extends BaseActivity {
 
         send.setOnClickListener(view -> {
             if(!sent) {
-                new Thread(() -> {
+                CenterThreadPool.run(() -> {
                     String text = editText.getText().toString();
                     if(!text.equals("")) {
                         try {
@@ -63,7 +64,7 @@ public class WriteReplyActivity extends BaseActivity {
                         }
                     }
                     else runOnUiThread(()-> Toast.makeText(this, "你还没输入内容呢~", Toast.LENGTH_SHORT).show());
-                }).start();
+                });
             }
             else Toast.makeText(WriteReplyActivity.this, "正在发送中，\n别急嘛~", Toast.LENGTH_SHORT).show();
         });

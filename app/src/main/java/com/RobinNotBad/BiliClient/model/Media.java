@@ -7,17 +7,12 @@ public class Media {
     public String cover;
     public String horizontalCover;
     public long mediaId;
-
-    public NewEp newEP;
-
     public Rating rating;
-
     public long seasonId;
 
     public String title;
 
     public MediaType type;
-
     public String typeName;
 
     public Media(JSONObject jsonObject) throws JSONException {
@@ -47,7 +42,6 @@ public class Media {
         }
         this.seasonId = jsonObject.getLong("season_id");
         this.typeName = jsonObject.getString("type_name");
-        this.newEP = new NewEp(jsonObject.getJSONObject("new_ep"));
         this.rating = new Rating(jsonObject.getJSONObject("rating"));
         this.title = jsonObject.getString("title");
     }
@@ -60,24 +54,6 @@ public class Media {
         TV,
         MANGA,
 
-    }
-
-    class NewEp {
-        public NewEp(JSONObject jsonObject) throws JSONException {
-            this.epid = jsonObject.getLong("id");
-            this.index = jsonObject.getString("index");
-            this.indexShow = jsonObject.getString("index_show");
-        }
-
-        public NewEp(long epid, String index, String indexShow) {
-            this.epid = epid;
-            this.index = index;
-            this.indexShow = indexShow;
-        }
-
-        public long epid;
-        public String index;
-        public String indexShow;
     }
 
     class Rating {

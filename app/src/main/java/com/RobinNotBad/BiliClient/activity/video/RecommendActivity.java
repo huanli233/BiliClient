@@ -17,6 +17,7 @@ import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.RecommendApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import org.json.JSONException;
@@ -76,7 +77,7 @@ public class RecommendActivity extends BaseActivity {
         swipeRefreshLayout.setRefreshing(true);
 
         refreshing = true;
-        new Thread(this::addRecommend).start();
+        CenterThreadPool.run(this::addRecommend);
 
     }
 
@@ -111,7 +112,7 @@ public class RecommendActivity extends BaseActivity {
                         int itemCount = manager.getItemCount();
                         if (lastItemPosition >= (itemCount - 3) && dy>0 && !refreshing) {// 滑动到倒数第三个就可以刷新了
                             refreshing = true;
-                            new Thread(()->addRecommend()).start(); //加载第二页
+                            CenterThreadPool.run(()->addRecommend()); //加载第二页
                         }
                     }
                 });

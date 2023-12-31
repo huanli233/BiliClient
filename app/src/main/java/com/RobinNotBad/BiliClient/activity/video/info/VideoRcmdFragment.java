@@ -15,6 +15,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.RecommendApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import org.json.JSONException;
@@ -64,7 +65,7 @@ public class VideoRcmdFragment extends Fragment {
         Log.e("debug-av号",String.valueOf(aid));
 
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             try {
 
                 ArrayList<VideoCard> videoList = RecommendApi.getRelated(aid);
@@ -81,7 +82,7 @@ public class VideoRcmdFragment extends Fragment {
                 if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
 }

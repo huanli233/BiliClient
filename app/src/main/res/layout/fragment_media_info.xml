@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" xmlns:tools="http://schemas.android.com/tools">
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -11,8 +11,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:round="5dp"
-                app:srcCompat="@drawable/avatar_robin"
                 android:id="@+id/image_media_cover"
+                tools:src="@drawable/loading_2233"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="8dp"
@@ -25,18 +25,53 @@
                 android:id="@+id/title"
                 android:text="加载中"
                 android:textSize="13sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="6dp"
                 app:layout_constraintTop_toBottomOf="@+id/image_media_cover"
                 app:layout_constraintStart_toStartOf="parent"
         />
-        <Button
-                android:id="@+id/btn_play"
-                android:text="播放"
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_episode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/title"
+                app:backgroundTint="#78242424"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:strokeColor="#707070"
+                app:strokeWidth="0.1dp"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="正片 点击切换"
+        />
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_eposide_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/cell_button_only_text"
+                android:orientation="horizontal"
+                android:layout_marginStart="3dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/btn_episode"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-
+        />
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_play"
+                android:text="播放"
+                android:textColor="#FFFFFF"
+                app:backgroundTint="#78242424"
+                app:strokeColor="#707070"
+                app:strokeWidth="0.1dp"
+                app:cornerRadius="8dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/rv_eposide_list"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
         />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -21,6 +21,7 @@ import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.adapter.LocalVideoAdapter;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.model.LocalVideo;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 
 import java.io.File;
@@ -68,7 +69,7 @@ public class LocalListActivity extends BaseActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
         }
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             runOnUiThread(()->swipeRefreshLayout.setRefreshing(true));
             scan(ConfInfoApi.getDownloadPath(this));
             adapter = new LocalVideoAdapter(this,videoList);
@@ -93,7 +94,7 @@ public class LocalListActivity extends BaseActivity {
                 recyclerView.setAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false);
             });
-        }).start();
+        });
     }
 
     private void scan(File folder){
@@ -140,7 +141,7 @@ public class LocalListActivity extends BaseActivity {
     }
 
     public void refresh(){
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             runOnUiThread(()->swipeRefreshLayout.setRefreshing(true));
             int oldSize = videoList.size();
             videoList.clear();
@@ -149,6 +150,6 @@ public class LocalListActivity extends BaseActivity {
                 adapter.notifyItemRangeChanged(0,oldSize);
                 swipeRefreshLayout.setRefreshing(false);
             });
-        }).start();
+        });
     }
 }

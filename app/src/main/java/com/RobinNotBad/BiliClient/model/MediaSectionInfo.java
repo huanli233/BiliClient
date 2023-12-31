@@ -5,8 +5,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MediaSectionInfo {
-    SectionInfo mainSection;
-    SectionInfo[] sections;
+    public SectionInfo mainSection;
+    public SectionInfo[] sections;
 
     public MediaSectionInfo(SectionInfo mainSection, SectionInfo[] sections){
         this.mainSection = mainSection;
@@ -23,48 +23,28 @@ public class MediaSectionInfo {
     }
 
     public static class EpisodeInfo{
-        public EpisodeInfo(){
-
-        }
+        public EpisodeInfo(){}
 
         public EpisodeInfo(VideoCard videoCard){
             longTitle = videoCard.title;
             cover = videoCard.cover;
             cid = videoCard.cid;
             aid = videoCard.aid;
-
-
-
         }
         public EpisodeInfo(JSONObject jsonObject) throws JSONException {
                 aid = jsonObject.getLong("aid");
                 cid = jsonObject.getLong("cid");
                 cover = jsonObject.getString("cover");
-                from = jsonObject.getString("from");
                 longTitle = jsonObject.getString("long_title");
         }
         public long aid;
         public long cid;
-        String cover;
-        String from;
-        String longTitle;
+        public String cover;
+        public String longTitle;
     }
-    static class BadgeInfo{
-        public BadgeInfo(){
 
-        }
-        public BadgeInfo(JSONObject jsonObject) throws JSONException {
-            text = jsonObject.getString("text");
-            bgColor = jsonObject.getString("bg_color");
-            bgColorNight = jsonObject.getString("bg_color_night");
-        }
-        String text;
-        String bgColor;
-        String bgColorNight;
-    }
     public static class SectionInfo{
         public SectionInfo(){
-
         }
         public SectionInfo(JSONObject jsonObject) throws JSONException {
             JSONArray episodesJson = jsonObject.getJSONArray("episodes");
@@ -73,12 +53,10 @@ public class MediaSectionInfo {
                 episodes[i] = new EpisodeInfo(episodesJson.getJSONObject(i));
             }
             id = jsonObject.getLong("id");
-            type = jsonObject.getInt("type");
             title = jsonObject.getString("title");
         }
         public EpisodeInfo[] episodes;
         public long id;
-        public int type;
         public String title;
     }
 }
