@@ -33,8 +33,8 @@ public class SharedPreferencesUtil
         return sharedPreferences.getString(key, def);
     }
 
-    public static boolean putString(String key, String value) {
-        return editor.putString(key, value).commit();
+    public static void putString(String key, String value) {
+        editor.putString(key, value).apply();
     }
 
     public static int getInt(String key, int def)
@@ -42,8 +42,8 @@ public class SharedPreferencesUtil
         return sharedPreferences.getInt(key, def);
     }
 
-    public static boolean putInt(String key, int value) {
-        return editor.putInt(key, value).commit();
+    public static void putInt(String key, int value) {
+        editor.putInt(key, value).apply();
     }
 
     public static long getLong(String key, long def)
@@ -51,8 +51,8 @@ public class SharedPreferencesUtil
         return sharedPreferences.getLong(key, def);
     }
 
-    public static boolean putLong(String key, long value) {
-        return editor.putLong(key, value).commit();
+    public static void putLong(String key, long value) {
+        editor.putLong(key, value).apply();
     }
 
     public static boolean getBoolean(String key, boolean def)
@@ -60,14 +60,13 @@ public class SharedPreferencesUtil
         return sharedPreferences.getBoolean(key, def);
     }
 
-    public static boolean putBoolean(String key, boolean value)
+    public static void putBoolean(String key, boolean value)
     {
-        return editor.putBoolean(key, value).commit();
+        editor.putBoolean(key, value).apply();
     }
 
-    public static boolean putFloat(String key, float value)
-    {
-        return editor.putFloat(key, value).commit();
+    public static void putFloat(String key, float value) {
+        editor.putFloat(key, value).apply();
     }
 
     public static float getFloat(String key, float def)

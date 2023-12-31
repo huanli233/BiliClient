@@ -18,7 +18,10 @@ public class BilibiliIDConverter {
     public static Long bvtoaid(String bv) {
         long x = 0;
         for (int i = 0; i < 6; i++) {
-            x += tr.get(bv.charAt(s[i])) * Math.pow(58, i);
+            Integer temp = tr.get(bv.charAt(s[i]));
+            if(temp != null) {
+                x += (long) (temp * Math.pow(58, i));
+            }
         }
         x = (x - add) ^ xor;
         return x;

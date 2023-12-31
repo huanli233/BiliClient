@@ -315,6 +315,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:orientation="vertical"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent">
 
                         <ImageButton
@@ -335,8 +337,8 @@
                         android:layout_height="50dp"
                         android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@id/layout_fav"
-                        app:layout_constraintStart_toStartOf="@id/layout_like"
+                        app:layout_constraintEnd_toStartOf="@id/layout_fav"
+                        app:layout_constraintStart_toEndOf="@id/layout_like"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageButton
@@ -356,6 +358,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:orientation="vertical"
+                        app:layout_constraintStart_toEndOf="@+id/layout_coin"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent">
 
                         <ImageButton

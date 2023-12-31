@@ -3,6 +3,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.PrivateMsgAdapter;
@@ -18,7 +19,7 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
     
     
     
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         public ViewHolder(View view){
             super(view);
         }
@@ -27,12 +28,13 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
         mPrivateMsgList=msgList;
     }
     @Override
+    @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup parent,int viewType){
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_private_msg,parent,false);
         return new ViewHolder(view);
     }
     @Override
-    public void onBindViewHolder(ViewHolder holder,int position){
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position){
         PrivateMessage msg = mPrivateMsgList.get(position);
     }
     @Override 

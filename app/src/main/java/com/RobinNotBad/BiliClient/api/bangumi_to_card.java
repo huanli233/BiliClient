@@ -35,28 +35,24 @@ public class bangumi_to_card {
                 JSONObject result = all.getJSONObject("result");
                 Media baseMediaInfo = new Media(result);
                 if (activity != null && !activity.isDestroyed()) {
-                    activity.runOnUiThread(() -> {
-                        callback.onSuccess(baseMediaInfo);
-                    });
+                    activity.runOnUiThread(() -> callback.onSuccess(baseMediaInfo));
                 }
                 body.close();
             } catch (Exception e) {
                 if (activity != null && !activity.isDestroyed()) {
-                    activity.runOnUiThread(() -> {
-                        callback.onFailed(e);
-                    });
+                    activity.runOnUiThread(() -> callback.onFailed(e));
                 }
             }
         });
     }
+    /** @noinspection unchecked*/
     public static MediaSectionInfo getSectionInfo(String seasonId) throws JSONException, IOException {
         JSONArray cardArray = bangumi_to_car(seasonId);
         //先建main_section
         JSONObject mainSection = (JSONObject) cardArray.get(0);
-        String mainSectionTitle = mainSection.getString("title");
         ArrayList<VideoCard> mainSectionCards = (ArrayList<VideoCard>) mainSection.get("card");
         MediaSectionInfo.SectionInfo mainSectionInfo = new MediaSectionInfo.SectionInfo();
-        mainSectionInfo.title = mainSectionTitle;
+        mainSectionInfo.title = mainSection.getString("title");
         mainSectionInfo.episodes = new MediaSectionInfo.EpisodeInfo[mainSectionCards.size()];
         for (int i = 0; i < mainSectionCards.size(); i++) {
             mainSectionInfo.episodes[i] = new MediaSectionInfo.EpisodeInfo(mainSectionCards.get(i));
@@ -86,7 +82,7 @@ public class bangumi_to_card {
         JSONObject main_section = result.getJSONObject("main_section");
         JSONArray episodes = main_section.getJSONArray("episodes");
         JSONObject input = new JSONObject();
-        ArrayList<VideoCard> list = new ArrayList<VideoCard>();
+        ArrayList<VideoCard> list = new ArrayList<>();
         for (int j = 0; j < episodes.length(); j++) {
             JSONObject array = episodes.getJSONObject(j);
             String title = array.getString("long_title");
@@ -126,7 +122,7 @@ public class bangumi_to_card {
     }
     public static JSONObject GetMain_section(String season_id) throws IOException, JSONException {
         String url = "https://api.bilibili.com/pgc/web/season/section?season_id=" + season_id;
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url).body()).string());  //得到一整个json
+        JSONObject all = new JSONObject(Objects.requireNonNull(Objects.requireNonNull(NetWorkUtil.get(url)).body()).string());  //得到一整个json
         return all.getJSONObject("result");
     }
 }

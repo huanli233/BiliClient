@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Objects;
 
 //用于清除缓存，因为glide实际上会往本地存不少缩略图，时间一长就会爆炸

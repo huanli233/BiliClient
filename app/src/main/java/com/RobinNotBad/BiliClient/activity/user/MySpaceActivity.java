@@ -69,7 +69,7 @@ public class MySpaceActivity extends BaseActivity {
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(userAvatar);
                     userName.setText(userInfo.name);
-                    userFans.setText(LittleToolsUtil.toWan(userInfo.fans) + "粉丝 " + String.valueOf(userCoin) + "硬币");
+                    userFans.setText(LittleToolsUtil.toWan(userInfo.fans) + "粉丝 " + userCoin + "硬币");
                     userDesc.setText(userInfo.sign);
 
                     myInfo.setOnClickListener(view -> {

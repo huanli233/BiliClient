@@ -1,20 +1,14 @@
 package com.RobinNotBad.BiliClient.api;
 
 import android.util.Log;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import java.lang.reflect.Array;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Objects;
-
-import okhttp3.Response;
 
 public class LikeCoinFavApi {
     

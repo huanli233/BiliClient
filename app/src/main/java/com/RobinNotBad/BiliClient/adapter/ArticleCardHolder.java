@@ -33,14 +33,14 @@ public class ArticleCardHolder extends RecyclerView.ViewHolder{
     public void showArticleCard(ArticleInfo articleCard, Context context){
         title.setText(LittleToolsUtil.htmlToString(articleCard.title));
         String upNameStr = articleCard.upName;
-        if(upNameStr.equals("")){
+        if(upNameStr.isEmpty()){
             upName.setVisibility(View.GONE);
             upIcon.setVisibility(View.GONE);
         }
         else upName.setText(upNameStr);
 
         String playTimesStr = String.valueOf(articleCard.view);
-        if(playTimesStr.equals("")){
+        if(playTimesStr.isEmpty()){
             playIcon.setVisibility(View.GONE);
             playTimes.setVisibility(View.GONE);
         }

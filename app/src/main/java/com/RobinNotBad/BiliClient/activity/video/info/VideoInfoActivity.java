@@ -92,7 +92,7 @@ public class VideoInfoActivity extends BaseActivity {
                     //ErrorUtil.showText(requireContext(),"调试",data.toString());
 
                     JSONArray tagList;
-                    if (bvid == null || bvid.equals("")) tagList = VideoInfoApi.getTagsByAid(aid);
+                    if (bvid == null || bvid.isEmpty()) tagList = VideoInfoApi.getTagsByAid(aid);
                     else tagList = VideoInfoApi.getTagsByBvid(bvid);
                     videoInfo = VideoInfoApi.getInfoByJson(data, tagList);
                 }

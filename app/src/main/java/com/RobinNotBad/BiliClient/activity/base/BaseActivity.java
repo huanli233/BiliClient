@@ -11,12 +11,12 @@ import android.view.View;
 import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 
-public class BaseActivity extends FragmentActivity {
+public class BaseActivity extends AppCompatActivity {
 
     //调整应用内dpi的代码，其他Activity要继承于BaseActivity才能调大小
     @Override

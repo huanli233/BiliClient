@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.activity.article;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,7 @@ public class ArticleInfoFragment extends Fragment {
     private ImageView cover,upIcon;
     private TextView title,content, keywords,upName,views,timeText,cvidText;
     private MaterialCardView upCard;
-    private boolean keywords_expand = false;
+    private final boolean keywords_expand = false;
     public ArticleInfoFragment(){}
 
     public static ArticleInfoFragment newInstance(ArticleInfo newArticleInfo) {
@@ -70,7 +69,7 @@ public class ArticleInfoFragment extends Fragment {
             if (isAdded()) requireActivity().runOnUiThread(() -> {
                 title.setText(articleInfo.title);
                 content.setText(LittleToolsUtil.htmlReString(LittleToolsUtil.htmlToString(articleInfo.content)));
-                cvidText.setText("CV" + String.valueOf(articleInfo.id));
+                cvidText.setText("CV" + articleInfo.id);
                 upName.setText(articleInfo.upName);
                 keywords.setText("关键词：" + articleInfo.keywords);
                 views.setText(String.valueOf(articleInfo.view));

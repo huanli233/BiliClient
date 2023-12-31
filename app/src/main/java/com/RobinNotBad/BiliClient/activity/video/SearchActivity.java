@@ -135,7 +135,7 @@ public class SearchActivity extends BaseActivity {
 
 
 
-            if (str.equals("")) {
+            if (str.isEmpty()) {
                 runOnUiThread(() -> Toast.makeText(this, "你还木有输入内容哦~", Toast.LENGTH_SHORT).show());
             } else {
                 keyword = str;

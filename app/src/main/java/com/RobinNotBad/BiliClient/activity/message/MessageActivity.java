@@ -9,10 +9,6 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 
 import com.RobinNotBad.BiliClient.activity.message.MessageListActivity;
 import com.google.android.material.card.MaterialCardView;
-import org.json.JSONException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MessageActivity extends BaseActivity {
     public static MessageActivity instance = null;

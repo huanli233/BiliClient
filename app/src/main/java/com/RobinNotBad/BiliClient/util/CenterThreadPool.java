@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class CenterThreadPool {
 
-    private static AtomicReference<ExecutorService> INSTANCE = new AtomicReference<>();
+    private static final AtomicReference<ExecutorService> INSTANCE = new AtomicReference<>();
     private static ExecutorService getInstance(){
         while(INSTANCE.get() == null){
             INSTANCE.compareAndSet(null, new ThreadPoolExecutor(

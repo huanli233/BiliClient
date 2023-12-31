@@ -78,9 +78,7 @@ public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdap
             } else {
                 binding.btn.setTextColor(0xFFFFFFFF);
                 ViewCompat.setBackgroundTintList(binding.btn, AppCompatResources.getColorStateList(binding.getRoot().getContext(), R.color.background_button));
-                binding.btn.setOnClickListener(v -> {
-                    setSelectedItemIndex(currentIndex);
-                });
+                binding.btn.setOnClickListener(v -> setSelectedItemIndex(currentIndex));
             }
         }
     }

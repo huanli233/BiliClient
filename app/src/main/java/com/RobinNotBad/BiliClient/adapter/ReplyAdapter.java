@@ -140,7 +140,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             else replyHolder.upLiked.setVisibility(View.GONE);
             replyHolder.pubDate.setText(replyList.get(realPosition).pubTime);
 
-            if (replyList.get(realPosition).pictureList != null && replyList.get(realPosition).pictureList.size() > 0) {  //图片显示相关
+            if (replyList.get(realPosition).pictureList != null && !replyList.get(realPosition).pictureList.isEmpty()) {  //图片显示相关
                 replyHolder.imageCard.setVisibility(View.VISIBLE);
                 replyHolder.imageCount.setVisibility(View.VISIBLE);
                 Glide.with(context).load(replyList.get(realPosition).pictureList.get(0))

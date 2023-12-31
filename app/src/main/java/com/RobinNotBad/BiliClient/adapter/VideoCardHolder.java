@@ -33,14 +33,14 @@ public class VideoCardHolder extends RecyclerView.ViewHolder{
     public void showVideoCard(VideoCard videoCard, Context context){
         title.setText(LittleToolsUtil.htmlToString(videoCard.title));
         String upNameStr = videoCard.upName;
-        if(upNameStr.equals("")){
+        if(upNameStr.isEmpty()){
             upName.setVisibility(View.GONE);
             upIcon.setVisibility(View.GONE);
         }
         else upName.setText(upNameStr);
 
         String playTimesStr = videoCard.view;
-        if(playTimesStr.equals("")){
+        if(playTimesStr.isEmpty()){
             playIcon.setVisibility(View.GONE);
             playTimes.setVisibility(View.GONE);
         }

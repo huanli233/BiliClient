@@ -23,7 +23,7 @@
             android:gravity="center"
             android:text="登录"
             android:textStyle="bold"
-            android:drawableStart="@drawable/arrow_back"
+            app:drawableStartCompat="@drawable/arrow_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -46,8 +46,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
-        android:id="@+id/background"
-        android:layout_width="match_parent"
+            android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +133,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="35sp"
                     android:layout_marginHorizontal="8dp"
-                    android:drawableEnd="@drawable/arrow_forward"
+                    app:drawableEndCompat="@drawable/arrow_forward"
                     android:gravity="center_vertical"
                     android:text="但是我拒绝"
                     android:textAlignment="textStart"

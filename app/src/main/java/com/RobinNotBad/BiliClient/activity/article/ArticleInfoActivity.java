@@ -3,8 +3,7 @@ package com.RobinNotBad.BiliClient.activity.article;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,13 +19,11 @@ import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ArticleInfoActivity extends BaseActivity {
+    private static final String TAG = "ArticleInfoActivity";
     private long cvid;
 
     @SuppressLint("MissingInflatedId")
@@ -35,7 +32,7 @@ public class ArticleInfoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_viewpager);
         Intent intent = getIntent();
-        cvid = intent.getLongExtra("cvid",(long)114514);
+        cvid = intent.getLongExtra("cvid", 114514);
         findViewById(R.id.top).setOnClickListener(view -> finish());
 
         TextView pageName = findViewById(R.id.pageName);
@@ -62,10 +59,8 @@ public class ArticleInfoActivity extends BaseActivity {
                         SharedPreferencesUtil.putBoolean("first_articleinfo",false);
                     }
                 });
-            }catch (IOException e){
-                e.printStackTrace();
-            }catch (JSONException e){
-                e.printStackTrace();
+            }catch (Exception e){
+                Log.wtf(TAG, e);
             }
         });
     }

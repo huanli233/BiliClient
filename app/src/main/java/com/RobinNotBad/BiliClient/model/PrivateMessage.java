@@ -1,5 +1,4 @@
 package com.RobinNotBad.BiliClient.model;
-import com.RobinNotBad.BiliClient.model.PrivateMessage;
 
 public class PrivateMessage {
     

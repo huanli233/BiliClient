@@ -15,18 +15,18 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/pageName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="3dp"
-            android:layout_marginStart="8dp"
-            android:gravity="center"
-            android:text="设置"
-            android:textStyle="bold"
-            android:drawableStart="@drawable/arrow_down"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                android:id="@+id/pageName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="3dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:text="设置"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:drawableStartCompat="@drawable/arrow_down"/>
 
         <TextClock
             android:id="@+id/timeText"
@@ -74,16 +74,15 @@
                 app:strokeWidth="0.1dp">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:layout_marginHorizontal="8dp"
-                    android:drawableEnd="@drawable/arrow_forward"
-                    android:gravity="center_vertical"
-                    android:text="你还木有登录哦！点击这里登录"
-                    android:textAlignment="textStart"
-                    android:textSize="13sp"
-                    android:visibility="visible"
-                    tools:ignore="RtlCompat" />
+                        android:layout_width="match_parent"
+                        android:layout_height="35sp"
+                        android:layout_marginHorizontal="8dp"
+                        android:gravity="center_vertical"
+                        android:text="你还木有登录哦！点击这里登录"
+                        android:textAlignment="textStart"
+                        android:textSize="13sp"
+                        android:visibility="visible"
+                        tools:ignore="RtlCompat" app:drawableEndCompat="@drawable/arrow_forward"/>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -156,7 +155,7 @@
                         android:lines="1"
                         android:text="切换播放器、清晰度"
                         android:textColor="#fff"
-                        android:textSize="10sp"
+                        android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/playerSetting_go"
                         app:layout_constraintStart_toEndOf="@+id/playerSetting_icon"
@@ -234,7 +233,7 @@
                         android:lines="1"
                         android:text="界面大小、边距等"
                         android:textColor="#fff"
-                        android:textSize="10sp"
+                        android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/uiSetting_go"
                         app:layout_constraintStart_toEndOf="@+id/uiSetting_icon"
@@ -313,7 +312,7 @@
                         android:lines="1"
                         android:text="一些奇奇怪怪的选项"
                         android:textColor="#fff"
-                        android:textSize="10sp"
+                        android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/prefSetting_go"
                         app:layout_constraintStart_toEndOf="@+id/prefSetting_icon"
@@ -392,7 +391,7 @@
                         android:lines="1"
                         android:text="作者的话、联系方式"
                         android:textColor="#fff"
-                        android:textSize="10sp"
+                        android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/about_go"
                         app:layout_constraintStart_toEndOf="@+id/about_icon"
@@ -415,15 +414,14 @@
                 app:strokeWidth="0.1dp">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:layout_marginHorizontal="8dp"
-                    android:drawableEnd="@drawable/arrow_forward"
-                    android:gravity="center_vertical"
-                    android:text="查看公告"
-                    android:textAlignment="textStart"
-                    android:textSize="13sp"
-                    tools:ignore="RtlCompat" />
+                        android:layout_width="match_parent"
+                        android:layout_height="35sp"
+                        android:layout_marginHorizontal="8dp"
+                        android:gravity="center_vertical"
+                        android:text="查看公告"
+                        android:textAlignment="textStart"
+                        android:textSize="13sp"
+                        tools:ignore="RtlCompat" app:drawableEndCompat="@drawable/arrow_forward"/>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -440,15 +438,14 @@
                 app:strokeWidth="0.1dp">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:layout_marginHorizontal="8dp"
-                    android:drawableEnd="@drawable/arrow_forward"
-                    android:gravity="center_vertical"
-                    android:text="检查更新"
-                    android:textAlignment="textStart"
-                    android:textSize="13sp"
-                    tools:ignore="RtlCompat" />
+                        android:layout_width="match_parent"
+                        android:layout_height="35sp"
+                        android:layout_marginHorizontal="8dp"
+                        android:gravity="center_vertical"
+                        android:text="检查更新"
+                        android:textAlignment="textStart"
+                        android:textSize="13sp"
+                        tools:ignore="RtlCompat" app:drawableEndCompat="@drawable/arrow_forward"/>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -465,15 +462,14 @@
                 app:strokeWidth="0.1dp">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:layout_marginHorizontal="8dp"
-                    android:drawableEnd="@drawable/arrow_forward"
-                    android:gravity="center_vertical"
-                    android:text="功能测试"
-                    android:textAlignment="textStart"
-                    android:textSize="13sp"
-                    tools:ignore="RtlCompat" />
+                        android:layout_width="match_parent"
+                        android:layout_height="35sp"
+                        android:layout_marginHorizontal="8dp"
+                        android:gravity="center_vertical"
+                        android:text="功能测试"
+                        android:textAlignment="textStart"
+                        android:textSize="13sp"
+                        tools:ignore="RtlCompat" app:drawableEndCompat="@drawable/arrow_forward"/>
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>

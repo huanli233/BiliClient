@@ -51,20 +51,20 @@ public class SetupUIActivity extends BaseActivity {
     }
 
     private void save() {
-        if(!uiScaleInput.getText().toString().equals("")) {
+        if(!uiScaleInput.getText().toString().isEmpty()) {
             float dpiTimes = Float.parseFloat(uiScaleInput.getText().toString());
             if (dpiTimes >= 0.1F && dpiTimes <= 10.0F)
                 SharedPreferencesUtil.putFloat("dpi", dpiTimes);
             Log.e("dpi", uiScaleInput.getText().toString());
         }
 
-        if(!uiPaddingH.getText().toString().equals("")) {
+        if(!uiPaddingH.getText().toString().isEmpty()) {
             int paddingH = Integer.parseInt(uiPaddingH.getText().toString());
             if(paddingH <= 30) SharedPreferencesUtil.putInt("paddingH_percent", paddingH);
             Log.e("paddingH", uiPaddingH.getText().toString());
         }
 
-        if(!uiPaddingV.getText().toString().equals("")) {
+        if(!uiPaddingV.getText().toString().isEmpty()) {
             int paddingV = Integer.parseInt(uiPaddingV.getText().toString());
             if(paddingV <= 30) SharedPreferencesUtil.putInt("paddingV_percent", paddingV);
             Log.e("paddingV", uiPaddingV.getText().toString());

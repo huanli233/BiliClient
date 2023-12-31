@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.media;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -70,6 +71,7 @@ public class MediaInfoFragment extends Fragment {
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void setSelectSectionIndex(int index) {
         MediaSectionInfo.SectionInfo section = index == 0 ? sectionInfo.mainSection : sectionInfo.sections[index - 1];
         binding.btnEpisode.setText(section.title + " 点击切换");
@@ -94,9 +96,7 @@ public class MediaInfoFragment extends Fragment {
         //section selector setting.
         RecyclerView rv = binding.rvEposideList;
         MediaEpisodesAdapter adapter = new MediaEpisodesAdapter();
-        binding.btnEpisode.setOnClickListener(v -> {
-            getSectionChooseDialog(mediaSectionInfo).show();
-        });
+        binding.btnEpisode.setOnClickListener(v -> getSectionChooseDialog(mediaSectionInfo).show());
         rv.setAdapter(adapter);
         adapter.setData(mediaSectionInfo.mainSection.episodes);
         rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -141,9 +141,7 @@ public class MediaInfoFragment extends Fragment {
         CenterThreadPool.run(() -> {
             try {
                 MediaSectionInfo mediaSectionInfo = bangumi_to_card.getSectionInfo(String.valueOf(baseMediaInfo.seasonId));
-                this.requireActivity().runOnUiThread(() -> {
-                    initView(baseMediaInfo, mediaSectionInfo);
-                });
+                this.requireActivity().runOnUiThread(() -> initView(baseMediaInfo, mediaSectionInfo));
 
             } catch (Exception e) {
                 Toast.makeText(requireContext(), "解析剧集详细信息失败\n" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();

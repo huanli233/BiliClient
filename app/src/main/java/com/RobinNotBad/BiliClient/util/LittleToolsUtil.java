@@ -1,9 +1,7 @@
 package com.RobinNotBad.BiliClient.util;
 
 import android.content.Context;
-import android.webkit.URLUtil;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 //2023-07-25

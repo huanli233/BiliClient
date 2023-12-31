@@ -23,7 +23,7 @@
             android:layout_marginVertical="3dp"
             android:text="我的"
             android:textStyle="bold"
-            android:drawableStart="@drawable/arrow_down"
+            app:drawableStartCompat="@drawable/arrow_down"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -116,8 +116,7 @@
                     tools:ignore="TouchTargetSizeCheck" />
 
                 <View
-                    android:id="@+id/divider"
-                    android:layout_width="match_parent"
+                        android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginVertical="4dp"
                     android:layout_marginHorizontal="8dp"
@@ -174,8 +173,7 @@
                         app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
-                        android:id="@+id/myinfo_title"
-                        android:layout_width="0dp"
+                            android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:ellipsize="end"
@@ -236,8 +234,7 @@
                         app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
-                        android:id="@+id/follow_title"
-                        android:layout_width="0dp"
+                            android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:ellipsize="end"
@@ -299,8 +296,7 @@
                         app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
-                        android:id="@+id/watchlater_title"
-                        android:layout_width="0dp"
+                            android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:ellipsize="end"
@@ -362,8 +358,7 @@
                         app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
-                        android:id="@+id/favorite_title"
-                        android:layout_width="0dp"
+                            android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:ellipsize="end"
@@ -424,8 +419,7 @@
                         app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
-                        android:id="@+id/history_title"
-                        android:layout_width="0dp"
+                            android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:ellipsize="end"

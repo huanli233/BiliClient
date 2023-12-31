@@ -12,10 +12,6 @@ import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.google.android.material.card.MaterialCardView;
 
-import org.json.JSONException;
-
-import java.io.IOException;
-
 public class WriteReplyActivity extends BaseActivity {
 
     boolean sent = false;
@@ -43,9 +39,9 @@ public class WriteReplyActivity extends BaseActivity {
             if(!sent) {
                 CenterThreadPool.run(() -> {
                     String text = editText.getText().toString();
-                    if(!text.equals("")) {
+                    if(!text.isEmpty()) {
                         try {
-                            if(!parentSender.equals("")) text = "回复 @" + parentSender + " :" + text;
+                            if(!parentSender.isEmpty()) text = "回复 @" + parentSender + " :" + text;
 
                             Log.e("debug-评论内容",text);
 
@@ -57,9 +53,7 @@ public class WriteReplyActivity extends BaseActivity {
                             else
                                 runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, "发送失败TAT\n错误码："+result, Toast.LENGTH_SHORT).show());
                             finish();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

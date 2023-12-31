@@ -46,7 +46,7 @@ public class Media {
         this.title = jsonObject.getString("title");
     }
 
-    enum MediaType {
+    public enum MediaType {
         BANGUMI,
         MOVIE,
         RECORD,
@@ -56,7 +56,7 @@ public class Media {
 
     }
 
-    class Rating {
+    public static class Rating {
         public Rating(JSONObject jsonObject) throws JSONException {
             this.count = jsonObject.getLong("count");
             this.Score = jsonObject.getLong("score");

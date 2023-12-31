@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<resource>
+<resources>
     <style name="CardStyle">
     
         <item name="cardMaxElevation">0dp</item> 
@@ -11,4 +11,4 @@
         <item name="cardCornerRadius">8dp</item>
     
     </style>
-</resource>
+</resources>

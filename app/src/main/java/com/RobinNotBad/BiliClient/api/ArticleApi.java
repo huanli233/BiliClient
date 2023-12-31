@@ -9,8 +9,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Objects;
 
-import okhttp3.Response;
-
 /*
 专栏API
 API是自己扒的
@@ -32,7 +30,7 @@ public class ArticleApi {
         articleInfo.upAvatar = data.getJSONObject("author").getString("face");
         articleInfo.upFans = data.getJSONObject("author").getInt("fans");
         articleInfo.upLevel = data.getJSONObject("author").getInt("level");
-        articleInfo.view = data.getJSONObject("stats").getString("view").toString();
+        articleInfo.view = data.getJSONObject("stats").getString("view");
         articleInfo.favourite = data.getJSONObject("stats").getInt("favorite");
         articleInfo.like = data.getJSONObject("stats").getInt("like");
         articleInfo.reply = data.getJSONObject("stats").getInt("reply");

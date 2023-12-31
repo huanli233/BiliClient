@@ -5,17 +5,13 @@ import android.graphics.Bitmap;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.QRCodeUtil;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -61,8 +57,7 @@ public class UserLoginApi
     public static String getCookies(Response response){
         StringBuilder cookies = new StringBuilder();
         List<String> cookiesList = response.headers("Set-Cookie");
-        for (int i = 0; i < cookiesList.size(); i++)
-            cookies.append(cookiesList.get(i).split("; ")[0]).append("; ");
+        for (String s : cookiesList) cookies.append(s.split("; ")[0]).append("; ");
 
         return cookies.substring(0, cookies.length() - 2);
     }

@@ -2,27 +2,24 @@ package com.RobinNotBad.BiliClient.activity.user.favorite;
 
 import android.content.Intent;
 import android.os.Bundle;
-
+import android.util.Log;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.FolderChooseAdapter;
 import com.RobinNotBad.BiliClient.api.FavoriteApi;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 //添加收藏
 //2023-08-28
 
 public class AddFavoriteActivity extends BaseActivity {
-
+    private static final String TAG = "AddFavoriteActivity";
     FolderChooseAdapter adapter;
     ArrayList<String> folderList = new ArrayList<>();
     ArrayList<Boolean> stateList = new ArrayList<>();
@@ -41,7 +38,7 @@ public class AddFavoriteActivity extends BaseActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             try {
                 FavoriteApi.getFavoriteState(aid,folderList,fidList,stateList);
 
@@ -51,14 +48,11 @@ public class AddFavoriteActivity extends BaseActivity {
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
                     recyclerView.setAdapter(adapter);
                 });
-            } catch (IOException e){
-                runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
-                e.printStackTrace();
-            } catch (JSONException e) {
-                runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,this));
-                e.printStackTrace();
+            } catch (Exception e) {
+                runOnUiThread(() -> MsgUtil.quickErr(MsgUtil.err_net, this));
+                Log.wtf(TAG, e);
             }
-        }).start();
+        });
     }
 
     @Override

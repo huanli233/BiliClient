@@ -58,7 +58,7 @@ public class LocalPageChooseActivity extends BaseActivity {
                 danmakuFileList.remove(position);
                 adapter.notifyItemRemoved(position);
 
-                if(pageList.size() == 0){
+                if(pageList.isEmpty()){
                     FileUtil.deleteFolder(videoPath);
                 }
 

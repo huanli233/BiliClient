@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="4dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
         android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="32dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:orientation="horizontal"
             android:id="@+id/avatar_list">
         </LinearLayout>
@@ -25,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
             android:text="" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

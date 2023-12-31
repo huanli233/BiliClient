@@ -15,18 +15,18 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/pageName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="3dp"
-            android:layout_marginStart="8dp"
-            android:gravity="center"
-            android:text="选择播放器"
-            android:textStyle="bold"
-            android:drawableStart="@drawable/arrow_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                android:id="@+id/pageName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="3dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:text="选择播放器"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:drawableStartCompat="@drawable/arrow_back"/>
 
         <TextClock
             android:id="@+id/timeText"
@@ -116,7 +116,7 @@
                         android:lines="1"
                         android:text="一款开源播放器"
                         android:textColor="#fff"
-                        android:textSize="10sp"
+                        android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/mtvPlayer_icon"
@@ -183,7 +183,7 @@
                         android:lines="1"
                         android:text="支持缩放视频"
                         android:textColor="#fff"
-                        android:textSize="10sp"
+                        android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/aliangPlayer_icon"
@@ -192,7 +192,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/high_res"
                 android:layout_marginTop="5dp"
                 android:layout_marginHorizontal="8dp"

@@ -25,7 +25,6 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -87,7 +86,7 @@ public class SplashActivity extends Activity {
                     if (SharedPreferencesUtil.getLong("mid", 0) == 0) {
                         String cookies = UserLoginApi.getCookies(response);
                         Log.e("cookies",cookies);
-                        if(!cookies.equals("")) SharedPreferencesUtil.putString("cookies",cookies);
+                        if(!cookies.isEmpty()) SharedPreferencesUtil.putString("cookies",cookies);
                     }else checkCookie();
 
 

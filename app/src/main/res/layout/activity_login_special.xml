@@ -23,7 +23,7 @@
             android:gravity="center"
             android:text="特殊登录"
             android:textStyle="bold"
-            android:drawableStart="@drawable/arrow_back"
+            app:drawableStartCompat="@drawable/arrow_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -101,7 +101,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="35sp"
-                    android:drawableEnd="@drawable/arrow_forward"
+                    app:drawableEndCompat="@drawable/arrow_forward"
                     android:gravity="center_vertical"
                     android:text="登录"
                     android:textAlignment="textEnd"

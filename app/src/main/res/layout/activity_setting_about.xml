@@ -16,18 +16,18 @@
          android:id="@+id/top">
 
         <TextView
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             android:layout_marginVertical="3dp"
-             android:gravity="center"
-             app:layout_constraintTop_toTopOf="parent"
-             app:layout_constraintStart_toStartOf="parent"
-             android:drawableStart="@drawable/arrow_back"
-             app:layout_constraintBottom_toBottomOf="parent"
-             android:layout_marginStart="8dp"
-             android:id="@+id/pageName"
-             android:text="关于"
-             android:textStyle="bold" />
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginVertical="3dp"
+                android:gravity="center"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="8dp"
+                android:id="@+id/pageName"
+                android:text="关于"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/arrow_back"/>
 
         <TextClock
              android:layout_height="wrap_content"
@@ -66,14 +66,13 @@
                  android:src="@mipmap/icon"
                  android:layout_marginTop="30dp"
                  android:layout_gravity="center"
-                 android:id="@+id/app_icon" />
+            />
 
             <TextView
                  android:layout_height="wrap_content"
                  android:layout_width="wrap_content"
                  android:textSize="15sp"
                  android:layout_marginTop="5dp"
-                 android:id="@+id/app_name"
                  android:layout_gravity="center"
                  android:text="@string/app_name" />
 
@@ -112,7 +111,7 @@
                  app:strokeWidth="0.1dp"
                  app:layout_constraintEnd_toEndOf="parent"
                  app:cardCornerRadius="4dp"
-                 android:id="@+id/about_say">
+            >
 
                 <LinearLayout
                      android:layout_height="wrap_content"

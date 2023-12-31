@@ -67,8 +67,7 @@ public class UserInfoApi {
             JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.defHeaders).body()).string());
             if(all.has("data") && !all.isNull("data")) {
                 JSONObject data = all.getJSONObject("data");
-                if(data.get("money") == null) return 0;
-                else return data.getInt("money");
+                return data.has("money") ? data.getInt("money") : 0;
             }
         }
         catch(IOException e){

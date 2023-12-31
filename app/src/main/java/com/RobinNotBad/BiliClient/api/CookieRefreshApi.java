@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -60,7 +59,7 @@ public class CookieRefreshApi {
         if(Objects.equals(CorrespondPath, "")) return "";
         String url = "https://www.bilibili.com/correspond/1/" + CorrespondPath;
         Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
-        String body = null;
+        String body;
         if (response.body() != null) {
             body = response.body().string();
         }else return "";
@@ -82,7 +81,7 @@ public class CookieRefreshApi {
             String cookies = "buvid3=" + LittleToolsUtil.getInfoFromCookie("buvid3",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,"")) + "; " + UserLoginApi.getCookies(response);
             Log.e("新的Cookie",cookies);
             Log.e("新的RefreshToken",result.getJSONObject("data").getString("refresh_token"));
-            int confirmCode = new JSONObject(NetWorkUtil.post("https://passport.bilibili.com/x/passport-login/web/confirm/refresh","csrf=" + LittleToolsUtil.getInfoFromCookie("bili_jct",cookies) + "&refresh_token=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""),ConfInfoApi.webHeaders).body().string()).getInt("code");
+            int confirmCode = new JSONObject(Objects.requireNonNull(NetWorkUtil.post("https://passport.bilibili.com/x/passport-login/web/confirm/refresh", "csrf=" + LittleToolsUtil.getInfoFromCookie("bili_jct", cookies) + "&refresh_token=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), ConfInfoApi.webHeaders).body()).string()).getInt("code");
             if(confirmCode != 0){ //必须要等确认更新Cookie成功，不然就无法完成Cookie的刷新
                 Log.e("Cookie刷新失败","确认刷新时返回:" + confirmCode);
                 return false;
@@ -96,8 +95,8 @@ public class CookieRefreshApi {
         }
     }
     
-    public static String base16Encode(byte src[])throws Exception {
-        StringBuffer strbuf = new StringBuffer(src.length * 2);
+    public static String base16Encode(byte[] src)throws Exception {
+        StringBuilder strbuf = new StringBuilder(src.length * 2);
         int i;
 
         for (i = 0; i < src.length; i++) {

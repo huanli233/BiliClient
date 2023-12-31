@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -157,12 +158,12 @@ public class QRLoginActivity extends BaseActivity {
                             String cookies = UserLoginApi.getCookies(response);
 
 
-                            List<String> responseCookies = NetWorkUtil.get("https://www.bilibili.com/").networkResponse().headers("Set-Cookie");
+                            List<String> responseCookies = Objects.requireNonNull(Objects.requireNonNull(NetWorkUtil.get("https://www.bilibili.com/")).networkResponse()).headers("Set-Cookie");
                             String buvid3 = "";
-                            for(int i = 0; i < responseCookies.size(); ++i) {
-                            	if(responseCookies.get(i).startsWith("buvid3")) {
-                            		buvid3 = responseCookies.get(i);
-                            	}
+                            for (String responseCookie : responseCookies) {
+                                if (responseCookie.startsWith("buvid3")) {
+                                    buvid3 = responseCookie;
+                                }
                             }
                             buvid3=buvid3.substring(buvid3.indexOf("buvid3"),buvid3.indexOf(";",buvid3.indexOf("buvid3"))+1);
                             Log.e("buvid3",buvid3);//获取buvid3

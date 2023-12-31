@@ -23,7 +23,7 @@ import okhttp3.Response;
 
 public class NetWorkUtil
 {
-    private static AtomicReference<OkHttpClient> INSTANCE = new AtomicReference<>();
+    private static final AtomicReference<OkHttpClient> INSTANCE = new AtomicReference<>();
     private static OkHttpClient getOkHttpInstance() {
         while(INSTANCE.get() == null){
             INSTANCE.compareAndSet(null, new OkHttpClient
@@ -114,10 +114,10 @@ public class NetWorkUtil
         return output;
     }
 
-    public static interface Callback<T> {
+    public interface Callback<T> {
 
-        public void onSuccess(T t);
+        void onSuccess(T t);
 
-        public void onFailed(Exception e);
+        void onFailed(Exception e);
     }
 }
