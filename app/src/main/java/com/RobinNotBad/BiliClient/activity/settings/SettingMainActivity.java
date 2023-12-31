@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
+import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.CookieRefreshApi;
@@ -137,13 +138,9 @@ public class SettingMainActivity extends BaseActivity {
 
         MaterialCardView test = findViewById(R.id.test);    //用于测试
         test.setOnClickListener(view -> {
-            try {
-                JSONObject jsonObject = new JSONObject("{\"arg1\":{\"id\":114514},\"arg2\":\"228028\"}");
-                Log.e("json",jsonObject.toString());
-                JsonUtil.getJsonKeys(jsonObject);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Intent intent = new Intent(this, ArticleInfoActivity.class);
+            intent.putExtra("cvid",(long)23552660);
+            startActivity(intent);
         });
     }
 }

@@ -28,6 +28,12 @@ public class LittleToolsUtil {
                 .replace("&#62;", ">");
     }
 
+    public static String htmlReString(String html){
+        return html.replace("<p>","")
+                .replace("</p>","\n")
+                .replace("<br>","\n");
+    }
+
     public static String stringToFile(String str){
         return str.replace("|", "｜")
                 .replace(":", "：")

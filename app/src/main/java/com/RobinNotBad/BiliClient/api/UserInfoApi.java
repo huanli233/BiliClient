@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.util.Log;
 
+import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
@@ -106,6 +107,49 @@ public class UserInfoApi {
                 return 0;
             }
             else return -1;
+        }
+        else return -1;
+    }
+
+
+    public static int getUserArticles(long mid, int page,ArrayList<ArticleInfo> articleList) throws IOException, JSONException {
+        String url = "https://api.bilibili.com/x/space/wbi/article?";
+        String args = "mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
+                + "&ps=30&tid=0";
+        Log.e("debug",url);
+        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.defHeaders).body()).string());
+        if(all.has("data") && !all.isNull("data")) {
+            JSONObject data = all.getJSONObject("data");
+            if(data.has("articles")){
+                JSONArray list = data.getJSONArray("articles");
+                if(list.length() == 0) return 1;
+                for (int i = 0; i < list.length(); i++) {
+                    JSONObject card = list.getJSONObject(i);
+
+                    ArticleInfo articleInfo = new ArticleInfo();
+                    articleInfo.id = card.getLong("id");
+                    articleInfo.title = card.getString("title");
+                    articleInfo.summary = card.getString("summary");
+                    articleInfo.keywords = "";
+                    articleInfo.view = Integer.parseInt(LittleToolsUtil.toWan(card.getJSONObject("stats").getInt("view")) + "浏览");
+                    articleInfo.favourite = card.getJSONObject("stats").getInt("favorite");
+                    articleInfo.like = card.getJSONObject("stats").getInt("like");
+                    articleInfo.reply = card.getJSONObject("stats").getInt("reply");
+                    articleInfo.share = card.getJSONObject("stats").getInt("share");
+                    articleInfo.coin = card.getJSONObject("stats").getInt("coin");
+                    articleInfo.ctime = card.getLong("ctime");
+                    articleInfo.wordCount = card.getInt("words");
+                    articleInfo.banner = card.getString("banner_url");
+                    articleInfo.upMid = card.getJSONObject("author").getLong("mid");
+                    articleInfo.upName = card.getJSONObject("author").getString("name");
+                    articleInfo.upAvatar = card.getJSONObject("author").getString("face");
+                    articleInfo.upFans = 0;
+                    articleInfo.upLevel = 0;
+
+                    articleList.add(articleInfo);
+                }
+                return 0;
+            }else return 1;
         }
         else return -1;
     }

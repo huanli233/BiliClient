@@ -42,6 +42,8 @@ public class UserInfoActivity extends BaseActivity {
         fragmentList.add(udFragment);
         UserVideoFragment uvFragment = UserVideoFragment.newInstance(mid);
         fragmentList.add(uvFragment);
+        UserArticleFragment acFragment = UserArticleFragment.newInstance(mid);
+        fragmentList.add(acFragment);
 
         ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
 
