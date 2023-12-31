@@ -48,9 +48,11 @@ public class MediaInfoFragment extends Fragment {
 
     private void initView(Media baseMediaInfo, MediaSectionInfo mediaSectionInfo){
         Glide.with(this)
-                .load(baseMediaInfo.cover)
+                .load(baseMediaInfo.horizontalCover)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(binding.imageMediaCover);
+        binding.title.setText(baseMediaInfo.title);
+        binding.btnPlay.setText("番剧功能正在开发中");
     }
     private void getSectionInfo(Media baseMediaInfo){
         CenterThreadPool.run(() -> {

@@ -49,6 +49,7 @@ public class Media {
         this.typeName = jsonObject.getString("type_name");
         this.newEP = new NewEp(jsonObject.getJSONObject("new_ep"));
         this.rating = new Rating(jsonObject.getJSONObject("rating"));
+        this.title = jsonObject.getString("title");
     }
 
     enum MediaType {
