@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="wrap_content"
+     android:layout_width="wrap_content"
+     android:orientation="vertical"
+     android:id="@+id/msg_layout">
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:textSize="10sp"
+         android:id="@+id/msg_name"
+         android:text="用户名" />
+
+    <com.google.android.material.card.MaterialCardView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:visibility="gone"
+         android:layout_margin="5dp"
+         style="@style/CardStyle"
+         android:id="@+id/msg_type_text_card">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_margin="3dp"
+             android:id="@+id/msg_text_content"
+             android:text="" />
+
+    </com.google.android.material.card.MaterialCardView>
+    
+    <include
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_margin="5dp"
+        android:visibility="gone"
+        layout="@layout/cell_video_list"/>
+    <ImageView
+        android:layout_height="60dp"
+        android:layout_width="60dp"
+        android:layout_margin="5dp"
+        android:visibility="gone"
+        android:id="@+id/msg_type_pic"/>
+</LinearLayout>
