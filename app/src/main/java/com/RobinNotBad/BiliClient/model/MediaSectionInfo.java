@@ -46,10 +46,7 @@ public class MediaSectionInfo {
                 cover = jsonObject.getString("cover");
                 from = jsonObject.getString("from");
                 epid = jsonObject.getLong("epid");
-                isPremiere = jsonObject.getInt("is_premiere");
                 longTitle = jsonObject.getString("long_title");
-                shareUrl = jsonObject.getString("share_url");
-                status = jsonObject.getInt("status");
                 title = jsonObject.getString("title");
                 vid = jsonObject.getString("vid");
         }
@@ -61,10 +58,7 @@ public class MediaSectionInfo {
         String cover;
         String from;
         long epid;
-        int isPremiere;
         String longTitle;
-        String shareUrl;
-        int status;
         String title;
         String vid;
     }

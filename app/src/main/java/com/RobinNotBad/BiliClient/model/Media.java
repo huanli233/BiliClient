@@ -13,7 +13,6 @@ public class Media {
     public Rating rating;
 
     public long seasonId;
-    public String shareUrl;
 
     public String title;
 
@@ -47,7 +46,6 @@ public class Media {
                 break;
         }
         this.seasonId = jsonObject.getLong("season_id");
-        this.shareUrl = jsonObject.getString("share_url");
         this.typeName = jsonObject.getString("type_name");
         this.newEP = new NewEp(jsonObject.getJSONObject("new_ep"));
         this.rating = new Rating(jsonObject.getJSONObject("rating"));
