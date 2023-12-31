@@ -29,7 +29,6 @@ public class MediaSectionInfo {
 
         public EpisodeInfo(VideoCard videoCard){
             longTitle = videoCard.title;
-            badge = videoCard.upName;
             cover = videoCard.cover;
             cid = videoCard.cid;
             aid = videoCard.aid;
@@ -39,28 +38,16 @@ public class MediaSectionInfo {
         }
         public EpisodeInfo(JSONObject jsonObject) throws JSONException {
                 aid = jsonObject.getLong("aid");
-                badge = jsonObject.getString("badge");
-                badgeInfo = new BadgeInfo(jsonObject.getJSONObject("badge_info"));
-                badgeType = jsonObject.getInt("badge_type");
                 cid = jsonObject.getLong("cid");
                 cover = jsonObject.getString("cover");
                 from = jsonObject.getString("from");
-                epid = jsonObject.getLong("epid");
                 longTitle = jsonObject.getString("long_title");
-                title = jsonObject.getString("title");
-                vid = jsonObject.getString("vid");
         }
         public long aid;
-        public String badge;
-        public BadgeInfo badgeInfo;
-        public int badgeType;
         public long cid;
         String cover;
         String from;
-        long epid;
         String longTitle;
-        String title;
-        String vid;
     }
     static class BadgeInfo{
         public BadgeInfo(){
