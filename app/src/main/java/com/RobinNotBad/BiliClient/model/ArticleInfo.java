@@ -11,7 +11,7 @@ public class ArticleInfo {
     public int upFans;
     public int upLevel;
     public long ctime;
-    public int view;
+    public String view;
     public int favourite;
     public int like;
     public int reply;

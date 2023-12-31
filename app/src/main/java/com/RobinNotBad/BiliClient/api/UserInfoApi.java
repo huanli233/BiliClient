@@ -131,7 +131,7 @@ public class UserInfoApi {
                     articleInfo.title = card.getString("title");
                     articleInfo.summary = card.getString("summary");
                     articleInfo.keywords = "";
-                    articleInfo.view = Integer.parseInt(LittleToolsUtil.toWan(card.getJSONObject("stats").getInt("view")) + "浏览");
+                    articleInfo.view = Integer.parseInt(LittleToolsUtil.toWan(card.getJSONObject("stats").getInt("view"))) + "浏览";
                     articleInfo.favourite = card.getJSONObject("stats").getInt("favorite");
                     articleInfo.like = card.getJSONObject("stats").getInt("like");
                     articleInfo.reply = card.getJSONObject("stats").getInt("reply");

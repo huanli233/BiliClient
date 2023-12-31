@@ -32,7 +32,7 @@ public class ArticleApi {
         articleInfo.upAvatar = data.getJSONObject("author").getString("face");
         articleInfo.upFans = data.getJSONObject("author").getInt("fans");
         articleInfo.upLevel = data.getJSONObject("author").getInt("level");
-        articleInfo.view = data.getJSONObject("stats").getInt("view");
+        articleInfo.view = data.getJSONObject("stats").getString("view").toString();
         articleInfo.favourite = data.getJSONObject("stats").getInt("favorite");
         articleInfo.like = data.getJSONObject("stats").getInt("like");
         articleInfo.reply = data.getJSONObject("stats").getInt("reply");
