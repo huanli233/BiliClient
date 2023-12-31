@@ -107,6 +107,8 @@
         android:layout_marginEnd="10dp"
         android:layout_marginTop="6dp"
         app:round="4dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:visibility="gone"
         tools:visibility="visible"
         android:src="@drawable/loading_2233"

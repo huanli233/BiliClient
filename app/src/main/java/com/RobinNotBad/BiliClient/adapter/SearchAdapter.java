@@ -60,10 +60,14 @@ public class SearchAdapter extends RecyclerView.Adapter<VideoCardHolder> {
                     intent.setClass(context, VideoInfoActivity.class);
                     intent.putExtra("bvid", videoCard.bvid);
                     intent.putExtra("aid", videoCard.aid);
+                    intent.putExtra("type", "video");
                     context.startActivity(intent);
                 break;
                 case "media_bangumi":
+                    //番剧----videoCard里的aid就是media_id
                     intent.putExtra("aid", videoCard.aid);
+                    intent.putExtra("type", "media");
+                    intent.setClass(context, VideoInfoActivity.class);
                     context.startActivity(intent);
             }
         });
