@@ -15,7 +15,7 @@ public class SettingUIActivity extends BaseActivity {
 
     private EditText uiScaleInput,uiPaddingH,uiPaddingV;
 
-    @SuppressLint({"UseSwitchCompatOrMaterialCode", "MissingInflatedId", "SetTextI18n"})
+    @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

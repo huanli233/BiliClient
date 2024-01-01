@@ -107,7 +107,7 @@ public class MediaInfoFragment extends Fragment {
             MediaSectionInfo.EpisodeInfo episodeInfo = section.episodes[adapter.getSelectedItemIndex()];
             Glide.get(requireContext()).clearMemory();
             Intent intent = new Intent(v.getContext(), JumpToPlayerActivity.class);
-            intent.putExtra("cid", episodeInfo.cid);
+            intent.putExtra("cid", (int)episodeInfo.cid);
             intent.putExtra("title", episodeInfo.longTitle);
             intent.putExtra("bvid", BilibiliIDConverter.aidtobv(episodeInfo.aid));
             intent.putExtra("aid", episodeInfo.aid);

@@ -3,16 +3,15 @@ package com.RobinNotBad.BiliClient.activity.settings;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Switch;
 
+import androidx.appcompat.widget.SwitchCompat;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class SettingPrefActivity extends BaseActivity {
 
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    private Switch back_disable,fav_single,fav_notice,tags_enable,related_enable;
+    private SwitchCompat back_disable,fav_single,fav_notice,tags_enable,related_enable;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override

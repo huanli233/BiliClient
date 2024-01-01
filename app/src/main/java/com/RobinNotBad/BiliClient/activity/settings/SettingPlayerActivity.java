@@ -4,9 +4,9 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.SwitchCompat;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
@@ -21,8 +21,7 @@ public class SettingPlayerActivity extends BaseActivity {
 
     String player = SharedPreferencesUtil.getString("player","null");
     MaterialCardView mtvPlayer,aliangPlayer;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    Switch sw_highres;
+    SwitchCompat sw_highres;
     ArrayList<MaterialCardView> cardViewList;
     int checkPosition = -1;
     final String[] playerList = {"null","mtvPlayer","aliangPlayer"};
