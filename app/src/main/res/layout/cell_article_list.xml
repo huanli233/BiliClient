@@ -1,21 +1,21 @@
 <com.google.android.material.card.MaterialCardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/cardView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginHorizontal="6dp"
     android:layout_marginVertical="2dp"
     app:cardBackgroundColor="#78242424"
-        app:cardCornerRadius="6dp"
-        app:cardElevation="0dp"
-        app:cardMaxElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="#70707070"
-        app:strokeWidth="0.1dp">
+    app:cardCornerRadius="6dp"
+    app:cardElevation="0dp"
+    app:cardMaxElevation="0dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:strokeColor="#70707070"
+    app:strokeWidth="0.1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -31,9 +31,11 @@
             android:layout_marginTop="2dp"
             android:layout_marginEnd="5dp"
             android:adjustViewBounds="true"
+            app:layout_constraintBottom_toTopOf="@id/listUpName"
             app:layout_constraintDimensionRatio="16:11"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:src="@drawable/placeholder" />
 
@@ -42,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.7" />
+            app:layout_constraintGuide_percent="0.48" />
 
         <ImageView
             android:id="@+id/imageView3"
@@ -52,9 +54,9 @@
             android:layout_marginBottom="1dp"
             android:adjustViewBounds="true"
             android:alpha="0.5"
-            app:layout_constraintBottom_toBottomOf="@+id/listPlayTimes"
-            app:layout_constraintStart_toStartOf="@+id/listVideoTitle"
-            app:layout_constraintTop_toTopOf="@+id/listPlayTimes"
+            app:layout_constraintBottom_toBottomOf="@+id/listReadTimes"
+            app:layout_constraintStart_toStartOf="@+id/listCover"
+            app:layout_constraintTop_toTopOf="@+id/listReadTimes"
             app:layout_constraintVertical_bias="0.5"
             android:src="@drawable/icon_cv" />
 
@@ -68,12 +70,12 @@
             android:adjustViewBounds="true"
             android:alpha="0.5"
             app:layout_constraintBottom_toBottomOf="@+id/listUpName"
-            app:layout_constraintStart_toEndOf="@+id/listPlayTimes"
+            app:layout_constraintStart_toEndOf="@+id/listReadTimes"
             app:layout_constraintTop_toTopOf="@+id/listUpName"
             android:src="@drawable/icon_person" />
 
         <TextView
-            android:id="@+id/listPlayTimes"
+            android:id="@+id/listReadTimes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -82,7 +84,7 @@
             android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
-            app:layout_constraintTop_toBottomOf="@+id/listVideoTitle"
+            app:layout_constraintTop_toBottomOf="@+id/listCover"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
@@ -94,27 +96,26 @@
             android:lines="1"
             android:textColor="#fff"
             android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="@+id/listPlayTimes"
+            app:layout_constraintBottom_toBottomOf="@+id/listReadTimes"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/listPlayTimes" />
+            app:layout_constraintStart_toEndOf="@+id/avatarIcon"
+            app:layout_constraintTop_toTopOf="@+id/listReadTimes" />
 
         <TextView
-            android:id="@+id/listVideoTitle"
+            android:id="@+id/listArticleTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:maxLines="3"
-            android:text="标题标题标题标题标题标题标题标题标题"
+            android:maxLines="2"
+            android:text="标题标题标题标题标题标题标题标题标题标题标题标题"
             android:textColor="#fff"
-            android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guideline2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/listCover" />
-
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/listCover"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

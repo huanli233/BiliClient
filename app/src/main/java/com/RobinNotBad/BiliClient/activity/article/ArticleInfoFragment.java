@@ -7,31 +7,44 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.user.UserInfoActivity;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.material.card.MaterialCardView;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArticleInfoFragment extends Fragment {
     public ArticleInfo articleInfo;
     private ImageView cover,upIcon;
-    private TextView title,content, keywords,upName,views,timeText,cvidText;
+    private TextView title, keywords,upName,views,timeText,cvidText;
+    private LinearLayout content;
     private MaterialCardView upCard;
-    private final boolean keywords_expand = false;
+    private boolean keywords_expand = false;
     public ArticleInfoFragment(){}
 
     public static ArticleInfoFragment newInstance(ArticleInfo newArticleInfo) {
@@ -55,7 +68,7 @@ public class ArticleInfoFragment extends Fragment {
         cover = view.findViewById(R.id.cover);
         upIcon = view.findViewById(R.id.upInfo_Icon);
         title = view.findViewById(R.id.title);
-        content = view.findViewById(R.id.content);
+        content = view.findViewById(R.id.content_list);
         keywords = view.findViewById(R.id.keywords);
         upName = view.findViewById(R.id.upInfo_Name);
         views = view.findViewById(R.id.viewsCount);
@@ -65,18 +78,26 @@ public class ArticleInfoFragment extends Fragment {
 
         if (!SharedPreferencesUtil.getBoolean("tags_enable", true)) keywords.setVisibility(View.GONE);
 
+        keywords.setOnClickListener(view1 -> {
+            if(keywords_expand) keywords.setMaxLines(1);
+            else keywords.setMaxLines(200);
+            keywords_expand = !keywords_expand;
+        });
+
         CenterThreadPool.run(()-> {
             if (isAdded()) requireActivity().runOnUiThread(() -> {
                 title.setText(articleInfo.title);
-                content.setText(LittleToolsUtil.htmlReString(LittleToolsUtil.htmlToString(articleInfo.content)));
-                cvidText.setText("CV" + articleInfo.id);
+                cvidText.setText("CV" + articleInfo.id + " " + articleInfo.wordCount + "字");
                 upName.setText(articleInfo.upName);
                 keywords.setText("关键词：" + articleInfo.keywords);
-                views.setText(String.valueOf(articleInfo.view));
-                Glide.with(view.getContext()).load(articleInfo.banner).placeholder(R.drawable.placeholder)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(4,view.getContext()))))
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .into(cover);
+                views.setText(articleInfo.view);
+                if(articleInfo.banner.isEmpty()) cover.setVisibility(View.GONE);
+                else{
+                    Glide.with(view.getContext()).load(articleInfo.banner).placeholder(R.drawable.placeholder)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(4,view.getContext()))))
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .into(cover);
+                }
                 Glide.with(view.getContext()).load(articleInfo.upAvatar).placeholder(R.drawable.akari)
                         .apply(RequestOptions.circleCropTransform())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -89,7 +110,75 @@ public class ArticleInfoFragment extends Fragment {
                 });
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 timeText.setText(sdf.format(articleInfo.ctime * 1000));
+
+                //开始解析内容的html
+                Document document = Jsoup.parse(articleInfo.content);
+                loadContentHtml(document.select("body").get(0),view);
             });
         });
+    }
+
+    private void loadContentHtml(Element element,View view){
+        TextView last_textview = null; //用来节约一丢丢性能
+        for(Element e : element.children()){
+            if (e.is("p")){
+                if(last_textview == null){
+                    last_textview = new TextView(view.getContext());
+                    last_textview.setText(e.text() + "\n");
+                    last_textview.setAlpha(0.85F);
+                    content.addView(last_textview);
+                }else{
+                    last_textview.setText(last_textview.getText() + e.text() + "\n");
+                }
+            }
+            else if (e.is("strong")){
+                last_textview = null;
+                TextView textView = new TextView(view.getContext());
+                textView.setTextSize(LittleToolsUtil.sp2px(13,view.getContext()));
+                textView.setText(e.text());
+                content.addView(textView);
+            }
+            else if (e.is("br")){
+                if(last_textview == null){
+                    last_textview = new TextView(view.getContext());
+                    last_textview.setText("\n");
+                    last_textview.setAlpha(0.85F);
+                    content.addView(last_textview);
+                }else{
+                    last_textview.setText(last_textview.getText() + "\n");
+                }
+            }
+            else if (e.is("img")){
+                last_textview = null;
+                ImageView imageView = new ImageView(view.getContext());
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(5,0,5,0);
+                imageView.setLayoutParams(layoutParams);
+                String url = "http:" + e.attr("src");
+                imageView.setOnClickListener(view1 -> {
+                    Intent intent = new Intent();
+                    intent.setClass(view.getContext(), ImageViewerActivity.class);
+                    intent.putExtra("imageList", new ArrayList<String>().add(url));
+                    view.getContext().startActivity(intent);
+                });
+
+                content.addView(imageView);
+                try {
+                    Glide.with(view.getContext())
+                            .asDrawable()
+                            .thumbnail(0.2f)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .priority(Priority.LOW)
+                            .placeholder(R.drawable.placeholder)
+                            .load(url)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(4,view.getContext()))))
+                            .into(imageView);
+                }catch (OutOfMemoryError ee){
+                    ee.printStackTrace();
+                    MsgUtil.toast("内存溢出哩（悲",view.getContext());
+                }
+            }
+            else loadContentHtml(e,view);
+        }
     }
 }

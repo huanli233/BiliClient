@@ -1,6 +1,7 @@
 package com.RobinNotBad.BiliClient.api;
 
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
+import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 
 import org.json.JSONException;
@@ -25,19 +26,21 @@ public class ArticleApi {
         articleInfo.summary = data.getString("summary");
         articleInfo.banner = data.getString("banner_url");
         articleInfo.ctime = data.getLong("ctime");
-        articleInfo.upMid = data.getJSONObject("author").getLong("mid");
-        articleInfo.upName = data.getJSONObject("author").getString("name");
-        articleInfo.upAvatar = data.getJSONObject("author").getString("face");
-        articleInfo.upFans = data.getJSONObject("author").getInt("fans");
-        articleInfo.upLevel = data.getJSONObject("author").getInt("level");
-        articleInfo.view = data.getJSONObject("stats").getString("view");
-        articleInfo.favourite = data.getJSONObject("stats").getInt("favorite");
-        articleInfo.like = data.getJSONObject("stats").getInt("like");
-        articleInfo.reply = data.getJSONObject("stats").getInt("reply");
-        articleInfo.share = data.getJSONObject("stats").getInt("share");
-        articleInfo.coin = data.getJSONObject("stats").getInt("coin");
+        JSONObject author = data.getJSONObject("author");
+        articleInfo.upMid = author.getLong("mid");
+        articleInfo.upName = author.getString("name");
+        articleInfo.upAvatar = author.getString("face");
+        articleInfo.upFans = author.getInt("fans");
+        articleInfo.upLevel = author.getInt("level");
+        JSONObject stats = data.getJSONObject("stats");
+        articleInfo.view = LittleToolsUtil.toWan(stats.getInt("view")) + "阅读";
+        articleInfo.favourite = stats.getInt("favorite");
+        articleInfo.like = stats.getInt("like");
+        articleInfo.reply = stats.getInt("reply");
+        articleInfo.share = stats.getInt("share");
+        articleInfo.coin = stats.getInt("coin");
         articleInfo.wordCount = data.getInt("words");
-        articleInfo.isLike = (data.getBoolean("is_like") ? 1:0);
+        articleInfo.isLike = data.getBoolean("is_like");
         articleInfo.content = data.getString("content");
         articleInfo.keywords = data.getString("keywords");
         return articleInfo;

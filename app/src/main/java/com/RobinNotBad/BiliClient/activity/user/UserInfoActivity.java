@@ -44,6 +44,7 @@ public class UserInfoActivity extends BaseActivity {
         fragmentList.add(uvFragment);
         UserArticleFragment acFragment = UserArticleFragment.newInstance(mid);
         fragmentList.add(acFragment);
+        viewPager.setOffscreenPageLimit(fragmentList.size());
 
         ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
 

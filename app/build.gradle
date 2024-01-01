@@ -47,6 +47,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.github.bumptech.glide:glide:4.13.2'
+    implementation 'org.jsoup:jsoup:1.10.2';
     //noinspection GradleCompatible
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 }

@@ -43,7 +43,7 @@ public class MessageListActivity extends BaseActivity{
                 if(pageType.equals("like")) messageList = MessageApi.getLikeMsg();
                 else if(pageType.equals("reply")) messageList = MessageApi.getReplyMsg();
                 else if(pageType.equals("at")) messageList = MessageApi.getAtMsg();
-                Log.e("总消息数", String.valueOf(messageList.size()));
+                else if(pageType.equals("system")) messageList = MessageApi.getSystemMsg();
 
                 messageAdapter = new MessageAdapter(this, messageList);
                 runOnUiThread(()-> {

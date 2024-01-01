@@ -104,6 +104,7 @@
                         app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
+                        android:id="@+id/reply_text"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -165,13 +166,14 @@
                         app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
+                        android:id="@+id/like_text"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="10dp"
                         android:ellipsize="end"
                         android:lines="1"
-                        android:text="点赞我的"
+                        android:text="收到的赞"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:autoSizeTextType="uniform"
@@ -180,7 +182,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
-            
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/at"
                 android:layout_width="match_parent"
@@ -218,7 +220,7 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/icon_share"
+                        android:src="@drawable/icon_at"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"
@@ -226,18 +228,81 @@
                         app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
+                        android:id="@+id/at_text"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="10dp"
                         android:ellipsize="end"
                         android:lines="1"
-                        android:text="\@我的"
+                        android:text="\@我"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:autoSizeTextType="uniform"
                         app:layout_constraintEnd_toStartOf="@+id/at_go"
                         app:layout_constraintStart_toEndOf="@+id/at_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/system"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="2dp"
+                android:foreground="?selectableItemBackground"
+                android:visibility="visible"
+                app:cardBackgroundColor="#78242424"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:strokeColor="#70707070"
+                app:strokeWidth="0.1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/system_go"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:src="@drawable/arrow_forward"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/system_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/icon_info"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHeight_percent="0.4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.5" />
+
+                    <TextView
+                        android:id="@+id/system_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:text="系统通知"
+                        android:textColor="#fff"
+                        android:textSize="11sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintEnd_toStartOf="@+id/system_go"
+                        app:layout_constraintStart_toEndOf="@+id/system_icon"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>

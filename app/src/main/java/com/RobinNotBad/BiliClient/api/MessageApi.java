@@ -4,7 +4,9 @@ import com.RobinNotBad.BiliClient.model.MessageCard;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.List;
 import org.json.JSONArray;
@@ -16,6 +18,24 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class MessageApi {
+    public static JSONObject getUnread() throws IOException, JSONException{
+        String url = "https://api.bilibili.com/x/msgfeed/unread";
+        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+        JSONObject jsonObject = new JSONObject();
+        if(all.has("data") && !all.isNull("data")) {
+            JSONObject data = all.getJSONObject("data");
+            jsonObject.put("at",data.getInt("at"));
+            jsonObject.put("like",data.getInt("like"));
+            jsonObject.put("reply",data.getInt("reply"));
+            jsonObject.put("system",data.getInt("sys_msg"));
+        }else{
+            jsonObject.put("at",0);
+            jsonObject.put("like",0);
+            jsonObject.put("reply",0);
+            jsonObject.put("system",0);
+        }
+        return jsonObject;
+    }
     public static ArrayList<MessageCard> getLikeMsg() throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/msgfeed/like?platform=web&build=0&mobi_app=web";
         JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
@@ -150,8 +170,8 @@ public class MessageApi {
             return totalArray;
         }else return new ArrayList<>();
     }
-    
-        
+
+
     public static ArrayList<MessageCard> getAtMsg() throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/msgfeed/at?platform=web&build=0&mobi_app=web";
         JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
@@ -164,11 +184,11 @@ public class MessageApi {
                 List<UserInfo> userList = new ArrayList<>();
                 userList.add(new UserInfo(object.getJSONObject("user").getLong("mid"), object.getJSONObject("user").getString("nickname"), object.getJSONObject("user").getString("avatar"), "", object.getJSONObject("user").getInt("fans"), 0, object.getJSONObject("user").getBoolean("follow"), ""));
                 replyInfo.user = userList;
-                
+
                 replyInfo.id = object.getLong("id");
                 replyInfo.timeStamp = object.getLong("at_time");
                 replyInfo.content = "提到了我";
-                
+
                 if (object.getJSONObject("item").getString("type").equals("video")) {
                     VideoCard videoCard = new VideoCard();
                     videoCard.aid = 0;
@@ -209,6 +229,28 @@ public class MessageApi {
                     replyChildInfo.childMsgList = new ArrayList<>();
                     replyInfo.dynamicInfo = replyChildInfo;
                 }
+                totalArray.add(replyInfo);
+            }
+
+            return totalArray;
+        }else return new ArrayList<>();
+    }
+
+    public static ArrayList<MessageCard> getSystemMsg() throws IOException, JSONException {
+        String url = "https://message.bilibili.com/x/sys-msg/query_user_notify?csrf=" + LittleToolsUtil.getInfoFromCookie("bili_jct", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""))  + "&page_size=35&build=0&mobi_app=web";
+        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+        if(all.has("data") && !all.isNull("data")) {
+            ArrayList<MessageCard> totalArray = new ArrayList<>();
+            for(int i = 0;i < all.getJSONObject("data").getJSONArray("system_notify_list").length();i++) {
+                JSONObject object = ((JSONObject) all.getJSONObject("data").getJSONArray("system_notify_list").get(i));
+                MessageCard replyInfo = new MessageCard();
+
+                replyInfo.user = new ArrayList<>();
+
+                replyInfo.id = object.getLong("id");
+                replyInfo.timeDesc = object.getString("time_at");
+                replyInfo.content = object.getString("title") + "\n" + object.getString("content");
+
                 totalArray.add(replyInfo);
             }
 

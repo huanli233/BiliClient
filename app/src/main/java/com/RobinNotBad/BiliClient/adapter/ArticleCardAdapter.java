@@ -42,7 +42,7 @@ public class ArticleCardAdapter extends RecyclerView.Adapter<ArticleCardHolder> 
     @Override
     public void onBindViewHolder(@NonNull ArticleCardHolder holder, int position) {
         ArticleInfo articleCard = articleCardList.get(position);
-        holder.showArticleCard(articleCard,context);    //此函数在VideoCardHolder里
+        holder.showArticleCard(articleCard,context);
 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent();

@@ -18,7 +18,7 @@ public class ArticleInfo {
     public int share;
     public int coin;
     public int wordCount; //字数
-    public int isLike;
+    public boolean isLike;
     public String keywords;
     public String content; //文章内容
 

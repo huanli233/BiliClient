@@ -40,6 +40,8 @@ public class MessageHolder extends RecyclerView.ViewHolder{
     @SuppressLint("SetTextI18n")
     public void showMessage(MessageCard message, Context context) {
         avaterList.removeAllViews();
+        if(message.user.size() < 1) avaterList.setVisibility(View.GONE);
+        else avaterList.setVisibility(View.VISIBLE);
         for(int i = 0;i<3;i++){
             if(i >= message.user.size()) break;
             ImageView imageView = new ImageView(context);
@@ -57,8 +59,11 @@ public class MessageHolder extends RecyclerView.ViewHolder{
             view.setLayoutParams(new ViewGroup.LayoutParams(LittleToolsUtil.dp2px(3,context),LittleToolsUtil.dp2px(32,context)));
             avaterList.addView(view);
         }
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        pubdate.setText(sdf.format(message.timeStamp * 1000));
+
+        if(message.timeStamp != 0){
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            pubdate.setText(sdf.format(message.timeStamp * 1000));
+        }else pubdate.setText(message.timeDesc);
 
         action.setText(message.content);
         

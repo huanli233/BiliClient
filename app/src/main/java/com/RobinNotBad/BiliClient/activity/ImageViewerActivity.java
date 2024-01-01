@@ -10,6 +10,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerImageAdapter;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
@@ -39,10 +40,15 @@ public class ImageViewerActivity extends BaseActivity {
 
         for (int i = 0; i < imageList.size(); i++) {
             PhotoView photoView = new PhotoView(this);
-            Glide.with(this).load(imageList.get(i))
-                    .override(Target.SIZE_ORIGINAL)//override这一项一定要加，这样才会显示原图，不然一放大就糊成使
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .into(photoView);
+            try {
+                Glide.with(this).load(imageList.get(i))
+                        .override(Target.SIZE_ORIGINAL)//override这一项一定要加，这样才会显示原图，不然一放大就糊成使
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .into(photoView);
+            }catch (OutOfMemoryError e){
+                e.printStackTrace();
+                MsgUtil.toast("内存溢出哩（悲",this);
+            }
 
             int id = i;
             photoView.setOnLongClickListener(view -> {
