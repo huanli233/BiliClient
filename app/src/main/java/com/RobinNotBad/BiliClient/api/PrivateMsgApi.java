@@ -1,0 +1,50 @@
+package com.RobinNotBad.BiliClient.api;
+import com.RobinNotBad.BiliClient.api.ConfInfoApi;
+import com.RobinNotBad.BiliClient.api.UserInfoApi;
+import com.RobinNotBad.BiliClient.model.PrivateMessage;
+import com.RobinNotBad.BiliClient.model.UserInfo;
+import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Objects;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class PrivateMsgApi {
+    
+    //返回的是倒序的消息列表，使用时记得列表倒置
+    public static ArrayList<PrivateMessage> getPrivateMsg(long talkerId,int size) throws IOException, JSONException {
+        String url = "https://api.vc.bilibili.com/svr_sync/v1/svr_sync/fetch_session_msgs?session_type=1&talker_id="+talkerId+"&size="+size;
+        JSONObject root = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+        if(root.has("data")&&root.isNull("data")){
+            JSONArray messages = root.getJSONObject("data").getJSONArray("messages");
+            UserInfo myInfo = UserInfoApi.getCurrentUserInfo();
+            UserInfo targetInfo = new UserInfo();
+            ArrayList<PrivateMessage> msgList = new ArrayList<PrivateMessage>();
+            boolean isReqTargetInfo = false;
+            if(messages!=null){
+            	for(int i = 0; i < messages.length(); i++) {
+            		PrivateMessage msgObject = new PrivateMessage();
+                    JSONObject msgJson = messages.getJSONObject(i);
+                    msgObject.uid = msgJson.getLong("sender_uid");
+                    msgObject.type = msgJson.getInt("msg_type");
+                    if(msgObject.uid==myInfo.mid) {
+                    	msgObject.name=myInfo.name;
+                    }else{
+                        if(!isReqTargetInfo) {
+                        	targetInfo = UserInfoApi.getUserInfo(msgObject.uid);
+                            isReqTargetInfo = true;
+                        }
+                        msgObject.name = targetInfo.name;
+                    }
+                    msgObject.content = new JSONObject(msgJson.getString("content").replace("\\",""));
+                    msgObject.timestamp = msgJson.getLong("timestamp");
+                    msgObject.msgId = msgJson.getLong("msg_key");
+                    msgList.add(msgObject);
+            	}
+            }else return new ArrayList<PrivateMessage>();
+            return msgList;
+        }else return new ArrayList<PrivateMessage>();
+    }
+}

@@ -1,23 +1,27 @@
 package com.RobinNotBad.BiliClient.model;
+import org.json.JSONObject;
 
 public class PrivateMessage {
     
-    public String content = "";
+    public JSONObject content = new JSONObject();
     public int type = 0;
-    public long time = 0;
+    public long timestamp = 0;
     public long uid = 0;
     public String name ="";
+    public long msgId = 0;
     
     public static final int TYPE_TEXT = 1;
     public static final int TYPE_VIDEO = 7;
     public static final int TYPE_PIC = 2;
     public static final int TYPE_TIP = 5;
     
-    public PrivateMessage(long uid,int type,String content,long time,String name){
+    public PrivateMessage(long uid,int type,JSONObject content,long timestamp,String name,long msgId){
         this.uid = uid;
         this.type = type;
         this.content = content;
-        this.time = time;
+        this.timestamp = timestamp;
         this.name = name;
+        this.msgId = msgId;
     }
+    public PrivateMessage(){}
 }
