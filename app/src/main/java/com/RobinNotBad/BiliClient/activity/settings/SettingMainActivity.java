@@ -136,7 +136,7 @@ public class SettingMainActivity extends BaseActivity {
         MaterialCardView test = findViewById(R.id.test);    //用于测试
         test.setOnClickListener(view -> {
             Intent intent = new Intent(this, ArticleInfoActivity.class);
-            intent.putExtra("cvid",(long)23552660);
+            intent.putExtra("cvid",28751039L);
             startActivity(intent);
         });
     }

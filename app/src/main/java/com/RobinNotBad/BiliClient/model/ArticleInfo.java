@@ -1,6 +1,8 @@
 package com.RobinNotBad.BiliClient.model;
 
-public class ArticleInfo {
+import java.io.Serializable;
+
+public class ArticleInfo implements Serializable {
     public long id;
     public String title;
     public String summary; //摘要
