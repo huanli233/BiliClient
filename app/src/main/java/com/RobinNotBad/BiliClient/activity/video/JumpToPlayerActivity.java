@@ -46,6 +46,9 @@ public class JumpToPlayerActivity extends BaseActivity {
         String bvid = intent.getStringExtra("bvid");
         long aid = intent.getLongExtra("aid", 0);
         int cid = intent.getIntExtra("cid",0);
+        if (cid == 0){
+            cid = Math.toIntExact(intent.getLongExtra("cid", 0));
+        }
         title = intent.getStringExtra("title");
         download = intent.getIntExtra("download",0);
 
