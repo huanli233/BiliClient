@@ -38,6 +38,7 @@ public class MessageActivity extends BaseActivity {
             intent.setClass(this, MessageListActivity.class);
             intent.putExtra("type","reply");
             startActivity(intent);
+            ((TextView)findViewById(R.id.reply_text)).setText("回复我的(0未读)");
         });
 
 
@@ -48,6 +49,7 @@ public class MessageActivity extends BaseActivity {
             intent.setClass(this, MessageListActivity.class);
             intent.putExtra("type","like");
             startActivity(intent);
+            ((TextView)findViewById(R.id.like_text)).setText("收到的赞(0未读)");
         });
 
         MaterialCardView at = findViewById(R.id.at);
@@ -56,6 +58,7 @@ public class MessageActivity extends BaseActivity {
             intent.setClass(this, MessageListActivity.class);
             intent.putExtra("type","at");
             startActivity(intent);
+            ((TextView)findViewById(R.id.at_text)).setText("@我(0未读)");
         });
 
         MaterialCardView system = findViewById(R.id.system);
@@ -64,6 +67,7 @@ public class MessageActivity extends BaseActivity {
             intent.setClass(this, MessageListActivity.class);
             intent.putExtra("type","system");
             startActivity(intent);
+            ((TextView)findViewById(R.id.system_text)).setText("系统通知(0未读)");
         });
 
         CenterThreadPool.run(() -> {

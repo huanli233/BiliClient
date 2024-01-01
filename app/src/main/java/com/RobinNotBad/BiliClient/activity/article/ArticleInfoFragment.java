@@ -119,46 +119,37 @@ public class ArticleInfoFragment extends Fragment {
     }
 
     private void loadContentHtml(Element element,View view){
-        TextView last_textview = null; //用来节约一丢丢性能
         for(Element e : element.children()){
             if (e.is("p")){
-                if(last_textview == null){
-                    last_textview = new TextView(view.getContext());
-                    last_textview.setText(e.text() + "\n");
-                    last_textview.setAlpha(0.85F);
-                    content.addView(last_textview);
-                }else{
-                    last_textview.setText(last_textview.getText() + e.text() + "\n");
-                }
+                TextView textView = new TextView(view.getContext());
+                textView.setText(e.text());
+                textView.setAlpha(0.85F);
+                content.addView(textView);
             }
             else if (e.is("strong")){
-                last_textview = null;
                 TextView textView = new TextView(view.getContext());
                 textView.setTextSize(LittleToolsUtil.sp2px(13,view.getContext()));
                 textView.setText(e.text());
+                textView.setAlpha(0.92F);
                 content.addView(textView);
             }
             else if (e.is("br")){
-                if(last_textview == null){
-                    last_textview = new TextView(view.getContext());
-                    last_textview.setText("\n");
-                    last_textview.setAlpha(0.85F);
-                    content.addView(last_textview);
-                }else{
-                    last_textview.setText(last_textview.getText() + "\n");
-                }
+                TextView textView = new TextView(view.getContext());
+                textView.setHeight(LittleToolsUtil.dp2px(6f,view.getContext()));
+                content.addView(textView);
             }
             else if (e.is("img")){
-                last_textview = null;
                 ImageView imageView = new ImageView(view.getContext());
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(5,0,5,0);
                 imageView.setLayoutParams(layoutParams);
                 String url = "http:" + e.attr("src");
+                ArrayList<String> img_list = new ArrayList<>();
+                img_list.add(url);
                 imageView.setOnClickListener(view1 -> {
                     Intent intent = new Intent();
                     intent.setClass(view.getContext(), ImageViewerActivity.class);
-                    intent.putExtra("imageList", new ArrayList<String>().add(url));
+                    intent.putExtra("imageList", img_list);
                     view.getContext().startActivity(intent);
                 });
 
@@ -166,12 +157,10 @@ public class ArticleInfoFragment extends Fragment {
                 try {
                     Glide.with(view.getContext())
                             .asDrawable()
-                            .thumbnail(0.2f)
+                            .thumbnail(0.12f)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .priority(Priority.LOW)
                             .placeholder(R.drawable.placeholder)
                             .load(url)
-                            .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(4,view.getContext()))))
                             .into(imageView);
                 }catch (OutOfMemoryError ee){
                     ee.printStackTrace();

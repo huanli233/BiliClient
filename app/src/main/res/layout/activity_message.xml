@@ -121,6 +121,68 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
+                        <com.google.android.material.card.MaterialCardView
+                android:id="@+id/at"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="2dp"
+                android:foreground="?selectableItemBackground"
+                android:visibility="visible"
+                app:cardBackgroundColor="#78242424"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:strokeColor="#70707070"
+                app:strokeWidth="0.1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/at_go"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:src="@drawable/arrow_forward"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/at_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/icon_at"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHeight_percent="0.4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.5" />
+
+                    <TextView
+                        android:id="@+id/at_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:text="\@我"
+                        android:textColor="#fff"
+                        android:textSize="11sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintEnd_toStartOf="@+id/at_go"
+                        app:layout_constraintStart_toEndOf="@+id/at_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/like"
                 android:layout_width="match_parent"
@@ -179,68 +241,6 @@
                         app:autoSizeTextType="uniform"
                         app:layout_constraintEnd_toStartOf="@+id/like_go"
                         app:layout_constraintStart_toEndOf="@+id/like_icon"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/at"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/at_go"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="16dp"
-                        android:src="@drawable/arrow_forward"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/at_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="8dp"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/icon_at"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHeight_percent="0.4"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5" />
-
-                    <TextView
-                        android:id="@+id/at_text"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="10dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="\@我"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintEnd_toStartOf="@+id/at_go"
-                        app:layout_constraintStart_toEndOf="@+id/at_icon"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
