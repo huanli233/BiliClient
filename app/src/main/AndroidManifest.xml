@@ -229,6 +229,11 @@
             android:label="登录"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.TestPriMsg"
+            android:exported="true"
+            android:label="测试"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SplashActivity"
             android:exported="true"
             android:label="哔哩终端"

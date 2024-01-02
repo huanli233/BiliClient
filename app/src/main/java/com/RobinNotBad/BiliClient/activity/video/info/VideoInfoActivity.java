@@ -17,7 +17,9 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.media.MediaInfoFragment;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
+import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
+import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -38,6 +40,10 @@ public class VideoInfoActivity extends BaseActivity {
     private String type = "video";
     private String bvid;
     private long aid;
+    
+    //test
+    //private ArrayList<PrivateMessage> list;
+    
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +64,21 @@ public class VideoInfoActivity extends BaseActivity {
         pageName.setText("视频详情");
 
         ViewPager viewPager = findViewById(R.id.viewPager);
-        
-        
+        /*
+        CenterThreadPool.run(()->{
+            try {
+            	list = PrivateMsgApi.getPrivateMsg(521241135,10);
+            } catch(IOException err) {
+            	Log.e("",err.toString());
+            } catch(JSONException err){
+                Log.e("",err.toString());
+            }
+        });
+        /*
+        for(PrivateMessage i : list) {
+                	Log.e("msg",i.name+"."+i.uid+"."+i.msgId+"."+i.timestamp+"."+i.content+"."+i.type);
+                }
+            */
         Log.e("VideoInfoActivity",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
         /*
         new Thread(()->{

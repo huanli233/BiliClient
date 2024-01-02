@@ -24,7 +24,7 @@ import okhttp3.Cache;
 import org.json.JSONException;
 
 public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.ViewHolder>{
-    private ArrayList<PrivateMessage> mPrivateMsgList;
+    private ArrayList<PrivateMessage> mPrivateMsgList=new ArrayList<PrivateMessage>();
     private long selfUid = -1;
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView nameTv,textContentTv,tipTv,playTimesTv,upNameTv,videoTitleTv;

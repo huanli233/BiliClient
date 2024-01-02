@@ -1,4 +1,5 @@
 package com.RobinNotBad.BiliClient.api;
+import android.util.Log;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
@@ -17,11 +18,12 @@ public class PrivateMsgApi {
     public static ArrayList<PrivateMessage> getPrivateMsg(long talkerId,int size) throws IOException, JSONException {
         String url = "https://api.vc.bilibili.com/svr_sync/v1/svr_sync/fetch_session_msgs?session_type=1&talker_id="+talkerId+"&size="+size;
         JSONObject root = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
-        if(root.has("data")&&root.isNull("data")){
+        if(root.has("data")&&!root.isNull("data")){
             JSONArray messages = root.getJSONObject("data").getJSONArray("messages");
             UserInfo myInfo = UserInfoApi.getCurrentUserInfo();
             UserInfo targetInfo = new UserInfo();
             ArrayList<PrivateMessage> msgList = new ArrayList<PrivateMessage>();
+            
             boolean isReqTargetInfo = false;
             if(messages!=null){
             	for(int i = 0; i < messages.length(); i++) {
@@ -38,13 +40,22 @@ public class PrivateMsgApi {
                         }
                         msgObject.name = targetInfo.name;
                     }
+                    msgObject.content = new JSONObject("{\"content\":\" 。\"}");
+                    if(msgJson.getString("content").endsWith("}")&&msgJson.getString("content").startsWith("{")){
                     msgObject.content = new JSONObject(msgJson.getString("content").replace("\\",""));
+                    }
                     msgObject.timestamp = msgJson.getLong("timestamp");
                     msgObject.msgId = msgJson.getLong("msg_key");
-                    msgList.add(msgObject);
+                    boolean isPuted = msgList.add(msgObject);
+                    Log.e("puted?",String.valueOf(isPuted));
+                    Log.e("msg",msgObject.name+"."+msgObject.uid+"."+msgObject.msgId+"."+msgObject.timestamp+"."+msgObject.content+"."+msgObject.type);
             	}
+                Log.e("","返回msgList");
+                //for(PrivateMessage i : msgList) {
+                //	Log.e("msg",i.name+"."+i.uid+"."+i.msgId+"."+i.timestamp+"."+i.content+"."+i.type);
+                //}
+                return msgList;
             }else return new ArrayList<PrivateMessage>();
-            return msgList;
         }else return new ArrayList<PrivateMessage>();
     }
 }
