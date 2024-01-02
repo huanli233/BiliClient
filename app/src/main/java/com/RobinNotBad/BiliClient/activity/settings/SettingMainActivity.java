@@ -82,6 +82,14 @@ public class SettingMainActivity extends BaseActivity {
             intent.setClass(this, SettingPrefActivity.class);
             startActivity(intent);
         });
+        
+        //实验性设置
+        MaterialCardView laboratorySetting = findViewById(R.id.laboratory);
+        laboratorySetting.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            intent.setClass(this, SettingLaboratoryActivity.class);
+            startActivity(intent);
+        });
 
         //关于
         MaterialCardView about = findViewById(R.id.about);

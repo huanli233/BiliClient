@@ -66,6 +66,11 @@
             android:label="动态"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.settings.SettingLaboratoryActivity"
+            android:exported="true"
+            android:label="实验性功能"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.settings.UIPreviewActivity"
             android:exported="true"
             android:label="界面预览"

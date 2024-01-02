@@ -279,7 +279,7 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/icon_info"
+                        android:src="@drawable/icon_settings"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"
@@ -320,6 +320,84 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/laboratory"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="2dp"
+                android:foreground="?selectableItemBackground"
+                app:cardBackgroundColor="#78242424"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:strokeColor="#70707070"
+                app:strokeWidth="0.1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/laboratory_go"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:src="@drawable/arrow_forward"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/laboratory_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/icon_laboratory"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHeight_percent="0.4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.5" />
+
+                    <TextView
+                        android:id="@+id/laboratory_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:text="测试性功能"
+                        android:textColor="#fff"
+                        android:textSize="11sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toTopOf="@+id/laboratory_desription"
+                        app:layout_constraintEnd_toStartOf="@+id/laboratory_go"
+                        app:layout_constraintStart_toEndOf="@+id/laboratory_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/laboratory_desription"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="10dp"
+                        android:lines="1"
+                        android:text="未经测试的功能，不保证正常使用"
+                        android:textColor="#fff"
+                        android:textSize="11sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/laboratory_go"
+                        app:layout_constraintStart_toEndOf="@+id/laboratory_icon"
+                        app:layout_constraintTop_toBottomOf="@+id/laboratory_title" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView

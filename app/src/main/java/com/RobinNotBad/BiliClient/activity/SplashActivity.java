@@ -87,7 +87,7 @@ public class SplashActivity extends Activity {
                         String cookies = UserLoginApi.getCookies(response);
                         Log.e("cookies",cookies);
                         if(!cookies.isEmpty()) SharedPreferencesUtil.putString("cookies",cookies);
-                    }else checkCookie();
+                    }else if (SharedPreferencesUtil.getBoolean("dev_refresh_cookie",false)) checkCookie();
 
 
                     Intent intent = new Intent();
