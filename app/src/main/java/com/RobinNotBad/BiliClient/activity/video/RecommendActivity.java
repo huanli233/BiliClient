@@ -71,8 +71,9 @@ public class RecommendActivity extends BaseActivity {
             videoCardAdapter = new VideoCardAdapter(this, videoCardList);
             recyclerView.setAdapter(videoCardAdapter);
         } else {
+            int last = videoCardList.size();
             videoCardList.clear();
-            videoCardAdapter.notifyDataSetChanged();
+            videoCardAdapter.notifyItemRangeRemoved(0,last);
         }
         swipeRefreshLayout.setRefreshing(true);
 
@@ -117,6 +118,7 @@ public class RecommendActivity extends BaseActivity {
                     }
                 });
             }
+            Log.e("debug","last="+lastSize+"&now="+videoCardList.size());
             videoCardAdapter.notifyItemRangeInserted(lastSize,videoCardList.size()-lastSize);
             swipeRefreshLayout.setRefreshing(false);
             refreshing = false;
