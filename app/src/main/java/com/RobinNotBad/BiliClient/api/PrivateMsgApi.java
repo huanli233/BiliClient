@@ -7,7 +7,9 @@ import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,11 +20,13 @@ public class PrivateMsgApi {
     public static ArrayList<PrivateMessage> getPrivateMsg(long talkerId,int size) throws IOException, JSONException {
         String url = "https://api.vc.bilibili.com/svr_sync/v1/svr_sync/fetch_session_msgs?session_type=1&talker_id="+talkerId+"&size="+size;
         JSONObject root = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+        ArrayList<PrivateMessage> list = new ArrayList<>();
         if(root.has("data")&&!root.isNull("data")){
             JSONArray messages = root.getJSONObject("data").getJSONArray("messages");
             UserInfo myInfo = UserInfoApi.getCurrentUserInfo();
             UserInfo targetInfo = new UserInfo();
-            ArrayList<PrivateMessage> msgList = new ArrayList<PrivateMessage>();
+            
+            //list.add(new PrivateMessage(114514,1,new JSONObject("{\"content\":\" 。\"}"),11111111,"aaaaa",111));
             
             boolean isReqTargetInfo = false;
             if(messages!=null){
@@ -40,21 +44,21 @@ public class PrivateMsgApi {
                         }
                         msgObject.name = targetInfo.name;
                     }
-                    msgObject.content = new JSONObject("{\"content\":\" 。\"}");
+                    msgObject.content = new JSONObject("{\"content\":\" 。\"}");   //防止内容不为json时解析错误
                     if(msgJson.getString("content").endsWith("}")&&msgJson.getString("content").startsWith("{")){
                     msgObject.content = new JSONObject(msgJson.getString("content").replace("\\",""));
                     }
                     msgObject.timestamp = msgJson.getLong("timestamp");
                     msgObject.msgId = msgJson.getLong("msg_key");
-                    boolean isPuted = msgList.add(msgObject);
+                    boolean isPuted = list.add(msgObject);
                     Log.e("puted?",String.valueOf(isPuted));
                     Log.e("msg",msgObject.name+"."+msgObject.uid+"."+msgObject.msgId+"."+msgObject.timestamp+"."+msgObject.content+"."+msgObject.type);
             	}
                 Log.e("","返回msgList");
-                //for(PrivateMessage i : msgList) {
-                //	Log.e("msg",i.name+"."+i.uid+"."+i.msgId+"."+i.timestamp+"."+i.content+"."+i.type);
-                //}
-                return msgList;
+                for(PrivateMessage i : list) {
+                	Log.e("msg",i.name+"."+i.uid+"."+i.msgId+"."+i.timestamp+"."+i.content+"."+i.type);
+                }
+                return list;
             }else return new ArrayList<PrivateMessage>();
         }else return new ArrayList<PrivateMessage>();
     }

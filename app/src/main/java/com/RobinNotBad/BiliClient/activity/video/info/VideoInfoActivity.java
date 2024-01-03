@@ -42,7 +42,7 @@ public class VideoInfoActivity extends BaseActivity {
     private long aid;
     
     //test
-    //private ArrayList<PrivateMessage> list;
+    //private ArrayList<PrivateMessage> list=new ArrayList<>();
     
     @SuppressLint("MissingInflatedId")
     @Override
@@ -64,21 +64,34 @@ public class VideoInfoActivity extends BaseActivity {
         pageName.setText("视频详情");
 
         ViewPager viewPager = findViewById(R.id.viewPager);
-        /*
-        CenterThreadPool.run(()->{
-            try {
-            	list = PrivateMsgApi.getPrivateMsg(521241135,10);
-            } catch(IOException err) {
-            	Log.e("",err.toString());
-            } catch(JSONException err){
-                Log.e("",err.toString());
-            }
-        });
-        /*
-        for(PrivateMessage i : list) {
-                	Log.e("msg",i.name+"."+i.uid+"."+i.msgId+"."+i.timestamp+"."+i.content+"."+i.type);
-                }
-            */
+/*
+        new Thread(
+                        () -> {
+                            try {
+                                list = PrivateMsgApi.getPrivateMsg(521241135, 10);
+                                for (PrivateMessage i : list) {
+                                    Log.e(
+                                            "msgaaaa",
+                                            i.name
+                                                    + "."
+                                                    + i.uid
+                                                    + "."
+                                                    + i.msgId
+                                                    + "."
+                                                    + i.timestamp
+                                                    + "."
+                                                    + i.content
+                                                    + "."
+                                                    + i.type);
+                                }
+                            } catch (IOException err) {
+                                Log.e("", err.toString());
+                            } catch (JSONException err) {
+                                Log.e("", err.toString());
+                            }
+                        })
+                .start();
+
         Log.e("VideoInfoActivity",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
         /*
         new Thread(()->{
