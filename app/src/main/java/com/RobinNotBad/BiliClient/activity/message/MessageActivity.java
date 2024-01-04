@@ -75,11 +75,13 @@ public class MessageActivity extends BaseActivity {
                         ((TextView) findViewById(R.id.at_text)).setText("@我(" + stats.getInt("at") + "未读)");
                         ((TextView) findViewById(R.id.system_text)).setText("系统通知(" + stats.getInt("system") + "未读)");
                     }catch (Exception e){
-                        Toast.makeText(this, "解析消息数据失败!\n" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                        Toast.makeText(this, "解析消息数据失败:(", Toast.LENGTH_SHORT).show();
                     }
                 });
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
+                Toast.makeText(this, "解析消息数据失败:(", Toast.LENGTH_SHORT).show();
             }
         });
     }

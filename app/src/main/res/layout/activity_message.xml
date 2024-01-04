@@ -110,11 +110,11 @@
                          app:autoSizeTextType="uniform"
                          android:textSize="11sp"
                          android:textColor="#fff"
-                        android:layout_marginTop="-1dp"
                          app:layout_constraintEnd_toStartOf="@+id/reply_go"
                          app:layout_constraintStart_toEndOf="@+id/reply_icon"
                          android:layout_marginStart="8dp"
                          app:layout_constraintTop_toTopOf="@id/reply_icon"
+                         app:layout_constraintBottom_toBottomOf="@id/reply_go"
                          android:lines="1"
                          android:id="@+id/reply_text"
                          android:text="回复我的" />
@@ -174,11 +174,11 @@
                          app:autoSizeTextType="uniform"
                          android:textSize="11sp"
                          android:textColor="#fff"
-                        android:layout_marginTop="-1dp"
                          app:layout_constraintEnd_toStartOf="@+id/at_go"
                          app:layout_constraintStart_toEndOf="@+id/at_icon"
                          android:layout_marginStart="8dp"
                          app:layout_constraintTop_toTopOf="@id/at_icon"
+                         app:layout_constraintBottom_toBottomOf="@id/at_go"
                          android:lines="1"
                          android:id="@+id/at_text"
                          android:text="\@我" />
@@ -242,8 +242,8 @@
                          app:layout_constraintStart_toEndOf="@+id/like_icon"
                          android:layout_marginStart="8dp"
                          app:layout_constraintTop_toTopOf="@id/like_icon"
+                         app:layout_constraintBottom_toBottomOf="@id/like_go"
                          android:lines="1"
-                        android:layout_marginTop="-1dp"
                          android:id="@+id/like_text"
                          android:text="收到的赞" />
 
@@ -302,11 +302,11 @@
                          app:autoSizeTextType="uniform"
                          android:textSize="11sp"
                          android:textColor="#fff"
-                        android:layout_marginTop="-1dp"
                          app:layout_constraintEnd_toStartOf="@+id/system_go"
                          app:layout_constraintStart_toEndOf="@+id/system_icon"
                          android:layout_marginStart="8dp"
                          app:layout_constraintTop_toTopOf="@id/system_icon"
+                         app:layout_constraintBottom_toBottomOf="@id/system_go"
                          android:lines="1"
                          android:id="@+id/system_text"
                          android:text="系统通知" />

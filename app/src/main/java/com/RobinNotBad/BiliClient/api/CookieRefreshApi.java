@@ -81,7 +81,7 @@ public class CookieRefreshApi {
             String cookies = "buvid3=" + LittleToolsUtil.getInfoFromCookie("buvid3",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,"")) + "; " + UserLoginApi.getCookies(response);
             Log.e("新的Cookie",cookies);
             Log.e("新的RefreshToken",result.getJSONObject("data").getString("refresh_token"));
-            int confirmCode = new JSONObject(Objects.requireNonNull(NetWorkUtil.post("https://passport.bilibili.com/x/passport-login/web/confirm/refresh", "csrf=" + LittleToolsUtil.getInfoFromCookie("bili_jct", cookies) + "&refresh_token=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), ConfInfoApi.webHeaders).body()).string()).getInt("code");
+            int confirmCode = new JSONObject(Objects.requireNonNull(NetWorkUtil.post("https://passport.bilibili.com/x/passport-login/web/confirm/refresh", "csrf=" + RefreshCsrf + "&refresh_token=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), ConfInfoApi.webHeaders).body()).string()).getInt("code");
             if(confirmCode != 0){ //必须要等确认更新Cookie成功，不然就无法完成Cookie的刷新
                 Log.e("Cookie刷新失败","确认刷新时返回:" + confirmCode);
                 return false;

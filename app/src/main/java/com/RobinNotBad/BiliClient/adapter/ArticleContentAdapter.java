@@ -70,6 +70,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 switch (article.get(realPosition).extra){
                     default:
                         textView.setAlpha(0.85f);
+                        textView.setTextSize(LittleToolsUtil.sp2px(12f,context));
                         break;
                     case "strong":
                         textView.setAlpha(0.92f);

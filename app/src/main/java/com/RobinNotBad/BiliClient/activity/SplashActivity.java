@@ -138,7 +138,8 @@ public class SplashActivity extends Activity {
                     Log.e("CorrespondPath",correspondPath);
                     String refreshCsrf = CookieRefreshApi.getRefreshCsrf(correspondPath);
                     Log.e("RefreshCsrf",refreshCsrf);
-                    if(!CookieRefreshApi.refreshCookie(refreshCsrf)) runOnUiThread(()-> MsgUtil.toast("Cookie刷新失败",this));
+                    if(CookieRefreshApi.refreshCookie(refreshCsrf)) runOnUiThread(()-> MsgUtil.toast("Cookie已刷新",this));
+                    else runOnUiThread(()-> MsgUtil.toast("Cookie刷新失败",this));
                 }
             }   
         }catch (Exception e){

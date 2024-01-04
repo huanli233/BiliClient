@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.user.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.model.MessageCard;
 import com.RobinNotBad.BiliClient.model.Reply;
@@ -42,8 +43,7 @@ public class MessageHolder extends RecyclerView.ViewHolder{
         avaterList.removeAllViews();
         if(message.user.size() < 1) avaterList.setVisibility(View.GONE);
         else avaterList.setVisibility(View.VISIBLE);
-        for(int i = 0;i<3;i++){
-            if(i >= message.user.size()) break;
+        for(int i = 0;i<message.user.size();i++){
             ImageView imageView = new ImageView(context);
             Glide.with(context)
                     .load(message.user.get(i).avatar)
@@ -52,6 +52,13 @@ public class MessageHolder extends RecyclerView.ViewHolder{
                     .into(imageView);
             imageView.setLayoutParams(new ViewGroup.LayoutParams(LittleToolsUtil.dp2px(32,context),LittleToolsUtil.dp2px(32,context)));
             imageView.setLeft(LittleToolsUtil.dp2px(3,context));
+            int finalI = i;
+            imageView.setOnClickListener(view1 -> {
+                Intent intent = new Intent();
+                intent.setClass(context, UserInfoActivity.class);
+                intent.putExtra("mid", message.user.get(finalI).mid);
+                context.startActivity(intent);
+            });
             avaterList.addView(imageView);
 
             //这个View什么都没有，用来当间隔的

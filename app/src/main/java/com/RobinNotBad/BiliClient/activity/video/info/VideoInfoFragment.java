@@ -28,6 +28,7 @@ import com.RobinNotBad.BiliClient.activity.user.WatchLaterActivity;
 import com.RobinNotBad.BiliClient.activity.user.favorite.AddFavoriteActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
 import com.RobinNotBad.BiliClient.activity.video.MultiPageActivity;
+import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.LikeCoinFavApi;
@@ -46,6 +47,7 @@ import com.google.android.material.card.MaterialCardView;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.ArrayList;
 
 //真正的视频详情页
 //2023-07-17
@@ -136,6 +138,15 @@ public class VideoInfoFragment extends Fragment {
                             .into(upIcon);
                     upName.setText(videoInfo.upName);
 
+                    cover.setOnClickListener(view1 -> {
+                        Intent intent = new Intent();
+                        intent.setClass(view1.getContext(), ImageViewerActivity.class);
+                        ArrayList<String> imageList = new ArrayList<>();
+                        imageList.add(videoInfo.cover);
+                        intent.putExtra("imageList", imageList);
+                        view1.getContext().startActivity(intent);
+                    });
+                            
                     int viewsInt = videoInfo.view;
                     String viewsStr;
                     if (viewsInt >= 10000)

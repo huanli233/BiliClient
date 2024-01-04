@@ -10,6 +10,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
+import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,18 +29,24 @@ public class BaseActivity extends AppCompatActivity {
         if(dpiTimes != 1.0F) {    //似乎有些低版本设备不支持，所以如果默认值就不要调整以免闪退    //后来发现这是错误的，详见SplashActivity
             Resources res = newBase.getResources();
             Configuration configuration = res.getConfiguration();
-            WindowManager windowManager = (WindowManager) newBase.getSystemService(Context.WINDOW_SERVICE);
-            Display display = windowManager.getDefaultDisplay();
-            DisplayMetrics metrics = new DisplayMetrics();
-            display.getRealMetrics(metrics);
-            int dpi = metrics.densityDpi;
-            Log.e("debug-系统dpi", String.valueOf(dpi));
-            configuration.densityDpi = (int) (dpi * dpiTimes);
-            Log.e("debug-应用dpi", String.valueOf((int) (dpi * dpiTimes)));
+            try{
+                WindowManager windowManager = (WindowManager) newBase.getSystemService(Context.WINDOW_SERVICE);
+                Display display = windowManager.getDefaultDisplay();
+                DisplayMetrics metrics = new DisplayMetrics();
+                display.getRealMetrics(metrics);
+                int dpi = metrics.densityDpi;
+                Log.e("debug-系统dpi", String.valueOf(dpi));
+                configuration.densityDpi = (int) (dpi * dpiTimes);
+                Log.e("debug-应用dpi", String.valueOf((int) (dpi * dpiTimes)));
 
-            Context confBase =  newBase.createConfigurationContext(configuration);
+                Context confBase =  newBase.createConfigurationContext(configuration);
 
-            super.attachBaseContext(confBase);
+                super.attachBaseContext(confBase);
+            }catch(Exception e){
+                Toast.makeText(newBase.getApplicationContext(),"遇到一点问题，重进试试",Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+                finish();
+            }
         }
         else super.attachBaseContext(newBase);
     }
