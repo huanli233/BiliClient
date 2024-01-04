@@ -27,7 +27,7 @@ public class TestPriMsg extends AppCompatActivity {
                     for(PrivateMessage i : list) {
                 	Log.e("msgaaaa",i.name+"."+i.uid+"."+i.msgId+"."+i.timestamp+"."+i.content+"."+i.type);
                 }
-                    PrivateMsgAdapter adapter = new PrivateMsgAdapter(list);
+                    PrivateMsgAdapter adapter = new PrivateMsgAdapter(list,this);
                 runOnUiThread(()->{
                     RecyclerView view = findViewById(R.id.test_recycler);
                     view.setLayoutManager(new LinearLayoutManager(this));
