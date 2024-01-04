@@ -143,7 +143,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (replyList.get(realPosition).pictureList != null && !replyList.get(realPosition).pictureList.isEmpty()) {  //图片显示相关
                 replyHolder.imageCard.setVisibility(View.VISIBLE);
                 replyHolder.imageCount.setVisibility(View.VISIBLE);
-                Glide.with(context).load(replyList.get(realPosition).pictureList.get(0))
+                Glide.with(context).load(replyList.get(realPosition).pictureList.get(0) + "@35q.webp")
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(replyHolder.imageCard);
 

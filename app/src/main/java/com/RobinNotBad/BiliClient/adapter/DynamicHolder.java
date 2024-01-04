@@ -95,7 +95,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
         if(dynamic.pictureList != null){
             View imageCard = View.inflate(context,R.layout.cell_dynamic_image,extraCard);
             ImageView imageView = imageCard.findViewById(R.id.imageView);
-            Glide.with(context).load(dynamic.pictureList.get(0))
+            Glide.with(context).load(dynamic.pictureList.get(0)+"@35q.webp")
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(imageView);
             TextView textView = imageCard.findViewById(R.id.imageCount);

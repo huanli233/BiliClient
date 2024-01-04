@@ -1,8 +1,10 @@
 package com.RobinNotBad.BiliClient.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,9 @@ import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.user.UserInfoActivity;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.ArticleLine;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -26,6 +30,9 @@ import com.google.android.material.card.MaterialCardView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 //文章内容Adapter by RobinNotBad
 
@@ -34,12 +41,14 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
     Context context;
     ArrayList<ArticleLine> article;
     ArticleInfo articleInfo;
+    Map<Integer, Bitmap> pictureMap;
     boolean keywords_expand = false;
 
     public ArticleContentAdapter(Context context,ArticleInfo articleInfo, ArrayList<ArticleLine> article) {
         this.context = context;
         this.article = article;
         this.articleInfo = articleInfo;
+        if(SharedPreferencesUtil.getBoolean("dev_article_pic_load",false)) pictureMap = new HashMap<>();
     }
 
     @NonNull
@@ -65,7 +74,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
         int realPosition = position - 1;
         switch (getItemViewType(position)){
             default:
-                TextView textView = holder.itemView.findViewById(R.id.textView);
+                TextView textView = holder.itemView.findViewById(R.id.textView);  //文本
                 textView.setText(article.get(realPosition).content);
                 switch (article.get(realPosition).extra){
                     default:
@@ -80,10 +89,28 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 }
                 break;
             case 1:
-                ImageView imageView = holder.itemView.findViewById(R.id.imageView);
-                Glide.with(context).load(article.get(realPosition).content)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .into(imageView);
+                ImageView imageView = holder.itemView.findViewById(R.id.imageView);  //图片
+
+                if(SharedPreferencesUtil.getBoolean("dev_article_pic_load",true)) {
+                    if(pictureMap.containsKey(realPosition))
+                        imageView.setImageBitmap(pictureMap.get(realPosition));
+                    else CenterThreadPool.run(()->{
+                        try {
+                            Bitmap bitmap = Glide.with(context).asBitmap().load(article.get(realPosition).content+"@50q.webp").diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit().get();
+                            pictureMap.put(realPosition,bitmap);
+                            ((Activity)context).runOnUiThread(()->imageView.setImageBitmap(bitmap));
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                }else{
+                    Glide.with(context).load(article.get(realPosition).content)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .into(imageView);
+                }
+
                 holder.itemView.findViewById(R.id.imageCard).setOnClickListener(view -> {
                     Intent intent = new Intent();
                     intent.setClass(context, ImageViewerActivity.class);
@@ -96,7 +123,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
             case -1:
                 TextView title = holder.itemView.findViewById(R.id.title);
                 ImageView cover = holder.itemView.findViewById(R.id.cover);
-                ImageView upIcon = holder.itemView.findViewById(R.id.upInfo_Icon);
+                ImageView upIcon = holder.itemView.findViewById(R.id.upInfo_Icon);  //头
                 TextView keywords = holder.itemView.findViewById(R.id.keywords);
                 TextView upName = holder.itemView.findViewById(R.id.upInfo_Name);
                 TextView views = holder.itemView.findViewById(R.id.viewsCount);
@@ -111,7 +138,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                     keywords_expand = !keywords_expand;
                 });
 
-                cvidText.setText("CV" + articleInfo.id + " | " + articleInfo.wordCount + "字");
+                cvidText.setText("cv" + articleInfo.id + " | " + articleInfo.wordCount + "字");
                 upName.setText(articleInfo.upName);
                 keywords.setText("关键词：" + articleInfo.keywords);
                 views.setText(articleInfo.view);

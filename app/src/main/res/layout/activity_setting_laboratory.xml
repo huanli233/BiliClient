@@ -83,6 +83,33 @@
                     android:text="在启动哔哩终端时检查Cookie是否需要刷新，在Cookie需要刷新时自动请求新的Cookie（功能未经测试可能并不可用）\n如果该开关为禁用状态请重新登录"
                     android:textSize="11sp" />
             </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/article_picture_load"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="6dp"
+                    android:background="@drawable/background_edit_text_setting"
+                    android:text="使用缓存法加载专栏图片"
+                    android:textColor="@color/textwhite" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="2dp"
+                    android:text="顾名思义"
+                    android:textSize="11sp" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
