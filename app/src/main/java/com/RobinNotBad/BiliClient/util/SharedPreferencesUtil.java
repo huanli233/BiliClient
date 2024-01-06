@@ -22,11 +22,12 @@ public class SharedPreferencesUtil
 
 
     private static SharedPreferences sharedPreferences;
-    private static SharedPreferences.Editor editor;
 
-    public static void initSharedPrefs(Context context){  //实际上在BaseActivity里已经帮你init过了，通常无需再调用此函数
-        sharedPreferences = context.getSharedPreferences("default",Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+    public static void initSharedPrefs(Context context){
+        //实际上在BaseActivity里已经帮你init过了，通常无需再调用此函数
+        if(sharedPreferences == null) {
+            sharedPreferences = context.getSharedPreferences("default", Context.MODE_PRIVATE);
+        }
     }
 
     public static String getString(String key, String def) {
@@ -34,7 +35,7 @@ public class SharedPreferencesUtil
     }
 
     public static void putString(String key, String value) {
-        editor.putString(key, value).apply();
+        sharedPreferences.edit().putString(key, value).apply();
     }
 
     public static int getInt(String key, int def)
@@ -43,7 +44,7 @@ public class SharedPreferencesUtil
     }
 
     public static void putInt(String key, int value) {
-        editor.putInt(key, value).apply();
+        sharedPreferences.edit().putInt(key, value).apply();
     }
 
     public static long getLong(String key, long def)
@@ -52,7 +53,7 @@ public class SharedPreferencesUtil
     }
 
     public static void putLong(String key, long value) {
-        editor.putLong(key, value).apply();
+        sharedPreferences.edit().putLong(key, value).apply();
     }
 
     public static boolean getBoolean(String key, boolean def)
@@ -62,11 +63,11 @@ public class SharedPreferencesUtil
 
     public static void putBoolean(String key, boolean value)
     {
-        editor.putBoolean(key, value).apply();
+        sharedPreferences.edit().putBoolean(key, value).apply();
     }
 
     public static void putFloat(String key, float value) {
-        editor.putFloat(key, value).apply();
+        sharedPreferences.edit().putFloat(key, value).apply();
     }
 
     public static float getFloat(String key, float def)
@@ -74,8 +75,7 @@ public class SharedPreferencesUtil
         return sharedPreferences.getFloat(key, def);
     }
 
-    public static boolean removeValue(String key)
-    {
-        return editor.remove(key).commit();
+    public static void removeValue(String key) {
+        sharedPreferences.edit().remove(key).apply();
     }
 }

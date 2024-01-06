@@ -1,54 +1,24 @@
 package com.RobinNotBad.BiliClient.activity.base;
 
 import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
-
-import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
+import com.RobinNotBad.BiliClient.BiliClient;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 
 public class BaseActivity extends AppCompatActivity {
-
     //调整应用内dpi的代码，其他Activity要继承于BaseActivity才能调大小
     @Override
     protected void attachBaseContext(Context newBase) {
-
-        SharedPreferencesUtil.initSharedPrefs(newBase);
-
-        float dpiTimes = SharedPreferencesUtil.getFloat("dpi", 1.0F);
-        if(dpiTimes != 1.0F) {    //似乎有些低版本设备不支持，所以如果默认值就不要调整以免闪退    //后来发现这是错误的，详见SplashActivity
-            Resources res = newBase.getResources();
-            Configuration configuration = res.getConfiguration();
-            try{
-                WindowManager windowManager = (WindowManager) newBase.getSystemService(Context.WINDOW_SERVICE);
-                Display display = windowManager.getDefaultDisplay();
-                DisplayMetrics metrics = new DisplayMetrics();
-                display.getRealMetrics(metrics);
-                int dpi = metrics.densityDpi;
-                Log.e("debug-系统dpi", String.valueOf(dpi));
-                configuration.densityDpi = (int) (dpi * dpiTimes);
-                Log.e("debug-应用dpi", String.valueOf((int) (dpi * dpiTimes)));
-
-                Context confBase =  newBase.createConfigurationContext(configuration);
-
-                super.attachBaseContext(confBase);
-            }catch(Exception e){
-                Toast.makeText(newBase.getApplicationContext(),"遇到一点问题，重进试试",Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-                finish();
-            }
-        }
-        else super.attachBaseContext(newBase);
+        newBase = BiliClient.getFitDisplayContext(newBase);
+        super.attachBaseContext(newBase);
     }
 
     //调整页面边距，参考了hankmi的方式
@@ -69,8 +39,6 @@ public class BaseActivity extends AppCompatActivity {
             rootView.setPadding(paddingH, paddingV, paddingH, paddingV);
         }
     }
-
-
     @Override
     public void onBackPressed() {
         if(!SharedPreferencesUtil.getBoolean("back_disable",false)) super.onBackPressed();

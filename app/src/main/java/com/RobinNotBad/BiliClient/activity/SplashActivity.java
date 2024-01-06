@@ -14,6 +14,7 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.RobinNotBad.BiliClient.BiliClient;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.settings.SetupUIActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
@@ -45,24 +46,8 @@ public class SplashActivity extends Activity {
     @Override
     protected void attachBaseContext(Context newBase) {
         SharedPreferencesUtil.initSharedPrefs(newBase);
-
-        float dpiTimes = SharedPreferencesUtil.getFloat("dpi", 1.0F);
-        if(dpiTimes != 1.0F && Build.VERSION.SDK_INT >= 25) {    //实测发现，低版本并不是不能调整大小，而是不能放在启动Activity里，所以判断一下就行了，反正启动页无所谓
-            Resources res = newBase.getResources();
-            Configuration configuration = res.getConfiguration();
-            WindowManager windowManager = (WindowManager) newBase.getSystemService(Context.WINDOW_SERVICE);
-            Display display = windowManager.getDefaultDisplay();
-            DisplayMetrics metrics = new DisplayMetrics();
-            display.getRealMetrics(metrics);
-            int dpi = metrics.densityDpi;
-            Log.e("debug-系统dpi", String.valueOf(dpi));
-            configuration.densityDpi = (int) (dpi * dpiTimes);
-            Log.e("debug-应用dpi", String.valueOf((int) (dpi * dpiTimes)));
-            Context confBase =  newBase.createConfigurationContext(configuration);
-
-            super.attachBaseContext(confBase);
-        }
-        else super.attachBaseContext(newBase);
+        newBase = BiliClient.getFitDisplayContext(newBase);
+        super.attachBaseContext(newBase);
     }
 
 
