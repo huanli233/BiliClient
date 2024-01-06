@@ -115,20 +115,13 @@ public class MySpaceActivity extends BaseActivity {
                         startActivity(intent);
                     });
 
-                    final boolean[] logout_click = {false};
                     logout.setOnClickListener(view -> {
-                        if(!logout_click[0]) {
-                            MsgUtil.toast("再点一次退出登录",this);
-                            logout_click[0] = true;
-                        }else{
-                            logout_click[0] = false;
-                            CenterThreadPool.run(() -> {
-                                UserInfoApi.exitLogin();
-                                SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies,"");
-                                MsgUtil.toast("账号已退出",getApplicationContext());
-                                finish();
-                            });
-                        }
+                        CenterThreadPool.run(() -> UserInfoApi.exitLogin());                                   
+                        SharedPreferencesUtil.removeValue(SharedPreferencesUtil.cookies);
+                        SharedPreferencesUtil.removeValue(SharedPreferencesUtil.mid);
+                        SharedPreferencesUtil.removeValue(SharedPreferencesUtil.refresh_token);
+                        MsgUtil.toast("账号已退出",getApplicationContext());
+                        finish();
                     });
                 });
             } catch (IOException e) {
