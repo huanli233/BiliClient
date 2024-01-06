@@ -163,5 +163,12 @@ public class UserInfoApi {
         else return -1;
     }
 
-
+    public static void exitLogin(){
+        try {
+            String url = "https://passport.bilibili.com/login/exit/v2";
+            NetWorkUtil.get(url, ConfInfoApi.webHeaders);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

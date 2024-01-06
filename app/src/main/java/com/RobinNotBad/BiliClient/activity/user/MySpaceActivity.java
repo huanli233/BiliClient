@@ -14,7 +14,10 @@ import com.RobinNotBad.BiliClient.activity.settings.SpecialLoginActivity;
 import com.RobinNotBad.BiliClient.activity.user.favorite.FavoriteFolderListActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.UserInfo;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -30,7 +33,7 @@ public class MySpaceActivity extends BaseActivity {
     public static MySpaceActivity instance = null;
     private ImageView userAvatar;
     private TextView userName, userFans, userDesc;
-    private MaterialCardView myInfo,follow,watchLater,favorite,history;
+    private MaterialCardView myInfo,follow,watchLater,favorite,history,logout;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -56,6 +59,7 @@ public class MySpaceActivity extends BaseActivity {
         watchLater = findViewById(R.id.watchlater);
         favorite = findViewById(R.id.favorite);
         history = findViewById(R.id.history);
+        logout = findViewById(R.id.logout);
 
 
 
@@ -109,6 +113,22 @@ public class MySpaceActivity extends BaseActivity {
                         Intent intent = new Intent();
                         intent.setClass(MySpaceActivity.this, HistoryActivity.class);
                         startActivity(intent);
+                    });
+
+                    final boolean[] logout_click = {false};
+                    logout.setOnClickListener(view -> {
+                        if(!logout_click[0]) {
+                            MsgUtil.toast("再点一次退出登录",this);
+                            logout_click[0] = true;
+                        }else{
+                            logout_click[0] = false;
+                            CenterThreadPool.run(() -> {
+                                UserInfoApi.exitLogin();
+                                SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies,"");
+                                MsgUtil.toast("账号已退出",getApplicationContext());
+                                finish();
+                            });
+                        }
                     });
                 });
             } catch (IOException e) {
