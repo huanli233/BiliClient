@@ -91,7 +91,7 @@ public class VideoInfoActivity extends BaseActivity {
                             }
                         })
                 .start();
-
+*/
         Log.e("VideoInfoActivity",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
         /*
         new Thread(()->{

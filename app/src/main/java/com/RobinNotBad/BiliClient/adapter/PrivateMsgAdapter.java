@@ -94,7 +94,7 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                     holder.nameTv.setVisibility(View.VISIBLE);
                     holder.textContentCard.setVisibility(View.GONE);
                     holder.videoCard.setVisibility(View.GONE);
-                    Glide.with(BiliClient.context)
+                    Glide.with(context)
                             .load(msg.content.getString("url"))
                             .into(holder.picMsg);
                     break;
