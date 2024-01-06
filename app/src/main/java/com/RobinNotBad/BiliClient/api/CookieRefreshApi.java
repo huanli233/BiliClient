@@ -91,7 +91,7 @@ public class CookieRefreshApi {
                 return false;
             }
             SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies,cookies);
-            SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,result.getJSONObject("data").getString("refresh_token"));
+            SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,refreshToken);
             Log.e("Cookie刷新成功","Success");
             return true;
         }else{
