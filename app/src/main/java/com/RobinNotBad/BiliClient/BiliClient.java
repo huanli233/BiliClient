@@ -35,9 +35,8 @@ public class BiliClient extends Application {
         if(dpiTimes == 1.0F) return newContext;
         try{
             DisplayMetrics displayMetrics = old.getResources().getDisplayMetrics();
-            displayMetrics.densityDpi = (int) (displayMetrics.densityDpi * dpiTimes);
             Configuration configuration = old.getResources().getConfiguration();
-            configuration.densityDpi = displayMetrics.densityDpi;
+            configuration.densityDpi = (int)(displayMetrics.densityDpi * dpiTimes);
             newContext = old.createConfigurationContext(configuration);
         }catch (Exception e){
             Toast.makeText(newContext, "调整缩放失败, 请联系开发者", Toast.LENGTH_SHORT).show();
