@@ -1,6 +1,10 @@
 package com.RobinNotBad.BiliClient.util;
 
-import java.util.concurrent.*;
+import com.bumptech.glide.util.Executors;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -31,6 +35,14 @@ public class CenterThreadPool {
         getInstance().submit(runnable);
     }
 
+    /**
+     * 在主线程运行, 用于更新UI, 例如Toast, Snackbar等
+     *
+     * @param runnable 要运行的任务
+     */
+    public static void runOnMainThread(Runnable runnable){
+        Executors.mainThreadExecutor().execute(runnable);
+    }
 // 想在这里实现一个自动切线程的网络请求一个方法,
 // 但是这种方式需要json转换器, 例如Gson, Moshi的第三方库的引入
 // 现在用的仍然是jsonObject做手动json转换, 先注释掉

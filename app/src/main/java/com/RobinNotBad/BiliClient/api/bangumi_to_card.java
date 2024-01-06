@@ -19,7 +19,7 @@ import java.util.Objects;
 public class bangumi_to_card {
 
     //获取番剧信息, 详情页需要有基本的cover, 信息等
-    public static void getMediaInfo(Activity activity, String mediaId, NetWorkUtil.Callback<Media> callback) {
+    public static void getMediaInfo(String mediaId, NetWorkUtil.Callback<Media> callback) {
         CenterThreadPool.run(() -> {
             try {
                 String url = "https://api.bilibili.com/pgc/review/user?media_id=" + mediaId;
@@ -34,14 +34,10 @@ public class bangumi_to_card {
                 }
                 JSONObject result = all.getJSONObject("result");
                 Media baseMediaInfo = new Media(result);
-                if (activity != null && !activity.isDestroyed()) {
-                    activity.runOnUiThread(() -> callback.onSuccess(baseMediaInfo));
-                }
+                CenterThreadPool.runOnMainThread(() -> callback.onSuccess(baseMediaInfo));
                 body.close();
             } catch (Exception e) {
-                if (activity != null && !activity.isDestroyed()) {
-                    activity.runOnUiThread(() -> callback.onFailed(e));
-                }
+                CenterThreadPool.runOnMainThread(() -> callback.onFailed(e));
             }
         });
     }

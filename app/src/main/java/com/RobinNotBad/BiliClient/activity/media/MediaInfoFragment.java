@@ -58,7 +58,7 @@ public class MediaInfoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         //拉数据
-        bangumi_to_card.getMediaInfo(requireActivity(), mediaId, new NetWorkUtil.Callback<Media>() {
+        bangumi_to_card.getMediaInfo(mediaId, new NetWorkUtil.Callback<Media>() {
             @Override
             public void onSuccess(Media baseMediaInfo) {
                 getSectionInfo(baseMediaInfo);
