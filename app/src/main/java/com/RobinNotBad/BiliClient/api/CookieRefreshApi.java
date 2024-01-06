@@ -9,6 +9,8 @@ import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.security.KeyFactory;
@@ -58,21 +60,20 @@ public class CookieRefreshApi {
     public static String getRefreshCsrf(String CorrespondPath) throws IOException {
         if(Objects.equals(CorrespondPath, "")) return "";
         String url = "https://www.bilibili.com/correspond/1/" + CorrespondPath;
-        Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
-        String body;
+        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
         if (response.body() != null) {
-            body = response.body().string();
-        }else return "";
-        if (body.contains("<div id=\"1-name\">")){ //手动截断提取html
-            body = body.substring(body.indexOf("<div id=\"1-name\">") + 17);
-            body = body.substring(0,body.indexOf("</div>"));
-            return body;
+            Document document = Jsoup.parse(response.body().string());
+            if(document.select("#1-name").size() > 0) return document.select("#1-name").get(0).text();
+            else return "";
         }else return "";
     }
     
     public static boolean refreshCookie(String RefreshCsrf) throws JSONException, IOException{
+        //必须的参数不能为空
         if(Objects.equals(RefreshCsrf, "")) return false;
         if(Objects.equals(SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), "")) return false;
+
+        //请求一个新的cookie
         String url = "https://passport.bilibili.com/x/passport-login/web/cookie/refresh";
         String args= "csrf=" + LittleToolsUtil.getInfoFromCookie("bili_jct",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,"")) + "&refresh_csrf=" + RefreshCsrf + "&source=main_web&refresh_token=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,"");
         Response response = NetWorkUtil.post(url,args,ConfInfoApi.webHeaders);
@@ -80,14 +81,18 @@ public class CookieRefreshApi {
         if (result.getInt("code") == 0) {
             String cookies = "buvid3=" + LittleToolsUtil.getInfoFromCookie("buvid3",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,"")) + "; " + UserLoginApi.getCookies(response);
             Log.e("新的Cookie",cookies);
-            Log.e("新的RefreshToken",result.getJSONObject("data").getString("refresh_token"));
-            int confirmCode = new JSONObject(Objects.requireNonNull(NetWorkUtil.post("https://passport.bilibili.com/x/passport-login/web/confirm/refresh", "csrf=" + RefreshCsrf + "&refresh_token=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), ConfInfoApi.webHeaders).body()).string()).getInt("code");
+            String refreshToken = result.getJSONObject("data").getString("refresh_token");
+            Log.e("新的RefreshToken",refreshToken);
+
+            //使老的Cookie失效
+            int confirmCode = new JSONObject(Objects.requireNonNull(NetWorkUtil.post("https://passport.bilibili.com/x/passport-login/web/confirm/refresh", "csrf=" + LittleToolsUtil.getInfoFromCookie("bili_jct",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,"")) + "&refresh_token=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), ConfInfoApi.webHeaders).body()).string()).getInt("code");
             if(confirmCode != 0){ //必须要等确认更新Cookie成功，不然就无法完成Cookie的刷新
                 Log.e("Cookie刷新失败","确认刷新时返回:" + confirmCode);
                 return false;
             }
             SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies,cookies);
-            SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,result.getJSONObject("data").getString("refresh_token")); 
+            SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,result.getJSONObject("data").getString("refresh_token"));
+            Log.e("Cookie刷新成功","Success");
             return true;
         }else{
             Log.e("Cookie刷新失败","刷新时返回:"+ result.getInt("code"));
