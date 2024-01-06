@@ -39,7 +39,10 @@ public class UserInfoApi {
             JSONObject levelInfo = card.getJSONObject("level_info");
             int level = levelInfo.getInt("current_level");
 
-            return new UserInfo(mid,name,avatar,sign,fans,level,followed,notice);
+            JSONObject official_data = card.getJSONObject("Official");
+            int official = official_data.getInt("role");
+            String officialDesc = official_data.getString("title");
+            return new UserInfo(mid,name,avatar,sign,fans,level,followed,notice,official,officialDesc);
         }
         else return null;
 
@@ -56,9 +59,13 @@ public class UserInfoApi {
             String sign = data.getString("sign");
             int fans = data.getInt("follower");
             int level = data.getInt("level");
-            return new UserInfo(mid,name,avatar,sign,fans,level,false,"");
+
+            JSONObject official_data = data.getJSONObject("official");
+            int official = official_data.getInt("role");
+            String officialDesc = official_data.getString("desc");
+            return new UserInfo(mid,name,avatar,sign,fans,level,false,"",official,officialDesc);
         }
-        else return new UserInfo(0,"加载失败","","",0,0,false,"");
+        else return new UserInfo(0,"加载失败","","",0,0,false,"",0,"");
     }
     
     public static int getCurrentUserCoin()  {

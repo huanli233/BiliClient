@@ -20,7 +20,7 @@ public class FollowApi {
     public static int getFollowList(long mid, int page, ArrayList<UserInfo> userList) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/relation/followings?vmid=" + mid + "&pn=" + page + "&ps=20&order=desc&order_type=attention";
 
-        Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
+        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
         JSONObject callback = new JSONObject(Objects.requireNonNull(response.body()).string());
         JSONObject data = callback.getJSONObject("data");
         JSONArray list = data.getJSONArray("list");
@@ -32,7 +32,7 @@ public class FollowApi {
                 long uid = userInfo.getLong("mid");
                 String avatar = userInfo.getString("face");
                 String sign = userInfo.getString("sign");
-                userList.add(new UserInfo(uid,name,avatar,sign,0,0,true,""));
+                userList.add(new UserInfo(uid,name,avatar,sign,0,0,true,"",0,""));
             }
             return 0;
         }

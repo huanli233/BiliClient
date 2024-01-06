@@ -10,7 +10,10 @@ public class UserInfo {
     public boolean followed;
     public String notice;
 
-    public UserInfo(long mid, String name, String avatar, String sign, int fans, int level, boolean followed, String notice) {
+    public int official;
+    public String officialDesc;
+
+    public UserInfo(long mid, String name, String avatar, String sign, int fans, int level, boolean followed, String notice, int official, String officialDesc) {
         this.mid = mid;
         this.name = name;
         this.avatar = avatar;
@@ -19,6 +22,8 @@ public class UserInfo {
         this.level = level;
         this.followed = followed;
         this.notice = notice;
+        this.official = official;
+        this.officialDesc = officialDesc;
     }
 
     public UserInfo(){}
