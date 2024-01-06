@@ -42,7 +42,6 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
     Context context;
     ArrayList<ArticleLine> article;
     ArticleInfo articleInfo;
-    Map<Integer, Bitmap> pictureMap;
     LruCache<Integer, Bitmap> pictureCache;
     boolean keywords_expand = false;
 
@@ -101,7 +100,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                     else CenterThreadPool.run(()->{
                         try {
                             Bitmap bitmap = Glide.with(context).asBitmap().load(article.get(realPosition).content+"@50q.webp").diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit().get();
-                            pictureMap.put(realPosition,bitmap);
+                            pictureCache.put(realPosition,bitmap);
                             ((Activity)context).runOnUiThread(()->imageView.setImageBitmap(bitmap));
                         } catch (Exception e) {
                             e.printStackTrace();
