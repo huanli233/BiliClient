@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.collection.LruCache;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
@@ -42,13 +43,15 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
     ArrayList<ArticleLine> article;
     ArticleInfo articleInfo;
     Map<Integer, Bitmap> pictureMap;
+    LruCache<Integer, Bitmap> pictureCache;
     boolean keywords_expand = false;
 
     public ArticleContentAdapter(Context context,ArticleInfo articleInfo, ArrayList<ArticleLine> article) {
         this.context = context;
         this.article = article;
         this.articleInfo = articleInfo;
-        if(SharedPreferencesUtil.getBoolean("dev_article_pic_load",false)) pictureMap = new HashMap<>();
+        if(SharedPreferencesUtil.getBoolean("dev_article_pic_load",false))
+            pictureCache = new LruCache<>(12);
     }
 
     @NonNull
@@ -92,16 +95,15 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 ImageView imageView = holder.itemView.findViewById(R.id.imageView);  //图片
 
                 if(SharedPreferencesUtil.getBoolean("dev_article_pic_load",true)) {
-                    if(pictureMap.containsKey(realPosition))
-                        imageView.setImageBitmap(pictureMap.get(realPosition));
+                    Bitmap cachedImage = pictureCache.get(realPosition);
+                    if(cachedImage != null)
+                        imageView.setImageBitmap(cachedImage);
                     else CenterThreadPool.run(()->{
                         try {
                             Bitmap bitmap = Glide.with(context).asBitmap().load(article.get(realPosition).content+"@50q.webp").diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit().get();
                             pictureMap.put(realPosition,bitmap);
                             ((Activity)context).runOnUiThread(()->imageView.setImageBitmap(bitmap));
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     });
@@ -165,6 +167,10 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 title.setText(articleInfo.title);
                 break;
         }
+    }
+
+    private void loadImage(String url, ImageView target){
+
     }
 
     @Override
