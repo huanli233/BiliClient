@@ -58,7 +58,7 @@ public class SettingAboutActivity extends BaseActivity {
         List<Long> developerUidList = new ArrayList<Long>() {{
             add((long)646521226);
             add((long)517053179);
-            add((long)0);
+            add((long)432128342);
             add((long)394675616);
             add((long)40140732);
         }};

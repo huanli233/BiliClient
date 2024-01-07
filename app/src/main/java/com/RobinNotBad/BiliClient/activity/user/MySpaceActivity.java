@@ -35,6 +35,8 @@ public class MySpaceActivity extends BaseActivity {
     private TextView userName, userFans, userDesc;
     private MaterialCardView myInfo,follow,watchLater,favorite,history,logout;
 
+    private boolean confirmLogout = false;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,12 +118,16 @@ public class MySpaceActivity extends BaseActivity {
                     });
 
                     logout.setOnClickListener(view -> {
-                        CenterThreadPool.run(() -> UserInfoApi.exitLogin());                                   
-                        SharedPreferencesUtil.removeValue(SharedPreferencesUtil.cookies);
-                        SharedPreferencesUtil.removeValue(SharedPreferencesUtil.mid);
-                        SharedPreferencesUtil.removeValue(SharedPreferencesUtil.refresh_token);
-                        MsgUtil.toast("账号已退出",getApplicationContext());
-                        finish();
+                        if(confirmLogout){
+                            CenterThreadPool.run(() -> UserInfoApi.exitLogin());
+                            SharedPreferencesUtil.removeValue(SharedPreferencesUtil.cookies);
+                            SharedPreferencesUtil.removeValue(SharedPreferencesUtil.mid);
+                            SharedPreferencesUtil.removeValue(SharedPreferencesUtil.csrf);
+                            SharedPreferencesUtil.removeValue(SharedPreferencesUtil.refresh_token);
+                            MsgUtil.toast("账号已退出",getApplicationContext());
+                            finish();
+                        }else MsgUtil.toast("再点一次退出登录",getApplicationContext());
+                        confirmLogout = !confirmLogout;
                     });
                 });
             } catch (IOException e) {

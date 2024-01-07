@@ -9,15 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
+import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.UserInfo;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -31,6 +36,8 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     Context context;
     ArrayList<Dynamic> dynamicList;
     UserInfo userInfo;
+
+    private boolean followBtnTemp = false; //防止关注失败改变按钮状态时触发逻辑用的缓存
 
     public UserInfoAdapter(Context context, ArrayList<Dynamic> dynamicList, UserInfo userInfo) {
         this.context = context;
@@ -73,7 +80,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             userInfoHolder.userDesc.setText(userInfo.sign);
             if (!userInfo.notice.isEmpty()) userInfoHolder.userNotice.setText(userInfo.notice);
             else userInfoHolder.userNotice.setVisibility(View.GONE);
-            userInfoHolder.userFans.setText("Lv" + userInfo.level + "  " + (userInfo.followed ? "已关注": "未关注") + "\n" + LittleToolsUtil.toWan(userInfo.fans) + "粉丝");
+            userInfoHolder.userFans.setText("Lv" + userInfo.level + "  " + LittleToolsUtil.toWan(userInfo.fans) + "粉丝");
 
             if(userInfo.official != 0) {
                 String official_title = "";
@@ -121,6 +128,23 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 intent.putExtra("imageList", imageList);
                 context.startActivity(intent);
             });
+
+            if((userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)) || (userInfo.mid == 0)) userInfoHolder.followBtn.setVisibility(View.GONE);
+            else userInfoHolder.followBtn.setChecked(userInfo.followed);
+            userInfoHolder.followBtn.setOnCheckedChangeListener((compoundButton, b) -> {
+                if(followBtnTemp) followBtnTemp = false;
+                else{
+                    CenterThreadPool.run(() -> {
+                        if(!UserInfoApi.followUser(userInfo.mid,b)){
+                            followBtnTemp = true;
+                            CenterThreadPool.runOnMainThread(() -> {
+                                MsgUtil.toast("操作失败",context);
+                                compoundButton.setChecked(!b);
+                            });
+                        }
+                    });
+                }
+            });
         }
     }
 
@@ -145,6 +169,8 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView userName,userFans,userDesc,userNotice,userOfficial,userOfficialDesc;
         ImageView userAvatar;
 
+        ToggleButton followBtn;
+
         public UserInfoHolder(@NonNull View itemView) {
             super(itemView);
             userName = itemView.findViewById(R.id.userName);
@@ -154,6 +180,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             userOfficial = itemView.findViewById(R.id.userOfficial);
             userOfficialDesc = itemView.findViewById(R.id.userOfficialDesc);
             userAvatar = itemView.findViewById(R.id.userAvatar);
+            followBtn = itemView.findViewById(R.id.followBtn);
         }
     }
 }

@@ -209,7 +209,7 @@
             android:label="设置"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.video.SearchActivity"
+            android:name=".activity.search.SearchActivity"
             android:exported="true"
             android:label="搜索"
             android:screenOrientation="portrait" />

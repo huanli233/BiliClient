@@ -109,6 +109,19 @@
         app:layout_constraintStart_toStartOf="@+id/officialIcon"
         app:layout_constraintTop_toBottomOf="@id/userOfficial" />
 
+    <ToggleButton
+        android:id="@+id/followBtn"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:textOff="未关注"
+        android:textOn="已关注"
+        android:textColor="#fff"
+        android:background="@drawable/background_follow_btn"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@id/userDesc"
+        app:layout_constraintEnd_toEndOf="@id/userDesc"
+        app:layout_constraintTop_toBottomOf="@id/userOfficialDesc" />
+
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
@@ -119,6 +132,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userOfficialDesc" />
+        app:layout_constraintTop_toBottomOf="@id/followBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

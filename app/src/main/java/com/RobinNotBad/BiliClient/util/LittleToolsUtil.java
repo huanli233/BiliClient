@@ -29,7 +29,9 @@ public class LittleToolsUtil {
     public static String htmlReString(String html){
         return html.replace("<p>","")
                 .replace("</p>","\n")
-                .replace("<br>","\n");
+                .replace("<br>","\n")
+                .replace("<em class=\"keyword\">","")
+                .replace("</em>","");
     }
 
     public static String stringToFile(String str){

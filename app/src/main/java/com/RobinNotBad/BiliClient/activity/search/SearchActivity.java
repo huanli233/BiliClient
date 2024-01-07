@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.activity.video;
+package com.RobinNotBad.BiliClient.activity.search;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,38 +12,39 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
-import com.RobinNotBad.BiliClient.adapter.SearchAdapter;
+import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.SearchApi;
+import com.RobinNotBad.BiliClient.model.ArticleInfo;
+import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchActivity extends BaseActivity {
 
-    private RecyclerView recyclerView;
+    private ViewPager viewPager;
     private ConstraintLayout searchBar;
     private ArrayList<VideoCard> videoCardList;
-    private SearchAdapter searchAdapter;
+    private ArrayList<UserInfo> userInfoList;
+    private ArrayList<ArticleInfo> articleInfoList;
     private String keyword;
     private boolean refreshing = false;
-    private boolean bottom = false;
-    private int page = 0;
     private boolean firstRun = true;
-    private int searchbar_alpha = 100;
 
     @SuppressLint("StaticFieldLeak")
     public static SearchActivity instance = null;
@@ -55,10 +56,11 @@ public class SearchActivity extends BaseActivity {
         instance = this;
         Log.e("debug","进入搜索页");
 
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
+        viewPager = findViewById(R.id.viewPager);
+
         videoCardList = new ArrayList<>();
-        searchAdapter = new SearchAdapter(this,videoCardList);
+        userInfoList = new ArrayList<>();
+        articleInfoList = new ArrayList<>();
 
         findViewById(R.id.top).setOnClickListener(view -> {
             Intent intent = new Intent();
@@ -79,38 +81,10 @@ public class SearchActivity extends BaseActivity {
             return false;
         });
 
-        recyclerView.setAdapter(searchAdapter);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                assert manager != null;
-                int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();  //获取最后一个完全显示的itemPosition
-                int itemCount = manager.getItemCount();
-                if (lastItemPosition >= (itemCount - 3) && dy>0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
-                    refreshing = true;
-                    CenterThreadPool.run(() -> continueLoading()); //加载第二页
-                }
-                searchbar_alpha = searchbar_alpha - dy;
-                if(searchbar_alpha < 0){
-                    searchbar_alpha = 0;
-                    searchBar.setVisibility(View.GONE);
-                }else{
-                    searchBar.setVisibility(View.VISIBLE);
-                }
-                if(searchbar_alpha > 100){
-                    searchbar_alpha = 100;
-                }
-                searchBar.setAlpha(searchbar_alpha / 100f);
-                Log.e("debug","dx=" + dx + ",dy=" + dy);
-            }
-        });
-
+        if(SharedPreferencesUtil.getBoolean("first_search",true)){
+            Toast.makeText(this, "提示：本页面可以左右滑动", Toast.LENGTH_LONG).show();
+            SharedPreferencesUtil.putBoolean("first_search",false);
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -128,39 +102,45 @@ public class SearchActivity extends BaseActivity {
 
         if(!refreshing) {
             refreshing = true;
-            bottom = false;
 
             InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
-
 
             if (str.isEmpty()) {
                 runOnUiThread(() -> Toast.makeText(this, "你还木有输入内容哦~", Toast.LENGTH_SHORT).show());
             } else {
                 keyword = str;
 
-                if (firstRun) {
-                    recyclerView.setAdapter(searchAdapter);
-                    firstRun = false;
-                } else {
-                    int size = videoCardList.size();
+                if (firstRun) firstRun = false;
+                else {
                     videoCardList.clear();
-                    searchAdapter.notifyItemRangeRemoved(0,size);
+                    userInfoList.clear();
+                    articleInfoList.clear();
                     Log.e("debug", "清空");
                 }
 
                 CenterThreadPool.run(() -> {
                     try {
-                        page = 1;
-                        JSONArray result = SearchApi.search(keyword, 1);
-                        if (result != null) {
-                            SearchApi.getVideosFromSearchResult(result, videoCardList);
-                            runOnUiThread(() -> {
-                                searchAdapter.notifyItemRangeInserted(0, videoCardList.size());
-                                Log.e("debug", "刷新");
-                            });
-                        } else runOnUiThread(() -> MsgUtil.toast("搜索结果为空OwO", this));
+                        JSONArray resultVideo = SearchApi.search(keyword, 1);
+                        JSONArray resultUser = SearchApi.searchType(keyword, 1,"bili_user");
+                        JSONArray resultArticle = SearchApi.searchType(keyword, 1,"article");
+
+                        if (resultVideo != null) {
+                            SearchApi.getVideosFromSearchResult(resultVideo, videoCardList);
+                            Log.e("debug", "刷新");
+                        } else runOnUiThread(() -> MsgUtil.toast("视频搜索结果为空OwO", this));
+
+                        if (resultUser != null) {
+                            SearchApi.getUsersFromSearchResult(resultUser, userInfoList);
+                            Log.e("debug", "刷新");
+                        } else runOnUiThread(() -> MsgUtil.toast("用户搜索结果为空OwO", this));
+
+                        if (resultArticle != null) {
+                            SearchApi.getArticlesFromSearchResult(resultArticle, articleInfoList);
+                            Log.e("debug", "刷新");
+                        } else runOnUiThread(() -> MsgUtil.toast("用户搜索结果为空OwO", this));
+
+                        reload_fragments();
                     } catch (IOException e) {
                         runOnUiThread(() -> MsgUtil.quickErr(MsgUtil.err_net, this));
                         e.printStackTrace();
@@ -174,29 +154,17 @@ public class SearchActivity extends BaseActivity {
         }
     }
 
-    private void continueLoading(){
-        refreshing = true;
-        page++;
-        Log.e("debug","加载下一页");
-        int lastSize = videoCardList.size();
-        try {
-            JSONArray result =  SearchApi.search(keyword,page);
-            if(result!=null) {
-                SearchApi.getVideosFromSearchResult(result, videoCardList);
-                runOnUiThread(() -> searchAdapter.notifyItemRangeInserted(lastSize + 1,videoCardList.size()-lastSize));
-            }
-            else {
-                bottom = true;
-                MsgUtil.toast("已经到底啦OwO",this);
-            }
-        } catch (IOException e){
-            runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
-            e.printStackTrace();
-        } catch (JSONException e) {
-            runOnUiThread(()-> MsgUtil.jsonErr(e,this));
-            e.printStackTrace();
-        }
-        refreshing = false;
-    }
+    private void reload_fragments(){
+        List<Fragment> fragmentList = new ArrayList<>();
+        SearchVideoFragment searchVideoFragment = SearchVideoFragment.newInstance(videoCardList,searchBar,keyword);
+        fragmentList.add(searchVideoFragment);
+        SearchArticleFragment searchArticleFragment  = SearchArticleFragment.newInstance(articleInfoList,searchBar,keyword);
+        fragmentList.add(searchArticleFragment);
+        SearchUserFragment searchUserFragment  = SearchUserFragment.newInstance(userInfoList,searchBar,keyword);
+        fragmentList.add(searchUserFragment);
+        viewPager.setOffscreenPageLimit(fragmentList.size());
 
+        ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
+        viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
+    }
 }

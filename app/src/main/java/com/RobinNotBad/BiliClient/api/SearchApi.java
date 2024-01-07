@@ -2,6 +2,8 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.util.Log;
 
+import com.RobinNotBad.BiliClient.model.ArticleInfo;
+import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
@@ -33,6 +35,27 @@ public class SearchApi {
 
         String url = "https://api.bilibili.com/x/web-interface/wbi/search/all/v2?page=" + page +
                 "&keyword=" + URLEncoder.encode(search_keyword, "UTF-8") + "&seid=" + seid;
+        url = ConfInfoApi.signWBI(url);
+        Log.e("debug-搜索链接",url);
+
+        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.defHeaders).body()).string());  //得到一整个json
+
+        JSONObject data = all.getJSONObject("data");  //搜索列表中的data项又是一个json，把它提出来
+
+        seid = data.getString("seid");
+
+        if(data.has("result") && !data.isNull("result")) return data.getJSONArray("result");  //其实这还不是我们要的结果，下面的函数对它进行再次拆解  这里做了判空
+        else return null;
+    }
+
+    public static JSONArray searchType(String keyword,int page,String type) throws IOException , JSONException {
+        if(!search_keyword.equals(keyword)) {
+            search_keyword = keyword;
+            seid = "";
+        }
+
+        String url = "https://api.bilibili.com/x/web-interface/wbi/search/type?page=" + page +
+                "&keyword=" + URLEncoder.encode(search_keyword, "UTF-8") + "&search_type=" + type + "&seid=" + seid;
         url = ConfInfoApi.signWBI(url);
         Log.e("debug-搜索链接",url);
 
@@ -90,5 +113,50 @@ public class SearchApi {
         }
     }
 
+    public static void getUsersFromSearchResult(JSONArray input,ArrayList<UserInfo> userInfoList) throws JSONException {
+        for (int i = 0; i < input.length(); i++) {
+            JSONObject card = input.getJSONObject(i);    //获得用户卡片
+
+            long mid = card.getLong("mid");
+            String name = card.getString("uname");
+            String avatar = "http:" + card.getString("upic");
+            String sign = card.getString("usign");
+            int fans = card.getInt("fans");
+            int level = card.getInt("level");
+
+            userInfoList.add(new UserInfo(mid,name,avatar,sign,fans,level,false,"",0,""));
+        }
+    }
+
+    public static void getArticlesFromSearchResult(JSONArray input,ArrayList<ArticleInfo> articleInfoList) throws JSONException {
+        for (int i = 0; i < input.length(); i++) {
+            ArticleInfo articleInfo = new ArticleInfo();
+            JSONObject card = input.getJSONObject(i);    //获得专栏卡片
+
+            articleInfo.id = card.getLong("id");
+            if(card.getJSONArray("image_urls").length() > 0) articleInfo.banner = card.getJSONArray("image_urls").getString(0);
+            else articleInfo.banner = "";
+            articleInfo.summary = "";
+            articleInfo.wordCount = 0;
+            articleInfo.isLike = false;
+            articleInfo.upLevel = 0;
+            articleInfo.upMid = card.getLong("mid");
+            articleInfo.upName = "";
+            articleInfo.upAvatar = "";
+            articleInfo.upFans = 0;
+            articleInfo.like = card.getInt("like");
+            articleInfo.favourite = 0;
+            articleInfo.reply = 0;
+            articleInfo.coin = 0;
+            articleInfo.share = 0;
+            articleInfo.keywords = "";
+            articleInfo.content = "";
+            articleInfo.title = LittleToolsUtil.htmlReString(card.getString("title"));
+            articleInfo.ctime = card.getLong("pub_time");
+            articleInfo.view = LittleToolsUtil.toWan(card.getInt("view")) + "阅读";
+
+            articleInfoList.add(articleInfo);
+        }
+    }
 }
 

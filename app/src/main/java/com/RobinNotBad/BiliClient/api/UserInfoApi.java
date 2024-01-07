@@ -164,13 +164,13 @@ public class UserInfoApi {
         else return -1;
     }
 
-    public static boolean followUser(int mid,boolean isFollow) {
+    public static boolean followUser(long mid,boolean isFollow) {
         try {
             String url = "https://api.bilibili.com/x/relation/modify?";
             String arg = "fid=" + mid + "&csrf=" + LittleToolsUtil.getInfoFromCookie("bili_jct", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
-            if(isFollow) arg += "&act=2"; //关注
-            else arg += "&act=1"; //取消关注
-            JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + arg, ConfInfoApi.webHeaders).body()).string());
+            if(isFollow) arg += "&act=1"; //关注
+            else arg += "&act=2"; //取消关注
+            JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url,arg, ConfInfoApi.webHeaders).body()).string());
             return (all.getInt("code") == 0);
         }catch (Exception e){
             e.printStackTrace();

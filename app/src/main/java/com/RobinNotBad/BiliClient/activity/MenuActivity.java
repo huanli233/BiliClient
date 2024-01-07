@@ -16,7 +16,7 @@ import com.RobinNotBad.BiliClient.activity.settings.SettingMainActivity;
 import com.RobinNotBad.BiliClient.activity.user.MySpaceActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
-import com.RobinNotBad.BiliClient.activity.video.SearchActivity;
+import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
 
