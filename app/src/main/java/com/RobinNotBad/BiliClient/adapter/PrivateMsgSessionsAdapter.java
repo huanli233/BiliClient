@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.adapter;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.message.PrivateMsgActivity;
 import com.RobinNotBad.BiliClient.adapter.PrivateMsgAdapter;
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.model.PrivateMsgSession;
@@ -57,6 +59,11 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
                             .placeholder(R.drawable.akari)
                             .apply(RequestOptions.circleCropTransform())
                             .into(holder.avatarView);
+            holder.itemView.setOnClickListener(view->{
+                Intent intent = new Intent(context,PrivateMsgActivity.class);
+                intent.putExtra("uid",msgContent.talkerUid);
+                context.startActivity(intent);
+            });
         } catch (JSONException err) {
             Log.e("PrivateMsgUserAdapter",err.toString());
         }

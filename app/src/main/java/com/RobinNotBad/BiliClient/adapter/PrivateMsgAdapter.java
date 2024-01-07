@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.adapter;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,15 +16,20 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.BiliClient;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
+import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.PrivateMsgAdapter;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
+import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 import okhttp3.Cache;
 import org.json.JSONException;
 
@@ -97,6 +103,17 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                     Glide.with(context)
                             .load(msg.content.getString("url"))
                             .into(holder.picMsg);
+                    holder.picMsg.setOnClickListener(view->{
+                        ArrayList<String> imageList = new ArrayList<String>();
+                        try{
+                            imageList.add(msg.content.getString("url"));
+                        }catch(JSONException e){
+                            Log.e("",e.toString());
+                        }
+                        Intent intent = new Intent(context,ImageViewerActivity.class);
+                        intent.putStringArrayListExtra("imageList",imageList);
+                        context.startActivity(intent);
+                    });
                     break;
                 case PrivateMessage.TYPE_TIP:
                     holder.tipTv.setVisibility(View.VISIBLE);
@@ -117,6 +134,23 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                             .into(holder.videoCover);
                     holder.upNameTv.setText(msg.content.getString("author"));
                     holder.videoTitleTv.setText(msg.content.getString("title"));
+                    holder.videoCard.setOnClickListener(view->{
+                        CenterThreadPool.run(()->{
+                            try {
+                                long aid = msg.content.getLong("id");
+                                String bvid = VideoInfoApi.getJsonByAid(aid).getString("bvid");
+                                Intent intent = new Intent(context,VideoInfoActivity.class);
+                                intent.putExtra("aid",aid);
+                                intent.putExtra("bvid",bvid);
+                                intent.putExtra("type","video");
+                                context.startActivity(intent);
+                        } catch(IOException err) {
+                        	Log.e("",err.toString());
+                        } catch(JSONException err){
+                            Log.e("",err.toString());
+                        }
+                        });
+                    });
                     break;
                 default:
                     holder.textContentCard.setVisibility(View.VISIBLE);

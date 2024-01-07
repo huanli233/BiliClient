@@ -49,7 +49,7 @@ public class PrivateMsgApi {
                     }
                     msgObject.content = new JSONObject("{\"content\":\" .\"}");   //防止内容不为json时解析错误
                     if(msgJson.getString("content").endsWith("}")&&msgJson.getString("content").startsWith("{")){
-                    msgObject.content = new JSONObject(msgJson.getString("content").replace("\\",""));
+                    msgObject.content = new JSONObject(msgJson.getString("content")/*.replace("\\","")*/);
                     }
                     msgObject.timestamp = msgJson.getLong("timestamp");
                     msgObject.msgId = msgJson.getLong("msg_key");
@@ -101,7 +101,7 @@ public class PrivateMsgApi {
                 session.contentType = sessionJson.getJSONObject("last_msg").getInt("msg_type");
                 session.content = new JSONObject("{\"content\":\" .\"}");
                 if(sessionJson.getJSONObject("last_msg").getString("content").endsWith("}")&&sessionJson.getJSONObject("last_msg").getString("content").startsWith("{")){
-                    session.content = new JSONObject(sessionJson.getJSONObject("last_msg").getString("content").replace("\\","")) ;
+                    session.content = new JSONObject(sessionJson.getJSONObject("last_msg").getString("content")/*.replace("\\","")*/) ;
                 }
                 session.unread = sessionJson.getInt("unread_count");
                 if(!sessionJson.has("account_info")&&sessionJson.isNull("account_info")){

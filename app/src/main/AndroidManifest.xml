@@ -234,9 +234,9 @@
             android:label="登录"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.TestPriMsg"
+            android:name=".activity.message.PrivateMsgActivity"
             android:exported="true"
-            android:label="测试"
+            android:label="私信"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SplashActivity"

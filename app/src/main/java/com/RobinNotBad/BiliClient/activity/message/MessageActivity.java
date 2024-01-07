@@ -4,17 +4,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.adapter.PrivateMsgSessionsAdapter;
 import com.RobinNotBad.BiliClient.api.MessageApi;
+import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
+import com.RobinNotBad.BiliClient.model.PrivateMsgSession;
+import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.google.android.material.card.MaterialCardView;
+import java.util.ArrayList;
+import java.util.HashMap;
 import org.json.JSONObject;
 
 
 public class MessageActivity extends BaseActivity {
     public static MessageActivity instance = null;
+    private RecyclerView sessionsView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,15 +74,27 @@ public class MessageActivity extends BaseActivity {
             ((TextView)findViewById(R.id.system_text)).setText("系统通知(0未读)");
         });
 
+        sessionsView = findViewById(R.id.sessions_list);
+        sessionsView.setNestedScrollingEnabled(false);
+        
         CenterThreadPool.run(() -> {
             try {
                 JSONObject stats = MessageApi.getUnread();
+                ArrayList<PrivateMsgSession> sessionsList = PrivateMsgApi.getSessionsList(20);
+                ArrayList<Long> uidList = new ArrayList<>();
+                for(PrivateMsgSession item :sessionsList) {
+                	uidList.add(item.talkerUid);
+                }    
+                HashMap<Long,UserInfo> userMap = PrivateMsgApi.getUsersInfo(uidList);
+                PrivateMsgSessionsAdapter adapter = new PrivateMsgSessionsAdapter(this,sessionsList,userMap);
                 runOnUiThread(() -> {
                     try {
                         ((TextView) findViewById(R.id.reply_text)).setText("回复我的(" + stats.getInt("reply") + "未读)");
                         ((TextView) findViewById(R.id.like_text)).setText("收到的赞(" + stats.getInt("like") + "未读)");
                         ((TextView) findViewById(R.id.at_text)).setText("@我(" + stats.getInt("at") + "未读)");
                         ((TextView) findViewById(R.id.system_text)).setText("系统通知(" + stats.getInt("system") + "未读)");
+                        sessionsView.setLayoutManager(new LinearLayoutManager(this));
+                        sessionsView.setAdapter(adapter);
                     }catch (Exception e){
                         e.printStackTrace();
                         Toast.makeText(this, "解析消息数据失败:(", Toast.LENGTH_SHORT).show();

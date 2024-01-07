@@ -9,7 +9,8 @@
     <TextView
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
-         android:textSize="11sp"
+         android:textSize="10sp"
+         android:layout_marginStart="6dp"
          android:id="@+id/msg_name"
          android:text="用户名" />
 
