@@ -6,6 +6,7 @@ import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.model.PrivateMsgSession;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +19,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class PrivateMsgApi {
+    
+    public static final int MSG_TYPE_TEXT = 1;
+    public static final int MSG_TYPE_PIC = 2;
+    public static final int MSG_TYPE_RETRACT = 5;
+    
     
     //返回的是倒序的消息列表，使用时记得列表倒置
     public static ArrayList<PrivateMessage> getPrivateMsg(long talkerId,int size) throws IOException, JSONException {
@@ -110,5 +116,31 @@ public class PrivateMsgApi {
             }
         }
     	return sessionList;
+    }
+    
+    public static int sendMsg(long senderUid, long receiverUid,int msgType,long timestamp,String content) throws IOException, JSONException {
+        String url = "https://api.vc.bilibili.com/web_im/v1/web_im/send_msg";
+        String per = "dev_id=" + getDevId() + "&msg_type="+msgType+"&content=" + content + "&receiver_type=1&csrf=" + SharedPreferencesUtil.getString("csrf","")+"&sender_id="+senderUid+"&receiver_id"+receiverUid+"&timestamp="+System.currentTimeMillis();
+
+        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, ConfInfoApi.webHeaders).body()).string());
+        Log.e("debug-发送私信",result.toString());
+        return result.getInt("code");
+    }
+    
+    private static String getDevId() {
+        char[] b = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        char[] s = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".toCharArray();
+        for (int i = 0; i < s.length; i++) {
+            if ('-' == s[i] || '4' == s[i]) {
+                continue;
+            }
+            int randomInt = (int) (16 * Math.random());
+            if ('x' == s[i]) {
+                s[i] = b[randomInt];
+            } else {
+                s[i] = b[3 & randomInt | 8];
+            }
+        }
+        return new String(s);
     }
 }
