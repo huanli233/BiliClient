@@ -14,6 +14,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.FollowListAdapter;
 import com.RobinNotBad.BiliClient.api.FollowApi;
 import com.RobinNotBad.BiliClient.model.UserInfo;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -51,7 +52,7 @@ public class FollowListActivity extends BaseActivity {
         mid = SharedPreferencesUtil.getLong("mid",0);
         userList = new ArrayList<>();
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             try {
                 int result = FollowApi.getFollowList(mid, page, userList);
                 adapter = new FollowListAdapter(this,userList);
@@ -73,7 +74,7 @@ public class FollowListActivity extends BaseActivity {
                             int itemCount = manager.getItemCount();
                             if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                                 refreshing = true;
-                                new Thread(() -> continueLoading()).start(); //加载第二页
+                                CenterThreadPool.run(() -> continueLoading()); //加载第二页
                             }
                         }
                     });
@@ -91,7 +92,7 @@ public class FollowListActivity extends BaseActivity {
                 runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,this));
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     private void continueLoading() {

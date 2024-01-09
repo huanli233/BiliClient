@@ -20,6 +20,7 @@ import com.RobinNotBad.BiliClient.activity.user.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -65,10 +66,10 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
             content.setVisibility(View.VISIBLE);
             content.setText(dynamic.content);
             if (dynamic.emote != null) {
-                new Thread(() -> {
+                CenterThreadPool.run(() -> {
                     try {
                         SpannableString spannableString = EmoteUtil.textReplaceEmote(dynamic.content, dynamic.emote, 1.0f, context);
-                        ((Activity) context).runOnUiThread(() -> content.setText(spannableString));
+                        CenterThreadPool.runOnMainThread(() -> content.setText(spannableString));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
@@ -76,7 +77,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }).start();
+                });
             }
         }else content.setVisibility(View.GONE);
         Glide.with(context).load(dynamic.userAvatar)

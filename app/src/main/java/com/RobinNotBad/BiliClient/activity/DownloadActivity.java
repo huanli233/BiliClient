@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -90,7 +91,7 @@ public class DownloadActivity extends BaseActivity {
         scrHeight = metrics.heightPixels;
 
         timer.schedule(showText,100,100);
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             if(type == 0){
                 rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"BiliClient");
                 if(!rootPath.exists()) rootPath.mkdirs();
@@ -120,7 +121,7 @@ public class DownloadActivity extends BaseActivity {
                 if(!coverFile.exists()) download(cover,coverFile,"下载封面",false);
                 download(link,videoFile,"下载视频",true);
             }
-        }).start();
+        });
 
     }
 

@@ -22,6 +22,7 @@ import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.CookieRefreshApi;
 import com.RobinNotBad.BiliClient.api.UserLoginApi;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -59,7 +60,7 @@ public class SplashActivity extends Activity {
 
         splashText = findViewById(R.id.splashText);
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
 
             //FileUtil.clearCache(this);  //先清个缓存（为了防止占用过大）
             //不需要了，我把大部分图片的硬盘缓存都关闭了，只有表情包保留，这样既可以缩减缓存占用又能在一定程度上减少流量消耗
@@ -79,7 +80,7 @@ public class SplashActivity extends Activity {
                     intent.setClass(SplashActivity.this, RecommendActivity.class);   //已登录且联网，去首页
                     startActivity(intent);
 
-                    new Thread(() -> ConfInfoApi.check(SplashActivity.this)).start();
+                    CenterThreadPool.run(() -> ConfInfoApi.check(SplashActivity.this));
 
                     finish();
                 } catch (IOException e) {
@@ -109,7 +110,7 @@ public class SplashActivity extends Activity {
                 finish();
             }
 
-        }).start();
+        });
     }
 
     private void checkCookie() {

@@ -75,7 +75,7 @@ public class LocalListActivity extends BaseActivity {
             adapter.setOnLongClickListener(position -> {
                 if(longClickPosition == position) {
                     File file = new File(ConfInfoApi.getDownloadPath(this), videoList.get(position).title);
-                    new Thread(()-> FileUtil.deleteFolder(file)).start();
+                    CenterThreadPool.run(()-> FileUtil.deleteFolder(file));
                     Toast.makeText(this, "删除成功", Toast.LENGTH_SHORT).show();
                     videoList.remove(position);
                     adapter.notifyItemRemoved(position);

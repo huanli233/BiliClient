@@ -12,6 +12,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.MessageAdapter;
 import com.RobinNotBad.BiliClient.api.MessageApi;
 import com.RobinNotBad.BiliClient.model.MessageCard;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import java.util.ArrayList;
 
@@ -36,7 +37,7 @@ public class MessageListActivity extends BaseActivity{
 
         messageList = new ArrayList<>();
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             try {
                 Intent intent = getIntent();
                 String pageType = intent.getStringExtra("type");
@@ -57,6 +58,6 @@ public class MessageListActivity extends BaseActivity{
                 runOnUiThread(()-> MsgUtil.jsonErr(e,this));
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 }

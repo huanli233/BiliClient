@@ -65,7 +65,7 @@ public class MySpaceActivity extends BaseActivity {
 
 
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             try {
                 UserInfo userInfo = UserInfoApi.getCurrentUserInfo();
                 int userCoin = UserInfoApi.getCurrentUserCoin();
@@ -135,7 +135,7 @@ public class MySpaceActivity extends BaseActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
 
 
     }

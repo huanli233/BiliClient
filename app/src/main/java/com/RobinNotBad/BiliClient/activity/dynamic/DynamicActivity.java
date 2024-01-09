@@ -18,6 +18,7 @@ import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.adapter.DynamicAdapter;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import org.json.JSONException;
@@ -68,7 +69,7 @@ public class DynamicActivity extends BaseActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void refreshDynamic() {
         Log.e("debug","刷新");
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             if (firstRefresh) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(DynamicActivity.this));
                 dynamicList = new ArrayList<>();
@@ -85,7 +86,7 @@ public class DynamicActivity extends BaseActivity {
             refreshing = true;
             addRecommend();
 
-        }).start();
+        });
     }
 
     private void addRecommend() {
@@ -115,7 +116,7 @@ public class DynamicActivity extends BaseActivity {
                             int itemCount = manager.getItemCount();
                             if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                                 refreshing = true;
-                                new Thread(() -> addRecommend()).start(); //加载第二页
+                                CenterThreadPool.run(() -> addRecommend()); //加载第二页
                             }
                         }
                     });

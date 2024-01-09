@@ -11,10 +11,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.UserLoginApi;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.NetWorkUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.*;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
@@ -102,7 +99,7 @@ public class QRLoginActivity extends BaseActivity {
         runOnUiThread(()->qrImageView.setEnabled(false));
 
         qrImageView.setImageResource(R.drawable.loading);
-        new Thread(() ->{
+        CenterThreadPool.run(() ->{
             try{
                 runOnUiThread(() -> scanStat.setText("正在获取二维码"));
                 QRImage = UserLoginApi.getLoginQR();
@@ -119,7 +116,7 @@ public class QRLoginActivity extends BaseActivity {
                 });
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     @Override

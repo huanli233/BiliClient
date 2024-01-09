@@ -15,6 +15,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.FavoriteApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import org.json.JSONException;
@@ -58,7 +59,7 @@ public class FavoriteVideoListActivity extends BaseActivity {
 
         videoList = new ArrayList<>();
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             try {
                 int result = FavoriteApi.getFolderVideos(mid,fid,page,videoList);
                 if(result != -1) {
@@ -66,7 +67,7 @@ public class FavoriteVideoListActivity extends BaseActivity {
 
                     videoCardAdapter.setOnLongClickListener(position -> {
                         if(longClickPosition == position) {
-                            new Thread(() -> {
+                            CenterThreadPool.run(() -> {
                                 try {
                                     int delResult = FavoriteApi.deleteFavorite(videoList.get(position).aid,fid);
                                     longClickPosition = -1;
@@ -82,7 +83,7 @@ public class FavoriteVideoListActivity extends BaseActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                            }).start();
+                            });
                         }
                         else {
                             longClickPosition = position;
@@ -108,7 +109,7 @@ public class FavoriteVideoListActivity extends BaseActivity {
                                 int itemCount = manager.getItemCount();
                                 if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                                     refreshing = true;
-                                    new Thread(() -> continueLoading()).start(); //加载第二页
+                                    CenterThreadPool.run(() -> continueLoading()); //加载第二页
                                 }
                             }
                         });
@@ -126,7 +127,7 @@ public class FavoriteVideoListActivity extends BaseActivity {
                 runOnUiThread(()-> MsgUtil.jsonErr(e,this));
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     @SuppressLint("NotifyDataSetChanged")

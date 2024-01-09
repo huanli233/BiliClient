@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.api.FavoriteApi;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
@@ -67,7 +68,7 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
 
         holder.itemView.setOnClickListener(view -> {
             if(chooseState.get(position)){
-                new Thread(()->{
+                CenterThreadPool.run(()->{
                     try {
                         int result = FavoriteApi.deleteFavorite(aid,fidList.get(position));
                         if(result==0) {
@@ -84,12 +85,12 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }).start();
+                });
             }
             else{
                 cardView.setStrokeColor(context.getResources().getColor(R.color.gray));
                 cardView.setStrokeWidth(LittleToolsUtil.dp2px(0.1f,context));
-                new Thread(()->{
+                CenterThreadPool.run(()->{
                     try {
                         int result = FavoriteApi.addFavorite(aid,fidList.get(position));
                         if(result==0) {
@@ -108,7 +109,7 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }).start();
+                });
             }
         });
 

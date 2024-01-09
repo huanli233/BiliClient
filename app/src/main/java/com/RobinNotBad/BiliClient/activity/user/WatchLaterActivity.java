@@ -12,6 +12,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.WatchLaterApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import org.json.JSONException;
@@ -39,14 +40,14 @@ public class WatchLaterActivity extends BaseActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             try {
                 ArrayList<VideoCard> videoCardList = WatchLaterApi.getWatchLaterList();
                 VideoCardAdapter adapter = new VideoCardAdapter(this,videoCardList);
 
                 adapter.setOnLongClickListener(position -> {
                     if(longClickPosition == position) {
-                        new Thread(() -> {
+                        CenterThreadPool.run(() -> {
                             try {
                                 int result = WatchLaterApi.delete(videoCardList.get(position).aid);
                                 longClickPosition = -1;
@@ -62,7 +63,7 @@ public class WatchLaterActivity extends BaseActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                        }).start();
+                        });
                     }
                     else {
                         longClickPosition = position;
@@ -81,7 +82,7 @@ public class WatchLaterActivity extends BaseActivity {
                 runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,this));
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
 }

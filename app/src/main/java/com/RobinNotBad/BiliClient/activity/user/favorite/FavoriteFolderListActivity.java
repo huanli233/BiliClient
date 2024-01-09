@@ -12,6 +12,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.FavoriteFolderAdapter;
 import com.RobinNotBad.BiliClient.api.FavoriteApi;
 import com.RobinNotBad.BiliClient.model.FavoriteFolder;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -41,7 +42,7 @@ public class FavoriteFolderListActivity extends BaseActivity {
         TextView pageName = findViewById(R.id.pageName);
         pageName.setText("收藏");
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             try {
                 ArrayList<FavoriteFolder> folderList = FavoriteApi.getFavoriteFolders(mid);
                 FavoriteFolderAdapter adapter = new FavoriteFolderAdapter(this,folderList,mid);
@@ -56,6 +57,6 @@ public class FavoriteFolderListActivity extends BaseActivity {
                 runOnUiThread(()-> MsgUtil.jsonErr(e,this));
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 }

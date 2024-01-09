@@ -15,6 +15,7 @@ import com.RobinNotBad.BiliClient.adapter.DynamicHolder;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class DynamicInfoFragment extends Fragment {
 
         ScrollView scrollView = view.findViewById(R.id.scrollView);
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             try {
                 Dynamic dynamic = DynamicApi.analyzeDynamic(DynamicApi.getDynamicInfo(id));
                 if(isAdded()) requireActivity().runOnUiThread(() -> {
@@ -77,7 +78,7 @@ public class DynamicInfoFragment extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
 
     }
 }

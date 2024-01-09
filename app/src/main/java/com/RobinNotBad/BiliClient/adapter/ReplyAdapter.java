@@ -26,6 +26,7 @@ import com.RobinNotBad.BiliClient.activity.video.info.ReplyInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.WriteReplyActivity;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.model.Reply;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
 import com.RobinNotBad.BiliClient.view.CustomListView;
 import com.bumptech.glide.Glide;
@@ -99,7 +100,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             String text = replyList.get(realPosition).message;
             replyHolder.message.setText(text);  //防止加载速度慢时露出鸡脚
             if(replyList.get(realPosition).emote != null) {
-                new Thread(() -> {
+                CenterThreadPool.run(() -> {
                     try {
                         SpannableString spannableString = EmoteUtil.textReplaceEmote(text, replyList.get(realPosition).emote, 1.0f, context);
                         ((Activity) context).runOnUiThread(() -> replyHolder.message.setText(spannableString));
@@ -110,7 +111,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }).start();
+                });
             }
 
             replyHolder.likeCount.setText(String.valueOf(replyList.get(realPosition).likeCount));
@@ -175,7 +176,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 context.startActivity(intent);
             });
 
-            replyHolder.likeCount.setOnClickListener(view -> new Thread(() -> {
+            replyHolder.likeCount.setOnClickListener(view -> CenterThreadPool.run(() -> {
                 if (!replyList.get(realPosition).liked) {
                     try {
                         if (ReplyApi.likeReply(oid, replyList.get(realPosition).rpid, true) == 0) {
@@ -211,7 +212,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         e.printStackTrace();
                     }
                 }
-            }).start());
+            }));
 
             replyHolder.replyBtn.setOnClickListener(view -> {
                 Intent intent = new Intent();

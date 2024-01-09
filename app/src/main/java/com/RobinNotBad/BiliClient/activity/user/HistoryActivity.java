@@ -13,6 +13,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import org.json.JSONException;
@@ -46,7 +47,7 @@ public class HistoryActivity extends BaseActivity {
 
         videoList = new ArrayList<>();
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             try {
                 int result = HistoryApi.getHistory(page,videoList);
                 if(result != -1) {
@@ -69,7 +70,7 @@ public class HistoryActivity extends BaseActivity {
                                 int itemCount = manager.getItemCount();
                                 if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                                     refreshing = true;
-                                    new Thread(() -> continueLoading()).start(); //加载第二页
+                                    CenterThreadPool.run(() -> continueLoading()); //加载第二页
                                 }
                             }
                         });
@@ -87,7 +88,7 @@ public class HistoryActivity extends BaseActivity {
                 runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,this));
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     private void continueLoading() {

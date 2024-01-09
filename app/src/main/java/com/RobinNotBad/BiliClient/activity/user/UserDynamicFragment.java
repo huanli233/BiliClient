@@ -17,6 +17,7 @@ import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.UserInfo;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import org.json.JSONException;
@@ -71,7 +72,7 @@ public class UserDynamicFragment extends Fragment {
 
         dynamicList = new ArrayList<>();
 
-        new Thread(()->{
+        CenterThreadPool.run(()->{
             try {
                 UserInfo userInfo = UserInfoApi.getUserInfo(mid);
 
@@ -99,7 +100,7 @@ public class UserDynamicFragment extends Fragment {
                             int itemCount = manager.getItemCount();
                             if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                                 refreshing = true;
-                                new Thread(() -> continueLoading()).start(); //加载第二页
+                                CenterThreadPool.run(() -> continueLoading()); //加载第二页
                             }
                         }
                     });
@@ -111,7 +112,7 @@ public class UserDynamicFragment extends Fragment {
                 if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,getContext()));
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     @SuppressLint("NotifyDataSetChanged")
