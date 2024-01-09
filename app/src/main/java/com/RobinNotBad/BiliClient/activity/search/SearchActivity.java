@@ -140,7 +140,7 @@ public class SearchActivity extends BaseActivity {
                             Log.e("debug", "刷新");
                         } else runOnUiThread(() -> MsgUtil.toast("用户搜索结果为空OwO", this));
 
-                        reload_fragments();
+                        runOnUiThread(this::reload_fragments);
                     } catch (IOException e) {
                         runOnUiThread(() -> MsgUtil.quickErr(MsgUtil.err_net, this));
                         e.printStackTrace();

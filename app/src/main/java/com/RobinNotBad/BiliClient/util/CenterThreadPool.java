@@ -1,38 +1,45 @@
 package com.RobinNotBad.BiliClient.util;
 
-import com.bumptech.glide.util.Executors;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
+import androidx.core.util.Supplier;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
+import kotlinx.coroutines.*;
 
 /**
  * @author silent碎月
- * 核心运行线程池, 用CAS去做获取(watch端能不用synchroized就不用, 占性能)
- * 核心线程数: 1, 应对低并发
- * 最大线程数: CPU核心数 * 2, 这个数量是io密集型的最佳线程数
- * 特性: 创建的线程60s后才销毁, 期间如果有其他的runnable需要运行, 直接用已创建的线程
+ * 核心运行线程池, 内部其实直接用的Kotlin协程
  */
 public class CenterThreadPool {
 
-    private static final AtomicReference<ExecutorService> INSTANCE = new AtomicReference<>();
-    private static ExecutorService getInstance(){
-        while(INSTANCE.get() == null){
-            INSTANCE.compareAndSet(null, new ThreadPoolExecutor(
-                    1,
-                    Runtime.getRuntime().availableProcessors() * 2,
-                    60,
-                    TimeUnit.SECONDS,
-                    new ArrayBlockingQueue<>(10)
+    private static final CoroutineScope INSTANCE = CoroutineScopeKt.CoroutineScope(Dispatchers.getIO());
 
-
-            ));
-        }
-        return INSTANCE.get();
-    }
+    /**
+     * 在后台运行, 用于网络请求等耗时操作
+     * @param runnable 要运行的任务
+     */
     public static void run(Runnable runnable){
-        getInstance().submit(runnable);
+        BuildersKt.launch(INSTANCE, Dispatchers.getIO(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation continuation) -> {
+            runnable.run();
+            return Unit.INSTANCE;
+        });
+    }
+
+    /**
+     * 在后台运行, 用于网络请求等耗时操作, 有返回值, 使用LiveData.observe()获取返回值, 会自动切到主线程,不需要再runOnUiThread().
+     * @param supplier 要运行的任务
+     * @return LiveData包装的返回值
+     * @param <T> 返回值类型
+     */
+    public <T> LiveData<T> supplyAsync(Supplier<T> supplier) {
+        MutableLiveData<T> retval = new MutableLiveData<>();
+        BuildersKt.launch(INSTANCE, Dispatchers.getIO(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation continuation) -> {
+            T res = supplier.get();
+            retval.postValue(res);
+            return Unit.INSTANCE;
+        });
+        return retval;
     }
 
     /**
@@ -40,9 +47,11 @@ public class CenterThreadPool {
      * @param runnable 要运行的任务
      */
     public static void runOnMainThread(Runnable runnable){
-        Executors.mainThreadExecutor().execute(runnable);
+        BuildersKt.launch(INSTANCE, Dispatchers.getMain(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation continuation) -> {
+            runnable.run();
+            return Unit.INSTANCE;
+        });
     }
-
 
 // 想在这里实现一个自动切线程的网络请求一个方法,
 // 但是这种方式需要json转换器, 例如Gson, Moshi的第三方库的引入
@@ -54,4 +63,6 @@ public class CenterThreadPool {
 //        runOnUiThread(() -> callback.onSuccess(res));
 //       });
 //    }
+
+
 }
