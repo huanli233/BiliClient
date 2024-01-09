@@ -144,4 +144,50 @@ public class VideoReplyFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    public void setAid(long aid) {
+        this.aid = aid;
+        CenterThreadPool.run(()->{
+            try {
+                int result = ReplyApi.getReplies(aid,0,page,type,replyList);
+                if(result != -1) {
+                    replyAdapter = new ReplyAdapter(getContext(), replyList,aid,0,type);
+                    if(isAdded()) requireActivity().runOnUiThread(()->{
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                        recyclerView.setAdapter(replyAdapter);
+                        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                            @Override
+                            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                super.onScrollStateChanged(recyclerView, newState);
+                            }
+
+                            @Override
+                            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                super.onScrolled(recyclerView, dx, dy);
+                                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                                assert manager != null;
+                                int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();  //获取最后一个完全显示的itemPosition
+                                int itemCount = manager.getItemCount();
+                                if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
+                                    refreshing = true;
+                                    CenterThreadPool.run(() -> continueLoading()); //加载第二页
+                                }
+                            }
+                        });
+                    });
+                    if(result == 1) {
+                        Log.e("debug","到底了");
+                        bottom = true;
+                    }
+                }
+
+            } catch (IOException e){
+                requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
+                e.printStackTrace();
+            } catch (JSONException e) {
+                requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
+                e.printStackTrace();
+            }
+        });
+    }
 }

@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
+import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
+import com.RobinNotBad.BiliClient.activity.video.info.factory.MediaDetailInfo;
 import com.RobinNotBad.BiliClient.adapter.MediaEpisodesAdapter;
 import com.RobinNotBad.BiliClient.api.BilibiliIDConverter;
 import com.RobinNotBad.BiliClient.api.bangumi_to_card;
@@ -37,6 +39,7 @@ public class MediaInfoFragment extends Fragment {
     private int selectedSectionIndex = 0;
     private MediaSectionInfo sectionInfo;
     private Dialog dialog;
+    private MediaDetailInfo info;
 
     public static MediaInfoFragment newInstance(long mediaId) {
         Bundle args = new Bundle();
@@ -53,6 +56,7 @@ public class MediaInfoFragment extends Fragment {
         if (arguments != null) {
             mediaId = arguments.getString("media_id");
         }
+        info = (MediaDetailInfo)((VideoInfoActivity)requireActivity()).getInfo();
         binding = FragmentMediaInfoBinding.inflate(inflater);
         return binding.getRoot();
     }
@@ -63,7 +67,7 @@ public class MediaInfoFragment extends Fragment {
         LiveData<Pair<Media, MediaSectionInfo>> pairLiveData = CenterThreadPool.supplyAsync(() -> {
             try {
                 Media mediaInfo = bangumi_to_card.getMediaInfo(mediaId);
-                MediaSectionInfo sectionInfo = bangumi_to_card.getSectionInfo(mediaId);
+                MediaSectionInfo sectionInfo = bangumi_to_card.getSectionInfo(String.valueOf(mediaInfo.seasonId));
                 return new Pair(mediaInfo, sectionInfo);
             } catch (Exception e) {
                 Toast.makeText(requireContext(), "解析数据失败: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -102,11 +106,14 @@ public class MediaInfoFragment extends Fragment {
         //section selector setting.
         RecyclerView rv = binding.rvEposideList;
         MediaEpisodesAdapter adapter = new MediaEpisodesAdapter();
+        adapter.setOnItemClickListener(episodeInfo -> {
+            info.setCurrentEpisodeInfo(episodeInfo);
+        });
         binding.btnEpisode.setOnClickListener(v -> getSectionChooseDialog(mediaSectionInfo).show());
         rv.setAdapter(adapter);
         adapter.setData(mediaSectionInfo.mainSection.episodes);
+        info.setCurrentEpisodeInfo(mediaSectionInfo.mainSection.episodes[0]);
         rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-
         //play button setting
         binding.btnPlay.setOnClickListener(v -> {
             MediaSectionInfo.SectionInfo section = selectedSectionIndex == 0 ? mediaSectionInfo.mainSection : mediaSectionInfo.sections[selectedSectionIndex - 1];
@@ -141,5 +148,11 @@ public class MediaInfoFragment extends Fragment {
             dialog = builder.create();
         }
         return dialog;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        info = null;
     }
 }

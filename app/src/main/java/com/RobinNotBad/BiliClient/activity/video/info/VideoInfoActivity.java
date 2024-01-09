@@ -29,6 +29,10 @@ public class VideoInfoActivity extends BaseActivity {
         setContentView(info.getRootView());
     }
 
+    public DetailPage getInfo() {
+        return info;
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

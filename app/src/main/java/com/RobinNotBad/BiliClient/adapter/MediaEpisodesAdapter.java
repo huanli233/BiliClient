@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.util.Consumer;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
@@ -13,6 +14,12 @@ import com.RobinNotBad.BiliClient.model.MediaSectionInfo;
 
 public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdapter.MediaEpisodesViewHolder> {
     private MediaSectionInfo.EpisodeInfo[] data;
+
+    private Consumer<MediaSectionInfo.EpisodeInfo> onItemClickListener;
+
+    public void setOnItemClickListener(Consumer<MediaSectionInfo.EpisodeInfo> onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     private int selectedItemIndex = 0;
 
@@ -48,6 +55,11 @@ public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdap
     @Override
     public void onBindViewHolder(@NonNull MediaEpisodesViewHolder holder, int position) {
         MediaSectionInfo.EpisodeInfo episodeInfo = data[position];
+        holder.setOnClickListener(() -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.accept(episodeInfo);
+            }
+        });
         holder.bind(position, selectedItemIndex == position);
     }
 
@@ -57,6 +69,8 @@ public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdap
     }
 
     public class MediaEpisodesViewHolder extends RecyclerView.ViewHolder {
+
+        private Runnable outerClickListener;
 
         CellButtonOnlyTextBinding binding;
 
@@ -78,8 +92,16 @@ public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdap
             } else {
                 binding.btn.setTextColor(0xFFFFFFFF);
                 ViewCompat.setBackgroundTintList(binding.btn, AppCompatResources.getColorStateList(binding.getRoot().getContext(), R.color.background_button));
-                binding.btn.setOnClickListener(v -> setSelectedItemIndex(currentIndex));
+                binding.btn.setOnClickListener(v -> {
+                    setSelectedItemIndex(currentIndex);
+                    if (onItemClickListener != null) {
+                        onItemClickListener.accept(data[currentIndex]);
+                    }
+                });
             }
+        }
+        void setOnClickListener(Runnable runnable){
+            outerClickListener = runnable;
         }
     }
 }
