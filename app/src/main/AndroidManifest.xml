@@ -222,6 +222,7 @@
             android:name=".activity.MenuActivity"
             android:exported="true"
             android:label="菜单"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.video.RecommendActivity"

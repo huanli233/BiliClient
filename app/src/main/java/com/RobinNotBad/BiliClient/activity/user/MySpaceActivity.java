@@ -29,8 +29,8 @@ import java.io.IOException;
 
 public class MySpaceActivity extends BaseActivity {
 
-    @SuppressLint("StaticFieldLeak")
-    public static MySpaceActivity instance = null;
+//    @SuppressLint("StaticFieldLeak")
+//    public static MySpaceActivity instance = null;
     private ImageView userAvatar;
     private TextView userName, userFans, userDesc;
     private MaterialCardView myInfo,follow,watchLater,favorite,history,logout;
@@ -42,7 +42,7 @@ public class MySpaceActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myspace);
-        instance = this;
+//        instance = this;
         Log.e("debug","进入个人页");
 
         findViewById(R.id.top).setOnClickListener(view -> {

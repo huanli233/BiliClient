@@ -33,7 +33,7 @@ public class LocalListActivity extends BaseActivity {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
-    private final ArrayList<LocalVideo> videoList = new ArrayList<>();
+    private final ArrayList<LocalVideo> videoList = new ArrayList<>(10);
     private LocalVideoAdapter adapter;
     public static LocalListActivity instance = null;
 
@@ -68,7 +68,7 @@ public class LocalListActivity extends BaseActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
         }
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             runOnUiThread(()->swipeRefreshLayout.setRefreshing(true));
             scan(ConfInfoApi.getDownloadPath(this));
             adapter = new LocalVideoAdapter(this,videoList);
@@ -150,5 +150,11 @@ public class LocalListActivity extends BaseActivity {
                 swipeRefreshLayout.setRefreshing(false);
             });
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        instance = null;
+        super.onDestroy();
     }
 }

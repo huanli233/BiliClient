@@ -36,7 +36,7 @@ public class RecommendActivity extends BaseActivity {
     private VideoCardAdapter videoCardAdapter;
     private boolean firstRefresh = true;
     private boolean refreshing = false;
-    public static RecommendActivity instance = null;
+//    public static RecommendActivity instance = null;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -44,7 +44,7 @@ public class RecommendActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_main_refresh);
         Log.e("debug","进入推荐页");
-        instance = this;    //给菜单页面调用，用来结束本页面
+//        instance = this;    //给菜单页面调用，用来结束本页面
 
         recyclerView = findViewById(R.id.recyclerView);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);

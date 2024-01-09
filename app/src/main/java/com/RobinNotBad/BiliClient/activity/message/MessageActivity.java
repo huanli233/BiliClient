@@ -22,13 +22,13 @@ import org.json.JSONObject;
 
 
 public class MessageActivity extends BaseActivity {
-    public static MessageActivity instance = null;
+//    public static MessageActivity instance = null;
     private RecyclerView sessionsView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        instance = this;
+//        instance = this;
 
         findViewById(R.id.top).setOnClickListener(view -> {
             Intent intent = new Intent();

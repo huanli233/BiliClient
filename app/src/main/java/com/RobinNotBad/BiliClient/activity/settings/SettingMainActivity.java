@@ -14,6 +14,7 @@ import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
@@ -112,7 +113,7 @@ public class SettingMainActivity extends BaseActivity {
         MaterialCardView checkUpdate = findViewById(R.id.checkupdate);
         checkUpdate.setOnClickListener(view -> {
             MsgUtil.toast("正在获取...",this);
-            new Thread(() -> {
+            CenterThreadPool.run(() -> {
                 try {
                     ConfInfoApi.getUpdate(this);
                 } catch (IOException e) {
@@ -122,14 +123,14 @@ public class SettingMainActivity extends BaseActivity {
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
-            }).start();
+            });
         });
 
         //查看公告
         MaterialCardView announcement = findViewById(R.id.announcement);
         announcement.setOnClickListener(view -> {
             MsgUtil.toast("正在获取...",this);
-            new Thread(() -> {
+            CenterThreadPool.run(() -> {
                 try {
                     ConfInfoApi.getAnnouncement(this);
                 } catch (IOException e) {
@@ -138,7 +139,7 @@ public class SettingMainActivity extends BaseActivity {
                     e.printStackTrace();
                 }
 
-            }).start();
+            });
         });
 
         MaterialCardView test = findViewById(R.id.test);    //用于测试
@@ -147,5 +148,11 @@ public class SettingMainActivity extends BaseActivity {
             intent.putExtra("cvid",28751039L);
             startActivity(intent);
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        instance = null;
+        super.onDestroy();
     }
 }

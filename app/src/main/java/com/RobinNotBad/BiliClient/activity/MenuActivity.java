@@ -3,20 +3,20 @@ package com.RobinNotBad.BiliClient.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
 import com.RobinNotBad.BiliClient.activity.message.MessageActivity;
+import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
 import com.RobinNotBad.BiliClient.activity.settings.QRLoginActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingMainActivity;
 import com.RobinNotBad.BiliClient.activity.user.MySpaceActivity;
-import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
-import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
+import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
 
@@ -29,7 +29,7 @@ import java.util.List;
 public class MenuActivity extends BaseActivity {
 
     private int from;
-    private final List<Activity> activityList = new ArrayList<Activity>(){{
+    /*private final List<Activity> activityList = new ArrayList<Activity>() {{
         add(RecommendActivity.instance);
         add(SearchActivity.instance);
         add(DynamicActivity.instance);
@@ -38,8 +38,8 @@ public class MenuActivity extends BaseActivity {
         add(MessageActivity.instance);
         add(LocalListActivity.instance);
         add(SettingMainActivity.instance);
-    }};
-    private final List<Class<?>> classList = new ArrayList<Class<?>>(){{
+    }};*/
+    private final List<Class<? extends Activity>> classList = new ArrayList<Class<? extends Activity>>(){{
         add(RecommendActivity.class);
         add(SearchActivity.class);
         add(DynamicActivity.class);
@@ -85,80 +85,37 @@ public class MenuActivity extends BaseActivity {
             int finalI = i;
             cardList.get(i).setOnClickListener(view -> {
                 if(from == finalI) finish();
-                else killAndJump(finalI);
+                else if(finalI != cardList.size() - 1) start(classList.get(finalI));
             });
         }
-/*
-        main.setOnClickListener(view -> {
-            if(from==0) finish();
-            else killAndJump(RecommendActivity.class);
-        });
 
-        search.setOnClickListener(view -> {
-            if(from==1) finish();
-            else killAndJump(SearchActivity.class);
-        });
-
-        dynamic.setOnClickListener(view -> {
-            if(from==2) finish();
-            else killAndJump(DynamicActivity.class);
-        });
-
-        profile.setOnClickListener(view -> {
-            if(from==3) finish();
-            else killAndJump(MySpaceActivity.class);
-        });
-
-        local.setOnClickListener(view -> {
-            if(from==4) finish();
-            else killAndJump(LocalListActivity.class);
-        });
-
-        settings.setOnClickListener(view -> {
-            if(from==5) finish();
-            else killAndJump(SettingMainActivity.class);
-        });
-
-        exit.setOnClickListener(view -> {
-            activityList.get(from).finish();
-        });
-
- */
     }
 
-    private void killAndJump(int i){
+    /*private void killAndJump(int i){
         if(activityList.get(from)!=null) activityList.get(from).finish();
-
         if(i != activityList.size()) {
             Intent intent = new Intent();
             intent.setClass(MenuActivity.this, classList.get(i));
             startActivity(intent);
         }
+        finish();
+    }*/
 
-
-        /*
-        switch (from){
-            case 0:
-                RecommendActivity.instance.finish();
-                break;
-            case 1:
-                SearchActivity.instance.finish();
-                break;
-            case 2:
-                DynamicActivity.instance.finish();
-                break;
-            case 3:
-                MySpaceActivity.instance.finish();
-                break;
-            case 4:
-                LocalListActivity.instance.finish();
-                break;
-            case 5:
-                SettingMainActivity.instance.finish();
-                break;
+    private void start(Class<? extends Activity> activityClass){
+        Intent intent = new Intent(this, activityClass);
+        intent.setFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK |
+                Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("android.activity.launchSource", "android-internal");
+        startActivity(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setExitTransition(null);
         }
-         */
-
+        Activity activity;
+        while ((activity = getParent()) != null){
+            activity.finish();
+        }
         finish();
     }
 }

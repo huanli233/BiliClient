@@ -39,7 +39,7 @@ public class DynamicActivity extends BaseActivity {
     private boolean firstRefresh = true;
     private boolean refreshing = false;
     private boolean bottom = false;
-    public static DynamicActivity instance = null;
+//    public static DynamicActivity instance = null;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -47,7 +47,7 @@ public class DynamicActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_main_refresh);
         Log.e("debug","进入动态页");
-        instance = this;    //给菜单页面调用，用来结束本页面
+//        instance = this;    //给菜单页面调用，用来结束本页面
 
         recyclerView = findViewById(R.id.recyclerView);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);

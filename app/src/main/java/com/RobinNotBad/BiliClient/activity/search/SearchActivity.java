@@ -46,14 +46,14 @@ public class SearchActivity extends BaseActivity {
     private boolean refreshing = false;
     private boolean firstRun = true;
 
-    @SuppressLint("StaticFieldLeak")
-    public static SearchActivity instance = null;
+//    @SuppressLint("StaticFieldLeak")
+//    public static SearchActivity instance = null;
     @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        instance = this;
+//        instance = this;
         Log.e("debug","进入搜索页");
 
         viewPager = findViewById(R.id.viewPager);
