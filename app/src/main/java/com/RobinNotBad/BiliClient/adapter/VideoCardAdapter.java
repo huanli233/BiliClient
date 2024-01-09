@@ -60,6 +60,7 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
                 case "media_bangumi":
                     intent.putExtra("aid", videoCard.aid);
                     intent.setClass(context, VideoInfoActivity.class);
+                    intent.putExtra("type", "media");
                     context.startActivity(intent);
             }
         });
