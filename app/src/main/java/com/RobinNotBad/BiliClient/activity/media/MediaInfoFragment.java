@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerActivity;
@@ -58,15 +60,19 @@ public class MediaInfoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         //拉数据
-        bangumi_to_card.getMediaInfo(mediaId, new NetWorkUtil.Callback<Media>() {
-            @Override
-            public void onSuccess(Media baseMediaInfo) {
-                getSectionInfo(baseMediaInfo);
+        LiveData<Pair<Media, MediaSectionInfo>> pairLiveData = CenterThreadPool.supplyAsync(() -> {
+            try {
+                Media mediaInfo = bangumi_to_card.getMediaInfo(mediaId);
+                MediaSectionInfo sectionInfo = bangumi_to_card.getSectionInfo(mediaId);
+                return new Pair(mediaInfo, sectionInfo);
+            } catch (Exception e) {
+                Toast.makeText(requireContext(), "解析数据失败: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                return null;
             }
-
-            @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(requireContext(), "获取番剧信息失败\n" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        });
+        pairLiveData.observe(getViewLifecycleOwner(), pair -> {
+            if (pair != null) {
+                initView(pair.first, pair.second);
             }
         });
     }
@@ -135,17 +141,5 @@ public class MediaInfoFragment extends Fragment {
             dialog = builder.create();
         }
         return dialog;
-    }
-
-    private void getSectionInfo(Media baseMediaInfo) {
-        CenterThreadPool.run(() -> {
-            try {
-                MediaSectionInfo mediaSectionInfo = bangumi_to_card.getSectionInfo(String.valueOf(baseMediaInfo.seasonId));
-                this.requireActivity().runOnUiThread(() -> initView(baseMediaInfo, mediaSectionInfo));
-
-            } catch (Exception e) {
-                Toast.makeText(requireContext(), "解析剧集详细信息失败\n" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

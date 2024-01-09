@@ -32,7 +32,7 @@ public class CenterThreadPool {
      * @return LiveData包装的返回值
      * @param <T> 返回值类型
      */
-    public <T> LiveData<T> supplyAsync(Supplier<T> supplier) {
+    public static <T> LiveData<T> supplyAsync(Supplier<T> supplier) {
         MutableLiveData<T> retval = new MutableLiveData<>();
         BuildersKt.launch(INSTANCE, Dispatchers.getIO(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation continuation) -> {
             T res = supplier.get();

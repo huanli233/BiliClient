@@ -1,11 +1,9 @@
 package com.RobinNotBad.BiliClient.api;
 
 import android.accounts.NetworkErrorException;
-import android.app.Activity;
 import com.RobinNotBad.BiliClient.model.Media;
 import com.RobinNotBad.BiliClient.model.MediaSectionInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import okhttp3.ResponseBody;
 import org.json.JSONArray;
@@ -19,29 +17,22 @@ import java.util.Objects;
 public class bangumi_to_card {
 
     //获取番剧信息, 详情页需要有基本的cover, 信息等
-    public static void getMediaInfo(String mediaId, NetWorkUtil.Callback<Media> callback) {
-        CenterThreadPool.run(() -> {
-            try {
-                String url = "https://api.bilibili.com/pgc/review/user?media_id=" + mediaId;
-                ResponseBody body = NetWorkUtil.get(url, ConfInfoApi.defHeaders).body();
-                if (body == null) {
-                    throw new NetworkErrorException("baseMedia info body is null");
-                }
-                JSONObject all = new JSONObject(body.string());
-                int code = all.getInt("code");
-                if (code != 0) {
-                    throw new IOException("从服务器获取剧集失败, code = " + code);
-                }
-                JSONObject result = all.getJSONObject("result");
-                Media baseMediaInfo = new Media(result);
-                CenterThreadPool.runOnMainThread(() -> callback.onSuccess(baseMediaInfo));
-                body.close();
-            } catch (Exception e) {
-                CenterThreadPool.runOnMainThread(() -> callback.onFailed(e));
-            }
-        });
+    public static Media getMediaInfo(String mediaId) throws Exception {
+        String url = "https://api.bilibili.com/pgc/review/user?media_id=" + mediaId;
+        ResponseBody body = NetWorkUtil.get(url, ConfInfoApi.defHeaders).body();
+        if (body == null) {
+            throw new NetworkErrorException("baseMedia info body is null");
+        }
+        JSONObject all = new JSONObject(body.string());
+        int code = all.getInt("code");
+        if (code != 0) {
+            throw new IOException("从服务器获取剧集失败, code = " + code);
+        }
+        JSONObject result = all.getJSONObject("result");
+        Media baseMediaInfo = new Media(result);
+        body.close();
+        return baseMediaInfo;
     }
-    /** @noinspection unchecked*/
     public static MediaSectionInfo getSectionInfo(String seasonId) throws JSONException, IOException {
         JSONArray cardArray = bangumi_to_car(seasonId);
         //先建main_section
@@ -88,7 +79,7 @@ public class bangumi_to_card {
             String bvid = BilibiliIDConverter.aidtobv(array.getLong("aid"));
             long aid = array.getLong("aid");
             long cid = array.getLong("cid");
-            list.add(new VideoCard(title,upname,playTimesStr,cover,aid,bvid,cid));
+            list.add(new VideoCard(title, upname, playTimesStr, cover, aid, bvid, cid));
         }
         input.put("card", list);
         input.put("title", main_section.getString("title"));
@@ -108,7 +99,7 @@ public class bangumi_to_card {
                 String bvid = BilibiliIDConverter.aidtobv(array.getLong("aid"));
                 long aid = array.getLong("aid");
                 long cid = array.getLong("cid");
-                list.add(new VideoCard(title,upname,playTimesStr,cover,aid,bvid,cid));
+                list.add(new VideoCard(title, upname, playTimesStr, cover, aid, bvid, cid));
             }
             input.put("card", list);
             input.put("title", card.getString("title"));
@@ -116,6 +107,7 @@ public class bangumi_to_card {
         }
         return cardArray;
     }
+
     public static JSONObject GetMain_section(String season_id) throws IOException, JSONException {
         String url = "https://api.bilibili.com/pgc/web/season/section?season_id=" + season_id;
         JSONObject all = new JSONObject(Objects.requireNonNull(Objects.requireNonNull(NetWorkUtil.get(url)).body()).string());  //得到一整个json
