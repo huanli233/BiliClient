@@ -25,8 +25,10 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import org.json.JSONObject;
 
 public class PrivateMsgActivity extends AppCompatActivity {
+    JSONObject allMsg = new JSONObject();
     ArrayList<PrivateMessage> list = new ArrayList<>();
     RecyclerView msgView;
     @Override
@@ -42,9 +44,10 @@ public class PrivateMsgActivity extends AppCompatActivity {
     
         CenterThreadPool.run(()->{
             try {
-            	list = PrivateMsgApi.getPrivateMsg(uid,50);
+            	allMsg = PrivateMsgApi.getPrivateMsg(uid,50);
+                list = PrivateMsgApi.getPrivateMsgList(allMsg);
                 Collections.reverse(list);
-                PrivateMsgAdapter adapter = new PrivateMsgAdapter(list,this);
+                PrivateMsgAdapter adapter = new PrivateMsgAdapter(list,PrivateMsgApi.getEmoteJsonArray(allMsg),this);
                 runOnUiThread(()->{
                     msgView.setLayoutManager(new LinearLayoutManager(this));
                     msgView.setAdapter(adapter);

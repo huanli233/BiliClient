@@ -51,7 +51,7 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
             	holder.contentText.setText(msgContent.content.getString("title"));
             }if(msgContent.contentType == PrivateMessage.TYPE_TEXT_WITH_VIDEO) {
             	holder.contentText.setText(msgContent.content.getString("reply_content"));
-            }if(msgContent.contentType == PrivateMessage.TYPE_TIP) {
+            }if(msgContent.contentType == PrivateMessage.TYPE_RETRACT) {
             	holder.contentText.setText("[撤回消息]");
             }
             holder.nameText.setText(userMap.get(msgContent.talkerUid).name);

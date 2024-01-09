@@ -19,7 +19,6 @@ import java.util.concurrent.ExecutionException;
 //2023-07-23
 
 public class EmoteUtil {
-
     public static SpannableString textReplaceEmote(String text, JSONArray emote, float scale, Context context) throws JSONException, ExecutionException, InterruptedException {
         SpannableString result = new SpannableString(text);
         if(emote!=null && emote.length()>0) {

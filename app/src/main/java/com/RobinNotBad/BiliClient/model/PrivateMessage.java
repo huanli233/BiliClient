@@ -13,7 +13,7 @@ public class PrivateMessage {
     public static final int TYPE_TEXT = 1;
     public static final int TYPE_VIDEO = 7;
     public static final int TYPE_PIC = 2;
-    public static final int TYPE_TIP = 5;
+    public static final int TYPE_RETRACT = 5;
     public static final int TYPE_NOMAL_CARD = 10;
     public static final int TYPE_PIC_CARD = 13;
     public static final int TYPE_TEXT_WITH_VIDEO = 16;
