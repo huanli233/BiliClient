@@ -56,10 +56,11 @@ public class ArticleInfoFragment extends Fragment {
 
         //开始解析html的内容
         lineList = new ArrayList<>();
-        Document document = Jsoup.parse(articleInfo.content);
-        loadContentHtml(document.select("body").get(0));
 
         CenterThreadPool.run(()-> {
+            Document document = Jsoup.parse(articleInfo.content);
+            loadContentHtml(document.select("body").get(0));
+
             if (isAdded()) requireActivity().runOnUiThread(() -> {
                 ArticleContentAdapter adapter = new ArticleContentAdapter(requireContext(),articleInfo,lineList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
