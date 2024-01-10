@@ -31,6 +31,11 @@
         </provider>
 
         <activity
+            android:name=".activity.search.SearchOldActivity"
+            android:exported="true"
+            android:label="旧版搜索"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.article.ArticleInfoActivity"
             android:exported="true"
             android:label="专栏详情"

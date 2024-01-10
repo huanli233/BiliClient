@@ -37,6 +37,10 @@ import java.util.List;
 
 public class SearchActivity extends BaseActivity {
 
+    SearchVideoFragment searchVideoFragment;
+    SearchArticleFragment searchArticleFragment;
+    SearchUserFragment searchUserFragment;
+
     private ViewPager viewPager;
     private ConstraintLayout searchBar;
     private ArrayList<VideoCard> videoCardList;
@@ -45,6 +49,7 @@ public class SearchActivity extends BaseActivity {
     private String keyword;
     private boolean refreshing = false;
     private boolean firstRun = true;
+    private boolean firstFragment = true;
 
 //    @SuppressLint("StaticFieldLeak")
 //    public static SearchActivity instance = null;
@@ -138,7 +143,7 @@ public class SearchActivity extends BaseActivity {
                         if (resultArticle != null) {
                             SearchApi.getArticlesFromSearchResult(resultArticle, articleInfoList);
                             Log.e("debug", "刷新");
-                        } else runOnUiThread(() -> MsgUtil.toast("用户搜索结果为空OwO", this));
+                        } else runOnUiThread(() -> MsgUtil.toast("文章搜索结果为空OwO", this));
 
                         runOnUiThread(this::reload_fragments);
                     } catch (IOException e) {
@@ -155,16 +160,25 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void reload_fragments(){
-        List<Fragment> fragmentList = new ArrayList<>();
-        SearchVideoFragment searchVideoFragment = SearchVideoFragment.newInstance(videoCardList,searchBar,keyword);
-        fragmentList.add(searchVideoFragment);
-        SearchArticleFragment searchArticleFragment  = SearchArticleFragment.newInstance(articleInfoList,searchBar,keyword);
-        fragmentList.add(searchArticleFragment);
-        SearchUserFragment searchUserFragment  = SearchUserFragment.newInstance(userInfoList,searchBar,keyword);
-        fragmentList.add(searchUserFragment);
-        viewPager.setOffscreenPageLimit(fragmentList.size());
+        if(firstFragment) {
+            List<Fragment> fragmentList = new ArrayList<>();
+            searchVideoFragment = SearchVideoFragment.newInstance(videoCardList, searchBar, keyword);
+            fragmentList.add(searchVideoFragment);
+            searchArticleFragment = SearchArticleFragment.newInstance(articleInfoList, searchBar, keyword);
+            fragmentList.add(searchArticleFragment);
+            searchUserFragment = SearchUserFragment.newInstance(userInfoList, searchBar, keyword);
+            fragmentList.add(searchUserFragment);
+            viewPager.setOffscreenPageLimit(fragmentList.size());
 
-        ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
-        viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
+            ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
+            viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
+
+            firstFragment=false;
+        }
+        else{
+            searchVideoFragment.refresh(videoCardList,keyword);
+            searchArticleFragment.refresh(articleInfoList,keyword);
+            searchUserFragment.refresh(userInfoList,keyword);
+        }
     }
 }

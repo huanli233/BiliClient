@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.SearchApi;
+import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -129,5 +130,23 @@ public class SearchVideoFragment extends Fragment {
             e.printStackTrace();
         }
         refreshing = false;
+    }
+
+
+    public void refresh(ArrayList<VideoCard> newList, String keyword){
+        this.keyword = keyword;
+        int size_old = this.videoCardList.size();
+        this.videoCardList.clear();
+        CenterThreadPool.runOnMainThread(()-> {
+            videoCardAdapter.notifyItemRangeRemoved(0,size_old);
+            this.videoCardList = newList;
+            videoCardAdapter.notifyItemRangeInserted(0,videoCardList.size());
+            Log.e("debug","size="+videoCardList.size() + "&last="+size_old);
+
+            refreshing = false;
+            bottom = false;
+            page = 0;
+            searchbar_alpha = 100;
+        });
     }
 }

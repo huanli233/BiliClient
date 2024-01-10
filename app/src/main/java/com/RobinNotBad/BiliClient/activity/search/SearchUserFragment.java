@@ -18,6 +18,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.FollowListAdapter;
 import com.RobinNotBad.BiliClient.adapter.UserInfoAdapter;
 import com.RobinNotBad.BiliClient.api.SearchApi;
+import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -134,4 +135,20 @@ public class SearchUserFragment extends Fragment {
         refreshing = false;
     }
 
+
+    public void refresh(ArrayList<UserInfo> userInfoList, String keyword){
+        this.keyword = keyword;
+        int size_old = this.userInfoList.size();
+        this.userInfoList.clear();
+        CenterThreadPool.runOnMainThread(()-> {
+            userInfoAdapter.notifyItemRangeRemoved(0,size_old);
+            this.userInfoList = userInfoList;
+            userInfoAdapter.notifyItemRangeInserted(0,userInfoList.size());
+
+            refreshing = false;
+            bottom = false;
+            page = 0;
+            searchbar_alpha = 100;
+        });
+    }
 }
