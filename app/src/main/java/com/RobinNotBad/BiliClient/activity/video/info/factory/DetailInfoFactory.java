@@ -14,7 +14,7 @@ public class DetailInfoFactory {
         }
     }
     public static class Data {
-        private String type;
+        private String type = "video";
         private String bvid;
         private long aid;
 
