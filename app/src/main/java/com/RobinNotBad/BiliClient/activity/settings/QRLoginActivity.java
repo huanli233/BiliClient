@@ -1,34 +1,31 @@
 package com.RobinNotBad.BiliClient.activity.settings;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.api.UserLoginApi;
 import com.RobinNotBad.BiliClient.util.*;
 import com.google.android.material.card.MaterialCardView;
-
-import java.util.List;
+import okhttp3.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import okhttp3.Response;
-
 //登录页面，参考了腕上哔哩和WearBili的代码
 
-public class QRLoginActivity extends BaseActivity {
-//    public static QRLoginActivity instance = null;
+public class QRLoginActivity extends InstanceActivity {
     private ImageView qrImageView;
     private TextView scanStat;
     private int clickCount = 0;
@@ -39,8 +36,7 @@ public class QRLoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Log.e("debug","进入登录页面");
-//        instance = this;
-        
+
         findViewById(R.id.top).setOnClickListener(view -> finish());
 
         qrImageView = findViewById(R.id.qrImage);
@@ -173,7 +169,8 @@ public class QRLoginActivity extends BaseActivity {
                             Log.e("refresh_token",SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""));
 
                             if(SharedPreferencesUtil.getBoolean("setup",false)) {
-                                if(SettingMainActivity.instance!=null) SettingMainActivity.instance.finish();
+                                Activity instance = SettingMainActivity.getInstance();
+                                if(instance instanceof SettingMainActivity) instance.finish();
                             }
                             else {
                                 SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup,true);

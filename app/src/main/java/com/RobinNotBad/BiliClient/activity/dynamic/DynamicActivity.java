@@ -3,24 +3,20 @@ package com.RobinNotBad.BiliClient.activity.dynamic;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
+import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.DynamicAdapter;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,7 +26,7 @@ import java.util.ArrayList;
 //动态页面
 //2023-09-17
 
-public class DynamicActivity extends BaseActivity {
+public class DynamicActivity extends InstanceActivity {
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -40,7 +36,6 @@ public class DynamicActivity extends BaseActivity {
     private boolean firstRefresh = true;
     private boolean refreshing = false;
     private boolean bottom = false;
-//    public static DynamicActivity instance = null;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -48,7 +43,6 @@ public class DynamicActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_main_refresh);
         Log.e("debug","进入动态页");
-//        instance = this;    //给菜单页面调用，用来结束本页面
 
         recyclerView = findViewById(R.id.recyclerView);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);

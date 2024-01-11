@@ -5,21 +5,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
+import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.RecommendApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -28,7 +25,7 @@ import java.util.ArrayList;
 //推荐页面
 //2023-07-13
 
-public class RecommendActivity extends BaseActivity {
+public class RecommendActivity extends InstanceActivity {
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -36,7 +33,6 @@ public class RecommendActivity extends BaseActivity {
     private VideoCardAdapter videoCardAdapter;
     private boolean firstRefresh = true;
     private boolean refreshing = false;
-//    public static RecommendActivity instance = null;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -44,7 +40,6 @@ public class RecommendActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_main_refresh);
         Log.e("debug","进入推荐页");
-//        instance = this;    //给菜单页面调用，用来结束本页面
 
         recyclerView = findViewById(R.id.recyclerView);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
@@ -124,5 +119,4 @@ public class RecommendActivity extends BaseActivity {
             refreshing = false;
         });
     }
-
 }

@@ -1,14 +1,13 @@
 package com.RobinNotBad.BiliClient.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
 import com.RobinNotBad.BiliClient.activity.message.MessageActivity;
 import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
@@ -29,17 +28,8 @@ import java.util.List;
 public class MenuActivity extends BaseActivity {
 
     private int from;
-    /*private final List<Activity> activityList = new ArrayList<Activity>() {{
-        add(RecommendActivity.instance);
-        add(SearchActivity.instance);
-        add(DynamicActivity.instance);
-        add(QRLoginActivity.instance);
-        add(MySpaceActivity.instance);
-        add(MessageActivity.instance);
-        add(LocalListActivity.instance);
-        add(SettingMainActivity.instance);
-    }};*/
-    private final List<Class<? extends Activity>> classList = new ArrayList<Class<? extends Activity>>(){{
+
+    private final List<Class<? extends InstanceActivity>> classList = new ArrayList<Class<? extends InstanceActivity>>(){{
         add(RecommendActivity.class);
         add(SearchActivity.class);
         add(DynamicActivity.class);
@@ -85,37 +75,20 @@ public class MenuActivity extends BaseActivity {
             int finalI = i;
             cardList.get(i).setOnClickListener(view -> {
                 if(from == finalI) finish();
-                else if(finalI != cardList.size() - 1) start(classList.get(finalI));
+                else if(finalI != cardList.size() - 1) killAndJump(finalI);
             });
         }
 
     }
 
-    /*private void killAndJump(int i){
-        if(activityList.get(from)!=null) activityList.get(from).finish();
-        if(i != activityList.size()) {
+    private void killAndJump(int i){
+        InstanceActivity.getInstance().finish();
+        if(i != classList.size()) {
             Intent intent = new Intent();
             intent.setClass(MenuActivity.this, classList.get(i));
             startActivity(intent);
         }
         finish();
-    }*/
-
-    private void start(Class<? extends Activity> activityClass){
-        Intent intent = new Intent(this, activityClass);
-        intent.setFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK |
-                Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("android.activity.launchSource", "android-internal");
-        startActivity(intent);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setExitTransition(null);
-        }
-        Activity activity;
-        while ((activity = getParent()) != null){
-            activity.finish();
-        }
-        finish();
     }
+
 }

@@ -7,16 +7,14 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
+import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.LocalVideoAdapter;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.model.LocalVideo;
@@ -29,13 +27,12 @@ import java.util.ArrayList;
 //本地列表
 //2023-08-07
 
-public class LocalListActivity extends BaseActivity {
+public class LocalListActivity extends InstanceActivity {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private final ArrayList<LocalVideo> videoList = new ArrayList<>(10);
     private LocalVideoAdapter adapter;
-    public static LocalListActivity instance = null;
 
     private Boolean isDoubleClicked;
     private int longClickPosition=-1;
@@ -46,7 +43,6 @@ public class LocalListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_main_refresh);
 
-        instance = this;
 
         findViewById(R.id.top).setOnClickListener(view -> {
             Intent intent = new Intent();
@@ -150,11 +146,5 @@ public class LocalListActivity extends BaseActivity {
                 swipeRefreshLayout.setRefreshing(false);
             });
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        instance = null;
-        super.onDestroy();
     }
 }

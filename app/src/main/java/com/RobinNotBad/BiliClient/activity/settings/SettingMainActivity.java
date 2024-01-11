@@ -8,24 +8,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
-
 import org.json.JSONException;
 
 import java.io.IOException;
 
-public class SettingMainActivity extends BaseActivity {
+public class SettingMainActivity extends InstanceActivity {
 
-    public static SettingMainActivity instance = null;
     private int eggClick = 0;
 
     @SuppressLint("MissingInflatedId")
@@ -34,7 +31,6 @@ public class SettingMainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_main);
         Log.e("debug","进入设置页");
-        instance = this;    //给菜单页面调用，用来结束本页面
 
         findViewById(R.id.top).setOnClickListener(view -> {
             Intent intent = new Intent();
@@ -148,11 +144,5 @@ public class SettingMainActivity extends BaseActivity {
             intent.putExtra("cvid",28751039L);
             startActivity(intent);
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        instance = null;
-        super.onDestroy();
     }
 }

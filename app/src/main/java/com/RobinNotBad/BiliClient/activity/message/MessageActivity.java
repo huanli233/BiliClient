@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.PrivateMsgSessionsAdapter;
 import com.RobinNotBad.BiliClient.api.MessageApi;
 import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
@@ -16,19 +16,18 @@ import com.RobinNotBad.BiliClient.model.PrivateMsgSession;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.google.android.material.card.MaterialCardView;
-import java.util.ArrayList;
-import java.util.HashMap;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 
-public class MessageActivity extends BaseActivity {
-//    public static MessageActivity instance = null;
+
+public class MessageActivity extends InstanceActivity {
     private RecyclerView sessionsView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-//        instance = this;
 
         findViewById(R.id.top).setOnClickListener(view -> {
             Intent intent = new Intent();

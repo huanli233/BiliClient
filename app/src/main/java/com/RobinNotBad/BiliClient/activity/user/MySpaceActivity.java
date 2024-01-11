@@ -6,10 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
+import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SpecialLoginActivity;
 import com.RobinNotBad.BiliClient.activity.user.favorite.FavoriteFolderListActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
@@ -22,15 +21,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
-
 import org.json.JSONException;
 
 import java.io.IOException;
 
-public class MySpaceActivity extends BaseActivity {
+public class MySpaceActivity extends InstanceActivity {
 
-//    @SuppressLint("StaticFieldLeak")
-//    public static MySpaceActivity instance = null;
     private ImageView userAvatar;
     private TextView userName, userFans, userDesc;
     private MaterialCardView myInfo,follow,watchLater,favorite,history,logout;
@@ -42,7 +38,6 @@ public class MySpaceActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myspace);
-//        instance = this;
         Log.e("debug","进入个人页");
 
         findViewById(R.id.top).setOnClickListener(view -> {

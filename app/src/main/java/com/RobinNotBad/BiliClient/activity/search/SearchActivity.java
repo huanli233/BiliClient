@@ -11,14 +11,12 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
-
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
+import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.SearchApi;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
@@ -27,7 +25,6 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -35,7 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchActivity extends BaseActivity {
+public class SearchActivity extends InstanceActivity {
 
     SearchVideoFragment searchVideoFragment;
     SearchArticleFragment searchArticleFragment;
@@ -51,14 +48,11 @@ public class SearchActivity extends BaseActivity {
     private boolean firstRun = true;
     private boolean firstFragment = true;
 
-//    @SuppressLint("StaticFieldLeak")
-//    public static SearchActivity instance = null;
     @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-//        instance = this;
         Log.e("debug","进入搜索页");
 
         viewPager = findViewById(R.id.viewPager);

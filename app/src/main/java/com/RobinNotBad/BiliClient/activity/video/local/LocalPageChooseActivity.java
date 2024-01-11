@@ -1,6 +1,7 @@
 package com.RobinNotBad.BiliClient.activity.video.local;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -79,7 +80,8 @@ public class LocalPageChooseActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        if(deleted && LocalListActivity.instance!=null) LocalListActivity.instance.refresh();
+        Activity instance = LocalListActivity.getInstance();
+        if(deleted && instance instanceof LocalListActivity) ((LocalListActivity)(instance)).refresh();
         super.onDestroy();
     }
 }
