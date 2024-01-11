@@ -114,7 +114,7 @@ public class MySpaceActivity extends InstanceActivity {
 
                     logout.setOnClickListener(view -> {
                         if(confirmLogout){
-                            CenterThreadPool.run(() -> UserInfoApi.exitLogin());
+                            CenterThreadPool.run(UserInfoApi::exitLogin);
                             SharedPreferencesUtil.removeValue(SharedPreferencesUtil.cookies);
                             SharedPreferencesUtil.removeValue(SharedPreferencesUtil.mid);
                             SharedPreferencesUtil.removeValue(SharedPreferencesUtil.csrf);
