@@ -13,7 +13,9 @@ import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
+import com.RobinNotBad.BiliClient.api.UserLoginApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
@@ -140,9 +142,8 @@ public class SettingMainActivity extends InstanceActivity {
 
         MaterialCardView test = findViewById(R.id.test);    //用于测试
         test.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ArticleInfoActivity.class);
-            intent.putExtra("cvid",28751039L);
-            startActivity(intent);
+            String cookies_new = SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,"");
+            MsgUtil.showText(this,"",cookies_new);
         });
     }
 }

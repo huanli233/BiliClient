@@ -152,6 +152,7 @@ public class QRLoginActivity extends InstanceActivity {
                             String cookies = UserLoginApi.getCookies(response);
 
 
+                            /*
                             List<String> responseCookies = Objects.requireNonNull(Objects.requireNonNull(NetWorkUtil.get("https://www.bilibili.com/")).networkResponse()).headers("Set-Cookie");
                             String buvid3 = "";
                             for (String responseCookie : responseCookies) {
@@ -160,11 +161,13 @@ public class QRLoginActivity extends InstanceActivity {
                                 }
                             }
                             buvid3=buvid3.substring(buvid3.indexOf("buvid3"),buvid3.indexOf(";",buvid3.indexOf("buvid3"))+1);
+                             */
+                            String buvid3 = LittleToolsUtil.getInfoFromCookie("buvid3",UserLoginApi.getCookies(NetWorkUtil.get("https://www.bilibili.com/",ConfInfoApi.webHeaders)));
                             Log.e("buvid3",buvid3);//获取buvid3
 
                             SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(LittleToolsUtil.getInfoFromCookie("DedeUserID", cookies)));
                             SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, LittleToolsUtil.getInfoFromCookie("bili_jct", cookies));
-                            SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, buvid3 + cookies);
+                            SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, "buvid3="+buvid3+"; " + cookies);
                             SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,loginJson.getJSONObject("data").getString("refresh_token"));
 
                             Log.e("refresh_token",SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""));
