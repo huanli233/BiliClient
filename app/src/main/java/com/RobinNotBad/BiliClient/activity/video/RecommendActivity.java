@@ -63,8 +63,6 @@ public class RecommendActivity extends InstanceActivity {
         if (firstRefresh) {
             recyclerView.setLayoutManager(new LinearLayoutManager(RecommendActivity.this));
             videoCardList = new ArrayList<>();
-            videoCardAdapter = new VideoCardAdapter(this, videoCardList);
-            recyclerView.setAdapter(videoCardAdapter);
         } else {
             int last = videoCardList.size();
             videoCardList.clear();
@@ -83,6 +81,40 @@ public class RecommendActivity extends InstanceActivity {
         int lastSize = videoCardList.size();
         try {
             RecommendApi.getRecommend(videoCardList);
+
+            runOnUiThread(() -> {
+
+                swipeRefreshLayout.setRefreshing(false);
+                refreshing = false;
+
+                if (firstRefresh) {
+                    firstRefresh = false;
+                    videoCardAdapter = new VideoCardAdapter(this, videoCardList);
+                    recyclerView.setAdapter(videoCardAdapter);
+
+                    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                            super.onScrollStateChanged(recyclerView, newState);
+                        }
+                        @Override
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
+                            LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                            assert manager != null;
+                            int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();  //获取最后一个完全显示的itemPosition
+                            int itemCount = manager.getItemCount();
+                            if (lastItemPosition >= (itemCount - 3) && dy>0 && !refreshing) {// 滑动到倒数第三个就可以刷新了
+                                refreshing = true;
+                                CenterThreadPool.run(()->addRecommend()); //加载第二页
+                            }
+                        }
+                    });
+                }else {
+                    Log.e("debug","last="+lastSize+"&now="+videoCardList.size());
+                    videoCardAdapter.notifyItemRangeInserted(lastSize,videoCardList.size()-lastSize);
+                }
+            });
         } catch (IOException e){
             runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
             e.printStackTrace();
@@ -91,32 +123,6 @@ public class RecommendActivity extends InstanceActivity {
             e.printStackTrace();
         }
 
-        runOnUiThread(() -> {
-            if (firstRefresh) {
-                firstRefresh = false;
-                recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                        super.onScrollStateChanged(recyclerView, newState);
-                    }
-                    @Override
-                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                        super.onScrolled(recyclerView, dx, dy);
-                        LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                        assert manager != null;
-                        int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();  //获取最后一个完全显示的itemPosition
-                        int itemCount = manager.getItemCount();
-                        if (lastItemPosition >= (itemCount - 3) && dy>0 && !refreshing) {// 滑动到倒数第三个就可以刷新了
-                            refreshing = true;
-                            CenterThreadPool.run(()->addRecommend()); //加载第二页
-                        }
-                    }
-                });
-            }
-            Log.e("debug","last="+lastSize+"&now="+videoCardList.size());
-            videoCardAdapter.notifyItemRangeInserted(lastSize,videoCardList.size()-lastSize);
-            swipeRefreshLayout.setRefreshing(false);
-            refreshing = false;
-        });
+
     }
 }
