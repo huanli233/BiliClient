@@ -2,9 +2,9 @@ package com.RobinNotBad.BiliClient.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import androidx.recyclerview.widget.RecyclerView;
+import android.widget.ListView;
 
-public class CustomListView extends RecyclerView {
+public class CustomListView extends ListView {
     public CustomListView(Context context) {
         super(context);
     }
