@@ -80,8 +80,8 @@ public class LocalPageChooseActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        Activity instance = LocalListActivity.getInstance();
-        if(deleted && instance instanceof LocalListActivity) ((LocalListActivity)(instance)).refresh();
+        Activity instance = LocalListActivity.getInstance(LocalListActivity.class);
+        if(deleted && instance != null) ((LocalListActivity)(instance)).refresh();
         super.onDestroy();
     }
 }

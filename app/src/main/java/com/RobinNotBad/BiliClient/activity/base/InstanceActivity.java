@@ -1,21 +1,23 @@
 package com.RobinNotBad.BiliClient.activity.base;
 
 import android.os.Bundle;
+import com.RobinNotBad.BiliClient.BiliClient;
+
+import java.util.*;
 
 public class InstanceActivity extends BaseActivity {
-    private static InstanceActivity instance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        instance = this;
+        BiliClient.addInstance(this);
         super.onCreate(savedInstanceState);
     }
-    public static InstanceActivity getInstance() {
-        return instance;
+    public static InstanceActivity getInstance(Class<? extends InstanceActivity> cls) {
+        return BiliClient.getInstance(cls);
     }
 
     @Override
     protected void onDestroy() {
-        instance = null;
+        BiliClient.removeInstance(this);
         super.onDestroy();
     }
 }

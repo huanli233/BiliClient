@@ -169,8 +169,8 @@ public class QRLoginActivity extends InstanceActivity {
                             Log.e("refresh_token",SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""));
 
                             if(SharedPreferencesUtil.getBoolean("setup",false)) {
-                                Activity instance = SettingMainActivity.getInstance();
-                                if(instance instanceof SettingMainActivity) instance.finish();
+                                Activity instance = InstanceActivity.getInstance(SettingMainActivity.class);
+                                if(instance != null) instance.finish();
                             }
                             else {
                                 SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup,true);

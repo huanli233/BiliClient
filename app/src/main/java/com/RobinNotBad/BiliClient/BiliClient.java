@@ -7,12 +7,18 @@ import android.content.res.Configuration;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
+import androidx.annotation.Nullable;
+import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class BiliClient extends Application {
     @SuppressLint("StaticFieldLeak")
     public static Context context;
 
+    private static Set<InstanceActivity> activityInstances;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -21,7 +27,27 @@ public class BiliClient extends Application {
             ErrorCatch errorCatch = ErrorCatch.getInstance();
             errorCatch.init(getApplicationContext());
             SharedPreferencesUtil.initSharedPrefs(this);
+            activityInstances = new HashSet<>();
         }
+    }
+
+    public static void addInstance(InstanceActivity instanceActivity){
+        activityInstances.add(instanceActivity);
+    }
+    public static void removeInstance(InstanceActivity instanceActivity){
+        activityInstances.remove(instanceActivity);
+    }
+
+    @Nullable
+    public static InstanceActivity getInstance(Class<? extends InstanceActivity> cls) {
+        for (InstanceActivity instanceActivity : activityInstances) {
+            if (instanceActivity != null) {
+                if (cls.isInstance(instanceActivity)){
+                    return instanceActivity;
+                }
+            }
+        }
+        return null;
     }
 
     /**
