@@ -11,6 +11,7 @@ import androidx.viewbinding.ViewBinding;
 public abstract class DetailInfo<VB extends ViewBinding> implements DetailPage {
     protected AppCompatActivity activity;
     protected VB binding;
+    private boolean viewInited = false;
 
     public DetailInfo(AppCompatActivity activity) {
         this.activity = activity;
@@ -27,11 +28,15 @@ public abstract class DetailInfo<VB extends ViewBinding> implements DetailPage {
 
     @Override
     public void onStart(@NonNull LifecycleOwner owner) {
-        initView();
+        if(!viewInited) {
+            initView();
+            viewInited = true;
+        }
     }
 
     @Override
     public void onDestroy(@NonNull LifecycleOwner owner) {
+        viewInited = false;
         activity = null;
     }
 }
