@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
+import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.UserLoginApi;
 import com.RobinNotBad.BiliClient.util.*;
 import com.google.android.material.card.MaterialCardView;
@@ -167,6 +168,8 @@ public class QRLoginActivity extends InstanceActivity {
                             SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,loginJson.getJSONObject("data").getString("refresh_token"));
 
                             Log.e("refresh_token",SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""));
+
+                            ConfInfoApi.refreshHeaders();
 
                             if(SharedPreferencesUtil.getBoolean("setup",false)) {
                                 Activity instance = InstanceActivity.getInstance(SettingMainActivity.class);

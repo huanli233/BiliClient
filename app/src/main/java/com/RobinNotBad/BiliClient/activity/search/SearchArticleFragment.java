@@ -40,7 +40,7 @@ public class SearchArticleFragment extends Fragment {
     private int page = 0;
     private int searchbar_alpha = 100;
 
-    public SearchArticleFragment(){};
+    public SearchArticleFragment(){}
 
     public static SearchArticleFragment newInstance(ArrayList<ArticleInfo> articleInfoList, ConstraintLayout searchBar, String keyword) {
         SearchArticleFragment fragment = new SearchArticleFragment();

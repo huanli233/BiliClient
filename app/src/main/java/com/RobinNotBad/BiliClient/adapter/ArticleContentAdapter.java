@@ -31,9 +31,6 @@ import com.google.android.material.card.MaterialCardView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 //文章内容Adapter by RobinNotBad
 
@@ -166,10 +163,6 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 title.setText(articleInfo.title);
                 break;
         }
-    }
-
-    private void loadImage(String url, ImageView target){
-
     }
 
     @Override

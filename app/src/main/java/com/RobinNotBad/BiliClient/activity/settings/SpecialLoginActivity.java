@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
+import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -51,6 +52,8 @@ public class SpecialLoginActivity extends BaseActivity {
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,jsonObject.getString("refresh_token"));
                     runOnUiThread(() -> Toast.makeText(SpecialLoginActivity.this, "登录成功！", Toast.LENGTH_SHORT).show());
                     SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup, true);
+
+                    ConfInfoApi.refreshHeaders();
 
                     Intent intent1 = new Intent();
                     intent1.setClass(SpecialLoginActivity.this, SplashActivity.class);

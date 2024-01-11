@@ -4,14 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.RobinNotBad.BiliClient.BiliClient;
@@ -72,9 +66,11 @@ public class SplashActivity extends Activity {
                     if (SharedPreferencesUtil.getLong("mid", 0) == 0) {
                         String cookies = UserLoginApi.getCookies(response);
                         Log.e("cookies",cookies);
-                        if(!cookies.isEmpty()) SharedPreferencesUtil.putString("cookies",cookies);
-                    }else if (SharedPreferencesUtil.getBoolean("dev_refresh_cookie",false)) checkCookie();
-
+                        if(!cookies.isEmpty()) {
+                            SharedPreferencesUtil.putString("cookies",cookies);
+                            ConfInfoApi.refreshHeaders();
+                        }
+                    }else if (SharedPreferencesUtil.getBoolean("dev_refresh_cookie",true)) checkCookie();
 
                     Intent intent = new Intent();
                     intent.setClass(SplashActivity.this, RecommendActivity.class);   //已登录且联网，去首页
@@ -124,7 +120,10 @@ public class SplashActivity extends Activity {
                     Log.e("CorrespondPath",correspondPath);
                     String refreshCsrf = CookieRefreshApi.getRefreshCsrf(correspondPath);
                     Log.e("RefreshCsrf",refreshCsrf);
-                    if(CookieRefreshApi.refreshCookie(refreshCsrf)) runOnUiThread(()-> MsgUtil.toast("Cookie已刷新",this));
+                    if(CookieRefreshApi.refreshCookie(refreshCsrf)){
+                        ConfInfoApi.refreshHeaders();
+                        runOnUiThread(()-> MsgUtil.toast("Cookie已刷新",this));
+                    }
                     else runOnUiThread(()-> MsgUtil.toast("Cookie刷新失败",this));
                 }
             }   

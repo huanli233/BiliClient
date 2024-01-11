@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.widget.SwitchCompat;
+
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+
 import java.util.Objects;
-import java.util.prefs.Preferences;
 
 public class SettingLaboratoryActivity extends BaseActivity {
 
@@ -25,7 +26,7 @@ public class SettingLaboratoryActivity extends BaseActivity {
         findViewById(R.id.top).setOnClickListener(view -> finish());
 
         refresh_cookie = findViewById(R.id.refresh_cookie);
-        refresh_cookie.setChecked(SharedPreferencesUtil.getBoolean("dev_refresh_cookie",false));
+        refresh_cookie.setChecked(SharedPreferencesUtil.getBoolean("dev_refresh_cookie",true));
 
         article_picture_load = findViewById(R.id.article_picture_load);
         article_picture_load.setChecked(SharedPreferencesUtil.getBoolean("dev_article_pic_load",true));
