@@ -17,6 +17,7 @@ import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.CookieRefreshApi;
 import com.RobinNotBad.BiliClient.api.UserLoginApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -63,14 +64,15 @@ public class SplashActivity extends Activity {
                 try {
 
                     Response response = NetWorkUtil.get("https://bilibili.com",ConfInfoApi.defHeaders);
-                    if (SharedPreferencesUtil.getLong("mid", 0) == 0) {
-                        String cookies = UserLoginApi.getCookies(response);
-                        Log.e("cookies",cookies);
-                        if(!cookies.isEmpty()) {
-                            SharedPreferencesUtil.putString("cookies",cookies);
-                            ConfInfoApi.refreshHeaders();
-                        }
-                    }else if (SharedPreferencesUtil.getBoolean("dev_refresh_cookie",true)) checkCookie();
+                    String cookies = SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,"");
+                    if(!cookies.contains("buvid3")){
+                        String buvid3 = LittleToolsUtil.getInfoFromCookie("buvid3",UserLoginApi.getCookies(response));
+                        Log.e("buvid3",buvid3);//获取buvid3
+                        SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, "buvid3="+buvid3+"; " + cookies);
+                        ConfInfoApi.refreshHeaders();
+                    }
+                    if (SharedPreferencesUtil.getLong("mid", 0) != 0
+                            && SharedPreferencesUtil.getBoolean("dev_refresh_cookie",true)) checkCookie();
 
                     Intent intent = new Intent();
                     intent.setClass(SplashActivity.this, RecommendActivity.class);   //已登录且联网，去首页
