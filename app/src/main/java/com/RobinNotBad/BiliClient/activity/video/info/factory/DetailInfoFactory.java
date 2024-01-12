@@ -3,7 +3,7 @@ package com.RobinNotBad.BiliClient.activity.video.info.factory;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class DetailInfoFactory {
-    public static DetailPage get(AppCompatActivity activity, Data data) {
+    public static DetailInfo get(AppCompatActivity activity, Data data) {
         switch (data.type) {
             case "video":
                 return new VideoDetailInfo(activity, data.bvid, data.aid);

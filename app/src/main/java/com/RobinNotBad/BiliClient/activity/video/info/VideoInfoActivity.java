@@ -3,14 +3,14 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 import android.content.Intent;
 import android.os.Bundle;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.video.info.factory.DetailInfo;
 import com.RobinNotBad.BiliClient.activity.video.info.factory.DetailInfoFactory;
-import com.RobinNotBad.BiliClient.activity.video.info.factory.DetailPage;
 
 //视频详情页，但这只是个壳，瓤是VideoInfoFragment、VideoReplyFragment、VideoRcmdFragment
 
 public class VideoInfoActivity extends BaseActivity {
 
-    private DetailPage info;
+    private DetailInfo info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class VideoInfoActivity extends BaseActivity {
         setContentView(info.getRootView());
     }
 
-    public DetailPage getInfo() {
+    public DetailInfo getInfo() {
         return info;
     }
 

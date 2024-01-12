@@ -1,21 +1,24 @@
 package com.RobinNotBad.BiliClient.activity.video.info.factory;
 
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
+import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.media.MediaInfoFragment;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
-import com.RobinNotBad.BiliClient.databinding.ActivitySimpleViewpagerBinding;
 import com.RobinNotBad.BiliClient.model.MediaSectionInfo;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MediaDetailInfo extends DetailInfo<ActivitySimpleViewpagerBinding> {
+public class MediaDetailInfo extends DetailInfo {
     private final long mediaId;
     private MediaSectionInfo.EpisodeInfo currentEpisodeInfo;
 
@@ -25,17 +28,18 @@ public class MediaDetailInfo extends DetailInfo<ActivitySimpleViewpagerBinding> 
         this.mediaId = mediaId;
     }
 
-
     @Override
-    protected ActivitySimpleViewpagerBinding createViewBinding(Context context) {
-        return ActivitySimpleViewpagerBinding.inflate(activity.getLayoutInflater());
+    protected View createView(Context context) {
+       return LayoutInflater.from(context).inflate(R.layout.activity_simple_viewpager, null, false);
     }
 
     @Override
     protected void initView() {
-        ViewPager viewPager = binding.viewPager;
-        binding.top.setOnClickListener(view -> activity.finish());
-        binding.pageName.setText("视频详情");
+        View rootView = getRootView();
+        ViewPager viewPager = rootView.findViewById(R.id.viewPager);
+        rootView.findViewById(R.id.top).setOnClickListener(view -> activity.finish());
+        TextView pageName = rootView.findViewById(R.id.pageName);
+        pageName.setText("视频详情");
         fragmentList = createFragmentList();
         viewPager.setOffscreenPageLimit(fragmentList.size());
         ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(activity.getSupportFragmentManager(), fragmentList);

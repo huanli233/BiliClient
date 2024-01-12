@@ -3,7 +3,10 @@ package com.RobinNotBad.BiliClient.activity.video.info.factory;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -14,7 +17,6 @@ import com.RobinNotBad.BiliClient.activity.video.info.VideoRcmdFragment;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
-import com.RobinNotBad.BiliClient.databinding.ActivitySimpleViewpagerBinding;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -27,7 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-class VideoDetailInfo extends DetailInfo<ActivitySimpleViewpagerBinding> {
+class VideoDetailInfo extends DetailInfo {
     private final String bvid;
     private final long aid;
     public VideoDetailInfo(AppCompatActivity activity, String bvid, long aid) {
@@ -37,18 +39,19 @@ class VideoDetailInfo extends DetailInfo<ActivitySimpleViewpagerBinding> {
     }
 
     @Override
-    protected ActivitySimpleViewpagerBinding createViewBinding(Context context) {
-        return ActivitySimpleViewpagerBinding.inflate(activity.getLayoutInflater());
+    protected View createView(Context context) {
+        return LayoutInflater.from(context).inflate(R.layout.activity_simple_viewpager, null, false);
     }
 
     @Override
     protected void initView() {
-        ViewPager viewPager = binding.viewPager;
-        binding.top.setOnClickListener(view -> activity.finish());
-
-        binding.loading.setVisibility(View.VISIBLE);
-
-        binding.pageName.setText("视频详情");
+        View rootView = getRootView();
+        ViewPager viewPager = rootView.findViewById(R.id.viewPager);
+        TextView pageName = rootView.findViewById(R.id.pageName);
+        ImageView loading = rootView.findViewById(R.id.loading);
+        rootView.findViewById(R.id.top).setOnClickListener(view -> activity.finish());
+        loading.setVisibility(View.VISIBLE);
+        pageName.setText("视频详情");
         Log.e("VideoInfoActivity",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
 
         CenterThreadPool.run(() -> {
@@ -65,7 +68,7 @@ class VideoDetailInfo extends DetailInfo<ActivitySimpleViewpagerBinding> {
                 viewPager.setOffscreenPageLimit(fragmentList.size());
                 ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(activity.getSupportFragmentManager(), fragmentList);
                 activity.runOnUiThread(() -> {
-                    binding.loading.setVisibility(View.GONE);
+                    loading.setVisibility(View.GONE);
                     viewPager.setAdapter(vpfAdapter);
                     if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
                         Toast.makeText(activity, "提示：本页面可以左右滑动", Toast.LENGTH_LONG).show();
@@ -75,13 +78,13 @@ class VideoDetailInfo extends DetailInfo<ActivitySimpleViewpagerBinding> {
                 //没啥好说的，教科书式的ViewPager使用方法
             } catch (JSONException e) {
                 activity.runOnUiThread(() -> {
-                    binding.loading.setImageResource(R.drawable.loading_2233_error);
+                    loading.setImageResource(R.drawable.loading_2233_error);
                     MsgUtil.jsonErr(e, activity);
                 });
                 e.printStackTrace();
             } catch (IOException e) {
                 activity.runOnUiThread(() -> {
-                    binding.loading.setImageResource(R.drawable.loading_2233_error);
+                    loading.setImageResource(R.drawable.loading_2233_error);
                     MsgUtil.quickErr(MsgUtil.err_net, activity);
                 });
                 e.printStackTrace();
