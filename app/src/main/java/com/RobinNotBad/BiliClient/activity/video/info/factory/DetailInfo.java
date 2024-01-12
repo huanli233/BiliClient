@@ -75,7 +75,7 @@ public abstract class DetailInfo implements DefaultLifecycleObserver {
     /**
      * 在Activity的onDestroy调用时， 通过lifeCycle，
      * 也会调用到该方法， 该方法需要释放资源， 防止内存泄漏
-     * 同时, 也需要将viewInited设置为false， 以便下次重新在Activity创建视图时初始化layout.
+     * 同时, 也需要将viewInited设置为false， 以便下次重新在Activity试图被销毁时重建layout.
      */
 
     @Override
