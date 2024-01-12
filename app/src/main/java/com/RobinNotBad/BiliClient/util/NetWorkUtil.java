@@ -43,7 +43,7 @@ public class NetWorkUtil
         Request.Builder requestb = new Request.Builder().url(url).header("Referer", "https://www.bilibili.com/").addHeader("Accept", "*/*").addHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
         Request request = requestb.build();
         Response response = client.newCall(request).execute();
-
+        SharedPreferencesUtil.saveCookiesFromResponse(response);
         if(response.isSuccessful())
             return response;
         return null;
@@ -59,7 +59,9 @@ public class NetWorkUtil
         for(int i = 0; i < headers.size(); i+=2)
             requestBuilder = requestBuilder.addHeader(headers.get(i), headers.get(i+1));
         Request request = requestBuilder.build();
-        return client.newCall(request).execute();
+        Response response =  client.newCall(request).execute();
+        SharedPreferencesUtil.saveCookiesFromResponse(response);
+        return response;
     }
 
     public static Response post(String url, String data, ArrayList<String> headers) throws IOException
@@ -74,7 +76,9 @@ public class NetWorkUtil
         for(int i = 0; i < headers.size(); i+=2)
             requestBuilder = requestBuilder.addHeader(headers.get(i), headers.get(i+1));
         Request request = requestBuilder.build();
-        return client.newCall(request).execute();
+        Response response =  client.newCall(request).execute();
+        SharedPreferencesUtil.saveCookiesFromResponse(response);
+        return response;
     }
 
 
