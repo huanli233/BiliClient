@@ -48,11 +48,35 @@ public class WriteReplyActivity extends BaseActivity {
                             int result = ReplyApi.sendReply(oid, rpid, parent, text);
 
                             sent = true;
-                            if (result == 0)
-                                runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, "发送成功>w<", Toast.LENGTH_SHORT).show());
-                            else
-                                runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, "发送失败TAT\n错误码："+result, Toast.LENGTH_SHORT).show());
-                            finish();
+                            String toast_msg = "评论发送失败TAT";
+                            switch (result){
+                                case 0:
+                                    runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, "发送成功>w<", Toast.LENGTH_SHORT).show());
+                                    finish();
+                                case -101:
+                                    toast_msg = "没有登录哦";
+                                    break;
+                                case -102:
+                                    toast_msg = "账号已被封禁";
+                                    break;
+                                case -509:
+                                    toast_msg = "请求太频繁哩TAT";
+                                    break;
+                                case 12015:
+                                    toast_msg = "需要评论验证码TAT";
+                                    break;
+                                case 12016:
+                                    toast_msg = "包含敏感内容";
+                                    break;
+                                case 12025:
+                                    toast_msg = "字数过多啦！QAQ";
+                                    break;
+                                case 12035:
+                                    toast_msg = "被拉黑哩..";
+                                    break;
+                            }
+                            String finalToast_msg = toast_msg;
+                            runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, finalToast_msg, Toast.LENGTH_SHORT).show());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
