@@ -37,7 +37,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.article.ArticleInfoActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="专栏详情"
             android:screenOrientation="portrait" />
         <activity
@@ -47,7 +47,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.video.local.LocalPageChooseActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="缓存分页"
             android:screenOrientation="portrait" />
         <activity
@@ -57,12 +57,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.DownloadActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="下载"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.dynamic.DynamicInfoActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="动态详情"
             android:screenOrientation="portrait" />
         <activity
@@ -134,7 +134,7 @@
         </activity>
         <activity
             android:name=".activity.user.favorite.AddFavoriteActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="添加收藏"
             android:screenOrientation="portrait" />
         <activity
@@ -144,12 +144,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.video.JumpToPlayerActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="跳转播放"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.video.info.WriteReplyActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="写评论"
             android:screenOrientation="portrait" />
         <activity
@@ -164,7 +164,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.user.favorite.FavoriteVideoListActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="收藏夹详情"
             android:screenOrientation="portrait" />
         <activity
@@ -174,7 +174,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.user.UserInfoActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="用户信息"
             android:screenOrientation="portrait" />
         <activity
@@ -185,12 +185,12 @@
             android:theme="@style/Theme.NoSwipe" />
         <activity
             android:name=".activity.video.info.ReplyInfoActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="评论详情"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.video.MultiPageActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="分页视频选集"
             android:screenOrientation="portrait" />
         <activity
@@ -220,7 +220,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.video.info.VideoInfoActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="视频详情"
             android:screenOrientation="portrait" />
         <activity
