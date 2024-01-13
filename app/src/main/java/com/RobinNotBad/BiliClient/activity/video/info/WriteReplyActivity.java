@@ -48,7 +48,7 @@ public class WriteReplyActivity extends BaseActivity {
                             int result = ReplyApi.sendReply(oid, rpid, parent, text);
 
                             sent = true;
-                            String toast_msg = "评论发送失败TAT";
+                            String toast_msg = "评论发送失败TAT\n错误码:" + result;
                             switch (result){
                                 case 0:
                                     runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, "发送成功>w<", Toast.LENGTH_SHORT).show());
