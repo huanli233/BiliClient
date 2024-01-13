@@ -55,8 +55,10 @@ public class UserLoginApi
     }
 
     public static String getCookies(Response response){
-        StringBuilder cookies = new StringBuilder();
         List<String> cookiesList = response.headers("Set-Cookie");
+        if(cookiesList.isEmpty())return "";
+
+        StringBuilder cookies = new StringBuilder();
         for (String s : cookiesList) cookies.append(s.split("; ")[0]).append("; ");
 
         return cookies.substring(0, cookies.length() - 2);

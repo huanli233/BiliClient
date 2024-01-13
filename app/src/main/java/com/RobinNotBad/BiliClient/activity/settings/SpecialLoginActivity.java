@@ -13,8 +13,8 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
 
@@ -46,8 +46,8 @@ public class SpecialLoginActivity extends BaseActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(loginInfo);
                     String cookies = jsonObject.getString("cookies");
-                    SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(LittleToolsUtil.getInfoFromCookie("DedeUserID", cookies)));
-                    SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, LittleToolsUtil.getInfoFromCookie("bili_jct", cookies));
+                    SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(NetWorkUtil.getInfoFromCookie("DedeUserID", cookies)));
+                    SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, NetWorkUtil.getInfoFromCookie("bili_jct", cookies));
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies);
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,jsonObject.getString("refresh_token"));
                     runOnUiThread(() -> Toast.makeText(SpecialLoginActivity.this, "登录成功！", Toast.LENGTH_SHORT).show());

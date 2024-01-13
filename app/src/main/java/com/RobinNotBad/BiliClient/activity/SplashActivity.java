@@ -17,7 +17,6 @@ import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.CookieRefreshApi;
 import com.RobinNotBad.BiliClient.api.UserLoginApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -63,14 +62,8 @@ public class SplashActivity extends Activity {
             if(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.setup,false)) {//判断是否设置完成
                 try {
 
-                    Response response = NetWorkUtil.get("https://bilibili.com",ConfInfoApi.defHeaders);
-                    String cookies = SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,"");
-                    if(!cookies.contains("buvid3")){
-                        String buvid3 = LittleToolsUtil.getInfoFromCookie("buvid3",UserLoginApi.getCookies(response));
-                        Log.e("buvid3",buvid3);//获取buvid3
-                        SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, "buvid3="+buvid3+"; " + cookies);
-                        ConfInfoApi.refreshHeaders();
-                    }
+                    NetWorkUtil.get("https://bilibili.com",ConfInfoApi.defHeaders);
+
                     if (SharedPreferencesUtil.getLong("mid", 0) != 0
                             && SharedPreferencesUtil.getBoolean("dev_refresh_cookie",true)) checkCookie();
 

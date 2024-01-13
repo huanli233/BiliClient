@@ -4,7 +4,6 @@ import com.RobinNotBad.BiliClient.model.MessageCard;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -237,7 +236,7 @@ public class MessageApi {
     }
 
     public static ArrayList<MessageCard> getSystemMsg() throws IOException, JSONException {
-        String url = "https://message.bilibili.com/x/sys-msg/query_user_notify?csrf=" + LittleToolsUtil.getInfoFromCookie("bili_jct", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""))  + "&page_size=35&build=0&mobi_app=web";
+        String url = "https://message.bilibili.com/x/sys-msg/query_user_notify?csrf=" + NetWorkUtil.getInfoFromCookie("bili_jct", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""))  + "&page_size=35&build=0&mobi_app=web";
         JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
         if(all.has("data") && !all.isNull("data")) {
             ArrayList<MessageCard> totalArray = new ArrayList<>();

@@ -82,14 +82,4 @@ public class LittleToolsUtil {
         return "fail";
     }
 
-    public static String getInfoFromCookie(String name, String cookie)
-    {
-        String[] cookies = cookie.split("; ");
-        for(String i : cookies)
-        {
-            if(i.contains(name + "="))
-                return i.substring(name.length() + 1);
-        }
-        return "";
-    }
 }
