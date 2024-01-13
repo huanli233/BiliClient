@@ -96,7 +96,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                         imageView.setImageBitmap(cachedImage);
                     else CenterThreadPool.run(()->{
                         try {
-                            Bitmap bitmap = Glide.with(context).asBitmap().load(article.get(realPosition).content+"@50q.webp").diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit().get();
+                            Bitmap bitmap = Glide.with(context).asBitmap().load(article.get(realPosition).content).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit().get();
                             pictureCache.put(realPosition,bitmap);
                             ((Activity)context).runOnUiThread(()->imageView.setImageBitmap(bitmap));
                         } catch (Exception e) {

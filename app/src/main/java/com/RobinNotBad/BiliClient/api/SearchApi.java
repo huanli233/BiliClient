@@ -134,7 +134,7 @@ public class SearchApi {
             JSONObject card = input.getJSONObject(i);    //获得专栏卡片
 
             articleInfo.id = card.getLong("id");
-            if(card.getJSONArray("image_urls").length() > 0) articleInfo.banner = card.getJSONArray("image_urls").getString(0);
+            if(card.getJSONArray("image_urls").length() > 0) articleInfo.banner = "http:" + card.getJSONArray("image_urls").getString(0);
             else articleInfo.banner = "";
             articleInfo.summary = "";
             articleInfo.wordCount = 0;

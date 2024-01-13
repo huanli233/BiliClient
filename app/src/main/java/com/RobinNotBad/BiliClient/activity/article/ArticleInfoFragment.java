@@ -16,7 +16,11 @@ import com.RobinNotBad.BiliClient.adapter.ArticleContentAdapter;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.ArticleLine;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.JsonUtil;
+import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -58,8 +62,24 @@ public class ArticleInfoFragment extends Fragment {
         lineList = new ArrayList<>();
 
         CenterThreadPool.run(()-> {
-            Document document = Jsoup.parse(articleInfo.content);
-            loadContentHtml(document.select("body").get(0));
+            try {
+                JSONObject jsonObject = new JSONObject(articleInfo.content);
+                for (int i = 0;i<jsonObject.getJSONArray("ops").length();i++){ //遍历Array
+                    JSONObject element = jsonObject.getJSONArray("ops").getJSONObject(i);
+                    if(element.has("insert")){
+                        if(element.get("insert") instanceof JSONObject){ //有图片
+                            lineList.add(new ArticleLine(1, JsonUtil.searchString(element.getJSONObject("insert"),"url",""),""));
+                        }else{ //纯文字
+                            lineList.add(new ArticleLine(0,element.getString("insert"),""));
+                        }
+                    }
+                }
+            }catch (JSONException e){
+                e.printStackTrace();
+                //如果抛出了JSONException就说明是HTML而不是JSON
+                Document document = Jsoup.parse(articleInfo.content);
+                loadContentHtml(document.select("body").get(0));
+            }
 
             if (isAdded()) requireActivity().runOnUiThread(() -> {
                 ArticleContentAdapter adapter = new ArticleContentAdapter(requireContext(),articleInfo,lineList);
@@ -81,7 +101,7 @@ public class ArticleInfoFragment extends Fragment {
                 lineList.add(new ArticleLine(0,"","br"));
             }
             else if (e.is("img")){
-                lineList.add(new ArticleLine(1,"http:" + e.attr("src"),""));
+                lineList.add(new ArticleLine(1,"http:" + e.attr("src") + "@50q.webp",""));
             }
             else loadContentHtml(e);
         }
