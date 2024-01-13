@@ -195,33 +195,35 @@ public class PrivateMsgApi {
         return sessionList;
     }
 
-    public static int sendMsg(
+    public static JSONObject sendMsg(
             long senderUid, long receiverUid, int msgType, long timestamp, String content)
             throws IOException, JSONException {
-        String url = "https://api.vc.bilibili.com/web_im/v1/web_im/send_msg";
+        String url = "https://api.vc.bilibili.com/web_im/v1/web_im/send_msg?";
         String per =
-                "dev_id="
+                "msg[dev_id]="
                         + getDevId()
-                        + "&msg_type="
+                        + "&msg[msg_type]="
                         + msgType
-                        + "&content="
+                        + "&msg[content]="
                         + content
-                        + "&receiver_type=1&csrf="
+                        + "&msg[receiver_type]=1&csrf="
                         + SharedPreferencesUtil.getString("csrf", "")
-                        + "&sender_id="
+                        + "&msg[sender_id]="
                         + senderUid
-                        + "&receiver_id"
+                        + "&msg[receiver_id]="
                         + receiverUid
-                        + "&timestamp="
-                        + System.currentTimeMillis();
+                        + "&msg[timestamp]="
+                        + timestamp;
 
         JSONObject result =
                 new JSONObject(
                         Objects.requireNonNull(
-                                        NetWorkUtil.post(url, per, ConfInfoApi.webHeaders).body())
+                                        NetWorkUtil.post(url, per, ConfInfoApi.defHeaders).body())
                                 .string());
+        
         Log.e("debug-发送私信", result.toString());
-        return result.getInt("code");
+        Log.e("debug-发送私信", ConfInfoApi.webHeaders.toString());
+        return result;
     }
 
     private static String getDevId() {
