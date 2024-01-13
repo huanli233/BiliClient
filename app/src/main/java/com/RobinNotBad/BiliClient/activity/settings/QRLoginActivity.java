@@ -147,27 +147,13 @@ public class QRLoginActivity extends InstanceActivity {
                             this.cancel();
                             break;
                         case 0:
-                            String cookies = UserLoginApi.getCookies(response);
-
-
-                            /*
-                            List<String> responseCookies = Objects.requireNonNull(Objects.requireNonNull(NetWorkUtil.get("https://www.bilibili.com/")).networkResponse()).headers("Set-Cookie");
-                            String buvid3 = "";
-                            for (String responseCookie : responseCookies) {
-                                if (responseCookie.startsWith("buvid3")) {
-                                    buvid3 = responseCookie;
-                                }
-                            }
-                            buvid3=buvid3.substring(buvid3.indexOf("buvid3"),buvid3.indexOf(";",buvid3.indexOf("buvid3"))+1);
-                             */
+                            String cookies = SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,"");
 
                             SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(NetWorkUtil.getInfoFromCookie("DedeUserID", cookies)));
                             SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, NetWorkUtil.getInfoFromCookie("bili_jct", cookies));
                             SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,loginJson.getJSONObject("data").getString("refresh_token"));
 
                             Log.e("refresh_token",SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""));
-
-                            ConfInfoApi.refreshHeaders();
 
                             if(SharedPreferencesUtil.getBoolean("setup",false)) {
                                 Activity instance = InstanceActivity.getInstance(SettingMainActivity.class);
