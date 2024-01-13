@@ -142,33 +142,33 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                 android:layout_height="wrap_content"
-                 android:layout_width="match_parent"
-                 app:cardMaxElevation="0dp"
-                 android:layout_marginEnd="6dp"
-                 app:strokeColor="#70707070"
-                 app:cardElevation="0dp"
-                 app:cardBackgroundColor="#78242424"
-                 android:layout_marginTop="10dp"
-                 app:layout_constraintBottom_toBottomOf="parent"
-                 android:layout_marginStart="6dp"
-                 android:layout_marginBottom="2dp"
-                 app:layout_constraintTop_toTopOf="parent"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:strokeWidth="0.1dp"
-                 app:layout_constraintEnd_toEndOf="parent"
-                 app:cardCornerRadius="4dp"
-                 android:id="@+id/about_group">
+                android:id="@+id/about_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="2dp"
+                app:cardBackgroundColor="#78242424"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="#70707070"
+                app:strokeWidth="0.1dp">
 
                 <TextView
-                     android:layout_height="wrap_content"
-                     android:layout_width="match_parent"
-                     android:layout_marginBottom="4dp"
-                     android:gravity="center"
-                     android:textSize="12sp"
-                     android:layout_marginTop="4dp"
-                     android:text="@string/about_group"
-                     android:layout_gravity="center" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:gravity="center"
+                    android:text="@string/about_group"
+                    android:textSize="12sp" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -608,36 +608,83 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                 android:layout_height="wrap_content"
-                 android:layout_width="match_parent"
-                 app:cardMaxElevation="0dp"
-                 android:layout_marginEnd="6dp"
-                 app:strokeColor="#70707070"
-                 app:cardElevation="0dp"
-                 app:cardBackgroundColor="#78242424"
-                 android:layout_marginTop="6dp"
-                 app:layout_constraintBottom_toBottomOf="parent"
-                 android:layout_marginStart="6dp"
-                 android:layout_marginBottom="2dp"
-                 app:layout_constraintTop_toTopOf="parent"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:strokeWidth="0.1dp"
-                 app:layout_constraintEnd_toEndOf="parent"
-                 app:cardCornerRadius="4dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="2dp"
+                app:cardBackgroundColor="#78242424"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="#70707070"
+                app:strokeWidth="0.1dp">
 
                 <TextView
-                     android:layout_height="wrap_content"
-                     android:layout_width="match_parent"
-                     android:layout_marginBottom="4dp"
-                     android:gravity="center"
-                     android:layout_marginHorizontal="3dp"
-                     android:textSize="11sp"
-                     android:layout_marginTop="5dp"
-                     android:text="@string/about_source"
-                     android:layout_gravity="center" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="3dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="4dp"
+                    android:gravity="center"
+                    android:text="@string/about_source"
+                    android:textSize="11sp" />
 
             </com.google.android.material.card.MaterialCardView>
 
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:cardMaxElevation="0dp"
+                android:layout_marginEnd="6dp"
+                app:strokeColor="#70707070"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#78242424"
+                android:layout_marginTop="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="6dp"
+                android:layout_marginBottom="2dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeWidth="0.1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:cardCornerRadius="4dp">
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textSize="13sp"
+                        android:layout_marginTop="4dp"
+                        android:text="免责声明"
+                        android:layout_gravity="center" />
+
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:layout_marginHorizontal="3dp"
+                        android:textSize="11sp"
+                        android:layout_marginTop="1dp"
+                        android:text="@string/about_to_uncle"
+                        android:layout_gravity="center" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
     </ScrollView>

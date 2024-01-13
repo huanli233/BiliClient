@@ -1,15 +1,16 @@
 <resources>
     <string name="app_name">哔哩终端</string>
     <string name="about_description">一个轻量的第三方B站客户端</string>
-    <string name="about_say">软件名来自原神中的“虚空终端”\n兼容至安卓4.2\n注意：安卓4.4系统需要使用交流群中的改版小电视播放器。\n\n提示，长按“关于”按钮有彩蛋哦！</string>
+    <string name="about_say">软件名来自原神中的“虚空终端”\n兼容至安卓4.2\n愿你在这一方小小的屏幕中，找到属于自己的小小的快乐\n\n提示，长按“关于”按钮有彩蛋哦！</string>
     <string name="about_group">交流群（闲聊）：482091687\n测试组（问题反馈）：745414928</string>
     <string name="about_opensource">本程序完全开源，代码部分遵循GNU GPL-V3.0协议，界面布局（UI）部分遵循CC BY-NC-SA协议。\n你可以通过 https://gitee.com/RobinNotBad/BiliClient 获取源代码</string>
     <string name="about_source">本程序使用或借鉴了下列项目的部分代码及收集的B站API：\nWearBili：https://github.com/SpaceXC/WearBili\n腕上哔哩：https://github.com/luern0313/WristBilibili\nBAC Document：https://socialsisteryi.github.io/bilibili-API-collect/\n程序的界面布局修改与借鉴于WearBili开源项目的UI部分，设计者为@JesseGary_（已得到同意）\n\n本程序使用了下列第三方库：\nOkHttp（用于进行网络请求）：com.squareup.okhttp3:okhttp:3.12.1\nGlide（用于图片获取与显示）：com.github.bumptech.glide:glide:4.13.2\nPhotoView（用于提供图片缩放功能）：com.github.chrisbanes:PhotoView:2.3.0\nJsoup（用于解析html）：org.jsoup:jsoup:1.10.2\n\n--------------------------------\n\n部分图标来自B站及icon8，有修改，版权归原作者所有\n\n--------------------------------</string>
+    <string name="about_to_uncle">本软件的开发目的是为系统和配置老旧的安卓手表与旧手机提供能够（模拟）访问B站网页端的服务，从而在这些设备上使用B站的部分基本功能。软件所使用的API来自网络，我们未参与API的收集或破解。本软件不会对任何API接口进行恶意轰炸式访问。我们不收集任何用户的任何信息。软件内没有任何付费功能，代码开源。如果您仍然认为本软件侵犯了您的权利，请联系我们。\n\n同时，我们也不对学生党用户由于在不恰当的时间、地点使用本软件摸鱼而导致的财产损失（设备被没收）和精神伤害（被老师或家长臭骂）而负责。请尽量自控，不要影响到你的正常生活哦！（各种意义上）</string>
+
     <string name="setting_ui_desc">有效范围为0.25倍~5.00倍，修改完打开新页面即可生效。\n注意：建议一点一点调节，切勿调到两个最值处，否则你真的会后悔！若由于乱调此选项导致应用不能正常使用，请清除应用数据！</string>
     <string name="setting_player_desc">*你也可以通过长按“播放”按钮快速进入此页面。若无法跳转播放，请确保你的播放器和哔哩终端都是最新版本。\n\n*“高清视频”选项开启后，将会尝试获取1080P的视频源，关闭则是360P。与凉腕播放器配合食用效果更佳，非手表设备也比较建议开启，会同时影响缓存功能。需要注意的是，低性能设备播放可能会略有卡顿，且流量消耗较大。原版小电视播放器不支持此功能，请到交流群482091687下载改版小电视。（也请注意，改版需要V20才能支持当前版本的哔哩终端）</string>
-    <string name="setting_player_desc_low">*你的安卓系统版本过低，无法运行原版的小电视播放器和凉腕播放器，请至我的B站主页置顶动态下载修改版小电视播放器！若仍出现兼容问题，请联系我！</string>
     <string name="setting_startanim_desc">我实在想不出有什么好的开屏动画方案了，所以我选择默认关闭TAT</string>
-    <string name="setup_introduction">你好呀，同在茫茫网络世界中漂流的旅者！我是哔哩终端的开发者Robin。感谢你选择了哔哩终端，每增加一位用户，我就有了更多继续开发的动力！希望它能够为你的闲暇时光增添一些快乐~\n本软件永久免费开源，不会收集你的任何账号及设备信息，请放心使用！\n由于作者是学生，上学期间更新会极其缓慢，很多功能不是我不想做，是没时间做(TAT)\n我的B站名是RobinNotBad，欢迎前来关注和给我留言提建议哟！\n\nQQ群：482091687，来一起交流呀~\n\n点击下面的按钮，让我们开始吧！</string>
+    <string name="setup_introduction">你好呀，同在茫茫网络世界中漂流的旅者！我们是哔哩终端的开发团队。感谢你选择了哔哩终端，每增加一位用户，我们就有了更多继续开发的动力！希望它能够为你的闲暇时光增添一些快乐~\n本软件永久免费开源，不会收集你的任何账号及设备信息，请放心使用！\n我的B站名是RobinNotBad，欢迎前来关注和给我留言提建议哟！\n\nQQ群：482091687，来一起交流呀~\n\n点击下面的按钮，让我们开始吧！</string>
 
     <string name="egg_special">群友“@垃圾的东西”要求加一个撅作者的彩蛋（\n\n所以，\n\n》点击此处撅Robin《\n\n别点，假的（\n\n投稿者：垃圾的东西\n\n此彩蛋的触发方式为：在搜索框内输入以“撅Robin”开头的文字</string>
     <string name="egg_robin_nahida">Robin喜欢纳西妲。\n也许不只是由于外表的可爱，还有对遭遇的同情。\n\n我们都被囚禁——\n纳西妲是物理上的；\n屏幕前后的你我则是心灵上的。\n\n纳西妲已经遇到了她的旅行者——\n但我们，又会有谁来关心呢……？\n\n*纳西妲：\n不要这样说哦。\n能够拯救你们的，正是你们自己。\n请用自己的行动，来努力改变这个不美好的世界。\n无论结果如何。</string>
@@ -36,6 +37,6 @@
     <string name="player_aliang_package">com.aliangmaker.media</string>
     <string name="player_mtv_package">com.xinxiangshicheng.wearbiliplayer.cn</string>
 
-    <string name="update_log">###更新内容###\n\n2.3.4更新内容：1.修复了个人主页的投稿列表\n2.新增视频标签\n3.视频简介默认收起，点击展开\n\n2.3版本总更新内容：\n1.更换了推荐API，现在推荐不准的问题解决了\n2.增加了跳过登录的功能\n3.视频详情页中，评论区右侧新增了相关推荐\n4.一些小改动和bug修复\n5.可能增加了新的bug</string>
+    <string name="update_log">###更新内容###\n\n请注意：此版本更新内容较多，且涉及登录数据相关内容，建议前往 我的-退出登录 然后重新扫码！\n\n2.4.0更新内容：\n1.增加了专栏功能，可查看专栏，用户详情页右侧增加专栏列表\n2.增加了消息及私信功能\n3.增加了可能并不完善的番剧功能\n4.用户详情页可关注\n5.增加退出登录功能\n6.非常多的不可见问题修复\n7.一些小改动和bug修复\n8.可能增加了新的bug</string>
 
 </resources>

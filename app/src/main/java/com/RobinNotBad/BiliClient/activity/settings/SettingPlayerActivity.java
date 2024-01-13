@@ -46,8 +46,11 @@ public class SettingPlayerActivity extends BaseActivity {
         cardViewList.add(aliangPlayer);
 
         if(Build.VERSION.SDK_INT <= 19) {
-            TextView desc = findViewById(R.id.desc);
-            desc.setText(getString(R.string.setting_player_desc) + "\n\n" + getString(R.string.setting_player_desc_low));
+            TextView alplayer_desc = findViewById(R.id.aliangPlayer_desc);
+            alplayer_desc.setText("安卓版本过低不支持");
+
+            TextView mtvplayer_desc = findViewById(R.id.mtvPlayer_desc);
+            mtvplayer_desc.setText("去交流群里下载改版");
         }
 
         switch (player){
