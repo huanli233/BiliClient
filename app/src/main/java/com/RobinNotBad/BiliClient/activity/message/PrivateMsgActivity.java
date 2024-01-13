@@ -79,7 +79,7 @@ public class PrivateMsgActivity extends BaseActivity {
             CenterThreadPool.run(()->{
                 try {
                 	if(!contentEt.getText().equals("")) {
-                        PrivateMessage msg = new PrivateMessage(uid,PrivateMessage.TYPE_TEXT,new JSONObject("{\"content\":\""+contentEt.getText()+"\"}"),System.currentTimeMillis()/1000,UserInfoApi.getUserInfo(uid).name,0);
+                        PrivateMessage msg = new PrivateMessage(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,114514),PrivateMessage.TYPE_TEXT,new JSONObject("{\"content\":\""+contentEt.getText()+"\"}"),System.currentTimeMillis()/1000,UserInfoApi.getCurrentUserInfo().name,0);
                         JSONObject result = PrivateMsgApi.sendMsg(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,114514),uid,PrivateMessage.TYPE_TEXT,msg.timestamp,msg.content.toString());
                         msg.msgId = result.getJSONObject("data").getLong("msg_key");
                         runOnUiThread(()->{
@@ -87,6 +87,7 @@ public class PrivateMsgActivity extends BaseActivity {
                             	if(result.getInt("code")==0) {
                                     MsgUtil.toast("发送成功",this);
                                     list.add(msg);
+                                    contentEt.setText("");
                                     adapter.notifyItemInserted(list.size()-1);
                                     adapter.notifyItemRangeChanged(list.size()-1,list.size()-1);
                                 }else{

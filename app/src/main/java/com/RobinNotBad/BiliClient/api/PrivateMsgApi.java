@@ -208,7 +208,7 @@ public class PrivateMsgApi {
                         + content
                         + "&msg[receiver_type]=1&csrf="
                         + SharedPreferencesUtil.getString("csrf", "")
-                        + "&msg[sender_id]="
+                        + "&msg[sender_uid]="
                         + senderUid
                         + "&msg[receiver_id]="
                         + receiverUid
