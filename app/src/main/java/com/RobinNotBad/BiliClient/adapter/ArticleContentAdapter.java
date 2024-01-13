@@ -89,6 +89,8 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 break;
             case 1:
                 ImageView imageView = holder.itemView.findViewById(R.id.imageView);  //图片
+                //在图片没有完全加载成功之前， 先用占位图垫着，后面等加载成功了再替换
+                imageView.setImageResource(R.drawable.placeholder);
 
                 if(SharedPreferencesUtil.getBoolean("dev_article_pic_load",true)) {
                     Bitmap cachedImage = pictureCache.get(realPosition);
