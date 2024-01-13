@@ -137,7 +137,7 @@ public class NetWorkUtil
         List<String> newCookies = response.headers("Set-Cookie");
 
         //如果没有新cookies，直接返回
-        if (response.headers("Set-Cookie").isEmpty()) return;
+        if (newCookies.isEmpty()) return;
 
         ArrayList<String> oldCookies = new ArrayList<>(Arrays.asList(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, "").split("; ")));  //转list
 
