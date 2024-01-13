@@ -137,10 +137,9 @@ public class SearchUserFragment extends Fragment {
     public void refresh(ArrayList<UserInfo> userInfoList, String keyword){
         this.keyword = keyword;
         int size_old = this.userInfoList.size();
-        this.userInfoList.clear();
+        this.userInfoList = userInfoList;
         CenterThreadPool.runOnMainThread(()-> {
             userInfoAdapter.notifyItemRangeRemoved(0,size_old);
-            this.userInfoList = userInfoList;
             userInfoAdapter.notifyItemRangeInserted(0,userInfoList.size());
 
             refreshing = false;

@@ -134,10 +134,9 @@ public class SearchArticleFragment extends Fragment {
     public void refresh(ArrayList<ArticleInfo> articleInfoList, String keyword){
         this.keyword = keyword;
         int size_old = this.articleInfoList.size();
-        this.articleInfoList.clear();
+        this.articleInfoList = articleInfoList;
         CenterThreadPool.runOnMainThread(()-> {
             articleCardAdapter.notifyItemRangeRemoved(0,size_old);
-            this.articleInfoList = articleInfoList;
             articleCardAdapter.notifyItemRangeInserted(0,articleInfoList.size());
 
             refreshing = false;

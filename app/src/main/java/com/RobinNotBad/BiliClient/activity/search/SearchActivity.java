@@ -124,20 +124,14 @@ public class SearchActivity extends InstanceActivity {
                         JSONArray resultUser = SearchApi.searchType(keyword, 1,"bili_user");
                         JSONArray resultArticle = SearchApi.searchType(keyword, 1,"article");
 
-                        if (resultVideo != null) {
-                            SearchApi.getVideosFromSearchResult(resultVideo, videoCardList);
-                            Log.e("debug", "刷新");
-                        } else runOnUiThread(() -> MsgUtil.toast("视频搜索结果为空OwO", this));
+                        if (resultVideo != null) SearchApi.getVideosFromSearchResult(resultVideo, videoCardList);
+                        else runOnUiThread(() -> MsgUtil.toast("视频搜索结果为空OwO", this));
 
-                        if (resultUser != null) {
-                            SearchApi.getUsersFromSearchResult(resultUser, userInfoList);
-                            Log.e("debug", "刷新");
-                        } else runOnUiThread(() -> MsgUtil.toast("用户搜索结果为空OwO", this));
+                        if (resultUser != null) SearchApi.getUsersFromSearchResult(resultUser, userInfoList);
+                        else runOnUiThread(() -> MsgUtil.toast("用户搜索结果为空OwO", this));
 
-                        if (resultArticle != null) {
-                            SearchApi.getArticlesFromSearchResult(resultArticle, articleInfoList);
-                            Log.e("debug", "刷新");
-                        } else runOnUiThread(() -> MsgUtil.toast("文章搜索结果为空OwO", this));
+                        if (resultArticle != null) SearchApi.getArticlesFromSearchResult(resultArticle, articleInfoList);
+                        else runOnUiThread(() -> MsgUtil.toast("文章搜索结果为空OwO", this));
 
                         runOnUiThread(this::reload_fragments);
                     } catch (IOException e) {
@@ -154,7 +148,7 @@ public class SearchActivity extends InstanceActivity {
     }
 
     private void reload_fragments(){
-        if(firstFragment) {
+        if(firstFragment) { //第一次搜索
             List<Fragment> fragmentList = new ArrayList<>();
             searchVideoFragment = SearchVideoFragment.newInstance(videoCardList, searchBar, keyword);
             fragmentList.add(searchVideoFragment);
@@ -165,11 +159,10 @@ public class SearchActivity extends InstanceActivity {
             viewPager.setOffscreenPageLimit(fragmentList.size());
 
             ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
-            viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
+            viewPager.setAdapter(vpfAdapter);
 
-            firstFragment=false;
-        }
-        else{
+            firstFragment = false;
+        } else { //再次搜索
             searchVideoFragment.refresh(videoCardList,keyword);
             searchArticleFragment.refresh(articleInfoList,keyword);
             searchUserFragment.refresh(userInfoList,keyword);

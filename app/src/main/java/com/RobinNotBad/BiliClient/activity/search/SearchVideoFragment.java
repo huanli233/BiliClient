@@ -136,12 +136,11 @@ public class SearchVideoFragment extends Fragment {
     public void refresh(ArrayList<VideoCard> newList, String keyword){
         this.keyword = keyword;
         int size_old = this.videoCardList.size();
-        this.videoCardList.clear();
+        this.videoCardList = newList;
         CenterThreadPool.runOnMainThread(()-> {
             videoCardAdapter.notifyItemRangeRemoved(0,size_old);
-            this.videoCardList = newList;
             videoCardAdapter.notifyItemRangeInserted(0,videoCardList.size());
-            Log.e("debug","size="+videoCardList.size() + "&last="+size_old);
+            Log.e("debug","size=" + this.videoCardList.size() + "&last="+size_old);
 
             refreshing = false;
             bottom = false;
