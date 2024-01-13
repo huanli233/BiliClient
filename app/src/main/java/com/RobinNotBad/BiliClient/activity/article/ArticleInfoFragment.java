@@ -13,11 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.ArticleContentAdapter;
+import com.RobinNotBad.BiliClient.api.ArticleApi;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.ArticleLine;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.JsonUtil;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,18 +26,20 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ArticleInfoFragment extends Fragment {
-    public ArticleInfo articleInfo;
+    ArticleInfo articleInfo;
+    long cvid;
     RecyclerView recyclerView;
     ArrayList<ArticleLine> lineList;
     public ArticleInfoFragment(){}
 
-    public static ArticleInfoFragment newInstance(ArticleInfo articleInfo) {
+    public static ArticleInfoFragment newInstance(long cvid) {
         ArticleInfoFragment fragment = new ArticleInfoFragment();
         Bundle args = new Bundle();
-        args.putSerializable("articleInfo", articleInfo);
+        args.putLong("cvid", cvid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,7 +47,7 @@ public class ArticleInfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            articleInfo = (ArticleInfo) getArguments().getSerializable("articleInfo");
+            cvid = getArguments().getLong("cvid");
         }
     }
     @Override
@@ -58,34 +61,44 @@ public class ArticleInfoFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerView);
 
-        //开始解析html的内容
+        //开始解析内容
         lineList = new ArrayList<>();
 
         CenterThreadPool.run(()-> {
             try {
-                JSONObject jsonObject = new JSONObject(articleInfo.content);
-                for (int i = 0;i<jsonObject.getJSONArray("ops").length();i++){ //遍历Array
-                    JSONObject element = jsonObject.getJSONArray("ops").getJSONObject(i);
-                    if(element.has("insert")){
-                        if(element.get("insert") instanceof JSONObject){ //有图片
-                            lineList.add(new ArticleLine(1, JsonUtil.searchString(element.getJSONObject("insert"),"url",""),""));
-                        }else{ //纯文字
-                            lineList.add(new ArticleLine(0,element.getString("insert"),""));
+                articleInfo = ArticleApi.getArticle(cvid);
+
+                //专栏分为html和json两种格式
+                if(articleInfo.content.startsWith("{")) {
+                    JSONObject jsonObject = new JSONObject(articleInfo.content);
+                    for (int i = 0; i < jsonObject.getJSONArray("ops").length(); i++) { //遍历Array
+                        JSONObject element = jsonObject.getJSONArray("ops").getJSONObject(i);
+                        if (element.has("insert")) {
+                            if (element.get("insert") instanceof JSONObject) { //有图片
+                                lineList.add(new ArticleLine(1, JsonUtil.searchString(element.getJSONObject("insert"), "url", ""), ""));
+                            } else { //纯文字
+                                lineList.add(new ArticleLine(0, element.getString("insert"), ""));
+                            }
                         }
                     }
                 }
-            }catch (JSONException e){
-                e.printStackTrace();
-                //如果抛出了JSONException就说明是HTML而不是JSON
-                Document document = Jsoup.parse(articleInfo.content);
-                loadContentHtml(document.select("body").get(0));
-            }
+                else{
+                    Document document = Jsoup.parse(articleInfo.content);
+                    loadContentHtml(document.select("body").get(0));
+                }
+                if (isAdded()) requireActivity().runOnUiThread(() -> {
+                    ArticleContentAdapter adapter = new ArticleContentAdapter(requireContext(),articleInfo,lineList);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                    recyclerView.setAdapter(adapter);
+                });
 
-            if (isAdded()) requireActivity().runOnUiThread(() -> {
-                ArticleContentAdapter adapter = new ArticleContentAdapter(requireContext(),articleInfo,lineList);
-                recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-                recyclerView.setAdapter(adapter);
-            });
+            } catch (JSONException e) {
+                if(isAdded()) requireActivity().runOnUiThread(()->MsgUtil.jsonErr(e,requireContext()));
+                e.printStackTrace();
+            } catch (IOException e) {
+                if(isAdded()) requireActivity().runOnUiThread(()->MsgUtil.quickErr(MsgUtil.err_net,requireContext()));
+                e.printStackTrace();
+            }
         });
     }
 

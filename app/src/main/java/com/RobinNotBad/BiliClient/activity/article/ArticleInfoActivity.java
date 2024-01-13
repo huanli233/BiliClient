@@ -14,8 +14,6 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
-import com.RobinNotBad.BiliClient.api.ArticleApi;
-import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -42,13 +40,11 @@ public class ArticleInfoActivity extends BaseActivity {
 
         CenterThreadPool.run(() -> {
             try {
-                ArticleInfo articleInfo = ArticleApi.getArticle(cvid);
-
                 List<Fragment> fragmentList = new ArrayList<>();
-                ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance(articleInfo);
+                ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance(cvid);
                 fragmentList.add(articleInfoFragment);
-                VideoReplyFragment vpFragment = VideoReplyFragment.newInstance(articleInfo.id,12);
-                fragmentList.add(vpFragment);
+                VideoReplyFragment vrFragment = VideoReplyFragment.newInstance(cvid,12);
+                fragmentList.add(vrFragment);
 
                 runOnUiThread(() -> {
                     ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
