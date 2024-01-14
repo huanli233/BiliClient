@@ -8,10 +8,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/msg_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:paddingBottom="40dp"
         android:paddingTop="24dp"
-        android:clipToPadding="false"/>
+        android:clipToPadding="false" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top"
@@ -56,17 +56,42 @@
         android:id="@+id/layout_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/black"
         android:layout_gravity="bottom">
-        <EditText
-            android:id="@+id/msg_input_et"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"/>
-        <ImageButton
-            android:id="@+id/send_btn"
-            android:layout_height="40dp"
-            android:layout_width="40dp"
-            android:background="@color/pink"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:padding="4dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="#505050"
+            app:cardBackgroundColor="#202020"
+            style="@style/CardStyle"
+            app:cardCornerRadius="80dp"
+            android:layout_weight="1">
+            <EditText
+                android:id="@+id/msg_input_et"
+                android:layout_width="match_parent"
+                android:layout_marginHorizontal="10dp"
+                android:layout_height="40dp"
+                android:singleLine="true"
+                android:background="@null"
+                android:textCursorDrawable="@drawable/cursor_drawable"
+                android:textColorHint="#80ffffff"
+                android:textSize="14sp"
+                android:hint="说点什么..." />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="80dp"
+            android:layout_margin="2dp">
+            <ImageButton
+                android:id="@+id/send_btn"
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:src="@drawable/send"
+                android:background="@color/pink" />
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </FrameLayout>

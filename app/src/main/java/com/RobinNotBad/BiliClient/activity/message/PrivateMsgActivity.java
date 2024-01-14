@@ -1,13 +1,21 @@
 package com.RobinNotBad.BiliClient.activity.message;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +26,7 @@ import com.RobinNotBad.BiliClient.adapter.PrivateMsgAdapter;
 import com.RobinNotBad.BiliClient.adapter.PrivateMsgSessionsAdapter;
 import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
+import com.RobinNotBad.BiliClient.listener.AutoHideListener;
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.model.PrivateMsgSession;
 import com.RobinNotBad.BiliClient.model.UserInfo;
@@ -42,6 +51,8 @@ public class PrivateMsgActivity extends BaseActivity {
     EditText contentEt;
     ImageButton sendBtn;
     PrivateMsgAdapter adapter;
+    LinearLayout inputLayout;
+    int onTopOrBottom = 0;//0在下面1在上面
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +61,8 @@ public class PrivateMsgActivity extends BaseActivity {
         msgView = findViewById(R.id.msg_view);
         contentEt = findViewById(R.id.msg_input_et);
         sendBtn = findViewById(R.id.send_btn);
+        inputLayout = findViewById(R.id.layout_input);
+        
         
         Intent intent = getIntent();
         long uid = intent.getLongExtra("uid",114514);
@@ -66,6 +79,8 @@ public class PrivateMsgActivity extends BaseActivity {
                 runOnUiThread(()->{
                     msgView.setLayoutManager(new LinearLayoutManager(this));
                     msgView.setAdapter(adapter);
+                    setViewAutoHide(this,inputLayout,msgView,0);
+                    setViewAutoHide(this,(ConstraintLayout)findViewById(R.id.top),msgView,1);
                     ((LinearLayoutManager)msgView.getLayoutManager()).scrollToPositionWithOffset(list.size()-1,0);
                 });    
                 
@@ -110,5 +125,32 @@ public class PrivateMsgActivity extends BaseActivity {
             
         });
         
+    }
+    private static void setViewAutoHide(final Activity activity, final View view, final RecyclerView list,int azimuth) {
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int height = view.getMeasuredHeight() + 2;
+                Log.i("TAGAAA", "height=" + height);
+                final TranslateAnimation hide = new TranslateAnimation(0, 0, 0, height);
+                final int hideDuration = 250;
+                hide.setDuration(hideDuration);
+                AccelerateDecelerateInterpolator i = new AccelerateDecelerateInterpolator();
+                hide.setInterpolator(i);
+                hide.setFillAfter(true);
+                final TranslateAnimation show = new TranslateAnimation(0, 0, height, 0);
+                final int showDuration = 250;
+                show.setDuration(showDuration);
+                show.setInterpolator(i);
+                show.setFillAfter(true);
+                if(azimuth==0) {
+                	list.addOnScrollListener(new AutoHideListener(activity, view, hide, hideDuration, show, showDuration));
+                }else{
+                    list.addOnScrollListener(new AutoHideListener(activity, view, show, showDuration, hide, hideDuration));
+                }
+                
+            }
+        });
     }
 }
