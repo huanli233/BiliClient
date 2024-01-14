@@ -81,7 +81,7 @@ public class MenuActivity extends BaseActivity {
     }
 
     private void killAndJump(int i){
-        if (i < classList.size()){
+        if (i <= classList.size()){
             InstanceActivity instance = InstanceActivity.getInstance(classList.get(from));
             if(instance != null) instance.finish();
             if(i != classList.size()) {

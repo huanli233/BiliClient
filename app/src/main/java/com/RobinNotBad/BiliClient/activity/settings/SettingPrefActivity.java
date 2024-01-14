@@ -11,7 +11,7 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class SettingPrefActivity extends BaseActivity {
 
-    private SwitchCompat back_disable,fav_single,fav_notice,tags_enable,related_enable,creative_enable;
+    private SwitchCompat back_disable,fav_single,fav_notice, video_tags, video_related, myspace_creativecenter,menu_popular;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -31,23 +31,27 @@ public class SettingPrefActivity extends BaseActivity {
         fav_notice = findViewById(R.id.fav_notice);
         fav_notice.setChecked(SharedPreferencesUtil.getBoolean("fav_notice",false));
 
-        tags_enable = findViewById(R.id.tags_enable);
-        tags_enable.setChecked(SharedPreferencesUtil.getBoolean("tags_enable",true));
+        video_tags = findViewById(R.id.tags_enable);
+        video_tags.setChecked(SharedPreferencesUtil.getBoolean("tags_enable",true));
 
-        related_enable = findViewById(R.id.related_enable);
-        related_enable.setChecked(SharedPreferencesUtil.getBoolean("related_enable",true));
+        video_related = findViewById(R.id.related_enable);
+        video_related.setChecked(SharedPreferencesUtil.getBoolean("related_enable",true));
 
-        creative_enable = findViewById(R.id.creative_enable);
-        creative_enable.setChecked(SharedPreferencesUtil.getBoolean("creative_enable",true));
+        myspace_creativecenter = findViewById(R.id.creative_enable);
+        myspace_creativecenter.setChecked(SharedPreferencesUtil.getBoolean("creative_enable",true));
+
+        menu_popular = findViewById(R.id.menu_popular);
+        menu_popular.setChecked(SharedPreferencesUtil.getBoolean("menu_popular",true));
     }
 
     private void save() {
         SharedPreferencesUtil.putBoolean("back_disable", back_disable.isChecked());
         SharedPreferencesUtil.putBoolean("fav_single", fav_single.isChecked());
         SharedPreferencesUtil.putBoolean("fav_notice", fav_notice.isChecked());
-        SharedPreferencesUtil.putBoolean("tags_enable", tags_enable.isChecked());
-        SharedPreferencesUtil.putBoolean("related_enable", related_enable.isChecked());
-        SharedPreferencesUtil.putBoolean("creative_enable", creative_enable.isChecked());
+        SharedPreferencesUtil.putBoolean("tags_enable", video_tags.isChecked());
+        SharedPreferencesUtil.putBoolean("related_enable", video_related.isChecked());
+        SharedPreferencesUtil.putBoolean("creative_enable", myspace_creativecenter.isChecked());
+        SharedPreferencesUtil.putBoolean("menu_popular", menu_popular.isChecked());
     }
 
     @Override

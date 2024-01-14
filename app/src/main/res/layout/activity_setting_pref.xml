@@ -142,12 +142,37 @@
                 android:orientation="vertical">
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/menu_popular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_edit_text_setting"
+                    android:paddingStart="6dp"
+                    android:text="热门"
+                    android:textColor="@color/textwhite" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="2dp"
+                    android:text="打开此选项，在菜单页面会显示热门按钮"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/tags_enable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/background_edit_text_setting"
                     android:paddingStart="6dp"
-                    android:text="显示视频标签"
+                    android:text="视频标签"
                     android:textColor="@color/textwhite" />
 
                 <TextView
@@ -196,7 +221,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/background_edit_text_setting"
                     android:paddingStart="6dp"
-                    android:text="显示创作中心"
+                    android:text="创作中心"
                     android:textColor="@color/textwhite" />
 
                 <TextView
@@ -204,9 +229,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"
                     android:layout_marginTop="2dp"
-                    android:text="打开此选项，在“我的”页面会显示创作中心"
+                    android:text="打开此选项，在“我的”页面会显示创作中心（可查看投稿视频的数据变化情况）"
                     android:textSize="11sp" />
             </LinearLayout>
+
+
         </LinearLayout>
     </ScrollView>
 
