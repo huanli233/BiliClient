@@ -69,7 +69,7 @@ public class AiSummaryActivity extends BaseActivity {
                             messageCard.content = outline.getString("title") + "\n\n----------\n";
                             for(int j = 0;j<outline.getJSONArray("part_outline").length();j++){
                                 JSONObject part = outline.getJSONArray("part_outline").getJSONObject(j);
-                                messageCard.content += "时间：" + LittleToolsUtil.timestampToTime(part.getLong("timestamp")) + "\n" + part.getString("content") + "\n----------";
+                                messageCard.content += "时间：" + LittleToolsUtil.timestampToTime(part.getLong("timestamp")) + "\n" + part.getString("content") + "\n----------\n";
                             }
                             messageList.add(messageCard);
                         }
