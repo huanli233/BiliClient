@@ -52,7 +52,7 @@ public class PrivateMsgActivity extends BaseActivity {
     ImageButton sendBtn;
     PrivateMsgAdapter adapter;
     LinearLayout inputLayout;
-    int onTopOrBottom = 0;//0在下面1在上面
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +126,7 @@ public class PrivateMsgActivity extends BaseActivity {
         });
         
     }
+    //1在上面0在下面
     private static void setViewAutoHide(final Activity activity, final View view, final RecyclerView list,int azimuth) {
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -133,23 +134,23 @@ public class PrivateMsgActivity extends BaseActivity {
                 view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 int height = view.getMeasuredHeight() + 2;
                 Log.i("TAGAAA", "height=" + height);
-                final TranslateAnimation hide = new TranslateAnimation(0, 0, 0, height);
+                TranslateAnimation hide;
+                if(azimuth==0){hide = new TranslateAnimation(0, 0, 0, height);}
+                else {hide = new TranslateAnimation(0, 0, 0, 0-height);}
                 final int hideDuration = 250;
                 hide.setDuration(hideDuration);
                 AccelerateDecelerateInterpolator i = new AccelerateDecelerateInterpolator();
                 hide.setInterpolator(i);
                 hide.setFillAfter(true);
-                final TranslateAnimation show = new TranslateAnimation(0, 0, height, 0);
+                TranslateAnimation show;
+                if(azimuth==0){show = new TranslateAnimation(0, 0, height, 0);}
+                else{show = new TranslateAnimation(0, 0, 0-height, 0);}
                 final int showDuration = 250;
                 show.setDuration(showDuration);
                 show.setInterpolator(i);
                 show.setFillAfter(true);
-                if(azimuth==0) {
-                	list.addOnScrollListener(new AutoHideListener(activity, view, hide, hideDuration, show, showDuration));
-                }else{
-                    list.addOnScrollListener(new AutoHideListener(activity, view, show, showDuration, hide, hideDuration));
-                }
                 
+                list.addOnScrollListener(new AutoHideListener(activity,view,hide,hideDuration,show,showDuration));
             }
         });
     }

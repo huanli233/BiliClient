@@ -23,7 +23,7 @@ public class AutoHideListener extends RecyclerView.OnScrollListener {
     int Hide = 0;
     int Show = 1;
     int _idleTime = 0;
-    int DefaultIdleTime = 300;
+    int DefaultIdleTime = 400;
     boolean _onScrollChange = false;
     int _state = -1;
 
