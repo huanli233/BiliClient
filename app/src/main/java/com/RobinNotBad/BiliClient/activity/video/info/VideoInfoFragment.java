@@ -3,6 +3,9 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -167,6 +170,14 @@ public class VideoInfoFragment extends Fragment {
                         if (desc_expand) description.setMaxLines(3);
                         else description.setMaxLines(512);
                         desc_expand = !desc_expand;
+                    });
+
+                    description.setOnLongClickListener(view1 -> {
+                        ClipboardManager clipboardManager = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clipData = ClipData.newPlainText("label",videoInfo.description);
+                        clipboardManager.setPrimaryClip(clipData);
+                        MsgUtil.toast("已复制简介",requireContext());
+                        return false;
                     });
 
                     tags.setOnClickListener(view1 -> {
