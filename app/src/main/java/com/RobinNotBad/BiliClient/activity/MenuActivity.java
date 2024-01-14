@@ -74,6 +74,9 @@ public class MenuActivity extends BaseActivity {
         }
         else findViewById(R.id.login).setVisibility(View.GONE);
 
+        if(!SharedPreferencesUtil.getBoolean("menu_popular",true))
+            findViewById(R.id.popular).setVisibility(View.GONE);
+
         for (int i = 0; i < cardList.size(); i++) {
             int finalI = i;
             cardList.get(i).setOnClickListener(view -> killAndJump(finalI));
