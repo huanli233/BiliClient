@@ -142,11 +142,14 @@ public class NetWorkUtil
         ArrayList<String> oldCookies = new ArrayList<>(Arrays.asList(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, "").split("; ")));  //转list
 
         for (String newCookie : newCookies) {  //对每一条新cookie遍历
-            newCookie = newCookie.substring(0,newCookie.indexOf("; "));
+            int index = newCookie.indexOf("; ");
+            if (index == -1) continue;  //如果没有分号，跳过
+            newCookie = newCookie.substring(0, index);
 
-            int index = newCookie.indexOf("=") + 1;
+            index = newCookie.indexOf("=") + 1;
+            if(index == 0) continue;   //如果没有等号，跳过
+
             String key = newCookie.substring(0, index);    //key=
-
             Log.e("debug-newCookie", newCookie);
 
             boolean added = false;
