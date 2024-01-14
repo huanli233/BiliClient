@@ -64,7 +64,7 @@ public class SearchActivity extends InstanceActivity {
         findViewById(R.id.top).setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setClass(SearchActivity.this, MenuActivity.class);
-            intent.putExtra("from",1);
+            intent.putExtra("from",2);
             startActivity(intent);
         });
 

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
+import com.RobinNotBad.BiliClient.activity.settings.QRLoginActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SpecialLoginActivity;
 import com.RobinNotBad.BiliClient.activity.user.favorite.FavoriteFolderListActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
@@ -43,7 +44,7 @@ public class MySpaceActivity extends InstanceActivity {
         findViewById(R.id.top).setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setClass(MySpaceActivity.this, MenuActivity.class);
-            intent.putExtra("from",4);
+            intent.putExtra("from",5);
             startActivity(intent);
         });
         userAvatar = findViewById(R.id.userAvatar);
@@ -120,6 +121,8 @@ public class MySpaceActivity extends InstanceActivity {
                             SharedPreferencesUtil.removeValue(SharedPreferencesUtil.csrf);
                             SharedPreferencesUtil.removeValue(SharedPreferencesUtil.refresh_token);
                             MsgUtil.toast("账号已退出",getApplicationContext());
+                            Intent intent = new Intent(this, QRLoginActivity.class);
+                            startActivity(intent);
                             finish();
                         }else MsgUtil.toast("再点一次退出登录",getApplicationContext());
                         confirmLogout = !confirmLogout;
@@ -131,7 +134,5 @@ public class MySpaceActivity extends InstanceActivity {
                 e.printStackTrace();
             }
         });
-
-
     }
 }

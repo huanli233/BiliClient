@@ -14,6 +14,7 @@ import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
 import com.RobinNotBad.BiliClient.activity.settings.QRLoginActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingMainActivity;
 import com.RobinNotBad.BiliClient.activity.user.MySpaceActivity;
+import com.RobinNotBad.BiliClient.activity.video.PopularActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -31,6 +32,7 @@ public class MenuActivity extends BaseActivity {
 
     private final List<Class<? extends InstanceActivity>> classList = new ArrayList<Class<? extends InstanceActivity>>(){{
         add(RecommendActivity.class);
+        add(PopularActivity.class);
         add(SearchActivity.class);
         add(DynamicActivity.class);
         add(QRLoginActivity.class);
@@ -48,12 +50,13 @@ public class MenuActivity extends BaseActivity {
         Log.e("debug","进入菜单页");
 
         Intent intent = getIntent();
-        from = intent.getIntExtra("from",0);
+        from = intent.getIntExtra("from",-1);
 
         findViewById(R.id.top).setOnClickListener(view -> finish());
 
         List<MaterialCardView> cardList = new ArrayList<MaterialCardView>() {{
             add(findViewById(R.id.main));
+            add(findViewById(R.id.popular));
             add(findViewById(R.id.search));
             add(findViewById(R.id.dynamic));
             add(findViewById(R.id.login));
@@ -64,7 +67,7 @@ public class MenuActivity extends BaseActivity {
             add(findViewById(R.id.exit));
         }};
 
-        if(SharedPreferencesUtil.getLong("mid",0)==0) {
+        if(SharedPreferencesUtil.getLong("mid",0) == 0) {
             findViewById(R.id.profile).setVisibility(View.GONE);
             findViewById(R.id.dynamic).setVisibility(View.GONE);
             findViewById(R.id.message).setVisibility(View.GONE);
@@ -73,21 +76,24 @@ public class MenuActivity extends BaseActivity {
 
         for (int i = 0; i < cardList.size(); i++) {
             int finalI = i;
-            cardList.get(i).setOnClickListener(view -> {
-                if(from == finalI) finish();
-                else if(finalI != cardList.size() - 1) killAndJump(finalI);
-            });
+            cardList.get(i).setOnClickListener(view -> killAndJump(finalI));
         }
-
     }
 
     private void killAndJump(int i){
-        InstanceActivity instance = InstanceActivity.getInstance(classList.get(from));
-        if(instance != null) instance.finish();
-        if(i != classList.size()) {
-            Intent intent = new Intent();
-            intent.setClass(MenuActivity.this, classList.get(i));
-            startActivity(intent);
+        if (i < classList.size()){
+            InstanceActivity instance = InstanceActivity.getInstance(classList.get(from));
+            if(instance != null) instance.finish();
+            if(i != classList.size()) {
+                Intent intent = new Intent();
+                intent.setClass(MenuActivity.this, classList.get(i));
+                startActivity(intent);
+            }
+        } else {
+            for(int j = 0;j<classList.size();j++){
+                InstanceActivity instance = InstanceActivity.getInstance(classList.get(j));
+                if(instance != null) instance.finish();
+            }
         }
         finish();
     }

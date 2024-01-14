@@ -230,6 +230,11 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.video.PopularActivity"
+            android:exported="true"
+            android:label="热门"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.video.RecommendActivity"
             android:exported="true"
             android:label="推荐"
