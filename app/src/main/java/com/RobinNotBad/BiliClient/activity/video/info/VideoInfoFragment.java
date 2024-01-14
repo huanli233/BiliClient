@@ -114,6 +114,7 @@ public class VideoInfoFragment extends Fragment {
         MaterialCardView upCard = view.findViewById(R.id.upInfo);
         MaterialCardView addFavorite = view.findViewById(R.id.addFavorite);
         MaterialCardView download = view.findViewById(R.id.download);
+        MaterialCardView ai_summary = view.findViewById(R.id.ai_summary);
         bvidText = view.findViewById(R.id.bvidText);
         danmakuCount = view.findViewById(R.id.danmakuCount);
         ImageButton like = view.findViewById(R.id.btn_like);
@@ -288,6 +289,16 @@ public class VideoInfoFragment extends Fragment {
                                 startActivity(intent);
                             }
                         }
+                    });
+
+                    ai_summary.setOnClickListener(view1 -> {
+                        Intent intent = new Intent();
+                        intent.setClass(view.getContext(), AiSummaryActivity.class);
+                        intent.putExtra("aid", videoInfo.aid);
+                        intent.putExtra("bvid", videoInfo.bvid);
+                        intent.putExtra("cid",videoInfo.cids.get(0));
+                        intent.putExtra("mid", videoInfo.upMid);
+                        startActivity(intent);
                     });
 
                     upCard.setOnClickListener(view1 -> {

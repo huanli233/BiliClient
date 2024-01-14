@@ -428,27 +428,52 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                 android:layout_height="wrap_content"
-                 android:layout_width="match_parent"
-                 app:cardMaxElevation="0dp"
-                 android:layout_marginEnd="10dp"
-                 app:strokeColor="#70707070"
-                 app:cardElevation="0dp"
-                 app:cardBackgroundColor="#78242424"
-                 android:layout_marginTop="4dp"
-                 android:layout_marginStart="10dp"
-                 app:layout_constraintTop_toBottomOf="@id/addFavorite"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:strokeWidth="0.1dp"
-                 app:layout_constraintEnd_toEndOf="parent"
-                 app:cardCornerRadius="8dp"
-                 android:id="@+id/download">
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:cardMaxElevation="0dp"
+                android:layout_marginEnd="10dp"
+                app:strokeColor="#70707070"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#78242424"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintTop_toBottomOf="@id/addFavorite"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeWidth="0.1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:cardCornerRadius="8dp"
+                android:id="@+id/download">
 
                 <TextView
-                     android:layout_height="42sp"
-                     android:layout_width="match_parent"
-                     android:gravity="center"
-                     android:text="缓存到本地" />
+                    android:layout_height="42sp"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:text="缓存到本地" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:cardMaxElevation="0dp"
+                android:layout_marginEnd="10dp"
+                app:strokeColor="#70707070"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#78242424"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintTop_toBottomOf="@id/download"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeWidth="0.1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:cardCornerRadius="8dp"
+                android:id="@+id/ai_summary">
+
+                <TextView
+                    android:layout_height="42sp"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:text="AI总结" />
 
             </com.google.android.material.card.MaterialCardView>
 

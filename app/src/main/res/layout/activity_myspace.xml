@@ -472,7 +472,7 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/icon_laboratory"
+                        android:src="@drawable/icon_maker"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"

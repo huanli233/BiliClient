@@ -121,4 +121,20 @@ public class VideoInfoApi {
         return videoInfo;
     }
 
+    public static JSONObject getAiSummary(long aid,int cid,long mid) throws JSONException, IOException {
+        String url = "https://api.bilibili.com/x/web-interface/view/conclusion/get?";
+        String args = "aid=" + aid + "&cid=" + cid + "&up_mid=" + mid;
+        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.defHeaders).body()).string());
+
+        if(all.getInt("code") == 0) return all.getJSONObject("data");
+        return new JSONObject();
+    }
+    public static JSONObject getAiSummary(String bvid,int cid,long mid) throws JSONException, IOException {
+        String url = "https://api.bilibili.com/x/web-interface/view/conclusion/get?";
+        String args = "bvid=" + bvid + "&cid=" + cid + "&up_mid=" + mid;
+        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.defHeaders).body()).string());
+
+        if(all.getInt("code") == 0) return all.getJSONObject("data");
+        return new JSONObject();
+    }
 }

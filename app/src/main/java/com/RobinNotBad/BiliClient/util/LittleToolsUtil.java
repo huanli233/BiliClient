@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.util;
 import android.content.Context;
 
 import java.util.Locale;
+import java.util.TimeZone;
 
 //2023-07-25
 
@@ -82,4 +83,9 @@ public class LittleToolsUtil {
         return "fail";
     }
 
+    public static String timestampToTime(long timestamp) {
+        final long ONE_MINUTE = 60L;
+        final long ONE_HOUR = 3600L;
+        return (timestamp / ONE_HOUR) + ":" + ((timestamp % ONE_HOUR) / ONE_MINUTE) + ":" + ((timestamp % ONE_HOUR) % ONE_MINUTE);
+    }
 }
