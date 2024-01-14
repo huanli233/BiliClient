@@ -142,9 +142,9 @@ public class NetWorkUtil
         ArrayList<String> oldCookies = new ArrayList<>(Arrays.asList(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, "").split("; ")));  //转list
 
         for (String newCookie : newCookies) {  //对每一条新cookie遍历
+
             int index = newCookie.indexOf("; ");
-            if (index == -1) continue;  //如果没有分号，跳过
-            newCookie = newCookie.substring(0, index);
+            if (index != -1) newCookie = newCookie.substring(0, index);  //如果没有分号不做处理
 
             index = newCookie.indexOf("=") + 1;
             if(index == 0) continue;   //如果没有等号，跳过

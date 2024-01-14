@@ -1,11 +1,13 @@
 package com.RobinNotBad.BiliClient.activity.message;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
@@ -15,15 +17,20 @@ import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
 import com.RobinNotBad.BiliClient.model.PrivateMsgSession;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.google.android.material.card.MaterialCardView;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
 public class MessageActivity extends InstanceActivity {
     private RecyclerView sessionsView;
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,14 +101,17 @@ public class MessageActivity extends InstanceActivity {
                         ((TextView) findViewById(R.id.system_text)).setText("系统通知(" + stats.getInt("system") + "未读)");
                         sessionsView.setLayoutManager(new LinearLayoutManager(this));
                         sessionsView.setAdapter(adapter);
-                    }catch (Exception e){
+                    } catch (JSONException e) {
+                        MsgUtil.jsonErr(e,this);
                         e.printStackTrace();
-                        Toast.makeText(this, "解析消息数据失败:(", Toast.LENGTH_SHORT).show();
                     }
                 });
-            } catch (Exception e) {
+            } catch (JSONException e) {
+                MsgUtil.jsonErr(e,this);
                 e.printStackTrace();
-                Toast.makeText(this, "解析消息数据失败:(", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                MsgUtil.quickErr(MsgUtil.err_net,this);
+                e.printStackTrace();
             }
         });
     }
