@@ -11,7 +11,7 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class SettingPrefActivity extends BaseActivity {
 
-    private SwitchCompat back_disable,fav_single,fav_notice,tags_enable,related_enable;
+    private SwitchCompat back_disable,fav_single,fav_notice,tags_enable,related_enable,creative_enable;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -36,6 +36,9 @@ public class SettingPrefActivity extends BaseActivity {
 
         related_enable = findViewById(R.id.related_enable);
         related_enable.setChecked(SharedPreferencesUtil.getBoolean("related_enable",true));
+
+        creative_enable = findViewById(R.id.creative_enable);
+        creative_enable.setChecked(SharedPreferencesUtil.getBoolean("creative_enable",true));
     }
 
     private void save() {
@@ -44,6 +47,7 @@ public class SettingPrefActivity extends BaseActivity {
         SharedPreferencesUtil.putBoolean("fav_notice", fav_notice.isChecked());
         SharedPreferencesUtil.putBoolean("tags_enable", tags_enable.isChecked());
         SharedPreferencesUtil.putBoolean("related_enable", related_enable.isChecked());
+        SharedPreferencesUtil.putBoolean("creative_enable", creative_enable.isChecked());
     }
 
     @Override

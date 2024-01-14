@@ -183,8 +183,30 @@
                     android:text="打开此选项，视频评论区右侧会有相关视频推荐"
                     android:textSize="11sp" />
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/creative_enable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_edit_text_setting"
+                    android:paddingStart="6dp"
+                    android:text="显示创作中心"
+                    android:textColor="@color/textwhite" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="2dp"
+                    android:text="打开此选项，在“我的”页面会显示创作中心"
+                    android:textSize="11sp" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

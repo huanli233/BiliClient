@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.RobinNotBad.BiliClient.R;
@@ -119,6 +120,7 @@ public class MySpaceActivity extends InstanceActivity {
                         intent.setClass(MySpaceActivity.this, CreativeCenterActivity.class);
                         startActivity(intent);
                     });
+                    if(!SharedPreferencesUtil.getBoolean("creative_enable",true)) creative.setVisibility(View.GONE);
 
                     logout.setOnClickListener(view -> {
                         if(confirmLogout){
