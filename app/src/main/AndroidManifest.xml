@@ -214,6 +214,11 @@
             android:label="设置"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.user.CreativeCenterActivity"
+            android:exported="true"
+            android:label="创作中心"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.search.SearchActivity"
             android:exported="true"
             android:label="搜索"

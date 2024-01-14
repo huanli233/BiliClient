@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.user.MySpaceActivity">
+    tools:context=".activity.settings.SettingMainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top"
@@ -15,18 +15,18 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/pageName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginStart="8dp"
-            android:layout_marginVertical="3dp"
-            android:text="我的"
-            android:textStyle="bold"
-            app:drawableStartCompat="@drawable/arrow_down"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                android:id="@+id/pageName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="3dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:text="创作中心"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:drawableStartCompat="@drawable/arrow_back"/>
 
         <TextClock
             android:id="@+id/timeText"
@@ -48,94 +48,23 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top"
-        app:layout_constraintBottom_toBottomOf="parent">
-
+        app:layout_constraintTop_toBottomOf="@+id/top">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/userAvatar"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="12dp"
-                    android:adjustViewBounds="true"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/akari" />
-
-                <TextView
-                    android:id="@+id/userName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="1dp"
-                    android:singleLine="true"
-                    android:text="加载中..."
-                    android:textColor="#fff"
-                    app:layout_constraintBottom_toTopOf="@+id/userFans"
-                    app:layout_constraintStart_toEndOf="@id/userAvatar"
-                    app:layout_constraintTop_toTopOf="@id/userAvatar" />
-
-                <TextView
-                    android:id="@+id/userFans"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginBottom="2dp"
-                    android:alpha="0.7"
-                    android:textColor="#fff"
-                    android:textSize="11sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/userAvatar"
-                    app:layout_constraintStart_toEndOf="@id/userAvatar"
-                    app:layout_constraintTop_toBottomOf="@id/userName" />
-
-                <TextView
-                    android:id="@+id/userDesc"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="10dp"
-                    android:textColor="#fff"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/userAvatar"
-                    tools:ignore="TouchTargetSizeCheck" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="4dp"
-                    android:layout_marginHorizontal="8dp"
-                    android:background="#318C8C8C"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/userDesc" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
+            android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/myinfo"
+                android:id="@+id/totalFans"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
+                android:visibility="visible"
                 app:cardBackgroundColor="#78242424"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
@@ -147,56 +76,43 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/myinfo_go"
+                    <TextView
+                        android:id="@+id/totalFans_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="8dp"
                         android:src="@drawable/arrow_forward"
+                        android:text="114+51"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/myinfo_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="8dp"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/icon_info"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHeight_percent="0.4"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5" />
-
                     <TextView
-                            android:layout_width="0dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
                         android:ellipsize="end"
                         android:lines="1"
-                        android:text="我的主页"
+                        android:text="粉丝数"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:autoSizeTextType="uniform"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/myinfo_go"
-                        app:layout_constraintStart_toEndOf="@+id/myinfo_icon"
+                        app:layout_constraintEnd_toStartOf="@+id/totalFans_number"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
-
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/follow"
+                android:id="@+id/totalClick"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
+                android:visibility="visible"
                 app:cardBackgroundColor="#78242424"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
@@ -208,57 +124,43 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/follow_go"
+                    <TextView
+                        android:id="@+id/totalClick_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="8dp"
                         android:src="@drawable/arrow_forward"
+                        android:text="114+51"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/follow_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="8dp"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/icon_person"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHeight_percent="0.4"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5" />
-
                     <TextView
-                            android:layout_width="0dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
                         android:ellipsize="end"
                         android:lines="1"
-                        android:text="关注"
+                        android:text="播放量"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:autoSizeTextType="uniform"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/follow_go"
-                        app:layout_constraintStart_toEndOf="@+id/follow_icon"
+                        app:layout_constraintEnd_toStartOf="@+id/totalClick_number"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
-
-
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/watchlater"
+                android:id="@+id/totalLike"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
+                android:visibility="visible"
                 app:cardBackgroundColor="#78242424"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
@@ -270,57 +172,43 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/watchlater_go"
+                    <TextView
+                        android:id="@+id/totalLike_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="8dp"
                         android:src="@drawable/arrow_forward"
+                        android:text="114+51"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/watchlater_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="8dp"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/icon_play"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHeight_percent="0.4"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5" />
-
                     <TextView
-                            android:layout_width="0dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
                         android:ellipsize="end"
                         android:lines="1"
-                        android:text="稍后再看"
+                        android:text="点赞"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:autoSizeTextType="uniform"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/watchlater_go"
-                        app:layout_constraintStart_toEndOf="@+id/watchlater_icon"
+                        app:layout_constraintEnd_toStartOf="@+id/totalLike_number"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
-
-
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/favorite"
+                android:id="@+id/totalCoin"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
+                android:visibility="visible"
                 app:cardBackgroundColor="#78242424"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
@@ -332,56 +220,91 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/favorite_go"
+                    <TextView
+                        android:id="@+id/totalCoin_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="8dp"
                         android:src="@drawable/arrow_forward"
+                        android:text="114+51"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/favorite_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="8dp"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/icon_star"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHeight_percent="0.4"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5" />
-
                     <TextView
-                            android:layout_width="0dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:text="投币"
+                        android:textColor="#fff"
+                        android:textSize="11sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintEnd_toStartOf="@+id/totalCoin_number"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/totalFavourite"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="2dp"
+                android:foreground="?selectableItemBackground"
+                android:visibility="visible"
+                app:cardBackgroundColor="#78242424"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:strokeColor="#70707070"
+                app:strokeWidth="0.1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/totalFavourite_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:src="@drawable/arrow_forward"
+                        android:text="114+51"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="收藏"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:autoSizeTextType="uniform"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/favorite_go"
-                        app:layout_constraintStart_toEndOf="@+id/favorite_icon"
+                        app:layout_constraintEnd_toStartOf="@+id/totalFavourite_number"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
-
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/history"
+                android:id="@+id/totalShare"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
+                android:visibility="visible"
                 app:cardBackgroundColor="#78242424"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
@@ -393,56 +316,43 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/history_go"
+                    <TextView
+                        android:id="@+id/totalShare_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="8dp"
                         android:src="@drawable/arrow_forward"
+                        android:text="114+51"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/history_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="8dp"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/icon_history"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHeight_percent="0.4"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
                         android:ellipsize="end"
                         android:lines="1"
-                        android:text="历史记录"
+                        android:text="分享"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:autoSizeTextType="uniform"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/history_go"
-                        app:layout_constraintStart_toEndOf="@+id/history_icon"
+                        app:layout_constraintEnd_toStartOf="@+id/totalShare_number"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
-
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/creative"
+                android:id="@+id/totalReply"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
+                android:visibility="visible"
                 app:cardBackgroundColor="#78242424"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
@@ -454,56 +364,43 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/creative_go"
+                    <TextView
+                        android:id="@+id/totalReply_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="8dp"
                         android:src="@drawable/arrow_forward"
+                        android:text="114+51"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/creative_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="8dp"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/icon_laboratory"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHeight_percent="0.4"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
                         android:ellipsize="end"
                         android:lines="1"
-                        android:text="创作中心"
+                        android:text="评论数"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:autoSizeTextType="uniform"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/creative_go"
-                        app:layout_constraintStart_toEndOf="@+id/creative_icon"
+                        app:layout_constraintEnd_toStartOf="@+id/totalReply_number"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
-
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/logout"
+                android:id="@+id/totalDm"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
+                android:visibility="visible"
                 app:cardBackgroundColor="#78242424"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
@@ -515,46 +412,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/logout_go"
+                    <TextView
+                        android:id="@+id/totalDm_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="8dp"
                         android:src="@drawable/arrow_forward"
+                        android:text="114+51"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/logout_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="8dp"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/icon_logout"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHeight_percent="0.4"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
                         android:ellipsize="end"
                         android:lines="1"
-                        android:text="退出登录"
+                        android:text="弹幕数"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:autoSizeTextType="uniform"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/logout_go"
-                        app:layout_constraintStart_toEndOf="@+id/logout_icon"
+                        app:layout_constraintEnd_toStartOf="@+id/totalDm_number"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

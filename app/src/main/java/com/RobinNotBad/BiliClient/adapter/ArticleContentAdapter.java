@@ -134,7 +134,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 keywords.setMaxLines((keywords_expand ? 10 : 1));
                 keywords.setOnClickListener(view1 -> {
                     if(keywords_expand) keywords.setMaxLines(1);
-                    else keywords.setMaxLines(10);
+                    else keywords.setMaxLines(512);
                     keywords_expand = !keywords_expand;
                 });
 
