@@ -89,7 +89,7 @@ public class PrivateMsgActivity extends BaseActivity {
         sendBtn.setOnClickListener(view -> CenterThreadPool.run(()->{
             try {
                 if(!contentEt.getText().toString().equals("")) {
-                    PrivateMessage msg = new PrivateMessage(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,114514),PrivateMessage.TYPE_TEXT,new JSONObject("{\"content\":\""+contentEt.getText()+"\"}"),System.currentTimeMillis()/1000,UserInfoApi.getCurrentUserInfo().name,0);
+                    PrivateMessage msg = new PrivateMessage(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,114514),PrivateMessage.TYPE_TEXT,new JSONObject("{\"content\":\""+contentEt.getText()+"\"}"),System.currentTimeMillis()/1000,UserInfoApi.getCurrentUserInfo().name,0,0);
                     contentEt.setText("");
                     JSONObject result = PrivateMsgApi.sendMsg(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,114514),uid,PrivateMessage.TYPE_TEXT,msg.timestamp,msg.content.toString());
                     msg.msgId = result.getJSONObject("data").getLong("msg_key");

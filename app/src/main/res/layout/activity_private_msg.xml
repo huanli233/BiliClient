@@ -66,7 +66,7 @@
             app:strokeColor="#505050"
             app:cardBackgroundColor="#202020"
             style="@style/CardStyle"
-            app:cardCornerRadius="80dp"
+            app:cardCornerRadius="40dp"
             android:layout_weight="1">
             <EditText
                 android:id="@+id/msg_input_et"
