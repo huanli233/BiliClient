@@ -1,6 +1,6 @@
 package com.RobinNotBad.BiliClient.adapter;
 import android.graphics.Rect;
-import android.view.View;;
+import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class BottomOffsetDecoration extends RecyclerView.ItemDecoration {
