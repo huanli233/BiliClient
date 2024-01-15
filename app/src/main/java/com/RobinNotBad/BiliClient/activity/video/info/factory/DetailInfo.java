@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.viewbinding.ViewBinding;
 
 /**
  * 详情页的基类， 通过继承该类， 可以实现不同的详情页

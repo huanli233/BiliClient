@@ -236,7 +236,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
         }
     }
-
+    public void setOid(long oid){
+        this.oid = oid;
+    }
     @Override
     public int getItemCount() {
         return replyList.size() + 1;

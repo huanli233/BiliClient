@@ -39,6 +39,7 @@ public class VideoReplyFragment extends Fragment {
     private boolean refreshing = false;
     private boolean bottom = false;
     private int page = 1;
+    private boolean aidChanged = false;
 
     public VideoReplyFragment() {
 
@@ -121,6 +122,33 @@ public class VideoReplyFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(aidChanged){
+            CenterThreadPool.run(()->{
+                try {
+                    int result = ReplyApi.getReplies(aid,0,page,type,replyList);
+                    if(result != -1) {
+                        replyAdapter.setReplyList(replyList);
+                        replyAdapter.setOid(aid);
+                        replyAdapter.notifyDataSetChanged();
+                        if(result == 1) {
+                            Log.e("debug","到底了");
+                            bottom = true;
+                        }
+                    }
+                } catch (IOException e){
+                    requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
+                    Log.wtf("debug", e);
+                } catch (JSONException e) {
+                    requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
+                    Log.wtf("debug", e);
+                }
+            });
+        }
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private void continueLoading() {
         page++;
@@ -148,24 +176,6 @@ public class VideoReplyFragment extends Fragment {
     @SuppressLint("NotifyDataSetChanged")
     public void setAid(long aid) {
         this.aid = aid;
-        CenterThreadPool.run(()->{
-            try {
-                int result = ReplyApi.getReplies(aid,0,page,type,replyList);
-                if(result != -1) {
-                    replyAdapter.setReplyList(replyList);
-                    replyAdapter.notifyDataSetChanged();
-                   if(result == 1) {
-                        Log.e("debug","到底了");
-                        bottom = true;
-                    }
-                }
-            } catch (IOException e){
-                requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
-                Log.wtf("debug", e);
-            } catch (JSONException e) {
-                requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
-                Log.wtf("debug", e);
-            }
-        });
+        aidChanged = true;
     }
 }

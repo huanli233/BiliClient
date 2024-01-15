@@ -36,5 +36,6 @@ public class VideoInfoActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        getLifecycle().removeObserver(info);
     }
 }

@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.video.info.factory;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,11 +29,12 @@ public class MediaDetailInfo extends DetailInfo {
 
     @Override
     protected View createView(Context context) {
-       return LayoutInflater.from(context).inflate(R.layout.activity_simple_viewpager, null, false);
+        return activity.getLayoutInflater().inflate(R.layout.activity_simple_viewpager, null, true);
     }
 
+
     @Override
-    protected void initView() {
+    public void initView() {
         View rootView = getRootView();
         ViewPager viewPager = rootView.findViewById(R.id.viewPager);
         rootView.findViewById(R.id.top).setOnClickListener(view -> activity.finish());
