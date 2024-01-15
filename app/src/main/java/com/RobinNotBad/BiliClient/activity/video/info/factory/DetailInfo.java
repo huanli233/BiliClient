@@ -1,6 +1,7 @@
 package com.RobinNotBad.BiliClient.activity.video.info.factory;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +30,7 @@ public abstract class DetailInfo implements DefaultLifecycleObserver {
 
     public DetailInfo(AppCompatActivity activity) {
         this.activity = activity;
-        rootView = createView(activity);
+        rootView = createView(activity.getLayoutInflater());
     }
 
     /**
@@ -37,11 +38,11 @@ public abstract class DetailInfo implements DefaultLifecycleObserver {
      * 在这里创建视图， 通过LayoutInflater.from(context).inflate()创建视图
      * 同时可以在这里做网络请求, 先把数据保存着，
      * 在initView()方法中再将数据设置到视图上。这样用户的卡顿会小一点
-     * @param context
+     * @param inflater Activity 的 LayoutInflater
      * @return
      */
 
-    protected abstract View createView(Context context);
+    protected abstract View createView(LayoutInflater inflater);
 
     /**
      * 获取根视图. 通过getRootView().findViewById()获取子视图

@@ -39,8 +39,8 @@ class VideoDetailInfo extends DetailInfo {
     }
 
     @Override
-    protected View createView(Context context) {
-        return LayoutInflater.from(context).inflate(R.layout.activity_simple_viewpager, null, false);
+    protected View createView(LayoutInflater inflater) {
+        return inflater.inflate(R.layout.activity_simple_viewpager, null, true);
     }
 
     @Override
