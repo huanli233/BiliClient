@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +27,9 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,6 +46,7 @@ public class PrivateMsgActivity extends BaseActivity {
     ImageButton sendBtn;
     PrivateMsgAdapter adapter;
     LinearLayout inputLayout;
+    long uid;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +60,7 @@ public class PrivateMsgActivity extends BaseActivity {
         
         
         Intent intent = getIntent();
-        long uid = intent.getLongExtra("uid",114514);
+        uid = intent.getLongExtra("uid",114514);
         Log.e("",String.valueOf(uid));
 
         findViewById(R.id.top).setOnClickListener(view -> finish());
@@ -85,6 +90,7 @@ public class PrivateMsgActivity extends BaseActivity {
             try {
                 if(!contentEt.getText().toString().equals("")) {
                     PrivateMessage msg = new PrivateMessage(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,114514),PrivateMessage.TYPE_TEXT,new JSONObject("{\"content\":\""+contentEt.getText()+"\"}"),System.currentTimeMillis()/1000,UserInfoApi.getCurrentUserInfo().name,0);
+                    contentEt.setText("");
                     JSONObject result = PrivateMsgApi.sendMsg(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,114514),uid,PrivateMessage.TYPE_TEXT,msg.timestamp,msg.content.toString());
                     msg.msgId = result.getJSONObject("data").getLong("msg_key");
                     runOnUiThread(()->{
@@ -92,10 +98,13 @@ public class PrivateMsgActivity extends BaseActivity {
                             if(result.getInt("code")==0) {
                                 MsgUtil.toast("发送成功",this);
                                 list.add(msg);
-                                contentEt.setText("");
                                 adapter.notifyItemInserted(list.size()-1);
                                 adapter.notifyItemRangeChanged(list.size()-1,list.size()-1);
+                                msgView.smoothScrollToPosition(list.size()-1);
                             }else{
+                                if(result.getInt("code")==21047){
+                                    Toast.makeText(this,result.getString("message"),Toast.LENGTH_LONG).show();
+                                }
                                 MsgUtil.toast("发送失败",this);
                             }
                         } catch (JSONException e) {
@@ -110,7 +119,14 @@ public class PrivateMsgActivity extends BaseActivity {
                 err.printStackTrace();
             }
         }));
-        
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+        Runnable task = new Runnable(){
+            @Override
+            public void run() {
+                refresh();
+            }
+        };
+        scheduledExecutorService.scheduleAtFixedRate(task,0,120, TimeUnit.SECONDS);
     }
     //1在上面0在下面
     private static void setViewAutoHide(final Activity activity, final View view, final RecyclerView list,int azimuth) {
@@ -137,6 +153,24 @@ public class PrivateMsgActivity extends BaseActivity {
                 show.setFillAfter(true);
                 
                 list.addOnScrollListener(new AutoHideListener(activity,view,hide,hideDuration,show,showDuration));
+            }
+        });
+    }
+    private void refresh() {
+    	CenterThreadPool.run(()->{
+            try {
+            	allMsg = PrivateMsgApi.getPrivateMsg(uid,50);
+                list = PrivateMsgApi.getPrivateMsgList(allMsg);
+                Collections.reverse(list);
+                runOnUiThread(()->{
+                    adapter.notifyDataSetChanged();
+                    msgView.smoothScrollToPosition(list.size()-1);
+                });    
+                
+            } catch(IOException err) {
+            	Log.e("",err.toString());
+            } catch(JSONException err){
+                Log.e("",err.toString());
             }
         });
     }

@@ -9,6 +9,7 @@ public class PrivateMessage {
     public long uid = 0;
     public String name="";
     public long msgId = 0;
+    public long msgSeqno = 0;
     
     public static final int TYPE_TEXT = 1;
     public static final int TYPE_VIDEO = 7;
@@ -18,13 +19,14 @@ public class PrivateMessage {
     public static final int TYPE_PIC_CARD = 13;
     public static final int TYPE_TEXT_WITH_VIDEO = 16;
     
-    public PrivateMessage(long uid,int type,JSONObject content,long timestamp,String name,long msgId){
+    public PrivateMessage(long uid,int type,JSONObject content,long timestamp,String name,long msgId,long msgSeqno){
         this.uid = uid;
         this.type = type;
         this.content = content;
         this.timestamp = timestamp;
         this.name = name;
         this.msgId = msgId;
+        this.msgSeqno = msgSeqno;
     }
     
     public PrivateMessage(){}
