@@ -3,9 +3,11 @@ package com.RobinNotBad.BiliClient.activity.search;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -167,5 +169,34 @@ public class SearchActivity extends InstanceActivity {
             searchArticleFragment.refresh(articleInfoList,keyword);
             searchUserFragment.refresh(userInfoList,keyword);
         }
+    }
+    private Point startPoint;
+
+    /**
+     * Called when a touch screen event was not handled by any of the views under it.
+     * if is swipe up, hide search bar, else show search bar
+     * @param event The touch screen event being processed.
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                startPoint = new Point((int)event.getX(),(int)event.getY());
+                break;
+            case MotionEvent.ACTION_MOVE:
+                //先判断是不是竖向滑动， 如果是竖向滑动， 再考虑是上滑还是下滑
+                boolean isVerticalMove = Math.abs(event.getY() - startPoint.y) > Math.abs(event.getX() - startPoint.x);
+                if(isVerticalMove) {
+                    //上滑显示
+                    boolean isSwipeUp = event.getY() - startPoint.y < 0;
+                    if(isSwipeUp) {
+                        searchBar.setVisibility(View.VISIBLE);
+                    }else {
+                        searchBar.setVisibility(View.GONE);
+                    }
+                }
+                break;
+        }
+        return super.onTouchEvent(event);
     }
 }
