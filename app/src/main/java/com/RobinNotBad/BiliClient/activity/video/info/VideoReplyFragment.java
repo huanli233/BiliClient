@@ -2,24 +2,20 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.ReplyAdapter;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -39,7 +35,6 @@ public class VideoReplyFragment extends Fragment {
     private boolean refreshing = false;
     private boolean bottom = false;
     private int page = 1;
-    private boolean aidChanged = false;
 
     public VideoReplyFragment() {
 
@@ -77,41 +72,40 @@ public class VideoReplyFragment extends Fragment {
         Log.e("debug-av号",String.valueOf(aid));
 
         replyList = new ArrayList<>();
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        replyAdapter = new ReplyAdapter(requireContext(), replyList,aid,0,type);
+        recyclerView.setAdapter(replyAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
 
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                assert manager != null;
+                int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();  //获取最后一个完全显示的itemPosition
+                int itemCount = manager.getItemCount();
+                if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
+                    refreshing = true;
+                    CenterThreadPool.run(() -> continueLoading()); //加载第二页
+                }
+            }
+        });
         CenterThreadPool.run(()->{
             try {
                 int result = ReplyApi.getReplies(aid,0,page,type,replyList);
                 if(result != -1) {
-                    replyAdapter = new ReplyAdapter(getContext(), replyList,aid,0,type);
                     if(isAdded()) requireActivity().runOnUiThread(()->{
-                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                        recyclerView.setAdapter(replyAdapter);
-                        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                            @Override
-                            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                                super.onScrollStateChanged(recyclerView, newState);
-                            }
-
-                            @Override
-                            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                                super.onScrolled(recyclerView, dx, dy);
-                                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                                assert manager != null;
-                                int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();  //获取最后一个完全显示的itemPosition
-                                int itemCount = manager.getItemCount();
-                                if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
-                                    refreshing = true;
-                                    CenterThreadPool.run(() -> continueLoading()); //加载第二页
-                                }
-                            }
-                        });
+                        replyAdapter.notifyDataSetChanged();
                     });
                     if(result == 1) {
                         Log.e("debug","到底了");
                         bottom = true;
                     }
                 }
-
             } catch (IOException e){
                 requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
                 Log.wtf("debug", e);
@@ -120,33 +114,6 @@ public class VideoReplyFragment extends Fragment {
                 Log.wtf("debug", e);
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(aidChanged){
-            CenterThreadPool.run(()->{
-                try {
-                    int result = ReplyApi.getReplies(aid,0,page,type,replyList);
-                    if(result != -1) {
-                        replyAdapter.setReplyList(replyList);
-                        replyAdapter.setOid(aid);
-                        replyAdapter.notifyDataSetChanged();
-                        if(result == 1) {
-                            Log.e("debug","到底了");
-                            bottom = true;
-                        }
-                    }
-                } catch (IOException e){
-                    requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
-                    Log.wtf("debug", e);
-                } catch (JSONException e) {
-                    requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
-                    Log.wtf("debug", e);
-                }
-            });
-        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -171,11 +138,5 @@ public class VideoReplyFragment extends Fragment {
             if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
             Log.wtf("debug", e);
         }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void setAid(long aid) {
-        this.aid = aid;
-        aidChanged = true;
     }
 }
