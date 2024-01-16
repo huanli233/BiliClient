@@ -42,7 +42,7 @@ public class ConfInfoApi
     }
 
     private static final String TAG = "ConfInfoApi";
-    public static final String USER_AGENT_DEF = "Mozilla/5.0 BiliDroid/4.34.0 (bbcallen@gmail.com)";
+    public static final String USER_AGENT_BB = "Mozilla/5.0 BiliDroid/4.34.0 (bbcallen@gmail.com)";
     public static final String USER_AGENT_OWN = "BiliClient/2.2 (robin_0229@qq.com; bilibili@RobinNotBad;)";
     public static final String USER_AGENT_WEB = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0";
 
@@ -57,7 +57,7 @@ public class ConfInfoApi
         36, 20, 34, 44, 52};
 
     public static String getWBIRawKey() throws IOException, JSONException {
-        JSONObject getJson = new JSONObject(Objects.requireNonNull(NetWorkUtil.get("https://api.bilibili.com/x/web-interface/nav", defHeaders).body()).string());
+        JSONObject getJson = new JSONObject(Objects.requireNonNull(NetWorkUtil.get("https://api.bilibili.com/x/web-interface/nav", webHeaders).body()).string());
         JSONObject wbi_img = getJson.getJSONObject("data").getJSONObject("wbi_img");  //不要被名称骗了，这玩意是签名用的
         String img_key = LittleToolsUtil.getFileFirstName(LittleToolsUtil.getFileNameFromLink(wbi_img.getString("img_url")));  //得到文件名
         String sub_key = LittleToolsUtil.getFileFirstName(LittleToolsUtil.getFileNameFromLink(wbi_img.getString("sub_url")));
@@ -144,15 +144,6 @@ public class ConfInfoApi
         return md5code.toString();
     }
 
-    public static ArrayList<String> defHeaders = new ArrayList<String>() {{
-        add("Cookie");
-        add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
-        add("Referer");
-        add("https://www.bilibili.com/");
-        add("User-Agent");
-        add(USER_AGENT_WEB);
-    }};
-
     public static ArrayList<String> webHeaders = new ArrayList<String>() {{
         add("Cookie");
         add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
@@ -162,23 +153,19 @@ public class ConfInfoApi
         add(USER_AGENT_WEB);
     }};
 
+    public static ArrayList<String> bbHeaders = new ArrayList<String>() {{
+        add("Cookie");
+        add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
+        add("Referer");
+        add("https://www.bilibili.com/");
+        add("User-Agent");
+        add(USER_AGENT_WEB);
+    }};
+
+
     public static void refreshHeaders(){
-        webHeaders = new ArrayList<String>() {{
-            add("Cookie");
-            add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
-            add("Referer");
-            add("https://www.bilibili.com/");
-            add("User-Agent");
-            add(USER_AGENT_WEB);
-        }};
-        defHeaders = new ArrayList<String>() {{
-            add("Cookie");
-            add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
-            add("Referer");
-            add("https://www.bilibili.com/");
-            add("User-Agent");
-            add(USER_AGENT_WEB);
-        }};
+        bbHeaders.set(1,SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
+        webHeaders.set(1,SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
     }
 
 

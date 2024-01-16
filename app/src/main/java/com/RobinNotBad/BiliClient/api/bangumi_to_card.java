@@ -19,7 +19,7 @@ public class bangumi_to_card {
     //获取番剧信息, 详情页需要有基本的cover, 信息等
     public static Media getMediaInfo(String mediaId) throws Exception {
         String url = "https://api.bilibili.com/pgc/review/user?media_id=" + mediaId;
-        ResponseBody body = NetWorkUtil.get(url, ConfInfoApi.defHeaders).body();
+        ResponseBody body = NetWorkUtil.get(url, ConfInfoApi.webHeaders).body();
         if (body == null) {
             throw new NetworkErrorException("baseMedia info body is null");
         }

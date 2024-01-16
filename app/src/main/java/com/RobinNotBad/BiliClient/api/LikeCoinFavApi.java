@@ -17,7 +17,7 @@ public class LikeCoinFavApi {
         String url = "http://api.bilibili.com/x/web-interface/archive/like";
         String per = "aid=" + aid + "&like=" + likeState + "&csrf=" + SharedPreferencesUtil.getString("csrf","");
 
-        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, ConfInfoApi.defHeaders).body()).string());
+        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, ConfInfoApi.webHeaders).body()).string());
         Log.e("debug-点赞",result.toString());
         return result.getInt("code");
     }
@@ -26,7 +26,7 @@ public class LikeCoinFavApi {
         String url = "http://api.bilibili.com/x/web-interface/coin/add";
         String per = "aid=" + aid + "&multiply=" + multiply + "&csrf=" + SharedPreferencesUtil.getString("csrf","");
 
-        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, ConfInfoApi.defHeaders).body()).string());
+        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, ConfInfoApi.webHeaders).body()).string());
         Log.e("debug-投币",result.toString());
         return result.getInt("code");
     }
@@ -37,7 +37,7 @@ public class LikeCoinFavApi {
         String url = "https://api.bilibili.com/medialist/gateway/coll/resource/deal";
         String per = "rid=" + aid + "&type=2&add_media_ids=" + addFid + "&del_media_ids=&csrf=" + SharedPreferencesUtil.getString("csrf","");
 
-        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, ConfInfoApi.defHeaders).body()).string());
+        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, ConfInfoApi.webHeaders).body()).string());
         Log.e("debug-添加收藏",result.toString());
         return result.getInt("code");
     }

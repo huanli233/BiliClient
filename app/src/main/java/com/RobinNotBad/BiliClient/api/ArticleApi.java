@@ -18,7 +18,7 @@ public class ArticleApi {
     public static ArticleInfo getArticle(long id) throws JSONException, IOException {
         String url = "https://api.bilibili.com/x/article/view?";
         String args = "id=" + id + "&gaia_source=main_web&web_location=333.976";
-        JSONObject data = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.defHeaders).body()).string()).getJSONObject("data");
+        JSONObject data = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.webHeaders).body()).string()).getJSONObject("data");
 
         ArticleInfo articleInfo = new ArticleInfo();
         articleInfo.id = id;

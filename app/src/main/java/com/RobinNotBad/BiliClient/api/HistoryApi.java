@@ -19,12 +19,12 @@ public class HistoryApi {
     public static void reportHistory(long aid, long cid,long mid, long progress) throws IOException {
         String url = "https://api.bilibili.com/x/report/web/heartbeat";
         String per = "aid=" + aid + "&cid=" + cid + "&mid=" + mid + "&csrf=" + SharedPreferencesUtil.getString("csrf","") + "&played_time=" + progress + "&realtime=0&start_ts=" + (System.currentTimeMillis() / 1000) + "&type=3&dt=2&play_type=1";
-        NetWorkUtil.post(url,per,ConfInfoApi.defHeaders);
+        NetWorkUtil.post(url,per,ConfInfoApi.webHeaders);
     }
 
     public static int getHistory(int page, ArrayList<VideoCard> videoList) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/v2/history?pn=" + page + "&ps=30";
-        Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
+        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
         if(!result.isNull("data")){
             JSONArray data = result.getJSONArray("data");

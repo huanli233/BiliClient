@@ -23,9 +23,9 @@ public class UserInfoApi {
 
     public static UserInfo getUserInfo(long mid) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/web-interface/card?mid=" + mid;
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.defHeaders).body()).string());
+        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
         if(all.has("data") && !all.isNull("data")) {
-            JSONObject notice_all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get("https://api.bilibili.com/x/space/notice?mid=" + mid, ConfInfoApi.defHeaders).body()).string());
+            JSONObject notice_all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get("https://api.bilibili.com/x/space/notice?mid=" + mid, ConfInfoApi.webHeaders).body()).string());
             String notice;
             if(notice_all.has("data") && !notice_all.isNull("data")) notice = notice_all.getString("data");
             else notice = "";
@@ -51,7 +51,7 @@ public class UserInfoApi {
 
     public static UserInfo getCurrentUserInfo() throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/space/myinfo";
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.defHeaders).body()).string());
+        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
         if(all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
             long mid = data.getLong("mid");
@@ -72,7 +72,7 @@ public class UserInfoApi {
     public static int getCurrentUserCoin()  {
         try{
             String url = "https://account.bilibili.com/site/getCoin";
-            JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.defHeaders).body()).string());
+            JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
             if(all.has("data") && !all.isNull("data")) {
                 JSONObject data = all.getJSONObject("data");
                 return data.has("money") ? data.getInt("money") : 0;
@@ -93,7 +93,7 @@ public class UserInfoApi {
         String args = "keyword=" + searchKeyword + "&mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
                 + "&ps=30&tid=0";
         Log.e("debug",url);
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.defHeaders).body()).string());
+        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.webHeaders).body()).string());
         if(all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
             JSONObject list = data.getJSONObject("list");
@@ -124,7 +124,7 @@ public class UserInfoApi {
         String args = "mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
                 + "&ps=30&tid=0";
         Log.e("debug",url);
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.defHeaders).body()).string());
+        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.webHeaders).body()).string());
         if(all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
             if(data.has("articles")){

@@ -35,7 +35,7 @@ public class DynamicApi {
                     + SharedPreferencesUtil.getLong("mid",0)
                     + "&offset_dynamic_id=" + offset + "&type=" + DYNAMIC_TYPES;
         }
-        Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
+        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
         return new JSONObject(Objects.requireNonNull(response.body()).string());
     }
 
@@ -43,13 +43,13 @@ public class DynamicApi {
         String url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?visitor_uid="
                     + SharedPreferencesUtil.getLong("mid",0) + "&host_uid=" + mid
                     + "&offset_dynamic_id=" + offset + "&type=" + DYNAMIC_TYPES;
-        Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
+        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
         return new JSONObject(Objects.requireNonNull(response.body()).string());
     }
 
     public static JSONObject getDynamicInfo(long id) throws IOException, JSONException {
         String url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/get_dynamic_detail?dynamic_id=" + id;
-        Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
+        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
         return new JSONObject(Objects.requireNonNull(response.body()).string()).getJSONObject("data").getJSONObject("card");
     }
 

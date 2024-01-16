@@ -15,7 +15,6 @@ import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.CookieRefreshApi;
-import com.RobinNotBad.BiliClient.api.UserLoginApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -27,8 +26,6 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import okhttp3.Response;
 
 //启动页面
 //一切的一切的开始
@@ -62,7 +59,7 @@ public class SplashActivity extends Activity {
             if(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.setup,false)) {//判断是否设置完成
                 try {
 
-                    NetWorkUtil.get("https://bilibili.com",ConfInfoApi.defHeaders);
+                    NetWorkUtil.get("https://bilibili.com",ConfInfoApi.webHeaders);
 
                     if (SharedPreferencesUtil.getLong("mid", 0) != 0
                             && SharedPreferencesUtil.getBoolean("dev_refresh_cookie",true)) checkCookie();

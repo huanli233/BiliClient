@@ -24,7 +24,7 @@ public class FavoriteApi {
 
     public static ArrayList<FavoriteFolder> getFavoriteFolders(long mid) throws IOException, JSONException {
         String url = "https://space.bilibili.com/ajax/fav/getBoxList?mid=" + mid;
-        Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
+        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
         JSONObject data = result.getJSONObject("data");
         ArrayList<FavoriteFolder> folderList = new ArrayList<>();
@@ -58,7 +58,7 @@ public class FavoriteApi {
     public static int getFolderVideos(long mid, long fid, int page, ArrayList<VideoCard> videoList) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/space/fav/arc?vmid=" + mid
                 + "&ps=30&fid=" + fid + "&tid=0&keyword=&pn=" + page + "&order=fav_time";
-        Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
+        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
         JSONObject data = result.getJSONObject("data");
         if(data.has("archives") && !data.isNull("archives")){
@@ -88,7 +88,7 @@ public class FavoriteApi {
 
     public static void getFavoriteState(long aid, ArrayList<String> folderList, ArrayList<Long> fidList, ArrayList<Boolean> stateList) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/v3/fav/folder/created/list-all?type=2&jsonp=jsonp&rid=" + aid + "&up_mid=" + SharedPreferencesUtil.getLong("mid",0);
-        Response response = NetWorkUtil.get(url,ConfInfoApi.defHeaders);
+        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
         JSONObject data = result.getJSONObject("data");
 
@@ -109,7 +109,7 @@ public class FavoriteApi {
         String url = "https://api.bilibili.com/medialist/gateway/coll/resource/deal";
         String per = "rid=" + aid + "&type=2&add_media_ids=" + addFid + "&del_media_ids=&csrf=" + SharedPreferencesUtil.getString("csrf","");
 
-        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, ConfInfoApi.defHeaders).body()).string());
+        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, ConfInfoApi.webHeaders).body()).string());
         Log.e("debug-添加收藏",result.toString());
         return result.getInt("code");
     }
@@ -121,7 +121,7 @@ public class FavoriteApi {
         String url = "https://api.bilibili.com/medialist/gateway/coll/resource/batch/del";
         String per = "resources=" + aid + ":2&media_id=" + delFid + "&csrf=" + SharedPreferencesUtil.getString("csrf","");
 
-        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, ConfInfoApi.defHeaders).body()).string());
+        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, ConfInfoApi.webHeaders).body()).string());
         Log.e("debug-删除收藏",result.toString());
         return result.getInt("code");
     }

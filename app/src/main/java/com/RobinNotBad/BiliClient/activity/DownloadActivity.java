@@ -132,7 +132,7 @@ public class DownloadActivity extends BaseActivity {
         Request request = new Request.Builder().url(url)
                 .addHeader("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""))
                 .addHeader("Connection", "close")
-                .addHeader("User-Agent", "Mozilla/5.0 BiliDroid/1.1.1 (bbcallen@gmail.com)")
+                .addHeader("User-Agent", ConfInfoApi.USER_AGENT_BB)
                 .addHeader("Referer", "https://www.bilibili.com/")
                 .addHeader("Range", "bytes=0-")
                 .build();
