@@ -138,6 +138,7 @@ public class DownloadActivity extends BaseActivity {
                 .build();
         try {
             Response response = okHttpClient.newCall(request).execute();
+            if(!file.exists()) file.createNewFile();
             InputStream inputStream = Objects.requireNonNull(response.body()).byteStream();
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             int len;
@@ -174,7 +175,7 @@ public class DownloadActivity extends BaseActivity {
         Request request = new Request.Builder().url(danmaku)
                 .addHeader("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""))
                 .addHeader("Connection", "close")
-                .addHeader("User-Agent", "Mozilla/5.0 BiliDroid/1.1.1 (bbcallen@gmail.com)")
+                .addHeader("User-Agent", ConfInfoApi.USER_AGENT_BB)
                 .addHeader("Referer", "https://www.bilibili.com/")
                 .build();
         try {
