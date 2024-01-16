@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 public class VideoReplyFragment extends Fragment {
 
+    private boolean dontload;
     private long aid;
     private int type;
     private RecyclerView recyclerView;
@@ -49,12 +50,23 @@ public class VideoReplyFragment extends Fragment {
         return fragment;
     }
 
+    public static VideoReplyFragment newInstance(long aid, int type,boolean dontload) {
+        VideoReplyFragment fragment = new VideoReplyFragment();
+        Bundle args = new Bundle();
+        args.putLong("aid", aid);
+        args.putInt("type", type);
+        args.putBoolean("dontload",dontload);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             aid = getArguments().getLong("aid");
             type = getArguments().getInt("type");
+            dontload = getArguments().getBoolean("dontload",false);
         }
     }
 
@@ -94,13 +106,11 @@ public class VideoReplyFragment extends Fragment {
                 }
             }
         });
-        CenterThreadPool.run(()->{
+        if(!dontload) CenterThreadPool.run(()->{
             try {
                 int result = ReplyApi.getReplies(aid,0,page,type,replyList);
                 if(result != -1) {
-                    if(isAdded()) requireActivity().runOnUiThread(()->{
-                        replyAdapter.notifyDataSetChanged();
-                    });
+                    if(isAdded()) requireActivity().runOnUiThread(()-> replyAdapter.notifyItemRangeInserted(0,replyList.size()));
                     if(result == 1) {
                         Log.e("debug","到底了");
                         bottom = true;
@@ -138,5 +148,34 @@ public class VideoReplyFragment extends Fragment {
             if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
             Log.wtf("debug", e);
         }
+    }
+
+    public void refresh(long aid){
+        this.aid = aid;
+        Log.e("","ok");
+        replyList.clear();
+        CenterThreadPool.run(()->{
+            try {
+                int result = ReplyApi.getReplies(aid,0,page,type,replyList);
+                if(result != -1) {
+                    if(isAdded()) requireActivity().runOnUiThread(()->{
+                        replyAdapter = new ReplyAdapter(requireContext(),replyList,aid,0,type);
+                        recyclerView.setAdapter(replyAdapter);
+                        //replyAdapter.notifyItemRangeInserted(0,replyList.size());
+                    });
+                    if(result == 1) {
+                        Log.e("debug","到底了");
+                        bottom = true;
+                    }
+                    else bottom=false;
+                }
+            } catch (IOException e){
+                requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
+                Log.wtf("debug", e);
+            } catch (JSONException e) {
+                requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
+                Log.wtf("debug", e);
+            }
+        });
     }
 }

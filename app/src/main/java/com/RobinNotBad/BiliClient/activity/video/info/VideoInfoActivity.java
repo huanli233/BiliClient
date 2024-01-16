@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -41,8 +43,9 @@ public class VideoInfoActivity extends BaseActivity {
     private long mediaId;
 
     private List<Fragment> fragmentList;
+    VideoReplyFragment replyFragment;
 
-    private MediaViewPager2Adapter mediaViewPager2Adapter;
+    //private MediaViewPager2Adapter mediaViewPager2Adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,28 +56,34 @@ public class VideoInfoActivity extends BaseActivity {
         this.aid = intent.getLongExtra("aid",114514);
         this.bvid = intent.getStringExtra("bvid");
         this.mediaId = this.aid;
-        int layoutId;
-        if(type == "media") layoutId = R.layout.activity_simple_viewpager2;
-        else layoutId = R.layout.activity_simple_viewpager;
-        setContentView(layoutId);
+        //int layoutId;
+        //if(type == "media") layoutId = R.layout.activity_simple_viewpager2;
+        //else layoutId = R.layout.activity_simple_viewpager;
+        //setContentView(layoutId);
+        setContentView(R.layout.activity_simple_viewpager);
+
+        if(type.equals("media")) initMediaInfoView();
+        else initVideoInfoView();
     }
 
+    /*
     @Override
     protected void onStart() {
         super.onStart();
         if(type.equals("media")) initMediaInfoView();
         else initVideoInfoView();
-
     }
+     */
+
     public void initMediaInfoView() {
-        ViewPager2 viewPager = findViewById(R.id.viewPager);
+        ViewPager viewPager = findViewById(R.id.viewPager);
         findViewById(R.id.top).setOnClickListener(view -> finish());
         TextView pageName = findViewById(R.id.pageName);
         pageName.setText("视频详情");
         fragmentList = createFragmentList(null);
         viewPager.setOffscreenPageLimit(fragmentList.size());
-        mediaViewPager2Adapter = new MediaViewPager2Adapter(this, mediaId, fragmentList);
-        viewPager.setAdapter(mediaViewPager2Adapter);
+        ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(),fragmentList);
+        viewPager.setAdapter(vpfAdapter);
         if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
             Toast.makeText(this, "提示：本页面可以左右滑动", Toast.LENGTH_LONG).show();
             SharedPreferencesUtil.putBoolean("first_videoinfo", false);
@@ -92,7 +101,7 @@ public class VideoInfoActivity extends BaseActivity {
         CenterThreadPool.run(() -> {
             JSONObject data;
             try {
-                VideoInfo videoInfo = null;
+                VideoInfo videoInfo;
                 if (bvid == null || TextUtils.isEmpty(bvid)) data = VideoInfoApi.getJsonByAid(aid);
                 else data = VideoInfoApi.getJsonByBvid(bvid);
                 JSONArray tagList;
@@ -128,8 +137,10 @@ public class VideoInfoActivity extends BaseActivity {
     }
 
     public void setCurrentEpisodeInfo(MediaSectionInfo.EpisodeInfo currentEpisodeInfo) {
-        fragmentList.set(1, VideoReplyFragment.newInstance(currentEpisodeInfo.aid, 1));
-        if(mediaViewPager2Adapter != null) mediaViewPager2Adapter.notifyItemChanged(1);
+        if(replyFragment!=null) runOnUiThread(()->replyFragment.refresh(currentEpisodeInfo.aid));
+        Log.e("","REF");
+        //fragmentList.set(1, VideoReplyFragment.newInstance(currentEpisodeInfo.aid, 1));
+        //if(mediaViewPager2Adapter != null) mediaViewPager2Adapter.notifyItemChanged(1);
     }
 
     private List<Fragment> createFragmentList(VideoInfo videoInfo) {
@@ -137,13 +148,12 @@ public class VideoInfoActivity extends BaseActivity {
         if(type.equals("media")) {
             list = new ArrayList<>(2);
             list.add(MediaInfoFragment.newInstance(mediaId));
-            list.add(VideoReplyFragment.newInstance(mediaId, 1));
+            replyFragment = VideoReplyFragment.newInstance(mediaId, 1,true);
+            list.add(replyFragment);
         } else {
             list = new ArrayList<>(3);
-            VideoInfoFragment viFragment = VideoInfoFragment.newInstance(videoInfo);
-            list.add(viFragment);
-            VideoReplyFragment vpFragment = VideoReplyFragment.newInstance(videoInfo.aid, 1);
-            list.add(vpFragment);
+            list.add(VideoInfoFragment.newInstance(videoInfo));
+            list.add(VideoReplyFragment.newInstance(videoInfo.aid, 1));
             if (SharedPreferencesUtil.getBoolean("related_enable", true)) {
                 VideoRcmdFragment vrFragment = VideoRcmdFragment.newInstance(videoInfo.aid);
                 list.add(vrFragment);
@@ -152,25 +162,4 @@ public class VideoInfoActivity extends BaseActivity {
         return list;
     }
 
-    static class MediaViewPager2Adapter extends FragmentStateAdapter {
-        private List<Fragment> fragmentList;
-
-        public MediaViewPager2Adapter(FragmentActivity fragmentActivity, long mediaId, List<Fragment> fragmentList) {
-            super(fragmentActivity);
-            this.fragmentList = fragmentList;
-        }
-
-        @Override
-        public Fragment createFragment(int position) {
-            return fragmentList.get(position);
-        }
-        @Override
-        public long getItemId(int position) {
-            return fragmentList.get(position).hashCode();
-        }
-        @Override
-        public int getItemCount() {
-            return fragmentList.size();
-        }
-    }
 }
