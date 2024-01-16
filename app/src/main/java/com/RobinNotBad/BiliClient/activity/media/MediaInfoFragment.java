@@ -1,6 +1,7 @@
 package com.RobinNotBad.BiliClient.activity.media;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +24,6 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.factory.MediaDetailInfo;
 import com.RobinNotBad.BiliClient.adapter.MediaEpisodesAdapter;
 import com.RobinNotBad.BiliClient.api.BilibiliIDConverter;
 import com.RobinNotBad.BiliClient.api.bangumi_to_card;
@@ -38,7 +38,6 @@ public class MediaInfoFragment extends Fragment {
     private int selectedSectionIndex = 0;
     private MediaSectionInfo sectionInfo;
     private Dialog dialog;
-    private MediaDetailInfo info;
     private View rootView;
 
     public static MediaInfoFragment newInstance(long mediaId) {
@@ -56,7 +55,6 @@ public class MediaInfoFragment extends Fragment {
         if (arguments != null) {
             mediaId = arguments.getString("media_id");
         }
-        info = (MediaDetailInfo)((VideoInfoActivity)requireActivity()).getInfo();
         rootView = inflater.inflate(R.layout.fragment_media_info, container, false);
         return rootView;
     }
@@ -77,7 +75,10 @@ public class MediaInfoFragment extends Fragment {
         pairLiveData.observe(getViewLifecycleOwner(), pair -> {
             if (pair != null) {
                 initView(pair.first, pair.second);
-                info.setCurrentEpisodeInfo(pair.second.mainSection.episodes[0]);
+                Activity activity = requireActivity();
+                if(activity instanceof VideoInfoActivity){
+                    ((VideoInfoActivity) activity).setCurrentEpisodeInfo(pair.second.mainSection.episodes[0]);
+                }
             }
         });
     }
@@ -114,7 +115,10 @@ public class MediaInfoFragment extends Fragment {
         //section selector setting.
         MediaEpisodesAdapter adapter = new MediaEpisodesAdapter();
         adapter.setOnItemClickListener(episodeInfo -> {
-            info.setCurrentEpisodeInfo(episodeInfo);
+            Activity activity = requireActivity();
+            if(activity instanceof VideoInfoActivity){
+                ((VideoInfoActivity) activity).setCurrentEpisodeInfo(episodeInfo);
+            }
         });
         episodeButton.setOnClickListener(v -> getSectionChooseDialog(mediaSectionInfo).show());
         adapter.setData(mediaSectionInfo.mainSection.episodes);
@@ -154,11 +158,5 @@ public class MediaInfoFragment extends Fragment {
             dialog = builder.create();
         }
         return dialog;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        info = null;
     }
 }
