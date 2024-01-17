@@ -60,7 +60,11 @@ public class UserLoginApi
 
         StringBuilder cookies = new StringBuilder();
         for (String s : cookiesList) cookies.append(s.split("; ")[0]).append("; ");
-
-        return cookies.substring(0, cookies.length() - 2);
+        //如果cookies长度小于2，说明cookies是个空串，直接返回吧
+        if(cookies.length() >= 2) {
+            return cookies.substring(0, cookies.length() - 2);
+        } else {
+            return cookies.toString();
+        }
     }
 }

@@ -170,11 +170,11 @@ public class NetWorkUtil
         for (String setCookie : oldCookies) {
             setCookies.append(setCookie).append("; ");
         }
-
-
-        Log.e("debug-save-result", setCookies.substring(0, setCookies.length() - 2));
-
-        SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, setCookies.substring(0, setCookies.length() - 2));
-        ConfInfoApi.refreshHeaders();
+        //如果一次setCookies都没有，就不要存了， 因为是个空字符串
+        if(setCookies.length() >= 2) {
+            Log.e("debug-save-result", setCookies.substring(0, setCookies.length() - 2));
+            SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, setCookies.substring(0, setCookies.length() - 2));
+            ConfInfoApi.refreshHeaders();
+        }
     }
 }
