@@ -81,11 +81,13 @@ public class JumpToPlayerActivity extends BaseActivity {
                 }
             }*/ //原来的方法看起来太多if else 闲的没事的ic改了改
 
-            String url = "https://api.bilibili.com/x/player/playurl?"+ (aid == 0 ? ("bvid=" + bvid): ("avid=" + aid)) + "&cid=" + cid + "&type=mp4" + (SharedPreferencesUtil.getBoolean("high_res",false) ? "&qn=80" : "&qn=16");
+            String url = "https://api.bilibili.com/x/player/wbi/playurl?"+ (aid == 0 ? ("bvid=" + bvid): ("avid=" + aid)) + "&cid=" + cid + "&type=mp4" + (SharedPreferencesUtil.getBoolean("high_res",false) ? "&qn=80" : "&qn=16");
             //顺便把platform html5给删了,实测删除后放和番剧相关的东西不会404了 (不到为啥)
-            Log.e("debug-哔哩终端-跳转页","请求链接：" + url);
 
             try {
+                url=ConfInfoApi.signWBI(url);
+                Log.e("debug-哔哩终端-跳转页","请求链接：" + url);
+
                 Response response = NetWorkUtil.get(url, ConfInfoApi.bbHeaders);
 
                 String body = Objects.requireNonNull(response.body()).string();

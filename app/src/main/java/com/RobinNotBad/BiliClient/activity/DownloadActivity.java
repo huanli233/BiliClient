@@ -134,7 +134,6 @@ public class DownloadActivity extends BaseActivity {
                 .addHeader("Connection", "close")
                 .addHeader("User-Agent", ConfInfoApi.USER_AGENT_BB)
                 .addHeader("Referer", "https://www.bilibili.com/")
-                .addHeader("Range", "bytes=0-")
                 .build();
         try {
             Response response = okHttpClient.newCall(request).execute();
