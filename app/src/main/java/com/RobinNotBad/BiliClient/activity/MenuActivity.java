@@ -89,7 +89,7 @@ public class MenuActivity extends BaseActivity {
                 if(instance != null) instance.finish();
             }
             finish();
-        })
+        });
     }
 
     private void killAndJump(int i){

@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity.settings;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -44,7 +45,7 @@ public class SettingAboutActivity extends BaseActivity {
         List<Integer> developerAvaters = new ArrayList<Integer>() {{
             add(R.drawable.avatar_robin);
             add(R.drawable.avatar_dudu);
-            add(R.drawable.avatar_dada);
+            add(-1);
             add(R.drawable.avatar_moye);
             add(R.drawable.avatar_silent);
         }};
@@ -65,7 +66,7 @@ public class SettingAboutActivity extends BaseActivity {
 
         for(int i = 0;i < developerAvaterViews.size();i++){
             int finalI = i;
-            Glide.with(this).load(developerAvaters.get(i))
+            if(developerAvaters.get(i) != -1) Glide.with(this).load(developerAvaters.get(i))
                     .placeholder(R.drawable.akari)
                     .apply(RequestOptions.circleCropTransform())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
