@@ -138,8 +138,8 @@ public class NetWorkUtil
 
         //如果没有新cookies，直接返回
         if (newCookies.isEmpty()) return;
-
-        ArrayList<String> oldCookies = new ArrayList<>(Arrays.asList(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, "").split("; ")));  //转list
+        String cookiesStr = SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, "");
+        ArrayList<String> oldCookies = (cookiesStr.equals("") ? new ArrayList<>() : new ArrayList<>(Arrays.asList(cookiesStr.split("; "))));  //转list
 
         for (String newCookie : newCookies) {  //对每一条新cookie遍历
 

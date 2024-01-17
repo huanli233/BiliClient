@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,17 +20,12 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.PrivateMsgAdapter;
 import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
-import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.listener.AutoHideListener;
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import java.util.Collection;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +34,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class PrivateMsgActivity extends BaseActivity {
     JSONObject allMsg = new JSONObject();
@@ -88,7 +85,8 @@ public class PrivateMsgActivity extends BaseActivity {
                         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                             super.onScrollStateChanged(recyclerView, newState);
                             if (!recyclerView.canScrollVertically(-1)&&!isLoadingMore) {
-                                CenterThreadPool.run(()->loadMore());
+                                isLoadingMore =true;
+                                loadMore();
                                 Log.e("","滑动到顶部，开始刷新");
                             }
                         }
@@ -131,19 +129,14 @@ public class PrivateMsgActivity extends BaseActivity {
                         }
                     });
                 }else{
-                runOnUiThread(()-> MsgUtil.toast("空消息，不予发送",this));
+                runOnUiThread(()-> MsgUtil.toast("你还木有输入喵~",this));
             }
             } catch(Exception err) {
                 err.printStackTrace();
             }
         }));
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-        Runnable task = new Runnable(){
-            @Override
-            public void run() {
-                refresh();
-            }
-        };
+        Runnable task = this::refresh;
         scheduledExecutorService.scheduleAtFixedRate(task,60,60, TimeUnit.SECONDS);
     }
     //1在上面0在下面
@@ -229,7 +222,7 @@ public class PrivateMsgActivity extends BaseActivity {
                     });    
                     isLoadingMore=false;
                     }
-            	}else runOnUiThread(()->{MsgUtil.toast("没有更多消息了",this);});
+            	}else runOnUiThread(()-> MsgUtil.toast("没有更多消息了",this));
             } catch(IOException err) {
             	err.printStackTrace();
             } catch(JSONException err){
