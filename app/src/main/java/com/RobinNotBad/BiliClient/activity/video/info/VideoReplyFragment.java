@@ -85,8 +85,6 @@ public class VideoReplyFragment extends Fragment {
 
         replyList = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        replyAdapter = new ReplyAdapter(requireContext(), replyList,aid,0,type);
-        recyclerView.setAdapter(replyAdapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -100,6 +98,7 @@ public class VideoReplyFragment extends Fragment {
                 assert manager != null;
                 int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();  //获取最后一个完全显示的itemPosition
                 int itemCount = manager.getItemCount();
+                //Log.e("debug","last="+lastItemPosition+"&itemcount="+itemCount);
                 if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                     refreshing = true;
                     CenterThreadPool.run(() -> continueLoading()); //加载第二页
@@ -110,7 +109,10 @@ public class VideoReplyFragment extends Fragment {
             try {
                 int result = ReplyApi.getReplies(aid,0,page,type,replyList);
                 if(result != -1) {
-                    if(isAdded()) requireActivity().runOnUiThread(()-> replyAdapter.notifyItemRangeInserted(0,replyList.size()));
+                    if(isAdded()) requireActivity().runOnUiThread(()-> {
+                        replyAdapter = new ReplyAdapter(requireContext(), replyList,aid,0,type);
+                        recyclerView.setAdapter(replyAdapter);
+                    });
                     if(result == 1) {
                         Log.e("debug","到底了");
                         bottom = true;
