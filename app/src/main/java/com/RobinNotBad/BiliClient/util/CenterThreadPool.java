@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author silent碎月
- * 核心运行线程池, 内部其实直接用的Kotlin协程
+ * 核心运行线程池, 最大线程容量为CPU核心数的2倍, 最小线程容量为1, 线程空闲时间为60s, 线程队列容量为20
  */
 public class CenterThreadPool {
 
@@ -26,7 +26,7 @@ public class CenterThreadPool {
                     Runtime.getRuntime().availableProcessors() * 2,
                     60,
                     TimeUnit.SECONDS,
-                    new ArrayBlockingQueue<>(10)
+                    new ArrayBlockingQueue<>(20)
 
 
             ));
