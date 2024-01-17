@@ -19,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
+import com.RobinNotBad.BiliClient.activity.search.SearchOldActivity;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.SearchApi;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
@@ -54,6 +55,14 @@ public class SearchActivity extends InstanceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        if(SharedPreferencesUtil.getBoolean("old_search_enable",false)){
+            Log.e("debug","送到旧版搜索");
+            Intent intent = new Intent(this,SearchOldActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        
         setContentView(R.layout.activity_search);
         Log.e("debug","进入搜索页");
 
@@ -81,11 +90,6 @@ public class SearchActivity extends InstanceActivity {
             }
             return false;
         });
-
-        if(SharedPreferencesUtil.getBoolean("first_search",true)){
-            Toast.makeText(this, "提示：本页面可以左右滑动", Toast.LENGTH_LONG).show();
-            SharedPreferencesUtil.putBoolean("first_search",false);
-        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -99,6 +103,11 @@ public class SearchActivity extends InstanceActivity {
                 MsgUtil.showText(this,"特殊彩蛋",getString(R.string.egg_robin_nahida));
                 return;
             }
+        }
+        
+        if(SharedPreferencesUtil.getBoolean("first_search_result",true)){
+            Toast.makeText(this, "提示：搜索结果可以左右滑动", Toast.LENGTH_LONG).show();
+            SharedPreferencesUtil.putBoolean("first_search_result",false);
         }
 
         if(!refreshing) {

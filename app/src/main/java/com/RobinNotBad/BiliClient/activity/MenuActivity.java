@@ -50,7 +50,7 @@ public class MenuActivity extends BaseActivity {
         Log.e("debug","进入菜单页");
 
         Intent intent = getIntent();
-        from = intent.getIntExtra("from",-1);
+        from = intent.getIntExtra("from",0);
 
         findViewById(R.id.top).setOnClickListener(view -> finish());
 
@@ -85,12 +85,14 @@ public class MenuActivity extends BaseActivity {
 
     private void killAndJump(int i){
         if (i <= classList.size()){
-            InstanceActivity instance = InstanceActivity.getInstance(classList.get(from));
-            if(instance != null) instance.finish();
-            if(i != classList.size()) {
-                Intent intent = new Intent();
-                intent.setClass(MenuActivity.this, classList.get(i));
-                startActivity(intent);
+            if(i != from){
+                InstanceActivity instance = InstanceActivity.getInstance(classList.get(from));
+                if(instance != null) instance.finish();
+                if(i != classList.size()) {
+                    Intent intent = new Intent();
+                    intent.setClass(MenuActivity.this, classList.get(i));
+                    startActivity(intent);
+                }
             }
         } else {
             for(int j = 0;j<classList.size();j++){

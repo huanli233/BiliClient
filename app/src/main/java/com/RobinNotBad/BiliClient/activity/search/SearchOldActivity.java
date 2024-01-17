@@ -50,7 +50,7 @@ public class SearchOldActivity extends InstanceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_old);
-        Log.e("debug","进入搜索页");
+        Log.e("debug","进入旧版搜索页");
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(SearchOldActivity.this));
@@ -60,7 +60,7 @@ public class SearchOldActivity extends InstanceActivity {
         findViewById(R.id.top).setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setClass(SearchOldActivity.this, MenuActivity.class);
-            intent.putExtra("from",1);
+            intent.putExtra("from",2);
             startActivity(intent);
         });
 
@@ -129,8 +129,6 @@ public class SearchOldActivity extends InstanceActivity {
 
             InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
-
 
             if (str.equals("")) {
                 runOnUiThread(() -> Toast.makeText(this, "你还木有输入内容哦~", Toast.LENGTH_SHORT).show());
