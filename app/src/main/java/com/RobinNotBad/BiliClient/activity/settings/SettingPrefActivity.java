@@ -11,7 +11,7 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class SettingPrefActivity extends BaseActivity {
 
-    private SwitchCompat back_disable,fav_single,fav_notice, video_tags, video_related, myspace_creativecenter,menu_popular,old_search_enable;
+    private SwitchCompat back_disable,fav_single,fav_notice, video_tags, video_related, myspace_creativecenter,menu_popular,old_search_enable,copy_enable;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -45,6 +45,9 @@ public class SettingPrefActivity extends BaseActivity {
         
         old_search_enable = findViewById(R.id.old_search_enable);
         old_search_enable.setChecked(SharedPreferencesUtil.getBoolean("old_search_enable",false));
+                
+        copy_enable = findViewById(R.id.copy_enable);
+        copy_enable.setChecked(SharedPreferencesUtil.getBoolean("copy_enable",true));
     }
 
     private void save() {
@@ -56,6 +59,7 @@ public class SettingPrefActivity extends BaseActivity {
         SharedPreferencesUtil.putBoolean("creative_enable", myspace_creativecenter.isChecked());
         SharedPreferencesUtil.putBoolean("menu_popular", menu_popular.isChecked());
         SharedPreferencesUtil.putBoolean("old_search_enable", old_search_enable.isChecked());
+        SharedPreferencesUtil.putBoolean("copy_enable", copy_enable.isChecked());
     }
 
     @Override

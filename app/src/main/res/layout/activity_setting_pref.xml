@@ -255,6 +255,30 @@
                     android:layout_marginTop="2dp"
                     android:text="打开此选项，搜索页面会使用旧版的形式(注意：旧版页面仅可搜索视频及番剧)"
                     android:textSize="11sp" />
+            </LinearLayout>            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/copy_enable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_edit_text_setting"
+                    android:paddingStart="6dp"
+                    android:text="启用复制"
+                    android:textColor="@color/textwhite" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="2dp"
+                    android:text="打开此选项，长按视频描述或评论可以复制到剪贴板"
+                    android:textSize="11sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

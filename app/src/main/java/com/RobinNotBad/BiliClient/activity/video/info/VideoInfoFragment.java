@@ -172,13 +172,15 @@ public class VideoInfoFragment extends Fragment {
                         desc_expand = !desc_expand;
                     });
 
-                    description.setOnLongClickListener(view1 -> {
-                        ClipboardManager clipboardManager = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clipData = ClipData.newPlainText("label",videoInfo.description);
-                        clipboardManager.setPrimaryClip(clipData);
-                        MsgUtil.toast("已复制简介",requireContext());
-                        return false;
-                    });
+                    if(SharedPreferencesUtil.getBoolean("copy_enable", true)){
+                        description.setOnLongClickListener(view1 -> {
+                            ClipboardManager clipboardManager = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipData clipData = ClipData.newPlainText("label",videoInfo.description);
+                            clipboardManager.setPrimaryClip(clipData);
+                            MsgUtil.toast("已复制简介",requireContext());
+                            return false;
+                        });
+                    }
 
                     tags.setOnClickListener(view1 -> {
                         if (tags_expand) tags.setMaxLines(1);
