@@ -80,24 +80,26 @@ public class MenuActivity extends BaseActivity {
         for (int i = 0; i < cardList.size(); i++) {
             int finalI = i;
             cardList.get(i).setOnClickListener(view -> killAndJump(finalI));
-        }
-    }
-
-    private void killAndJump(int i){
-        if (i <= classList.size()){
-            if(i != from){
-                InstanceActivity instance = InstanceActivity.getInstance(classList.get(from));
-                if(instance != null) instance.finish();
-                if(i != classList.size()) {
-                    Intent intent = new Intent();
-                    intent.setClass(MenuActivity.this, classList.get(i));
-                    startActivity(intent);
-                }
-            }
-        } else {
+        };
+        
+        //我求求你了退出按钮能用吧....
+        findViewById(R.id.exit).setOnClickListener(view -> {
             for(int j = 0;j<classList.size();j++){
                 InstanceActivity instance = InstanceActivity.getInstance(classList.get(j));
                 if(instance != null) instance.finish();
+            }
+            finish();
+        })
+    }
+
+    private void killAndJump(int i){
+        if (i <= classList.size() && i != from){
+            InstanceActivity instance = InstanceActivity.getInstance(classList.get(from));
+            if(instance != null) instance.finish();
+            if(i != classList.size()) {
+                Intent intent = new Intent();
+                intent.setClass(MenuActivity.this, classList.get(i));
+                startActivity(intent);
             }
         }
         finish();
