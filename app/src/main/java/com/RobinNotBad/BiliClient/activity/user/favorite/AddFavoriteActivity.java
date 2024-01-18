@@ -57,13 +57,15 @@ public class AddFavoriteActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        if(SharedPreferencesUtil.getBoolean("fav_notice",false)) {
-            if(adapter.added) MsgUtil.toast("添加成功", this);
-            else if(adapter.changed) MsgUtil.toast("更改成功", this);
+        if(adapter!=null) {
+            if (SharedPreferencesUtil.getBoolean("fav_notice", false)) {
+                if (adapter.added) MsgUtil.toast("添加成功", this);
+                else if (adapter.changed) MsgUtil.toast("更改成功", this);
+            }
+            Intent intent = new Intent();
+            intent.putExtra("is_changed", adapter.changed);
+            setResult(RESULT_OK, intent);
         }
-        Intent intent = new Intent();
-        intent.putExtra("is_changed",adapter.changed);
-        setResult(RESULT_OK,intent);
         
         super.onDestroy();
         
