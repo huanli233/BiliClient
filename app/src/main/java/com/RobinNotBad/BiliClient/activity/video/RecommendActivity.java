@@ -83,7 +83,6 @@ public class RecommendActivity extends InstanceActivity {
             RecommendApi.getRecommend(videoCardList);
 
             runOnUiThread(() -> {
-
                 swipeRefreshLayout.setRefreshing(false);
                 refreshing = false;
 
@@ -116,10 +115,19 @@ public class RecommendActivity extends InstanceActivity {
                 }
             });
         } catch (IOException e){
-            runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
+            runOnUiThread(()-> {
+                MsgUtil.quickErr(MsgUtil.err_net,this);
+                swipeRefreshLayout.setRefreshing(false);
+                refreshing = false;
+            });
+
             e.printStackTrace();
         } catch (JSONException e) {
-            runOnUiThread(()-> MsgUtil.jsonErr(e, this));
+            runOnUiThread(()-> {
+                MsgUtil.jsonErr(e, this);
+                swipeRefreshLayout.setRefreshing(false);
+                refreshing = false;
+            });
             e.printStackTrace();
         }
 
