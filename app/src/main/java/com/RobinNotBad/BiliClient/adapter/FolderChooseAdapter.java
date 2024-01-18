@@ -33,6 +33,7 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
     ArrayList<Boolean> chooseState;
     ArrayList<Long> fidList;
     long aid;
+    boolean adding;
     public boolean added;
     public boolean changed;
 
@@ -57,59 +58,58 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
         MaterialCardView cardView = (MaterialCardView) holder.itemView;
 
         holder.folder_name.setText(folderList.get(position));
-        if(chooseState.get(position)){
-            cardView.setStrokeColor(context.getResources().getColor(R.color.pink));
-            cardView.setStrokeWidth(LittleToolsUtil.dp2px(1,context));
-        }
-        else{
-            cardView.setStrokeColor(context.getResources().getColor(R.color.gray));
-            cardView.setStrokeWidth(LittleToolsUtil.dp2px(0.1f,context));
-        }
+        setCardView(cardView,chooseState.get(position));
 
         holder.itemView.setOnClickListener(view -> {
-            if(chooseState.get(position)){
-                CenterThreadPool.run(()->{
-                    try {
-                        int result = FavoriteApi.deleteFavorite(aid,fidList.get(position));
-                        if(result==0) {
-                            chooseState.set(position, false);
-                            ((Activity) context).runOnUiThread(() -> {
-                                cardView.setStrokeColor(context.getResources().getColor(R.color.gray));
-                                cardView.setStrokeWidth(LittleToolsUtil.dp2px(0.1f, context));
-                            });
-                            changed = true;
+            if(!adding) {
+                adding = true;
+                cardView.setStrokeColor(context.getResources().getColor(R.color.low_pink));
+                cardView.setStrokeWidth(LittleToolsUtil.dp2px(1f, context));
+
+                if (chooseState.get(position)) {
+                    CenterThreadPool.run(() -> {
+                        try {
+                            int result = FavoriteApi.deleteFavorite(aid, fidList.get(position));
+                            adding = false;
+                            if (result == 0) {
+                                chooseState.set(position, false);
+                                ((Activity) context).runOnUiThread(() -> setCardView(cardView,false));
+                                changed = true;
+                            } else ((Activity) context).runOnUiThread(() ->{
+                                    Toast.makeText(context, "删除失败！错误码：" + result, Toast.LENGTH_SHORT).show();
+                                    ((Activity) context).runOnUiThread(() -> setCardView(cardView,true));
+                                });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        else ((Activity) context).runOnUiThread(() -> Toast.makeText(context, "删除失败！错误码：" + result, Toast.LENGTH_SHORT).show());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
-            else{
-                cardView.setStrokeColor(context.getResources().getColor(R.color.gray));
-                cardView.setStrokeWidth(LittleToolsUtil.dp2px(0.1f,context));
-                CenterThreadPool.run(()->{
-                    try {
-                        int result = FavoriteApi.addFavorite(aid,fidList.get(position));
-                        if(result==0) {
-                            chooseState.set(position, true);
-                            ((Activity) context).runOnUiThread(() -> {
-                                cardView.setStrokeColor(context.getResources().getColor(R.color.pink));
-                                cardView.setStrokeWidth(LittleToolsUtil.dp2px(1, context));
-                            });
-                            changed = true;
-                            added = true;
+                    });
+                } else {
+                    cardView.setStrokeColor(context.getResources().getColor(R.color.gray));
+                    cardView.setStrokeWidth(LittleToolsUtil.dp2px(0.1f, context));
+                    CenterThreadPool.run(() -> {
+                        try {
+                            int result = FavoriteApi.addFavorite(aid, fidList.get(position));
+                            adding = false;
+                            if (result == 0) {
+                                chooseState.set(position, true);
+                                ((Activity) context).runOnUiThread(() -> setCardView(cardView,true));
+                                changed = true;
+                                added = true;
+                            } else ((Activity) context).runOnUiThread(() -> {
+                                    Toast.makeText(context, "添加失败！错误码：" + result, Toast.LENGTH_SHORT).show();
+                                    ((Activity) context).runOnUiThread(() -> setCardView(cardView,false));
+                                });
+                            if (SharedPreferencesUtil.getBoolean("fav_single", false))
+                                ((Activity) context).finish();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        else ((Activity) context).runOnUiThread(() -> Toast.makeText(context, "添加失败！错误码：" + result, Toast.LENGTH_SHORT).show());
-                        if(SharedPreferencesUtil.getBoolean("fav_single",false)) ((Activity) context).finish();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                });
+                    });
+                }
             }
         });
 
@@ -126,6 +126,17 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
         public FolderHolder(@NonNull View itemView) {
             super(itemView);
             folder_name = itemView.findViewById(R.id.folder_name);
+        }
+    }
+
+    private void setCardView(MaterialCardView cardView, boolean bool){
+        if(bool){
+            cardView.setStrokeColor(context.getResources().getColor(R.color.pink));
+            cardView.setStrokeWidth(LittleToolsUtil.dp2px(1,context));
+        }
+        else{
+            cardView.setStrokeColor(context.getResources().getColor(R.color.gray));
+            cardView.setStrokeWidth(LittleToolsUtil.dp2px(0.1f,context));
         }
     }
 }
