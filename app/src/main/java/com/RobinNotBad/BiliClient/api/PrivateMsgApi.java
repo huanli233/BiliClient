@@ -90,21 +90,8 @@ public class PrivateMsgApi {
                 msgObject.timestamp = msgJson.getLong("timestamp");
                 msgObject.msgId = msgJson.getLong("msg_key");
                 msgObject.msgSeqno = msgJson.getLong("msg_seqno");
-                boolean isPuted = list.add(msgObject);
-                Log.e("puted?", String.valueOf(isPuted));
-                Log.e(
-                        "msg",
-                        msgObject.name
-                                + "."
-                                + msgObject.uid
-                                + "."
-                                + msgObject.msgId
-                                + "."
-                                + msgObject.timestamp
-                                + "."
-                                + msgObject.content
-                                + "."
-                                + msgObject.type);
+                list.add(msgObject);
+                
             }
             Log.e("", "返回msgList");
             for (PrivateMessage i : list) {

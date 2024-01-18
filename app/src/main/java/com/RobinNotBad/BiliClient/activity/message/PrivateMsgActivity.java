@@ -49,6 +49,7 @@ public class PrivateMsgActivity extends BaseActivity {
     LinearLayout inputLayout;
     long uid;
     boolean isLoadingMore = false;
+    long lastLoadTime = 0;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,7 @@ public class PrivateMsgActivity extends BaseActivity {
             try {
             	allMsg = PrivateMsgApi.getPrivateMsg(uid,50,0,0);
                 list = PrivateMsgApi.getPrivateMsgList(allMsg);
+                Collections.synchronizedList(list); 
                 Collections.reverse(list);
                 emoteArray = PrivateMsgApi.getEmoteJsonArray(allMsg);
                 adapter = new PrivateMsgAdapter(list,emoteArray,this);
@@ -84,7 +86,7 @@ public class PrivateMsgActivity extends BaseActivity {
                         @Override
                         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                             super.onScrollStateChanged(recyclerView, newState);
-                            if (!recyclerView.canScrollVertically(-1)&&!isLoadingMore) {
+                            if (!recyclerView.canScrollVertically(-1)&&!isLoadingMore&&newState==RecyclerView.SCROLL_STATE_DRAGGING) {
                                 isLoadingMore =true;
                                 loadMore();
                                 Log.e("","滑动到顶部，开始刷新");
@@ -199,6 +201,7 @@ public class PrivateMsgActivity extends BaseActivity {
             	if(allMsg.getInt("has_more")==1) {
                     isLoadingMore = true;
             		allMsg = PrivateMsgApi.getPrivateMsg(uid,15,0,list.get(0).msgSeqno);
+                    Log.e("",allMsg.toString());
                     ArrayList<PrivateMessage> newList = PrivateMsgApi.getPrivateMsgList(allMsg);
                     Collections.reverse(newList);
                     
@@ -206,17 +209,18 @@ public class PrivateMsgActivity extends BaseActivity {
                 	JSONObject emote = PrivateMsgApi.getEmoteJsonArray(allMsg).getJSONObject(i);
                     emoteArray.put(emote);
                     
-                    
+                    for (PrivateMessage a : list) {
+                        Log.e("msgAll",a.msgSeqno+a.name + "." + a.uid+ "." + a.msgId+ "." + a.timestamp + "." + a.content + "."  + a.type);
+                    }
+                            
                     Log.e("loadMore","loadMore");
                             
                     runOnUiThread(()->{
                         MsgUtil.toast("加载更多中。。",this);
-                        for(PrivateMessage msg : newList) {
-                            list.add(0,msg);
-                            adapter.notifyItemInserted(0);
-                        }
-                        for(PrivateMessage a : list) {
-                        	Log.e("",a.msgSeqno+";");
+                        boolean added = list.addAll(0,newList);
+                        Log.e("added?",String.valueOf(added));                       
+                        for(int a =0 ;a<newList.size();a++) {
+                            adapter.notifyItemInserted(a);
                         }
                         adapter.notifyItemRangeChanged(0,list.size());
                     });    
