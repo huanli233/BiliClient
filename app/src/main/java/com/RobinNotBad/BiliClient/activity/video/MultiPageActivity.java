@@ -12,11 +12,12 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.PageChooseAdapter;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.api.PlayerApi;
+import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import java.io.File;
-import java.util.ArrayList;
 
 //分页视频选集
 //2023-07-17
@@ -35,43 +36,20 @@ public class MultiPageActivity extends BaseActivity {
         textView.setText("请选择分页");
 
         Intent intent = getIntent();
-        ArrayList<Integer> cids = intent.getIntegerArrayListExtra("cids");
-        ArrayList<String> pages = intent.getStringArrayListExtra("pages");
-        String bvid = intent.getStringExtra("bvid");
-        long aid = intent.getLongExtra("aid", 0);
-        //long mid = intent.getLongExtra("mid",0);
+        VideoInfo videoInfo = (VideoInfo) intent.getSerializableExtra("videoInfo");
 
-        PageChooseAdapter adapter = new PageChooseAdapter(this,pages);
+        PageChooseAdapter adapter = new PageChooseAdapter(this,videoInfo.pagenames);
 
         if(intent.getIntExtra("download",0) == 1) {    //下载模式
             adapter.setOnItemClickListener(position -> {
-                File rootPath = new File(ConfInfoApi.getDownloadPath(this), LittleToolsUtil.stringToFile(intent.getStringExtra("title")));
-                File downPath = new File(rootPath, LittleToolsUtil.stringToFile(pages.get(position)));
+                File rootPath = new File(ConfInfoApi.getDownloadPath(this), LittleToolsUtil.stringToFile(videoInfo.title));
+                File downPath = new File(rootPath, LittleToolsUtil.stringToFile(videoInfo.pagenames.get(position)));
                 if(downPath.exists()) MsgUtil.toast("已经缓存过了~",this);
-                else{
-                    Intent intent1 = new Intent()
-                            .putExtra("aid", aid)
-                            .putExtra("bvid", bvid)
-                            .putExtra("cid", cids.get(position))
-                            .putExtra("title", pages.get(position))
-                            .putExtra("download", 2)
-                            .putExtra("cover", intent.getStringExtra("cover"))
-                            .putExtra("parent_title", intent.getStringExtra("title"))
-                            .setClass(this, JumpToPlayerActivity.class);
-                    startActivity(intent1);
-                }
+                else PlayerApi.startDownloadingVideo(this,videoInfo,position);
             });
         }
         else{        //普通播放模式
-            adapter.setOnItemClickListener(position -> {
-                Intent intent1 = new Intent()
-                        .putExtra("aid", aid)
-                        .putExtra("bvid", bvid)
-                        .putExtra("cid", cids.get(position))
-                        .putExtra("title", pages.get(position));
-                intent1.setClass(this, JumpToPlayerActivity.class);
-                startActivity(intent1);
-            });
+            adapter.setOnItemClickListener(position -> PlayerApi.startGettingUrl(this,videoInfo,position));
         }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

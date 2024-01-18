@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -20,12 +21,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.MediaEpisodesAdapter;
-import com.RobinNotBad.BiliClient.api.BilibiliIDConverter;
 import com.RobinNotBad.BiliClient.api.bangumi_to_card;
 import com.RobinNotBad.BiliClient.model.Media;
 import com.RobinNotBad.BiliClient.model.MediaSectionInfo;
@@ -83,7 +84,7 @@ public class MediaInfoFragment extends Fragment {
         });
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     private void setSelectSectionIndex(int index) {
         TextView episodeButton = rootView.findViewById(R.id.btn_episode);
         RecyclerView eposideListRecyclerView = rootView.findViewById(R.id.rv_eposide_list);
@@ -130,10 +131,10 @@ public class MediaInfoFragment extends Fragment {
             MediaSectionInfo.EpisodeInfo episodeInfo = section.episodes[adapter.getSelectedItemIndex()];
             Glide.get(requireContext()).clearMemory();
             Intent intent = new Intent(v.getContext(), JumpToPlayerActivity.class);
-            intent.putExtra("cid", (int)episodeInfo.cid);
+            intent.putExtra("cid", episodeInfo.cid);
             intent.putExtra("title", episodeInfo.longTitle);
-            intent.putExtra("bvid", BilibiliIDConverter.aidtobv(episodeInfo.aid));
             intent.putExtra("aid", episodeInfo.aid);
+            intent.putExtra("html5",false);
             startActivity(intent);
         });
         playButton.setOnLongClickListener(v -> {

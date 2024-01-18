@@ -7,11 +7,38 @@ import android.util.Log;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerActivity;
+import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
+import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.io.File;
 
 public class PlayerApi {
+    public static void startGettingUrl(Context context, VideoInfo videoInfo, int page){
+        Intent intent = new Intent()
+                .setClass(context, JumpToPlayerActivity.class)
+                .putExtra("title", (videoInfo.pagenames.size()==1 ? videoInfo.title : videoInfo.pagenames.get(page)))
+                .putExtra("bvid", videoInfo.bvid)
+                .putExtra("aid", videoInfo.aid)
+                .putExtra("cid", videoInfo.cids.get(page));
+        context.startActivity(intent);
+    }
+
+    public static void startDownloadingVideo(Context context, VideoInfo videoInfo, int page){
+        Intent intent = new Intent()
+                .putExtra("aid", videoInfo.aid)
+                .putExtra("bvid", videoInfo.bvid)
+                .putExtra("cid", videoInfo.cids.get(page))
+                .putExtra("title", (videoInfo.pagenames.size()==1 ? videoInfo.title : videoInfo.pagenames.get(page)))
+                .putExtra("download", (videoInfo.pagenames.size()==1 ? 1 : 2))  //1：单页  2：分页
+                .putExtra("cover", videoInfo.cover)
+                .putExtra("parent_title", videoInfo.title)
+                .setClass(context, JumpToPlayerActivity.class);
+        context.startActivity(intent);
+    }
+
+
+
     public static void jumpToPlayer(Context context, String videourl, String danmakuurl, String title, boolean local){
         Log.e("debug-准备跳转","--------");
         Log.e("debug-视频标题",title);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <style name="CardStyle">
+    <style name="CardStyle" parent="Widget.MaterialComponents.CardView">
     
         <item name="cardMaxElevation">0dp</item> 
         <item name="strokeColor">#70707070</item>
@@ -9,6 +9,7 @@
         <item name="strokeWidth">0.1dp</item>
         <item name="cardBackgroundColor">#78242424</item>
         <item name="cardCornerRadius">8dp</item>
-    
+
+
     </style>
 </resources>

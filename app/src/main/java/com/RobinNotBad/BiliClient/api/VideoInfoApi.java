@@ -98,13 +98,13 @@ public class VideoInfoApi {
 
         JSONArray pages = data.getJSONArray("pages");
         ArrayList<String> pagenames = new ArrayList<>();
-        ArrayList<Integer> cids = new ArrayList<>();
+        ArrayList<Long> cids = new ArrayList<>();
         for (int i = 0; i < pages.length(); i++) {
             JSONObject page = pages.getJSONObject(i);
             String pagename = page.getString("part");
             pagenames.add(pagename);
             Log.e("第" + i + "个视频的标题",pagename);
-            int cid = page.getInt("cid");
+            long cid = page.getLong("cid");
             cids.add(cid);
             Log.e("第" + i + "个视频的cid",String.valueOf(cid));
         }

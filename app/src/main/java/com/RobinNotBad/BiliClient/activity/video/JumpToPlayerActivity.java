@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.video;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,6 +35,8 @@ public class JumpToPlayerActivity extends BaseActivity {
 
     boolean destroyed = false;
 
+    boolean html5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,25 +48,26 @@ public class JumpToPlayerActivity extends BaseActivity {
         Log.e("debug-哔哩终端-跳转页","已接收数据");
         String bvid = intent.getStringExtra("bvid");
         long aid = intent.getLongExtra("aid", 0);
-        int cid = intent.getIntExtra("cid",0);
-        if (cid == 0){
-            cid = Math.toIntExact(intent.getLongExtra("cid", 0));
-        }
+        long cid = intent.getLongExtra("cid", 0);
+
         title = intent.getStringExtra("title");
         download = intent.getIntExtra("download",0);
+
+        html5 = intent.getBooleanExtra("html5",true);
 
         Log.e("debug-哔哩终端-跳转页", "cid=" + cid);
         danmakuurl = "https://comment.bilibili.com/" + cid + ".xml";
         if (aid == 0) {
-            Log.e("debug-哔哩终端-跳转页", "bid");
+            Log.e("debug-哔哩终端-跳转页", "bid=" + bvid);
             requestVideo(0, bvid, cid);
         } else {
-            Log.e("debug-哔哩终端-跳转页", "aid");
+            Log.e("debug-哔哩终端-跳转页", "aid=" + aid);
             requestVideo(aid, null, cid);
         }
     }
 
-    private void requestVideo(long aid,String bvid, int cid) {
+    @SuppressLint("SetTextI18n")
+    private void requestVideo(long aid, String bvid, long cid) {
         CenterThreadPool.run(()->{
 //            String url;
             /*if(SharedPreferencesUtil.getBoolean("high_res",false)){
@@ -81,14 +85,18 @@ public class JumpToPlayerActivity extends BaseActivity {
                 }
             }*/ //原来的方法看起来太多if else 闲的没事的ic改了改
 
-            String url = "https://api.bilibili.com/x/player/wbi/playurl?"+ (aid == 0 ? ("bvid=" + bvid): ("avid=" + aid)) + "&cid=" + cid + "&type=mp4" + (SharedPreferencesUtil.getBoolean("high_res",false) ? "&qn=80" : "&qn=16");
+            String url = "https://api.bilibili.com/x/player/wbi/playurl?"
+                    + (aid == 0 ? ("bvid=" + bvid): ("avid=" + aid))
+                    + "&cid=" + cid + "&type=mp4"
+                    + (SharedPreferencesUtil.getBoolean("high_res",false) ? (html5 ? "&high_quality=1&qn=80" : "&qn=80") : "&qn=16")
+                    + "&platform=" + (html5 ? "html5" : "pc");
             //顺便把platform html5给删了,实测删除后放和番剧相关的东西不会404了 (不到为啥)
 
             try {
                 url=ConfInfoApi.signWBI(url);
                 Log.e("debug-哔哩终端-跳转页","请求链接：" + url);
 
-                Response response = NetWorkUtil.get(url, ConfInfoApi.bbHeaders);
+                Response response = NetWorkUtil.get(url, ConfInfoApi.webHeaders);
 
                 String body = Objects.requireNonNull(response.body()).string();
                 Log.e("debug-body", body);
@@ -122,7 +130,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                 runOnUiThread(()->textView.setText("网络错误！\n请检查你的网络连接是否正常"));
                 e.printStackTrace();
             } catch (JSONException e) {
-                runOnUiThread(()->textView.setText("解析视频地址失败！\n建议联系开发者\n（但开发者大概率已经知道了）"));
+                runOnUiThread(()->textView.setText("视频获取失败！\n可能的原因：\n1.本视频仅大会员可播放\n2.视频获取接口失效"));
                 e.printStackTrace();
             } catch (ActivityNotFoundException e){
                 runOnUiThread(()->textView.setText("跳转失败！\n请安装对应的播放器\n或将哔哩终端和播放器同时更新到最新版本"));

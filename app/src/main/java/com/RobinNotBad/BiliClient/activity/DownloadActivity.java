@@ -131,8 +131,8 @@ public class DownloadActivity extends BaseActivity {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder().url(url)
                 .addHeader("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""))
-                .addHeader("Connection", "close")
-                .addHeader("User-Agent", ConfInfoApi.USER_AGENT_BB)
+                .addHeader("Connection", "Keep-Alive")
+                .addHeader("User-Agent", ConfInfoApi.USER_AGENT_WEB)
                 .addHeader("Referer", "https://www.bilibili.com/")
                 .build();
         try {
@@ -173,8 +173,8 @@ public class DownloadActivity extends BaseActivity {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder().url(danmaku)
                 .addHeader("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""))
-                .addHeader("Connection", "close")
-                .addHeader("User-Agent", ConfInfoApi.USER_AGENT_BB)
+                .addHeader("Connection", "Keep-Alive")
+                .addHeader("User-Agent", ConfInfoApi.USER_AGENT_WEB)
                 .addHeader("Referer", "https://www.bilibili.com/")
                 .build();
         try {

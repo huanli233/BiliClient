@@ -159,7 +159,7 @@ public class ConfInfoApi
         add("Referer");
         add("https://www.bilibili.com/");
         add("User-Agent");
-        add(USER_AGENT_WEB);
+        add(USER_AGENT_BB);
     }};
 
 

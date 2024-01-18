@@ -9,8 +9,8 @@
         android:minWidth="0dp"
         app:strokeWidth="0.1dp"
         app:cornerRadius="5dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginEnd="6dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 </com.google.android.material.button.MaterialButton>

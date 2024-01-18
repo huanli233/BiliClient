@@ -51,53 +51,54 @@
                  android:text="正在加载中..." />
 
             <com.google.android.material.card.MaterialCardView
-                 android:layout_height="wrap_content"
-                 android:layout_width="match_parent"
-                 app:cardMaxElevation="0dp"
-                 android:layout_marginEnd="10dp"
-                 app:strokeColor="#70707070"
-                 app:cardElevation="0dp"
-                 app:cardBackgroundColor="#78242424"
-                 android:layout_marginTop="6dp"
-                 android:layout_marginStart="10dp"
-                 app:layout_constraintTop_toBottomOf="@+id/title"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:strokeWidth="0.1dp"
-                 app:layout_constraintEnd_toEndOf="parent"
-                 app:cardCornerRadius="8dp"
-                 android:id="@+id/upInfo">
+                android:id="@+id/upInfo"
+                style="@style/Widget.MaterialComponents.CardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="10dp"
+                app:cardBackgroundColor="#78242424"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:strokeColor="#70707070"
+                app:strokeWidth="0.1dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                     android:layout_height="60dp"
-                     android:layout_width="match_parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp">
 
                     <ImageView
-                         android:layout_height="0dp"
-                         android:layout_width="0dp"
-                         android:adjustViewBounds="true"
-                         android:src="@drawable/default_avatar"
-                         app:layout_constraintHeight_percent="0.7"
-                         app:layout_constraintTop_toTopOf="parent"
-                         app:layout_constraintDimensionRatio="1:1"
-                         app:layout_constraintStart_toStartOf="parent"
-                         app:layout_constraintBottom_toBottomOf="parent"
-                         android:layout_marginStart="6dp"
-                         android:id="@+id/upInfo_Icon" />
+                        android:id="@+id/upInfo_Icon"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="6dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/default_avatar"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintHeight_percent="0.7"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                         android:layout_height="wrap_content"
-                         android:layout_width="wrap_content"
-                         android:ellipsize="marquee"
-                         app:autoSizeTextType="uniform"
-                         android:textSize="13sp"
-                         android:singleLine="true"
-                         android:textColor="#fff"
-                         app:layout_constraintStart_toEndOf="@+id/upInfo_Icon"
-                         app:layout_constraintBottom_toBottomOf="@+id/upInfo_Icon"
-                         android:layout_marginStart="6dp"
-                         app:layout_constraintTop_toTopOf="@id/upInfo_Icon"
-                         android:id="@+id/upInfo_Name"
-                         android:text="UP主名字" />
+                        android:id="@+id/upInfo_Name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:ellipsize="marquee"
+                        android:singleLine="true"
+                        android:text="UP主名字"
+                        android:textColor="#fff"
+                        android:textSize="13sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="@+id/upInfo_Icon"
+                        app:layout_constraintStart_toEndOf="@+id/upInfo_Icon"
+                        app:layout_constraintTop_toTopOf="@id/upInfo_Icon" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -259,29 +260,28 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tags" />
-            
+
             <com.google.android.material.card.MaterialCardView
-                 android:layout_height="wrap_content"
-                 android:layout_width="match_parent"
-                 app:cardMaxElevation="0dp"
-                 android:layout_marginEnd="10dp"
-                 app:strokeColor="#70707070"
-                 app:cardElevation="0dp"
-                 app:cardBackgroundColor="#78242424"
-                 android:layout_marginTop="6dp"
-                 android:layout_marginStart="10dp"
-                 app:layout_constraintTop_toBottomOf="@id/description"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:strokeWidth="0.1dp"
-                 app:layout_constraintEnd_toEndOf="parent"
-                 app:cardCornerRadius="8dp"
-                 android:id="@+id/play">
+                android:id="@+id/play"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="10dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/description"
+                app:strokeColor="#70707070"
+                app:strokeWidth="0.1dp">
 
                 <TextView
-                     android:layout_height="42sp"
-                     android:layout_width="match_parent"
-                     android:gravity="center"
-                     android:text="播放" />
+                    android:layout_width="match_parent"
+                    android:layout_height="42sp"
+                    android:gravity="center"
+                    android:text="播放" />
 
             </com.google.android.material.card.MaterialCardView>
 

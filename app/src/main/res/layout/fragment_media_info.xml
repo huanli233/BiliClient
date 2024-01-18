@@ -58,22 +58,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
         />
+
         <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_play"
-                android:text="播放"
-                android:textColor="#FFFFFF"
-                app:backgroundTint="#78242424"
-                app:strokeColor="#707070"
-                app:strokeWidth="0.1dp"
-                app:cornerRadius="8dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/rv_eposide_list"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-        />
+            android:id="@+id/btn_play"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="10dp"
+            android:text="播放"
+            app:backgroundTint="#78242424"
+            app:cornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_eposide_list"
+            app:strokeColor="#707070"
+            app:strokeWidth="0.1dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
