@@ -26,7 +26,7 @@ public class MediaSectionInfo {
         public EpisodeInfo(){}
 
         public EpisodeInfo(VideoCard videoCard){
-            longTitle = videoCard.title;
+            title = videoCard.title;
             cover = videoCard.cover;
             cid = videoCard.cid;
             aid = videoCard.aid;
@@ -35,12 +35,12 @@ public class MediaSectionInfo {
                 aid = jsonObject.getLong("aid");
                 cid = jsonObject.getLong("cid");
                 cover = jsonObject.getString("cover");
-                longTitle = jsonObject.getString("long_title");
+                title = jsonObject.getString("long_title");
         }
         public long aid;
         public long cid;
         public String cover;
-        public String longTitle;
+        public String title;
     }
 
     public static class SectionInfo{

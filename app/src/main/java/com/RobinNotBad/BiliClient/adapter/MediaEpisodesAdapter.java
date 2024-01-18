@@ -19,7 +19,7 @@ import java.util.List;
 public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdapter.MediaEpisodesViewHolder> {
     private List<MediaSectionInfo.EpisodeInfo> data;
 
-    private Consumer<MediaSectionInfo.EpisodeInfo> onItemClickListener;
+    public Consumer<MediaSectionInfo.EpisodeInfo> onItemClickListener;
     private int selectedItemIndex = 0;
 
     public void setOnItemClickListener(Consumer<MediaSectionInfo.EpisodeInfo> onItemClickListener) {

@@ -17,16 +17,16 @@ import java.util.Objects;
 public class bangumi_to_card {
 
     //获取番剧信息, 详情页需要有基本的cover, 信息等
-    public static Media getMediaInfo(String mediaId) throws Exception {
+    public static Media getMediaInfo(String mediaId) throws JSONException,IOException {
         String url = "https://api.bilibili.com/pgc/review/user?media_id=" + mediaId;
         ResponseBody body = NetWorkUtil.get(url, ConfInfoApi.webHeaders).body();
         if (body == null) {
-            throw new NetworkErrorException("baseMedia info body is null");
+            throw new JSONException("返回数据为空");
         }
         JSONObject all = new JSONObject(body.string());
         int code = all.getInt("code");
         if (code != 0) {
-            throw new IOException("从服务器获取剧集失败, code = " + code);
+            throw new JSONException("错误码：" + code);
         }
         JSONObject result = all.getJSONObject("result");
         Media baseMediaInfo = new Media(result);
