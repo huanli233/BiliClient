@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.CopyTextActivity;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerActivity;
 import com.RobinNotBad.BiliClient.activity.user.UserInfoActivity;
@@ -177,10 +178,9 @@ public class VideoInfoFragment extends Fragment {
 
                     if(SharedPreferencesUtil.getBoolean("copy_enable", true)){
                         description.setOnLongClickListener(view1 -> {
-                            ClipboardManager clipboardManager = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clipData = ClipData.newPlainText("label",videoInfo.description);
-                            clipboardManager.setPrimaryClip(clipData);
-                            MsgUtil.toast("已复制简介",requireContext());
+                            Intent intent = new Intent(requireContext(),CopyTextActivity.class);
+                            intent.putExtra("content",videoInfo.description);
+                            requireContext().startActivity(intent);
                             return false;
                         });
                     }

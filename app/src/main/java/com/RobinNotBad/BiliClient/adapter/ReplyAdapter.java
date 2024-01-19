@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.CopyTextActivity;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.user.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.ReplyInfoActivity;
@@ -105,10 +106,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             replyHolder.message.setText(text);  //防止加载速度慢时露出鸡脚
             if(SharedPreferencesUtil.getBoolean("copy_enable", true)){
                 replyHolder.message.setOnLongClickListener(view -> {
-                    ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clipData = ClipData.newPlainText("label",text);
-                    clipboardManager.setPrimaryClip(clipData);
-                    MsgUtil.toast("已复制评论",context);
+                    Intent intent = new Intent(context,CopyTextActivity.class);
+                    intent.putExtra("content",text);
+                    context.startActivity(intent);
                     return false;
                 });
             }

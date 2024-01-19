@@ -133,6 +133,11 @@
 
         </activity>
         <activity
+            android:name=".activity.CopyTextActivity"
+            android:exported="true"
+            android:label="复制文本"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.user.favorite.AddFavoriteActivity"
             android:exported="false"
             android:label="添加收藏"

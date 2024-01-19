@@ -269,7 +269,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/background_edit_text_setting"
                     android:paddingStart="6dp"
-                    android:text="启用复制"
+                    android:text="长按复制"
                     android:textColor="@color/textwhite" />
 
                 <TextView
@@ -277,7 +277,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"
                     android:layout_marginTop="2dp"
-                    android:text="打开此选项，长按视频描述或评论可以复制到剪贴板"
+                    android:text="打开此选项，长按视频描述或评论可以打开复制界面，复制界面中可以复制这些文本"
                     android:textSize="11sp" />
             </LinearLayout>
         </LinearLayout>

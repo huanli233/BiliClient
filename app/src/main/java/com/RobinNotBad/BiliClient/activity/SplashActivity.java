@@ -116,7 +116,7 @@ public class SplashActivity extends Activity {
                         ConfInfoApi.refreshHeaders();
                         runOnUiThread(()-> MsgUtil.toast("Cookie已刷新",this));
                     }
-                    else runOnUiThread(()-> MsgUtil.toast("Cookie刷新失败",this));
+                    else runOnUiThread(()-> MsgUtil.toast("Cookie刷新失败，您可能需要重新登陆以便进行敏感操作",this));
                 }
             }   
         }catch (Exception e){
