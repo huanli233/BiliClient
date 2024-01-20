@@ -389,7 +389,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
                         android:lines="1"
-                        android:text="未经测试的功能，不保证正常使用"
+                        android:text="不保证能使用"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
