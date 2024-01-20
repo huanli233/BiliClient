@@ -40,11 +40,13 @@ import java.io.IOException;
 
 public class MediaInfoFragment extends Fragment {
     private String mediaId;
-    private int selectedSectionIndex = 0;
+    private int selectedSection = 0, selectedEpidose = 0;
     private MediaSectionInfo sectionInfo;
     private Dialog dialog;
     private View rootView;
     private RecyclerView eposideRecyclerView;
+    private Button section_choose;
+    private TextView eposide_choose;
 
     public static MediaInfoFragment newInstance(long mediaId) {
         Bundle args = new Bundle();
@@ -97,24 +99,27 @@ public class MediaInfoFragment extends Fragment {
 
     @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     private void setSelectSectionIndex(int index) {
-        TextView episodeButton = rootView.findViewById(R.id.btn_episode);
         MediaSectionInfo.SectionInfo section = index == 0 ? sectionInfo.mainSection : sectionInfo.sections[index - 1];
-        episodeButton.setText(section.title + " 点击切换");
+        section_choose.setText(section.title + " 点击切换");
         MediaEpisodesAdapter adapter = (MediaEpisodesAdapter) eposideRecyclerView.getAdapter();
         if (adapter != null) {
             adapter.setData(section.episodes);
             eposideRecyclerView.scrollToPosition(0);
         }
-        selectedSectionIndex = index;
+        selectedSection = index;
+        eposide_choose.setOnClickListener(v -> getEposideChooseDialog(section).show());
+
+
     }
 
     private void initView(Media baseMediaInfo, MediaSectionInfo mediaSectionInfo) {
         //init data.
         ImageView imageMediaCover = rootView.findViewById(R.id.image_media_cover);
         TextView title = rootView.findViewById(R.id.title);
-        Button episodeButton = rootView.findViewById(R.id.btn_episode);
+        section_choose = rootView.findViewById(R.id.section_choose);
         Button playButton = rootView.findViewById(R.id.btn_play);
-        selectedSectionIndex = 0;
+        eposide_choose = rootView.findViewById(R.id.eposide_choose);
+        selectedSection = 0;
         sectionInfo = mediaSectionInfo;
         Glide.with(this)
                 .load(baseMediaInfo.horizontalCover)
@@ -130,13 +135,14 @@ public class MediaInfoFragment extends Fragment {
                 ((VideoInfoActivity) activity).setCurrentEpisodeInfo(episodeInfo);
             }
         });
-        episodeButton.setOnClickListener(v -> getSectionChooseDialog(mediaSectionInfo).show());
+        section_choose.setOnClickListener(v -> getSectionChooseDialog(mediaSectionInfo).show());
+        eposide_choose.setOnClickListener(v -> getEposideChooseDialog(mediaSectionInfo.mainSection).show());
         adapter.setData(mediaSectionInfo.mainSection.episodes);
         eposideRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         eposideRecyclerView.setAdapter(adapter);
         //play button setting
         playButton.setOnClickListener(v -> {
-            MediaSectionInfo.SectionInfo section = selectedSectionIndex == 0 ? mediaSectionInfo.mainSection : mediaSectionInfo.sections[selectedSectionIndex - 1];
+            MediaSectionInfo.SectionInfo section = selectedSection == 0 ? mediaSectionInfo.mainSection : mediaSectionInfo.sections[selectedSection - 1];
             MediaSectionInfo.EpisodeInfo episodeInfo = section.episodes[adapter.getSelectedItemIndex()];
             Glide.get(requireContext()).clearMemory();
             Intent intent = new Intent(v.getContext(), JumpToPlayerActivity.class);
@@ -154,40 +160,42 @@ public class MediaInfoFragment extends Fragment {
     }
 
     private Dialog getSectionChooseDialog(MediaSectionInfo mediaSectionInfo) {
-        if (dialog == null) {
             String[] choices = new String[mediaSectionInfo.sections.length + 1];
             choices[0] = mediaSectionInfo.mainSection.title;
             for (int i = 0; i < mediaSectionInfo.sections.length; i++) {
                 choices[i + 1] = mediaSectionInfo.sections[i].title;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-            builder.setSingleChoiceItems(choices, selectedSectionIndex, (dialog, which) -> {
+            builder.setSingleChoiceItems(choices, selectedSection, (dialog, which) -> {
                 setSelectSectionIndex(which);
                 dialog.dismiss();
             });
             dialog = builder.create();
-        }
+
         return dialog;
-    }
+        }
 
     private Dialog getEposideChooseDialog(MediaSectionInfo.SectionInfo sectionInfo) {
-        if (dialog == null) {
             String[] choices = new String[sectionInfo.episodes.length];
             for (int i = 0; i < sectionInfo.episodes.length; i++) {
-                choices[i] = sectionInfo.episodes[i].title;
+                choices[i] = (i+1) + "." + sectionInfo.episodes[i].title;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-            builder.setSingleChoiceItems(choices, selectedSectionIndex, (dialog, which) -> {
+            builder.setSingleChoiceItems(choices, selectedEpidose, (dialog, which) -> {
                 Activity activity = requireActivity();
                 if(activity instanceof VideoInfoActivity){
                     ((VideoInfoActivity) activity).setCurrentEpisodeInfo(sectionInfo.episodes[which]);
                 }
                 MediaEpisodesAdapter adapter = (MediaEpisodesAdapter) eposideRecyclerView.getAdapter();
-                if(adapter!=null) adapter.setSelectedItemIndex(which);
+                selectedEpidose = which;
+                if(adapter!=null) {
+                    adapter.setSelectedItemIndex(which);
+                    eposideRecyclerView.scrollToPosition(which);
+                }
                 dialog.dismiss();
             });
             dialog = builder.create();
-        }
+
         return dialog;
     }
 }
