@@ -66,7 +66,7 @@ public class SpecialLoginActivity extends BaseActivity {
             });
         }
         else{
-            desc.setText("以下是你的登录信息。此功能是为低版本安卓用户无法登录的问题准备，如果你是意外进入此页面，请直接退出。");
+            desc.setText("以下是你的登录信息。此功能是为低版本安卓用户无法登录的问题准备，如果你是意外进入此页面，请退出。\n同时，请勿将此页面的信息传给别人，以防盗号！");
             confirm.setVisibility(View.GONE);
             JSONObject jsonObject = new JSONObject();
             try {
