@@ -329,6 +329,7 @@
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
+                android:visibility="gone"
                 app:cardBackgroundColor="#78242424"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
@@ -532,6 +533,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginVertical="2dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="#78242424"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
@@ -540,14 +542,15 @@
                 app:strokeWidth="0.1dp">
 
                 <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="35sp"
-                        android:layout_marginHorizontal="8dp"
-                        android:gravity="center_vertical"
-                        android:text="功能测试"
-                        android:textAlignment="textStart"
-                        android:textSize="13sp"
-                        tools:ignore="RtlCompat" app:drawableEndCompat="@drawable/arrow_forward"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
+                    android:layout_marginHorizontal="8dp"
+                    android:gravity="center_vertical"
+                    android:text="功能测试"
+                    android:textAlignment="textStart"
+                    android:textSize="13sp"
+                    app:drawableEndCompat="@drawable/arrow_forward"
+                    tools:ignore="RtlCompat" />
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
