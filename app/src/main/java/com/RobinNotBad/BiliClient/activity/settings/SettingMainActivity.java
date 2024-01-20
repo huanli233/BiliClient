@@ -139,6 +139,18 @@ public class SettingMainActivity extends InstanceActivity {
             });
         });
 
+        MaterialCardView reset_tutorial = findViewById(R.id.reset_tutorial);    //用于测试
+        reset_tutorial.setOnClickListener(view -> {
+            SharedPreferencesUtil.putBoolean("tutorial_recommend",false);
+            SharedPreferencesUtil.putBoolean("tutorial_menu",false);
+            SharedPreferencesUtil.putBoolean("tutorial_search",false);
+            SharedPreferencesUtil.putBoolean("tutorial_media",false);
+            SharedPreferencesUtil.putBoolean("tutorial_video",false);
+            SharedPreferencesUtil.putBoolean("tutorial_user",false);
+            SharedPreferencesUtil.putBoolean("tutorial_dynamic",false);
+            MsgUtil.toast("已经重置教程完成情况",this);
+        });
+
         MaterialCardView test = findViewById(R.id.test);    //用于测试
         test.setOnClickListener(view -> MsgUtil.toast("喵~",this));
     }
