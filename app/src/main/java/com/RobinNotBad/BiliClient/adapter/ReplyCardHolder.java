@@ -1,11 +1,10 @@
 package com.RobinNotBad.BiliClient.adapter;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
-import androidx.recyclerview.widget.RecyclerView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.model.Reply;

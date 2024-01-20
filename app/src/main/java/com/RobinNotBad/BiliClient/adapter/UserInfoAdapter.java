@@ -20,7 +20,6 @@ import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.message.PrivateMsgActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
-import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
@@ -86,37 +85,11 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             userInfoHolder.userFans.setText("Lv" + userInfo.level + "  " + LittleToolsUtil.toWan(userInfo.fans) + "粉丝");
 
             if(userInfo.official != 0) {
-                String official_title = "";
-                switch (userInfo.official){
-                    case 1:
-                        official_title = "哔哩哔哩知名UP主";
-                        break;
-                    case 2:
-                        official_title = "哔哩哔哩大V达人";
-                        break;
-                    case 3:
-                        official_title = "哔哩哔哩企业认证";
-                        break;
-                    case 4:
-                        official_title = "哔哩哔哩组织认证";
-                        break;
-                    case 5:
-                        official_title = "哔哩哔哩媒体认证";
-                        break;
-                    case 6:
-                        official_title = "哔哩哔哩政府认证";
-                        break;
-                    case 7:
-                        official_title = "哔哩哔哩高能主播";
-                        break;
-                    case 8:
-                        official_title = "社会知名人士";
-                        break;
-                }
-                userInfoHolder.userOfficial.setText(official_title);
+                String[] official_signs = {"哔哩哔哩不知名UP主","哔哩哔哩知名UP主","哔哩哔哩大V达人","哔哩哔哩企业认证",
+                        "哔哩哔哩组织认证","哔哩哔哩媒体认证","哔哩哔哩政府认证","哔哩哔哩高能主播","社会知名人士"};
+                userInfoHolder.userOfficial.setText(official_signs[userInfo.official] + (userInfo.officialDesc.isEmpty() ? "" : userInfo.officialDesc));
             } else userInfoHolder.userOfficial.setVisibility(View.GONE);
-            if(!userInfo.officialDesc.isEmpty()) userInfoHolder.userOfficialDesc.setText(userInfo.officialDesc);
-            else userInfoHolder.userOfficialDesc.setVisibility(View.GONE);
+
             Glide.with(this.context).load(userInfo.avatar)
                     .placeholder(R.mipmap.akari)
                     .apply(RequestOptions.circleCropTransform())
@@ -182,7 +155,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public static class UserInfoHolder extends RecyclerView.ViewHolder{
-        TextView userName,userFans,userDesc,userNotice,userOfficial,userOfficialDesc;
+        TextView userName,userFans,userDesc,userNotice,userOfficial;
         ImageView userAvatar;
 
         ToggleButton followBtn;
@@ -195,7 +168,6 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             userNotice = itemView.findViewById(R.id.userNotice);
             userFans = itemView.findViewById(R.id.userFans);
             userOfficial = itemView.findViewById(R.id.userOfficial);
-            userOfficialDesc = itemView.findViewById(R.id.userOfficialDesc);
             userAvatar = itemView.findViewById(R.id.userAvatar);
             followBtn = itemView.findViewById(R.id.followBtn);
             msgBtn = itemView.findViewById(R.id.msgBtn);

@@ -5,11 +5,11 @@ import android.graphics.Bitmap;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.QRCodeUtil;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import okhttp3.Response;
@@ -36,7 +36,7 @@ public class UserLoginApi
         }};
     }
 
-    public static Bitmap getLoginQR() throws Exception
+    public static Bitmap getLoginQR() throws JSONException,IOException
     {
         ArrayList<String> headers = new ArrayList<String>()
         {{
@@ -54,17 +54,4 @@ public class UserLoginApi
         return NetWorkUtil.get("https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key=" + oauthKey, defaultHeaders);
     }
 
-    public static String getCookies(Response response){
-        List<String> cookiesList = response.headers("Set-Cookie");
-        if(cookiesList.isEmpty())return "";
-
-        StringBuilder cookies = new StringBuilder();
-        for (String s : cookiesList) cookies.append(s.split("; ")[0]).append("; ");
-        //如果cookies长度小于2，说明cookies是个空串，直接返回吧
-        if(cookies.length() >= 2) {
-            return cookies.substring(0, cookies.length() - 2);
-        } else {
-            return cookies.toString();
-        }
-    }
 }

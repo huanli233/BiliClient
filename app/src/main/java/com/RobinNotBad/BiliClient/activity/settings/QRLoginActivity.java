@@ -7,20 +7,28 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.constraintlayout.widget.Guideline;
+
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.UserLoginApi;
-import com.RobinNotBad.BiliClient.util.*;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
-import okhttp3.Response;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.Response;
 
 //登录页面，参考了腕上哔哩和WearBili的代码
 
@@ -30,6 +38,9 @@ public class QRLoginActivity extends InstanceActivity {
     private int clickCount = 0;
     Bitmap QRImage;
     Timer timer;
+    boolean need_refresh = false;
+    int qrScale = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,25 +86,43 @@ public class QRLoginActivity extends InstanceActivity {
 
 
         qrImageView.setOnClickListener(view -> {
-            try {
+            if(need_refresh) {
+                qrImageView.setImageResource(R.mipmap.loading);
+                qrImageView.setEnabled(false);
                 refreshQrCode();
-            } catch (IOException e) {
-                e.printStackTrace();
+            }
+            else {
+                Guideline guideline_left = findViewById(R.id.guideline33);
+                Guideline guideline_right = findViewById(R.id.guideline34);
+                switch (qrScale){
+                    case 0:
+                        guideline_left.setGuidelinePercent(0.00f);
+                        guideline_right.setGuidelinePercent(1.00f);
+                        Toast.makeText(this, "切换为大二维码", Toast.LENGTH_SHORT).show();
+                        qrScale = 1;
+                        break;
+                    case 1:
+                        guideline_left.setGuidelinePercent(0.25f);
+                        guideline_right.setGuidelinePercent(0.75f);
+                        Toast.makeText(this, "切换为小二维码", Toast.LENGTH_SHORT).show();
+                        qrScale = 2;
+                        break;
+                    case 2:
+                        guideline_left.setGuidelinePercent(0.15f);
+                        guideline_right.setGuidelinePercent(0.85f);
+                        Toast.makeText(this, "切换为默认大小", Toast.LENGTH_SHORT).show();
+                        qrScale = 0;
+                        break;
+                }
             }
         });
 
 
-        try {
-            refreshQrCode();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        refreshQrCode();
     }
 
-    public void refreshQrCode() throws IOException {
-        runOnUiThread(()->qrImageView.setEnabled(false));
+    public void refreshQrCode() {
 
-        qrImageView.setImageResource(R.mipmap.loading);
         CenterThreadPool.run(() ->{
             try{
                 runOnUiThread(() -> scanStat.setText("正在获取二维码"));
@@ -104,10 +133,16 @@ public class QRLoginActivity extends InstanceActivity {
                     qrImageView.setImageBitmap(QRImage);
                     detectLogin();
                 });
-            } catch (Exception e) {
+            } catch (IOException e) {
                 runOnUiThread(() -> {
                     qrImageView.setEnabled(true);
-                    scanStat.setText("获取二维码失败，点击上方重试");
+                    scanStat.setText("获取二维码失败，网络错误");
+                });
+                e.printStackTrace();
+            } catch (JSONException e){
+                runOnUiThread(() -> {
+                    qrImageView.setEnabled(true);
+                    scanStat.setText("登录接口可能失效，请找开发者");
                 });
                 e.printStackTrace();
             }
@@ -137,7 +172,7 @@ public class QRLoginActivity extends InstanceActivity {
                             runOnUiThread(() -> scanStat.setText("已扫描，请在手机上点击登录"));
                             break;
                         case 86101:
-                            runOnUiThread(() -> scanStat.setText("请使用手机端哔哩哔哩扫码登录"));
+                            runOnUiThread(() -> scanStat.setText("请使用手机端哔哩哔哩扫码登录\n点击二维码可以进行放大和缩小"));
                             break;
                         case 86038:
                             runOnUiThread(() -> {
