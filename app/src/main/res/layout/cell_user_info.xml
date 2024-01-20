@@ -72,7 +72,7 @@
         android:id="@+id/officialIcon"
         android:layout_width="24dp"
         android:layout_height="0dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="8dp"
         android:adjustViewBounds="true"
         android:alpha="0.5"
         android:src="@mipmap/icon_verified"
@@ -85,11 +85,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="8dp"
         android:alpha="0.6"
         android:text="小黑子认证"
         android:textColor="#fff"
-        android:textSize="12sp"
+        android:textSize="11sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/officialIcon"
         app:layout_constraintTop_toBottomOf="@id/userNotice" />
@@ -99,28 +99,30 @@
         android:layout_width="0dp"
         android:layout_height="38dp"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="2dp"
         android:background="@drawable/background_follow_btn"
         android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:textColor="#fff"
         android:textOff="关注"
         android:textOn="已关注"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:layout_constraintEnd_toEndOf="@id/userDesc"
-        app:layout_constraintStart_toStartOf="@id/userDesc"
+        app:layout_constraintEnd_toStartOf="@+id/msgBtn"
+        app:layout_constraintStart_toStartOf="@+id/userDesc"
         app:layout_constraintTop_toBottomOf="@+id/userOfficial" />
 
     <Button
         android:id="@+id/msgBtn"
         android:layout_width="0dp"
         android:layout_height="38dp"
-        android:layout_marginTop="5dp"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_marginStart="2dp"
         android:background="@drawable/background_grey_cardview"
         android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="私信"
-        app:layout_constraintEnd_toEndOf="@id/userDesc"
-        app:layout_constraintStart_toStartOf="@id/userDesc"
-        app:layout_constraintTop_toBottomOf="@id/followBtn" />
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/userDesc"
+        app:layout_constraintStart_toEndOf="@id/followBtn"
+        app:layout_constraintTop_toTopOf="@id/followBtn" />
 
     <View
         android:id="@+id/divider"
@@ -132,6 +134,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/msgBtn" />
+        app:layout_constraintTop_toBottomOf="@id/followBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
