@@ -329,7 +329,6 @@
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
-                android:visibility="gone"
                 app:cardBackgroundColor="#78242424"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="0dp"
