@@ -62,41 +62,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.2" />
+                app:layout_constraintGuide_percent="0.15" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline34"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.8" />
+                app:layout_constraintGuide_percent="0.85" />
 
-            <ImageView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/qrImageBg"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
+                app:cardBackgroundColor="#fff"
                 app:layout_constraintEnd_toStartOf="@+id/guideline34"
                 app:layout_constraintStart_toStartOf="@+id/guideline33"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/background_qrcode" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/qrImage"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:adjustViewBounds="true"
-                android:src="@mipmap/loading"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="@+id/qrImageBg"
-                app:layout_constraintEnd_toEndOf="@+id/qrImageBg"
-                app:layout_constraintStart_toStartOf="@+id/qrImageBg"
-                app:layout_constraintTop_toTopOf="@+id/qrImageBg" />
+                <ImageView
+                    android:id="@+id/qrImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/loading" />
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/scanStat"

@@ -38,7 +38,7 @@
         android:layout_marginTop="-1dp"
         android:layout_marginBottom="2dp"
         android:alpha="0.7"
-        android:text="Lv114  已关注\n2.5万粉丝"
+        android:text="Lv114\n2.5万粉丝"
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="@+id/userAvatar"
         app:layout_constraintStart_toEndOf="@id/userAvatar"
@@ -84,8 +84,8 @@
         android:id="@+id/userOfficial"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="5dp"
         android:alpha="0.6"
         android:text="小黑子认证"
         android:textColor="#fff"
@@ -94,43 +94,32 @@
         app:layout_constraintStart_toEndOf="@+id/officialIcon"
         app:layout_constraintTop_toBottomOf="@id/userNotice" />
 
-    <TextView
-        android:id="@+id/userOfficialDesc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="8dp"
-        android:alpha="0.4"
-        android:text="小黑子官方认证"
-        android:textColor="#fff"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/officialIcon"
-        app:layout_constraintStart_toStartOf="@+id/officialIcon"
-        app:layout_constraintTop_toBottomOf="@id/userOfficial" />
-
     <ToggleButton
         android:id="@+id/followBtn"
         android:layout_width="0dp"
         android:layout_height="38dp"
-        android:textOff="未关注"
-        android:textOn="已关注"
-        android:textColor="#fff"
+        android:layout_marginTop="4dp"
         android:background="@drawable/background_follow_btn"
-        android:layout_marginTop="5dp"
-        app:layout_constraintStart_toStartOf="@id/userDesc"
+        android:clickable="true"
+        android:textColor="#fff"
+        android:textOff="关注"
+        android:textOn="已关注"
+        android:foreground="?android:attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="@id/userDesc"
-        app:layout_constraintTop_toBottomOf="@id/userOfficialDesc" />
+        app:layout_constraintStart_toStartOf="@id/userDesc"
+        app:layout_constraintTop_toBottomOf="@+id/userOfficial" />
+
     <Button
         android:id="@+id/msgBtn"
         android:layout_width="0dp"
         android:layout_height="38dp"
         android:layout_marginTop="5dp"
-        android:visibility="gone"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:background="@drawable/background_grey_cardview"
+        android:clickable="true"
         android:text="私信"
-        android:background="@drawable/background_follow_btn"
-        app:layout_constraintStart_toStartOf="@id/userDesc"
         app:layout_constraintEnd_toEndOf="@id/userDesc"
+        app:layout_constraintStart_toStartOf="@id/userDesc"
         app:layout_constraintTop_toBottomOf="@id/followBtn" />
 
     <View

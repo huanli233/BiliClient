@@ -34,7 +34,6 @@ import com.RobinNotBad.BiliClient.view.CustomListView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 
 import org.json.JSONException;
 
@@ -48,7 +47,7 @@ import java.util.concurrent.ExecutionException;
 public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
-    private ArrayList<Reply> replyList;
+    private final ArrayList<Reply> replyList;
     long oid, root;
     int type;
 
@@ -156,7 +155,6 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 replyHolder.imageCard.setVisibility(View.VISIBLE);
                 replyHolder.imageCount.setVisibility(View.VISIBLE);
                 Glide.with(context).load(replyList.get(realPosition).pictureList.get(0) + "@25q.webp")
-                        .override(Target.SIZE_ORIGINAL)
                         .placeholder(R.mipmap.placeholder)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(replyHolder.imageCard);
@@ -239,9 +237,6 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
         }
     }
-    public void setOid(long oid){
-        this.oid = oid;
-    }
     @Override
     public int getItemCount() {
         return replyList.size() + 1;
@@ -250,10 +245,6 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public int getItemViewType(int position) {
         return (position==0 ? 0 : 1);
-    }
-
-    public void setReplyList(ArrayList<Reply> replyList) {
-        this.replyList = replyList;
     }
 
     public static class ReplyHolder extends RecyclerView.ViewHolder{

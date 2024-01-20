@@ -23,7 +23,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.material.card.MaterialCardView;
 
 import java.text.SimpleDateFormat;
@@ -87,7 +86,6 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
 
                 String url = article.get(realPosition).content;
                     Glide.with(context).load(url + (url.endsWith("webp") ? "" : "@25q.webp")).placeholder(R.mipmap.placeholder)
-                            .override(Target.SIZE_ORIGINAL)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(imageView);
 

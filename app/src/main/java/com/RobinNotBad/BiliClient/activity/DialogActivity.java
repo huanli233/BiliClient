@@ -3,14 +3,12 @@ package com.RobinNotBad.BiliClient.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
@@ -51,6 +49,7 @@ public class DialogActivity extends BaseActivity {
             wait_time = intent.getIntExtra("wait_time",3);
             Timer timer = new Timer();
             timer.scheduleAtFixedRate(new TimerTask() {
+                @SuppressLint("SetTextI18n")
                 @Override
                 public void run() {
                     runOnUiThread(() -> {
