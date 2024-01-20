@@ -11,27 +11,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/tip_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
-                android:text="提示"
                 android:gravity="center"
-                android:textSize="18sp" />
+                android:text="提示"
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:textSize="15sp"
-                android:text="因为...所以..." />
+                android:text="因为...所以..."
+                android:textSize="14sp" />
 
             <androidx.constraintlayout.utils.widget.ImageFilterView
                 android:id="@+id/image"
-                android:adjustViewBounds="false"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY" />
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/close_btn"
                 android:layout_width="match_parent"

@@ -81,13 +81,13 @@ public class MenuActivity extends BaseActivity {
         if(!SharedPreferencesUtil.getBoolean("menu_popular",true))
             findViewById(R.id.popular).setVisibility(View.GONE);
 
-        if(!SharedPreferencesUtil.getBoolean("menu_precious",true))
+        if(!SharedPreferencesUtil.getBoolean("menu_precious",false))
             findViewById(R.id.precious).setVisibility(View.GONE);
 
         for (int i = 0; i < cardList.size(); i++) {
             int finalI = i;
             cardList.get(i).setOnClickListener(view -> killAndJump(finalI));
-        };
+        }
         
         //我求求你了退出按钮能用吧....
         findViewById(R.id.exit).setOnClickListener(view -> {

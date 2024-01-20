@@ -37,21 +37,30 @@ public class VideoInfoApi {
     }
 
     
-    public static JSONArray getTagsByBvid(String bvid) throws IOException, JSONException {  //通过bvid获取tag
+    public static String getTagsByBvid(String bvid) throws IOException, JSONException {  //通过bvid获取tag
         String url = "https://api.bilibili.com/x/tag/archive/tags?bvid=" + bvid;
         Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
-        return result.getJSONArray("data");
+        return analyzeTags(result.getJSONArray("data"));
     }
 
-    public static JSONArray getTagsByAid(long aid) throws IOException, JSONException {  //通过aid获取tag
+    public static String getTagsByAid(long aid) throws IOException, JSONException {  //通过aid获取tag
         String url = "https://api.bilibili.com/x/tag/archive/tags?aid=" + aid;
         Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
-        return result.getJSONArray("data");
+        return analyzeTags(result.getJSONArray("data"));
+    }
+
+    public static String analyzeTags(JSONArray tagJson) throws JSONException {
+        StringBuilder tags = new StringBuilder();
+        for (int i = 0;i<tagJson.length();i++){
+            if(i>0) tags.append("/");
+            tags.append(((JSONObject) tagJson.get(i)).getString("tag_name"));
+        }
+        return tags.toString();
     }
     
-    public static VideoInfo getInfoByJson(JSONObject data,JSONArray tagJson) throws JSONException {  //项目实在太多qwq 拆就完事了
+    public static VideoInfo getInfoByJson(JSONObject data) throws JSONException {  //项目实在太多qwq 拆就完事了
         VideoInfo videoInfo = new VideoInfo();
         Log.e("视频信息","--------");
         videoInfo.title = data.getString("title");
@@ -110,13 +119,6 @@ public class VideoInfoApi {
         }
         videoInfo.pagenames = pagenames;
         videoInfo.cids = cids;
-        
-        StringBuilder tags = new StringBuilder();
-        for (int i = 0;i<tagJson.length();i++){
-            if(i>0) tags.append("/ ");
-            tags.append(((JSONObject) tagJson.get(i)).getString("tag_name"));
-        }
-        videoInfo.tagsDesc = tags.toString();
 
         return videoInfo;
     }

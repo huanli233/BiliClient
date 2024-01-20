@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.activity.media;
+package com.RobinNotBad.BiliClient.activity.video.info;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.MediaEpisodesAdapter;
 import com.RobinNotBad.BiliClient.api.bangumi_to_card;
 import com.RobinNotBad.BiliClient.model.Media;

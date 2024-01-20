@@ -82,7 +82,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             userInfoHolder.userDesc.setText(userInfo.sign);
             if (!userInfo.notice.isEmpty()) userInfoHolder.userNotice.setText(userInfo.notice);
             else userInfoHolder.userNotice.setVisibility(View.GONE);
-            userInfoHolder.userFans.setText("Lv" + userInfo.level + "  " + LittleToolsUtil.toWan(userInfo.fans) + "粉丝");
+            userInfoHolder.userFans.setText("Lv" + userInfo.level + "\n" + LittleToolsUtil.toWan(userInfo.fans) + "粉丝");
 
             if(userInfo.official != 0) {
                 String[] official_signs = {"哔哩哔哩不知名UP主","哔哩哔哩知名UP主","哔哩哔哩大V达人","哔哩哔哩企业认证",

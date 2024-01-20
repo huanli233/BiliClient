@@ -19,7 +19,6 @@ public class VideoInfo implements Serializable {    //自定义类需要加这�
     public int coin;
     public int reply;
     public String timeDesc;
-    public String tagsDesc;
     public int danmaku;
     public int favorite;
     public ArrayList<String> pagenames;

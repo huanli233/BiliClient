@@ -44,7 +44,7 @@ public class SettingPrefActivity extends BaseActivity {
         menu_popular.setChecked(SharedPreferencesUtil.getBoolean("menu_popular",true));
 
         menu_precious = findViewById(R.id.menu_precious);
-        menu_precious.setChecked(SharedPreferencesUtil.getBoolean("menu_precious",true));
+        menu_precious.setChecked(SharedPreferencesUtil.getBoolean("menu_precious",false));
         
         old_search_enable = findViewById(R.id.old_search_enable);
         old_search_enable.setChecked(SharedPreferencesUtil.getBoolean("old_search_enable",false));
