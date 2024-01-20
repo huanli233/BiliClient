@@ -19,6 +19,7 @@ public class SharedPreferencesUtil
     public static String player = "player";
     public static String padding_horizontal = "padding_horizontal";
     public static String padding_vertical = "padding_vertical";
+    public static String cookie_refresh = "cookie_refresh";
 
 
     private static SharedPreferences sharedPreferences;

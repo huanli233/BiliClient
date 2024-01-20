@@ -189,6 +189,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NoSwipe" />
         <activity
+            android:name=".activity.DialogActivity"
+            android:exported="false"
+            android:label="提示对话框"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.NoSwipe" />
+        <activity
             android:name=".activity.video.info.ReplyInfoActivity"
             android:exported="false"
             android:label="评论详情"

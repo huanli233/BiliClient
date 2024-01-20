@@ -115,8 +115,12 @@ public class SplashActivity extends Activity {
                     if(CookieRefreshApi.refreshCookie(refreshCsrf)){
                         ConfInfoApi.refreshHeaders();
                         runOnUiThread(()-> MsgUtil.toast("Cookie已刷新",this));
+                        SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cookie_refresh,true);
                     }
-                    else runOnUiThread(()-> MsgUtil.toast("Cookie刷新失败，您可能需要重新登陆以便进行敏感操作",this));
+                    else {
+                        SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cookie_refresh,false);
+                        runOnUiThread(()-> MsgUtil.showDialog(this,"Cookie刷新失败","您可能需要重新登陆获取新的登录数据，以确保可以进行敏感操作（如发评论等）",-1,false,0));
+                    }
                 }
             }   
         }catch (Exception e){

@@ -17,6 +17,8 @@ import com.RobinNotBad.BiliClient.api.RecommendApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -53,6 +55,11 @@ public class RecommendActivity extends InstanceActivity {
 
         TextView title = findViewById(R.id.pageName);
         title.setText("推荐");
+
+        if(!SharedPreferencesUtil.getBoolean("tutorial_recommend",false)){
+            MsgUtil.showDialog(this,"使用教程","点击上方标题栏可以打开菜单",R.mipmap.tutorial_recommend,true,5);
+            SharedPreferencesUtil.putBoolean("tutorial_recommend",true);
+        }
 
         refreshRecommend();
     }

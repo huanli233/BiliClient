@@ -17,6 +17,7 @@ import com.RobinNotBad.BiliClient.activity.user.MySpaceActivity;
 import com.RobinNotBad.BiliClient.activity.video.PopularActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
 
@@ -90,6 +91,11 @@ public class MenuActivity extends BaseActivity {
             }
             finish();
         });
+
+        if(!SharedPreferencesUtil.getBoolean("tutorial_menu",false)){
+            MsgUtil.showDialog(this,"使用教程","点击上方标题栏可以返回上一个页面",R.mipmap.tutorial_menu,true,5);
+            SharedPreferencesUtil.putBoolean("tutorial_menu",true);
+        }
     }
 
     private void killAndJump(int i){

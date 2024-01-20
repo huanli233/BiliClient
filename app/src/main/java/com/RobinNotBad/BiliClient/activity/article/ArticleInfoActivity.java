@@ -15,6 +15,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
@@ -50,9 +51,9 @@ public class ArticleInfoActivity extends BaseActivity {
                     ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
                     viewPager.setAdapter(vpfAdapter);
 
-                    if(SharedPreferencesUtil.getBoolean("first_articleinfo",true)){
-                        Toast.makeText(this, "提示：本页面可以左右滑动", Toast.LENGTH_LONG).show();
-                        SharedPreferencesUtil.putBoolean("first_articleinfo",false);
+                    if(!SharedPreferencesUtil.getBoolean("tutorial_menu",false)){
+                        MsgUtil.showDialog(this,"使用教程","此页面从左向有或从右向左滑动可以切换页面，第一页为专栏详情和内容，第二页为评论区",R.mipmap.tutorial_article,true,5);
+                        SharedPreferencesUtil.putBoolean("tutorial_menu",true);
                     }
                 });
             }catch (Exception e){
