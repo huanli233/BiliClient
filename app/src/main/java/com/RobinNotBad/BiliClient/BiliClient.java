@@ -19,7 +19,7 @@ public class BiliClient extends Application {
     @SuppressLint("StaticFieldLeak")
     public static Context context;
 
-    private static Set<InstanceActivity> activityInstances;
+    private static Set<InstanceActivity> activityInstances = new HashSet<>();
     @Override
     public void onCreate() {
         super.onCreate();
@@ -28,7 +28,6 @@ public class BiliClient extends Application {
             ErrorCatch errorCatch = ErrorCatch.getInstance();
             errorCatch.init(getApplicationContext());
             SharedPreferencesUtil.initSharedPrefs(this);
-            activityInstances = new HashSet<>();
         }
     }
 
