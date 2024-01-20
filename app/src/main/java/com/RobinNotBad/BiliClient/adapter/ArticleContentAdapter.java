@@ -1,10 +1,8 @@
 package com.RobinNotBad.BiliClient.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.collection.LruCache;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
@@ -20,9 +17,7 @@ import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.user.UserInfoActivity;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.ArticleLine;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -40,15 +35,12 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
     Context context;
     ArrayList<ArticleLine> article;
     ArticleInfo articleInfo;
-    LruCache<Integer, Bitmap> pictureCache;
     boolean keywords_expand = false;
 
     public ArticleContentAdapter(Context context,ArticleInfo articleInfo, ArrayList<ArticleLine> article) {
         this.context = context;
         this.article = article;
         this.articleInfo = articleInfo;
-        if(SharedPreferencesUtil.getBoolean("dev_article_pic_load",false))
-            pictureCache = new LruCache<>(12);
     }
 
     @NonNull

@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class SettingLaboratoryActivity extends BaseActivity {
 
-    private SwitchCompat refresh_cookie,article_picture_load;
+    private SwitchCompat refresh_cookie;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override

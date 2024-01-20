@@ -11,12 +11,10 @@ import android.view.View;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
-import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
 
@@ -142,8 +140,6 @@ public class SettingMainActivity extends InstanceActivity {
         });
 
         MaterialCardView test = findViewById(R.id.test);    //用于测试
-        test.setOnClickListener(view -> {
-            MsgUtil.toast("喵~",this);
-        });
+        test.setOnClickListener(view -> MsgUtil.toast("喵~",this));
     }
 }

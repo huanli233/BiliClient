@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.SpannableString;
@@ -99,6 +98,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
             ImageView imageView = imageCard.findViewById(R.id.imageView);
             Glide.with(context).load(dynamic.pictureList.get(0)+"@25q.webp")
                     .override(Target.SIZE_ORIGINAL)
+                    .placeholder(R.mipmap.placeholder)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(imageView);
             TextView textView = imageCard.findViewById(R.id.imageCount);
