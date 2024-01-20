@@ -103,7 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"
-                    android:text="有效范围：0.1倍-10倍，建议少量多次调节"
+                    android:text="有效范围：0.25倍-5.00倍，建议少量多次调节"
                     android:textSize="11sp" />
 
             </LinearLayout>
