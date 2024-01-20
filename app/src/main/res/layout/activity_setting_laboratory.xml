@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"
                     android:layout_marginTop="2dp"
-                    android:text="在启动哔哩终端时检查Cookie是否需要刷新，在Cookie需要刷新时自动请求新的Cookie\n如果该开关为禁用状态请重新登录\n介绍：Cookie会因为敏感操作被风控而失效，此时仍可继续使用，但无法进行例如发评论之类的敏感操作，便需要刷新"
+                    android:text="在启动哔哩终端时检查Cookie是否需要刷新，在Cookie需要刷新时自动请求新的Cookie\n从2.4.0以下版本升级到2.4.0及以上版本需要重新登录以使用此功能\n介绍：Cookie会因为敏感操作被风控而失效，此时仍可继续使用，但无法进行例如发评论之类的敏感操作，便需要刷新"
                     android:textSize="11sp" />
             </LinearLayout>
 
