@@ -1,447 +1,479 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.settings.SettingMainActivity">
+<androidx.constraintlayout.widget.ConstraintLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     tools:context=".activity.settings.SettingMainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         app:layout_constraintTop_toTopOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         android:id="@+id/top">
 
         <TextView
-                android:id="@+id/pageName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="3dp"
-                android:layout_marginStart="8dp"
-                android:gravity="center"
-                android:text="创作中心"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:drawableStartCompat="@drawable/arrow_back"/>
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginVertical="3dp"
+             app:drawableStartCompat="@drawable/arrow_back"
+             android:gravity="center"
+             app:layout_constraintTop_toTopOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintBottom_toBottomOf="parent"
+             android:layout_marginStart="8dp"
+             android:id="@+id/pageName"
+             android:text="创作中心"
+             android:textStyle="bold" />
 
         <TextClock
-            android:id="@+id/timeText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginVertical="3dp"
-            android:format12Hour="hh:mm"
-            android:format24Hour="HH:mm"
-            android:gravity="center"
-            android:text="11:45"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginEnd="8dp"
+             android:layout_marginVertical="3dp"
+             android:format24Hour="HH:mm"
+             app:layout_constraintBottom_toBottomOf="parent"
+             android:gravity="center"
+             app:layout_constraintTop_toTopOf="parent"
+             android:format12Hour="hh:mm"
+             app:layout_constraintEnd_toEndOf="parent"
+             android:id="@+id/timeText"
+             android:text="11:45"
+             android:textStyle="bold" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top">
+         android:layout_height="0dp"
+         android:layout_width="match_parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/top">
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:orientation="vertical">
+             <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="3dp"
+                android:text="投稿总数据"/>
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/totalFans"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:visibility="visible"
+                 app:cardMaxElevation="0dp"
+                 android:layout_marginVertical="2dp"
+                 app:strokeColor="#70707070"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="#78242424"
+                 android:foreground="?selectableItemBackground"
+                 android:layout_marginHorizontal="8dp"
+                 app:strokeWidth="0.1dp"
+                 app:cardCornerRadius="4dp"
+                 android:id="@+id/totalFans">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent">
 
                     <TextView
-                        android:id="@+id/totalFans_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:src="@drawable/arrow_forward"
-                        android:text="114+51"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="wrap_content"
+                         android:layout_marginBottom="8dp"
+                         android:layout_marginEnd="8dp"
+                         android:src="@drawable/arrow_forward"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintEnd_toEndOf="parent"
+                         android:layout_marginTop="8dp"
+                         app:layout_constraintBottom_toBottomOf="parent"
+                         android:id="@+id/totalFans_number"
+                         android:text="114+51" />
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="粉丝数"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintEnd_toStartOf="@+id/totalFans_number"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="0dp"
+                         android:ellipsize="end"
+                         app:autoSizeTextType="uniform"
+                         android:textSize="11sp"
+                         android:textColor="#fff"
+                         app:layout_constraintEnd_toStartOf="@+id/totalFans_number"
+                         android:layout_marginTop="8dp"
+                         android:layout_marginStart="8dp"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintStart_toStartOf="parent"
+                         android:lines="1"
+                         android:text="粉丝数" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/totalClick"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:visibility="visible"
+                 app:cardMaxElevation="0dp"
+                 android:layout_marginVertical="2dp"
+                 app:strokeColor="#70707070"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="#78242424"
+                 android:foreground="?selectableItemBackground"
+                 android:layout_marginHorizontal="8dp"
+                 app:strokeWidth="0.1dp"
+                 app:cardCornerRadius="4dp"
+                 android:id="@+id/totalClick">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent">
 
                     <TextView
-                        android:id="@+id/totalClick_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:src="@drawable/arrow_forward"
-                        android:text="114+51"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="wrap_content"
+                         android:layout_marginBottom="8dp"
+                         android:layout_marginEnd="8dp"
+                         android:src="@drawable/arrow_forward"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintEnd_toEndOf="parent"
+                         android:layout_marginTop="8dp"
+                         app:layout_constraintBottom_toBottomOf="parent"
+                         android:id="@+id/totalClick_number"
+                         android:text="114+51" />
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="播放量"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintEnd_toStartOf="@+id/totalClick_number"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="0dp"
+                         android:ellipsize="end"
+                         app:autoSizeTextType="uniform"
+                         android:textSize="11sp"
+                         android:textColor="#fff"
+                         app:layout_constraintEnd_toStartOf="@+id/totalClick_number"
+                         android:layout_marginTop="8dp"
+                         android:layout_marginStart="8dp"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintStart_toStartOf="parent"
+                         android:lines="1"
+                         android:text="播放量" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/totalLike"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:visibility="visible"
+                 app:cardMaxElevation="0dp"
+                 android:layout_marginVertical="2dp"
+                 app:strokeColor="#70707070"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="#78242424"
+                 android:foreground="?selectableItemBackground"
+                 android:layout_marginHorizontal="8dp"
+                 app:strokeWidth="0.1dp"
+                 app:cardCornerRadius="4dp"
+                 android:id="@+id/totalLike">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent">
 
                     <TextView
-                        android:id="@+id/totalLike_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:src="@drawable/arrow_forward"
-                        android:text="114+51"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="wrap_content"
+                         android:layout_marginBottom="8dp"
+                         android:layout_marginEnd="8dp"
+                         android:src="@drawable/arrow_forward"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintEnd_toEndOf="parent"
+                         android:layout_marginTop="8dp"
+                         app:layout_constraintBottom_toBottomOf="parent"
+                         android:id="@+id/totalLike_number"
+                         android:text="114+51" />
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="点赞"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintEnd_toStartOf="@+id/totalLike_number"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="0dp"
+                         android:ellipsize="end"
+                         app:autoSizeTextType="uniform"
+                         android:textSize="11sp"
+                         android:textColor="#fff"
+                         app:layout_constraintEnd_toStartOf="@+id/totalLike_number"
+                         android:layout_marginTop="8dp"
+                         android:layout_marginStart="8dp"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintStart_toStartOf="parent"
+                         android:lines="1"
+                         android:text="总点赞" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/totalCoin"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:visibility="visible"
+                 app:cardMaxElevation="0dp"
+                 android:layout_marginVertical="2dp"
+                 app:strokeColor="#70707070"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="#78242424"
+                 android:foreground="?selectableItemBackground"
+                 android:layout_marginHorizontal="8dp"
+                 app:strokeWidth="0.1dp"
+                 app:cardCornerRadius="4dp"
+                 android:id="@+id/totalCoin">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent">
 
                     <TextView
-                        android:id="@+id/totalCoin_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:src="@drawable/arrow_forward"
-                        android:text="114+51"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="wrap_content"
+                         android:layout_marginBottom="8dp"
+                         android:layout_marginEnd="8dp"
+                         android:src="@drawable/arrow_forward"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintEnd_toEndOf="parent"
+                         android:layout_marginTop="8dp"
+                         app:layout_constraintBottom_toBottomOf="parent"
+                         android:id="@+id/totalCoin_number"
+                         android:text="114+51" />
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="投币"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintEnd_toStartOf="@+id/totalCoin_number"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="0dp"
+                         android:ellipsize="end"
+                         app:autoSizeTextType="uniform"
+                         android:textSize="11sp"
+                         android:textColor="#fff"
+                         app:layout_constraintEnd_toStartOf="@+id/totalCoin_number"
+                         android:layout_marginTop="8dp"
+                         android:layout_marginStart="8dp"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintStart_toStartOf="parent"
+                         android:lines="1"
+                         android:text="总投币" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/totalFavourite"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:visibility="visible"
+                 app:cardMaxElevation="0dp"
+                 android:layout_marginVertical="2dp"
+                 app:strokeColor="#70707070"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="#78242424"
+                 android:foreground="?selectableItemBackground"
+                 android:layout_marginHorizontal="8dp"
+                 app:strokeWidth="0.1dp"
+                 app:cardCornerRadius="4dp"
+                 android:id="@+id/totalFavourite">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent">
 
                     <TextView
-                        android:id="@+id/totalFavourite_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:src="@drawable/arrow_forward"
-                        android:text="114+51"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="wrap_content"
+                         android:layout_marginBottom="8dp"
+                         android:layout_marginEnd="8dp"
+                         android:src="@drawable/arrow_forward"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintEnd_toEndOf="parent"
+                         android:layout_marginTop="8dp"
+                         app:layout_constraintBottom_toBottomOf="parent"
+                         android:id="@+id/totalFavourite_number"
+                         android:text="114+51" />
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="收藏"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintEnd_toStartOf="@+id/totalFavourite_number"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="0dp"
+                         android:ellipsize="end"
+                         app:autoSizeTextType="uniform"
+                         android:textSize="11sp"
+                         android:textColor="#fff"
+                         app:layout_constraintEnd_toStartOf="@+id/totalFavourite_number"
+                         android:layout_marginTop="8dp"
+                         android:layout_marginStart="8dp"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintStart_toStartOf="parent"
+                         android:lines="1"
+                         android:text="总收藏" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/totalShare"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:visibility="visible"
+                 app:cardMaxElevation="0dp"
+                 android:layout_marginVertical="2dp"
+                 app:strokeColor="#70707070"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="#78242424"
+                 android:foreground="?selectableItemBackground"
+                 android:layout_marginHorizontal="8dp"
+                 app:strokeWidth="0.1dp"
+                 app:cardCornerRadius="4dp"
+                 android:id="@+id/totalShare">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent">
 
                     <TextView
-                        android:id="@+id/totalShare_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:src="@drawable/arrow_forward"
-                        android:text="114+51"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="wrap_content"
+                         android:layout_marginBottom="8dp"
+                         android:layout_marginEnd="8dp"
+                         android:src="@drawable/arrow_forward"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintEnd_toEndOf="parent"
+                         android:layout_marginTop="8dp"
+                         app:layout_constraintBottom_toBottomOf="parent"
+                         android:id="@+id/totalShare_number"
+                         android:text="114+51" />
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="分享"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintEnd_toStartOf="@+id/totalShare_number"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="0dp"
+                         android:ellipsize="end"
+                         app:autoSizeTextType="uniform"
+                         android:textSize="11sp"
+                         android:textColor="#fff"
+                         app:layout_constraintEnd_toStartOf="@+id/totalShare_number"
+                         android:layout_marginTop="8dp"
+                         android:layout_marginStart="8dp"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintStart_toStartOf="parent"
+                         android:lines="1"
+                         android:text="总分享" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/totalReply"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:visibility="visible"
+                 app:cardMaxElevation="0dp"
+                 android:layout_marginVertical="2dp"
+                 app:strokeColor="#70707070"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="#78242424"
+                 android:foreground="?selectableItemBackground"
+                 android:layout_marginHorizontal="8dp"
+                 app:strokeWidth="0.1dp"
+                 app:cardCornerRadius="4dp"
+                 android:id="@+id/totalReply">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent">
 
                     <TextView
-                        android:id="@+id/totalReply_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:src="@drawable/arrow_forward"
-                        android:text="114+51"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="wrap_content"
+                         android:layout_marginBottom="8dp"
+                         android:layout_marginEnd="8dp"
+                         android:src="@drawable/arrow_forward"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintEnd_toEndOf="parent"
+                         android:layout_marginTop="8dp"
+                         app:layout_constraintBottom_toBottomOf="parent"
+                         android:id="@+id/totalReply_number"
+                         android:text="114+51" />
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="评论数"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintEnd_toStartOf="@+id/totalReply_number"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="0dp"
+                         android:ellipsize="end"
+                         app:autoSizeTextType="uniform"
+                         android:textSize="11sp"
+                         android:textColor="#fff"
+                         app:layout_constraintEnd_toStartOf="@+id/totalReply_number"
+                         android:layout_marginTop="8dp"
+                         android:layout_marginStart="8dp"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintStart_toStartOf="parent"
+                         android:lines="1"
+                         android:text="评论数" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/totalDm"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:visibility="visible"
+                 app:cardMaxElevation="0dp"
+                 android:layout_marginVertical="2dp"
+                 app:strokeColor="#70707070"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="#78242424"
+                 android:foreground="?selectableItemBackground"
+                 android:layout_marginHorizontal="8dp"
+                 app:strokeWidth="0.1dp"
+                 app:cardCornerRadius="4dp"
+                 android:id="@+id/totalDm">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent">
 
                     <TextView
-                        android:id="@+id/totalDm_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:src="@drawable/arrow_forward"
-                        android:text="114+51"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="wrap_content"
+                         android:layout_marginBottom="8dp"
+                         android:layout_marginEnd="8dp"
+                         android:src="@drawable/arrow_forward"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintEnd_toEndOf="parent"
+                         android:layout_marginTop="8dp"
+                         app:layout_constraintBottom_toBottomOf="parent"
+                         android:id="@+id/totalDm_number"
+                         android:text="114+51" />
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="弹幕数"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintEnd_toStartOf="@+id/totalDm_number"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                         android:layout_height="wrap_content"
+                         android:layout_width="0dp"
+                         android:ellipsize="end"
+                         app:autoSizeTextType="uniform"
+                         android:textSize="11sp"
+                         android:textColor="#fff"
+                         app:layout_constraintEnd_toStartOf="@+id/totalDm_number"
+                         android:layout_marginTop="8dp"
+                         android:layout_marginStart="8dp"
+                         app:layout_constraintTop_toTopOf="parent"
+                         app:layout_constraintStart_toStartOf="parent"
+                         android:lines="1"
+                         android:text="弹幕数" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
+
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
