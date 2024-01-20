@@ -43,7 +43,7 @@ public class SearchUserFragment extends Fragment {
     public static SearchUserFragment newInstance(ArrayList<UserInfo> userInfoList, String keyword) {
         SearchUserFragment fragment = new SearchUserFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("list",userInfoList);
+        bundle.putParcelableArrayList("list",userInfoList);
         bundle.putString("keyword",keyword);
         fragment.setArguments(bundle);
         return fragment;
@@ -53,7 +53,7 @@ public class SearchUserFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments()!=null){
-            userInfoList = (ArrayList<UserInfo>) getArguments().getSerializable("list");
+            userInfoList = getArguments().getParcelableArrayList("list");
             keyword = getArguments().getString("keyword");
         }
     }

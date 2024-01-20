@@ -1,7 +1,9 @@
 package com.RobinNotBad.BiliClient.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class VideoCard {
+public class VideoCard implements Parcelable {
     public String title;
     public String upName;
     public String view;
@@ -39,4 +41,42 @@ public class VideoCard {
     }
 
     public VideoCard(){}
+
+    protected VideoCard(Parcel in) {
+        title = in.readString();
+        upName = in.readString();
+        view = in.readString();
+        cover = in.readString();
+        type = in.readString();
+        aid = in.readLong();
+        bvid = in.readString();
+        cid = in.readLong();
+    }
+
+    public static final Creator<VideoCard> CREATOR = new Creator<VideoCard>() {
+        @Override
+        public VideoCard createFromParcel(Parcel in) {
+            return new VideoCard(in);
+        }
+
+        @Override
+        public VideoCard[] newArray(int size) {
+            return new VideoCard[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(title);
+        parcel.writeString(upName);
+        parcel.writeString(view);
+        parcel.writeString(cover);
+        parcel.writeLong(aid);
+        parcel.writeString(bvid);
+    }
 }

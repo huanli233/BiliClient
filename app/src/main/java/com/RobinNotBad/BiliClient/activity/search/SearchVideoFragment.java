@@ -42,7 +42,7 @@ public class SearchVideoFragment extends Fragment {
     public static SearchVideoFragment newInstance(ArrayList<VideoCard> cardList, String keyword) {
         SearchVideoFragment fragment = new SearchVideoFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("list",cardList);
+        bundle.putParcelableArrayList("list",cardList);
         bundle.putString("keyword",keyword);
         fragment.setArguments(bundle);
         return fragment;
@@ -52,7 +52,7 @@ public class SearchVideoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments()!=null){
-            videoCardList = (ArrayList<VideoCard>) getArguments().getSerializable("list");
+            videoCardList = getArguments().getParcelableArrayList("list");
             keyword = getArguments().getString("keyword");
         }
     }
