@@ -65,7 +65,7 @@ public class MessageListActivity extends BaseActivity{
                 runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
                 e.printStackTrace();
             } catch (JSONException e) {
-                runOnUiThread(()-> MsgUtil.jsonErr(e,this));
+                runOnUiThread(()-> MsgUtil.toast("加载出错",this));
                 e.printStackTrace();
             }
         });
