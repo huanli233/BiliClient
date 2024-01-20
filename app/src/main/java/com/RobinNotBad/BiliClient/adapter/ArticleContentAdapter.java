@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
@@ -81,15 +82,16 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 }
                 break;
             case 1:
-                ImageView imageView = holder.itemView.findViewById(R.id.imageView);  //图片
+                ImageFilterView imageView = (ImageFilterView) holder.itemView;  //图片
 
 
-                    Glide.with(context).load(article.get(realPosition).content + "@25q.webp").placeholder(R.mipmap.placeholder)
+                String url = article.get(realPosition).content;
+                    Glide.with(context).load(url + (url.endsWith("webp") ? "" : "@25q.webp")).placeholder(R.mipmap.placeholder)
                             .override(Target.SIZE_ORIGINAL)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(imageView);
 
-                holder.itemView.findViewById(R.id.imageCard).setOnClickListener(view -> {
+                imageView.setOnClickListener(view -> {
                     Intent intent = new Intent();
                     intent.setClass(context, ImageViewerActivity.class);
                     ArrayList<String> imageList = new ArrayList<>();
