@@ -8,7 +8,7 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    android:src="@drawable/placeholder"
+    android:src="@mipmap/placeholder"
     tools:ignore="UnusedAttribute">
 
 </androidx.constraintlayout.utils.widget.ImageFilterView>

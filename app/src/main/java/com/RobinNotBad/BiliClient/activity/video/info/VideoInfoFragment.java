@@ -136,11 +136,11 @@ public class VideoInfoFragment extends Fragment {
                 HistoryApi.reportHistory(videoInfo.aid, videoInfo.cids.get(0), videoInfo.upMid, 0);
 
                 if (isAdded()) requireActivity().runOnUiThread(() -> {
-                    Glide.with(view.getContext()).load(videoInfo.cover).placeholder(R.drawable.placeholder)
+                    Glide.with(view.getContext()).load(videoInfo.cover).placeholder(R.mipmap.placeholder)
                             .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(4, view.getContext()))))
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(cover);
-                    Glide.with(view.getContext()).load(videoInfo.upAvatar).placeholder(R.drawable.akari)
+                    Glide.with(view.getContext()).load(videoInfo.upAvatar).placeholder(R.mipmap.akari)
                             .apply(RequestOptions.circleCropTransform())
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(upIcon);

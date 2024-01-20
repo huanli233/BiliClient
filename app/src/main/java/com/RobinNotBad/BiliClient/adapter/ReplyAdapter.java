@@ -93,7 +93,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ReplyHolder replyHolder = (ReplyHolder) holder;
 
             Glide.with(context).load(replyList.get(realPosition).sender.avatar)
-                    .placeholder(R.drawable.akari)
+                    .placeholder(R.mipmap.akari)
                     .apply(RequestOptions.circleCropTransform())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(replyHolder.replyAvatar);
@@ -157,6 +157,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 replyHolder.imageCount.setVisibility(View.VISIBLE);
                 Glide.with(context).load(replyList.get(realPosition).pictureList.get(0) + "@25q.webp")
                         .override(Target.SIZE_ORIGINAL)
+                        .placeholder(R.mipmap.placeholder)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(replyHolder.imageCard);
 

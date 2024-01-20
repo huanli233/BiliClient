@@ -96,7 +96,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                     if(cachedImage != null)
                         imageView.setImageBitmap(cachedImage);
                     else CenterThreadPool.run(()->{
-                        imageView.setImageResource(R.drawable.placeholder);
+                        imageView.setImageResource(R.mipmap.placeholder);
                         //在图片没有完全加载成功之前， 先用占位图垫着，后面等加载成功了再替换
                         try {
                             Bitmap bitmap = Glide.with(context).asBitmap().load(article.get(realPosition).content + "@25q.webp")
@@ -110,7 +110,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                         }
                     });
                 }else{
-                    Glide.with(context).load(article.get(realPosition).content + "@25q.webp").placeholder(R.drawable.placeholder)
+                    Glide.with(context).load(article.get(realPosition).content + "@25q.webp").placeholder(R.mipmap.placeholder)
                             .override(Target.SIZE_ORIGINAL)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(imageView);
@@ -149,12 +149,12 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 views.setText(articleInfo.view);
                 if(articleInfo.banner.isEmpty()) cover.setVisibility(View.GONE);
                 else{
-                    Glide.with(context).load(articleInfo.banner).placeholder(R.drawable.placeholder)
+                    Glide.with(context).load(articleInfo.banner).placeholder(R.mipmap.placeholder)
                             .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(4,context))))
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(cover);
                 }
-                Glide.with(context).load(articleInfo.upAvatar).placeholder(R.drawable.akari)
+                Glide.with(context).load(articleInfo.upAvatar).placeholder(R.mipmap.akari)
                         .apply(RequestOptions.circleCropTransform())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(upIcon);

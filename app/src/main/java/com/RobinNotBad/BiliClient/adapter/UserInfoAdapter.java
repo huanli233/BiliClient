@@ -115,7 +115,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if(!userInfo.officialDesc.isEmpty()) userInfoHolder.userOfficialDesc.setText(userInfo.officialDesc);
             else userInfoHolder.userOfficialDesc.setVisibility(View.GONE);
             Glide.with(this.context).load(userInfo.avatar)
-                    .placeholder(R.drawable.akari)
+                    .placeholder(R.mipmap.akari)
                     .apply(RequestOptions.circleCropTransform())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(userInfoHolder.userAvatar);

@@ -48,7 +48,7 @@ public class MessageHolder extends RecyclerView.ViewHolder{
             ImageView imageView = new ImageView(context);
             Glide.with(context)
                     .load(message.user.get(i).avatar)
-                    .placeholder(R.drawable.akari)
+                    .placeholder(R.mipmap.akari)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .apply(RequestOptions.circleCropTransform())
                     .into(imageView);
@@ -91,7 +91,7 @@ public class MessageHolder extends RecyclerView.ViewHolder{
         if(message.replyInfo != null){
             Reply childReply = message.replyInfo;
             ReplyCardHolder holder = new ReplyCardHolder(View.inflate(context,R.layout.cell_message_reply,extraCard));
-            holder.showReplyCard(childReply,context);
+            holder.showReplyCard(childReply);
             holder.itemView.findViewById(R.id.cardView).setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(context, VideoInfoActivity.class);
@@ -103,7 +103,7 @@ public class MessageHolder extends RecyclerView.ViewHolder{
         if(message.dynamicInfo != null){
             Reply childReply = message.dynamicInfo;
             ReplyCardHolder holder = new ReplyCardHolder(View.inflate(context,R.layout.cell_message_reply,extraCard));
-            holder.showReplyCard(childReply,context);
+            holder.showReplyCard(childReply);
         }
     }
 }

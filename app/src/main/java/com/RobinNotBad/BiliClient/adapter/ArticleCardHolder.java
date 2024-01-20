@@ -46,7 +46,7 @@ public class ArticleCardHolder extends RecyclerView.ViewHolder{
         else readTimes.setText(articleCard.view);
 
         Glide.with(context).load(articleCard.banner)
-                .placeholder(R.drawable.placeholder)
+                .placeholder(R.mipmap.placeholder)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(5,context))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(cover);

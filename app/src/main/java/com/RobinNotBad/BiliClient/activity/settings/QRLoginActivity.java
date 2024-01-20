@@ -93,7 +93,7 @@ public class QRLoginActivity extends InstanceActivity {
     public void refreshQrCode() throws IOException {
         runOnUiThread(()->qrImageView.setEnabled(false));
 
-        qrImageView.setImageResource(R.drawable.loading);
+        qrImageView.setImageResource(R.mipmap.loading);
         CenterThreadPool.run(() ->{
             try{
                 runOnUiThread(() -> scanStat.setText("正在获取二维码"));

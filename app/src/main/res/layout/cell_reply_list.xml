@@ -16,7 +16,7 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/akari" />
+        android:src="@mipmap/akari" />
 
     <TextView
         android:id="@+id/replyUsername"
@@ -110,7 +110,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:src="@drawable/placeholder"
+        android:src="@mipmap/placeholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/replyText"

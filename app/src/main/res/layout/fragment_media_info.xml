@@ -21,7 +21,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:round="5dp"
-            tools:src="@drawable/placeholder" />
+            tools:src="@mipmap/placeholder" />
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

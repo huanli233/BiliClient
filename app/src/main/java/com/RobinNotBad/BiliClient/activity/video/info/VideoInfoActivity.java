@@ -122,13 +122,13 @@ public class VideoInfoActivity extends BaseActivity {
                 //没啥好说的，教科书式的ViewPager使用方法
             } catch (JSONException e) {
                 runOnUiThread(() -> {
-                    loading.setImageResource(R.drawable.loading_2233_error);
+                    loading.setImageResource(R.mipmap.loading_2233_error);
                     MsgUtil.jsonErr(e, this);
                 });
                 e.printStackTrace();
             } catch (IOException e) {
                 runOnUiThread(() -> {
-                    loading.setImageResource(R.drawable.loading_2233_error);
+                    loading.setImageResource(R.mipmap.loading_2233_error);
                     MsgUtil.quickErr(MsgUtil.err_net, this);
                 });
                 e.printStackTrace();

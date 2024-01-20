@@ -64,7 +64,7 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
             holder.nameText.setText(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).name);
             Glide.with(context).load(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).avatar)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .placeholder(R.drawable.akari)
+                            .placeholder(R.mipmap.akari)
                             .apply(RequestOptions.circleCropTransform())
                             .into(holder.avatarView);
             holder.itemView.setOnClickListener(view->{

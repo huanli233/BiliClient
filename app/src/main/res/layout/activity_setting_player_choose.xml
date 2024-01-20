@@ -88,7 +88,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.5"
-                        android:src="@drawable/mtvplayer" />
+                        android:src="@mipmap/mtvplayer" />
 
                     <TextView
                         android:id="@+id/mtvPlayer_title"
@@ -155,7 +155,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.5"
-                        android:src="@drawable/aliangplayer" />
+                        android:src="@mipmap/aliangplayer" />
 
                     <TextView
                         android:id="@+id/aliangPlayer_title"

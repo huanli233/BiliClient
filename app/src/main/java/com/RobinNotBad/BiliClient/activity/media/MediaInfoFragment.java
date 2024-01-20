@@ -124,7 +124,7 @@ public class MediaInfoFragment extends Fragment {
         Glide.with(this)
                 .load(baseMediaInfo.horizontalCover)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .placeholder(R.drawable.loading_2233)
+                .placeholder(R.mipmap.loading_2233)
                 .into(imageMediaCover);
         title.setText(baseMediaInfo.title);
         //section selector setting.

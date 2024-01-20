@@ -82,7 +82,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
             }
         }else content.setVisibility(View.GONE);
         Glide.with(context).load(dynamic.userAvatar)
-                .placeholder(R.drawable.akari)
+                .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(avatar);

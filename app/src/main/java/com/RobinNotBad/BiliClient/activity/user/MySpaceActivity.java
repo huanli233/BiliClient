@@ -69,7 +69,7 @@ public class MySpaceActivity extends InstanceActivity {
                 int userCoin = UserInfoApi.getCurrentUserCoin();
                 runOnUiThread(() -> {
                     Glide.with(MySpaceActivity.this).load(userInfo.avatar)
-                            .placeholder(R.drawable.akari).apply(RequestOptions.circleCropTransform())
+                            .placeholder(R.mipmap.akari).apply(RequestOptions.circleCropTransform())
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(userAvatar);
                     userName.setText(userInfo.name);

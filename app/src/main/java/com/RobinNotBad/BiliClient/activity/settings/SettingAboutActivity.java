@@ -43,11 +43,11 @@ public class SettingAboutActivity extends BaseActivity {
             add(findViewById(R.id.silentAvatar));
         }};
         List<Integer> developerAvaters = new ArrayList<Integer>() {{
-            add(R.drawable.avatar_robin);
-            add(R.drawable.avatar_dudu);
+            add(R.mipmap.avatar_robin);
+            add(R.mipmap.avatar_dudu);
             add(-1);
-            add(R.drawable.avatar_moye);
-            add(R.drawable.avatar_silent);
+            add(R.mipmap.avatar_moye);
+            add(R.mipmap.avatar_silent);
         }};
         List<MaterialCardView> developerCardList = new ArrayList<MaterialCardView>() {{
             add(findViewById(R.id.robin_card));
@@ -67,7 +67,7 @@ public class SettingAboutActivity extends BaseActivity {
         for(int i = 0;i < developerAvaterViews.size();i++){
             int finalI = i;
             if(developerAvaters.get(i) != -1) Glide.with(this).load(developerAvaters.get(i))
-                    .placeholder(R.drawable.akari)
+                    .placeholder(R.mipmap.akari)
                     .apply(RequestOptions.circleCropTransform())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(developerAvaterViews.get(i));
