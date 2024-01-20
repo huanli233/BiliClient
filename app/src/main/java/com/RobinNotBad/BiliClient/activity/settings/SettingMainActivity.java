@@ -148,6 +148,7 @@ public class SettingMainActivity extends InstanceActivity {
             SharedPreferencesUtil.putBoolean("tutorial_video",false);
             SharedPreferencesUtil.putBoolean("tutorial_user",false);
             SharedPreferencesUtil.putBoolean("tutorial_dynamic",false);
+            SharedPreferencesUtil.putBoolean("tutorial_article",false);
             MsgUtil.toast("已经重置教程完成情况",this);
         });
 
