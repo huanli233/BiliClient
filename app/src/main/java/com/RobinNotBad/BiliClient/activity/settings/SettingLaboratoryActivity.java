@@ -29,7 +29,7 @@ public class SettingLaboratoryActivity extends BaseActivity {
         refresh_cookie.setChecked(SharedPreferencesUtil.getBoolean("dev_refresh_cookie",true));
 
         article_picture_load = findViewById(R.id.article_picture_load);
-        article_picture_load.setChecked(SharedPreferencesUtil.getBoolean("dev_article_pic_load",true));
+        article_picture_load.setChecked(SharedPreferencesUtil.getBoolean("dev_article_pic_load",false));
 
         if(Objects.equals(SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), "")) refresh_cookie.setEnabled(false);
     }

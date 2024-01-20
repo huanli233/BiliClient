@@ -91,30 +91,11 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
             case 1:
                 ImageView imageView = holder.itemView.findViewById(R.id.imageView);  //图片
 
-                if(SharedPreferencesUtil.getBoolean("dev_article_pic_load",true)) {
-                    Bitmap cachedImage = pictureCache.get(realPosition);
-                    if(cachedImage != null)
-                        imageView.setImageBitmap(cachedImage);
-                    else CenterThreadPool.run(()->{
-                        imageView.setImageResource(R.mipmap.placeholder);
-                        //在图片没有完全加载成功之前， 先用占位图垫着，后面等加载成功了再替换
-                        try {
-                            Bitmap bitmap = Glide.with(context).asBitmap().load(article.get(realPosition).content + "@25q.webp")
-                                    .override(Target.SIZE_ORIGINAL)
-                                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
-                                    .submit().get();
-                            pictureCache.put(realPosition,bitmap);
-                            ((Activity)context).runOnUiThread(()->imageView.setImageBitmap(bitmap));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    });
-                }else{
+
                     Glide.with(context).load(article.get(realPosition).content + "@25q.webp").placeholder(R.mipmap.placeholder)
                             .override(Target.SIZE_ORIGINAL)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(imageView);
-                }
 
                 holder.itemView.findViewById(R.id.imageCard).setOnClickListener(view -> {
                     Intent intent = new Intent();
