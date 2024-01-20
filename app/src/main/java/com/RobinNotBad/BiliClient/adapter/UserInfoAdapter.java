@@ -87,7 +87,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if(userInfo.official != 0) {
                 String[] official_signs = {"哔哩哔哩不知名UP主","哔哩哔哩知名UP主","哔哩哔哩大V达人","哔哩哔哩企业认证",
                         "哔哩哔哩组织认证","哔哩哔哩媒体认证","哔哩哔哩政府认证","哔哩哔哩高能主播","社会知名人士"};
-                userInfoHolder.userOfficial.setText(official_signs[userInfo.official] + (userInfo.officialDesc.isEmpty() ? "" : userInfo.officialDesc));
+                userInfoHolder.userOfficial.setText(official_signs[userInfo.official] + (userInfo.officialDesc.isEmpty() ? "" : ("\n" + userInfo.officialDesc)));
             } else userInfoHolder.userOfficial.setVisibility(View.GONE);
 
             Glide.with(this.context).load(userInfo.avatar)
