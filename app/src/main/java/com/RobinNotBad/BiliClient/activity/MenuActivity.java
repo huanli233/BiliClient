@@ -15,6 +15,7 @@ import com.RobinNotBad.BiliClient.activity.settings.QRLoginActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingMainActivity;
 import com.RobinNotBad.BiliClient.activity.user.MySpaceActivity;
 import com.RobinNotBad.BiliClient.activity.video.PopularActivity;
+import com.RobinNotBad.BiliClient.activity.video.PreciousActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -34,6 +35,7 @@ public class MenuActivity extends BaseActivity {
     private final List<Class<? extends InstanceActivity>> classList = new ArrayList<Class<? extends InstanceActivity>>(){{
         add(RecommendActivity.class);
         add(PopularActivity.class);
+        add(PreciousActivity.class);
         add(SearchActivity.class);
         add(DynamicActivity.class);
         add(QRLoginActivity.class);
@@ -58,6 +60,7 @@ public class MenuActivity extends BaseActivity {
         List<MaterialCardView> cardList = new ArrayList<MaterialCardView>() {{
             add(findViewById(R.id.main));
             add(findViewById(R.id.popular));
+            add(findViewById(R.id.precious));
             add(findViewById(R.id.search));
             add(findViewById(R.id.dynamic));
             add(findViewById(R.id.login));
@@ -77,6 +80,9 @@ public class MenuActivity extends BaseActivity {
 
         if(!SharedPreferencesUtil.getBoolean("menu_popular",true))
             findViewById(R.id.popular).setVisibility(View.GONE);
+
+        if(!SharedPreferencesUtil.getBoolean("menu_precious",true))
+            findViewById(R.id.precious).setVisibility(View.GONE);
 
         for (int i = 0; i < cardList.size(); i++) {
             int finalI = i;

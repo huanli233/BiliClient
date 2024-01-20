@@ -167,6 +167,31 @@
                 android:orientation="vertical">
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/menu_precious"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_edit_text_setting"
+                    android:paddingStart="6dp"
+                    android:text="入站必刷"
+                    android:textColor="@color/textwhite" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="2dp"
+                    android:text="打开此选项，在菜单页面会显示入站必刷按钮"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/tags_enable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

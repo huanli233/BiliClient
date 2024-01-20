@@ -1,106 +1,105 @@
-package com.RobinNotBad.BiliClient.activity.dynamic;
+package com.RobinNotBad.BiliClient.activity.video;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.adapter.DynamicAdapter;
-import com.RobinNotBad.BiliClient.api.DynamicApi;
-import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
+import com.RobinNotBad.BiliClient.api.RecommendApi;
+import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-//动态页面
-//2023-09-17
+//入站必刷
+//2024-01-14
 
-public class DynamicActivity extends InstanceActivity {
+public class PreciousActivity extends InstanceActivity {
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ArrayList<Dynamic> dynamicList;
-    private DynamicAdapter dynamicAdapter;
-    private long offset = 0;
+    private ArrayList<VideoCard> videoCardList;
+    private VideoCardAdapter videoCardAdapter;
     private boolean firstRefresh = true;
     private boolean refreshing = false;
-    private boolean bottom = false;
+
+    private int page = 1;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_main_refresh);
-        Log.e("debug","进入动态页");
+        Log.e("debug","进入入站必刷页");
 
         recyclerView = findViewById(R.id.recyclerView);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(this::refreshDynamic);
+        swipeRefreshLayout.setOnRefreshListener(this::loadPrecious);
         findViewById(R.id.top).setOnClickListener(view -> {
             Intent intent = new Intent();
-            intent.setClass(DynamicActivity.this, MenuActivity.class);
-            intent.putExtra("from",4);
+            intent.setClass(PreciousActivity.this, MenuActivity.class);
+            intent.putExtra("from",2);
             startActivity(intent);
         });
 
         TextView title = findViewById(R.id.pageName);
-        title.setText("动态");
+        title.setText("入站必刷");
 
-        refreshDynamic();
+        loadPrecious();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void refreshDynamic() {
-        Log.e("debug","刷新");
-        CenterThreadPool.run(()->{
-            if (firstRefresh) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(DynamicActivity.this));
-                dynamicList = new ArrayList<>();
-                dynamicAdapter = new DynamicAdapter(this,dynamicList);
-                recyclerView.setAdapter(dynamicAdapter);
-            } else {
-                offset = 0;
-                bottom = false;
-                dynamicList.clear();
-                dynamicAdapter.notifyDataSetChanged();
-            }
-            runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
+    private void loadPrecious() {
+        Log.e("debug", "刷新");
+        page = 1;
+        if (firstRefresh) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(PreciousActivity.this));
+            videoCardList = new ArrayList<>();
+        } else {
+            int last = videoCardList.size();
+            videoCardList.clear();
+            videoCardAdapter.notifyItemRangeRemoved(0,last);
+        }
+        swipeRefreshLayout.setRefreshing(true);
 
-            refreshing = true;
-            addRecommend();
-
-        });
+        refreshing = true;
+        CenterThreadPool.run(this::addPrecious);
     }
 
-    private void addRecommend() {
+    private void addPrecious() {
         Log.e("debug", "加载下一页");
         runOnUiThread(()->swipeRefreshLayout.setRefreshing(true));
-        int lastSize = dynamicList.size();
+        int lastSize = videoCardList.size();
         try {
-            JSONObject jsonObject = DynamicApi.getSelfDynamic(offset);
-            offset = DynamicApi.analyzeDynamicList(jsonObject, dynamicList);
-            bottom = offset == -1;
-
+            RecommendApi.getPrecious(videoCardList,page);
+            page++;
             runOnUiThread(() -> {
+                swipeRefreshLayout.setRefreshing(false);
+                refreshing = false;
                 if (firstRefresh) {
                     firstRefresh = false;
+                    videoCardAdapter = new VideoCardAdapter(this, videoCardList);
+                    recyclerView.setAdapter(videoCardAdapter);
+
                     recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override
                         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                             super.onScrollStateChanged(recyclerView, newState);
                         }
-
                         @Override
                         public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                             super.onScrolled(recyclerView, dx, dy);
@@ -108,34 +107,23 @@ public class DynamicActivity extends InstanceActivity {
                             assert manager != null;
                             int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();  //获取最后一个完全显示的itemPosition
                             int itemCount = manager.getItemCount();
-                            if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
+                            if (lastItemPosition >= (itemCount - 3) && dy>0 && !refreshing) {// 滑动到倒数第三个就可以刷新了
                                 refreshing = true;
-                                CenterThreadPool.run(() -> addRecommend()); //加载第二页
+                                CenterThreadPool.run(()->addPrecious()); //加载第二页
                             }
                         }
                     });
+                }else {
+                    Log.e("debug","last="+lastSize+"&now="+videoCardList.size());
+                    videoCardAdapter.notifyItemRangeInserted(lastSize,videoCardList.size()-lastSize);
                 }
-                dynamicAdapter.notifyItemRangeInserted(lastSize, dynamicList.size() - lastSize);
-                swipeRefreshLayout.setRefreshing(false);
-                refreshing = false;
             });
-
-        } catch(IOException e) {
-            runOnUiThread(() -> {
-                MsgUtil.quickErr(MsgUtil.err_net, this);
-                swipeRefreshLayout.setRefreshing(false);
-                refreshing = false;
-            });
+        } catch (IOException e){
+            runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
             e.printStackTrace();
-        } catch(JSONException e) {
-            runOnUiThread(() -> {
-                MsgUtil.jsonErr(e, this);
-                swipeRefreshLayout.setRefreshing(false);
-                refreshing = false;
-            });
+        } catch (JSONException e) {
+            runOnUiThread(()-> MsgUtil.jsonErr(e, this));
             e.printStackTrace();
         }
-
     }
-
 }

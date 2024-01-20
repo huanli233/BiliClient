@@ -92,4 +92,28 @@ public class RecommendApi {
             }
         }
     }
+    public static void getPrecious(ArrayList<VideoCard> videoCardList,int page) throws JSONException, IOException {
+        //热门接口在携带Cookie时返回的数据的排行是个性化的
+
+        String url = "https://api.bilibili.com/x/web-interface/popular/precious?page=" + page + "&page_size=10";
+
+        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
+        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());  //得到一整个json
+
+        if(result.has("data") && !result.isNull("data")){
+            if(result.getJSONObject("data").has("list")){
+                JSONArray list = result.getJSONObject("data").getJSONArray("list");
+                for(int i = 0;i < list.length();i++){
+                    JSONObject card = list.getJSONObject(i);
+                    VideoCard videoCard = new VideoCard();
+                    videoCard.aid = card.getLong("aid");
+                    videoCard.cover = card.getString("pic");
+                    videoCard.title = card.getString("title");
+                    videoCard.upName = card.getJSONObject("owner").getString("name");
+                    videoCard.view = LittleToolsUtil.toWan(card.getJSONObject("stat").getLong("view")) + "观看";
+                    videoCardList.add(videoCard);
+                }
+            }
+        }
+    }
 }

@@ -36,7 +36,7 @@ public class SettingMainActivity extends InstanceActivity {
         findViewById(R.id.top).setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setClass(this,MenuActivity.class);
-            intent.putExtra("from",8);
+            intent.putExtra("from",9);
             startActivity(intent);
         });
 

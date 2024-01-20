@@ -251,6 +251,11 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.video.PreciousActivity"
+            android:exported="true"
+            android:label="入站必刷"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.video.PopularActivity"
             android:exported="true"
             android:label="热门"
