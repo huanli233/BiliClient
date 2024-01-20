@@ -104,33 +104,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginTop="6dp"
-        app:round="4dp"
+        android:layout_marginEnd="10dp"
+        android:adjustViewBounds="true"
         android:clickable="true"
+        android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:visibility="gone"
-        tools:visibility="visible"
-        android:src="@drawable/loading_2233"
-        android:scaleType="fitXY"
+        android:src="@drawable/placeholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/replyText"
-        android:focusable="true"/>
+        app:round="4dp" />
 
 
     <TextView
-            android:id="@+id/imageCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
-            android:layout_marginBottom="2dp"
-            android:background="#64555555"
-            android:text="共1张图片"
-            android:visibility="gone"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageCard"
-            app:layout_constraintEnd_toEndOf="@+id/imageCard"/>
+        android:id="@+id/imageCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
+        android:background="#64555555"
+        android:text="共1张图片"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageCard"
+        app:layout_constraintEnd_toEndOf="@+id/imageCard" />
 
 
     <TextView
@@ -147,10 +144,9 @@
         android:text=" UP主觉得很赞"
         android:textColor="#fff"
         android:textSize="11sp"
-        android:visibility="gone"
+        app:drawableStartCompat="@drawable/icon_like"
         app:layout_constraintStart_toStartOf="@+id/replyText"
-        app:layout_constraintTop_toBottomOf="@+id/likes"
-        app:drawableStartCompat="@drawable/icon_like"/>
+        app:layout_constraintTop_toBottomOf="@+id/likes" />
 
     <LinearLayout
         android:id="@+id/repliesCard"
@@ -159,7 +155,6 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/background_grey_cardview"
         android:orientation="vertical"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/replyText"
         app:layout_constraintStart_toStartOf="@+id/replyText"
         app:layout_constraintTop_toBottomOf="@+id/upLiked">
@@ -179,11 +174,11 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:textSize="13sp"
             android:text="共114条回复"
             android:textColor="#FE679A"
-            app:drawableTint="#FE679A"
-            app:drawableEndCompat="@drawable/arrow_forward_pink"/>
+            android:textSize="13sp"
+            app:drawableEndCompat="@drawable/arrow_forward_pink"
+            app:drawableTint="#FE679A" />
     </LinearLayout>
 
     <TextView

@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.material.card.MaterialCardView;
 
 import java.text.SimpleDateFormat;
@@ -89,16 +90,19 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 break;
             case 1:
                 ImageView imageView = holder.itemView.findViewById(R.id.imageView);  //图片
-                //在图片没有完全加载成功之前， 先用占位图垫着，后面等加载成功了再替换
-                imageView.setImageResource(R.drawable.placeholder);
 
                 if(SharedPreferencesUtil.getBoolean("dev_article_pic_load",true)) {
                     Bitmap cachedImage = pictureCache.get(realPosition);
                     if(cachedImage != null)
                         imageView.setImageBitmap(cachedImage);
                     else CenterThreadPool.run(()->{
+                        imageView.setImageResource(R.drawable.placeholder);
+                        //在图片没有完全加载成功之前， 先用占位图垫着，后面等加载成功了再替换
                         try {
-                            Bitmap bitmap = Glide.with(context).asBitmap().load(article.get(realPosition).content).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).submit().get();
+                            Bitmap bitmap = Glide.with(context).asBitmap().load(article.get(realPosition).content + "@25q.webp")
+                                    .override(Target.SIZE_ORIGINAL)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+                                    .submit().get();
                             pictureCache.put(realPosition,bitmap);
                             ((Activity)context).runOnUiThread(()->imageView.setImageBitmap(bitmap));
                         } catch (Exception e) {
@@ -106,7 +110,8 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                         }
                     });
                 }else{
-                    Glide.with(context).load(article.get(realPosition).content)
+                    Glide.with(context).load(article.get(realPosition).content + "@25q.webp").placeholder(R.drawable.placeholder)
+                            .override(Target.SIZE_ORIGINAL)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(imageView);
                 }

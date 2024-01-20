@@ -1,31 +1,25 @@
 package com.RobinNotBad.BiliClient.api;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
 import android.util.Log;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
-import com.RobinNotBad.BiliClient.api.UserInfoApi;
+
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.model.PrivateMsgSession;
 import com.RobinNotBad.BiliClient.model.UserInfo;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.EmoteUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.bumptech.glide.Glide;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutionException;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class PrivateMsgApi {
 
@@ -66,51 +60,49 @@ public class PrivateMsgApi {
         // 。\"}"),11111111,"aaaaa",111));
 
         boolean isReqTargetInfo = false;
-        if (messages != null) {
-            for (int i = 0; i < messages.length(); i++) {
-                PrivateMessage msgObject = new PrivateMessage();
-                JSONObject msgJson = messages.getJSONObject(i);
-                msgObject.uid = msgJson.getLong("sender_uid");
-                msgObject.type = msgJson.getInt("msg_type");
-                if (msgObject.uid == myInfo.mid) {
-                    msgObject.name = myInfo.name;
-                } else {
-                    if (!isReqTargetInfo) {
-                        targetInfo = UserInfoApi.getUserInfo(msgObject.uid);
-                        isReqTargetInfo = true;
-                    }
-                    msgObject.name = targetInfo.name;
+        for (int i = 0; i < messages.length(); i++) {
+            PrivateMessage msgObject = new PrivateMessage();
+            JSONObject msgJson = messages.getJSONObject(i);
+            msgObject.uid = msgJson.getLong("sender_uid");
+            msgObject.type = msgJson.getInt("msg_type");
+            if (msgObject.uid == myInfo.mid) {
+                msgObject.name = myInfo.name;
+            } else {
+                if (!isReqTargetInfo) {
+                    targetInfo = UserInfoApi.getUserInfo(msgObject.uid);
+                    isReqTargetInfo = true;
                 }
-                msgObject.content = new JSONObject("{\"content\":\" .\"}"); // 防止内容不为json时解析错误
-                if (msgJson.getString("content").endsWith("}")
-                        && msgJson.getString("content").startsWith("{")) {
-                    msgObject.content =
-                            new JSONObject(msgJson.getString("content") /*.replace("\\","")*/);
-                }
-                msgObject.timestamp = msgJson.getLong("timestamp");
-                msgObject.msgId = msgJson.getLong("msg_key");
-                msgObject.msgSeqno = msgJson.getLong("msg_seqno");
-                list.add(msgObject);
-                
+                if(targetInfo!=null) msgObject.name = targetInfo.name;
             }
-            Log.e("", "返回msgList");
-            for (PrivateMessage i : list) {
-                Log.e(
-                        "msg",
-                        i.name
-                                + "."
-                                + i.uid
-                                + "."
-                                + i.msgId
-                                + "."
-                                + i.timestamp
-                                + "."
-                                + i.content
-                                + "."
-                                + i.type);
+            msgObject.content = new JSONObject("{\"content\":\" .\"}"); // 防止内容不为json时解析错误
+            if (msgJson.getString("content").endsWith("}")
+                    && msgJson.getString("content").startsWith("{")) {
+                msgObject.content =
+                        new JSONObject(msgJson.getString("content") /*.replace("\\","")*/);
             }
-            return list;
-        } else return new ArrayList<PrivateMessage>();
+            msgObject.timestamp = msgJson.getLong("timestamp");
+            msgObject.msgId = msgJson.getLong("msg_key");
+            msgObject.msgSeqno = msgJson.getLong("msg_seqno");
+            list.add(msgObject);
+
+        }
+        Log.e("", "返回msgList");
+        for (PrivateMessage i : list) {
+            Log.e(
+                    "msg",
+                    i.name
+                            + "."
+                            + i.uid
+                            + "."
+                            + i.msgId
+                            + "."
+                            + i.timestamp
+                            + "."
+                            + i.content
+                            + "."
+                            + i.type);
+        }
+        return list;
     }
 
     public static JSONArray getEmoteJsonArray(JSONObject allMsgJson) throws JSONException {
@@ -123,9 +115,9 @@ public class PrivateMsgApi {
 
     public static HashMap<Long, UserInfo> getUsersInfo(ArrayList<Long> uidList)
             throws IOException, JSONException {
-        String userString = "";
+        StringBuilder userString = new StringBuilder();
         for (Long uid : uidList) {
-            userString = userString + uid + ",";
+            userString.append(uid).append(",");
         }
         String url =
                 "https://api.vc.bilibili.com/account/v1/user/cards?uids="
@@ -167,22 +159,17 @@ public class PrivateMsgApi {
                 JSONObject sessionJson = sessions.getJSONObject(i);
                 session.talkerUid = sessionJson.getLong("talker_id");
                 session.contentType = sessionJson.getJSONObject("last_msg").getInt("msg_type");
-                session.content = new JSONObject("{\"content\":\" .\"}");
-                if (sessionJson.getJSONObject("last_msg").getString("content").endsWith("}")
-                        && sessionJson
-                                .getJSONObject("last_msg")
-                                .getString("content")
-                                .startsWith("{")) {
-                    session.content =
-                            new JSONObject(
-                                    sessionJson
-                                            .getJSONObject("last_msg")
-                                            .getString("content") /*.replace("\\","")*/);
-                }
+
+                String content = sessionJson.getJSONObject("last_msg").getString("content");
+                if (content.endsWith("}") && content.startsWith("{"))
+                    session.content = new JSONObject(content);
+                else session.content = new JSONObject("{\"content\":\" .\"}");
+
                 session.unread = sessionJson.getInt("unread_count");
-                if (!sessionJson.has("account_info") && sessionJson.isNull("account_info")) {
+
+                if (!sessionJson.has("account_info") && sessionJson.isNull("account_info"))
                     sessionList.add(session);
-                }
+
             }
         }
         return sessionList;
@@ -237,50 +224,17 @@ public class PrivateMsgApi {
     }
 
     // 由于接口特殊性定制的textReplaceEmote
-    public static SpannableString textReplaceEmote(
-            String text, JSONArray emote, float scale, Context context)
-            throws JSONException, ExecutionException, InterruptedException {
+    public static SpannableString textReplaceEmote(String text, JSONArray emote, float scale, Context context) throws JSONException, ExecutionException, InterruptedException {
         SpannableString result = new SpannableString(text);
-        if (emote != null && emote.length() > 0) {
-            for (int i = 0; i < emote.length(); i++) { // 遍历每一个表情包
+        if (emote!=null && emote.length()>0) {
+            for (int i = 0; i < emote.length(); i++) {    //遍历每一个表情包
                 JSONObject key = emote.getJSONObject(i);
 
                 String name = key.getString("text");
                 String emoteUrl = key.getString("url");
-                int size = key.getInt("size"); // B站十分贴心的帮你把表情包大小都写好了，快说谢谢蜀黍
+                int size = key.getInt("size");  //B站十分贴心的帮你把表情包大小都写好了，快说谢谢蜀黍
 
-                Drawable drawable =
-                        Glide.with(context)
-                                .asDrawable()
-                                .load(emoteUrl)
-                                .submit()
-                                .get(); // 获得url并通过glide得到一张图片
-
-                drawable.setBounds(
-                        0,
-                        0,
-                        (int) (size * LittleToolsUtil.sp2px(18, context) * scale),
-                        (int)
-                                (size
-                                        * LittleToolsUtil.sp2px(18, context)
-                                        * scale)); // 参考了隔壁腕上哔哩并进行了改进
-
-                int start = text.indexOf(name); // 检测此字符串的起始位置
-                while (start >= 0) {
-                    int end = start + name.length(); // 计算得出结束位置
-                    ImageSpan imageSpan =
-                            new ImageSpan(
-                                    drawable,
-                                    ImageSpan
-                                            .ALIGN_BOTTOM); // 获得一个imagespan
-                                                            // 这句不能放while上面，imagespan不可以复用，我也不知道为什么
-                    result.setSpan(
-                            imageSpan,
-                            start,
-                            end,
-                            SpannableStringBuilder.SPAN_INCLUSIVE_EXCLUSIVE); // 替换
-                    start = text.indexOf(name, end); // 重新检测起始位置，直到找不到，然后开启下一个循环
-                }
+                EmoteUtil.replaceSingle(text,result,name,emoteUrl,size,scale,context);
             }
         }
         return result;

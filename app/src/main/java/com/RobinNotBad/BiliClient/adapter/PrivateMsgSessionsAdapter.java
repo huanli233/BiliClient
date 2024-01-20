@@ -1,4 +1,5 @@
 package com.RobinNotBad.BiliClient.adapter;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -7,19 +8,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.message.PrivateMsgActivity;
-import com.RobinNotBad.BiliClient.adapter.PrivateMsgAdapter;
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.model.PrivateMsgSession;
 import com.RobinNotBad.BiliClient.model.UserInfo;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.json.JSONException;
+import java.util.Objects;
 
 public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSessionsAdapter.PrivateMsgSessionsHolder> {
 
@@ -33,14 +39,15 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
         this.userMap = userMap;
     }
 
+    @NonNull
     @Override
-    public PrivateMsgSessionsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PrivateMsgSessionsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(this.context).inflate(R.layout.cell_user_list,parent,false);
         return new PrivateMsgSessionsHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(PrivateMsgSessionsHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PrivateMsgSessionsHolder holder, int position) {
         PrivateMsgSession msgContent = sessionsList.get(position);
         try {
             if (msgContent.contentType == PrivateMessage.TYPE_TEXT) {
@@ -54,8 +61,9 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
             }if(msgContent.contentType == PrivateMessage.TYPE_RETRACT) {
             	holder.contentText.setText("[撤回消息]");
             }
-            holder.nameText.setText(userMap.get(msgContent.talkerUid).name);
-            Glide.with(context).load(userMap.get(msgContent.talkerUid).avatar)
+            holder.nameText.setText(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).name);
+            Glide.with(context).load(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).avatar)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .placeholder(R.drawable.akari)
                             .apply(RequestOptions.circleCropTransform())
                             .into(holder.avatarView);

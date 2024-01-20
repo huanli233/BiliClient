@@ -114,7 +114,7 @@ public class ArticleInfoFragment extends Fragment {
                 lineList.add(new ArticleLine(0,"","br"));
             }
             else if (e.is("img")){
-                lineList.add(new ArticleLine(1,"http:" + e.attr("src") + "@50q.webp",""));
+                lineList.add(new ArticleLine(1,"http:" + e.attr("src"),""));
             }
             else loadContentHtml(e);
         }

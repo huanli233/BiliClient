@@ -17,13 +17,5 @@ public class UIPreviewActivity extends BaseActivity {
         setContentView(R.layout.activity_setting_ui_preview);
 
         findViewById(R.id.top).setOnClickListener(view -> finish());
-
-        LinearLayout layout = findViewById(R.id.previewList);
-        View videoCard = getLayoutInflater().inflate(R.layout.cell_video_list,null);
-        layout.addView(videoCard);
-        View replyCard = getLayoutInflater().inflate(R.layout.cell_reply_list,null);
-        layout.addView(replyCard);
-        View userCard = getLayoutInflater().inflate(R.layout.cell_user_list,null);
-        layout.addView(userCard);
     }
 }

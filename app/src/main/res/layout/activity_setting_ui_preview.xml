@@ -56,7 +56,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="6dp" />
+            android:paddingHorizontal="6dp" >
+
+            <include layout="@layout/cell_user_list" />
+
+            <include
+                layout="@layout/cell_video_list"/>
+
+            <include
+                layout="@layout/cell_article_list"/>
+            <include
+                layout="@layout/cell_reply_list"/>
+        </LinearLayout>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

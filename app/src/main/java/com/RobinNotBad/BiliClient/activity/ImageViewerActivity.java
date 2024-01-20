@@ -41,7 +41,7 @@ public class ImageViewerActivity extends BaseActivity {
         for (int i = 0; i < imageList.size(); i++) {
             PhotoView photoView = new PhotoView(this);
             try {
-                Glide.with(this).load(imageList.get(i))
+                Glide.with(this).load(imageList.get(i) + "@80q.webp")  //让b站自己压缩一下以加速获取
                         .override(Target.SIZE_ORIGINAL)//override这一项一定要加，这样才会显示原图，不然一放大就糊成使
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(photoView);

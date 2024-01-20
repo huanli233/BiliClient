@@ -21,6 +21,7 @@ import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.text.SimpleDateFormat;
@@ -48,6 +49,7 @@ public class MessageHolder extends RecyclerView.ViewHolder{
             Glide.with(context)
                     .load(message.user.get(i).avatar)
                     .placeholder(R.drawable.akari)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .apply(RequestOptions.circleCropTransform())
                     .into(imageView);
             imageView.setLayoutParams(new ViewGroup.LayoutParams(LittleToolsUtil.dp2px(32,context),LittleToolsUtil.dp2px(32,context)));
