@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -16,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
+import com.RobinNotBad.BiliClient.activity.message.PrivateMsgActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
@@ -141,9 +144,22 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 MsgUtil.toast("操作失败",context);
                                 compoundButton.setChecked(!b);
                             });
-                        }else CenterThreadPool.runOnMainThread(() -> MsgUtil.toast("操作成功",context));
+                        } else {
+                            CenterThreadPool.runOnMainThread(() -> {
+                                MsgUtil.toast("操作成功",context);
+                                if(b) userInfoHolder.msgBtn.setVisibility(View.VISIBLE);
+                                else userInfoHolder.msgBtn.setVisibility(View.GONE);
+                            });
+                        }
                     });
                 }
+            });
+
+            if(userInfo.followed) userInfoHolder.msgBtn.setVisibility(View.VISIBLE);
+            userInfoHolder.msgBtn.setOnClickListener(view -> {
+                Intent intent = new Intent(context, PrivateMsgActivity.class);
+                intent.putExtra("uid",userInfo.mid);
+                context.startActivity(intent);
             });
         }
     }
@@ -170,6 +186,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ImageView userAvatar;
 
         ToggleButton followBtn;
+        Button msgBtn;
 
         public UserInfoHolder(@NonNull View itemView) {
             super(itemView);
@@ -181,6 +198,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             userOfficialDesc = itemView.findViewById(R.id.userOfficialDesc);
             userAvatar = itemView.findViewById(R.id.userAvatar);
             followBtn = itemView.findViewById(R.id.followBtn);
+            msgBtn = itemView.findViewById(R.id.msgBtn);
         }
     }
 }

@@ -121,6 +121,17 @@
         app:layout_constraintStart_toStartOf="@id/userDesc"
         app:layout_constraintEnd_toEndOf="@id/userDesc"
         app:layout_constraintTop_toBottomOf="@id/userOfficialDesc" />
+    <Button
+        android:id="@+id/msgBtn"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        android:text="私信"
+        android:background="@drawable/background_follow_btn"
+        app:layout_constraintStart_toStartOf="@id/userDesc"
+        app:layout_constraintEnd_toEndOf="@id/userDesc"
+        app:layout_constraintTop_toBottomOf="@id/followBtn" />
 
     <View
         android:id="@+id/divider"
@@ -132,6 +143,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/followBtn" />
+        app:layout_constraintTop_toBottomOf="@id/msgBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
