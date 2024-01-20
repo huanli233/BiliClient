@@ -92,6 +92,24 @@ public class SearchUserFragment extends Fragment {
                             refreshing = true;
                             CenterThreadPool.run(() -> continueLoading(requireContext())); //加载第二页
                         }
+
+
+                        if(requireActivity() instanceof SearchActivity) {
+                            SearchActivity activity = (SearchActivity) requireActivity();
+                            int searchbar_alpha = activity.searchBarAlpha - (4*dy);
+                            if (searchbar_alpha < 0) {
+                                searchbar_alpha = 0;
+                                activity.searchBar.setVisibility(View.GONE);
+                            } else {
+                                activity.searchBar.setVisibility(View.VISIBLE);
+                                if (searchbar_alpha > 100) {
+                                    searchbar_alpha = 100;
+                                }
+                                activity.searchBar.setAlpha(searchbar_alpha / 100f);
+                            }
+                            activity.searchBarAlpha = searchbar_alpha;
+                            //Log.e("debug", "dx=" + dx + ",dy=" + dy);
+                        }
                     }
                 });
             });

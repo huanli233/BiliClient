@@ -93,7 +93,7 @@ public class SearchOldActivity extends InstanceActivity {
                     refreshing = true;
                     new Thread(() -> continueLoading()).start(); //加载第二页
                 }
-                searchbar_alpha = searchbar_alpha - dy;
+                searchbar_alpha = searchbar_alpha - (4*dy);
                 if(searchbar_alpha < 0){
                     searchbar_alpha = 0;
                     searchBar.setVisibility(View.GONE);
@@ -104,7 +104,6 @@ public class SearchOldActivity extends InstanceActivity {
                     searchbar_alpha = 100;
                 }
                 searchBar.setAlpha(searchbar_alpha / 100f);
-                Log.e("debug","dx=" + dx + ",dy=" + dy);
             }
         });
 

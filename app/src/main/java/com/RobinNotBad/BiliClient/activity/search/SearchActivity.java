@@ -3,23 +3,22 @@ package com.RobinNotBad.BiliClient.activity.search;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
+
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.activity.search.SearchOldActivity;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.SearchApi;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
@@ -28,6 +27,7 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -42,7 +42,8 @@ public class SearchActivity extends InstanceActivity {
     SearchUserFragment searchUserFragment;
 
     private ViewPager viewPager;
-    private ConstraintLayout searchBar;
+    public ConstraintLayout searchBar;
+    public int searchBarAlpha = 100;
     private ArrayList<VideoCard> videoCardList;
     private ArrayList<UserInfo> userInfoList;
     private ArrayList<ArticleInfo> articleInfoList;
@@ -178,34 +179,5 @@ public class SearchActivity extends InstanceActivity {
             searchArticleFragment.refresh(articleInfoList,keyword);
             searchUserFragment.refresh(userInfoList,keyword);
         }
-    }
-    private Point startPoint;
-
-    /**
-     * Called when a touch screen event was not handled by any of the views under it.
-     * if is swipe up, hide search bar, else show search bar
-     * @param event The touch screen event being processed.
-     */
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                startPoint = new Point((int)event.getX(),(int)event.getY());
-                break;
-            case MotionEvent.ACTION_MOVE:
-                //先判断是不是竖向滑动， 如果是竖向滑动， 再考虑是上滑还是下滑
-                boolean isVerticalMove = Math.abs(event.getY() - startPoint.y) > Math.abs(event.getX() - startPoint.x);
-                if(isVerticalMove) {
-                    //上滑显示
-                    boolean isSwipeUp = event.getY() - startPoint.y < 0;
-                    if(isSwipeUp) {
-                        searchBar.setVisibility(View.VISIBLE);
-                    }else {
-                        searchBar.setVisibility(View.GONE);
-                    }
-                }
-                break;
-        }
-        return super.onTouchEvent(event);
     }
 }
