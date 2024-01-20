@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 
 public class SearchArticleFragment extends Fragment {
     RecyclerView recyclerView;
-    private ConstraintLayout searchBar;
     private ArrayList<ArticleInfo> articleInfoList;
 
     private ArticleCardAdapter articleCardAdapter;
@@ -38,21 +36,25 @@ public class SearchArticleFragment extends Fragment {
     private boolean refreshing = false;
     private boolean bottom = false;
     private int page = 0;
-    private int searchbar_alpha = 100;
 
     public SearchArticleFragment(){}
 
-    public static SearchArticleFragment newInstance(ArrayList<ArticleInfo> articleInfoList, ConstraintLayout searchBar, String keyword) {
+    public static SearchArticleFragment newInstance(ArrayList<ArticleInfo> articleInfoList, String keyword) {
         SearchArticleFragment fragment = new SearchArticleFragment();
-        fragment.articleInfoList = articleInfoList;
-        fragment.searchBar = searchBar;
-        fragment.keyword = keyword;
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("list",articleInfoList);
+        bundle.putString("keyword",keyword);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getArguments()!=null){
+            articleInfoList = (ArrayList<ArticleInfo>) getArguments().getSerializable("list");
+            keyword = getArguments().getString("keyword");
+        }
     }
 
     @Override
@@ -88,18 +90,6 @@ public class SearchArticleFragment extends Fragment {
                             refreshing = true;
                             CenterThreadPool.run(() -> continueLoading(requireContext())); //加载第二页
                         }
-                        searchbar_alpha = searchbar_alpha - dy;
-                        if(searchbar_alpha < 0){
-                            searchbar_alpha = 0;
-                            searchBar.setVisibility(View.GONE);
-                        }else{
-                            searchBar.setVisibility(View.VISIBLE);
-                        }
-                        if(searchbar_alpha > 100){
-                            searchbar_alpha = 100;
-                        }
-                        searchBar.setAlpha(searchbar_alpha / 100f);
-                        Log.e("debug","dx=" + dx + ",dy=" + dy);
                     }
                 });
             });
@@ -142,7 +132,6 @@ public class SearchArticleFragment extends Fragment {
             refreshing = false;
             bottom = false;
             page = 0;
-            searchbar_alpha = 100;
         });
     }
 }

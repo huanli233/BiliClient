@@ -161,11 +161,11 @@ public class SearchActivity extends InstanceActivity {
     private void reload_fragments(){
         if(firstFragment) { //第一次搜索
             List<Fragment> fragmentList = new ArrayList<>();
-            searchVideoFragment = SearchVideoFragment.newInstance(videoCardList, searchBar, keyword);
+            searchVideoFragment = SearchVideoFragment.newInstance(videoCardList, keyword);
             fragmentList.add(searchVideoFragment);
-            searchArticleFragment = SearchArticleFragment.newInstance(articleInfoList, searchBar, keyword);
+            searchArticleFragment = SearchArticleFragment.newInstance(articleInfoList, keyword);
             fragmentList.add(searchArticleFragment);
-            searchUserFragment = SearchUserFragment.newInstance(userInfoList, searchBar, keyword);
+            searchUserFragment = SearchUserFragment.newInstance(userInfoList, keyword);
             fragmentList.add(searchUserFragment);
             viewPager.setOffscreenPageLimit(fragmentList.size());
 

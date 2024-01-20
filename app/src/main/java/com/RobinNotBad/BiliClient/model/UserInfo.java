@@ -1,6 +1,8 @@
 package com.RobinNotBad.BiliClient.model;
 
-public class UserInfo {
+import java.io.Serializable;
+
+public class UserInfo implements Serializable {
     public long mid;
     public String name;
     public String avatar;

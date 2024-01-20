@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.SearchApi;
-import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -30,7 +28,6 @@ import java.util.ArrayList;
 
 public class SearchVideoFragment extends Fragment {
     RecyclerView recyclerView;
-    private ConstraintLayout searchBar;
     private ArrayList<VideoCard> videoCardList;
 
     private VideoCardAdapter videoCardAdapter;
@@ -39,21 +36,25 @@ public class SearchVideoFragment extends Fragment {
     private boolean refreshing = false;
     private boolean bottom = false;
     private int page = 0;
-    private int searchbar_alpha = 100;
 
-    public SearchVideoFragment(){};
+    public SearchVideoFragment(){}
 
-    public static SearchVideoFragment newInstance(ArrayList<VideoCard> cardList, ConstraintLayout searchBar, String keyword) {
+    public static SearchVideoFragment newInstance(ArrayList<VideoCard> cardList, String keyword) {
         SearchVideoFragment fragment = new SearchVideoFragment();
-        fragment.videoCardList = cardList;
-        fragment.searchBar = searchBar;
-        fragment.keyword = keyword;
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("list",cardList);
+        bundle.putString("keyword",keyword);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getArguments()!=null){
+            videoCardList = (ArrayList<VideoCard>) getArguments().getSerializable("list");
+            keyword = getArguments().getString("keyword");
+        }
     }
 
     @Override
@@ -89,18 +90,6 @@ public class SearchVideoFragment extends Fragment {
                             refreshing = true;
                             CenterThreadPool.run(() -> continueLoading(requireContext())); //加载第二页
                         }
-                        searchbar_alpha = searchbar_alpha - dy;
-                        if(searchbar_alpha < 0){
-                            searchbar_alpha = 0;
-                            searchBar.setVisibility(View.GONE);
-                        }else{
-                            searchBar.setVisibility(View.VISIBLE);
-                        }
-                        if(searchbar_alpha > 100){
-                            searchbar_alpha = 100;
-                        }
-                        searchBar.setAlpha(searchbar_alpha / 100f);
-                        Log.e("debug","dx=" + dx + ",dy=" + dy);
                     }
                 });
             });
@@ -145,7 +134,6 @@ public class SearchVideoFragment extends Fragment {
             refreshing = false;
             bottom = false;
             page = 0;
-            searchbar_alpha = 100;
         });
     }
 }
