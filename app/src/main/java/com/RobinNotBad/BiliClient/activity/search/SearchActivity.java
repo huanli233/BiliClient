@@ -106,7 +106,7 @@ public class SearchActivity extends InstanceActivity {
         }
 
         if(!SharedPreferencesUtil.getBoolean("tutorial_search",false)){
-            MsgUtil.showDialog(this,"使用教程","新版搜索页面中展示出来的搜索结果从左向有或从右向左滑动可以切换页面，第一页为视频列表，第二页为专栏列表，第三页为用户列表",R.mipmap.tutorial_search,true,5);
+            MsgUtil.showDialog(this,"使用教程","新版搜索页面中展示出来的搜索结果从左向右或从右向左滑动可以切换页面，第一页为视频列表，第二页为专栏列表，第三页为用户列表",R.mipmap.tutorial_search,true,5);
             SharedPreferencesUtil.putBoolean("tutorial_search",true);
         }
 

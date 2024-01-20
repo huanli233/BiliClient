@@ -15,8 +15,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class DialogActivity extends BaseActivity {
 
+    int wait_time = 0;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,24 +48,24 @@ public class DialogActivity extends BaseActivity {
 
         if(intent.getBooleanExtra("wait",false)){
             findViewById(R.id.close_btn).setEnabled(false);
-            CenterThreadPool.run(() -> {
-                for (int i = intent.getIntExtra("wait_time",3);i>0;i--){
-                    int finalI = i;
-                    runOnUiThread(() -> ((TextView)findViewById(R.id.close_text)).setText("知道了(" + finalI + "s)"));
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        runOnUiThread(() -> {
+            wait_time = intent.getIntExtra("wait_time",3);
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(() -> {
+                        if(wait_time > 0){
+                            ((TextView)findViewById(R.id.close_text)).setText("知道了(" + wait_time + "s)");
+                            findViewById(R.id.close_btn).setEnabled(false);
+                            wait_time--;
+                        }else{
                             ((TextView)findViewById(R.id.close_text)).setText("知道了");
                             findViewById(R.id.close_btn).setEnabled(true);
-                        });
-                    }
+                            timer.cancel();
+                        }
+                    });
                 }
-                runOnUiThread(() -> {
-                    ((TextView)findViewById(R.id.close_text)).setText("知道了");
-                    findViewById(R.id.close_btn).setEnabled(true);
-                });
-            });
+            },0,1000);
         }else findViewById(R.id.close_btn).setEnabled(true);
         findViewById(R.id.close_btn).setOnClickListener(view -> finish());
     }
