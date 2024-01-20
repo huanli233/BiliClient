@@ -68,10 +68,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"
                     android:layout_marginTop="4dp"
-                    android:paddingHorizontal="2dp"
                     android:drawableEnd="@drawable/arrow_forward"
+                    android:paddingHorizontal="3dp"
                     android:text="快速选择"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
