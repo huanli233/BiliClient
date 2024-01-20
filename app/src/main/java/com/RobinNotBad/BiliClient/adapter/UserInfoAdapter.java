@@ -141,7 +141,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 MsgUtil.toast("操作失败",context);
                                 compoundButton.setChecked(!b);
                             });
-                        }
+                        }else CenterThreadPool.runOnMainThread(() -> MsgUtil.toast("操作成功",context));
                     });
                 }
             });

@@ -12,6 +12,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
@@ -50,9 +51,9 @@ public class UserInfoActivity extends BaseActivity {
 
         viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
 
-        if(SharedPreferencesUtil.getBoolean("first_userinfo",true)){
-            Toast.makeText(this, "提示：本页面可以左右滑动", Toast.LENGTH_LONG).show();
-            SharedPreferencesUtil.putBoolean("first_userinfo",false);
+        if(!SharedPreferencesUtil.getBoolean("tutorial_user",false)){
+            MsgUtil.showDialog(this,"使用教程","此页面从左向右或从右向左滑动可以切换页面，第一页为动态列表，第二页为视频列表，第三页为专栏列表；登录后可以关注用户。",R.mipmap.tutorial_user,true,5);
+            SharedPreferencesUtil.putBoolean("tutorial_user",true);
         }
     }
 }
