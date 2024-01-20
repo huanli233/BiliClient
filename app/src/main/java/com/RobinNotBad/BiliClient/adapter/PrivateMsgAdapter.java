@@ -18,6 +18,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.BiliClient;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.CopyTextActivity;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.PrivateMsgAdapter;
@@ -33,6 +34,8 @@ import com.google.android.material.card.MaterialCardView;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 import okhttp3.Cache;
@@ -41,7 +44,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.ViewHolder>{
-    private ArrayList<PrivateMessage> mPrivateMsgList=new ArrayList<PrivateMessage>();
+    private List<PrivateMessage> mPrivateMsgList=new ArrayList<PrivateMessage>();
     private long selfUid = -1;
     private JSONArray emoteArray = new JSONArray();
     private Context context;
@@ -66,7 +69,7 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
             videoCover = (ImageView)view.findViewById(R.id.listCover);
         }
     }
-    public PrivateMsgAdapter(ArrayList<PrivateMessage> msgList,JSONArray emoteArray,Context context){
+    public PrivateMsgAdapter(List<PrivateMessage> msgList,JSONArray emoteArray,Context context){
         this.mPrivateMsgList=msgList;
         this.context = context;
         this.emoteArray = emoteArray;
@@ -94,6 +97,7 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                 holder.textContentCard.setCardBackgroundColor(Color.parseColor("#78242424"));
                 holder.textContentCard.setStrokeWidth(1);
             }
+            
             switch (msg.type) {
                 case PrivateMessage.TYPE_TEXT:
                     holder.tipTv.setVisibility(View.GONE);
@@ -186,12 +190,33 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                     holder.nameTv.setVisibility(View.VISIBLE);
                     holder.videoCard.setVisibility(View.GONE);
             }
+            holder.textContentCard.setOnLongClickListener(view->{
+                try {
+                	Intent intent = new Intent(context,CopyTextActivity.class);
+                    intent.putExtra("content",msg.content.getString("content"));
+                    context.startActivity(intent);
+                  
+                } catch(Exception err) {
+                	err.printStackTrace();
+                }    
+                 return false; 
+            });
         } catch (JSONException err) {
             Log.e(PrivateMessage.class.getName(), err.toString());
         } 
     }
+    public void addItem(ArrayList<PrivateMessage> list) {
+    	mPrivateMsgList.addAll(0,list);
+        this.notifyItemRangeInserted(0,list.size());
+    }
     @Override 
     public int getItemCount(){
         return mPrivateMsgList.size();
+    }
+    public List getMsgList() {
+    	return mPrivateMsgList;
+    }
+    public JSONArray getEmoteArray() {
+    	return emoteArray;
     }
 }
