@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class SettingLaboratoryActivity extends BaseActivity {
 
-    private SwitchCompat refresh_cookie;
+    private SwitchCompat refresh_cookie,like_coin_fav_enable,ai_summary;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -27,13 +27,16 @@ public class SettingLaboratoryActivity extends BaseActivity {
 
         refresh_cookie = findViewById(R.id.refresh_cookie);
         refresh_cookie.setChecked(SharedPreferencesUtil.getBoolean("dev_refresh_cookie",true));
-
-        if(Objects.equals(SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), "")) refresh_cookie.setEnabled(false);
+        like_coin_fav_enable = findViewById(R.id.like_coin_fav_enable);
+        like_coin_fav_enable.setChecked(SharedPreferencesUtil.getBoolean("like_coin_fav_enable",false));
+        ai_summary = findViewById(R.id.ai_summary);
+        ai_summary.setChecked(SharedPreferencesUtil.getBoolean("ai_summary",false));
     }
 
     private void save() {
         SharedPreferencesUtil.putBoolean("dev_refresh_cookie", refresh_cookie.isChecked());
-
+        SharedPreferencesUtil.putBoolean("like_coin_fav_enable", like_coin_fav_enable.isChecked());
+        SharedPreferencesUtil.putBoolean("ai_summary", ai_summary.isChecked());
     }
 
     @Override

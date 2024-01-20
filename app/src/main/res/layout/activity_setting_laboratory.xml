@@ -84,8 +84,55 @@
                     android:textSize="11sp" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/like_coin_fav_enable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="6dp"
+                    android:background="@drawable/background_edit_text_setting"
+                    android:text="点赞投币功能"
+                    android:textColor="@color/textwhite" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="2dp"
+                    android:text="开启之后会在视频详情页展示点赞和投币按钮\n注意：由于B站风控的关系，点赞和投币功能不一定能正常使用"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/ai_summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="6dp"
+                    android:background="@drawable/background_edit_text_setting"
+                    android:text="AI摘要"
+                    android:textColor="@color/textwhite" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="2dp"
+                    android:text="开启之后会在视频详情页最底部展示AI摘要按钮，为B站官方的功能\n注意：并不是所有视频都可以使用"
+                    android:textSize="11sp" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

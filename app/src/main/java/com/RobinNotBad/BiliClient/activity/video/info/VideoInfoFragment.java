@@ -122,6 +122,7 @@ public class VideoInfoFragment extends Fragment {
         MaterialCardView addFavorite = view.findViewById(R.id.addFavorite);
         MaterialCardView download = view.findViewById(R.id.download);
         MaterialCardView ai_summary = view.findViewById(R.id.ai_summary);
+        MaterialCardView like_coin_fav = view.findViewById(R.id.like_coin_fav);
         bvidText = view.findViewById(R.id.bvidText);
         danmakuCount = view.findViewById(R.id.danmakuCount);
         ImageButton like = view.findViewById(R.id.btn_like);
@@ -129,6 +130,8 @@ public class VideoInfoFragment extends Fragment {
         fav = view.findViewById(R.id.btn_fav);
 
         if (!SharedPreferencesUtil.getBoolean("tags_enable", true)) tags.setVisibility(View.GONE);
+        if (SharedPreferencesUtil.getBoolean("like_coin_fav_enable", false)) like_coin_fav.setVisibility(View.VISIBLE);
+        if (SharedPreferencesUtil.getBoolean("ai_summary", false)) ai_summary.setVisibility(View.VISIBLE);
 
         CenterThreadPool.run(() -> {
             try {

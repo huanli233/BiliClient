@@ -357,6 +357,7 @@
                         android:id="@+id/layout_fav"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
+                        android:visibility="gone"
                         android:orientation="vertical"
                         app:layout_constraintStart_toEndOf="@+id/layout_coin"
                         app:layout_constraintTop_toTopOf="parent"
