@@ -42,6 +42,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.RobinNotBad.BiliClient.view.BatteryView;
 import com.bumptech.glide.Glide;
 
 import java.io.ByteArrayOutputStream;

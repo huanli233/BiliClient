@@ -107,7 +107,7 @@
             android:layout_marginRight="6px"
             android:layout_alignParentRight="true">
 
-            <com.RobinNotBad.BiliClient.activity.player.BatteryView
+            <com.RobinNotBad.BiliClient.view.BatteryView
                 android:id="@+id/power"
                 android:layout_width="30px"
                 android:layout_height="15px"

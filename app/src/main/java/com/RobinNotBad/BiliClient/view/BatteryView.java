@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.activity.player;
+package com.RobinNotBad.BiliClient.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
