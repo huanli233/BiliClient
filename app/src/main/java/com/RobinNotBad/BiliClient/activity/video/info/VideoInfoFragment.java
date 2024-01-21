@@ -70,7 +70,7 @@ public class VideoInfoFragment extends Fragment {
     private TextView title, description, tagsText, upName, views, timeText, durationText, bvidText, danmakuCount;
     private ImageButton fav;
 
-    private boolean desc_expand = false, tags_expand = false;
+    private boolean desc_expand = false, tags_expand = false,isLiked = false,isCoined = false,isFavoutited= false;
     ActivityResultLauncher<Intent> favoriteActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult o) {
@@ -257,8 +257,8 @@ public class VideoInfoFragment extends Fragment {
                         int result = LikeCoinFavApi.coin(videoInfo.aid, 1);
                         if (result == 0) {
                             requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "投币成功,长按可投2币", Toast.LENGTH_SHORT).show());
-                            like.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_coin_1));
-                            like.setOnClickListener(view2 -> CenterThreadPool.run(() -> Toast.makeText(requireContext(), "暂未完成", Toast.LENGTH_SHORT).show()));
+                            coin.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_coin_1));
+                            coin.setOnClickListener(view2 -> CenterThreadPool.run(() -> Toast.makeText(requireContext(), "暂未完成", Toast.LENGTH_SHORT).show()));
                         } else
                             requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "投币失败，错误码：" + result, Toast.LENGTH_SHORT).show());
                     } catch (Exception e) {

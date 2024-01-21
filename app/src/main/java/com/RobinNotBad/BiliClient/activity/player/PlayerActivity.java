@@ -71,7 +71,7 @@ import master.flame.danmaku.danmaku.model.IDisplayer;
 import master.flame.danmaku.danmaku.model.android.DanmakuContext;
 import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
-import master.flame.danmaku.danmaku.parser.BiliDanmukuParser;
+import com.RobinNotBad.BiliClient.activity.player.BiliDanmukuParser;
 import master.flame.danmaku.danmaku.parser.IDataSource;
 import okhttp3.Call;
 import okhttp3.Callback;

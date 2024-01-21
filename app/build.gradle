@@ -59,7 +59,9 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.10.2'
     //noinspection GradleCompatible
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
-
-    implementation project(path: ':ijkplayer-java')
-    implementation project(path: ':DanmakuFlameMaster')
+    //danmaku
+    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+    implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
+    implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
+    implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
 }
