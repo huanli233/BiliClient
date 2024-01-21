@@ -53,6 +53,8 @@ public class SpecialLoginActivity extends BaseActivity {
                     runOnUiThread(() -> Toast.makeText(SpecialLoginActivity.this, "登录成功！", Toast.LENGTH_SHORT).show());
                     SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup, true);
 
+                    SharedPreferencesUtil.removeValue(SharedPreferencesUtil.cookie_refresh);
+
                     ConfInfoApi.refreshHeaders();
 
                     Intent intent1 = new Intent();

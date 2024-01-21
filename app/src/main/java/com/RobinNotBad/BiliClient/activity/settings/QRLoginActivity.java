@@ -188,6 +188,8 @@ public class QRLoginActivity extends InstanceActivity {
                             SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, NetWorkUtil.getInfoFromCookie("bili_jct", cookies));
                             SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,loginJson.getJSONObject("data").getString("refresh_token"));
 
+                            SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cookie_refresh,true);
+
                             Log.e("refresh_token",SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""));
 
                             if(SharedPreferencesUtil.getBoolean("setup",false)) {
