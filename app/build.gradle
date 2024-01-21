@@ -6,6 +6,12 @@ android {
     namespace 'com.RobinNotBad.BiliClient'
     compileSdk 32
 
+    sourceSets{
+        main{
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
     defaultConfig {
         applicationId "com.RobinNotBad.BiliClient"
         minSdk 17
@@ -15,6 +21,10 @@ android {
         versionName "2.4.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters 'armeabi-v7a','x86'
+        }
     }
 
     buildTypes {
@@ -46,7 +56,10 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.github.bumptech.glide:glide:4.13.2'
-    implementation 'org.jsoup:jsoup:1.10.2';
+    implementation 'org.jsoup:jsoup:1.10.2'
     //noinspection GradleCompatible
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
+    implementation project(path: ':ijkplayer-java')
+    implementation project(path: ':DanmakuFlameMaster')
 }

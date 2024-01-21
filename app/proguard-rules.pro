@@ -21,3 +21,4 @@
 #-renamesourcefileattribute SourceFile
 
 -keeppackagenames org.jsoup.nodes
+-keep class tv.danmaku.ijk.media.** {*;}

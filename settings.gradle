@@ -16,3 +16,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "BiliClient"
 include ':app'
+include ':ijkplayer-java'
+include ':ijkplayer-x86'
+include ':ijkplayer-armv7a'
+include ':DanmakuFlameMaster', ':ndkbitmap-armv7a', ':ndkbitmap-x86'

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.player.PlayerActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
@@ -48,6 +49,15 @@ public class PlayerApi {
 
         Intent intent = new Intent();
         switch (SharedPreferencesUtil.getString("player", "null")) {
+            case "clientPlayer":
+                intent.setClass(context,PlayerActivity.class);
+                intent.putExtra("cookie", SharedPreferencesUtil.getString("cookies", ""));
+                intent.putExtra("mode", (local ? "2" : "0"));
+                intent.putExtra("url", videourl);
+                intent.putExtra("danmaku", danmakuurl);
+                intent.putExtra("title", title);
+                break;
+
             case "mtvPlayer":
                 intent.setClassName(context.getString(R.string.player_mtv_package), "com.xinxiangshicheng.wearbiliplayer.cn.player.PlayerActivity");
                 intent.setAction(Intent.ACTION_VIEW);

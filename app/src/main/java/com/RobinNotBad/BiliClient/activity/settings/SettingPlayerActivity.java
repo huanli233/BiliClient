@@ -20,11 +20,11 @@ import java.util.ArrayList;
 public class SettingPlayerActivity extends BaseActivity {
 
     String player = SharedPreferencesUtil.getString("player","null");
-    MaterialCardView mtvPlayer,aliangPlayer;
+    MaterialCardView clientPlayer,mtvPlayer,aliangPlayer;
     SwitchCompat sw_highres;
     ArrayList<MaterialCardView> cardViewList;
     int checkPosition = -1;
-    final String[] playerList = {"null","mtvPlayer","aliangPlayer"};
+    final String[] playerList = {"null","clientPlayer","mtvPlayer","aliangPlayer"};
 
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
@@ -35,6 +35,7 @@ public class SettingPlayerActivity extends BaseActivity {
         Log.e("debug","选择播放器");
 
         findViewById(R.id.top).setOnClickListener(view -> finish());
+        clientPlayer = findViewById(R.id.clientPlayer);
         mtvPlayer = findViewById(R.id.mtvPlayer);
         aliangPlayer = findViewById(R.id.aliangPlayer);
         sw_highres = findViewById(R.id.high_res);
@@ -42,6 +43,7 @@ public class SettingPlayerActivity extends BaseActivity {
         sw_highres.setChecked(SharedPreferencesUtil.getBoolean("high_res",false));
 
         cardViewList = new ArrayList<>();
+        cardViewList.add(clientPlayer);
         cardViewList.add(mtvPlayer);
         cardViewList.add(aliangPlayer);
 
@@ -54,16 +56,19 @@ public class SettingPlayerActivity extends BaseActivity {
         }
 
         switch (player){
-            case "mtvPlayer":
+            case "clientPlayer":
                 setChecked(0);
                 break;
 
-            case "aliangPlayer":
+            case "mtvPlayer":
                 setChecked(1);
                 break;
 
-            default:
+            case "aliangPlayer":
+                setChecked(2);
+                break;
 
+            default:
                 break;
         }
 
