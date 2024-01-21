@@ -1,2 +1,0 @@
-master.flame.danmaku.R
-master.flame.danmaku.R: R()
