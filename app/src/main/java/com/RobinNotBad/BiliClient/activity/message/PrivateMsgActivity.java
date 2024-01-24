@@ -110,7 +110,7 @@ public class PrivateMsgActivity extends BaseActivity {
             try {
                 if(!contentEt.getText().toString().equals("")) {
                     String content = contentEt.getText().toString();
-                    contentEt.setText("");
+                    runOnUiThread(()->contentEt.setText(""));
                     JSONObject result = PrivateMsgApi.sendMsg(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,114514),uid,PrivateMessage.TYPE_TEXT,System.currentTimeMillis()/1000,"{\"content\":\""+content+"\"}");
                     runOnUiThread(()->{
                         try {
