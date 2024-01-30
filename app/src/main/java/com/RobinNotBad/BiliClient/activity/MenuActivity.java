@@ -11,6 +11,7 @@ import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
 import com.RobinNotBad.BiliClient.activity.message.MessageActivity;
 import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
+import com.RobinNotBad.BiliClient.activity.search.SearchOldActivity;
 import com.RobinNotBad.BiliClient.activity.settings.QRLoginActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingMainActivity;
 import com.RobinNotBad.BiliClient.activity.user.MySpaceActivity;
@@ -91,6 +92,7 @@ public class MenuActivity extends BaseActivity {
         
         //我求求你了退出按钮能用吧....
         findViewById(R.id.exit).setOnClickListener(view -> {
+            classList.add(SearchOldActivity.class);
             for(int j = 0;j<classList.size();j++){
                 InstanceActivity instance = InstanceActivity.getInstance(classList.get(j));
                 if(instance != null) instance.finish();
