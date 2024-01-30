@@ -26,6 +26,8 @@ public class SettingPlayerActivity extends BaseActivity {
     ArrayList<MaterialCardView> cardViewList;
     int checkPosition = -1;
     final String[] playerList = {"null","clientPlayer","mtvPlayer","aliangPlayer"};
+    
+    private boolean just_create = true;
 
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
@@ -102,15 +104,16 @@ public class SettingPlayerActivity extends BaseActivity {
         }
         switch(playerList[checkPosition+1]){
             case "mtvPlayer":
-                if(Build.VERSION.SDK_INT <= 19) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，请使用QQ群中提供的改版小电视播放器",-1,false,0);
+                if(Build.VERSION.SDK_INT <= 19 && !just_create) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，请使用QQ群中提供的改版小电视播放器",-1,false,0);
                 break;
             
             case "aliangPlayer":
-                if(Build.VERSION.SDK_INT <= 19) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，可能无法使用凉腕播放器",-1,false,0);
+                if(Build.VERSION.SDK_INT <= 19 && !just_create) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，可能无法使用凉腕播放器",-1,false,0);
                 break;
 
             default:
                 break;
         }
+        just_create = false;
     }
 }
