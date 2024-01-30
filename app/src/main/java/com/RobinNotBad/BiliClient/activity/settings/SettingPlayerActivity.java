@@ -10,6 +10,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
 
@@ -46,14 +47,6 @@ public class SettingPlayerActivity extends BaseActivity {
         cardViewList.add(clientPlayer);
         cardViewList.add(mtvPlayer);
         cardViewList.add(aliangPlayer);
-
-        if(Build.VERSION.SDK_INT <= 19) {
-            TextView alplayer_desc = findViewById(R.id.aliangPlayer_desc);
-            alplayer_desc.setText("安卓版本过低不支持");
-
-            TextView mtvplayer_desc = findViewById(R.id.mtvPlayer_desc);
-            mtvplayer_desc.setText("去交流群里下载改版");
-        }
 
         switch (player){
             case "clientPlayer":
@@ -106,6 +99,18 @@ public class SettingPlayerActivity extends BaseActivity {
                 cardViewList.get(i).setStrokeColor(getResources().getColor(R.color.gray));
                 cardViewList.get(i).setStrokeWidth(LittleToolsUtil.dp2px(0.1f,this));
             }
+        }
+        switch(playerList[checkPosition+1]){
+            case "mtvPlayer":
+                if(Build.VERSION.SDK_INT <= 19) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，请使用QQ群中提供的改版小电视播放器",-1,false,0);
+                break;
+            
+            case "aliangPlayer":
+                if(Build.VERSION.SDK_INT <= 19) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，可能无法使用凉腕播放器",-1,false,0);
+                break;
+
+            default:
+                break;
         }
     }
 }
