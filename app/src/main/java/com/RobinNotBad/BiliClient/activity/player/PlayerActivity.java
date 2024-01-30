@@ -294,7 +294,7 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
         new Thread(()->{
             switch (mode){
                 case "0":
-                    if (videopref.getBoolean("online", true)) {
+                    if (SharedPreferencesUtil.getBoolean("player_online", true)) {
                         Log.e("debug", "准备在线播放");
                         runOnUiThread(() -> {
                             loadingText0.setText("载入视频中");

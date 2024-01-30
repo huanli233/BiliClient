@@ -10,7 +10,7 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class SettingClientPlayerActivity extends BaseActivity {
-    private RadioButton SWtexture,SWsurface,SWhard,SWsoft,SWopensles,SWaudiotrack;
+    private RadioButton SWtexture,SWsurface,SWhard,SWsoft,SWopensles,SWaudiotrack,SWonline,SWdownload;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +25,8 @@ public class SettingClientPlayerActivity extends BaseActivity {
         SWsoft = findViewById(R.id.SWsoft);
         SWopensles = findViewById(R.id.SWopensles);
         SWaudiotrack = findViewById(R.id.SWaudiotrack);
+        SWonline = findViewById(R.id.SWonline);
+        SWdownload = findViewById(R.id.SWdownload);
         
         SWtexture.setChecked(SharedPreferencesUtil.getBoolean("player_display",false));
         SWsurface.setChecked(!SharedPreferencesUtil.getBoolean("player_display",false));
@@ -32,6 +34,8 @@ public class SettingClientPlayerActivity extends BaseActivity {
         SWsoft.setChecked(!SharedPreferencesUtil.getBoolean("player_codec",true));
         SWopensles.setChecked(SharedPreferencesUtil.getBoolean("player_audio",false));
         SWaudiotrack.setChecked(!SharedPreferencesUtil.getBoolean("player_audio",false));
+        SWonline.setChecked(SharedPreferencesUtil.getBoolean("player_online",true));
+        SWdownload.setChecked(!SharedPreferencesUtil.getBoolean("player_online",true));
     }
     
     @Override
@@ -40,6 +44,7 @@ public class SettingClientPlayerActivity extends BaseActivity {
         SharedPreferencesUtil.putBoolean("player_display",SWtexture.isChecked());
         SharedPreferencesUtil.putBoolean("player_codec",SWhard.isChecked());
         SharedPreferencesUtil.putBoolean("player_audio",SWopensles.isChecked());
+        SharedPreferencesUtil.putBoolean("player_online",SWonline.isChecked());
         MsgUtil.toast("设置已保存喵~",this);
     }
 }

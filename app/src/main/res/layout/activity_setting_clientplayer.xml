@@ -98,7 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"
                     android:layout_marginTop="2dp"
-                    android:text="如果视频无法正常播放请切换该选项"
+                    android:text="如果视频无法正常播放请切换该选项\n已知：KidoX3只能Surface，小天才只能Texture"
                     android:textSize="11sp" />
             </LinearLayout>
             
@@ -187,6 +187,55 @@
                     android:text="声音延迟或无法播放请尝试切换"
                     android:textSize="11sp" />
             </LinearLayout>
+             
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+                
+                <TextView
+                    android:id="@+id/playmode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="播放模式"
+                    android:textSize="14sp" />
+                
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/playmode">
+                    <RadioButton
+                        android:id="@+id/SWdownload"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="下载式"
+                        android:textColor="#fff"
+                        android:textSize="12sp" />
+
+                    <RadioButton
+                        android:id="@+id/SWonline"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="在线式"
+                        android:textColor="#fff"
+                        android:textSize="12sp" />
+                </RadioGroup>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="2dp"
+                    android:text="下载式：将完整视频下载到本地再播放。更加流畅，循环播放时不会多次消耗流量，但长视频会临时占用存储空间（缓存会删）\n在线式：直接在线播放，不下载视频。加载耗时短、不读写存储空间，长视频只消耗观看部分的流量，但网络不好会中途卡住或加载不出来。"
+                    android:textSize="11sp" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="4dp"
+                android:background="#318C8C8C"/>
         </LinearLayout>
     </ScrollView>
 
