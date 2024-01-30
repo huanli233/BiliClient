@@ -10,12 +10,12 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class SettingClientPlayerActivity extends BaseActivity {
-    private RadioButton SWtexture,SWsurface,SWhard,SWsoft;
+    private RadioButton SWtexture,SWsurface,SWhard,SWsoft,SWopensles,SWaudiotrack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_clientplayer);
-        Log.e("debug","设置设置内置播放器~");
+        Log.e("debug","设置内置播放器");
 
         findViewById(R.id.top).setOnClickListener(view -> finish());
         
@@ -23,11 +23,15 @@ public class SettingClientPlayerActivity extends BaseActivity {
         SWsurface = findViewById(R.id.SWsurface);
         SWhard = findViewById(R.id.SWhard);
         SWsoft = findViewById(R.id.SWsoft);
+        SWopensles = findViewById(R.id.SWopensles);
+        SWaudiotrack = findViewById(R.id.SWaudiotrack);
         
         SWtexture.setChecked(SharedPreferencesUtil.getBoolean("player_display",false));
         SWsurface.setChecked(!SharedPreferencesUtil.getBoolean("player_display",false));
         SWhard.setChecked(SharedPreferencesUtil.getBoolean("player_codec",true));
         SWsoft.setChecked(!SharedPreferencesUtil.getBoolean("player_codec",true));
+        SWopensles.setChecked(SharedPreferencesUtil.getBoolean("player_audio",false));
+        SWaudiotrack.setChecked(!SharedPreferencesUtil.getBoolean("player_audio",false));
     }
     
     @Override
@@ -35,6 +39,7 @@ public class SettingClientPlayerActivity extends BaseActivity {
         super.onDestroy();
         SharedPreferencesUtil.putBoolean("player_display",SWtexture.isChecked());
         SharedPreferencesUtil.putBoolean("player_codec",SWhard.isChecked());
+        SharedPreferencesUtil.putBoolean("player_audio",SWopensles.isChecked());
         MsgUtil.toast("设置已保存喵~",this);
     }
 }

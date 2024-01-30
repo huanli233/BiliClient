@@ -93,6 +93,13 @@
                         android:textColor="#fff"
                         android:textSize="12sp" />
                 </RadioGroup>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="2dp"
+                    android:text="如果视频无法正常播放请切换该选项"
+                    android:textSize="11sp" />
             </LinearLayout>
             
             <LinearLayout
@@ -129,6 +136,56 @@
                         android:textColor="#fff"
                         android:textSize="12sp" />
                 </RadioGroup>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="2dp"
+                    android:text="硬件解码：使用GPU解码，速度快，性能消耗小\n软件解码：使用CPU硬算，兼容性好，暖手必备"
+                    android:textSize="11sp" />
+            </LinearLayout>
+             
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+                
+                <TextView
+                    android:id="@+id/audio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="音频输出"
+                    android:textSize="14sp" />
+                
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/audio">
+                    <RadioButton
+                        android:id="@+id/SWaudiotrack"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="AudioTrack"
+                        android:textColor="#fff"
+                        android:textSize="12sp" />
+
+                    <RadioButton
+                        android:id="@+id/SWopensles"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="OpenSles"
+                        android:textColor="#fff"
+                        android:textSize="12sp" />
+                </RadioGroup>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="2dp"
+                    android:text="声音延迟或无法播放请尝试切换"
+                    android:textSize="11sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
