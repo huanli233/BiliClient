@@ -38,10 +38,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.view.BatteryView;
 import com.bumptech.glide.Glide;
@@ -87,7 +87,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 import com.RobinNotBad.BiliClient.R;
 
-public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.OnPreparedListener {
+public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPreparedListener {
     private IDanmakuView mDanmakuView;
     private DanmakuContext mContext;
     private Timer progresstimer, autoHideTimer, sound, speedTimer, loadingShowTimer;
@@ -110,7 +110,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     private boolean ischanging, isdanmakushowing = false;
     private TextView timenow, alltime, showsound, Showtitle, loadingText0, loadingText1, speed, newSpeed,clock;
     private AudioManager audioManager;
-    private ImageView danmaku_btn, circle, loop_btn, save_btn, rotate_btn;
+    private ImageView danmaku_btn, circle, loop_btn, rotate_btn;
     private int dldFinish = 0;
 
     private final float[] speeds = {0.5F, 0.75F,1.0F,1.25F,1.5F,1.75F,2.0F,3.0F};
@@ -328,7 +328,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         alltime = findViewById(R.id.alltime);
         danmaku_btn = findViewById(R.id.danmaku_btn);
         loop_btn = findViewById(R.id.loop_btn);
-        save_btn = findViewById(R.id.save_btn);
         rotate_btn = findViewById(R.id.rotate_btn);
         ControlButton = findViewById(R.id.control);//找到播放控制按钮
         progressBar = findViewById(R.id.videoprogress);//找到视频进度条
@@ -629,10 +628,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
                         if(mode) playing(videoFile.toString());
                         else {
-                            runOnUiThread(() -> {
-                                save_btn.setImageResource(R.mipmap.downloaded);
-                                Toast.makeText(PlayerActivity.this,"下载完成",Toast.LENGTH_SHORT).show();
-                            });
+                            runOnUiThread(() -> Toast.makeText(PlayerActivity.this,"下载完成",Toast.LENGTH_SHORT).show());
                             dldFinish = 1;
                             downloading = false;
                         }
@@ -649,7 +645,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
         mediaPlayer = new IjkMediaPlayer();
 
-        mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", (videopref.getBoolean("codec",true) ? 1 : 0));
+        mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", (SharedPreferencesUtil.getBoolean("player_codec",true) ? 1 : 0));
 
         mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", (videopref.getBoolean("audio",false) ? 1 : 0));
 
@@ -832,16 +828,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         if (interfacepref.getBoolean("showLoopBtn", true))
             loop_btn.setVisibility(View.VISIBLE);
         else loop_btn.setVisibility(View.GONE);
-
-        if (mode.equals("0")) {
-            if (dldFolder.exists()) {
-                save_btn.setImageResource(R.mipmap.downloaded);
-                dldFinish = 2;
-            } else save_btn.setImageResource(R.mipmap.download);
-            if (interfacepref.getBoolean("showDownloadBtn", true))
-                save_btn.setVisibility(View.VISIBLE);
-            else save_btn.setVisibility(View.GONE);
-        } else save_btn.setVisibility(View.GONE);
 
 
         progressBar.setMax(videoall);
@@ -1164,27 +1150,4 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     public void videospeed(View view) {
         speedEdit.setVisibility(View.VISIBLE);
     }
-
-    public void savevideo(View view) {
-        if (!downloading) {
-            if (dldFinish == 0) {
-                if (videopref.getBoolean("online", true)) {
-                    runOnUiThread(() -> {
-                        if (mediaPlayer != null) mediaPlayer.pause();
-                        if (mDanmakuView != null) mDanmakuView.pause();
-                        ControlButton.setText("▶");
-                        loadingInfo.setVisibility(View.VISIBLE);
-                    });
-                    downvideo(false);
-                    Toast.makeText(PlayerActivity.this, "开始下载", Toast.LENGTH_SHORT).show();
-                    downloading = true;
-                } else {
-                    runOnUiThread(() -> save_btn.setImageResource(R.mipmap.downloaded));
-                    dldFinish = 1;
-                    Toast.makeText(PlayerActivity.this, "下载完成", Toast.LENGTH_SHORT).show();
-                }
-            } else Toast.makeText(PlayerActivity.this, "已经下载过了~", Toast.LENGTH_SHORT).show();
-        } else Toast.makeText(PlayerActivity.this, "稍安勿躁，正在下载中~", Toast.LENGTH_SHORT).show();
-    }
-
 }

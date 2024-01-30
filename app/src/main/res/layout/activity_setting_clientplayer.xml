@@ -93,14 +93,42 @@
                         android:textColor="#fff"
                         android:textSize="12sp" />
                 </RadioGroup>
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
                 
                 <TextView
+                    android:id="@+id/mediacodec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="解码方式"
+                    android:textSize="14sp" />
+                
+                <RadioGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginTop="2dp"
-                    android:text="如果视频播放异常，请尝试修改此选项"
-                    android:textSize="11sp" />
+                    android:layout_below="@id/mediacodec">
+                    <RadioButton
+                        android:id="@+id/SWhard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="硬件解码"
+                        android:textColor="#fff"
+                        android:textSize="12sp" />
+
+                    <RadioButton
+                        android:id="@+id/SWsoft"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="软件解码"
+                        android:textColor="#fff"
+                        android:textSize="12sp" />
+                </RadioGroup>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
