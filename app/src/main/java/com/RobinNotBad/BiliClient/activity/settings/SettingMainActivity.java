@@ -57,11 +57,21 @@ public class SettingMainActivity extends InstanceActivity {
             });
         }
 
-        //播放器设置
+        //播放器设选择
         MaterialCardView playerSetting = findViewById(R.id.playerSetting);
         playerSetting.setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setClass(this, SettingPlayerActivity.class);
+            startActivity(intent);
+        });
+        
+        
+        //内置播放器设置
+        MaterialCardView clientPlayerSetting = findViewById(R.id.clientPlayerSetting);
+        if(SharedPreferencesUtil.getString("player","null").equals("clientPlayer")) clientPlayerSetting.setVisibility(View.VISIBLE);
+        clientPlayerSetting.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            intent.setClass(this, SettingClientPlayerActivity.class);
             startActivity(intent);
         });
 

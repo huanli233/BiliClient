@@ -81,6 +81,11 @@
             android:label="实验性功能"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.settings.SettingClientPlayerActivity"
+            android:exported="true"
+            android:label="内置播放器设置"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.settings.UIPreviewActivity"
             android:exported="true"
             android:label="界面预览"

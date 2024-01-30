@@ -42,6 +42,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.view.BatteryView;
 import com.bumptech.glide.Glide;
 
@@ -275,7 +276,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
         clock.setText(simpleDateFormat.format(new Date(System.currentTimeMillis())));
 
-        if(videopref.getBoolean("display",false)){
+        if(SharedPreferencesUtil.getBoolean("player_display",false)){
             textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
                 @Override
                 public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
@@ -350,7 +351,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         clock = findViewById(R.id.clock);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        if (videopref.getBoolean("display", false)) {
+        if (SharedPreferencesUtil.getBoolean("player_display", false)) {
             textureView = new TextureView(this);
             videoArea.addView(textureView,params);
         }
@@ -679,7 +680,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
 
         Log.e("debug","准备设置显示");
-        if (videopref.getBoolean("display", false)){            //Texture
+        if (SharedPreferencesUtil.getBoolean("player_display", false)){            //Texture
             Log.e("debug","使用texture模式");
             Timer textureTimer = new Timer();
             textureTimer.schedule(new TimerTask() {
