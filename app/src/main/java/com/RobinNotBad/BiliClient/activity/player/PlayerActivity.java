@@ -169,10 +169,10 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
         loop = videopref.getBoolean("videoloop",false);
         Glide.with(this).load(R.mipmap.load).into(circle);
 
-        if(videopref.getBoolean("privatepath",true)) workpath = getExternalFilesDir(null);
+        if(SharedPreferencesUtil.getBoolean("player_privatepath",true)) workpath = getExternalFilesDir(null);
         else workpath = new File(Environment.getExternalStorageDirectory() + "/Video");
         if(!workpath.exists()) workpath.mkdirs();
-        if(videopref.getBoolean("privatepath",true)) cachepath = getExternalCacheDir();
+        if(SharedPreferencesUtil.getBoolean("player_privatepath",true)) cachepath = getExternalCacheDir();
         else cachepath = new File(Environment.getExternalStorageDirectory() + "/Video/playerCache");
         if(!cachepath.exists()) cachepath.mkdirs();
 

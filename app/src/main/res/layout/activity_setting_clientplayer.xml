@@ -230,6 +230,50 @@
                     android:text="下载式：将完整视频下载到本地再播放。更加流畅，循环播放时不会多次消耗流量，但长视频会临时占用存储空间（缓存会删）\n在线式：直接在线播放，不下载视频。加载耗时短、不读写存储空间，长视频只消耗观看部分的流量，但网络不好会中途卡住或加载不出来。"
                     android:textSize="11sp" />
             </LinearLayout>
+             
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+                
+                <TextView
+                    android:id="@+id/workpath"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="存储路径"
+                    android:textSize="14sp" />
+                
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/workpath">
+                    <RadioButton
+                        android:id="@+id/SWprivate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="私有目录"
+                        android:textColor="#fff"
+                        android:textSize="12sp" />
+
+                    <RadioButton
+                        android:id="@+id/SWpublic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="公有目录"
+                        android:textColor="#fff"
+                        android:textSize="12sp" />
+                </RadioGroup>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="2dp"
+                    android:text="私有目录：即/内部存储/Android/data文件夹\n公有目录：即/内部存储/Video文件夹\n两者无差别，在高版本安卓中使用公有目录必须去设置里授权（部分手表阉割了授权界面导致无法授权）"
+                    android:textSize="11sp" />
+            </LinearLayout>
+            
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
