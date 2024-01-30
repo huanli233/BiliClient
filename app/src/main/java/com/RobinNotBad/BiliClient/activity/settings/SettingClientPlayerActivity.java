@@ -1,6 +1,12 @@
 package com.RobinNotBad.BiliClient.activity.settings;
 
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 
 import android.widget.RadioButton;
@@ -40,6 +46,31 @@ public class SettingClientPlayerActivity extends BaseActivity {
         SWdownload.setChecked(!SharedPreferencesUtil.getBoolean("player_online",true));
         SWprivate.setChecked(SharedPreferencesUtil.getBoolean("player_privatepath",true));
         SWpublic.setChecked(!SharedPreferencesUtil.getBoolean("player_privatepath",true));
+        
+        SWpublic.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if(!Environment.isExternalStorageManager()) {
+                    SWpublic.setChecked(false);
+                    SWprivate.setChecked(true);
+                    AlertDialog alertDialog = new AlertDialog.Builder(this)
+                            .setTitle("请授权...")
+                            .setMessage("使用此选项需要“访问所有文件”权限。\n" +
+                                "你的安卓系统版本较高，需要在设置中手动打开“访问所有文件”（或类似名称）的权限开关。\n" +
+                                "点击<确定>，将跳转到设置界面。如果跳转不成功，请手动进入设置打开。\n" +
+                                "如果找不到该选项，那就老老实实用私有目录吧(T_T)")
+                            .setPositiveButton("确定", (dialogInterface, i) -> request())
+                            .setNegativeButton("取消", (dialogInterface, i) -> {})
+                            .create();
+                    alertDialog.show();
+                }
+            }
+        });
+    }
+    
+    private void request(){
+        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+        intent.setData(Uri.parse("package:" + this.getPackageName()));
+        startActivity(intent);
     }
     
     @Override
