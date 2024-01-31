@@ -280,7 +280,6 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="4dp"
                 android:background="#318C8C8C"/>
-            
              
             <LinearLayout
                 android:layout_width="match_parent"
@@ -300,6 +299,45 @@
                     android:inputType="numberDecimal"
                     android:textSize="12sp"
                     android:id="@+id/DMmaxline"/>
+            </LinearLayout>
+            
+             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="弹幕字号大小"
+                    android:textSize="14sp" />
+                 <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:textSize="12sp"
+                    android:id="@+id/danmakusize"/>
+            </LinearLayout>
+            
+             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="弹幕速度"
+                    android:textSize="14sp" />
+                 <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:textSize="12sp"
+                    android:id="@+id/danmakuspeed"/>
             </LinearLayout>
             
         </LinearLayout>

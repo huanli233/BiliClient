@@ -18,7 +18,7 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class SettingClientPlayerActivity extends BaseActivity {
     private RadioButton SWtexture,SWsurface,SWhard,SWsoft,SWopensles,SWaudiotrack,SWonline,SWdownload,SWprivate,SWpublic;
-    private EditText DMmaxline;
+    private EditText DMmaxline,danmakusize,danmakuspeed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +38,8 @@ public class SettingClientPlayerActivity extends BaseActivity {
         SWprivate = findViewById(R.id.SWprivate);
         SWpublic = findViewById(R.id.SWpublic);
         DMmaxline = findViewById(R.id.DMmaxline);
+        danmakusize = findViewById(R.id.danmakusize);
+        danmakuspeed = findViewById(R.id.danmakuspeed);
         
         SWtexture.setChecked(SharedPreferencesUtil.getBoolean("player_display",false));
         SWsurface.setChecked(!SharedPreferencesUtil.getBoolean("player_display",false));
@@ -50,6 +52,8 @@ public class SettingClientPlayerActivity extends BaseActivity {
         SWprivate.setChecked(SharedPreferencesUtil.getBoolean("player_privatepath",true));
         SWpublic.setChecked(!SharedPreferencesUtil.getBoolean("player_privatepath",true));
         DMmaxline.setText(SharedPreferencesUtil.getInt("player_danmaku_maxline",25)+"");
+        danmakusize.setText((SharedPreferencesUtil.getFloat("player_danmaku_size",1.0f))+"");
+        danmakuspeed.setText((SharedPreferencesUtil.getFloat("player_danmaku_speed",1.0f))+"");
         
         SWpublic.setOnClickListener(view -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -87,8 +91,14 @@ public class SettingClientPlayerActivity extends BaseActivity {
         SharedPreferencesUtil.putBoolean("player_privatepath",SWprivate.isChecked());
         
         String newline = DMmaxline.getText().toString();
+        String newtextsize = danmakusize.getText().toString();
+        String newspeed = danmakuspeed.getText().toString();
+        if (newspeed.length()<=0) newspeed = "1.0";
+        if (newtextsize.length()<=0) newtextsize = "1.0";
         if (newline.length()<=0) newline = "0";
         SharedPreferencesUtil.putInt("player_danmaku_maxline",Integer.valueOf(newline));
+        SharedPreferencesUtil.putFloat("player_danmaku_size",Float.parseFloat(newtextsize));
+        SharedPreferencesUtil.putFloat("player_danmaku_speed",Float.parseFloat(newspeed));
         MsgUtil.toast("设置已保存喵~",this);
     }
 }

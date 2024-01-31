@@ -189,8 +189,8 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
         overlap.put(BaseDanmaku.TYPE_FIX_BOTTOM, danmakupref.getBoolean("allowoverlap", true));
         mContext.setDanmakuStyle(IDisplayer.DANMAKU_STYLE_STROKEN, 1)
                 .setDuplicateMergingEnabled(danmakupref.getBoolean("mergeduplicate", false))
-                .setScrollSpeedFactor(danmakupref.getFloat("danmakuspeed", 1.0f))
-                .setScaleTextSize(danmakupref.getFloat("danmakusize", 1.0f))//缩放值
+                .setScrollSpeedFactor(SharedPreferencesUtil.getFloat("player_danmaku_speed", 1.0f))
+                .setScaleTextSize(SharedPreferencesUtil.getFloat("player_danmaku_size", 1.0f))//缩放值
                 .setMaximumLines(maxLinesPair)
                 .setDanmakuTransparency(danmakupref.getFloat("transparency", 0.5f))
                 .preventOverlapping(overlap);
