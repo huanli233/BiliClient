@@ -340,6 +340,29 @@
                     android:id="@+id/danmakuspeed"/>
             </LinearLayout>
             
+             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="弹幕透明度"
+                    android:textSize="14sp" />
+                 <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:textSize="12sp"
+                    android:id="@+id/danmaku_transparency"/>
+                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%"/>
+            </LinearLayout>
+            
         </LinearLayout>
     </ScrollView>
 

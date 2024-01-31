@@ -192,7 +192,7 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
                 .setScrollSpeedFactor(SharedPreferencesUtil.getFloat("player_danmaku_speed", 1.0f))
                 .setScaleTextSize(SharedPreferencesUtil.getFloat("player_danmaku_size", 1.0f))//缩放值
                 .setMaximumLines(maxLinesPair)
-                .setDanmakuTransparency(danmakupref.getFloat("transparency", 0.5f))
+                .setDanmakuTransparency(SharedPreferencesUtil.getFloat("player_danmaku_transparency", 0.5f))
                 .preventOverlapping(overlap);
 
         WindowManager windowManager = this.getWindowManager();

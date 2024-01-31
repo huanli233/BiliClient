@@ -18,7 +18,7 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class SettingClientPlayerActivity extends BaseActivity {
     private RadioButton SWtexture,SWsurface,SWhard,SWsoft,SWopensles,SWaudiotrack,SWonline,SWdownload,SWprivate,SWpublic;
-    private EditText DMmaxline,danmakusize,danmakuspeed;
+    private EditText DMmaxline,danmakusize,danmakuspeed,danmaku_transparency;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +40,7 @@ public class SettingClientPlayerActivity extends BaseActivity {
         DMmaxline = findViewById(R.id.DMmaxline);
         danmakusize = findViewById(R.id.danmakusize);
         danmakuspeed = findViewById(R.id.danmakuspeed);
+        danmaku_transparency = findViewById(R.id.danmaku_transparency);
         
         SWtexture.setChecked(SharedPreferencesUtil.getBoolean("player_display",false));
         SWsurface.setChecked(!SharedPreferencesUtil.getBoolean("player_display",false));
@@ -54,6 +55,7 @@ public class SettingClientPlayerActivity extends BaseActivity {
         DMmaxline.setText(SharedPreferencesUtil.getInt("player_danmaku_maxline",25)+"");
         danmakusize.setText((SharedPreferencesUtil.getFloat("player_danmaku_size",1.0f))+"");
         danmakuspeed.setText((SharedPreferencesUtil.getFloat("player_danmaku_speed",1.0f))+"");
+        danmaku_transparency.setText((SharedPreferencesUtil.getFloat("player_danmaku_transparency",0.5f)*100)+"");
         
         SWpublic.setOnClickListener(view -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -93,12 +95,15 @@ public class SettingClientPlayerActivity extends BaseActivity {
         String newline = DMmaxline.getText().toString();
         String newtextsize = danmakusize.getText().toString();
         String newspeed = danmakuspeed.getText().toString();
+        String newtransparency = danmaku_transparency.getText().toString();
         if (newspeed.length()<=0) newspeed = "1.0";
         if (newtextsize.length()<=0) newtextsize = "1.0";
+        if (newtransparency.length()<=0) newtransparency = "50";
         if (newline.length()<=0) newline = "0";
         SharedPreferencesUtil.putInt("player_danmaku_maxline",Integer.valueOf(newline));
         SharedPreferencesUtil.putFloat("player_danmaku_size",Float.parseFloat(newtextsize));
         SharedPreferencesUtil.putFloat("player_danmaku_speed",Float.parseFloat(newspeed));
+        SharedPreferencesUtil.putFloat("player_danmaku_transparency",Float.parseFloat(newtransparency)/100f);
         MsgUtil.toast("设置已保存喵~",this);
     }
 }
