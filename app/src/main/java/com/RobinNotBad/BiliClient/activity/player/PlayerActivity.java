@@ -183,7 +183,7 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mContext = DanmakuContext.create();
         HashMap<Integer, Integer> maxLinesPair = new HashMap<>();
-        maxLinesPair.put(BaseDanmaku.TYPE_SCROLL_RL, danmakupref.getInt("maxline", 25));
+        maxLinesPair.put(BaseDanmaku.TYPE_SCROLL_RL, SharedPreferencesUtil.getInt("player_danmaku_maxline", 25));
         HashMap<Integer, Boolean> overlap = new HashMap<>();
         overlap.put(BaseDanmaku.TYPE_SCROLL_LR, danmakupref.getBoolean("allowoverlap", true));
         overlap.put(BaseDanmaku.TYPE_FIX_BOTTOM, danmakupref.getBoolean("allowoverlap", true));

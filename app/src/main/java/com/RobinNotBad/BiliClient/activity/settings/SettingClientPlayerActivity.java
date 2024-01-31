@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 
+import android.widget.EditText;
 import android.widget.RadioButton;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
@@ -17,6 +18,7 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class SettingClientPlayerActivity extends BaseActivity {
     private RadioButton SWtexture,SWsurface,SWhard,SWsoft,SWopensles,SWaudiotrack,SWonline,SWdownload,SWprivate,SWpublic;
+    private EditText DMmaxline;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +37,7 @@ public class SettingClientPlayerActivity extends BaseActivity {
         SWdownload = findViewById(R.id.SWdownload);
         SWprivate = findViewById(R.id.SWprivate);
         SWpublic = findViewById(R.id.SWpublic);
+        DMmaxline = findViewById(R.id.DMmaxline);
         
         SWtexture.setChecked(SharedPreferencesUtil.getBoolean("player_display",false));
         SWsurface.setChecked(!SharedPreferencesUtil.getBoolean("player_display",false));
@@ -46,6 +49,7 @@ public class SettingClientPlayerActivity extends BaseActivity {
         SWdownload.setChecked(!SharedPreferencesUtil.getBoolean("player_online",true));
         SWprivate.setChecked(SharedPreferencesUtil.getBoolean("player_privatepath",true));
         SWpublic.setChecked(!SharedPreferencesUtil.getBoolean("player_privatepath",true));
+        DMmaxline.setText(SharedPreferencesUtil.getInt("player_danmaku_maxline",25)+"");
         
         SWpublic.setOnClickListener(view -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -81,6 +85,10 @@ public class SettingClientPlayerActivity extends BaseActivity {
         SharedPreferencesUtil.putBoolean("player_audio",SWopensles.isChecked());
         SharedPreferencesUtil.putBoolean("player_online",SWonline.isChecked());
         SharedPreferencesUtil.putBoolean("player_privatepath",SWprivate.isChecked());
+        
+        String newline = DMmaxline.getText().toString();
+        if (newline.length()<=0) newline = "0";
+        SharedPreferencesUtil.putInt("player_danmaku_maxline",Integer.valueOf(newline));
         MsgUtil.toast("设置已保存喵~",this);
     }
 }
