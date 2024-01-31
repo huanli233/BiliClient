@@ -68,7 +68,6 @@ public class SettingMainActivity extends InstanceActivity {
         
         //内置播放器设置
         MaterialCardView clientPlayerSetting = findViewById(R.id.clientPlayerSetting);
-        if(SharedPreferencesUtil.getString("player","null").equals("clientPlayer")) clientPlayerSetting.setVisibility(View.VISIBLE);
         clientPlayerSetting.setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setClass(this, SettingClientPlayerActivity.class);

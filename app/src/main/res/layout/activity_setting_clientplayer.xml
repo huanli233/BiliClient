@@ -294,7 +294,7 @@
                     android:text="弹幕最大行数"
                     android:textSize="14sp" />
                  <EditText
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:textSize="12sp"
@@ -313,7 +313,7 @@
                     android:text="弹幕字号大小"
                     android:textSize="14sp" />
                  <EditText
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:textSize="12sp"
@@ -333,7 +333,7 @@
                     android:text="弹幕速度"
                     android:textSize="14sp" />
                  <EditText
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:textSize="12sp"
@@ -351,18 +351,22 @@
                     android:layout_height="wrap_content"
                     android:text="弹幕透明度"
                     android:textSize="14sp" />
-                 <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    android:textSize="12sp"
-                    android:id="@+id/danmaku_transparency"/>
-                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="%"/>
+                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="50dp"
+                        android:inputType="phone"
+                        android:textSize="12sp"
+                        android:id="@+id/danmaku_transparency"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="%"/>
+                </LinearLayout>
             </LinearLayout>
-            
         </LinearLayout>
     </ScrollView>
 
