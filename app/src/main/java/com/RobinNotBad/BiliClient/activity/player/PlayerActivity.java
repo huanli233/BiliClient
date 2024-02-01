@@ -38,10 +38,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.BiliClient;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.view.BatteryView;
 import com.bumptech.glide.Glide;
@@ -87,7 +88,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 import com.RobinNotBad.BiliClient.R;
 
-public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPreparedListener {
+public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.OnPreparedListener {
     private IDanmakuView mDanmakuView;
     private DanmakuContext mContext;
     private Timer progresstimer, autoHideTimer, sound, speedTimer, loadingShowTimer;
@@ -135,7 +136,12 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
     private boolean loop;
 
     private File workpath,cachepath,videoFile,danmakuFile,dldFolder;
-
+    
+    @Override
+    public void onBackPressed() {
+        if(!SharedPreferencesUtil.getBoolean("back_disable",false)) super.onBackPressed();
+    }
+    
     @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +149,6 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
         IjkMediaPlayer.loadLibrariesOnce(null);
 
         videopref = getSharedPreferences("videosetting", MODE_PRIVATE);
-        SharedPreferences danmakupref = getSharedPreferences("danmakusetting", MODE_PRIVATE);
         interfacepref = getSharedPreferences("interfacesetting", MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
@@ -185,10 +190,10 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
         HashMap<Integer, Integer> maxLinesPair = new HashMap<>();
         maxLinesPair.put(BaseDanmaku.TYPE_SCROLL_RL, SharedPreferencesUtil.getInt("player_danmaku_maxline", 25));
         HashMap<Integer, Boolean> overlap = new HashMap<>();
-        overlap.put(BaseDanmaku.TYPE_SCROLL_LR, danmakupref.getBoolean("allowoverlap", true));
-        overlap.put(BaseDanmaku.TYPE_FIX_BOTTOM, danmakupref.getBoolean("allowoverlap", true));
+        overlap.put(BaseDanmaku.TYPE_SCROLL_LR, SharedPreferencesUtil.getBoolean("player_danmaku_allowoverlap", true));
+        overlap.put(BaseDanmaku.TYPE_FIX_BOTTOM, SharedPreferencesUtil.getBoolean("player_danmaku_allowoverlap", true));
         mContext.setDanmakuStyle(IDisplayer.DANMAKU_STYLE_STROKEN, 1)
-                .setDuplicateMergingEnabled(danmakupref.getBoolean("mergeduplicate", false))
+                .setDuplicateMergingEnabled(SharedPreferencesUtil.getBoolean("player_danmaku_mergeduplicate", false))
                 .setScrollSpeedFactor(SharedPreferencesUtil.getFloat("player_danmaku_speed", 1.0f))
                 .setScaleTextSize(SharedPreferencesUtil.getFloat("player_danmaku_size", 1.0f))//缩放值
                 .setMaximumLines(maxLinesPair)
@@ -529,12 +534,6 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
         IDataSource<?> dataSource = loader.getDataSource();
         parser.load(dataSource);
         return parser;
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 
     @Override

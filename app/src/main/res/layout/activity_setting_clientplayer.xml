@@ -367,6 +367,46 @@
                         android:text="%"/>
                 </LinearLayout>
             </LinearLayout>
+            
+             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/danmaku_allowoverlap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_edit_text_setting"
+                    android:paddingStart="6dp"
+                    android:text="弹幕允许重叠"
+                    android:textColor="@color/textwhite" />
+            </LinearLayout>
+            
+             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/danmaku_mergeduplicate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_edit_text_setting"
+                    android:paddingStart="6dp"
+                    android:text="合并重复弹幕"
+                    android:textColor="@color/textwhite" />
+            </LinearLayout>
+             
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="4dp"
+                android:background="#318C8C8C"/>
+            
         </LinearLayout>
     </ScrollView>
 

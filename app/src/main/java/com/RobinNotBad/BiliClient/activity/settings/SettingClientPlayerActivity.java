@@ -11,6 +11,7 @@ import android.util.Log;
 
 import android.widget.EditText;
 import android.widget.RadioButton;
+import androidx.appcompat.widget.SwitchCompat;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -19,6 +20,7 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 public class SettingClientPlayerActivity extends BaseActivity {
     private RadioButton SWtexture,SWsurface,SWhard,SWsoft,SWopensles,SWaudiotrack,SWonline,SWdownload,SWprivate,SWpublic;
     private EditText DMmaxline,danmakusize,danmakuspeed,danmaku_transparency;
+    private SwitchCompat danmaku_allowoverlap,danmaku_mergeduplicate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,8 @@ public class SettingClientPlayerActivity extends BaseActivity {
         danmakusize = findViewById(R.id.danmakusize);
         danmakuspeed = findViewById(R.id.danmakuspeed);
         danmaku_transparency = findViewById(R.id.danmaku_transparency);
+        danmaku_allowoverlap = findViewById(R.id.danmaku_allowoverlap);
+        danmaku_mergeduplicate = findViewById(R.id.danmaku_mergeduplicate);
         
         SWtexture.setChecked(SharedPreferencesUtil.getBoolean("player_display",false));
         SWsurface.setChecked(!SharedPreferencesUtil.getBoolean("player_display",false));
@@ -56,6 +60,8 @@ public class SettingClientPlayerActivity extends BaseActivity {
         danmakusize.setText((SharedPreferencesUtil.getFloat("player_danmaku_size",1.0f))+"");
         danmakuspeed.setText((SharedPreferencesUtil.getFloat("player_danmaku_speed",1.0f))+"");
         danmaku_transparency.setText((SharedPreferencesUtil.getFloat("player_danmaku_transparency",0.5f)*100)+"");
+        danmaku_allowoverlap.setChecked(SharedPreferencesUtil.getBoolean("player_danmaku_allowoverlap",true));
+        danmaku_mergeduplicate.setChecked(SharedPreferencesUtil.getBoolean("player_danmaku_mergeduplicate",false));
         
         SWpublic.setOnClickListener(view -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -104,6 +110,9 @@ public class SettingClientPlayerActivity extends BaseActivity {
         SharedPreferencesUtil.putFloat("player_danmaku_size",Float.parseFloat(newtextsize));
         SharedPreferencesUtil.putFloat("player_danmaku_speed",Float.parseFloat(newspeed));
         SharedPreferencesUtil.putFloat("player_danmaku_transparency",Float.parseFloat(newtransparency)/100f);
+        SharedPreferencesUtil.putBoolean("player_danmaku_allowoverlap",danmaku_allowoverlap.isChecked());
+        SharedPreferencesUtil.putBoolean("player_danmaku_mergeduplicate",danmaku_mergeduplicate.isChecked());
+        
         MsgUtil.toast("设置已保存喵~",this);
     }
 }
