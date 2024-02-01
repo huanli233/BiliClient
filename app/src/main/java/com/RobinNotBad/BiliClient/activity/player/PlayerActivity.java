@@ -129,8 +129,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     private BatteryView batteryView;
     private BatteryManager manager;
     private SimpleDateFormat simpleDateFormat;
-    private SharedPreferences videopref;
-    private SharedPreferences interfacepref;
     private String minuteSTR;
     private String secondSTR;
     private boolean loop;
@@ -148,8 +146,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         Log.e("加载", "加载");
         IjkMediaPlayer.loadLibrariesOnce(null);
 
-        videopref = getSharedPreferences("videosetting", MODE_PRIVATE);
-        interfacepref = getSharedPreferences("interfacesetting", MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
@@ -171,7 +167,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
             batteryView.setPower(manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
         }
 
-        loop = videopref.getBoolean("videoloop",false);
+        loop = SharedPreferencesUtil.getBoolean("player_loop",false);
         Glide.with(this).load(R.mipmap.load).into(circle);
 
         if(SharedPreferencesUtil.getBoolean("player_privatepath",true)) workpath = getExternalFilesDir(null);
@@ -210,7 +206,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         setClickMgr();
         autohide();
 
-        if(interfacepref.getBoolean("showRotateBtn",true)) rotate_btn.setVisibility(View.VISIBLE);
+        if(SharedPreferencesUtil.getBoolean("player_ui_showRotateBtn",true)) rotate_btn.setVisibility(View.VISIBLE);
         else rotate_btn.setVisibility(View.GONE);
 
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -405,7 +401,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
         //这个管长按开始
         clickMgr.setOnLongClickListener(view -> {
-            if(videopref.getBoolean("longclick",false) && mediaPlayer!=null && (ControlButton.getText() == "| |")) {
+            if(SharedPreferencesUtil.getBoolean("player_longclick",false) && mediaPlayer!=null && (ControlButton.getText() == "| |")) {
                 if (!onLongClick) {
                     hidecon();
                     Vibrator vibrator = (Vibrator) getApplication().getSystemService(Service.VIBRATOR_SERVICE);
@@ -815,7 +811,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
             danmaku_btn.setImageResource(R.mipmap.danmakuoff);
             isdanmakushowing = false;
         }
-        if (interfacepref.getBoolean("showDanmakuBtn", true))
+        if (SharedPreferencesUtil.getBoolean("player_ui_showDanmakuBtn", true))
             danmaku_btn.setVisibility(View.VISIBLE);
         else danmaku_btn.setVisibility(View.GONE);
         //原作者居然把旋转按钮命名为danmaku_btn，也是没谁了...我改过来了  ----RobinNotBad
@@ -824,7 +820,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
         if (loop) loop_btn.setImageResource(R.mipmap.loopon);
         else loop_btn.setImageResource(R.mipmap.loopoff);
-        if (interfacepref.getBoolean("showLoopBtn", true))
+        if (SharedPreferencesUtil.getBoolean("player_ui_showLoopBtn", true))
             loop_btn.setVisibility(View.VISIBLE);
         else loop_btn.setVisibility(View.GONE);
 
@@ -871,7 +867,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         Log.e("debug-改变视频区域大小","开始");
         Log.e("wid", width + "");
         Log.e("hei", height + "");
-        if (interfacepref.getBoolean("round", false)) {
+        if (SharedPreferencesUtil.getBoolean("player_ui_round", false)) {
             float video_mul = (float) height / (float) width;
             double sqrt = Math.sqrt(((double) Screenwidth * (double) Screenwidth) / ((((double) height * (double) height) / ((double) width * (double) width)) + 1));
             int show_height = (int) (sqrt * video_mul + 0.5);
