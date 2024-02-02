@@ -44,7 +44,7 @@ android {
         exclude 'META-INF/androidx.cardview_cardview.version'
     }
     buildFeatures {
-        viewBinding true
+        viewBinding false
     }
 }
 

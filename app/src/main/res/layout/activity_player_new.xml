@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgblack"
+    android:keepScreenOn="true"
+    tools:context=".activity.player.PlayerActivity"
+    android:id="@+id/clickMgr"
+    tools:ignore="MissingClass">
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" >
+
+        <RelativeLayout
+            android:id="@+id/videoArea"
+            android:layout_width="1px"
+            android:layout_height="1px"></RelativeLayout>
+    </RelativeLayout>
+
+    <master.flame.danmaku.ui.widget.DanmakuView
+        android:id="@+id/sv_danmaku"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/control_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/top_control"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#348A8A8A"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginVertical="3dp"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center_horizontal"
+                android:singleLine="true"
+                android:text="原小电视播放器"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.RobinNotBad.BiliClient.view.BatteryView
+                    android:id="@+id/battery"
+                    android:layout_width="14dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextClock
+                    android:id="@+id/clock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:format12Hour="hh:mm"
+                    android:format24Hour="HH:mm"
+                    android:text="彩蛋"
+                    android:textSize="8sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/battery" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottom_control"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#348A8A8A"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/progress_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/text_now"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"
+                    android:textColor="#D3B8BDBF"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <SeekBar
+                    android:id="@+id/videoprogress"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:progressTint="#00A4DA"
+                    android:thumb="@drawable/thumb_player_selector"
+                    android:thumbOffset="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/text_all"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@id/text_now"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/text_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"
+                    android:textColor="#D3B8BDBF"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progress_layout">
+
+                <ImageButton
+                    android:id="@+id/button_sound_cut"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toStartOf="@+id/control"
+                    android:background="?attr/selectableItemBackground"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/soundcut"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/button_video"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/button_video"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:background="@drawable/round_button"
+                    android:text="▶"
+                    android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/button_sound_add"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toEndOf="@+id/control"
+                    android:background="?attr/selectableItemBackground"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/soundadd"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/button_video"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/right_control"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_control"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/top_control">
+
+            <ImageView
+                android:id="@+id/danmaku_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:visibility="gone"
+                app:srcCompat="@mipmap/danmakuoff" />
+
+            <ImageView
+                android:id="@+id/rotate_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                app:srcCompat="@mipmap/rotate" />
+
+            <ImageView
+                android:id="@+id/loop_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:visibility="gone"
+                app:srcCompat="@mipmap/loopoff" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="5dp"
+            android:shadowColor="@color/bgblack"
+            android:shadowDx="2.0"
+            android:shadowDy="0.0"
+            android:shadowRadius="3.0"
+            android:text="x 1.0"
+            android:textColor="#fff"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_control"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/top_control" />
+
+
+        <LinearLayout
+            android:id="@+id/loading_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_control"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/top_control">
+
+            <ImageView
+                android:id="@+id/circle"
+
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/loading_text0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:shadowColor="@color/bgblack"
+                android:shadowDx="2.0"
+                android:shadowDy="0.0"
+                android:shadowRadius="3.0"
+                android:text="加载中"
+                android:textAlignment="center"
+                android:textColor="#DDDDDD"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/loading_text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:shadowColor="@color/bgblack"
+                android:shadowDx="2.0"
+                android:shadowDy="0.0"
+                android:shadowRadius="3.0"
+                android:text="OwO"
+                android:textAlignment="center"
+                android:textColor="#DDDDDD"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_speed"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/gray"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@color/bgblack"
+                    android:shadowDx="2.0"
+                    android:shadowDy="0.0"
+                    android:shadowRadius="3.0"
+                    android:text="倍速调节"
+                    android:textColor="#DDDDDD"
+                    android:textSize="14sp" />
+
+                <SeekBar
+                    android:id="@+id/seekbar_speed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="14dp"
+                    android:indeterminate="false"
+                    android:max="7"
+                    android:progress="2" />
+
+                <TextView
+                    android:id="@+id/text_newspeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@color/bgblack"
+                    android:shadowDx="2.0"
+                    android:shadowDy="0.0"
+                    android:shadowRadius="3.0"
+                    android:text="1.0x"
+                    android:textColor="#DDDDDD"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/showsound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:shadowColor="@color/bgblack"
+        android:shadowDx="2.0"
+        android:shadowDy="0.0"
+        android:shadowRadius="3.0"
+        android:text="音量：100%"
+        android:textColor="#fff"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
+
+</RelativeLayout>
