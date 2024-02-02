@@ -3,8 +3,9 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
-        jcenter()
         maven { url "https://www.jitpack.io" }
+        maven { url "https://maven.aliyun.com/repositories/jcenter" }
+        maven { url "https://maven.aliyun.com/repository/public" }
     }
 }
 dependencyResolutionManagement {
@@ -13,6 +14,8 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url "https://www.jitpack.io" }
+        maven { url "https://maven.aliyun.com/repositories/jcenter" }
+        maven { url "https://maven.aliyun.com/repository/public" }
     }
 }
 rootProject.name = "BiliClient"

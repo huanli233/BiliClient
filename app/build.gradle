@@ -17,8 +17,8 @@ android {
         minSdk 17
         //noinspection ExpiredTargetSdkVersion
         targetSdk 26
-        versionCode 20240121
-        versionName "2.4.1"
+        versionCode 20240122
+        versionName "2.4.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -62,6 +62,7 @@ dependencies {
     //danmaku
     implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
     implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
+    implementation 'com.github.ctiao:ndkbitmap-x86:0.9.21'
     //ijk
     implementation project(path: ':ijkplayer-java')
 }
