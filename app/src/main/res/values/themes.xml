@@ -10,6 +10,7 @@
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowSwipeToDismiss" tools:targetApi="kitkat_watch">true</item>
         <item name="materialCardViewStyle">@style/CardStyle</item>
+        <item name="editTextColor">@color/textwhite</item>
     </style>
     <style name="Theme.NoSwipe" parent="Theme.BiliClient">
         <item name="android:windowSwipeToDismiss" tools:targetApi="kitkat_watch">false</item>
