@@ -1,11 +1,10 @@
 package com.RobinNotBad.BiliClient.api;
 
-import android.accounts.NetworkErrorException;
 import com.RobinNotBad.BiliClient.model.Media;
 import com.RobinNotBad.BiliClient.model.MediaSectionInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
-import okhttp3.ResponseBody;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +12,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import okhttp3.ResponseBody;
 
 public class bangumi_to_card {
 
