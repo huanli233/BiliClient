@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">哔哩终端</string>
     <string name="about_description">一个轻量的第三方B站客户端</string>
-    <string name="about_say">软件名来自原神中的“虚空终端”\n兼最低支持安卓4.2\n愿你在这一方小小的屏幕中，找到属于自己的小小的快乐\n\n提示，长按“关于”按钮有彩蛋哦！</string>
+    <string name="about_say">软件名来自原神中的“虚空终端”\n最低兼容安卓4.2\n愿你在这一方小小的屏幕中，找到属于自己的小小的快乐\n\n提示，长按“关于”按钮有彩蛋哦！</string>
     <string name="about_group">交流群（闲聊）：482091687\n测试组（反馈）：745414928</string>
     <string name="about_opensource">本程序完全开源，代码部分遵循GNU GPL-V3.0协议，界面布局（UI）部分遵循CC BY-NC-SA协议。\n你可以从 https://gitee.com/RobinNotBad/BiliClient 获取源代码</string>
     <string name="about_source">本程序使用或借鉴了下列项目的部分代码及收集的B站API：\nWearBili：https://github.com/SpaceXC/WearBili\n腕上哔哩：https://github.com/luern0313/WristBilibili\nBAC Document：https://socialsisteryi.github.io/bilibili-API-collect/\n程序的界面布局修改借鉴于WearBili开源项目的UI部分，设计者为@JesseGary_（已得到同意）\n\n本程序使用的第三方库：\nOkHttp（用于网络请求）：com.squareup.okhttp3:okhttp:3.12.1\nGlide（用于图片显示）：com.github.bumptech.glide:glide:4.13.2\nPhotoView（用于缩放图片功能）：com.github.chrisbanes:PhotoView:2.3.0\nJsoup（用于解析HTML）：org.jsoup:jsoup:1.10.2\n\n部分图标来自网络，有修改，版权归原作者所有\n</string>
