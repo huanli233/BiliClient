@@ -5,7 +5,7 @@
     <string name="about_group">交流群（闲聊）：482091687\n测试组（反馈）：745414928</string>
     <string name="about_opensource">本程序完全开源，代码部分遵循GNU GPL-V3.0协议，界面布局（UI）部分遵循CC BY-NC-SA协议。\n你可以从 https://gitee.com/RobinNotBad/BiliClient 获取源代码</string>
     <string name="about_source">本程序使用或借鉴了下列项目的部分代码及收集的B站API：\nWearBili：https://github.com/SpaceXC/WearBili\n腕上哔哩：https://github.com/luern0313/WristBilibili\nBAC Document：https://socialsisteryi.github.io/bilibili-API-collect/\n程序的界面布局修改借鉴于WearBili开源项目的UI部分，设计者为@JesseGary_（已得到同意）\n\n本程序使用的第三方库：\nOkHttp（用于网络请求）：com.squareup.okhttp3:okhttp:3.12.1\nGlide（用于图片显示）：com.github.bumptech.glide:glide:4.13.2\nPhotoView（用于缩放图片功能）：com.github.chrisbanes:PhotoView:2.3.0\nJsoup（用于解析HTML）：org.jsoup:jsoup:1.10.2\n\n部分图标来自网络，有修改，版权归原作者所有\n</string>
-    <string name="about_to_uncle">本软件是为了使老旧的安卓手表与手机能够使用B站网页端提供的服务而开发，使这些设备可以使用B站网页端的部分基本功能。软件所使用的API均来自公开渠道，我们未参与API的收集与破解。本软件不会对任何API接口进行恶意轰炸。我们不收集任何用户信息。软件不存在付费功能，代码完全开源。如果您仍然认为本软件侵犯了您的权利，请联系我们。\n\n同时，我们也不对学生党用户在不恰当的时间、地点使用本软件导致的财产损失（如设备被没收）或精神伤害（如受到辱骂）负责。请尽量自控，不影响到正常生活（各种意义上）。</string>
+    <string name="about_to_uncle">本软件的开发目的是使配置较低的安卓手表与老旧手机能够使用B站网页端提供的部分基本功能。本软件不会对任何API接口进行恶意轰炸，也不收集任何用户信息。软件不存在付费功能，代码完全开源。如果您仍然认为本软件侵犯了您的权利，请联系我们。\n\n同时，我们也不对学生党用户在不恰当的时间、地点使用本软件导致的财产损失（设备被没收）或精神伤害（？）负责。请尽量自控，不要影响到正常生活哦！（各种意义上）</string>
 
     <string name="setting_ui_desc">有效范围为0.25~5.00（倍），建议每次只进行轻微调节，再预览页面确认显示正常。修改完毕，打开新页面即可生效。\n注意：切勿调到两个最值处，否则你真的会后悔！若乱调此选项，导致应用无法正常使用的，请清除应用数据！</string>
     <string name="setting_player_desc">*你也可以通过长按“播放”按钮快速进入此页面。若无法跳转播放，请确保你的播放器和哔哩终端都是最新版本。\n*播放器和哔哩终端在洋葱商店、hankmi商店、唯趣商店均可下载（其中洋葱上架最快，唯趣上架较慢）\n*“高清视频”选项开启后，将会尝试获取1080P的视频源，若未开启则是360P。会同时影响缓存画质。</string>
