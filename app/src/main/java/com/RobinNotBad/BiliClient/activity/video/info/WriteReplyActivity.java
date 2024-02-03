@@ -26,6 +26,10 @@ public class WriteReplyActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reply_write);
 
+        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)==0){
+            MsgUtil.toast("还没有登录喵~",this);
+            finish();
+        }
 
         Intent intent = getIntent();
         long oid = intent.getLongExtra("oid",0);
@@ -61,8 +65,8 @@ public class WriteReplyActivity extends BaseActivity {
                                 }
                                 else {
                                     Map<Integer,String> msgMap = new HashMap<Integer,String>(){{
-                                        put(-101,"没有登录or登录信息有误");
-                                        put(-102,"账号被封禁");
+                                        put(-101,"没有登录or登录信息有误？");
+                                        put(-102,"账号被封禁！");
                                         put(-509,"请求过于频繁！");
                                         put(12015,"需要评论验证码...？");
                                         put(12016,"包含敏感内容！");
