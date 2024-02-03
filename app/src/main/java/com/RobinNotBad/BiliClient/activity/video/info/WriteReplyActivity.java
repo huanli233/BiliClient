@@ -56,6 +56,7 @@ public class WriteReplyActivity extends BaseActivity {
                                     case 0:
                                         runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, "发送成功>w<", Toast.LENGTH_SHORT).show());
                                         finish();
+                                        break;
                                     case -101:
                                         toast_msg = "没有登录哦";
                                         break;
