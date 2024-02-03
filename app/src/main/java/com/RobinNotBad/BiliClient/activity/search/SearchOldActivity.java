@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.activity.search;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.SearchAdapter;
 import com.RobinNotBad.BiliClient.api.SearchApi;
@@ -50,19 +48,13 @@ public class SearchOldActivity extends InstanceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_old);
+        setMenuClick(3);
         Log.e("debug","进入旧版搜索页");
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(SearchOldActivity.this));
         videoCardList = new ArrayList<>();
         searchAdapter = new SearchAdapter(this,videoCardList);
-
-        findViewById(R.id.top).setOnClickListener(view -> {
-            Intent intent = new Intent();
-            intent.setClass(SearchOldActivity.this, MenuActivity.class);
-            intent.putExtra("from",2);
-            startActivity(intent);
-        });
 
         View searchBtn = findViewById(R.id.search);
         EditText keywordInput = findViewById(R.id.keywordInput);

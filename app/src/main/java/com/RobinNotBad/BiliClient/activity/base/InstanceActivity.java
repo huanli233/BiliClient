@@ -1,23 +1,25 @@
 package com.RobinNotBad.BiliClient.activity.base;
 
+import android.content.Intent;
 import android.os.Bundle;
-import com.RobinNotBad.BiliClient.BiliClient;
 
-import java.util.*;
+import com.RobinNotBad.BiliClient.BiliClient;
+import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.MenuActivity;
 
 public class InstanceActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        BiliClient.addInstance(this);
+        BiliClient.setInstance(this);
         super.onCreate(savedInstanceState);
     }
-    public static InstanceActivity getInstance(Class<? extends InstanceActivity> cls) {
-        return BiliClient.getInstance(cls);
-    }
 
-    @Override
-    protected void onDestroy() {
-        BiliClient.removeInstance(this);
-        super.onDestroy();
+    public void setMenuClick(int from){
+        findViewById(R.id.top).setOnClickListener(view -> {
+            Intent intent = new Intent();
+            intent.setClass(this, MenuActivity.class);
+            intent.putExtra("from",from);
+            startActivity(intent);
+        });
     }
 }

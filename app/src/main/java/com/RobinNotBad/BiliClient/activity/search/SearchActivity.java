@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.SearchApi;
@@ -65,6 +64,7 @@ public class SearchActivity extends InstanceActivity {
         }
         
         setContentView(R.layout.activity_search);
+        setMenuClick(3);
         Log.e("debug","进入搜索页");
 
         viewPager = findViewById(R.id.viewPager);
@@ -72,13 +72,6 @@ public class SearchActivity extends InstanceActivity {
         videoCardList = new ArrayList<>();
         userInfoList = new ArrayList<>();
         articleInfoList = new ArrayList<>();
-
-        findViewById(R.id.top).setOnClickListener(view -> {
-            Intent intent = new Intent();
-            intent.setClass(SearchActivity.this, MenuActivity.class);
-            intent.putExtra("from",3);
-            startActivity(intent);
-        });
 
         View searchBtn = findViewById(R.id.search);
         EditText keywordInput = findViewById(R.id.keywordInput);

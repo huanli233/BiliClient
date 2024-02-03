@@ -1,6 +1,5 @@
 package com.RobinNotBad.BiliClient.activity.settings;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,9 +10,12 @@ import android.widget.Toast;
 
 import androidx.constraintlayout.widget.Guideline;
 
+import com.RobinNotBad.BiliClient.BiliClient;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
+import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
+import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.UserLoginApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -32,7 +34,7 @@ import okhttp3.Response;
 
 //登录页面，参考了腕上哔哩和WearBili的代码
 
-public class QRLoginActivity extends InstanceActivity {
+public class QRLoginActivity extends BaseActivity {
     private ImageView qrImageView;
     private TextView scanStat;
     private int clickCount = 0;
@@ -193,15 +195,16 @@ public class QRLoginActivity extends InstanceActivity {
                             Log.e("refresh_token",SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""));
 
                             if(SharedPreferencesUtil.getBoolean("setup",false)) {
-                                Activity instance = InstanceActivity.getInstance(SettingMainActivity.class);
-                                if(instance != null) instance.finish();
+                                InstanceActivity instance = BiliClient.instance;
+                                if(instance != null && !instance.isDestroyed()) instance.finish();
                             }
-                            else {
-                                SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup,true);
-                                Intent intent = new Intent();
-                                intent.setClass(QRLoginActivity.this, SplashActivity.class);
-                                startActivity(intent);
-                            }
+                            else SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup,true);
+
+                            ConfInfoApi.refreshHeaders();
+
+                            Intent intent = new Intent();
+                            intent.setClass(QRLoginActivity.this, SplashActivity.class);
+                            startActivity(intent);
 
                             finish();
                             this.cancel();

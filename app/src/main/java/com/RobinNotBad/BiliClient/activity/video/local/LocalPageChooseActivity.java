@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.video.local;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -9,8 +8,10 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliClient;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.PageChooseAdapter;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
@@ -80,8 +81,8 @@ public class LocalPageChooseActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        Activity instance = LocalListActivity.getInstance(LocalListActivity.class);
-        if(deleted && instance != null) ((LocalListActivity)(instance)).refresh();
+        InstanceActivity instance = BiliClient.instance;
+        if(deleted && instance instanceof LocalListActivity && !instance.isDestroyed()) ((LocalListActivity)(instance)).refresh();
         super.onDestroy();
     }
 }

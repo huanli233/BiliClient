@@ -35,13 +35,7 @@ public class MessageActivity extends InstanceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-
-        findViewById(R.id.top).setOnClickListener(view -> {
-            Intent intent = new Intent();
-            intent.setClass(this, MenuActivity.class);
-            intent.putExtra("from",7);
-            startActivity(intent);
-        });
+        setMenuClick(6);
                 
         MaterialCardView reply = findViewById(R.id.reply);
         reply.setOnClickListener(view -> {

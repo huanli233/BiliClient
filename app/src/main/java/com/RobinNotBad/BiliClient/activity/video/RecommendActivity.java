@@ -41,17 +41,13 @@ public class RecommendActivity extends InstanceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_main_refresh);
+        setMenuClick(0);
         Log.e("debug","进入推荐页");
 
         recyclerView = findViewById(R.id.recyclerView);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this::refreshRecommend);
-        findViewById(R.id.top).setOnClickListener(view -> {
-            Intent intent = new Intent();
-            intent.setClass(RecommendActivity.this, MenuActivity.class);
-            intent.putExtra("from",0);
-            startActivity(intent);
-        });
+
 
         TextView title = findViewById(R.id.pageName);
         title.setText("推荐");

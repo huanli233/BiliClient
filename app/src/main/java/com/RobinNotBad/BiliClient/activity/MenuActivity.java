@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.RobinNotBad.BiliClient.BiliClient;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
@@ -40,7 +41,6 @@ public class MenuActivity extends BaseActivity {
         add(PreciousActivity.class);
         add(SearchActivity.class);
         add(DynamicActivity.class);
-        add(QRLoginActivity.class);
         add(MySpaceActivity.class);
         add(MessageActivity.class);
         add(LocalListActivity.class);
@@ -65,10 +65,9 @@ public class MenuActivity extends BaseActivity {
             add(findViewById(R.id.menu_precious));
             add(findViewById(R.id.menu_search));
             add(findViewById(R.id.menu_dynamic));
-            add(findViewById(R.id.menu_login));
             add(findViewById(R.id.menu_myspace));
             add(findViewById(R.id.menu_message));
-            add(findViewById(R.id.menu_login));
+            add(findViewById(R.id.menu_local));
             add(findViewById(R.id.menu_settings));
             add(findViewById(R.id.menu_exit));
         }};
@@ -77,6 +76,11 @@ public class MenuActivity extends BaseActivity {
             findViewById(R.id.menu_myspace).setVisibility(View.GONE);
             findViewById(R.id.menu_dynamic).setVisibility(View.GONE);
             findViewById(R.id.menu_message).setVisibility(View.GONE);
+            findViewById(R.id.menu_login).setOnClickListener(view -> {
+                Intent intent1 = new Intent();
+                intent1.setClass(this,QRLoginActivity.class);
+                startActivity(intent1);
+            });
         }
         else findViewById(R.id.menu_login).setVisibility(View.GONE);
 
@@ -95,8 +99,8 @@ public class MenuActivity extends BaseActivity {
         findViewById(R.id.menu_exit).setOnClickListener(view -> {
             classList.add(SearchOldActivity.class);
             for(int j = 0;j<classList.size();j++){
-                InstanceActivity instance = InstanceActivity.getInstance(classList.get(j));
-                if(instance != null) instance.finish();
+                InstanceActivity instance = BiliClient.instance;
+                if(instance != null && !instance.isDestroyed()) instance.finish();
             }
             finish();
         });
@@ -109,8 +113,8 @@ public class MenuActivity extends BaseActivity {
 
     private void killAndJump(int i){
         if (i <= classList.size() && i != from){
-            InstanceActivity instance = InstanceActivity.getInstance(classList.get(from));
-            if(instance != null) instance.finish();
+            InstanceActivity instance = BiliClient.instance;
+            if(instance != null && !instance.isDestroyed()) instance.finish();
             if(i != classList.size()) {
                 Intent intent = new Intent();
                 intent.setClass(MenuActivity.this, classList.get(i));

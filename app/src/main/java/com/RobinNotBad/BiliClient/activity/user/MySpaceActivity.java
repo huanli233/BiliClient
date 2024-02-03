@@ -7,8 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.activity.settings.QRLoginActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SpecialLoginActivity;
@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
+
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -40,14 +41,9 @@ public class MySpaceActivity extends InstanceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myspace);
+        setMenuClick(5);
         Log.e("debug","进入个人页");
 
-        findViewById(R.id.top).setOnClickListener(view -> {
-            Intent intent = new Intent();
-            intent.setClass(MySpaceActivity.this, MenuActivity.class);
-            intent.putExtra("from",6);
-            startActivity(intent);
-        });
         userAvatar = findViewById(R.id.userAvatar);
         userName = findViewById(R.id.userName);
         userFans = findViewById(R.id.userFans);

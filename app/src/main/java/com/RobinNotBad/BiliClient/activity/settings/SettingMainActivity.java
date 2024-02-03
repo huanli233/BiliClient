@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -31,14 +30,8 @@ public class SettingMainActivity extends InstanceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_main);
+        setMenuClick(8);
         Log.e("debug","进入设置页");
-
-        findViewById(R.id.top).setOnClickListener(view -> {
-            Intent intent = new Intent();
-            intent.setClass(this,MenuActivity.class);
-            intent.putExtra("from",9);
-            startActivity(intent);
-        });
 
         //登录
         MaterialCardView login = findViewById(R.id.login);

@@ -2,18 +2,18 @@ package com.RobinNotBad.BiliClient.activity.video.local;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.LocalVideoAdapter;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
@@ -34,7 +34,6 @@ public class LocalListActivity extends InstanceActivity {
     private final ArrayList<LocalVideo> videoList = new ArrayList<>(10);
     private LocalVideoAdapter adapter;
 
-    private Boolean isDoubleClicked;
     private int longClickPosition=-1;
 
     @SuppressLint("MissingInflatedId")
@@ -42,14 +41,7 @@ public class LocalListActivity extends InstanceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_main_refresh);
-
-
-        findViewById(R.id.top).setOnClickListener(view -> {
-            Intent intent = new Intent();
-            intent.setClass(LocalListActivity.this, MenuActivity.class);
-            intent.putExtra("from",8);
-            startActivity(intent);
-        });
+        setMenuClick(7);
 
         recyclerView = findViewById(R.id.recyclerView);
 
