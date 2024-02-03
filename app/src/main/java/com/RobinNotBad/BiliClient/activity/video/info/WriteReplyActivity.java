@@ -14,6 +14,9 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class WriteReplyActivity extends BaseActivity {
 
     boolean sent = false;
@@ -51,36 +54,24 @@ public class WriteReplyActivity extends BaseActivity {
                                 int result = ReplyApi.sendReply(oid, rpid, parent, text);
 
                                 sent = true;
-                                String toast_msg = "评论发送失败TAT\n错误码:" + result;
-                                switch (result){
-                                    case 0:
-                                        runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, "发送成功>w<", Toast.LENGTH_SHORT).show());
-                                        finish();
-                                        break;
-                                    case -101:
-                                        toast_msg = "没有登录哦";
-                                        break;
-                                    case -102:
-                                        toast_msg = "账号已被封禁";
-                                        break;
-                                    case -509:
-                                        toast_msg = "请求太频繁哩TAT";
-                                        break;
-                                    case 12015:
-                                        toast_msg = "需要评论验证码TAT";
-                                        break;
-                                    case 12016:
-                                        toast_msg = "包含敏感内容";
-                                        break;
-                                    case 12025:
-                                        toast_msg = "字数过多啦！QAQ";
-                                        break;
-                                    case 12035:
-                                        toast_msg = "被拉黑哩..";
-                                        break;
+
+                                if(result==0) {
+                                    runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, "发送成功>w<", Toast.LENGTH_SHORT).show());
+                                    finish();
                                 }
-                                String finalToast_msg = toast_msg;
-                                runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, finalToast_msg, Toast.LENGTH_SHORT).show());
+                                else {
+                                    Map<Integer,String> msgMap = new HashMap<Integer,String>(){{
+                                        put(-101,"没有登录or登录信息有误");
+                                        put(-102,"账号被封禁");
+                                        put(-509,"请求过于频繁！");
+                                        put(12015,"需要评论验证码...？");
+                                        put(12016,"包含敏感内容！");
+                                        put(12025,"字数过多啦QAQ");
+                                        put(12035,"被拉黑了...");
+                                    }};
+                                    String toast_msg = "评论发送失败：\n" + (msgMap.containsKey(result) ? msgMap.get(result) : result);
+                                    runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, toast_msg, Toast.LENGTH_SHORT).show());
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
