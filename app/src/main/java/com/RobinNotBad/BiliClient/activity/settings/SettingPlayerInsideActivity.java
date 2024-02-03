@@ -15,7 +15,7 @@ import com.RobinNotBad.BiliClient.activity.player.PlayerActivity;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-public class SettingClientPlayerActivity extends BaseActivity {
+public class SettingPlayerInsideActivity extends BaseActivity {
     private RadioButton SWtexture,SWsurface,SWhard,SWsoft,SWopensles,SWaudiotrack,SWonline,SWdownload;
     private EditText DMmaxline,danmakusize,danmakuspeed,danmaku_transparency;
     private SwitchCompat SWLClick,SWloop,danmaku_allowoverlap,danmaku_mergeduplicate,ui_round,ui_showRotateBtn,ui_showDanmakuBtn,ui_showLoopBtn;
@@ -73,10 +73,7 @@ public class SettingClientPlayerActivity extends BaseActivity {
         findViewById(R.id.preview).setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setClass(this,PlayerActivity.class);
-            intent.putExtra("cookie", SharedPreferencesUtil.getString("cookies", ""));
-            intent.putExtra("mode", "1");
-            intent.putExtra("url", "114514test");
-            intent.putExtra("danmaku", "114514test");
+            intent.putExtra("mode", -1);
             intent.putExtra("title", "页面预览");
             startActivity(intent);
         });

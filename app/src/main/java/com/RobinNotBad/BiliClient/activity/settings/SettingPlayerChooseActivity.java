@@ -1,10 +1,10 @@
 package com.RobinNotBad.BiliClient.activity.settings;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.appcompat.widget.SwitchCompat;
 import com.RobinNotBad.BiliClient.R;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 //选择播放器
 
-public class SettingPlayerActivity extends BaseActivity {
+public class SettingPlayerChooseActivity extends BaseActivity {
 
     String player = SharedPreferencesUtil.getString("player","null");
     MaterialCardView clientPlayer,mtvPlayer,aliangPlayer;
@@ -68,6 +68,12 @@ public class SettingPlayerActivity extends BaseActivity {
         }
 
         setOnClick();
+        clientPlayer.setOnLongClickListener(view -> {
+            Intent intent = new Intent();
+            intent.setClass(this,SettingPlayerInsideActivity.class);
+            startActivity(intent);
+            return true;
+        });
     }
 
     @SuppressLint("SuspiciousIndentation")
@@ -104,11 +110,11 @@ public class SettingPlayerActivity extends BaseActivity {
         }
         switch(playerList[checkPosition+1]){
             case "mtvPlayer":
-                if(Build.VERSION.SDK_INT <= 19 && !just_create) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，请使用QQ群中提供的改版小电视播放器",-1,false,0);
+                if(Build.VERSION.SDK_INT <= 19 && !just_create) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，请使用内置播放器或QQ群中提供的改版小电视播放器",-1,false,0);
                 break;
             
             case "aliangPlayer":
-                if(Build.VERSION.SDK_INT <= 19 && !just_create) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，可能无法使用凉腕播放器",-1,false,0);
+                if(Build.VERSION.SDK_INT <= 19 && !just_create) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，可能无法使用凉腕播放器，可以使用内置播放器或QQ群中提供的改版小电视播放器",-1,false,0);
                 break;
 
             default:

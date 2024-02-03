@@ -173,12 +173,12 @@
                     android:id="@+id/button_sound_cut"
                     android:layout_width="34dp"
                     android:layout_height="34dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:background="?attr/selectableItemBackground"
                     android:scaleType="fitXY"
                     android:src="@mipmap/soundcut"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/button_video"
+                    app:layout_constraintEnd_toStartOf="@+id/button_video"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
@@ -199,12 +199,12 @@
                     android:id="@+id/button_sound_add"
                     android:layout_width="34dp"
                     android:layout_height="34dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:background="?attr/selectableItemBackground"
                     android:scaleType="fitXY"
                     android:src="@mipmap/soundadd"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/button_video"
+                    app:layout_constraintStart_toEndOf="@+id/button_video"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 

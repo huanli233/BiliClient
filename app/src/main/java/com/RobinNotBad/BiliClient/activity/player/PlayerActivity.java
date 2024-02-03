@@ -132,17 +132,24 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.e("加载", "加载");
-        IjkMediaPlayer.loadLibrariesOnce(null);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_new);
+        findview();
+        getExtras();
+
+        if(mode==-1) {
+            loading_text0.setText("预览中");
+            loading_text1.setText("点击上方标题栏退出");
+            return;
+        }
+
+        IjkMediaPlayer.loadLibrariesOnce(null);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
         }
 
-        findview();//找到所有控件
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             manager = (BatteryManager) getSystemService(BATTERY_SERVICE);
@@ -177,7 +184,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         Screenwidth = displayMetrics.widthPixels;//获取屏宽
         Screenheight = displayMetrics.heightPixels;//获取屏高
 
-        getExtras();
         setClickMgr();
         autohide();
 
@@ -477,7 +483,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         if (mDanmakuView != null && mode!=1) mDanmakuView.release();
         if(loadingShowTimer != null) loadingShowTimer.cancel();
 
-        if(danmakuFile.exists()) danmakuFile.delete();
+        if(danmakuFile != null && danmakuFile.exists()) danmakuFile.delete();
 
         Intent data = new Intent();
         data.putExtra("time", videonow);

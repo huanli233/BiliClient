@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerActivity;
+import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
 import com.RobinNotBad.BiliClient.adapter.MediaEpisodesAdapter;
 import com.RobinNotBad.BiliClient.api.bangumi_to_card;
@@ -152,7 +152,7 @@ public class MediaInfoFragment extends Fragment {
             startActivity(intent);
         });
         playButton.setOnLongClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), SettingPlayerActivity.class);
+            Intent intent = new Intent(v.getContext(), SettingPlayerChooseActivity.class);
             startActivity(intent);
             return true;
         });

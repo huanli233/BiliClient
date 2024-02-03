@@ -54,7 +54,7 @@ public class SettingMainActivity extends InstanceActivity {
         MaterialCardView playerSetting = findViewById(R.id.playerSetting);
         playerSetting.setOnClickListener(view -> {
             Intent intent = new Intent();
-            intent.setClass(this, SettingPlayerActivity.class);
+            intent.setClass(this, SettingPlayerChooseActivity.class);
             startActivity(intent);
         });
         
@@ -63,7 +63,7 @@ public class SettingMainActivity extends InstanceActivity {
         MaterialCardView clientPlayerSetting = findViewById(R.id.clientPlayerSetting);
         clientPlayerSetting.setOnClickListener(view -> {
             Intent intent = new Intent();
-            intent.setClass(this, SettingClientPlayerActivity.class);
+            intent.setClass(this, SettingPlayerInsideActivity.class);
             startActivity(intent);
         });
 

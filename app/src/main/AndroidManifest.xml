@@ -81,7 +81,7 @@
             android:label="实验性功能"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.settings.SettingClientPlayerActivity"
+            android:name=".activity.settings.SettingPlayerInsideActivity"
             android:exported="true"
             android:label="内置播放器设置"
             android:screenOrientation="portrait" />
@@ -153,7 +153,7 @@
             android:label="添加收藏"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.settings.SettingPlayerActivity"
+            android:name=".activity.settings.SettingPlayerChooseActivity"
             android:exported="true"
             android:label="选择播放器"
             android:screenOrientation="portrait" />

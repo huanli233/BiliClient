@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.player.PlayerActivity;
-import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerActivity;
+import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -88,7 +88,7 @@ public class PlayerApi {
                 break;
 
             default:
-                intent.setClass(context, SettingPlayerActivity.class);
+                intent.setClass(context, SettingPlayerChooseActivity.class);
                 break;
         }
         context.startActivity(intent);

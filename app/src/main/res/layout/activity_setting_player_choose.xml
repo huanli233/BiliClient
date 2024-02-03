@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.settings.SettingPlayerActivity">
+    tools:context=".activity.settings.SettingPlayerChooseActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top"
@@ -115,7 +115,7 @@
                         android:layout_marginStart="6dp"
                         android:layout_marginBottom="10dp"
                         android:lines="1"
-                        android:text="目前处于测试阶段"
+                        android:text="长按这里进入设置"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
