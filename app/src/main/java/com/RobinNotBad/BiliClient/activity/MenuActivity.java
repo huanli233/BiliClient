@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
 import com.RobinNotBad.BiliClient.activity.search.SearchOldActivity;
 import com.RobinNotBad.BiliClient.activity.settings.QRLoginActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingMainActivity;
+import com.RobinNotBad.BiliClient.activity.settings.SpecialLoginActivity;
 import com.RobinNotBad.BiliClient.activity.user.MySpaceActivity;
 import com.RobinNotBad.BiliClient.activity.video.PopularActivity;
 import com.RobinNotBad.BiliClient.activity.video.PreciousActivity;
@@ -78,7 +80,11 @@ public class MenuActivity extends BaseActivity {
             findViewById(R.id.menu_message).setVisibility(View.GONE);
             findViewById(R.id.menu_login).setOnClickListener(view -> {
                 Intent intent1 = new Intent();
-                intent1.setClass(this,QRLoginActivity.class);
+                if(Build.VERSION.SDK_INT>=19) intent1.setClass(this,QRLoginActivity.class);
+                else{
+                    intent1.setClass(this, SpecialLoginActivity.class);
+                    intent1.putExtra("login",true);
+                }
                 startActivity(intent1);
             });
         }
@@ -117,7 +123,10 @@ public class MenuActivity extends BaseActivity {
             if(instance != null && !instance.isDestroyed()) instance.finish();
             if(i != classList.size()) {
                 Intent intent = new Intent();
-                intent.setClass(MenuActivity.this, classList.get(i));
+
+                if(i==3 && SharedPreferencesUtil.getBoolean("old_search_enable",false)) intent.setClass(this,SearchOldActivity.class);
+                else intent.setClass(MenuActivity.this, classList.get(i));
+
                 startActivity(intent);
             }
         }

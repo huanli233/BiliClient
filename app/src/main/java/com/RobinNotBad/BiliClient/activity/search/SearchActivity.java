@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.activity.search;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -55,13 +54,6 @@ public class SearchActivity extends InstanceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        if(SharedPreferencesUtil.getBoolean("old_search_enable",false)){
-            Log.e("debug","送到旧版搜索");
-            Intent intent = new Intent(this,SearchOldActivity.class);
-            startActivity(intent);
-            finish();
-        }
         
         setContentView(R.layout.activity_search);
         setMenuClick(3);
