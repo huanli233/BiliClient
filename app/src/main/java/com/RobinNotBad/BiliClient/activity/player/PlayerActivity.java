@@ -113,6 +113,8 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
     private boolean prepared = false;
 
+    private boolean needSurfaceHolder = true;
+
     private boolean finishWatching = false;
 
     private BatteryView batteryView;
@@ -542,6 +544,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                         Surface surface = new Surface(mSurfaceTexture);
                         ijkPlayer.setSurface(surface);
                         MPPrepare(nowurl);
+                        Log.e("debug","设置surfaceTexture成功！");
                         this.cancel();
                     }
                 }
@@ -555,7 +558,10 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
             surfaceHolder.addCallback(new SurfaceHolder.Callback() {
                 @Override
                 public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-                    ijkPlayer.setDisplay(surfaceHolder);
+                    if(needSurfaceHolder) {
+                        ijkPlayer.setDisplay(surfaceHolder);
+                        needSurfaceHolder = false;
+                    }
                     if(prepared) {
                         Log.e("debug", "重新设置Holder");
                         ijkPlayer.seekTo(progressBar.getProgress());
@@ -567,9 +573,28 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                 @Override
                 public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
                     Log.e("debug", "Holder没了");
+                    needSurfaceHolder = true;
                     ijkPlayer.setDisplay(null);
                 }
             });
+            Timer textureTimer = new Timer();
+            textureTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Log.e("debug","循环检测");
+                    if(!needSurfaceHolder) {
+                        Log.e("debug","循环检测被打断");
+                        this.cancel();
+                    }
+                    if(!surfaceHolder.isCreating()){
+                        needSurfaceHolder = false;
+                        ijkPlayer.setDisplay(surfaceHolder);
+                        MPPrepare(nowurl);
+                        Log.e("debug","设置surfaceHolder成功！");
+                        this.cancel();
+                    }
+                }
+            },0,200);
         }
     }
 

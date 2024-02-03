@@ -69,21 +69,6 @@ public class JumpToPlayerActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     private void requestVideo(long aid, String bvid, long cid) {
         CenterThreadPool.run(()->{
-//            String url;
-            /*if(SharedPreferencesUtil.getBoolean("high_res",false)){
-                if (aid == 0) {
-                    url = "https://api.bilibili.com/x/player/playurl?bvid=" + bvid + "&cid=" + cid + "&qn=80&type=mp4";
-                } else {
-                    url = "https://api.bilibili.com/x/player/playurl?avid=" + aid + "&cid=" + cid + "&qn=80&type=mp4";
-                }
-            }
-            else {
-                if (aid == 0) {
-                    url = "https://api.bilibili.com/x/player/playurl?platform=html5&bvid=" + bvid + "&cid=" + cid + "&qn=16&type=mp4";
-                } else {
-                    url = "https://api.bilibili.com/x/player/playurl?platform=html5&avid=" + aid + "&cid=" + cid + "&qn=16&type=mp4";
-                }
-            }*/ //原来的方法看起来太多if else 闲的没事的ic改了改
 
             String url = "https://api.bilibili.com/x/player/wbi/playurl?"
                     + (aid == 0 ? ("bvid=" + bvid): ("avid=" + aid))
