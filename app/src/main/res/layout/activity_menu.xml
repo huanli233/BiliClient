@@ -60,228 +60,64 @@
             android:paddingHorizontal="8dp"
             android:orientation="vertical">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/main"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/menu_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:text="登录" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="推荐" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/popular"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/menu_recommend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:text="推荐"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="热门" />
-            </com.google.android.material.card.MaterialCardView>
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/precious"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/menu_popular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="入站必刷" />
-            </com.google.android.material.card.MaterialCardView>
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/dynamic"
+                android:text="热门"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/menu_precious"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="动态" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/search"
+                android:text="每周必刷"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/menu_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="搜索" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/login"
+                android:text="搜索"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/menu_dynamic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:text="动态"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="登录"
-                    android:visibility="visible" />
-            </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/profile"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/menu_myspace"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="我的"
-                    android:visibility="visible" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/message"
+                android:text="我的"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/menu_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="消息"
-                    android:visibility="visible" />
-            </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/local"
+                android:text="消息"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/menu_local"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="缓存" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/settings"
+                android:text="缓存"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/menu_settings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="设置" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/exit"
+                android:text="设置"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/menu_exit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="退出" />
-            </com.google.android.material.card.MaterialCardView>
+                android:text="退出"/>
 
         </LinearLayout>
     </ScrollView>

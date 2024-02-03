@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
@@ -21,7 +22,7 @@ import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,32 +59,32 @@ public class MenuActivity extends BaseActivity {
 
         findViewById(R.id.top).setOnClickListener(view -> finish());
 
-        List<MaterialCardView> cardList = new ArrayList<MaterialCardView>() {{
-            add(findViewById(R.id.main));
-            add(findViewById(R.id.popular));
-            add(findViewById(R.id.precious));
-            add(findViewById(R.id.search));
-            add(findViewById(R.id.dynamic));
-            add(findViewById(R.id.login));
-            add(findViewById(R.id.profile));
-            add(findViewById(R.id.message));
-            add(findViewById(R.id.local));
-            add(findViewById(R.id.settings));
-            add(findViewById(R.id.exit));
+        List<MaterialButton> cardList = new ArrayList<MaterialButton>() {{
+            add(findViewById(R.id.menu_recommend));
+            add(findViewById(R.id.menu_popular));
+            add(findViewById(R.id.menu_precious));
+            add(findViewById(R.id.menu_search));
+            add(findViewById(R.id.menu_dynamic));
+            add(findViewById(R.id.menu_login));
+            add(findViewById(R.id.menu_myspace));
+            add(findViewById(R.id.menu_message));
+            add(findViewById(R.id.menu_login));
+            add(findViewById(R.id.menu_settings));
+            add(findViewById(R.id.menu_exit));
         }};
 
         if(SharedPreferencesUtil.getLong("mid",0) == 0) {
-            findViewById(R.id.profile).setVisibility(View.GONE);
-            findViewById(R.id.dynamic).setVisibility(View.GONE);
-            findViewById(R.id.message).setVisibility(View.GONE);
+            findViewById(R.id.menu_myspace).setVisibility(View.GONE);
+            findViewById(R.id.menu_dynamic).setVisibility(View.GONE);
+            findViewById(R.id.menu_message).setVisibility(View.GONE);
         }
-        else findViewById(R.id.login).setVisibility(View.GONE);
+        else findViewById(R.id.menu_login).setVisibility(View.GONE);
 
         if(!SharedPreferencesUtil.getBoolean("menu_popular",true))
-            findViewById(R.id.popular).setVisibility(View.GONE);
+            findViewById(R.id.menu_popular).setVisibility(View.GONE);
 
         if(!SharedPreferencesUtil.getBoolean("menu_precious",false))
-            findViewById(R.id.precious).setVisibility(View.GONE);
+            findViewById(R.id.menu_precious).setVisibility(View.GONE);
 
         for (int i = 0; i < cardList.size(); i++) {
             int finalI = i;
@@ -91,7 +92,7 @@ public class MenuActivity extends BaseActivity {
         }
         
         //我求求你了退出按钮能用吧....
-        findViewById(R.id.exit).setOnClickListener(view -> {
+        findViewById(R.id.menu_exit).setOnClickListener(view -> {
             classList.add(SearchOldActivity.class);
             for(int j = 0;j<classList.size();j++){
                 InstanceActivity instance = InstanceActivity.getInstance(classList.get(j));

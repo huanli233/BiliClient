@@ -3,14 +3,14 @@ package com.RobinNotBad.BiliClient.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +28,11 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.button.MaterialButton;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 //用户信息页专用Adapter 独立出来也是为了做首项不同
@@ -39,7 +43,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     ArrayList<Dynamic> dynamicList;
     UserInfo userInfo;
 
-    private boolean followBtnTemp = false; //防止关注失败改变按钮状态时触发逻辑用的缓存
+    private boolean follow_onprocess = false;
 
     public UserInfoAdapter(Context context, ArrayList<Dynamic> dynamicList, UserInfo userInfo) {
         this.context = context;
@@ -107,28 +111,34 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             if((userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)) || (userInfo.mid == 0)) userInfoHolder.followBtn.setVisibility(View.GONE);
             else userInfoHolder.followBtn.setChecked(userInfo.followed);
-            userInfoHolder.followBtn.setOnCheckedChangeListener((compoundButton, b) -> {
-                if(followBtnTemp) followBtnTemp = false;
-                else{
+            userInfoHolder.followBtn.setOnClickListener(btn -> {
+                if(!follow_onprocess) {
+                    follow_onprocess = true;
+                    userInfoHolder.setFollowed(!(userInfo.followed));
                     CenterThreadPool.run(() -> {
-                        if(!UserInfoApi.followUser(userInfo.mid,b)){
-                            followBtnTemp = true;
-                            CenterThreadPool.runOnMainThread(() -> {
-                                MsgUtil.toast("操作失败",context);
-                                compoundButton.setChecked(!b);
-                            });
-                        } else {
-                            CenterThreadPool.runOnMainThread(() -> {
-                                MsgUtil.toast("操作成功",context);
-                                if(b) userInfoHolder.msgBtn.setVisibility(View.VISIBLE);
-                                else userInfoHolder.msgBtn.setVisibility(View.GONE);
-                            });
+                        try {
+                            int result = UserInfoApi.followUser(userInfo.mid,!(userInfo.followed));
+                            if(result == 0){
+                                userInfo.followed = !(userInfo.followed);
+                                CenterThreadPool.runOnMainThread(()->MsgUtil.toast("操作成功",context));
+                            } else {
+                                userInfoHolder.setFollowed(userInfo.followed);
+                                CenterThreadPool.runOnMainThread(() -> MsgUtil.toast("操作失败："+result,context));
+                            }
+                            follow_onprocess = false;
+                        } catch (IOException e) {
+                            follow_onprocess = false;
+                            CenterThreadPool.runOnMainThread(()->MsgUtil.netErr(context));
+                        } catch (JSONException e) {
+                            follow_onprocess = false;
+                            CenterThreadPool.runOnMainThread(()->MsgUtil.jsonErr(e,context));
                         }
                     });
                 }
             });
 
-            if(userInfo.followed) userInfoHolder.msgBtn.setVisibility(View.VISIBLE);
+            userInfoHolder.setFollowed(userInfo.followed);
+
             userInfoHolder.msgBtn.setOnClickListener(view -> {
                 Intent intent = new Intent(context, PrivateMsgActivity.class);
                 intent.putExtra("uid",userInfo.mid);
@@ -158,8 +168,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView userName,userFans,userDesc,userNotice,userOfficial;
         ImageView userAvatar;
 
-        ToggleButton followBtn;
-        Button msgBtn;
+        MaterialButton followBtn,msgBtn;
 
         public UserInfoHolder(@NonNull View itemView) {
             super(itemView);
@@ -171,6 +180,12 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             userAvatar = itemView.findViewById(R.id.userAvatar);
             followBtn = itemView.findViewById(R.id.followBtn);
             msgBtn = itemView.findViewById(R.id.msgBtn);
+        }
+
+        public void setFollowed(boolean followed){
+            msgBtn.setVisibility((followed ? View.VISIBLE : View.GONE));
+            followBtn.setBackgroundTintList(ColorStateList.valueOf((followed ? Color.argb(0xDD,0x26,0x26,0x26) : Color.argb(0xFE,0xF0,0x5D,0x8E))));
+            followBtn.setText((followed ? "已关注" : "关注"));
         }
     }
 }

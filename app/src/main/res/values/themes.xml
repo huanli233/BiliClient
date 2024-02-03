@@ -2,14 +2,17 @@
     <style name="Theme.BiliClient" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@color/bgblack</item>
-        <item name="android:textColor">@color/textwhite</item>
         <item name="statusBarBackground">@color/pink</item>
-        <item name="colorSwitchThumbNormal">@color/textwhite</item>
-        <item name="colorControlActivated">@color/textwhite</item>
         <item name="android:colorForeground">@color/textwhite</item>
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowSwipeToDismiss" tools:targetApi="kitkat_watch">true</item>
+
         <item name="materialCardViewStyle">@style/CardStyle</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
+
+        <item name="colorSwitchThumbNormal">@color/textwhite</item>
+        <item name="colorControlActivated">@color/textwhite</item>
+        <item name="android:textColor">@color/textwhite</item>
         <item name="editTextColor">@color/textwhite</item>
     </style>
     <style name="Theme.NoSwipe" parent="Theme.BiliClient">

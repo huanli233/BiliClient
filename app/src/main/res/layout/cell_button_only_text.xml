@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.button.MaterialButton xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/btn"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="2dp"
     android:layout_marginEnd="2dp"
+    android:insetTop="6dp"
+    android:insetBottom="6dp"
     android:minWidth="0dp"
-    android:text="1"
-    app:backgroundTint="#78242424"
-    app:cornerRadius="5dp"
-    app:strokeColor="#707070"
-    app:strokeWidth="0.1dp"></com.google.android.material.button.MaterialButton>
+    android:text="1"/>

@@ -22,6 +22,7 @@ public class MsgUtil {
 
     public static void jsonErr(JSONException e, Context context){
         toast("数据解析错误(＃°Д°)\n" + e.toString(),context);
+        e.printStackTrace();
     }
     public static void netErr(Context context) {
         quickErr(err_net,context);

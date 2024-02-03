@@ -10,11 +10,9 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import java.util.Objects;
-
 public class SettingLaboratoryActivity extends BaseActivity {
 
-    private SwitchCompat refresh_cookie,like_coin_fav_enable,ai_summary;
+    private SwitchCompat refresh_cookie,like_coin_fav_enable;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -29,14 +27,11 @@ public class SettingLaboratoryActivity extends BaseActivity {
         refresh_cookie.setChecked(SharedPreferencesUtil.getBoolean("dev_refresh_cookie",true));
         like_coin_fav_enable = findViewById(R.id.like_coin_fav_enable);
         like_coin_fav_enable.setChecked(SharedPreferencesUtil.getBoolean("like_coin_fav_enable",false));
-        ai_summary = findViewById(R.id.ai_summary);
-        ai_summary.setChecked(SharedPreferencesUtil.getBoolean("ai_summary",false));
     }
 
     private void save() {
         SharedPreferencesUtil.putBoolean("dev_refresh_cookie", refresh_cookie.isChecked());
         SharedPreferencesUtil.putBoolean("like_coin_fav_enable", like_coin_fav_enable.isChecked());
-        SharedPreferencesUtil.putBoolean("ai_summary", ai_summary.isChecked());
     }
 
     @Override

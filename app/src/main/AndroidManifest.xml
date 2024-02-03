@@ -215,11 +215,6 @@
             android:label="分页视频选集"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.video.info.AiSummaryActivity"
-            android:exported="false"
-            android:label="AI总结"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.user.MySpaceActivity"
             android:exported="true"
             android:label="我的"

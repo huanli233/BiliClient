@@ -3,9 +3,6 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -49,6 +46,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
 import org.json.JSONException;
@@ -119,12 +117,11 @@ public class VideoInfoFragment extends Fragment {
         views = view.findViewById(R.id.viewsCount);
         timeText = view.findViewById(R.id.timeText);
         durationText = view.findViewById(R.id.durationText);
-        MaterialCardView play = view.findViewById(R.id.play);
-        MaterialCardView addWatchlater = view.findViewById(R.id.addWatchlater);
+        MaterialButton play = view.findViewById(R.id.play);
+        MaterialButton addWatchlater = view.findViewById(R.id.addWatchlater);
         MaterialCardView upCard = view.findViewById(R.id.upInfo);
-        MaterialCardView addFavorite = view.findViewById(R.id.addFavorite);
-        MaterialCardView download = view.findViewById(R.id.download);
-        MaterialCardView ai_summary = view.findViewById(R.id.ai_summary);
+        MaterialButton addFavorite = view.findViewById(R.id.addFavorite);
+        MaterialButton download = view.findViewById(R.id.download);
         MaterialCardView like_coin_fav = view.findViewById(R.id.like_coin_fav);
         bvidText = view.findViewById(R.id.bvidText);
         danmakuCount = view.findViewById(R.id.danmakuCount);
@@ -133,7 +130,6 @@ public class VideoInfoFragment extends Fragment {
         fav = view.findViewById(R.id.btn_fav);
 
         if (SharedPreferencesUtil.getBoolean("like_coin_fav_enable", false)) like_coin_fav.setVisibility(View.VISIBLE);
-        if (SharedPreferencesUtil.getBoolean("ai_summary", false)) ai_summary.setVisibility(View.VISIBLE);
 
         CenterThreadPool.run(() -> {
 
@@ -319,16 +315,6 @@ public class VideoInfoFragment extends Fragment {
                             }
                         }
                     }
-                });
-
-                ai_summary.setOnClickListener(view1 -> {
-                    Intent intent = new Intent();
-                    intent.setClass(view.getContext(), AiSummaryActivity.class);
-                    intent.putExtra("aid", videoInfo.aid);
-                    intent.putExtra("bvid", videoInfo.bvid);
-                    intent.putExtra("cid", videoInfo.cids.get(0));
-                    intent.putExtra("mid", videoInfo.upMid);
-                    startActivity(intent);
                 });
 
                 upCard.setOnClickListener(view1 -> {

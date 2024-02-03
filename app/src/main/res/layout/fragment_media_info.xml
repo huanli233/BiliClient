@@ -89,7 +89,7 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/cell_button_only_text" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.button.MaterialButton
@@ -100,12 +100,8 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="10dp"
             android:text="播放"
-            app:backgroundTint="#78242424"
-            app:cornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/eposides"
-            app:strokeColor="#707070"
-            app:strokeWidth="0.1dp" />
+            app:layout_constraintTop_toBottomOf="@id/eposides" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

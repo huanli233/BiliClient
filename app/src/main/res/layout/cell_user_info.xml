@@ -94,32 +94,30 @@
         app:layout_constraintStart_toEndOf="@+id/officialIcon"
         app:layout_constraintTop_toBottomOf="@id/userNotice" />
 
-    <ToggleButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/followBtn"
         android:layout_width="0dp"
         android:layout_height="38dp"
         android:layout_marginTop="4dp"
+        android:insetTop="0dp"
+        app:strokeWidth="0dp"
+        android:insetBottom="0dp"
         android:layout_marginEnd="2dp"
-        android:background="@drawable/background_follow_btn"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:textColor="#fff"
-        android:textOff="关注"
-        android:textOn="已关注"
+        android:text="关注"
         app:layout_constraintEnd_toStartOf="@+id/msgBtn"
         app:layout_constraintStart_toStartOf="@+id/userDesc"
         app:layout_constraintTop_toBottomOf="@+id/userOfficial" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/msgBtn"
         android:layout_width="0dp"
         android:layout_height="38dp"
         android:layout_marginStart="2dp"
-        android:background="@drawable/background_grey_cardview"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        app:strokeWidth="0dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:backgroundTint="#dd262626"
         android:text="私信"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/userDesc"
         app:layout_constraintStart_toEndOf="@id/followBtn"
         app:layout_constraintTop_toTopOf="@id/followBtn" />
