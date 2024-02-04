@@ -27,7 +27,7 @@ public class Bangumi {
         public String title;
         public ArrayList<Episode> episodeList;
 
-        public Section(){};
+        public Section(){}
     }
 
     public static class Episode{
