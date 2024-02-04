@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.message;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,14 +27,13 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -184,6 +184,7 @@ public class PrivateMsgActivity extends BaseActivity {
             	runOnUiThread(()->MsgUtil.err(e,this));}
         });
     }
+    @SuppressLint("SuspiciousIndentation")
     private void loadMore() {
         isLoadingMore = true;
     	CenterThreadPool.run(()->{
