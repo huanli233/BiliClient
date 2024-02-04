@@ -40,17 +40,7 @@ public class NetWorkUtil
 
     public static Response get(String url) throws IOException
     {
-        Log.e("debug-get","----------------");
-        Log.e("debug-get-url",url);
-        Log.e("debug-get","----------------");
-        OkHttpClient client = getOkHttpInstance();
-        Request.Builder requestb = new Request.Builder().url(url).header("Referer", "https://www.bilibili.com/").addHeader("Accept", "*/*").addHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-        Request request = requestb.build();
-        Response response = client.newCall(request).execute();
-        saveCookiesFromResponse(response);
-        if(response.isSuccessful())
-            return response;
-        return null;
+        return get(url,ConfInfoApi.webHeaders);
     }
 
     public static Response get(String url, ArrayList<String> headers) throws IOException

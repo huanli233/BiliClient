@@ -6,26 +6,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.util.Consumer;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.model.MediaSectionInfo;
+import com.RobinNotBad.BiliClient.listener.OnItemClickListener;
+import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.google.android.material.button.MaterialButton;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.ArrayList;
 
-public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdapter.MediaEpisodesViewHolder> {
-    private List<MediaSectionInfo.EpisodeInfo> data;
+public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdapter.EposidesHolder> {
+    private ArrayList<Bangumi.Episode> episodeList;
 
-    public Consumer<MediaSectionInfo.EpisodeInfo> onItemClickListener;
+    public OnItemClickListener listener;
     private int selectedItemIndex = 0;
 
-    public void setOnItemClickListener(Consumer<MediaSectionInfo.EpisodeInfo> onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
-
 
     public int getSelectedItemIndex() {
         return selectedItemIndex;
@@ -40,40 +38,36 @@ public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdap
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(MediaSectionInfo.EpisodeInfo[] data) {
-        this.data = Arrays.asList(data);
+    public void setData(ArrayList<Bangumi.Episode> episodeList) {
+        this.episodeList = episodeList;
         selectedItemIndex = 0;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public MediaEpisodesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public EposidesHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_button_only_text, parent, false);
-        return new MediaEpisodesViewHolder(view);
+        return new EposidesHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MediaEpisodesViewHolder holder, int position) {
-        MediaSectionInfo.EpisodeInfo episodeInfo = data.get(position);
-        if(onItemClickListener != null){
-            holder.outerClickListener = () -> onItemClickListener.accept(episodeInfo);
+    public void onBindViewHolder(@NonNull EposidesHolder holder, int position) {
+        if(listener != null){
+            holder.listener = listener;
         }
         holder.bind(position, selectedItemIndex == position);
     }
 
     @Override
-    public int getItemCount() {
-        return data != null ? data.size(): 0;
-    }
+    public int getItemCount() {return episodeList.size();}
 
-    public class MediaEpisodesViewHolder extends RecyclerView.ViewHolder {
+    public class EposidesHolder extends RecyclerView.ViewHolder {
 
-        private Runnable outerClickListener;
+        private OnItemClickListener listener;
         private final MaterialButton button;
 
-
-        public MediaEpisodesViewHolder(View view) {
+        public EposidesHolder(View view) {
             super(view);
             button = itemView.findViewById(R.id.btn);
         }
@@ -89,8 +83,8 @@ public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdap
                 ViewCompat.setBackgroundTintList(button, AppCompatResources.getColorStateList(itemView.getContext(), R.color.background_button));
                 button.setOnClickListener(v -> {
                     setSelectedItemIndex(currentIndex);
-                    if (outerClickListener != null) {
-                        outerClickListener.run();
+                    if (listener != null) {
+                        listener.onItemClick(currentIndex);
                     }
                 });
             }

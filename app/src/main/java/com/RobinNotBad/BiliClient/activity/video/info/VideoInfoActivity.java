@@ -16,16 +16,13 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
-import com.RobinNotBad.BiliClient.model.MediaSectionInfo;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +32,6 @@ public class VideoInfoActivity extends BaseActivity {
 
     private long aid;
     private String bvid;
-    private long mediaId;
 
     private List<Fragment> fragmentList;
     VideoReplyFragment replyFragment;
@@ -50,7 +46,6 @@ public class VideoInfoActivity extends BaseActivity {
         if(type == null) type = "video";
         this.aid = intent.getLongExtra("aid",114514);
         this.bvid = intent.getStringExtra("bvid");
-        this.mediaId = this.aid;
         //int layoutId;
         //if(type == "media") layoutId = R.layout.activity_simple_viewpager2;
         //else layoutId = R.layout.activity_simple_viewpager;
@@ -88,8 +83,8 @@ public class VideoInfoActivity extends BaseActivity {
         pageName.setText("视频详情");
 
         fragmentList = new ArrayList<>(2);
-        fragmentList.add(MediaInfoFragment.newInstance(mediaId));
-        replyFragment = VideoReplyFragment.newInstance(mediaId, 1,true);
+        fragmentList.add(BangumiInfoFragment.newInstance(aid));
+        replyFragment = VideoReplyFragment.newInstance(aid, 1,true);
         fragmentList.add(replyFragment);
 
         viewPager.setOffscreenPageLimit(fragmentList.size());
@@ -144,11 +139,8 @@ public class VideoInfoActivity extends BaseActivity {
         });
     }
 
-    public void setCurrentEpisodeInfo(MediaSectionInfo.EpisodeInfo currentEpisodeInfo) {
-        if(replyFragment!=null) runOnUiThread(()->replyFragment.refresh(currentEpisodeInfo.aid));
-        Log.e("","REF");
-        //fragmentList.set(1, VideoReplyFragment.newInstance(currentEpisodeInfo.aid, 1));
-        //if(mediaViewPager2Adapter != null) mediaViewPager2Adapter.notifyItemChanged(1);
+    public void setCurrentAid(long aid) {
+        if(replyFragment!=null) runOnUiThread(()->replyFragment.refresh(aid));
     }
 
 
