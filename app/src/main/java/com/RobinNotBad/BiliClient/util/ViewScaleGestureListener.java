@@ -5,7 +5,7 @@ import android.view.View;
 
 public class ViewScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
 
-    private View view;
+    private final View view;
     public ViewScaleGestureListener(View view) {
         super();
         this.view = view;

@@ -1,15 +1,11 @@
 package com.RobinNotBad.BiliClient.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,11 +80,7 @@ public class DownloadActivity extends BaseActivity {
         progressText = findViewById(R.id.progressText);
         progressView = findViewById(R.id.progressView);
 
-        WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
-        display.getRealMetrics(metrics);
-        scrHeight = metrics.heightPixels;
+        scrHeight = window_height;
 
         timer.schedule(showText,100,100);
         CenterThreadPool.run(()->{
