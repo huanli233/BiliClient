@@ -69,7 +69,7 @@ public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdap
         }
 
         void bind(int currentIndex, boolean isSelected) {
-            button.setText(String.valueOf(currentIndex + 1));
+            button.setText(episodeList.get(currentIndex).title);
             if (isSelected) {
                 button.setTextColor(0x78242424);
                 ViewCompat.setBackgroundTintList(button, AppCompatResources.getColorStateList(itemView.getContext(), R.color.background_button_selected));
