@@ -1,7 +1,5 @@
 package com.RobinNotBad.BiliClient.activity.player;
 
-import static android.media.AudioManager.STREAM_MUSIC;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -19,48 +17,18 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.TextureView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.view.*;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.NetWorkUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.*;
 import com.RobinNotBad.BiliClient.view.BatteryView;
 import com.bumptech.glide.Glide;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.zip.Inflater;
-
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.controller.IDanmakuView;
 import master.flame.danmaku.danmaku.loader.ILoader;
@@ -80,6 +48,14 @@ import okio.Sink;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.zip.Inflater;
+
+import static android.media.AudioManager.STREAM_MUSIC;
+
 public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.OnPreparedListener {
     private IDanmakuView mDanmakuView;
     private DanmakuContext mContext;
@@ -87,10 +63,10 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     private String url;
     private String danmaku;
     private int mode;
-    private boolean onLongClick= false;
+    private boolean onLongClick = false;
     private int videoall;
     private int videonow;
-    private ConstraintLayout control_layout,top_control,bottom_control,speed_layout;
+    private ConstraintLayout control_layout, top_control, bottom_control, speed_layout;
     private RelativeLayout videoArea;
     private LinearLayout right_control, loading_info;
     private IjkMediaPlayer ijkPlayer;
@@ -104,9 +80,13 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     private TextView text_now, text_all, showsound, text_title, loading_text0, loading_text1, text_speed, text_newspeed;
     private AudioManager audioManager;
     private ImageView danmaku_btn, circle, loop_btn, rotate_btn;
+    private ScaleGestureDetector scaleGestureDetector;
+    private float previousX, previousY;
+    private boolean isSingleClick;
+    private long singleClickMillis;
 
-    private final float[] speeds = {0.5F, 0.75F,1.0F,1.25F,1.5F,1.75F,2.0F,3.0F};
-    private final String[] speedTexts = {"x 0.5","x 0.75","x 1.0","x 1.25","x 1.5","x 1.75","x 2.0","x 3.0"};
+    private final float[] speeds = {0.5F, 0.75F, 1.0F, 1.25F, 1.5F, 1.75F, 2.0F, 3.0F};
+    private final String[] speedTexts = {"x 0.5", "x 0.75", "x 1.0", "x 1.25", "x 1.5", "x 1.75", "x 2.0", "x 3.0"};
 
     private int lastProgress;
     private boolean dmkPlaying;
@@ -124,12 +104,12 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     private boolean loop;
 
     private File danmakuFile;
-    
+
     @Override
     public void onBackPressed() {
-        if(!SharedPreferencesUtil.getBoolean("back_disable",false)) super.onBackPressed();
+        if (!SharedPreferencesUtil.getBoolean("back_disable", false)) super.onBackPressed();
     }
-    
+
     @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +118,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         setContentView(R.layout.activity_player_new);
         findview();
         getExtras();
-
-        if(mode==-1) {
+        if (mode == -1) {
             loading_text0.setText("预览中");
             loading_text1.setText("点击上方标题栏退出");
             return;
@@ -158,12 +137,12 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
             batteryView.setPower(manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
         } else batteryView.setVisibility(View.GONE);
 
-        loop = SharedPreferencesUtil.getBoolean("player_loop",false);
+        loop = SharedPreferencesUtil.getBoolean("player_loop", false);
         Glide.with(this).load(R.mipmap.load).into(circle);
 
         File cachepath = getExternalCacheDir();
-        if(!cachepath.exists()) cachepath.mkdirs();
-        danmakuFile = new File(cachepath,"danmaku.xml");
+        if (!cachepath.exists()) cachepath.mkdirs();
+        danmakuFile = new File(cachepath, "danmaku.xml");
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mContext = DanmakuContext.create();
@@ -189,21 +168,21 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         setClickMgr();
         autohide();
 
-        if(SharedPreferencesUtil.getBoolean("player_ui_showRotateBtn",true)) rotate_btn.setVisibility(View.VISIBLE);
+        if (SharedPreferencesUtil.getBoolean("player_ui_showRotateBtn", true)) rotate_btn.setVisibility(View.VISIBLE);
         else rotate_btn.setVisibility(View.GONE);
 
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
-                if(fromUser){
+                if (fromUser) {
                     int cgminute = position / 60000;
                     int cgsecond = position % 60000 / 1000;
                     String cgminStr;
                     String cgsecStr;
-                    if(cgminute < 10) cgminStr = "0" + cgminute;
+                    if (cgminute < 10) cgminStr = "0" + cgminute;
                     else cgminStr = String.valueOf(cgminute);
-                    if(cgsecond < 10) cgsecStr = "0" + cgsecond;
+                    if (cgsecond < 10) cgsecStr = "0" + cgsecond;
                     else cgsecStr = String.valueOf(cgsecond);
 
                     runOnUiThread(() -> text_now.setText(cgminStr + ":" + cgsecStr));
@@ -221,7 +200,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                 if (ijkPlayer != null) {
                     ijkPlayer.seekTo(progressBar.getProgress());
                     ischanging = false;
-                    if (mDanmakuView != null && mode!=1) {
+                    if (mDanmakuView != null && mode != 1) {
                         mDanmakuView.start(progressBar.getProgress());
                         mDanmakuView.pause();
                     }
@@ -233,7 +212,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         speed_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
-                if(fromUser) {
+                if (fromUser) {
                     text_newspeed.setText(speedTexts[position]);
                     text_speed.setText(speedTexts[position]);
                     ijkPlayer.setSpeed(speeds[position]);
@@ -242,7 +221,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                if(speedTimer!=null) speedTimer.cancel();
+                if (speedTimer != null) speedTimer.cancel();
             }
 
             @Override
@@ -254,26 +233,35 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                         runOnUiThread(() -> speed_layout.setVisibility(View.GONE));
                     }
                 };
-                speedTimer.schedule(timerTask,200);
+                speedTimer.schedule(timerTask, 200);
             }
         });
 
-        if(SharedPreferencesUtil.getBoolean("player_display",false)){
+        if (SharedPreferencesUtil.getBoolean("player_display", false)) {
+            scaleGestureDetector = new ScaleGestureDetector(this, new ViewScaleGestureListener(textureView));
             textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
                 @Override
                 public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
                     mSurfaceTexture = surfaceTexture;
                 }
-                @Override
-                public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {}
-                @Override
-                public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {return false;}
-                @Override
-                public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {}
-            });
-        }
 
-        new Thread(()->{
+                @Override
+                public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
+                }
+
+                @Override
+                public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
+                    return false;
+                }
+
+                @Override
+                public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {
+                }
+            });
+        } else {
+            scaleGestureDetector = new ScaleGestureDetector(this, new ViewScaleGestureListener(surfaceView));
+        }
+        CenterThreadPool.run(() -> {
             switch (mode) {
                 case 0:
                     Log.e("debug", "准备在线播放");
@@ -296,10 +284,9 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                     setDisplay(url);
                     break;
             }
-        }).start();
+        });
 
     }
-
 
 
     private void findview() {
@@ -334,11 +321,10 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         if (SharedPreferencesUtil.getBoolean("player_display", false)) {
             textureView = new TextureView(this);
-            videoArea.addView(textureView,params);
-        }
-        else {
+            videoArea.addView(textureView, params);
+        } else {
             surfaceView = new SurfaceView(this);
-            videoArea.addView(surfaceView,params);
+            videoArea.addView(surfaceView, params);
         }
 
         top_control.setOnClickListener(view -> finish());
@@ -353,26 +339,89 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
     private void getExtras() {
         Intent intent = getIntent();
-        mode = intent.getIntExtra("mode",0);//新增：模式  0=普通播放，1=本地无弹幕视频，2=本地有弹幕视频
+        mode = intent.getIntExtra("mode", 0);//新增：模式  0=普通播放，1=本地无弹幕视频，2=本地有弹幕视频
         url = intent.getStringExtra("url");//视频链接
         danmaku = intent.getStringExtra("danmaku");//弹幕链接
         String title = intent.getStringExtra("title");//视频标题
-        if (danmaku != null)Log.e("弹幕",danmaku);
-        if (url != null)Log.e("视频",url);
-        if (title != null)Log.e("标题", title);
+        if (danmaku != null) Log.e("弹幕", danmaku);
+        if (url != null) Log.e("视频", url);
+        if (title != null) Log.e("标题", title);
         Log.e("mode", String.valueOf(mode));
         if (title != null) text_title.setText(title);
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setClickMgr(){
+    private void setClickMgr() {
         //搞长按倍速累死个人
         //这个管普通点击
-        control_layout.setOnClickListener(view -> clickUI());
+        control_layout.setOnTouchListener((v, event) -> {
+            scaleGestureDetector.onTouchEvent(event);
+            int action = event.getActionMasked();
+            //双指场景， 放大, 拖动
+            if(action == MotionEvent.ACTION_MOVE && event.getPointerCount() == 2){
+                float currentX = event.getX(0) + event.getX(1) / 2;
+                float currentY = event.getY(0) + event.getY(1) / 2;
+                float deltaX = currentX - previousX;
+                float deltaY = currentY - previousY;
+                //move View
+                View view;
+                if(textureView != null){
+                    view = textureView;
+                } else {
+                    view = surfaceView;
+                }
+
+                view.setX(view.getX() + deltaX);
+                view.setY(view.getY() + deltaY);
+                previousX = currentX;
+                previousY = currentY;
+            }
+            //第二根指头落下
+            if(action == MotionEvent.ACTION_POINTER_DOWN){
+                previousX = event.getX(0) + event.getX(1) / 2;
+                previousY = event.getY(0) + event.getY(1) / 2;
+                isSingleClick = false;
+            }
+            //第一根指头落下
+            if(action == MotionEvent.ACTION_DOWN){
+                isSingleClick = true;
+                singleClickMillis = System.currentTimeMillis();
+            }
+            //当是单击场景且不是长按场景
+            if(action == MotionEvent.ACTION_UP && isSingleClick && !onLongClick){
+                clickUI();
+            }
+            //当是单击场景, 且手指未抬起， 通过延迟对长按的判断
+            if(action != MotionEvent.ACTION_UP && isSingleClick){
+                long now = System.currentTimeMillis();
+                if(now - singleClickMillis > 500){
+                    onLongClick = true;
+                } else {
+                    onLongClick = false;
+                }
+            }
+            //单击场景下的长按场景
+            if(onLongClick && isSingleClick && action != MotionEvent.ACTION_UP){
+                if (SharedPreferencesUtil.getBoolean("player_longclick", false) && ijkPlayer != null && (control_btn.getText() == "| |")) {
+                    hidecon();
+                    Vibrator vibrator = (Vibrator) getApplication().getSystemService(Service.VIBRATOR_SERVICE);
+                    vibrator.vibrate(20L);
+                    ijkPlayer.setSpeed(3.0F);
+                    text_speed.setText("x 3.0");
+                }
+            }
+            //单击场景下的长按场景, 手指抬起
+            if(onLongClick && isSingleClick && action == MotionEvent.ACTION_UP){
+                onLongClick = false;
+                ijkPlayer.setSpeed(speeds[speed_seekbar.getProgress()]);
+                text_speed.setText(speedTexts[speed_seekbar.getProgress()]);
+            }
+            return true;
+        });
 
         //这个管长按开始
-        control_layout.setOnLongClickListener(view -> {
-            if(SharedPreferencesUtil.getBoolean("player_longclick",false) && ijkPlayer !=null && (control_btn.getText() == "| |")) {
+        /*control_layout.setOnLongClickListener(view -> {
+            if (SharedPreferencesUtil.getBoolean("player_longclick", false) && ijkPlayer != null && (control_btn.getText() == "| |")) {
                 if (!onLongClick) {
                     hidecon();
                     Vibrator vibrator = (Vibrator) getApplication().getSystemService(Service.VIBRATOR_SERVICE);
@@ -383,18 +432,18 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                 }
             }
             return true;
-        });
+        });*/
 
         //这个管长按结束
-        control_layout.setOnTouchListener((view, motionEvent) -> {
-            if(motionEvent.getAction() == MotionEvent.ACTION_UP && onLongClick){
+        /*control_layout.setOnTouchListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP && onLongClick) {
                 onLongClick = false;
                 ijkPlayer.setSpeed(speeds[speed_seekbar.getProgress()]);
                 text_speed.setText(speedTexts[speed_seekbar.getProgress()]);
                 return true;
             }
             return false;
-        });
+        });*/
     }
 
 
@@ -403,18 +452,19 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         autoHideTimer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
-            public void run() {runOnUiThread(() -> {
-                right_control.setVisibility(View.GONE);
-                top_control.setVisibility(View.GONE);
-                bottom_control.setVisibility(View.GONE);
-                text_speed.setVisibility(View.GONE);
-            });
+            public void run() {
+                runOnUiThread(() -> {
+                    right_control.setVisibility(View.GONE);
+                    top_control.setVisibility(View.GONE);
+                    bottom_control.setVisibility(View.GONE);
+                    text_speed.setVisibility(View.GONE);
+                });
             }
         };
         autoHideTimer.schedule(timerTask, 4000);
     }
 
-    private void clickUI(){
+    private void clickUI() {
         if ((top_control.getVisibility()) == View.GONE) showcon();
         else hidecon();
     }
@@ -424,7 +474,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         right_control.setVisibility(View.VISIBLE);
         top_control.setVisibility(View.VISIBLE);
         bottom_control.setVisibility(View.VISIBLE);
-        if(prepared) text_speed.setVisibility(View.VISIBLE);
+        if (prepared) text_speed.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             batteryView.setPower(manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
         }
@@ -432,12 +482,12 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         autohide();
     }
 
-    private void hidecon(){
+    private void hidecon() {
         if (autoHideTimer != null) autoHideTimer.cancel();
         right_control.setVisibility(View.GONE);
         top_control.setVisibility(View.GONE);
         bottom_control.setVisibility(View.GONE);
-        if(prepared) text_speed.setVisibility(View.GONE);
+        if (prepared) text_speed.setVisibility(View.GONE);
     }
 
 
@@ -477,15 +527,15 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e("debug","结束");
+        Log.e("debug", "结束");
         if (autoHideTimer != null) autoHideTimer.cancel();
         if (sound != null) sound.cancel();
         if (progresstimer != null) progresstimer.cancel();
         if (ijkPlayer != null) ijkPlayer.release();
-        if (mDanmakuView != null && mode!=1) mDanmakuView.release();
-        if(loadingShowTimer != null) loadingShowTimer.cancel();
+        if (mDanmakuView != null && mode != 1) mDanmakuView.release();
+        if (loadingShowTimer != null) loadingShowTimer.cancel();
 
-        if(danmakuFile != null && danmakuFile.exists()) danmakuFile.delete();
+        if (danmakuFile != null && danmakuFile.exists()) danmakuFile.delete();
 
         Intent data = new Intent();
         data.putExtra("time", videonow);
@@ -496,10 +546,10 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e("debug","onPause");
-        if(ijkPlayer!=null && prepared) ijkPlayer.pause();
-        if (mDanmakuView != null && mode!=1) mDanmakuView.pause();
-        if(control_btn!=null) control_btn.setText("▶");
+        Log.e("debug", "onPause");
+        if (ijkPlayer != null && prepared) ijkPlayer.pause();
+        if (mDanmakuView != null && mode != 1) mDanmakuView.pause();
+        if (control_btn != null) control_btn.setText("▶");
     }
 
     @Override
