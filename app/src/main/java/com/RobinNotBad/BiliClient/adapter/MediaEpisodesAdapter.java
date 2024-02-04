@@ -19,14 +19,10 @@ public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdap
     private ArrayList<Bangumi.Episode> episodeList;
 
     public OnItemClickListener listener;
-    private int selectedItemIndex = 0;
+    public int selectedItemIndex = 0;
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
-    }
-
-    public int getSelectedItemIndex() {
-        return selectedItemIndex;
     }
 
     public void setSelectedItemIndex(int selectedItemIndex) {
