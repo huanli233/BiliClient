@@ -144,7 +144,8 @@ public class VideoReplyFragment extends Fragment {
     public void refresh(long aid){
         this.aid = aid;
         Log.e("","ok");
-        replyList.clear();
+        if(replyList!=null) replyList.clear();
+        else replyList = new ArrayList<>();
         CenterThreadPool.run(()->{
             try {
                 int result = ReplyApi.getReplies(aid,0,page,type,replyList);
