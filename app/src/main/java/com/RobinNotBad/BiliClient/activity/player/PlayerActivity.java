@@ -843,8 +843,8 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                 }
             }
             streamdanmaku(danmakuFile.toString());
-        }catch (IOException e){
-            MsgUtil.netErr(this);
+        }catch (Exception e){
+            MsgUtil.err(e,this);
         }
     }
 

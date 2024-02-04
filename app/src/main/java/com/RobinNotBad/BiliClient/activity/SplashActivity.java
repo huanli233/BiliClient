@@ -73,7 +73,7 @@ public class SplashActivity extends Activity {
                     finish();
                 } catch (IOException e) {
                     runOnUiThread(()-> {
-                        MsgUtil.quickErr(MsgUtil.err_net,this);
+                        MsgUtil.err(e,this);
                         splashText.setText("网络错误");
                         if(SharedPreferencesUtil.getBoolean("setup",false)){
                             Timer timer = new Timer();
@@ -88,7 +88,6 @@ public class SplashActivity extends Activity {
                             },200);
                         }
                     });
-                    e.printStackTrace();
                 }
             }
             else {

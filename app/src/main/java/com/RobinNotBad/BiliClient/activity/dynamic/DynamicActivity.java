@@ -19,10 +19,8 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 //动态页面
@@ -122,20 +120,12 @@ public class DynamicActivity extends InstanceActivity {
                 refreshing = false;
             });
 
-        } catch(IOException e) {
-            runOnUiThread(() -> {
-                MsgUtil.quickErr(MsgUtil.err_net, this);
+        } catch (Exception e) {
+            runOnUiThread(()->{
+                MsgUtil.err(e,this);
                 swipeRefreshLayout.setRefreshing(false);
                 refreshing = false;
             });
-            e.printStackTrace();
-        } catch(JSONException e) {
-            runOnUiThread(() -> {
-                MsgUtil.jsonErr(e, this);
-                swipeRefreshLayout.setRefreshing(false);
-                refreshing = false;
-            });
-            e.printStackTrace();
         }
 
     }

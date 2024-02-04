@@ -21,9 +21,7 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class SearchVideoFragment extends Fragment {
@@ -123,19 +121,13 @@ public class SearchVideoFragment extends Fragment {
             JSONArray result =  SearchApi.search(keyword,page);
             if(result!=null) {
                 SearchApi.getVideosFromSearchResult(result, videoCardList);
-                CenterThreadPool.runOnMainThread(() -> videoCardAdapter.notifyItemRangeInserted(lastSize + 1,videoCardList.size()-lastSize));
+                CenterThreadPool.runOnUiThread(() -> videoCardAdapter.notifyItemRangeInserted(lastSize + 1,videoCardList.size()-lastSize));
             }
             else {
                 bottom = true;
                 MsgUtil.toast("已经到底啦OwO",context);
             }
-        } catch (IOException e){
-            CenterThreadPool.runOnMainThread(()-> MsgUtil.quickErr(MsgUtil.err_net,context));
-            e.printStackTrace();
-        } catch (JSONException e) {
-            CenterThreadPool.runOnMainThread(()-> MsgUtil.jsonErr(e,context));
-            e.printStackTrace();
-        }
+        } catch (Exception e){CenterThreadPool.runOnUiThread(()-> MsgUtil.err(e,context));}
         refreshing = false;
     }
 
@@ -144,7 +136,7 @@ public class SearchVideoFragment extends Fragment {
         this.keyword = keyword;
         int size_old = this.videoCardList.size();
         this.videoCardList = newList;
-        CenterThreadPool.runOnMainThread(()-> {
+        CenterThreadPool.runOnUiThread(()-> {
             videoCardAdapter.notifyItemRangeRemoved(0,size_old);
             videoCardAdapter.notifyItemRangeInserted(0,videoCardList.size());
             Log.e("debug","size=" + this.videoCardList.size() + "&last="+size_old);

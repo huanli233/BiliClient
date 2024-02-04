@@ -117,21 +117,12 @@ public class RecommendActivity extends InstanceActivity {
                     videoCardAdapter.notifyItemRangeInserted(lastSize,videoCardList.size()-lastSize);
                 }
             });
-        } catch (IOException e){
+        } catch (Exception e) {
             runOnUiThread(()-> {
-                MsgUtil.quickErr(MsgUtil.err_net,this);
+                MsgUtil.err(e, this);
                 swipeRefreshLayout.setRefreshing(false);
                 refreshing = false;
             });
-
-            e.printStackTrace();
-        } catch (JSONException e) {
-            runOnUiThread(()-> {
-                MsgUtil.jsonErr(e, this);
-                swipeRefreshLayout.setRefreshing(false);
-                refreshing = false;
-            });
-            e.printStackTrace();
         }
 
 

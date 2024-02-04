@@ -214,18 +214,13 @@ public class QRLoginActivity extends BaseActivity {
                             break;
                     }
 
-                } catch (IOException e) {
+                } catch (Exception e) {
                     runOnUiThread(() -> {
                         qrImageView.setEnabled(true);
                         scanStat.setText("无法获取二维码信息，点击上方重试");
-                        MsgUtil.quickErr(MsgUtil.err_net, QRLoginActivity.this);
+                        MsgUtil.err(e, QRLoginActivity.this);
                     });
                     this.cancel();
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    runOnUiThread(()-> scanStat.setText(e.toString()));
-                    this.cancel();
-                    e.printStackTrace();
                 }
             }
         }, 2000, 500);

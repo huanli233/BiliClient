@@ -18,9 +18,6 @@ import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 //评论详细信息
@@ -92,13 +89,7 @@ public class ReplyInfoActivity extends BaseActivity {
                     }
                 }
 
-            } catch (IOException e){
-                runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
-                e.printStackTrace();
-            } catch (JSONException e) {
-                runOnUiThread(()-> MsgUtil.jsonErr(e,this));
-                e.printStackTrace();
-            }
+            } catch (Exception e) {runOnUiThread(()-> MsgUtil.err(e,this));}
         });
     }
 
@@ -111,18 +102,12 @@ public class ReplyInfoActivity extends BaseActivity {
                 Log.e("debug","下一页");
                 runOnUiThread(()-> replyAdapter.notifyItemRangeInserted(lastSize + 1,replyList.size() + 1 - lastSize));
                 if(result == 1) {
-                    runOnUiThread(()-> MsgUtil.toast("到底啦QwQ",this));
+                    //runOnUiThread(()-> MsgUtil.toast("到底啦QwQ",this));
                     Log.e("debug","到底了");
                     bottom = true;
                 }
             }
             refreshing = false;
-        } catch (IOException e){
-            runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
-            e.printStackTrace();
-        } catch (JSONException e) {
-            runOnUiThread(()-> MsgUtil.jsonErr(e,this));
-            e.printStackTrace();
-        }
+        } catch (Exception e) {runOnUiThread(()-> MsgUtil.err(e,this));}
     }
 }

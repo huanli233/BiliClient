@@ -111,12 +111,6 @@ public class PopularActivity extends InstanceActivity {
                     videoCardAdapter.notifyItemRangeInserted(lastSize,videoCardList.size()-lastSize);
                 }
             });
-        } catch (IOException e){
-            runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
-            e.printStackTrace();
-        } catch (JSONException e) {
-            runOnUiThread(()-> MsgUtil.jsonErr(e, this));
-            e.printStackTrace();
-        }
+        } catch (Exception e){runOnUiThread(()-> MsgUtil.err(e,this));}
     }
 }

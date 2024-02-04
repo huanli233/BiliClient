@@ -120,19 +120,15 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             int result = UserInfoApi.followUser(userInfo.mid,!(userInfo.followed));
                             if(result == 0){
                                 userInfo.followed = !(userInfo.followed);
-                                CenterThreadPool.runOnMainThread(()->MsgUtil.toast("操作成功",context));
+                                CenterThreadPool.runOnUiThread(()->MsgUtil.toast("操作成功",context));
                             } else {
                                 userInfoHolder.setFollowed(userInfo.followed);
-                                CenterThreadPool.runOnMainThread(() -> MsgUtil.toast("操作失败："+result,context));
+                                CenterThreadPool.runOnUiThread(() -> MsgUtil.toast("操作失败："+result,context));
                             }
-                            follow_onprocess = false;
-                        } catch (IOException e) {
-                            follow_onprocess = false;
-                            CenterThreadPool.runOnMainThread(()->MsgUtil.netErr(context));
-                        } catch (JSONException e) {
-                            follow_onprocess = false;
-                            CenterThreadPool.runOnMainThread(()->MsgUtil.jsonErr(e,context));
+                        } catch (Exception e) {
+                            CenterThreadPool.runOnUiThread(()->MsgUtil.err(e,context));
                         }
+                        follow_onprocess = false;
                     });
                 }
             });

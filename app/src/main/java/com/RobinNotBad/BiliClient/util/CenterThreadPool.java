@@ -72,7 +72,7 @@ public class CenterThreadPool {
      * 在主线程运行, 用于更新UI, 例如Toast, Snackbar等
      * @param runnable 要运行的任务
      */
-    public static void runOnMainThread(Runnable runnable){
+    public static void runOnUiThread(Runnable runnable){
        /* BuildersKt.launch(INSTANCE, Dispatchers.getMain(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation continuation) -> {
             runnable.run();
             return Unit.INSTANCE;

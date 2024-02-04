@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.PrivateMsgSessionsAdapter;
 import com.RobinNotBad.BiliClient.api.MessageApi;
@@ -20,10 +19,8 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.google.android.material.card.MaterialCardView;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -93,18 +90,9 @@ public class MessageActivity extends InstanceActivity {
                         ((TextView) findViewById(R.id.at_text)).setText("@我" + ((stats.getInt("at") > 0) ? ("(" + stats.getInt("at") + "未读)") : ""));
                         sessionsView.setLayoutManager(new LinearLayoutManager(this));
                         sessionsView.setAdapter(adapter);
-                    } catch (JSONException e) {
-                        MsgUtil.jsonErr(e,this);
-                        e.printStackTrace();
-                    }
+                    } catch (Exception e) {MsgUtil.err(e,this);}
                 });
-            } catch (JSONException e) {
-                MsgUtil.jsonErr(e,this);
-                e.printStackTrace();
-            } catch (IOException e) {
-                MsgUtil.quickErr(MsgUtil.err_net,this);
-                e.printStackTrace();
-            }
+            } catch (Exception e) {runOnUiThread(()->MsgUtil.err(e,this));}
         });
     }
 }

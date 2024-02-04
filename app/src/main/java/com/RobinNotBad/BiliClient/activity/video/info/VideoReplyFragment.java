@@ -6,19 +6,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.ReplyAdapter;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import org.json.JSONException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 //视频下评论页面，评论详情见ReplyInfoActivity
@@ -118,13 +118,7 @@ public class VideoReplyFragment extends Fragment {
                         bottom = true;
                     }
                 }
-            } catch (IOException e){
-                requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
-                Log.wtf("debug", e);
-            } catch (JSONException e) {
-                requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
-                Log.wtf("debug", e);
-            }
+            } catch (Exception e) {requireActivity().runOnUiThread(()-> MsgUtil.err(e,getContext()));}
         });
     }
 
@@ -138,18 +132,13 @@ public class VideoReplyFragment extends Fragment {
                 Log.e("debug","下一页");
                 if(isAdded()) requireActivity().runOnUiThread(()-> replyAdapter.notifyItemRangeInserted(lastSize + 1, replyList.size() + 1 - lastSize));
                 if(result == 1) {
-                    requireActivity().runOnUiThread(()-> MsgUtil.toast("到底啦QwQ",requireContext()));
+                    //requireActivity().runOnUiThread(()-> MsgUtil.toast("到底啦QwQ",requireContext()));
+                    Log.e("debug", "到底了");
                     bottom = true;
                 }
             }
             refreshing = false;
-        } catch (IOException e){
-            if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
-            Log.wtf("debug", e);
-        } catch (JSONException e) {
-            if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
-            Log.wtf("debug", e);
-        }
+        } catch (Exception e) {if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,getContext()));}
     }
 
     public void refresh(long aid){
@@ -171,13 +160,7 @@ public class VideoReplyFragment extends Fragment {
                     }
                     else bottom=false;
                 }
-            } catch (IOException e){
-                requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
-                Log.wtf("debug", e);
-            } catch (JSONException e) {
-                requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
-                Log.wtf("debug", e);
-            }
+            } catch (Exception e) {if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,getContext()));}
         });
     }
 }

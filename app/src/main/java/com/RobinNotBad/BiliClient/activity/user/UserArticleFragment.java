@@ -98,13 +98,7 @@ public class UserArticleFragment extends Fragment {
                     });
                 });
 
-            } catch (IOException e){
-                if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,requireContext()));
-                e.printStackTrace();
-            } catch (JSONException e) {
-                if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,requireContext()));
-                e.printStackTrace();
-            }
+            } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,requireContext()));}
         });
     }
 
@@ -123,12 +117,6 @@ public class UserArticleFragment extends Fragment {
                 }
             }
             refreshing = false;
-        } catch (IOException e){
-            if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,requireContext()));
-            e.printStackTrace();
-        } catch (JSONException e) {
-            if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,requireContext()));
-            e.printStackTrace();
-        }
+        } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,requireContext()));}
     }
 }

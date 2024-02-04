@@ -16,9 +16,6 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 //收藏夹列表
@@ -50,13 +47,7 @@ public class FavoriteFolderListActivity extends BaseActivity {
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
                     recyclerView.setAdapter(adapter);
                 });
-            } catch (IOException e) {
-                runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
-                e.printStackTrace();
-            } catch (JSONException e) {
-                runOnUiThread(()-> MsgUtil.jsonErr(e,this));
-                e.printStackTrace();
-            }
+            } catch (Exception e) {runOnUiThread(()-> MsgUtil.err(e,this));}
         });
     }
 }

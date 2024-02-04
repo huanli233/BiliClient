@@ -1,11 +1,10 @@
 package com.RobinNotBad.BiliClient.activity.user;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.CreativeCenterApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -15,9 +14,8 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
 public class CreativeCenterActivity extends BaseActivity {
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,18 +36,11 @@ public class CreativeCenterActivity extends BaseActivity {
                         ((TextView)findViewById(R.id.totalShare_number)).setText(LittleToolsUtil.toWan(stats.getInt("total_share")) + ((stats.getInt("inc_share") < 0) ? "-" : "+") + LittleToolsUtil.toWan(stats.getInt("inc_share")));
                         ((TextView)findViewById(R.id.totalReply_number)).setText(LittleToolsUtil.toWan(stats.getInt("total_reply")) + ((stats.getInt("incr_reply") < 0) ? "-" : "+") + LittleToolsUtil.toWan(stats.getInt("incr_reply")));
                         ((TextView)findViewById(R.id.totalDm_number)).setText(LittleToolsUtil.toWan(stats.getInt("total_dm")) + ((stats.getInt("incr_dm") < 0) ? "-" : "+") + LittleToolsUtil.toWan(stats.getInt("incr_dm")));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        runOnUiThread(() -> MsgUtil.toast("加载失败",this));
+                    } catch (Exception e) {
+                        runOnUiThread(() -> MsgUtil.err(e,this));
                     }
                 });
-            } catch (IOException e) {
-                e.printStackTrace();
-                runOnUiThread(() -> MsgUtil.toast("加载失败",this));
-            } catch (JSONException e) {
-                e.printStackTrace();
-                runOnUiThread(() -> MsgUtil.toast("加载失败",this));
-            }
+            } catch (Exception e) {runOnUiThread(() -> MsgUtil.err(e,this));}
 
         });
     }

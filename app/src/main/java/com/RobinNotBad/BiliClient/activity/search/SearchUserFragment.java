@@ -21,9 +21,7 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class SearchUserFragment extends Fragment {
@@ -125,19 +123,13 @@ public class SearchUserFragment extends Fragment {
             JSONArray result =  SearchApi.searchType(keyword,page,"bili_user");
             if(result!=null) {
                 SearchApi.getUsersFromSearchResult(result, userInfoList);
-                CenterThreadPool.runOnMainThread(() -> userInfoAdapter.notifyItemRangeInserted(lastSize + 1,userInfoList.size()-lastSize));
+                CenterThreadPool.runOnUiThread(() -> userInfoAdapter.notifyItemRangeInserted(lastSize + 1,userInfoList.size()-lastSize));
             }
             else {
                 bottom = true;
                 MsgUtil.toast("已经到底啦OwO",context);
             }
-        } catch (IOException e){
-            CenterThreadPool.runOnMainThread(()-> MsgUtil.quickErr(MsgUtil.err_net,context));
-            e.printStackTrace();
-        } catch (JSONException e) {
-            CenterThreadPool.runOnMainThread(()-> MsgUtil.jsonErr(e,context));
-            e.printStackTrace();
-        }
+        } catch (Exception e){CenterThreadPool.runOnUiThread(()-> MsgUtil.err(e,context));}
         refreshing = false;
     }
 
@@ -146,7 +138,7 @@ public class SearchUserFragment extends Fragment {
         this.keyword = keyword;
         int size_old = this.userInfoList.size();
         this.userInfoList = userInfoList;
-        CenterThreadPool.runOnMainThread(()-> {
+        CenterThreadPool.runOnUiThread(()-> {
             userInfoAdapter.notifyItemRangeRemoved(0,size_old);
             userInfoAdapter.notifyItemRangeInserted(0,userInfoList.size());
 

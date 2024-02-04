@@ -33,10 +33,6 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import org.json.JSONException;
-
-import java.io.IOException;
-
 public class MediaInfoFragment extends Fragment {
     private String mediaId;
     private int selectedSection = 0, selectedEpidose = 0;
@@ -75,13 +71,8 @@ public class MediaInfoFragment extends Fragment {
                 Media mediaInfo = bangumi_to_card.getMediaInfo(mediaId);
                 MediaSectionInfo sectionInfo = bangumi_to_card.getSectionInfo(String.valueOf(mediaInfo.seasonId));
                 return new Pair<>(mediaInfo, sectionInfo);
-            } catch (JSONException e) {
-                if(isAdded()) requireActivity().runOnUiThread(()->MsgUtil.jsonErr(e,requireContext()));
-                e.printStackTrace();
-                return null;
-            } catch (IOException e){
-                if(isAdded()) requireActivity().runOnUiThread(()->MsgUtil.netErr(requireContext()));
-                e.printStackTrace();
+            } catch (Exception e) {
+                if(isAdded()) requireActivity().runOnUiThread(()->MsgUtil.err(e,requireContext()));
                 return null;
             }
         });

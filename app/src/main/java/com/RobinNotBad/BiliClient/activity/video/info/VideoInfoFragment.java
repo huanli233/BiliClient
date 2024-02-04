@@ -49,10 +49,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
-import org.json.JSONException;
-
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -135,11 +132,7 @@ public class VideoInfoFragment extends Fragment {
 
             try {
                 HistoryApi.reportHistory(videoInfo.aid, videoInfo.cids.get(0), videoInfo.upMid, 0);
-            } catch (IOException e) {
-                if (isAdded())
-                    requireActivity().runOnUiThread(() -> MsgUtil.netErr(view.getContext()));
-                e.printStackTrace();
-            }
+            } catch (Exception e) {if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e,requireContext()));}
 
 
             if (SharedPreferencesUtil.getBoolean("tags_enable", true)) {
@@ -156,23 +149,15 @@ public class VideoInfoFragment extends Fragment {
                             tags_expand = !tags_expand;
                         });
                     });
-                } catch (IOException e) {
-                    if (isAdded())
-                        requireActivity().runOnUiThread(() -> MsgUtil.netErr(view.getContext()));
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    if (isAdded())
-                        requireActivity().runOnUiThread(() -> MsgUtil.jsonErr(e, view.getContext()));
-                    e.printStackTrace();
-                }
+                } catch (Exception e) {if(isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e,requireContext()));}
             } else requireActivity().runOnUiThread(() -> tagsText.setVisibility(View.GONE));
 
             if (isAdded()) requireActivity().runOnUiThread(() -> {
-                Glide.with(view.getContext()).load(videoInfo.cover).placeholder(R.mipmap.placeholder)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(4, view.getContext()))))
+                Glide.with(requireContext()).load(videoInfo.cover).placeholder(R.mipmap.placeholder)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(4, requireContext()))))
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(cover);
-                Glide.with(view.getContext()).load(videoInfo.upAvatar).placeholder(R.mipmap.akari)
+                Glide.with(requireContext()).load(videoInfo.upAvatar).placeholder(R.mipmap.akari)
                         .apply(RequestOptions.circleCropTransform())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(upIcon);
@@ -222,7 +207,7 @@ public class VideoInfoFragment extends Fragment {
                     //...经过测试，还是会释放，但会好很多
                     if (videoInfo.pagenames.size() > 1) {
                         Intent intent = new Intent()
-                                .setClass(view.getContext(), MultiPageActivity.class)
+                                .setClass(requireContext(), MultiPageActivity.class)
                                 .putExtra("videoInfo", (Serializable) videoInfo);
                         startActivity(intent);
                     } else {
@@ -231,7 +216,7 @@ public class VideoInfoFragment extends Fragment {
                 });
                 play.setOnLongClickListener(view1 -> {
                     Intent intent = new Intent();
-                    intent.setClass(view.getContext(), SettingPlayerChooseActivity.class);
+                    intent.setClass(requireContext(), SettingPlayerChooseActivity.class);
                     startActivity(intent);
                     return true;
                 });
@@ -263,7 +248,7 @@ public class VideoInfoFragment extends Fragment {
                 }));
                 fav.setOnClickListener(view1 -> {
                     Intent intent = new Intent();
-                    intent.setClass(view.getContext(), AddFavoriteActivity.class);
+                    intent.setClass(requireContext(), AddFavoriteActivity.class);
                     intent.putExtra("aid", videoInfo.aid);
                     intent.putExtra("bvid", videoInfo.bvid);
                     favoriteActivityLauncher.launch(intent);
@@ -281,14 +266,14 @@ public class VideoInfoFragment extends Fragment {
                 }));
                 addWatchlater.setOnLongClickListener(view1 -> {
                     Intent intent = new Intent();
-                    intent.setClass(view.getContext(), WatchLaterActivity.class);
+                    intent.setClass(requireContext(), WatchLaterActivity.class);
                     startActivity(intent);
                     return true;
                 });
 
                 addFavorite.setOnClickListener(view1 -> {
                     Intent intent = new Intent();
-                    intent.setClass(view.getContext(), AddFavoriteActivity.class);
+                    intent.setClass(requireContext(), AddFavoriteActivity.class);
                     intent.putExtra("aid", videoInfo.aid);
                     intent.putExtra("bvid", videoInfo.bvid);
                     startActivity(intent);
@@ -299,14 +284,14 @@ public class VideoInfoFragment extends Fragment {
                             ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
                     } else {
-                        File downPath = new File(ConfInfoApi.getDownloadPath(requireContext()), LittleToolsUtil.stringToFile(videoInfo.title));
+                        File downPath = new File(ConfInfoApi.getDownloadPath(requireContext()), LittleToolsUtil.stringToFile(videoInfo.title + "-" + videoInfo.bvid));
 
                         if (downPath.exists() && videoInfo.pagenames.size() == 1)
                             MsgUtil.toast("已经缓存过了~", requireContext());
                         else {
                             if (videoInfo.pagenames.size() > 1) {
                                 Intent intent = new Intent();
-                                intent.setClass(view.getContext(), MultiPageActivity.class);
+                                intent.setClass(requireContext(), MultiPageActivity.class);
                                 intent.putExtra("download", 1);
                                 intent.putExtra("videoInfo", (Serializable) videoInfo);
                                 startActivity(intent);
@@ -319,7 +304,7 @@ public class VideoInfoFragment extends Fragment {
 
                 upCard.setOnClickListener(view1 -> {
                     Intent intent = new Intent();
-                    intent.setClass(view.getContext(), UserInfoActivity.class);
+                    intent.setClass(requireContext(), UserInfoActivity.class);
                     intent.putExtra("mid", videoInfo.upMid);
                     startActivity(intent);
                 });

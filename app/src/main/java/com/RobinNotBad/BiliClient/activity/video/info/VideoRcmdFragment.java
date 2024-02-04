@@ -76,13 +76,7 @@ public class VideoRcmdFragment extends Fragment {
                     recyclerView.setAdapter(adapter);
                 });
 
-            } catch (IOException e){
-                if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
-                e.printStackTrace();
-            } catch (JSONException e) {
-                if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.jsonErr(e,getContext()));
-                e.printStackTrace();
-            }
+            } catch (Exception e) {if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,getContext()));}
         });
     }
 

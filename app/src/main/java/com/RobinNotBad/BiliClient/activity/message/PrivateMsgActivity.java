@@ -50,8 +50,7 @@ public class PrivateMsgActivity extends BaseActivity {
     LinearLayout inputLayout;
     long uid;
     boolean isLoadingMore = false;
-    long lastLoadTime = 0;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,11 +98,7 @@ public class PrivateMsgActivity extends BaseActivity {
                     });
                 });    
                 
-            } catch(IOException err) {
-            	Log.e("",err.toString());
-            } catch(JSONException err){
-                Log.e("",err.toString());
-            }
+            } catch(Exception e) {runOnUiThread(()->MsgUtil.err(e,this));}
         });
         
         sendBtn.setOnClickListener(view -> CenterThreadPool.run(()->{
@@ -132,9 +127,7 @@ public class PrivateMsgActivity extends BaseActivity {
                 }else{
                 runOnUiThread(()-> MsgUtil.toast("你还木有输入喵~",this));
             }
-            } catch(Exception err) {
-                err.printStackTrace();
-            }
+            } catch(Exception e) {runOnUiThread(()->MsgUtil.err(e,this));}
         }));
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
         Runnable task = this::refresh;
@@ -187,11 +180,8 @@ public class PrivateMsgActivity extends BaseActivity {
                     adapter.notifyItemRangeChanged(oldListSize-1,list.size());
                 });    
                 
-            } catch(IOException err) {
-            	Log.e("",err.toString());
-            } catch(JSONException err){
-                Log.e("",err.toString());
-            }
+            } catch(Exception e) {
+            	runOnUiThread(()->MsgUtil.err(e,this));}
         });
     }
     private void loadMore() {
@@ -199,7 +189,6 @@ public class PrivateMsgActivity extends BaseActivity {
     	CenterThreadPool.run(()->{
             try {
             	if(allMsg.getInt("has_more")==1) {
-                    
             		allMsg = PrivateMsgApi.getPrivateMsg(uid,15,0,list.get(0).msgSeqno);
                     Log.e("",allMsg.toString());
                     ArrayList<PrivateMessage> newList = PrivateMsgApi.getPrivateMsgList(allMsg);
@@ -221,11 +210,7 @@ public class PrivateMsgActivity extends BaseActivity {
                         
                     
             	}else runOnUiThread(()-> MsgUtil.toast("没有更多消息了",this));
-            } catch(IOException err) {
-            	err.printStackTrace();
-            } catch(JSONException err){
-                err.printStackTrace();
-            }
+            } catch(Exception e) {runOnUiThread(()->MsgUtil.err(e,this));}
         });
         isLoadingMore=false;
     }

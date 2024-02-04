@@ -68,7 +68,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 CenterThreadPool.run(() -> {
                     try {
                         SpannableString spannableString = EmoteUtil.textReplaceEmote(dynamic.content, dynamic.emote, 1.0f, context);
-                        CenterThreadPool.runOnMainThread(() -> content.setText(spannableString));
+                        CenterThreadPool.runOnUiThread(() -> content.setText(spannableString));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {

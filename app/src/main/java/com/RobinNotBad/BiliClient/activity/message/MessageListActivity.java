@@ -16,9 +16,6 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MessageListActivity extends BaseActivity{
@@ -67,13 +64,7 @@ public class MessageListActivity extends BaseActivity{
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
                     recyclerView.setAdapter(messageAdapter);
                 });
-            } catch (IOException e){
-                runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
-                e.printStackTrace();
-            } catch (JSONException e) {
-                runOnUiThread(()-> MsgUtil.toast("加载出错",this));
-                e.printStackTrace();
-            }
+            } catch (Exception e) {runOnUiThread(()-> MsgUtil.err(e,this));}
         });
     }
 }

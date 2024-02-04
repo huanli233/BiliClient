@@ -77,14 +77,14 @@ public class WriteReplyActivity extends BaseActivity {
                                     runOnUiThread(() -> Toast.makeText(WriteReplyActivity.this, toast_msg, Toast.LENGTH_SHORT).show());
                                 }
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                MsgUtil.err(e,this);
                             }
                         }
                         else runOnUiThread(()-> Toast.makeText(this, "你还没输入内容呢~", Toast.LENGTH_SHORT).show());
                     });
                 }
                 else Toast.makeText(WriteReplyActivity.this, "正在发送中，\n别急嘛~", Toast.LENGTH_SHORT).show();
-            }else runOnUiThread(() -> MsgUtil.showDialog(this,"无法发送","上一次的Cookie刷新失败了，您可能需要重新登录以进行敏感操作",-1,false,0));
+            }else runOnUiThread(() -> MsgUtil.showDialog(this,"无法发送","上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作",-1,false,0));
         });
     }
 }

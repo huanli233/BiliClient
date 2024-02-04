@@ -20,13 +20,11 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.JsonUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ArticleInfoFragment extends Fragment {
@@ -91,14 +89,7 @@ public class ArticleInfoFragment extends Fragment {
                     recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
                     recyclerView.setAdapter(adapter);
                 });
-
-            } catch (JSONException e) {
-                if(isAdded()) requireActivity().runOnUiThread(()->MsgUtil.jsonErr(e,requireContext()));
-                e.printStackTrace();
-            } catch (IOException e) {
-                if(isAdded()) requireActivity().runOnUiThread(()->MsgUtil.quickErr(MsgUtil.err_net,requireContext()));
-                e.printStackTrace();
-            }
+            }  catch (Exception e) {if(isAdded()) requireActivity().runOnUiThread(()->MsgUtil.err(e,requireContext()));}
         });
     }
 

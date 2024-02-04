@@ -18,9 +18,6 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 //收藏夹内
@@ -78,11 +75,7 @@ public class FavoriteVideoListActivity extends BaseActivity {
                                         videoCardAdapter.notifyItemRangeChanged(position,videoList.size() - position);
                                     });
                                     else runOnUiThread(()-> MsgUtil.toast("删除失败，错误码：" + delResult,this));
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                } catch (Exception e) {MsgUtil.err(e,this);}
                             });
                         }
                         else {
@@ -120,13 +113,7 @@ public class FavoriteVideoListActivity extends BaseActivity {
                     }
                 }
 
-            } catch (IOException e){
-                runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
-                e.printStackTrace();
-            } catch (JSONException e) {
-                runOnUiThread(()-> MsgUtil.jsonErr(e,this));
-                e.printStackTrace();
-            }
+            } catch (Exception e){runOnUiThread(()-> MsgUtil.err(e,this));}
         });
     }
 
@@ -145,12 +132,6 @@ public class FavoriteVideoListActivity extends BaseActivity {
                 }
             }
             refreshing = false;
-        } catch (IOException e){
-            runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
-            e.printStackTrace();
-        } catch (JSONException e) {
-            runOnUiThread(()-> MsgUtil.jsonErr(e,this));
-            e.printStackTrace();
-        }
+        } catch (Exception e){runOnUiThread(()-> MsgUtil.err(e,this));}
     }
 }

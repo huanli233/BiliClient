@@ -75,13 +75,7 @@ public class WatchLaterActivity extends BaseActivity {
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
                     recyclerView.setAdapter(adapter);
                 });
-            } catch (IOException e){
-                runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
-                e.printStackTrace();
-            } catch (JSONException e) {
-                runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,this));
-                e.printStackTrace();
-            }
+            } catch (Exception e){runOnUiThread(()-> MsgUtil.err(e,this));}
         });
     }
 

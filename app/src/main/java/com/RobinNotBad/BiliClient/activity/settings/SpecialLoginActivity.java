@@ -61,10 +61,7 @@ public class SpecialLoginActivity extends BaseActivity {
                     intent1.setClass(SpecialLoginActivity.this, SplashActivity.class);
                     startActivity(intent1);
                     finish();
-                } catch (JSONException e) {
-                    runOnUiThread(() -> MsgUtil.quickErr(MsgUtil.err_json, SpecialLoginActivity.this));
-                    e.printStackTrace();
-                }
+                } catch (JSONException e) {runOnUiThread(() -> MsgUtil.err(e, SpecialLoginActivity.this));}
             });
         }
         else{

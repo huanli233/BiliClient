@@ -126,11 +126,11 @@ public class MySpaceActivity extends InstanceActivity {
                             SharedPreferencesUtil.removeValue(SharedPreferencesUtil.csrf);
                             SharedPreferencesUtil.removeValue(SharedPreferencesUtil.refresh_token);
                             SharedPreferencesUtil.removeValue(SharedPreferencesUtil.cookie_refresh);
-                            MsgUtil.toast("账号已退出",getApplicationContext());
+                            MsgUtil.toast("账号已退出",this);
                             Intent intent = new Intent(this, QRLoginActivity.class);
                             startActivity(intent);
                             finish();
-                        }else MsgUtil.toast("再点一次退出登录",getApplicationContext());
+                        }else MsgUtil.toast("再点一次退出登录",this);
                         confirmLogout = !confirmLogout;
                     });
                 });

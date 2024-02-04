@@ -27,9 +27,7 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,13 +129,7 @@ public class SearchActivity extends InstanceActivity {
                         else runOnUiThread(() -> MsgUtil.toast("文章搜索结果为空OwO", this));
 
                         runOnUiThread(this::reload_fragments);
-                    } catch (IOException e) {
-                        runOnUiThread(() -> MsgUtil.quickErr(MsgUtil.err_net, this));
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        runOnUiThread(() -> MsgUtil.jsonErr(e,this));
-                        e.printStackTrace();
-                    }
+                    } catch (Exception e) {runOnUiThread(() -> MsgUtil.err(e, this));}
                     refreshing = false;
                 });
             }

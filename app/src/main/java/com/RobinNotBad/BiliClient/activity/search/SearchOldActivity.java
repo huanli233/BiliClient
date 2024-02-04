@@ -2,11 +2,9 @@ package com.RobinNotBad.BiliClient.activity.search;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -26,9 +24,7 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class SearchOldActivity extends InstanceActivity {
@@ -147,13 +143,7 @@ public class SearchOldActivity extends InstanceActivity {
                                 Log.e("debug", "刷新");
                             });
                         } else runOnUiThread(() -> MsgUtil.toast("搜索结果为空OwO", this));
-                    } catch (IOException e) {
-                        runOnUiThread(() -> MsgUtil.quickErr(MsgUtil.err_net, this));
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        runOnUiThread(() -> MsgUtil.jsonErr(e,this));
-                        e.printStackTrace();
-                    }
+                    } catch (Exception e) {runOnUiThread(() -> MsgUtil.err(e, this));}
                     refreshing = false;
                 }).start();
             }
@@ -175,22 +165,15 @@ public class SearchOldActivity extends InstanceActivity {
                 bottom = true;
                 MsgUtil.toast("已经到底啦OwO",this);
             }
-        } catch (IOException e){
-            runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
-            e.printStackTrace();
-        } catch (JSONException e) {
-            runOnUiThread(()-> MsgUtil.jsonErr(e,this));
-            e.printStackTrace();
-        }
+        } catch (Exception e){runOnUiThread(()-> MsgUtil.err(e,this));}
         refreshing = false;
     }
-    private Point startPoint;
+    //private Point startPoint;
 
-    /**
+    /*
      * Called when a touch screen event was not handled by any of the views under it.
      * if is swipe up, hide search bar, else show search bar
      * @param event The touch screen event being processed.
-     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()){
@@ -213,4 +196,5 @@ public class SearchOldActivity extends InstanceActivity {
         }
         return super.onTouchEvent(event);
     }
+     */
 }

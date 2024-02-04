@@ -16,9 +16,6 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 //历史记录
@@ -81,13 +78,7 @@ public class HistoryActivity extends BaseActivity {
                     }
                 }
 
-            } catch (IOException e){
-                runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
-                e.printStackTrace();
-            } catch (JSONException e) {
-                runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,this));
-                e.printStackTrace();
-            }
+            } catch (Exception e) {runOnUiThread(()-> MsgUtil.err(e,this));}
         });
     }
 
@@ -105,12 +96,6 @@ public class HistoryActivity extends BaseActivity {
                 }
             }
             refreshing = false;
-        } catch (IOException e){
-            runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,this));
-            e.printStackTrace();
-        } catch (JSONException e) {
-            runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,this));
-            e.printStackTrace();
-        }
+        } catch (Exception e) {runOnUiThread(()-> MsgUtil.err(e,this));}
     }
 }

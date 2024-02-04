@@ -20,10 +20,8 @@ import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 //用户动态
@@ -105,13 +103,7 @@ public class UserDynamicFragment extends Fragment {
                         }
                     });
                 });
-            } catch (IOException e){
-                if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
-                e.printStackTrace();
-            } catch (JSONException e) {
-                if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,getContext()));
-                e.printStackTrace();
-            }
+            } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,getContext()));}
         });
     }
 
@@ -124,12 +116,6 @@ public class UserDynamicFragment extends Fragment {
             if(isAdded()) requireActivity().runOnUiThread(()-> adapter.notifyItemRangeInserted(lastSize + 1, dynamicList.size() + 1 - lastSize));
             bottom = (offset==-1);
             refreshing = false;
-        } catch (IOException e){
-            if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_net,getContext()));
-            e.printStackTrace();
-        } catch (JSONException e) {
-            if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.quickErr(MsgUtil.err_json,getContext()));
-            e.printStackTrace();
-        }
+        } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,getContext()));}
     }
 }
