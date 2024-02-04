@@ -93,7 +93,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
     private boolean prepared = false;
 
-    private boolean needSurfaceHolder = true;
+    private boolean firstSurfaceHolder = true;
 
     private boolean finishWatching = false;
 
@@ -608,10 +608,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
             surfaceHolder.addCallback(new SurfaceHolder.Callback() {
                 @Override
                 public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-                    if(needSurfaceHolder) {
-                        ijkPlayer.setDisplay(surfaceHolder);
-                        needSurfaceHolder = false;
-                    }
+                    if(!firstSurfaceHolder) {ijkPlayer.setDisplay(surfaceHolder);}
                     if(prepared) {
                         Log.e("debug", "重新设置Holder");
                         ijkPlayer.seekTo(progressBar.getProgress());
@@ -623,7 +620,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                 @Override
                 public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
                     Log.e("debug", "Holder没了");
-                    needSurfaceHolder = true;
                     ijkPlayer.setDisplay(null);
                 }
             });
@@ -632,13 +628,9 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                 @Override
                 public void run() {
                     Log.e("debug","循环检测");
-                    if(!needSurfaceHolder) {
-                        Log.e("debug","循环检测被打断");
-                        this.cancel();
-                    }
                     if(!surfaceHolder.isCreating()){
-                        needSurfaceHolder = false;
                         ijkPlayer.setDisplay(surfaceHolder);
+                        firstSurfaceHolder = false;
                         MPPrepare(nowurl);
                         Log.e("debug","设置surfaceHolder成功！");
                         this.cancel();
