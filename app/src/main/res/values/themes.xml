@@ -10,6 +10,7 @@
         <item name="editTextStyle">@style/EditTextStyle</item>
         <item name="materialCardViewStyle">@style/CardStyle</item>
         <item name="materialButtonStyle">@style/ButtonStyle</item>
+        <item name="switchStyle">@style/SwitchCompatStyle</item>
 
         <item name="colorSwitchThumbNormal">@color/textwhite</item>
         <item name="colorControlActivated">@color/textwhite</item>

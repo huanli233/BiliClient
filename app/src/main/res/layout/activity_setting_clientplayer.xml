@@ -56,433 +56,345 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="4dp"
             android:paddingBottom="20dp"
             android:orientation="vertical">
 
-            <LinearLayout
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/ui_round"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-                
-                <TextView
-                    android:id="@+id/displaymode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="显示方式"
-                    android:textSize="14sp" />
-                
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/displaymode">
-                    <RadioButton
-                        android:id="@+id/SWsurface"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="SurfaceView"
-                        android:textColor="#fff"
-                        android:textSize="12sp" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="圆屏适配" />
 
-                    <RadioButton
-                        android:id="@+id/SWtexture"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="TextureView"
-                        android:textColor="#fff"
-                        android:textSize="12sp" />
-                </RadioGroup>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginTop="2dp"
-                    android:text="如果视频无法正常播放请切换该选项\n已知：KidoX3只能Surface，小天才只能Texture"
-                    android:textSize="11sp" />
-            </LinearLayout>
-            
-            <LinearLayout
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/SWLClick"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-                
-                <TextView
-                    android:id="@+id/mediacodec"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="解码方式"
-                    android:textSize="14sp" />
-                
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/mediacodec">
-                    <RadioButton
-                        android:id="@+id/SWhard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="硬件解码"
-                        android:textColor="#fff"
-                        android:textSize="12sp" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="长按倍速" />
 
-                    <RadioButton
-                        android:id="@+id/SWsoft"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="软件解码"
-                        android:textColor="#fff"
-                        android:textSize="12sp" />
-                </RadioGroup>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginTop="2dp"
-                    android:text="硬件解码：使用GPU解码，速度快，性能消耗小\n软件解码：使用CPU硬算，兼容性好，暖手必备"
-                    android:textSize="11sp" />
-            </LinearLayout>
-             
-            <LinearLayout
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/SWloop"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-                
-                <TextView
-                    android:id="@+id/audio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="音频输出"
-                    android:textSize="14sp" />
-                
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/audio">
-                    <RadioButton
-                        android:id="@+id/SWaudiotrack"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="AudioTrack"
-                        android:textColor="#fff"
-                        android:textSize="12sp" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="洗脑循环" />
 
-                    <RadioButton
-                        android:id="@+id/SWopensles"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="OpenSles"
-                        android:textColor="#fff"
-                        android:textSize="12sp" />
-                </RadioGroup>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginTop="2dp"
-                    android:text="声音延迟或无法播放请尝试切换"
-                    android:textSize="11sp" />
-            </LinearLayout>
-             
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                android:layout_marginTop="4dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-                
-                <TextView
-                    android:id="@+id/playmode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="播放模式"
-                    android:textSize="14sp" />
-                
-                <RadioGroup
+                android:layout_height="wrap_content">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/playmode">
-                    <RadioButton
-                        android:id="@+id/SWdownload"
+                    android:padding="4dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/displaymode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="显示方式"
+                        android:textSize="14sp" />
+
+                    <RadioGroup
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="下载式"
-                        android:textColor="#fff"
-                        android:textSize="12sp" />
+                        android:layout_below="@id/displaymode">
 
-                    <RadioButton
-                        android:id="@+id/SWonline"
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/SWsurface"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="SurfaceView"
+                            android:textColor="#fff"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                                android:id="@+id/SWtexture"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="TextureView"
+                                android:textColor="#fff"
+                                android:textSize="12sp" />
+                    </RadioGroup>
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="如果视频无法正常播放请切换该选项\n已知：KidoX3只能Surface，小天才只能Texture"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_marginTop="4dp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:padding="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/mediacodec"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="解码方式"
+                        android:textSize="14sp" />
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/SWhard"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="硬件解码"
+                            android:textColor="#fff"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/SWsoft"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="软件解码"
+                            android:textColor="#fff"
+                            android:textSize="12sp" />
+                    </RadioGroup>
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="在线式"
-                        android:textColor="#fff"
-                        android:textSize="12sp" />
-                </RadioGroup>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginTop="2dp"
-                    android:text="下载式：将完整视频下载到本地再播放。更加流畅，循环播放时不会多次消耗流量，但长视频会临时占用存储空间（缓存会删）\n在线式：直接在线播放，不下载视频。加载耗时短、不读写存储空间，长视频只消耗观看部分的流量，但网络不好会中途卡住或加载不出来。"
-                    android:textSize="11sp" />
-            </LinearLayout>
+                        android:layout_marginTop="2dp"
+                        android:text="硬件解码：使用GPU解码，速度快，性能消耗小\n软件解码：使用CPU硬算，兼容性好，暖手必备"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
+                android:layout_marginTop="4dp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:padding="4dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/SWLClick"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_edit_text_setting"
-                    android:paddingStart="6dp"
-                    android:text="长按倍速"
-                    android:textColor="@color/textwhite" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginTop="2dp"
-                    android:text="长按屏幕视频将会以3倍速播放。可能与滑动退出冲突，建议点击顶部栏退出。此功能可能导致bug，大部分手表撑不住长时间3倍速播放"
-                    android:textSize="11sp" />
-            </LinearLayout>
-            
-             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/SWloop"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_edit_text_setting"
-                    android:paddingStart="6dp"
-                    android:text="洗脑循环"
-                    android:textColor="@color/textwhite" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginTop="2dp"
-                    android:text="开启后视频默认循环播放"
-                    android:textSize="11sp" />
-            </LinearLayout>
-            
+                    <TextView
+                        android:id="@+id/audio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="音频输出"
+                        android:textSize="14sp" />
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/SWaudiotrack"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="AudioTrack"
+                            android:textColor="#fff"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/SWopensles"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="OpenSles"
+                            android:textColor="#fff"
+                            android:textSize="12sp" />
+                    </RadioGroup>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="声音延迟或无法播放请尝试切换"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginHorizontal="2dp"
+                android:layout_marginTop="4dp"
                 android:background="#318C8C8C"/>
-             
-            <LinearLayout
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/danmaku_allowoverlap"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="弹幕最大行数"
-                    android:textSize="14sp" />
-                 <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:textSize="12sp"
-                    android:id="@+id/DMmaxline"/>
-            </LinearLayout>
-            
-             <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="弹幕允许重叠" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/danmaku_mergeduplicate"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="弹幕字号大小"
-                    android:textSize="14sp" />
-                 <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:textSize="12sp"
-                    android:id="@+id/danmakusize"/>
-            </LinearLayout>
-            
-             <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="合并重复弹幕" />
+
+
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="弹幕速度"
-                    android:textSize="14sp" />
-                 <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:textSize="12sp"
-                    android:id="@+id/danmakuspeed"/>
-            </LinearLayout>
-            
-             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="弹幕透明度"
-                    android:textSize="14sp" />
-                 <LinearLayout
+                android:layout_marginTop="4dp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:padding="4dp"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:minWidth="50dp"
-                        android:inputType="phone"
-                        android:textSize="12sp"
-                        android:id="@+id/danmaku_transparency"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="%"/>
+                        android:text="弹幕最大行数"
+                        android:textSize="14sp" />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:textSize="12sp"
+                        android:id="@+id/DMmaxline"/>
                 </LinearLayout>
-            </LinearLayout>
-            
-             <LinearLayout
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/danmaku_allowoverlap"
+                android:layout_marginTop="4dp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:padding="4dp"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_edit_text_setting"
-                    android:paddingStart="6dp"
-                    android:text="弹幕允许重叠"
-                    android:textColor="@color/textwhite" />
-            </LinearLayout>
-            
-             <LinearLayout
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="弹幕字号大小"
+                        android:textSize="14sp" />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:textSize="12sp"
+                        android:id="@+id/danmakusize"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/danmaku_mergeduplicate"
+                android:layout_marginTop="4dp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:padding="4dp"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_edit_text_setting"
-                    android:paddingStart="6dp"
-                    android:text="合并重复弹幕"
-                    android:textColor="@color/textwhite" />
-            </LinearLayout>
-             
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="弹幕速度"
+                        android:textSize="14sp" />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:textSize="12sp"
+                        android:id="@+id/danmakuspeed"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_marginTop="4dp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:padding="4dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="弹幕透明度"
+                        android:textSize="14sp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="50dp"
+                            android:inputType="phone"
+                            android:textSize="12sp"
+                            android:id="@+id/danmaku_transparency"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="%"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginHorizontal="2dp"
+                android:layout_marginTop="4dp"
                 android:background="#318C8C8C"/>
-            
-             
-             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
 
-                 <androidx.appcompat.widget.SwitchCompat
-                     android:id="@+id/ui_round"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:background="@drawable/background_edit_text_setting"
-                     android:paddingStart="6dp"
-                     android:text="圆屏适配"
-                     android:textColor="@color/textwhite" />
-            </LinearLayout>
-            
-             <LinearLayout
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/ui_showRotateBtn"
+                android:layout_marginTop="4dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/ui_showRotateBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_edit_text_setting"
-                    android:paddingStart="6dp"
-                    android:text="显示旋转按钮"
-                    android:textColor="@color/textwhite" />
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/ui_showDanmakuBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/ui_showRotateBtn"
-                    android:background="@drawable/background_edit_text_setting"
-                    android:paddingStart="6dp"
-                    android:text="显示弹幕按钮"
-                    android:textColor="@color/textwhite" />
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/ui_showLoopBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/ui_showDanmakuBtn"
-                    android:background="@drawable/background_edit_text_setting"
-                    android:paddingStart="6dp"
-                    android:text="显示循环按钮"
-                    android:textColor="@color/textwhite" />
-            </LinearLayout>
-         
-            <com.google.android.material.card.MaterialCardView
+                android:layout_height="wrap_content"
+                android:text="显示旋转按钮" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/ui_showDanmakuBtn"
+                android:layout_width="match_parent"
+                android:layout_marginTop="4dp"
+                android:layout_height="wrap_content"
+                android:text="显示弹幕按钮" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/ui_showLoopBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="显示循环按钮"
+                android:layout_marginTop="4dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="2dp"
+                android:layout_marginTop="4dp"
+                android:background="#318C8C8C"/>
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/preview"
+                android:layout_marginTop="4dp"
+                android:text="查看预览"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="查看预览" />
-            </com.google.android.material.card.MaterialCardView>
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
 
