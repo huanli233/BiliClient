@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.activity.player;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -15,7 +14,6 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.*;
@@ -82,8 +80,9 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
     private AudioManager audioManager;
     private ImageView danmaku_btn, circle, loop_btn, rotate_btn;
     private ScaleGestureDetector scaleGestureDetector;
+    private ViewScaleGestureListener scaleGestureListener;
     private float previousX, previousY;
-    private boolean moving,doubleTouch;
+    private boolean moving;
 
     private final float[] speeds = {0.5F, 0.75F, 1.0F, 1.25F, 1.5F, 1.75F, 2.0F, 3.0F};
     private final String[] speedTexts = {"x 0.5", "x 0.75", "x 1.0", "x 1.25", "x 1.5", "x 1.75", "x 2.0", "x 3.0"};
@@ -173,7 +172,7 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
                 .setDanmakuTransparency(SharedPreferencesUtil.getFloat("player_danmaku_transparency", 0.5f))
                 .preventOverlapping(overlap);
 
-        setClickMgr();
+        setVideoGestures();
         autohide();
 
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -256,8 +255,6 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
                 public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {}
             });
         }
-
-        scaleGestureDetector = new ScaleGestureDetector(this, new ViewScaleGestureListener(videoArea));
 
         CenterThreadPool.run(() -> {
             switch (mode) {
@@ -348,54 +345,84 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setClickMgr() {
-        //搞长按倍速累死个人
-        //这个管普通点击
+    private void setVideoGestures() {
+        scaleGestureListener = new ViewScaleGestureListener(videoArea);
+        scaleGestureDetector = new ScaleGestureDetector(this, scaleGestureListener);
+
         control_layout.setOnTouchListener((v, event) -> {
-            scaleGestureDetector.onTouchEvent(event);
             int action = event.getActionMasked();
-            //单指拖动
-            if(action == MotionEvent.ACTION_MOVE && event.getPointerCount() == 1){
-                float currentX = event.getX(0);
-                float currentY = event.getY(0);
-                float deltaX = currentX - previousX;
-                float deltaY = currentY - previousY;
+            int pointerCount = event.getPointerCount();
+            boolean singleTouch = pointerCount == 1;
+            boolean doubleTouch = pointerCount == 2;
 
-                videoArea.setX(videoArea.getX() + deltaX);
-                videoArea.setY(videoArea.getY() + deltaY);
-                previousX = currentX;
-                previousY = currentY;
-                moving = true;
-                return true;
-            }
-            /*
-            if(action == MotionEvent.ACTION_MOVE && event.getPointerCount() == 2){
-                float currentX = (event.getX(0) + event.getX(1)) / 2;
-                float currentY = (event.getY(0) + event.getY(1)) / 2;
-                float deltaX = currentX - previousX;
-                float deltaY = currentY - previousY;
+            scaleGestureDetector.onTouchEvent(event);
+            boolean scaling = scaleGestureListener.scaling;
 
-                videoArea.setX(videoArea.getX() + deltaX);
-                videoArea.setY(videoArea.getY() + deltaY);
-                previousX = currentX;
-                previousY = currentY;
-                moving = true;
-                return true;
+            //Log.e("debug-gesture", (scaling ? "scaled-yes" : "scaled-no"));
+
+            switch (action){
+                case MotionEvent.ACTION_MOVE:
+                    if (singleTouch && !scaling) {
+                        float currentX = event.getX(0);  //单指移动
+                        float currentY = event.getY(0);
+                        float deltaX = currentX - previousX;
+                        float deltaY = currentY - previousY;
+                        videoArea.setX(videoArea.getX() + deltaX);
+                        videoArea.setY(videoArea.getY() + deltaY);
+                        previousX = currentX;
+                        previousY = currentY;
+                        moving = true;
+                    }
+                    if(doubleTouch) {
+                        float currentX = (event.getX(0) + event.getX(1)) / 2;
+                        float currentY = (event.getY(0) + event.getY(1)) / 2;
+                        float deltaX = currentX - previousX;
+                        float deltaY = currentY - previousY;
+                        videoArea.setX(videoArea.getX() + deltaX);  //双指移动
+                        videoArea.setY(videoArea.getY() + deltaY);
+                        previousX = currentX;
+                        previousY = currentY;
+                        moving = true;
+                    }
+                    break;
+
+                case MotionEvent.ACTION_DOWN:
+                    if(singleTouch) {  //如果是单指按下，设置起始位置为当前手指位置
+                        previousX = event.getX(0);
+                        previousY = event.getY(0);
+                        //Log.e("debug-gesture", "touch_start");
+                    }
+                    break;
+
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    if(doubleTouch){  //如果是双指按下，设置起始位置为两指连线的中心点
+                        previousX = (event.getX(0)+event.getX(1)) / 2;
+                        previousY = (event.getY(0)+event.getY(1)) / 2;
+                        //Log.e("debug-gesture","double_touch");
+                    }
+                    break;
+
+                case MotionEvent.ACTION_POINTER_UP:
+                    if(doubleTouch){
+                        int index = event.getActionIndex();  //actionIndex是抬起来的手指位置
+                        previousX = event.getX((index==0 ? 1 : 0));
+                        previousY = event.getY((index==0 ? 1 : 0));
+                        //Log.e("debug-gesture","single_touch");
+                    }
+                    break;
+
+                case MotionEvent.ACTION_UP:
+                    //Log.e("debug-gesture","touch_stop");
+                    if(moving) moving = false;
+                    else if(onLongClick){
+                        showcon();
+                        onLongClick = false;
+                        ijkPlayer.setSpeed(speeds[speed_seekbar.getProgress()]);
+                        text_speed.setText(speedTexts[speed_seekbar.getProgress()]);
+                    }
+                    break;
             }
-             */
-            if(action == MotionEvent.ACTION_DOWN){
-                if(event.getPointerCount() == 1) {
-                    previousX = event.getX(0);
-                    previousY = event.getY(0);
-                    Log.e("debug-gesture", "down");
-                }
-                if(event.getPointerCount() == 2) {
-                    doubleTouch = true;
-                }
-            }
-            if(action == MotionEvent.ACTION_POINTER_UP) {
-                doubleTouch = false;
-            }
+
             return false;
         });
 
@@ -416,16 +443,6 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
             return false;
         });
 
-        //这个管长按结束
-        /*control_layout.setOnTouchListener((view, motionEvent) -> {
-            if (motionEvent.getAction() == MotionEvent.ACTION_UP && onLongClick) {
-                onLongClick = false;
-                ijkPlayer.setSpeed(speeds[speed_seekbar.getProgress()]);
-                text_speed.setText(speedTexts[speed_seekbar.getProgress()]);
-                return true;
-            }
-            return false;
-        });*/
     }
 
 
