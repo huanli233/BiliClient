@@ -64,25 +64,25 @@
                 android:id="@+id/ui_round"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:text="圆屏适配" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/SWLClick"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:text="长按倍速" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/SWloop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:text="洗脑循环" />
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -132,7 +132,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:padding="4dp"
@@ -179,7 +179,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:padding="4dp"
@@ -228,28 +228,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="2dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:background="#318C8C8C"/>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/danmaku_allowoverlap"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:text="弹幕允许重叠" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/danmaku_mergeduplicate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:text="合并重复弹幕" />
 
 
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:padding="4dp"
@@ -274,7 +274,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:padding="4dp"
@@ -298,7 +298,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:padding="4dp"
@@ -322,7 +322,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:padding="4dp"
@@ -358,12 +358,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="2dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:background="#318C8C8C"/>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/ui_showRotateBtn"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="显示旋转按钮" />
@@ -371,7 +371,7 @@
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/ui_showDanmakuBtn"
                 android:layout_width="match_parent"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:layout_height="wrap_content"
                 android:text="显示弹幕按钮" />
 
@@ -380,18 +380,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="显示循环按钮"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="6dp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="2dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:background="#318C8C8C"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/preview"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:text="查看预览"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
