@@ -7,13 +7,13 @@
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowSwipeToDismiss" tools:targetApi="kitkat_watch">true</item>
 
+        <item name="editTextStyle">@style/EditTextStyle</item>
         <item name="materialCardViewStyle">@style/CardStyle</item>
         <item name="materialButtonStyle">@style/ButtonStyle</item>
 
         <item name="colorSwitchThumbNormal">@color/textwhite</item>
         <item name="colorControlActivated">@color/textwhite</item>
         <item name="android:textColor">@color/textwhite</item>
-        <item name="editTextColor">@color/textwhite</item>
     </style>
     <style name="Theme.NoSwipe" parent="Theme.BiliClient">
         <item name="android:windowSwipeToDismiss" tools:targetApi="kitkat_watch">false</item>

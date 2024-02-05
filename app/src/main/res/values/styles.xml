@@ -16,8 +16,13 @@
         <item name="backgroundTint">#78242424</item>
         <item name="strokeColor">#70707070</item>
         <item name="strokeWidth">0.1dp</item>
+        <item name="android:textColor">@color/textwhite</item>
         <item name="android:insetTop">2dp</item>
         <item name="android:insetBottom">2dp</item>
+    </style>
+
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/textwhite</item>
     </style>
 
 </resources>

@@ -16,10 +16,14 @@ public class MsgUtil {
         Toast toast = Toast.makeText(context, str, Toast.LENGTH_SHORT);
             toast.show();
     }
+    public static void toastLong(String str, Context context){
+        Toast toast = Toast.makeText(context, str, Toast.LENGTH_LONG);
+        toast.show();
+    }
 
     public static void err(Exception e,Context context){
         if(e instanceof IOException) toast("网络错误(＃°Д°)",context);
-        else if (e instanceof JSONException) toast("数据解析错误：\n" + e,context);
+        else if (e instanceof JSONException) toastLong("数据解析错误：\n" + e,context);
         e.printStackTrace();
     }
 

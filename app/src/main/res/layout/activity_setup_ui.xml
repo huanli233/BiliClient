@@ -226,45 +226,29 @@
 
             </LinearLayout>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/reset_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="4dp"
+                android:text="恢复默认" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/preview"
+                android:text="查看预览"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp"
-                android:layout_marginHorizontal="8dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginTop="4dp"
+                android:layout_marginHorizontal="8dp"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="查看预览" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/confirm"
+                android:text="确认设置"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp"
-                android:layout_marginHorizontal="8dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginHorizontal="8dp"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="确认设置" />
-            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </ScrollView>
 

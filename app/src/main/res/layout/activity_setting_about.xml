@@ -5,7 +5,7 @@
      xmlns:tools="http://schemas.android.com/tools"
      android:layout_height="match_parent"
      android:layout_width="match_parent"
-     tools:context=".activity.settings.SettingAboutActivity">
+     tools:context=".activity.settings.AboutActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
          android:layout_height="wrap_content"
@@ -95,6 +95,7 @@
                  android:layout_gravity="center" />
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/author_words"
                  android:layout_height="wrap_content"
                  android:layout_width="match_parent"
                  app:cardMaxElevation="0dp"
@@ -110,8 +111,7 @@
                  app:layout_constraintStart_toStartOf="parent"
                  app:strokeWidth="0.1dp"
                  app:layout_constraintEnd_toEndOf="parent"
-                 app:cardCornerRadius="4dp"
-            >
+                 app:cardCornerRadius="4dp">
 
                 <LinearLayout
                      android:layout_height="wrap_content"

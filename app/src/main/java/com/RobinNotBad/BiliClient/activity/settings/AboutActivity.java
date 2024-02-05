@@ -3,23 +3,26 @@ package com.RobinNotBad.BiliClient.activity.settings;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.user.UserInfoActivity;
-import com.google.android.material.card.MaterialCardView;
+import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingAboutActivity extends BaseActivity {
+public class AboutActivity extends BaseActivity {
+    int eggClick = 0;
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,5 +82,17 @@ public class SettingAboutActivity extends BaseActivity {
                 startActivity(intent);
             });
         }
+
+        findViewById(R.id.author_words).setOnClickListener(view -> {
+            eggClick++;
+            if (eggClick == 7) {
+                eggClick = 0;
+                MsgUtil.toastLong("无论当下的境遇如何，\n这片星空下永远有你的一片位置。\n抱抱屏幕前的你，\n真诚地祝愿你永远快乐幸福。\n让我们一起，迈入“下一个远方”。",this);
+                Intent intent = new Intent();
+                intent.setClass(this, VideoInfoActivity.class);
+                intent.putExtra("bvid", "BV1UC411B7Co");
+                startActivity(intent);
+            }
+        });
     }
 }

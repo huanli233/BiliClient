@@ -59,6 +59,21 @@
             android:paddingBottom="20dp"
             android:orientation="vertical">
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/reset_default"
+                android:text="恢复默认"
+                android:layout_marginTop="4dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:text="查看预览" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -217,26 +232,6 @@
                     android:textSize="11sp" />
 
             </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/preview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="46sp"
-                    android:gravity="center"
-                    android:text="查看预览" />
-            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
     </ScrollView>

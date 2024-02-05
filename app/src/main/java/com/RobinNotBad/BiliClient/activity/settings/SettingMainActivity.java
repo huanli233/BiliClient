@@ -96,7 +96,7 @@ public class SettingMainActivity extends InstanceActivity {
         //about.setOnClickListener(view -> MsgUtil.showText(this,"关于",getString(R.string.about)));
         about.setOnClickListener(view -> {
             Intent intent = new Intent();
-            intent.setClass(this, SettingAboutActivity.class);
+            intent.setClass(this, AboutActivity.class);
             startActivity(intent);
         });
         

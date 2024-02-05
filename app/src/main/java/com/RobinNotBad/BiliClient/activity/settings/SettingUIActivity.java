@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.google.android.material.card.MaterialCardView;
 
 public class SettingUIActivity extends BaseActivity {
 
@@ -33,12 +34,20 @@ public class SettingUIActivity extends BaseActivity {
         uiPaddingV.setText(String.valueOf(SharedPreferencesUtil.getInt("paddingV_percent",0)));
 
 
-        MaterialCardView preview = findViewById(R.id.preview);
-        preview.setOnClickListener(view -> {
+        findViewById(R.id.preview).setOnClickListener(view -> {
             save();
             Intent intent = new Intent();
             intent.setClass(SettingUIActivity.this, UIPreviewActivity.class);
             startActivity(intent);
+        });
+        findViewById(R.id.reset_default).setOnClickListener(view -> {
+            SharedPreferencesUtil.putInt("paddingH_percent", 0);
+            SharedPreferencesUtil.putInt("paddingV_percent", 0);
+            SharedPreferencesUtil.putFloat("dpi", 1.0f);
+            uiScaleInput.setText("1.0");
+            uiPaddingH.setText("0");
+            uiPaddingV.setText("0");
+            MsgUtil.toast("恢复完成",this);
         });
     }
 
