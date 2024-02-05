@@ -1,5 +1,7 @@
 package com.RobinNotBad.BiliClient.activity.player;
 
+import static android.media.AudioManager.STREAM_MUSIC;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,18 +18,51 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.*;
-import android.widget.*;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.Surface;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.TextureView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
-import com.RobinNotBad.BiliClient.util.*;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.ViewScaleGestureListener;
 import com.RobinNotBad.BiliClient.view.BatteryView;
 import com.bumptech.glide.Glide;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.zip.Inflater;
+
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.controller.IDanmakuView;
 import master.flame.danmaku.danmaku.loader.ILoader;
@@ -47,15 +82,7 @@ import okio.Sink;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.zip.Inflater;
-
-import static android.media.AudioManager.STREAM_MUSIC;
-
-public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPreparedListener {
+public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.OnPreparedListener {
     private IDanmakuView mDanmakuView;
     private DanmakuContext mContext;
     private Timer progresstimer, autoHideTimer, sound, speedTimer, loadingShowTimer;
@@ -82,7 +109,7 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
     private ScaleGestureDetector scaleGestureDetector;
     private ViewScaleGestureListener scaleGestureListener;
     private float previousX, previousY;
-    private boolean moving;
+    private boolean moving,scaling;
 
     private final float[] speeds = {0.5F, 0.75F, 1.0F, 1.25F, 1.5F, 1.75F, 2.0F, 3.0F};
     private final String[] speedTexts = {"x 0.5", "x 0.75", "x 1.0", "x 1.25", "x 1.5", "x 1.75", "x 2.0", "x 3.0"};
@@ -356,7 +383,7 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
             boolean doubleTouch = pointerCount == 2;
 
             scaleGestureDetector.onTouchEvent(event);
-            boolean scaling = scaleGestureListener.scaling;
+            scaling = scaleGestureListener.scaling;
 
             //Log.e("debug-gesture", (scaling ? "scaled-yes" : "scaled-no"));
 
@@ -413,24 +440,24 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
 
                 case MotionEvent.ACTION_UP:
                     //Log.e("debug-gesture","touch_stop");
-                    if(moving) moving = false;
-                    else if(onLongClick){
-                        showcon();
+                    if(onLongClick){
                         onLongClick = false;
                         ijkPlayer.setSpeed(speeds[speed_seekbar.getProgress()]);
                         text_speed.setText(speedTexts[speed_seekbar.getProgress()]);
                     }
+                    if(moving) moving = false;
+                    else if(!scaling) clickUI();
                     break;
             }
 
             return false;
         });
 
-        control_layout.setOnClickListener(view -> clickUI());
+        //control_layout.setOnClickListener(view -> );
         //这个管长按开始
         control_layout.setOnLongClickListener(view -> {
             if (SharedPreferencesUtil.getBoolean("player_longclick", false) && ijkPlayer != null && (control_btn.getText() == "| |")) {
-                if (!onLongClick && !moving) {
+                if (!onLongClick && !moving && !scaling) {
                     hidecon();
                     ijkPlayer.setSpeed(3.0F);
                     text_speed.setText("x 3.0");
