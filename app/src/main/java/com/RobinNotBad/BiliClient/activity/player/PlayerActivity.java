@@ -531,7 +531,7 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
         if (sound != null) sound.cancel();
         if (progresstimer != null) progresstimer.cancel();
         if (ijkPlayer != null) ijkPlayer.release();
-        if (mDanmakuView != null && mode != 1) mDanmakuView.release();
+        if (mDanmakuView != null) mDanmakuView.release();
         if (loadingShowTimer != null) loadingShowTimer.cancel();
 
         if (danmakuFile != null && danmakuFile.exists()) danmakuFile.delete();
@@ -737,7 +737,7 @@ public class PlayerActivity extends BaseActivity implements IjkMediaPlayer.OnPre
             }
             danmaku_btn.setOnClickListener(view -> {
                 if(mode==1) Toast.makeText(this, "本视频无弹幕", Toast.LENGTH_SHORT).show();
-                else if (mDanmakuView != null) {
+                else {
                     mDanmakuView.setVisibility((isdanmakushowing ? View.GONE : View.VISIBLE));
                     danmaku_btn.setImageResource((isdanmakushowing ? R.mipmap.danmakuoff : R.mipmap.danmakuon));
                     isdanmakushowing = !isdanmakushowing;
