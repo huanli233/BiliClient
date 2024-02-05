@@ -48,7 +48,6 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.ViewScaleGestureListener;
 import com.RobinNotBad.BiliClient.view.BatteryView;
 import com.bumptech.glide.Glide;
 
@@ -445,15 +444,17 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                         ijkPlayer.setSpeed(speeds[speed_seekbar.getProgress()]);
                         text_speed.setText(speedTexts[speed_seekbar.getProgress()]);
                     }
-                    if(moving) moving = false;
-                    else if(!scaling) clickUI();
+                    if(moving){
+                        moving = false;
+                        if(scaling) return true;
+                    }
                     break;
             }
 
             return false;
         });
 
-        //control_layout.setOnClickListener(view -> );
+        control_layout.setOnClickListener(view -> clickUI());
         //这个管长按开始
         control_layout.setOnLongClickListener(view -> {
             if (SharedPreferencesUtil.getBoolean("player_longclick", false) && ijkPlayer != null && (control_btn.getText() == "| |")) {
@@ -829,8 +830,8 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
     private void changeVideoSize(int width, int height) {
         Log.e("debug-改变视频区域大小","开始");
-        Log.e("screen", screen_width + "x" + screen_height);
-        Log.e("video", width + "x" + height);
+        Log.e("debug-screen", screen_width + "x" + screen_height);
+        Log.e("debug-video", width + "x" + height);
 
         int show_height;
         int show_width;
@@ -844,18 +845,23 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         else {
             float multiplewidth = screen_width / width;
             float multipleheight = screen_height / height;
-            float endhi1 = height * multipleheight;
-            float endwi1 = width * multipleheight;
-            float endhi2 = height * multiplewidth;
-            float endwi2 = width * multiplewidth;//这句之前是multipleheight，其实算出来结果是不对的
+            int endhi1 = (int) (height * multipleheight);
+            int endwi1 = (int) (width * multipleheight);
+            int endhi2 = (int) (height * multiplewidth);
+            int endwi2 = (int) (width * multiplewidth);//这句之前是multipleheight，其实算出来结果是不对的
                                                  //但是这个bug神奇般的在原来的ui布局中无法显现出来，直到我换成ConstraintLayout。。。
                                                  //越发对小电视作者心生敬意（
+            Log.e("debug-case1", endwi1 + "x" + endhi1);
+            Log.e("debug-case2", endwi2 + "x" + endhi2);
             if (endhi1 <= screen_height && endwi1 <= screen_width) {
-                show_height = (int) (endhi1 + 0.5);
-                show_width = (int) (endwi1 + 0.5);
-            } else {
-                show_height = (int) (endhi2 + 0.5);
-                show_width = (int) (endwi2 + 0.5);
+                show_height = endhi1;
+                show_width = endwi1;
+                Log.e("debug-choosed", "case1");
+            }
+            else {
+                show_height = endhi2;
+                show_width = endwi2;
+                Log.e("debug-choosed", "case2");
             }
         }
 

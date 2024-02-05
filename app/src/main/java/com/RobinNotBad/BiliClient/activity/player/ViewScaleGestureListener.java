@@ -1,6 +1,5 @@
-package com.RobinNotBad.BiliClient.util;
+package com.RobinNotBad.BiliClient.activity.player;
 
-import android.util.Log;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
@@ -17,8 +16,6 @@ public class ViewScaleGestureListener extends ScaleGestureDetector.SimpleOnScale
     public boolean onScale(ScaleGestureDetector detector) {
         if(view == null || view.getVisibility() == View.GONE) {return false;}
         float scaleFactor = detector.getScaleFactor();
-
-        Log.e("debug-gesture","scaleFactor=" + scaleFactor);
 
         float currentScale = view.getScaleX();
         float newScale = currentScale * scaleFactor;
