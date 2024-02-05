@@ -284,7 +284,7 @@ public class VideoInfoFragment extends Fragment {
                             ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
                     } else {
-                        File downPath = new File(ConfInfoApi.getDownloadPath(requireContext()), LittleToolsUtil.stringToFile(videoInfo.title + "-" + videoInfo.bvid));
+                        File downPath = new File(ConfInfoApi.getDownloadPath(requireContext()), LittleToolsUtil.stringToFile(videoInfo.title));
 
                         if (downPath.exists() && videoInfo.pagenames.size() == 1)
                             MsgUtil.toast("已经缓存过了~", requireContext());
