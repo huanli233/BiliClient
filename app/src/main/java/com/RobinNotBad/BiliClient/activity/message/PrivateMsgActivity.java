@@ -35,9 +35,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PrivateMsgActivity extends BaseActivity {
     JSONObject allMsg = new JSONObject();
@@ -50,6 +49,7 @@ public class PrivateMsgActivity extends BaseActivity {
     LinearLayout inputLayout;
     long uid;
     boolean isLoadingMore = false;
+    Timer refreshTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +96,15 @@ public class PrivateMsgActivity extends BaseActivity {
                             
                         }
                     });
-                });    
-                
+
+                    refreshTimer = new Timer();
+                    refreshTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            refresh();
+                        }
+                    },15000,15000);
+                });
             } catch(Exception e) {runOnUiThread(()->MsgUtil.err(e,this));}
         });
         
@@ -129,9 +136,6 @@ public class PrivateMsgActivity extends BaseActivity {
             }
             } catch(Exception e) {runOnUiThread(()->MsgUtil.err(e,this));}
         }));
-        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-        Runnable task = this::refresh;
-        scheduledExecutorService.scheduleAtFixedRate(task,30,30, TimeUnit.SECONDS);
     }
     //1在上面0在下面
     private static void setViewAutoHide(final Activity activity, final View view, final RecyclerView list,int azimuth) {
@@ -161,6 +165,13 @@ public class PrivateMsgActivity extends BaseActivity {
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        if(refreshTimer!=null) refreshTimer.cancel();
+        super.onDestroy();
+    }
+
     private void refresh() {
     	CenterThreadPool.run(()->{
             try {
