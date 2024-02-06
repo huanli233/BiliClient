@@ -44,7 +44,7 @@ public class DynamicApiNew {
 
         JSONObject modules = dynamic_json.getJSONObject("modules");
 
-        if(modules.has("module_author")) {
+        if(modules.has("module_author") && !modules.isNull("module_author")) {
             JSONObject module_author = modules.getJSONObject("module_author");
             UserInfo userInfo = new UserInfo();
             userInfo.mid = module_author.getLong("mid");
@@ -54,13 +54,18 @@ public class DynamicApiNew {
         }
         else dynamic.userInfo = new UserInfo();
 
-        if(modules.has("module_dynamic")){
-            JSONObject module_dynamic = modules.getJSONObject("module_dynamic");
-            JSONObject desc = module_dynamic.getJSONObject("desc");
-            JSONArray rich_text_nodes = module_dynamic.getJSONArray("rich_text_nodes");
-            for (int i = 0; i < rich_text_nodes.length(); i++) {
+        if(modules.has("module_dynamic") && !modules.isNull("module_dynamic")){
 
+            JSONObject module_dynamic = modules.getJSONObject("module_dynamic");
+            if(module_dynamic.has("desc") && !module_dynamic.isNull("module_dynamic")) {
+                JSONObject desc = module_dynamic.getJSONObject("desc");
+                JSONArray rich_text_nodes = module_dynamic.getJSONArray("rich_text_nodes");
+                for (int i = 0; i < rich_text_nodes.length(); i++) {
+
+                }
             }
+
+
         }
 
     }
