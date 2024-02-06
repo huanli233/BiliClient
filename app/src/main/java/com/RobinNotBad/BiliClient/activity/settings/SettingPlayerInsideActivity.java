@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.RadioButton;
-
-import androidx.appcompat.widget.SwitchCompat;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
@@ -25,7 +22,7 @@ public class SettingPlayerInsideActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting_clientplayer);
+        setContentView(R.layout.activity_setting_insideplayer);
         Log.e("debug","设置内置播放器");
 
         findViewById(R.id.top).setOnClickListener(view -> finish());

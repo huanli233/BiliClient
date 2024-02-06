@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -24,16 +25,16 @@ public class BatteryView extends View {
         super(context, attrs, defStyleAttr);
     }
 
+    @SuppressLint("DrawAllocation")
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int battery_left = 0;
-        int battery_top = 0;
-        int battery_width = 25;
-        int battery_height = 15;
-        int battery_inside_margin = 3;
-        int battery_head_width = 3;
-        int battery_head_height = 3;
+        int battery_width = (int) (getWidth() * 0.9f);
+        int battery_height = getHeight();
+        int battery_head_width = (int) (getWidth() * 0.08f);
+        int battery_head_height = (int) (getHeight() * 0.4f);
+        int battery_inside_margin = (int) (getWidth() * 0.08f);
+
         Paint paint = new Paint();
         if (mPower<=20) {
             paint.setColor(Color.RED);
@@ -42,29 +43,27 @@ public class BatteryView extends View {
         }
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.STROKE);
-        Rect rect = new Rect(battery_left, battery_top,
-                battery_left + battery_width, battery_top + battery_height);
+        paint.setStrokeWidth(getWidth() * 0.05f);
+        Rect rect = new Rect(0, 0,
+                battery_width, battery_height);
         canvas.drawRect(rect, paint);
 
         float power_percent = mPower / 100.0f;
 
-        Paint paint2 = new Paint(paint);
-        paint2.setStyle(Paint.Style.FILL);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setStrokeWidth(0f);
         //画电量
         if(power_percent != 0) {
-            int p_left = battery_left + battery_inside_margin;
-            int p_top = battery_top + battery_inside_margin;
-            int p_right = p_left - battery_inside_margin + (int)((battery_width - battery_inside_margin) * power_percent);
-            int p_bottom = p_top + battery_height - battery_inside_margin * 2;
-            Rect rect2 = new Rect(p_left, p_top, p_right , p_bottom);
-            canvas.drawRect(rect2, paint2);
-            }
-        int h_left = battery_left + battery_width;
-        int h_top = battery_top + battery_height / 2 - battery_head_height / 2;
-        int h_right = h_left + battery_head_width;
+            int p_right = (int) ((battery_width - battery_inside_margin) * power_percent);
+            int p_bottom = battery_inside_margin + battery_height - battery_inside_margin * 2;
+            Rect rect2 = new Rect(battery_inside_margin, battery_inside_margin, p_right, p_bottom);
+            canvas.drawRect(rect2, paint);
+        }
+        int h_top = battery_height / 2 - battery_head_height / 2;
+        int h_right = battery_width + battery_head_width;
         int h_bottom = h_top + battery_head_height;
-        Rect rect3 = new Rect(h_left, h_top, h_right, h_bottom);
-        canvas.drawRect(rect3, paint2);
+        Rect rect4 = new Rect(battery_width, h_top, h_right, h_bottom);
+        canvas.drawRect(rect4, paint);
     }
     public void setPower(int power){
         mPower=power;
