@@ -65,7 +65,7 @@ public class VideoInfoFragment extends Fragment {
     private TextView title, description, tagsText, upName, views, timeText, durationText, bvidText, danmakuCount;
     private ImageButton fav;
 
-    private boolean desc_expand = false, tags_expand = false,isLiked = false,isCoined = false,isFavoutited= false;
+    private boolean desc_expand = false, tags_expand = false,isLiked = false,isCoined = false,isFavourited= false;
     ActivityResultLauncher<Intent> favoriteActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult o) {
@@ -153,11 +153,11 @@ public class VideoInfoFragment extends Fragment {
             } else requireActivity().runOnUiThread(() -> tagsText.setVisibility(View.GONE));
 
             if (isAdded()) requireActivity().runOnUiThread(() -> {
-                Glide.with(requireContext()).load(videoInfo.cover).placeholder(R.mipmap.placeholder)
+                Glide.with(requireContext()).load(videoInfo.cover + "@20q.webp").placeholder(R.mipmap.placeholder)
                         .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(4, requireContext()))))
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(cover);
-                Glide.with(requireContext()).load(videoInfo.upAvatar).placeholder(R.mipmap.akari)
+                Glide.with(requireContext()).load(videoInfo.upAvatar + "@20q.webp").placeholder(R.mipmap.akari)
                         .apply(RequestOptions.circleCropTransform())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(upIcon);

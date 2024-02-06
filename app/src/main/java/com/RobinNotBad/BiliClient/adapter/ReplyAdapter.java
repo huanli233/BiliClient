@@ -91,7 +91,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             int realPosition = position - 1;
             ReplyHolder replyHolder = (ReplyHolder) holder;
 
-            Glide.with(context).load(replyList.get(realPosition).sender.avatar)
+            Glide.with(context).load(replyList.get(realPosition).sender.avatar + "@20q.webp")
                     .placeholder(R.mipmap.akari)
                     .apply(RequestOptions.circleCropTransform())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)

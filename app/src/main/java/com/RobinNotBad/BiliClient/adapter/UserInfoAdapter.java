@@ -30,9 +30,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 //用户信息页专用Adapter 独立出来也是为了做首项不同
@@ -94,7 +91,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 userInfoHolder.userOfficial.setText(official_signs[userInfo.official] + (userInfo.officialDesc.isEmpty() ? "" : ("\n" + userInfo.officialDesc)));
             } else userInfoHolder.userOfficial.setVisibility(View.GONE);
 
-            Glide.with(this.context).load(userInfo.avatar)
+            Glide.with(this.context).load(userInfo.avatar + "@20q.webp")
                     .placeholder(R.mipmap.akari)
                     .apply(RequestOptions.circleCropTransform())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)

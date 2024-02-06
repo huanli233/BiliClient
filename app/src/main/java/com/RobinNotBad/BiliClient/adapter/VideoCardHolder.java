@@ -46,7 +46,7 @@ public class VideoCardHolder extends RecyclerView.ViewHolder{
         }
         else playTimes.setText(playTimesStr);
 
-        Glide.with(context).load(videoCard.cover)
+        Glide.with(context).load(videoCard.cover + "@20q.webp")
                 .placeholder(R.mipmap.placeholder)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(5,context))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

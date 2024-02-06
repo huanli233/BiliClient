@@ -64,7 +64,7 @@ public class MySpaceActivity extends InstanceActivity {
                 UserInfo userInfo = UserInfoApi.getCurrentUserInfo();
                 int userCoin = UserInfoApi.getCurrentUserCoin();
                 runOnUiThread(() -> {
-                    Glide.with(MySpaceActivity.this).load(userInfo.avatar)
+                    Glide.with(MySpaceActivity.this).load(userInfo.avatar + "@20q.webp")
                             .placeholder(R.mipmap.akari).apply(RequestOptions.circleCropTransform())
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(userAvatar);

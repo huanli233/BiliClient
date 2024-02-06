@@ -62,7 +62,7 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
             	holder.contentText.setText("[撤回消息]");
             }
             holder.nameText.setText(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).name);
-            Glide.with(context).load(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).avatar)
+            Glide.with(context).load(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).avatar + "@20q.webp")
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .placeholder(R.mipmap.akari)
                             .apply(RequestOptions.circleCropTransform())

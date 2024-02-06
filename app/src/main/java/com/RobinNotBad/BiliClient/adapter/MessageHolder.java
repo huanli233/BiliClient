@@ -47,7 +47,7 @@ public class MessageHolder extends RecyclerView.ViewHolder{
         for(int i = 0;i<message.user.size();i++){
             ImageView imageView = new ImageView(context);
             Glide.with(context)
-                    .load(message.user.get(i).avatar)
+                    .load(message.user.get(i).avatar + "@20q.webp")
                     .placeholder(R.mipmap.akari)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .apply(RequestOptions.circleCropTransform())

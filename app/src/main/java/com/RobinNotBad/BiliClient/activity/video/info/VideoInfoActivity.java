@@ -46,10 +46,6 @@ public class VideoInfoActivity extends BaseActivity {
         if(type == null) type = "video";
         this.aid = intent.getLongExtra("aid",114514);
         this.bvid = intent.getStringExtra("bvid");
-        //int layoutId;
-        //if(type == "media") layoutId = R.layout.activity_simple_viewpager2;
-        //else layoutId = R.layout.activity_simple_viewpager;
-        //setContentView(layoutId);
         setContentView(R.layout.activity_simple_viewpager);
 
         if(type.equals("media")) {
@@ -67,14 +63,6 @@ public class VideoInfoActivity extends BaseActivity {
         }
     }
 
-    /*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(type.equals("media")) initMediaInfoView();
-        else initVideoInfoView();
-    }
-     */
 
     public void initMediaInfoView() {
         ViewPager viewPager = findViewById(R.id.viewPager);

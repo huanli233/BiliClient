@@ -45,7 +45,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Ho
 
         holder.name.setText(userList.get(position).name);
         holder.desc.setText(userList.get(position).sign);
-        Glide.with(context).load(userList.get(position).avatar)
+        Glide.with(context).load(userList.get(position).avatar + "@20q.webp")
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
