@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.DynamicHolder;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
-import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.model.DynamicOld;
 
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import org.json.JSONException;
@@ -60,7 +60,7 @@ public class DynamicInfoFragment extends Fragment {
 
         CenterThreadPool.run(()->{
             try {
-                Dynamic dynamic = DynamicApi.analyzeDynamic(DynamicApi.getDynamicInfo(id));
+                DynamicOld dynamic = DynamicApi.analyzeDynamic(DynamicApi.getDynamicInfo(id));
                 if(isAdded()) requireActivity().runOnUiThread(() -> {
                     View dynamicView = View.inflate(requireContext(),R.layout.cell_dynamic, scrollView);
                     DynamicHolder holder = new DynamicHolder(dynamicView,false);

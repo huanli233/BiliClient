@@ -17,7 +17,7 @@ import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
-import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.model.DynamicOld;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
@@ -58,7 +58,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
 
 
     @SuppressLint("SetTextI18n")
-    public void showDynamic(Dynamic dynamic, Context context){    //公用的显示函数 这样修改和调用都方便
+    public void showDynamic(DynamicOld dynamic, Context context){    //公用的显示函数 这样修改和调用都方便
         username.setText(dynamic.userName);
         if(pubdate!=null) pubdate.setText(dynamic.pubDate);
         if(dynamic.content != null && !dynamic.content.isEmpty()) {

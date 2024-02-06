@@ -15,7 +15,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.UserInfoAdapter;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
-import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.model.DynamicOld;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -31,7 +31,7 @@ public class UserDynamicFragment extends Fragment {
 
     private long mid;
     private RecyclerView recyclerView;
-    private ArrayList<Dynamic> dynamicList;
+    private ArrayList<DynamicOld> dynamicList;
     private UserInfoAdapter adapter;
     private boolean refreshing = false;
     private boolean bottom = false;

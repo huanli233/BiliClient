@@ -14,7 +14,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.DynamicAdapter;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
-import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.model.DynamicOld;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -30,7 +30,7 @@ public class DynamicActivity extends InstanceActivity {
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ArrayList<Dynamic> dynamicList;
+    private ArrayList<DynamicOld> dynamicList;
     private DynamicAdapter dynamicAdapter;
     private long offset = 0;
     private boolean firstRefresh = true;

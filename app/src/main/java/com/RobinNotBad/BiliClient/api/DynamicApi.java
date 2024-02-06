@@ -3,7 +3,7 @@ package com.RobinNotBad.BiliClient.api;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
-import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.model.DynamicOld;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -53,7 +53,7 @@ public class DynamicApi {
         return new JSONObject(Objects.requireNonNull(response.body()).string()).getJSONObject("data").getJSONObject("card");
     }
 
-    public static long analyzeDynamicList(JSONObject input, ArrayList<Dynamic> list) throws JSONException {
+    public static long analyzeDynamicList(JSONObject input, ArrayList<DynamicOld> list) throws JSONException {
         JSONObject data = input.getJSONObject("data");
         JSONArray cards = data.getJSONArray("cards");
         for (int i = 0; i < cards.length(); i++) {
@@ -64,8 +64,8 @@ public class DynamicApi {
         else return -1;
     }
 
-    public static Dynamic analyzeDynamic(JSONObject dynamicCard) throws JSONException {
-        Dynamic dynamicReturn = new Dynamic();
+    public static DynamicOld analyzeDynamic(JSONObject dynamicCard) throws JSONException {
+        DynamicOld dynamicReturn = new DynamicOld();
 
         JSONObject desc = dynamicCard.getJSONObject("desc");
         dynamicReturn.type = desc.getInt("type");
@@ -113,7 +113,7 @@ public class DynamicApi {
     }
 
 
-    public static void analyzeCard(Dynamic dynamicReturn, JSONObject card) throws JSONException {
+    public static void analyzeCard(DynamicOld dynamicReturn, JSONObject card) throws JSONException {
         int type = dynamicReturn.type;
         switch (type){
             case 1:    //分享动态
@@ -122,7 +122,7 @@ public class DynamicApi {
 
                 if(card.has("origin")) {
                     JSONObject origin = new JSONObject(card.getString("origin"));
-                    Dynamic childDynamic = new Dynamic();
+                    DynamicOld childDynamic = new DynamicOld();
                     childDynamic.type = item_1.getInt("orig_type");
                     childDynamic.dynamicId = item_1.getLong("orig_dy_id");
                     analyzeCard(childDynamic, origin);

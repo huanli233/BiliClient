@@ -103,6 +103,7 @@
         app:strokeWidth="0dp"
         android:insetBottom="0dp"
         android:layout_marginEnd="2dp"
+        android:backgroundTint="#dd262626"
         android:text="关注"
         app:layout_constraintEnd_toStartOf="@+id/msgBtn"
         app:layout_constraintStart_toStartOf="@+id/userDesc"

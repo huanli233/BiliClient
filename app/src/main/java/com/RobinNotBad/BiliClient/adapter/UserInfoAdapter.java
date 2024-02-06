@@ -19,7 +19,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.message.PrivateMsgActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
-import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.model.DynamicOld;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
@@ -37,12 +37,12 @@ import java.util.ArrayList;
 public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
-    ArrayList<Dynamic> dynamicList;
+    ArrayList<DynamicOld> dynamicList;
     UserInfo userInfo;
 
     private boolean follow_onprocess = false;
 
-    public UserInfoAdapter(Context context, ArrayList<Dynamic> dynamicList, UserInfo userInfo) {
+    public UserInfoAdapter(Context context, ArrayList<DynamicOld> dynamicList, UserInfo userInfo) {
         this.context = context;
         this.dynamicList = dynamicList;
         this.userInfo = userInfo;

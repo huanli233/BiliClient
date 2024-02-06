@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.model.DynamicOld;
 
 import java.util.ArrayList;
 
@@ -21,9 +21,9 @@ import java.util.ArrayList;
 public class DynamicAdapter extends RecyclerView.Adapter<DynamicHolder> {
 
     Context context;
-    ArrayList<Dynamic> dynamicList;
+    ArrayList<DynamicOld> dynamicList;
 
-    public DynamicAdapter(Context context, ArrayList<Dynamic> dynamicList) {
+    public DynamicAdapter(Context context, ArrayList<DynamicOld> dynamicList) {
         this.context = context;
         this.dynamicList = dynamicList;
     }
