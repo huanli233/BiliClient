@@ -118,7 +118,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(cover);
                 }
-                Glide.with(context).load(articleInfo.upAvatar).placeholder(R.mipmap.akari)
+                Glide.with(context).load(articleInfo.upAvatar + "@20q.webp").placeholder(R.mipmap.akari)
                         .apply(RequestOptions.circleCropTransform())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(upIcon);

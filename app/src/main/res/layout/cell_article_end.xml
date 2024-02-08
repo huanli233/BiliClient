@@ -7,23 +7,23 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
-            android:layout_height="0dp"
-            android:layout_width="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/icon_play"
-            android:alpha="0.5"
-            app:layout_constraintTop_toTopOf="@+id/viewsCount"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/viewsCount"
-            android:layout_marginStart="10dp"
-            android:id="@+id/viewsIcon" />
+        android:id="@+id/viewsIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="6dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.5"
+        android:src="@drawable/icon_play"
+        app:layout_constraintBottom_toBottomOf="@+id/viewsCount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/viewsCount" />
 
     <TextView
         android:id="@+id/viewsCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="6dp"
         android:alpha="0.5"
         android:text="114514"
         android:textColor="#fff"
@@ -42,22 +42,22 @@
             app:layout_constraintBottom_toBottomOf="@+id/timeText"
             android:id="@+id/timeIcon" />
 
-        <TextView
-            android:id="@+id/timeText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:alpha="0.5"
-            android:lines="1"
-            android:text="9999-13-32 25:61"
-            android:textColor="#fff"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/timeIcon"
-            app:layout_constraintTop_toBottomOf="@id/viewsCount" />
+    <TextView
+        android:id="@+id/timeText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="6dp"
+        android:alpha="0.5"
+        android:lines="1"
+        android:text="9999-13-32 25:61"
+        android:textColor="#fff"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/timeIcon"
+        app:layout_constraintTop_toBottomOf="@id/viewsCount" />
 
     <ImageView
         android:id="@+id/cvidIcon"
@@ -76,7 +76,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="6dp"
         android:alpha="0.5"
         android:lines="1"
         android:text="CV114514"

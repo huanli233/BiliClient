@@ -14,10 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.ArticleCardAdapter;
-import com.RobinNotBad.BiliClient.adapter.FollowListAdapter;
 import com.RobinNotBad.BiliClient.api.SearchApi;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
-import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
@@ -124,13 +122,14 @@ public class SearchArticleFragment extends Fragment {
     }
 
     public void refresh(String keyword){
-        refreshing = true;
+        this.refreshing = true;
         this.page = 0;
         this.keyword = keyword;
-        int size_old = articleCardList.size();
-        articleCardList.clear();
-        requireActivity().runOnUiThread(()->{
-            articleCardAdapter.notifyItemRangeRemoved(0,size_old);
+        if(this.articleCardList==null)this.articleCardList = new ArrayList<>();
+        int size_old = this.articleCardList.size();
+        this.articleCardList.clear();
+        CenterThreadPool.runOnUiThread(()->{
+            if(size_old!=0) this.articleCardAdapter.notifyItemRangeRemoved(0,size_old);
             CenterThreadPool.run(this::continueLoading);
         });
     }

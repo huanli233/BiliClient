@@ -122,13 +122,15 @@ public class SearchVideoFragment extends Fragment {
     }
 
     public void refresh(String keyword){
-        refreshing = true;
+        this.refreshing = true;
         this.page = 0;
         this.keyword = keyword;
-        int size_old = videoCardList.size();
-        videoCardList.clear();
-        requireActivity().runOnUiThread(()->{
-            videoCardAdapter.notifyItemRangeRemoved(0,size_old);
+        if(this.videoCardList==null) this.videoCardList = new ArrayList<>();
+        if(this.videoCardAdapter==null) this.videoCardAdapter = new VideoCardAdapter(requireContext(),this.videoCardList);
+        int size_old = this.videoCardList.size();
+        this.videoCardList.clear();
+        CenterThreadPool.runOnUiThread(()->{
+            if(size_old!=0) this.videoCardAdapter.notifyItemRangeRemoved(0,size_old);
             CenterThreadPool.run(this::continueLoading);
         });
     }

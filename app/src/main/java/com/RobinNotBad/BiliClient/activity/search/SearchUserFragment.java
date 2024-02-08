@@ -122,13 +122,15 @@ public class SearchUserFragment extends Fragment {
     }
 
     public void refresh(String keyword){
-        refreshing = true;
+        this.refreshing = true;
         this.page = 0;
         this.keyword = keyword;
-        int size_old = userInfoList.size();
-        userInfoList.clear();
-        requireActivity().runOnUiThread(()->{
-            userInfoAdapter.notifyItemRangeRemoved(0,size_old);
+        if(this.userInfoList==null) this.userInfoList = new ArrayList<>();
+        if(this.userInfoAdapter==null) this.userInfoAdapter = new FollowListAdapter(requireContext(),this.userInfoList);
+        int size_old = this.userInfoList.size();
+        this.userInfoList.clear();
+        CenterThreadPool.runOnUiThread(()->{
+            if(size_old!=0) this.userInfoAdapter.notifyItemRangeRemoved(0,size_old);
             CenterThreadPool.run(this::continueLoading);
         });
     }
