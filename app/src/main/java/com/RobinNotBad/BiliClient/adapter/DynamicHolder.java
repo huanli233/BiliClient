@@ -101,7 +101,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 VideoCard childVideoCard = (VideoCard) dynamic.major_object;
                 VideoCardHolder video_holder = new VideoCardHolder(View.inflate(context,R.layout.cell_dynamic_video,extraCard));
                 video_holder.showVideoCard(childVideoCard,context);
-                video_holder.itemView.setOnClickListener(view -> {
+                video_holder.itemView.findViewById(R.id.cardView).setOnClickListener(view -> {
                     Intent intent = new Intent();
                     intent.setClass(context, VideoInfoActivity.class);
                     intent.putExtra("bvid", "");
@@ -114,7 +114,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 ArticleCard articleCard = (ArticleCard) dynamic.major_object;
                 ArticleCardHolder article_holder = new ArticleCardHolder(View.inflate(context,R.layout.cell_dynamic_article,extraCard));
                 article_holder.showArticleCard(articleCard,context);
-                article_holder.itemView.setOnClickListener(view -> {
+                article_holder.itemView.findViewById(R.id.cardView).setOnClickListener(view -> {
                     Intent intent = new Intent();
                     intent.setClass(context, ArticleInfoActivity.class);
                     intent.putExtra("cvid", articleCard.id);
