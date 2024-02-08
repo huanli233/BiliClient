@@ -37,5 +37,5 @@
     <string name="player_aliang_package">com.aliangmaker.media</string>
     <string name="player_mtv_package">com.xinxiangshicheng.wearbiliplayer.cn</string>
 
-    <string name="update_log">请注意：从2.4.0以前的版本升级到现版本的用户请前往 我的-退出登录 或者 清除APP数据，然后重新扫码！\n\n2.5.0更新内容：\n1.增加内置播放器\n2.修复了离开登录页面时直接回到桌面的问题\n3.修复一堆bug</string>
+    <string name="update_log">请注意：从2.4.0以前的版本升级到现版本的用户请前往 我的-退出登录 或者 清除APP数据，然后重新扫码！\n\n2.5.0更新内容：\n1.增加内置播放器\n2.修复了离开登录页面时直接回到桌面的问题\n3.修复一堆bug\n4.调整统一了部分页面的布局，将按钮点击效果改为白色</string>
 </resources>
