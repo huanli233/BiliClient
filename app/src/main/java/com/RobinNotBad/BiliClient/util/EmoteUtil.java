@@ -6,12 +6,14 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 
+import com.RobinNotBad.BiliClient.model.Emote;
 import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 
@@ -28,6 +30,22 @@ public class EmoteUtil {
                 String name = key.getString("name");
                 String emoteUrl = key.getString("url");
                 int size = key.getInt("size");  //B站十分贴心的帮你把表情包大小都写好了，快说谢谢蜀黍
+
+                replaceSingle(text,result,name,emoteUrl,size,scale,context);
+            }
+        }
+        return result;
+    }
+
+    public static SpannableString textReplaceEmote(String text, ArrayList<Emote> emotes, float scale, Context context) throws JSONException, ExecutionException, InterruptedException {
+        SpannableString result = new SpannableString(text);
+        if(emotes!=null && emotes.size()>0) {
+            for (int i = 0; i < emotes.size(); i++) {    //遍历每一个表情包
+                Emote key = emotes.get(i);
+
+                String name = key.name;
+                String emoteUrl = key.url;
+                int size = key.size;  //B站十分贴心的帮你把表情包大小都写好了，快说谢谢蜀黍
 
                 replaceSingle(text,result,name,emoteUrl,size,scale,context);
             }

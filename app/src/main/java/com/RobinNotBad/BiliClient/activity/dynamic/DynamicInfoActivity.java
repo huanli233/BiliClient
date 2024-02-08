@@ -31,10 +31,7 @@ public class DynamicInfoActivity extends BaseActivity {
         Intent intent = getIntent();
         long id = intent.getLongExtra("id",0);
         long rid = intent.getLongExtra("rid",0);
-        int dynamicType = intent.getIntExtra("type",1);
-
-        int requestType = (dynamicType == 2 ? 11 : 17);
-        long requestId = (dynamicType == 2 ? rid : id);
+        int type = intent.getIntExtra("type",1);
 
         findViewById(R.id.top).setOnClickListener(view -> finish());
 
@@ -46,7 +43,7 @@ public class DynamicInfoActivity extends BaseActivity {
         List<Fragment> fragmentList = new ArrayList<>();
         DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance(id);
         fragmentList.add(diFragment);
-        VideoReplyFragment rFragment = VideoReplyFragment.newInstance(requestId, requestType);
+        VideoReplyFragment rFragment = VideoReplyFragment.newInstance(rid, type);
         fragmentList.add(rFragment);
 
         ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);

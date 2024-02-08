@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.search;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,25 +34,15 @@ public class SearchUserFragment extends Fragment {
     private boolean bottom = false;
     private int page = 0;
 
-
     public SearchUserFragment(){}
 
-    public static SearchUserFragment newInstance(ArrayList<UserInfo> userInfoList, String keyword) {
-        SearchUserFragment fragment = new SearchUserFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("list",userInfoList);
-        bundle.putString("keyword",keyword);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static SearchUserFragment newInstance() {
+        return new SearchUserFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments()!=null){
-            userInfoList = getArguments().getParcelableArrayList("list");
-            keyword = getArguments().getString("keyword");
-        }
     }
 
     @Override
@@ -67,12 +56,13 @@ public class SearchUserFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.recyclerView);
+        userInfoList = new ArrayList<>();
+
         CenterThreadPool.run(() -> {
             if(isAdded()) requireActivity().runOnUiThread(() -> {
                 userInfoAdapter = new FollowListAdapter(requireContext(), userInfoList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 recyclerView.setAdapter(userInfoAdapter);
-
 
                 recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override
@@ -88,9 +78,8 @@ public class SearchUserFragment extends Fragment {
                         int itemCount = manager.getItemCount();
                         if (lastItemPosition >= (itemCount - 3) && dy>0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                             refreshing = true;
-                            CenterThreadPool.run(() -> continueLoading(requireContext())); //加载第二页
+                            CenterThreadPool.run(()->continueLoading()); //加载第二页
                         }
-
 
                         if(requireActivity() instanceof SearchActivity) {
                             SearchActivity activity = (SearchActivity) requireActivity();
@@ -114,37 +103,33 @@ public class SearchUserFragment extends Fragment {
         });
     }
 
-    private void continueLoading(Context context){
-        refreshing = true;
+    private void continueLoading(){
         page++;
         Log.e("debug","加载下一页");
         int lastSize = userInfoList.size();
         try {
-            JSONArray result =  SearchApi.searchType(keyword,page,"bili_user");
+            JSONArray result = SearchApi.searchType(keyword,page,"bili_user");
             if(result!=null) {
                 SearchApi.getUsersFromSearchResult(result, userInfoList);
                 CenterThreadPool.runOnUiThread(() -> userInfoAdapter.notifyItemRangeInserted(lastSize + 1,userInfoList.size()-lastSize));
             }
             else {
                 bottom = true;
-                MsgUtil.toast("已经到底啦OwO",context);
+                if(isAdded()) requireActivity().runOnUiThread(() ->  MsgUtil.toast("已经到底啦OwO",requireContext()));
             }
-        } catch (Exception e){CenterThreadPool.runOnUiThread(()-> MsgUtil.err(e,context));}
+        } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,requireContext()));}
         refreshing = false;
     }
 
-
-    public void refresh(ArrayList<UserInfo> userInfoList, String keyword){
+    public void refresh(String keyword){
+        refreshing = true;
+        this.page = 0;
         this.keyword = keyword;
-        int size_old = this.userInfoList.size();
-        this.userInfoList = userInfoList;
-        CenterThreadPool.runOnUiThread(()-> {
+        int size_old = userInfoList.size();
+        userInfoList.clear();
+        requireActivity().runOnUiThread(()->{
             userInfoAdapter.notifyItemRangeRemoved(0,size_old);
-            userInfoAdapter.notifyItemRangeInserted(0,userInfoList.size());
-
-            refreshing = false;
-            bottom = false;
-            page = 0;
+            CenterThreadPool.run(this::continueLoading);
         });
     }
 }

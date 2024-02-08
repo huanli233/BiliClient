@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.model.ArticleInfo;
+import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -30,7 +30,7 @@ public class ArticleCardHolder extends RecyclerView.ViewHolder{
         upIcon = itemView.findViewById(R.id.avatarIcon);
     }
 
-    public void showArticleCard(ArticleInfo articleCard, Context context){
+    public void showArticleCard(ArticleCard articleCard, Context context){
         title.setText(LittleToolsUtil.htmlToString(articleCard.title));
         String upNameStr = articleCard.upName;
         if(upNameStr.isEmpty()){
@@ -45,7 +45,7 @@ public class ArticleCardHolder extends RecyclerView.ViewHolder{
         }
         else readTimes.setText(articleCard.view);
 
-        Glide.with(context).load(articleCard.banner)
+        Glide.with(context).load(articleCard.cover)
                 .placeholder(R.mipmap.placeholder)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(5,context))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

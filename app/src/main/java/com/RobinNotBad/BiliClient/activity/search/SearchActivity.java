@@ -37,35 +37,37 @@ public class SearchActivity extends InstanceActivity {
     SearchArticleFragment searchArticleFragment;
     SearchUserFragment searchUserFragment;
 
-    private ViewPager viewPager;
     public ConstraintLayout searchBar;
     public int searchBarAlpha = 100;
-    private ArrayList<VideoCard> videoCardList;
-    private ArrayList<UserInfo> userInfoList;
-    private ArrayList<ArticleInfo> articleInfoList;
     private String keyword;
     private boolean refreshing = false;
-    private boolean firstRun = true;
-    private boolean firstFragment = true;
 
     @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         setContentView(R.layout.activity_search);
         setMenuClick(3);
         Log.e("debug","进入搜索页");
 
-        viewPager = findViewById(R.id.viewPager);
-
-        videoCardList = new ArrayList<>();
-        userInfoList = new ArrayList<>();
-        articleInfoList = new ArrayList<>();
+        ViewPager viewPager = findViewById(R.id.viewPager);
 
         View searchBtn = findViewById(R.id.search);
         EditText keywordInput = findViewById(R.id.keywordInput);
         searchBar = findViewById(R.id.searchbar);
+
+        List<Fragment> fragmentList = new ArrayList<>();
+        searchVideoFragment = SearchVideoFragment.newInstance();
+        fragmentList.add(searchVideoFragment);
+        searchArticleFragment = SearchArticleFragment.newInstance();
+        fragmentList.add(searchArticleFragment);
+        searchUserFragment = SearchUserFragment.newInstance();
+        fragmentList.add(searchUserFragment);
+        viewPager.setOffscreenPageLimit(fragmentList.size());
+
+        ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
+        viewPager.setAdapter(vpfAdapter);
 
         searchBtn.setOnClickListener(view -> searchKeyword(keywordInput.getText().toString()));
         keywordInput.setOnEditorActionListener((textView, actionId, event) -> {
@@ -105,56 +107,19 @@ public class SearchActivity extends InstanceActivity {
             } else {
                 keyword = str;
 
-                if (firstRun) firstRun = false;
-                else {
-                    videoCardList.clear();
-                    userInfoList.clear();
-                    articleInfoList.clear();
-                    Log.e("debug", "清空");
-                }
-
-                CenterThreadPool.run(() -> {
+                CenterThreadPool.run(()->{
                     try {
-                        JSONArray resultVideo = SearchApi.search(keyword, 1);
-                        JSONArray resultUser = SearchApi.searchType(keyword, 1,"bili_user");
-                        JSONArray resultArticle = SearchApi.searchType(keyword, 1,"article");
-
-                        if (resultVideo != null) SearchApi.getVideosFromSearchResult(resultVideo, videoCardList);
-                        else runOnUiThread(() -> MsgUtil.toast("视频搜索结果为空OwO", this));
-
-                        if (resultUser != null) SearchApi.getUsersFromSearchResult(resultUser, userInfoList);
-                        else runOnUiThread(() -> MsgUtil.toast("用户搜索结果为空OwO", this));
-
-                        if (resultArticle != null) SearchApi.getArticlesFromSearchResult(resultArticle, articleInfoList);
-                        else runOnUiThread(() -> MsgUtil.toast("文章搜索结果为空OwO", this));
-
-                        runOnUiThread(this::reload_fragments);
-                    } catch (Exception e) {runOnUiThread(() -> MsgUtil.err(e, this));}
-                    refreshing = false;
+                        searchVideoFragment.refresh(keyword);
+                        searchArticleFragment.refresh(keyword);
+                        searchUserFragment.refresh(keyword);
+                        refreshing = false;
+                    }catch (Exception e){
+                        refreshing = false;
+                        runOnUiThread(()->MsgUtil.err(e,this));
+                    }
                 });
+
             }
-        }
-    }
-
-    private void reload_fragments(){
-        if(firstFragment) { //第一次搜索
-            List<Fragment> fragmentList = new ArrayList<>();
-            searchVideoFragment = SearchVideoFragment.newInstance(videoCardList, keyword);
-            fragmentList.add(searchVideoFragment);
-            searchArticleFragment = SearchArticleFragment.newInstance(articleInfoList, keyword);
-            fragmentList.add(searchArticleFragment);
-            searchUserFragment = SearchUserFragment.newInstance(userInfoList, keyword);
-            fragmentList.add(searchUserFragment);
-            viewPager.setOffscreenPageLimit(fragmentList.size());
-
-            ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
-            viewPager.setAdapter(vpfAdapter);
-
-            firstFragment = false;
-        } else { //再次搜索
-            searchVideoFragment.refresh(videoCardList,keyword);
-            searchArticleFragment.refresh(articleInfoList,keyword);
-            searchUserFragment.refresh(userInfoList,keyword);
         }
     }
 }

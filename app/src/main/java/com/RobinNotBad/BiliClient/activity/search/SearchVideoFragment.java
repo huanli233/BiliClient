@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.search;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,22 +36,13 @@ public class SearchVideoFragment extends Fragment {
 
     public SearchVideoFragment(){}
 
-    public static SearchVideoFragment newInstance(ArrayList<VideoCard> cardList, String keyword) {
-        SearchVideoFragment fragment = new SearchVideoFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("list",cardList);
-        bundle.putString("keyword",keyword);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static SearchVideoFragment newInstance() {
+        return new SearchVideoFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments()!=null){
-            videoCardList = getArguments().getParcelableArrayList("list");
-            keyword = getArguments().getString("keyword");
-        }
     }
 
     @Override
@@ -66,6 +56,8 @@ public class SearchVideoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.recyclerView);
+        videoCardList = new ArrayList<>();
+
         CenterThreadPool.run(() -> {
             if(isAdded()) requireActivity().runOnUiThread(() -> {
                 videoCardAdapter = new VideoCardAdapter(requireContext(), videoCardList);
@@ -86,9 +78,8 @@ public class SearchVideoFragment extends Fragment {
                         int itemCount = manager.getItemCount();
                         if (lastItemPosition >= (itemCount - 3) && dy>0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                             refreshing = true;
-                            CenterThreadPool.run(() -> continueLoading(requireContext())); //加载第二页
+                            CenterThreadPool.run(()->continueLoading()); //加载第二页
                         }
-
 
                         if(requireActivity() instanceof SearchActivity) {
                             SearchActivity activity = (SearchActivity) requireActivity();
@@ -112,38 +103,33 @@ public class SearchVideoFragment extends Fragment {
         });
     }
 
-    private void continueLoading(Context context){
-        refreshing = true;
+    private void continueLoading(){
         page++;
         Log.e("debug","加载下一页");
         int lastSize = videoCardList.size();
         try {
             JSONArray result =  SearchApi.search(keyword,page);
             if(result!=null) {
-                SearchApi.getVideosFromSearchResult(result, videoCardList);
+                SearchApi.getVideosFromSearchResult(result, videoCardList,page==1);
                 CenterThreadPool.runOnUiThread(() -> videoCardAdapter.notifyItemRangeInserted(lastSize + 1,videoCardList.size()-lastSize));
             }
             else {
                 bottom = true;
-                MsgUtil.toast("已经到底啦OwO",context);
+                if(isAdded()) requireActivity().runOnUiThread(() ->  MsgUtil.toast("已经到底啦OwO",requireContext()));
             }
-        } catch (Exception e){CenterThreadPool.runOnUiThread(()-> MsgUtil.err(e,context));}
+        } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,requireContext()));}
         refreshing = false;
     }
 
-
-    public void refresh(ArrayList<VideoCard> newList, String keyword){
+    public void refresh(String keyword){
+        refreshing = true;
+        this.page = 0;
         this.keyword = keyword;
-        int size_old = this.videoCardList.size();
-        this.videoCardList = newList;
-        CenterThreadPool.runOnUiThread(()-> {
+        int size_old = videoCardList.size();
+        videoCardList.clear();
+        requireActivity().runOnUiThread(()->{
             videoCardAdapter.notifyItemRangeRemoved(0,size_old);
-            videoCardAdapter.notifyItemRangeInserted(0,videoCardList.size());
-            Log.e("debug","size=" + this.videoCardList.size() + "&last="+size_old);
-
-            refreshing = false;
-            bottom = false;
-            page = 0;
+            CenterThreadPool.run(this::continueLoading);
         });
     }
 }

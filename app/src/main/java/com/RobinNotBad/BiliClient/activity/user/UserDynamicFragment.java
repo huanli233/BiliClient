@@ -15,12 +15,10 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.UserInfoAdapter;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
-import com.RobinNotBad.BiliClient.model.DynamicOld;
+import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -31,7 +29,7 @@ public class UserDynamicFragment extends Fragment {
 
     private long mid;
     private RecyclerView recyclerView;
-    private ArrayList<DynamicOld> dynamicList;
+    private ArrayList<Dynamic> dynamicList;
     private UserInfoAdapter adapter;
     private boolean refreshing = false;
     private boolean bottom = false;
@@ -74,9 +72,7 @@ public class UserDynamicFragment extends Fragment {
             try {
                 UserInfo userInfo = UserInfoApi.getUserInfo(mid);
 
-                JSONObject dynamic = DynamicApi.getUserDynamic(mid,offset);
-                offset = DynamicApi.analyzeDynamicList(dynamic,dynamicList);
-
+                offset = DynamicApi.getDynamicList(dynamicList,offset,mid);
                 bottom = (offset==-1);
 
                 if(isAdded()) requireActivity().runOnUiThread(()-> {
@@ -111,8 +107,7 @@ public class UserDynamicFragment extends Fragment {
     private void continueLoading() {
         try {
             int lastSize = dynamicList.size();
-            JSONObject jsonObject = DynamicApi.getUserDynamic(mid,offset);
-            offset = DynamicApi.analyzeDynamicList(jsonObject,dynamicList);
+            offset = DynamicApi.getDynamicList(dynamicList,offset,mid);
             if(isAdded()) requireActivity().runOnUiThread(()-> adapter.notifyItemRangeInserted(lastSize + 1, dynamicList.size() + 1 - lastSize));
             bottom = (offset==-1);
             refreshing = false;

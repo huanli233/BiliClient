@@ -14,12 +14,10 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.DynamicAdapter;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
-import com.RobinNotBad.BiliClient.model.DynamicOld;
+import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -30,7 +28,7 @@ public class DynamicActivity extends InstanceActivity {
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ArrayList<DynamicOld> dynamicList;
+    private ArrayList<Dynamic> dynamicList;
     private DynamicAdapter dynamicAdapter;
     private long offset = 0;
     private boolean firstRefresh = true;
@@ -88,9 +86,8 @@ public class DynamicActivity extends InstanceActivity {
         runOnUiThread(()->swipeRefreshLayout.setRefreshing(true));
         int lastSize = dynamicList.size();
         try {
-            JSONObject jsonObject = DynamicApi.getSelfDynamic(offset);
-            offset = DynamicApi.analyzeDynamicList(jsonObject, dynamicList);
-            bottom = offset == -1;
+            offset = DynamicApi.getDynamicList(dynamicList,offset,0);
+            bottom = (offset==-1);
 
             runOnUiThread(() -> {
                 if (firstRefresh) {

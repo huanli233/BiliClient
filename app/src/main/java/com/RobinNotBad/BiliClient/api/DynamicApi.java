@@ -1,199 +1,189 @@
 package com.RobinNotBad.BiliClient.api;
 
-import android.annotation.SuppressLint;
 import android.util.Log;
 
-import com.RobinNotBad.BiliClient.model.DynamicOld;
+import com.RobinNotBad.BiliClient.model.ArticleCard;
+import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.model.Emote;
+import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import okhttp3.Response;
 
+//新的动态api，旧的那个实在太蛋疼而且说不定随时会被弃用（
+
 public class DynamicApi {
+    public static long getDynamicList(ArrayList<Dynamic> dynamicList, long offset, long mid) throws IOException, JSONException {
+        String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/"
+                + (mid==0 ? "all?" : "space?host_mid=" + mid + "&")
+                + (offset==0 ? "" : "offset=" + offset);
 
-    public static final String DYNAMIC_TYPES = "268435455,1,2,4,8";
+        Response response = NetWorkUtil.get(url);
+        if(response.body()==null) throw new JSONException("动态返回数据为空TAT");
+        JSONObject all = new JSONObject(response.body().string());
+        if(all.getInt("code")!=0) throw new JSONException(all.getString("message"));
+        //以后API也按照这个写吧，提供的报错信息清楚些也不会爆黄
 
-    public static JSONObject getSelfDynamic(long offset) throws IOException, JSONException {
-        String url;
-        if(offset==0){
-            url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/dynamic_new?uid="
-                    + SharedPreferencesUtil.getLong("mid",0) + "&type=" + DYNAMIC_TYPES;
-        }else{
-            url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/dynamic_history?uid="
-                    + SharedPreferencesUtil.getLong("mid",0)
-                    + "&offset_dynamic_id=" + offset + "&type=" + DYNAMIC_TYPES;
-        }
-        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
-        return new JSONObject(Objects.requireNonNull(response.body()).string());
-    }
+        JSONObject data = all.getJSONObject("data");
 
-    public static JSONObject getUserDynamic(long mid,long offset) throws IOException, JSONException {
-        String url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?visitor_uid="
-                    + SharedPreferencesUtil.getLong("mid",0) + "&host_uid=" + mid
-                    + "&offset_dynamic_id=" + offset + "&type=" + DYNAMIC_TYPES;
-        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
-        return new JSONObject(Objects.requireNonNull(response.body()).string());
-    }
+        boolean has_more = data.getBoolean("has_more");
+        long offset_new = (has_more ? Long.parseLong(data.getString("offset")) : -1);
 
-    public static JSONObject getDynamicInfo(long id) throws IOException, JSONException {
-        String url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/get_dynamic_detail?dynamic_id=" + id;
-        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
-        return new JSONObject(Objects.requireNonNull(response.body()).string()).getJSONObject("data").getJSONObject("card");
-    }
-
-    public static long analyzeDynamicList(JSONObject input, ArrayList<DynamicOld> list) throws JSONException {
-        JSONObject data = input.getJSONObject("data");
-        JSONArray cards = data.getJSONArray("cards");
-        for (int i = 0; i < cards.length(); i++) {
-            list.add(analyzeDynamic(cards.getJSONObject(i)));
-        }
-        if(data.has("history_offset")) return data.getLong("history_offset");
-        else if(data.has("next_offset")) return data.getLong("next_offset");
-        else return -1;
-    }
-
-    public static DynamicOld analyzeDynamic(JSONObject dynamicCard) throws JSONException {
-        DynamicOld dynamicReturn = new DynamicOld();
-
-        JSONObject desc = dynamicCard.getJSONObject("desc");
-        dynamicReturn.type = desc.getInt("type");
-        dynamicReturn.dynamicId = desc.getLong("dynamic_id");
-        dynamicReturn.rid = desc.getLong("rid");
-        dynamicReturn.liked = desc.getInt("is_liked") == 1;
-        dynamicReturn.like = (desc.has("like") ? desc.getInt("like") : 0);
-        dynamicReturn.view = desc.getInt("view");
-        dynamicReturn.reply = (desc.has("comment") ? desc.getInt("comment") : 0);
-        Date date = new Date(desc.getLong("timestamp") * 1000);
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String action = simpleDateFormat.format(date);
-
-        JSONObject card = new JSONObject(dynamicCard.getString("card"));  //string，但是json
-
-        if(desc.has("user_profile")) {
-            JSONObject user_info = desc.getJSONObject("user_profile").getJSONObject("info");
-            dynamicReturn.userId = user_info.getLong("uid");
-            dynamicReturn.userName = user_info.getString("uname");
-            dynamicReturn.userAvatar = user_info.getString("face");
+        JSONArray items = data.getJSONArray("items");
+        for (int i = 0; i < items.length(); i++) {
+             dynamicList.add(analyzeDynamic(items.getJSONObject(i)));
         }
 
-        analyzeCard(dynamicReturn,card);
+        return offset_new;
+    }
 
-        if(dynamicCard.has("display")) {
-            JSONObject display = dynamicCard.getJSONObject("display");
-            if(display.has("emoji_info")){
-                JSONArray emoji_details = display.getJSONObject("emoji_info").getJSONArray("emoji_details");
-                JSONArray emote = new JSONArray();
-                for (int i = 0; i < emoji_details.length(); i++) {
-                    JSONObject key = emoji_details.getJSONObject(i);
-                    key.put("name",key.getString("text"));
-                    key.put("url",key.getString("url"));
-                    key.put("size",key.getJSONObject("meta").getInt("size"));
-                    emote.put(key);
+    public static Dynamic getDynamic(long id) throws JSONException, IOException {
+        String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/detail?id=" + id;
+
+        Response response = NetWorkUtil.get(url);
+        if(response.body()==null) throw new JSONException("动态返回数据为空TAT");
+        JSONObject all = new JSONObject(response.body().string());
+        if(all.getInt("code")!=0) throw new JSONException(all.getString("message"));
+
+        JSONObject data = all.getJSONObject("data");
+        JSONObject item = data.getJSONObject("item");
+        return analyzeDynamic(item);
+    }
+
+    public static Dynamic analyzeDynamic(JSONObject dynamic_json) throws JSONException {
+        Dynamic dynamic = new Dynamic();
+        dynamic.dynamicId = Long.parseLong(dynamic_json.getString("id_str"));
+        dynamic.type = dynamic_json.getString("type");
+
+        JSONObject basic = dynamic_json.getJSONObject("basic");
+        String comment_id_str = basic.getString("comment_id_str");
+        if(!comment_id_str.equals("")) dynamic.comment_id = Long.parseLong(comment_id_str);
+        dynamic.comment_type = basic.getInt("comment_type");
+
+        JSONObject modules = dynamic_json.getJSONObject("modules");
+        Log.e("debug-dynamic","--------------");
+        Log.e("debug-dynamic-id", String.valueOf(dynamic.dynamicId));
+        Log.e("debug-dynamic-type",dynamic.type);
+
+        //发布者
+        if(modules.has("module_author") && !modules.isNull("module_author")) {
+            JSONObject module_author = modules.getJSONObject("module_author");
+            UserInfo userInfo = new UserInfo();
+            userInfo.mid = module_author.getLong("mid");
+            userInfo.name = module_author.getString("name");
+            if(!module_author.isNull("following")) userInfo.followed = module_author.getBoolean("following");
+            userInfo.avatar = module_author.getString("face");
+            dynamic.userInfo = userInfo;
+            Log.e("debug-dynamic-sender",userInfo.name);
+        }
+
+        //动态主体
+        if(modules.has("module_dynamic") && !modules.isNull("module_dynamic")){
+            JSONObject module_dynamic = modules.getJSONObject("module_dynamic");
+
+            //内容
+            if(module_dynamic.has("desc") && !module_dynamic.isNull("desc")) {
+                StringBuilder dynamic_content = new StringBuilder();
+                ArrayList<Emote> dynamic_emotes = new ArrayList<>();
+
+                JSONObject desc = module_dynamic.getJSONObject("desc");
+                JSONArray rich_text_nodes = desc.getJSONArray("rich_text_nodes");
+                for (int i = 0; i < rich_text_nodes.length(); i++) {
+                    JSONObject rich_text_node = rich_text_nodes.getJSONObject(i);
+                    String type = rich_text_node.getString("type");
+                    switch (type){
+                        case "RICH_TEXT_NODE_TYPE_TEXT":
+                            dynamic_content.append(rich_text_node.getString("text"));
+                            break;
+                        case "RICH_TEXT_NODE_TYPE_EMOJI":
+                            dynamic_content.append(rich_text_node.getString("text"));
+                            JSONObject emoji = rich_text_node.getJSONObject("emoji");
+                            dynamic_emotes.add(new Emote(emoji.getString("text"), emoji.getString("icon_url"), emoji.getInt("size")));
+                            break;
+                        default:
+                            dynamic_content.append(rich_text_node.getString("text"));
+                            break;
+                    }
                 }
-                dynamicReturn.emote = emote;
+                dynamic.content = dynamic_content.toString();
+                Log.e("debug-dynamic-content",dynamic.content);
+                dynamic.emotes = dynamic_emotes;
             }
-            if(display.has("usr_action_txt")) action = action + " | " + display.getString("usr_action_txt");
+
+            //这里面什么都有，直译为主要的
+            if(module_dynamic.has("major") && !module_dynamic.isNull("major")){
+                JSONObject major = module_dynamic.getJSONObject("major");
+                String major_type = major.getString("type");
+                dynamic.major_type = major_type;
+                switch (major_type){
+                    case "MAJOR_TYPE_ARCHIVE":
+                        dynamic.major_object = analyzeVideoCard(major.getJSONObject("archive"));
+                        break;
+                    case "MAJOR_TYPE_UGC_SEASON":
+                        dynamic.major_object = analyzeVideoCard(major.getJSONObject("ugc_season"));
+                        break;
+
+                    case "MAJOR_TYPE_ARTICLE":
+                        JSONObject article = major.getJSONObject("article");
+                        dynamic.major_object = new ArticleCard(
+                                article.getString("title"),
+                                article.getLong("id"),
+                                (article.has("covers") && !article.isNull("covers") ? article.getJSONArray("covers").getString(0) : ""),
+                                "投稿文章",
+                                article.getString("label")
+                        );
+                        break;
+
+                    case "MAJOR_TYPE_DRAW":
+                        JSONObject draw = major.getJSONObject("draw");
+                        JSONArray items = draw.getJSONArray("items");
+                        ArrayList<String> picture_list = new ArrayList<>();
+                        for (int i = 0; i < items.length(); i++) {
+                            picture_list.add(items.getJSONObject(i).getString("src"));
+                        }
+                        dynamic.major_object = picture_list;
+                        break;
+
+                    default:
+                        dynamic.content = dynamic.content + "\n[*哔哩终端暂时无法此动态的附加信息QwQ|类型：" + major_type + "]";
+                }
+            }
+
+            if(modules.has("module_additional") && !modules.isNull("module_additional")){
+                JSONObject module_additional = modules.getJSONObject("module_additional");
+                if(module_additional.getString("type").equals("ADDITIONAL_TYPE_UGC")){
+                    dynamic.major_type = "MAJOR_TYPE_ARCHIVE";
+                    dynamic.major_object = analyzeVideoCard(module_additional.getJSONObject("ugc"));
+                }
+                else Log.e("debug-dynamic-addi",module_additional.getString("type"));
+            }
+
+
         }
 
-        dynamicReturn.pubDate = action;
-
-        return dynamicReturn;
-    }
-
-
-    public static void analyzeCard(DynamicOld dynamicReturn, JSONObject card) throws JSONException {
-        int type = dynamicReturn.type;
-        switch (type){
-            case 1:    //分享动态
-                JSONObject item_1 = card.getJSONObject("item");
-                dynamicReturn.content = item_1.getString("content");
-
-                if(card.has("origin")) {
-                    JSONObject origin = new JSONObject(card.getString("origin"));
-                    DynamicOld childDynamic = new DynamicOld();
-                    childDynamic.type = item_1.getInt("orig_type");
-                    childDynamic.dynamicId = item_1.getLong("orig_dy_id");
-                    analyzeCard(childDynamic, origin);
-
-                    JSONObject origin_user_info = card.getJSONObject("origin_user").getJSONObject("info");
-                    childDynamic.userName = origin_user_info.getString("uname");
-                    childDynamic.userId = origin_user_info.getLong("uid");
-                    childDynamic.userAvatar = origin_user_info.getString("face");
-
-                    dynamicReturn.childDynamic = childDynamic;
-
-                }
-                break;
-
-            case 2:    //图文动态
-                JSONObject item_2 = card.getJSONObject("item");
-                dynamicReturn.content = item_2.getString("description");
-                JSONArray pictures = item_2.getJSONArray("pictures");
-                ArrayList<String> pictureList = new ArrayList<>();
-                for (int i = 0; i < pictures.length(); i++) {
-                    pictureList.add(pictures.getJSONObject(i).getString("img_src"));
-                }
-                dynamicReturn.pictureList = pictureList;
-                break;
-
-            case 4:    //纯文本动态
-                JSONObject item_4 = card.getJSONObject("item");
-                dynamicReturn.content = item_4.getString("content");
-                break;
-
-            case 8:    //投稿视频动态
-                VideoCard videoCard_8 = new VideoCard();
-                videoCard_8.cover = card.getString("pic");
-                videoCard_8.title = card.getString("title");
-                videoCard_8.aid = card.getLong("aid");
-                JSONObject stat = card.getJSONObject("stat");
-                videoCard_8.view = LittleToolsUtil.toWan(stat.getLong("view")) + "观看";
-                JSONObject owner = card.getJSONObject("owner");
-                videoCard_8.upName = owner.getString("name");
-                dynamicReturn.childVideoCard = videoCard_8;
-                dynamicReturn.content = card.getString("dynamic");
-                break;
-
-            case 4310:    //合集更新动态
-                VideoCard videoCard_4310 = new VideoCard();
-                videoCard_4310.cover = card.getString("pic");
-                videoCard_4310.title = card.getString("title");
-                videoCard_4310.aid = card.getLong("aid");
-                JSONObject stat_4310 = card.getJSONObject("stat");
-                videoCard_4310.view = LittleToolsUtil.toWan(stat_4310.getLong("view")) + "观看";
-                JSONObject owner_4310 = card.getJSONObject("owner");
-                videoCard_4310.upName = owner_4310.getString("name");
-                dynamicReturn.childVideoCard = videoCard_4310;
-                dynamicReturn.content = card.getString("dynamic");
-
-                JSONObject collection = card.getJSONObject("collection");
-                dynamicReturn.userName = "[合集]" + collection.getString("title");
-                dynamicReturn.userAvatar = collection.getString("cover");
-                dynamicReturn.userId = collection.getLong("mid");
-
-                break;
-
-            default:
-                dynamicReturn.content = "[*哔哩终端暂时无法解析本类型动态，请等待后续版本OwO | 动态类型：" + type +"]";
-                break;
+        if(dynamic_json.has("orig") && !dynamic_json.isNull("orig")){
+            dynamic.dynamic_forward = analyzeDynamic(dynamic_json.getJSONObject("orig"));
         }
 
-        Log.e("动态","----------------");
-        if(dynamicReturn.userName!=null) Log.e("动态-发送者",dynamicReturn.userName);
-        if(dynamicReturn.content!=null) Log.e("动态-内容",dynamicReturn.content);
-        Log.e("动态","----------------");
+        return dynamic;
     }
 
+    private static VideoCard analyzeVideoCard(JSONObject jsonObject) throws JSONException {
+        return new VideoCard(
+                jsonObject.getString("title"),
+                "投稿视频",
+                jsonObject.getJSONObject("stat").getString("play"),
+                jsonObject.getString("cover"),
+                Long.parseLong(jsonObject.getString("aid")),
+                jsonObject.getString("bvid")
+        );
+    }
 }

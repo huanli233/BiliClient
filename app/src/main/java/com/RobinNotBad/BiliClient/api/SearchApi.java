@@ -2,11 +2,11 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.util.Log;
 
-import com.RobinNotBad.BiliClient.model.ArticleInfo;
+import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,7 +69,7 @@ public class SearchApi {
         else return null;
     }
 
-    public static void getVideosFromSearchResult(JSONArray input,ArrayList<VideoCard> videoCardList) throws JSONException {
+    public static void getVideosFromSearchResult(JSONArray input,ArrayList<VideoCard> videoCardList,boolean first) throws JSONException {
         for (int i = 0; i < input.length(); i++) {  //遍历所有的分类，找到视频那一项
             JSONObject typecard = input.getJSONObject(i);
             String type = typecard.getString("result_type");
@@ -93,7 +93,7 @@ public class SearchApi {
 
                     videoCardList.add(new VideoCard(title,upName,playTimesStr,cover,aid,bvid,type));
                 }
-            }else if (type.equals("media_bangumi")){
+            }else if (type.equals("media_bangumi") && first){
                 JSONArray data = typecard.getJSONArray("data");
                 for (int j = 0; j < data.length(); j++) {
                     JSONObject card = data.getJSONObject(j);    //获得番剧卡片
@@ -128,34 +128,19 @@ public class SearchApi {
         }
     }
 
-    public static void getArticlesFromSearchResult(JSONArray input,ArrayList<ArticleInfo> articleInfoList) throws JSONException {
+    public static void getArticlesFromSearchResult(JSONArray input,ArrayList<ArticleCard> articleCardList) throws JSONException {
         for (int i = 0; i < input.length(); i++) {
-            ArticleInfo articleInfo = new ArticleInfo();
+            ArticleCard articleCard = new ArticleCard();
             JSONObject card = input.getJSONObject(i);    //获得专栏卡片
 
-            articleInfo.id = card.getLong("id");
-            if(card.getJSONArray("image_urls").length() > 0) articleInfo.banner = "http:" + card.getJSONArray("image_urls").getString(0);
-            else articleInfo.banner = "";
-            articleInfo.summary = "";
-            articleInfo.wordCount = 0;
-            articleInfo.isLike = false;
-            articleInfo.upLevel = 0;
-            articleInfo.upMid = card.getLong("mid");
-            articleInfo.upName = "";
-            articleInfo.upAvatar = "";
-            articleInfo.upFans = 0;
-            articleInfo.like = card.getInt("like");
-            articleInfo.favourite = 0;
-            articleInfo.reply = 0;
-            articleInfo.coin = 0;
-            articleInfo.share = 0;
-            articleInfo.keywords = "";
-            articleInfo.content = "";
-            articleInfo.title = LittleToolsUtil.htmlReString(card.getString("title"));
-            articleInfo.ctime = card.getLong("pub_time");
-            articleInfo.view = LittleToolsUtil.toWan(card.getInt("view")) + "阅读";
+            articleCard.id = card.getLong("id");
+            if(card.getJSONArray("image_urls").length() > 0) articleCard.cover = "http:" + card.getJSONArray("image_urls").getString(0);
+            else articleCard.cover = "";
+            articleCard.upName = card.getString("category_name");
+            articleCard.title = LittleToolsUtil.htmlReString(card.getString("title"));
+            articleCard.view = LittleToolsUtil.toWan(card.getInt("view")) + "阅读";
 
-            articleInfoList.add(articleInfo);
+            articleCardList.add(articleCard);
         }
     }
 }

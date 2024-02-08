@@ -1,13 +1,13 @@
 <com.google.android.material.card.MaterialCardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/cardView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -46,11 +46,11 @@
             android:layout_marginBottom="1dp"
             android:adjustViewBounds="true"
             android:alpha="0.5"
-            app:layout_constraintBottom_toBottomOf="@+id/listPlayTimes"
+            app:layout_constraintBottom_toBottomOf="@+id/listReadTimes"
             app:layout_constraintStart_toStartOf="@+id/listCover"
-            app:layout_constraintTop_toTopOf="@+id/listPlayTimes"
+            app:layout_constraintTop_toTopOf="@+id/listReadTimes"
             app:layout_constraintVertical_bias="0.5"
-            android:src="@drawable/icon_play" />
+            android:src="@drawable/icon_cv" />
 
         <ImageView
             android:id="@+id/avatarIcon"
@@ -62,12 +62,12 @@
             android:adjustViewBounds="true"
             android:alpha="0.5"
             app:layout_constraintBottom_toBottomOf="@+id/listUpName"
-            app:layout_constraintStart_toEndOf="@+id/listPlayTimes"
+            app:layout_constraintStart_toEndOf="@+id/listReadTimes"
             app:layout_constraintTop_toTopOf="@+id/listUpName"
             android:src="@drawable/icon_person" />
 
         <TextView
-            android:id="@+id/listPlayTimes"
+            android:id="@+id/listReadTimes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -88,27 +88,26 @@
             android:lines="1"
             android:textColor="#fff"
             android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="@+id/listPlayTimes"
+            app:layout_constraintBottom_toBottomOf="@+id/listReadTimes"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/avatarIcon"
-            app:layout_constraintTop_toTopOf="@+id/listPlayTimes" />
+            app:layout_constraintTop_toTopOf="@+id/listReadTimes" />
 
         <TextView
-            android:id="@+id/listVideoTitle"
+            android:id="@+id/listArticleTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:maxLines="3"
-            android:text="标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题"
+            android:maxLines="2"
+            android:text="标题标题标题标题标题标题标题标题标题标题标题标题"
             android:textColor="#fff"
-            android:textSize="11sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/listCover"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toTopOf="@+id/listCover" />
-
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

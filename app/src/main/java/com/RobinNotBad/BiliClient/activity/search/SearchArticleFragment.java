@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.search;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,8 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.ArticleCardAdapter;
+import com.RobinNotBad.BiliClient.adapter.FollowListAdapter;
 import com.RobinNotBad.BiliClient.api.SearchApi;
-import com.RobinNotBad.BiliClient.model.ArticleInfo;
+import com.RobinNotBad.BiliClient.model.ArticleCard;
+import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 
 public class SearchArticleFragment extends Fragment {
     RecyclerView recyclerView;
-    private ArrayList<ArticleInfo> articleInfoList;
+    private ArrayList<ArticleCard> articleCardList;
 
     private ArticleCardAdapter articleCardAdapter;
 
@@ -37,22 +38,13 @@ public class SearchArticleFragment extends Fragment {
 
     public SearchArticleFragment(){}
 
-    public static SearchArticleFragment newInstance(ArrayList<ArticleInfo> articleInfoList, String keyword) {
-        SearchArticleFragment fragment = new SearchArticleFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("list",articleInfoList);
-        bundle.putString("keyword",keyword);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static SearchArticleFragment newInstance() {
+        return new SearchArticleFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments()!=null){
-            articleInfoList = getArguments().getParcelableArrayList("list");
-            keyword = getArguments().getString("keyword");
-        }
     }
 
     @Override
@@ -66,10 +58,12 @@ public class SearchArticleFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.recyclerView);
+        articleCardList = new ArrayList<>();
+
         CenterThreadPool.run(() -> {
             if(isAdded()) requireActivity().runOnUiThread(() -> {
+                articleCardAdapter = new ArticleCardAdapter(requireContext(), articleCardList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                articleCardAdapter = new ArticleCardAdapter(requireContext(), articleInfoList);
                 recyclerView.setAdapter(articleCardAdapter);
 
                 recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -86,7 +80,7 @@ public class SearchArticleFragment extends Fragment {
                         int itemCount = manager.getItemCount();
                         if (lastItemPosition >= (itemCount - 3) && dy>0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                             refreshing = true;
-                            CenterThreadPool.run(() -> continueLoading(requireContext())); //加载第二页
+                            CenterThreadPool.run(()->continueLoading()); //加载第二页
                         }
 
                         if(requireActivity() instanceof SearchActivity) {
@@ -111,36 +105,33 @@ public class SearchArticleFragment extends Fragment {
         });
     }
 
-    private void continueLoading(Context context){
-        refreshing = true;
+    private void continueLoading(){
         page++;
         Log.e("debug","加载下一页");
-        int lastSize = articleInfoList.size();
+        int lastSize = articleCardList.size();
         try {
-            JSONArray result =  SearchApi.searchType(keyword,page,"article");
+            JSONArray result = SearchApi.searchType(keyword,page,"article");
             if(result!=null) {
-                SearchApi.getArticlesFromSearchResult(result, articleInfoList);
-                CenterThreadPool.runOnUiThread(() -> articleCardAdapter.notifyItemRangeInserted(lastSize + 1,articleInfoList.size()-lastSize));
+                SearchApi.getArticlesFromSearchResult(result, articleCardList);
+                CenterThreadPool.runOnUiThread(() -> articleCardAdapter.notifyItemRangeInserted(lastSize + 1, articleCardList.size()-lastSize));
             }
             else {
                 bottom = true;
-                MsgUtil.toast("已经到底啦OwO",context);
+                if(isAdded()) requireActivity().runOnUiThread(() ->  MsgUtil.toast("已经到底啦OwO",requireContext()));
             }
-        } catch (Exception e){CenterThreadPool.runOnUiThread(()-> MsgUtil.err(e,context));}
+        } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,requireContext()));}
         refreshing = false;
     }
 
-    public void refresh(ArrayList<ArticleInfo> articleInfoList, String keyword){
+    public void refresh(String keyword){
+        refreshing = true;
+        this.page = 0;
         this.keyword = keyword;
-        int size_old = this.articleInfoList.size();
-        this.articleInfoList = articleInfoList;
-        CenterThreadPool.runOnUiThread(()-> {
+        int size_old = articleCardList.size();
+        articleCardList.clear();
+        requireActivity().runOnUiThread(()->{
             articleCardAdapter.notifyItemRangeRemoved(0,size_old);
-            articleCardAdapter.notifyItemRangeInserted(0,articleInfoList.size());
-
-            refreshing = false;
-            bottom = false;
-            page = 0;
+            CenterThreadPool.run(this::continueLoading);
         });
     }
 }

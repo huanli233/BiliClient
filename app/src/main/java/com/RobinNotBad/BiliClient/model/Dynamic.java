@@ -1,22 +1,26 @@
 package com.RobinNotBad.BiliClient.model;
 
-import org.json.JSONArray;
+import java.util.ArrayList;
 
 public class Dynamic {
-    public String dynamicId;
+    public long dynamicId;
     public String type;
-    public String comment_id;
+    public long comment_id;
     public int comment_type;
 
     public UserInfo userInfo;
     public String content;
+    public ArrayList<Emote> emotes;
     public String pubDate;
 
     public int view;
     public int like;
     public int reply;
-    public JSONArray emote;
     public boolean liked;
+
+    public String major_type;
+    public Object major_object;
+    public Dynamic dynamic_forward;
 
     public Dynamic(){}
 }

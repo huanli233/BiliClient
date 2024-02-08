@@ -137,7 +137,7 @@ public class SearchOldActivity extends InstanceActivity {
                         page = 1;
                         JSONArray result = SearchApi.search(keyword, 1);
                         if (result != null) {
-                            SearchApi.getVideosFromSearchResult(result, videoCardList);
+                            SearchApi.getVideosFromSearchResult(result, videoCardList,page==1);
                             runOnUiThread(() -> {
                                 searchAdapter.notifyItemRangeInserted(0, videoCardList.size());
                                 Log.e("debug", "刷新");
@@ -158,7 +158,7 @@ public class SearchOldActivity extends InstanceActivity {
         try {
             JSONArray result =  SearchApi.search(keyword,page);
             if(result!=null) {
-                SearchApi.getVideosFromSearchResult(result, videoCardList);
+                SearchApi.getVideosFromSearchResult(result, videoCardList,page==1);
                 runOnUiThread(() -> searchAdapter.notifyItemRangeInserted(lastSize + 1,videoCardList.size()-lastSize));
             }
             else {

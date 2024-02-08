@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.ArticleCardAdapter;
+import com.RobinNotBad.BiliClient.adapter.ArticleCardHolder;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
+import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -31,7 +33,7 @@ public class UserArticleFragment extends Fragment {
 
     private long mid;
     private RecyclerView recyclerView;
-    private ArrayList<ArticleInfo> articleList;
+    private ArrayList<ArticleCard> articleList;
     private ArticleCardAdapter adapter;
     private boolean refreshing = false;
     private boolean bottom = false;

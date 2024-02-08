@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.model.DynamicOld;
+import com.RobinNotBad.BiliClient.model.Dynamic;
 
 import java.util.ArrayList;
 
@@ -21,9 +21,9 @@ import java.util.ArrayList;
 public class DynamicAdapter extends RecyclerView.Adapter<DynamicHolder> {
 
     Context context;
-    ArrayList<DynamicOld> dynamicList;
+    ArrayList<Dynamic> dynamicList;
 
-    public DynamicAdapter(Context context, ArrayList<DynamicOld> dynamicList) {
+    public DynamicAdapter(Context context, ArrayList<Dynamic> dynamicList) {
         this.context = context;
         this.dynamicList = dynamicList;
     }
@@ -40,11 +40,11 @@ public class DynamicAdapter extends RecyclerView.Adapter<DynamicHolder> {
     public void onBindViewHolder(@NonNull DynamicHolder holder, int position) {
         holder.showDynamic(dynamicList.get(position),context);      //该函数在DynamicHolder里
 
-        if(dynamicList.get(position).childDynamic != null){
+        if(dynamicList.get(position).dynamic_forward != null){
             Log.e("debug","有子动态！");
             View childCard = View.inflate(context,R.layout.cell_dynamic_child,holder.extraCard);
             DynamicHolder childHolder = new DynamicHolder(childCard,true);
-            childHolder.showDynamic(dynamicList.get(position).childDynamic,context);
+            childHolder.showDynamic(dynamicList.get(position).dynamic_forward,context);
         }
     }
 

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
-import com.RobinNotBad.BiliClient.model.ArticleInfo;
+import com.RobinNotBad.BiliClient.model.ArticleCard;
 
 import java.util.ArrayList;
 
@@ -20,10 +20,10 @@ import java.util.ArrayList;
 public class ArticleCardAdapter extends RecyclerView.Adapter<ArticleCardHolder> {
 
     Context context;
-    ArrayList<ArticleInfo> articleCardList;
+    ArrayList<ArticleCard> articleCardList;
     OnItemLongClickListener longClickListener;
 
-    public ArticleCardAdapter(Context context, ArrayList<ArticleInfo> articleCardList) {
+    public ArticleCardAdapter(Context context, ArrayList<ArticleCard> articleCardList) {
         this.context = context;
         this.articleCardList = articleCardList;
     }
@@ -41,7 +41,7 @@ public class ArticleCardAdapter extends RecyclerView.Adapter<ArticleCardHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ArticleCardHolder holder, int position) {
-        ArticleInfo articleCard = articleCardList.get(position);
+        ArticleCard articleCard = articleCardList.get(position);
         holder.showArticleCard(articleCard,context);
 
         holder.itemView.setOnClickListener(view -> {
