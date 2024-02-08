@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/icon_play"
+            android:alpha="0.5"
+            app:layout_constraintTop_toTopOf="@+id/viewsCount"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/viewsCount"
+            android:layout_marginStart="10dp"
+            android:id="@+id/viewsIcon" />
+
+    <TextView
+        android:id="@+id/viewsCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="10dp"
+        android:alpha="0.5"
+        android:text="114514"
+        android:textColor="#fff"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/viewsIcon"
+        app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/icon_time"
+            android:alpha="0.5"
+            app:layout_constraintTop_toTopOf="@+id/timeText"
+            app:layout_constraintStart_toStartOf="@+id/viewsIcon"
+            app:layout_constraintBottom_toBottomOf="@+id/timeText"
+            android:id="@+id/timeIcon" />
+
+        <TextView
+            android:id="@+id/timeText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="10dp"
+            android:alpha="0.5"
+            android:lines="1"
+            android:text="9999-13-32 25:61"
+            android:textColor="#fff"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/timeIcon"
+            app:layout_constraintTop_toBottomOf="@id/viewsCount" />
+
+    <ImageView
+        android:id="@+id/cvidIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.5"
+        android:src="@drawable/icon_cv"
+        app:layout_constraintBottom_toBottomOf="@+id/cvidText"
+        app:layout_constraintStart_toEndOf="@+id/viewsCount"
+        app:layout_constraintTop_toTopOf="@+id/cvidText" />
+
+    <TextView
+        android:id="@+id/cvidText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="10dp"
+        android:alpha="0.5"
+        android:lines="1"
+        android:text="CV114514"
+        android:textColor="#fff"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/cvidIcon"
+        app:layout_constraintTop_toTopOf="@+id/viewsCount" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

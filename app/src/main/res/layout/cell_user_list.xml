@@ -4,20 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    app:cardMaxElevation="0dp"
-    android:layout_marginEnd="8dp"
-    app:strokeColor="#70707070"
-    app:cardElevation="0dp"
-    app:cardBackgroundColor="#78242424"
-    android:layout_marginTop="2dp"
     app:layout_constraintBottom_toBottomOf="parent"
-    android:layout_marginStart="8dp"
-    android:layout_marginBottom="2dp"
+    android:layout_marginHorizontal="6dp"
+    android:layout_marginVertical="2dp"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:strokeWidth="0.1dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:cardCornerRadius="4dp">
+    app:layout_constraintEnd_toEndOf="parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="wrap_content"

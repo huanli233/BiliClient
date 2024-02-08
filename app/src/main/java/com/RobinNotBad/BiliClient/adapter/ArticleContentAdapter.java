@@ -35,7 +35,6 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
     Context context;
     ArrayList<ArticleLine> article;
     ArticleInfo articleInfo;
-    boolean keywords_expand = false;
 
     public ArticleContentAdapter(Context context,ArticleInfo articleInfo, ArrayList<ArticleLine> article) {
         this.context = context;
@@ -56,6 +55,10 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 break;
             case -1:
                 view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_head,parent,false);
+                break;
+            case -2:
+                view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_end,parent,false);
+                break;
         }
         return new ArticleLineHolder(view);
     }
@@ -80,6 +83,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                         break;
                 }
                 break;
+
             case 1:
                 ImageFilterView imageView = (ImageFilterView) holder.itemView;  //图片
 
@@ -98,28 +102,15 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                     context.startActivity(intent);
                 });
                 break;
+
             case -1:
                 TextView title = holder.itemView.findViewById(R.id.title);
                 ImageView cover = holder.itemView.findViewById(R.id.cover);
                 ImageView upIcon = holder.itemView.findViewById(R.id.upInfo_Icon);  //头
-                TextView keywords = holder.itemView.findViewById(R.id.keywords);
                 TextView upName = holder.itemView.findViewById(R.id.upInfo_Name);
-                TextView views = holder.itemView.findViewById(R.id.viewsCount);
-                TextView timeText = holder.itemView.findViewById(R.id.timeText);
-                TextView cvidText = holder.itemView.findViewById(R.id.cvidText);
                 MaterialCardView upCard = holder.itemView.findViewById(R.id.upInfo);
 
-                keywords.setMaxLines((keywords_expand ? 10 : 1));
-                keywords.setOnClickListener(view1 -> {
-                    if(keywords_expand) keywords.setMaxLines(1);
-                    else keywords.setMaxLines(512);
-                    keywords_expand = !keywords_expand;
-                });
-
-                cvidText.setText("cv" + articleInfo.id + " | " + articleInfo.wordCount + "字");
                 upName.setText(articleInfo.upName);
-                keywords.setText("关键词：" + articleInfo.keywords);
-                views.setText(articleInfo.view);
                 if(articleInfo.banner.isEmpty()) cover.setVisibility(View.GONE);
                 else{
                     Glide.with(context).load(articleInfo.banner).placeholder(R.mipmap.placeholder)
@@ -137,22 +128,31 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                     intent.putExtra("mid",articleInfo.upMid);
                     context.startActivity(intent);
                 });
+                title.setText(articleInfo.title);
+                break;
+
+            case -2:
+                TextView views = holder.itemView.findViewById(R.id.viewsCount);
+                TextView timeText = holder.itemView.findViewById(R.id.timeText);
+                TextView cvidText = holder.itemView.findViewById(R.id.cvidText);
+                cvidText.setText("cv" + articleInfo.id + " | " + articleInfo.wordCount + "字");
+                views.setText(articleInfo.view);
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 timeText.setText(sdf.format(articleInfo.ctime * 1000));
-
-                title.setText(articleInfo.title);
                 break;
         }
     }
 
     @Override
     public int getItemCount() {
-        return article.size() + 1;
+        return article.size() + 2;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (position==0 ? -1 : article.get(position-1).type);
+        if(position==0) return -1;
+        else if(position == article.size() + 1) return -2;
+        else return article.get(position-1).type;
     }
 
     public static class ArticleLineHolder extends RecyclerView.ViewHolder {

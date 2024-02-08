@@ -6,184 +6,81 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-        <ImageView
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_marginEnd="10dp"
-            android:adjustViewBounds="true"
-            android:src="@mipmap/placeholder"
-            android:clickable="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="10dp"
-            android:focusable="true"
-            tools:ignore="ImageContrastCheck,SpeakableTextPresentCheck"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/cover" />
+    <ImageView
+        android:id="@+id/cover"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        android:adjustViewBounds="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@mipmap/placeholder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ImageContrastCheck,SpeakableTextPresentCheck" />
 
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="10dp"
-            android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/upInfo"
-            android:id="@+id/title"
-            android:text="正在加载中..." />
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/upInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cover">
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_height="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            app:cardMaxElevation="0dp"
-            android:layout_marginEnd="10dp"
-            app:strokeColor="#70707070"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="#78242424"
-            android:layout_marginTop="6dp"
-            android:layout_marginStart="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/keywords"
-            app:layout_constraintStart_toStartOf="parent"
-            app:strokeWidth="0.1dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:cardCornerRadius="8dp"
-            android:id="@+id/upInfo">
+            android:layout_height="60dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_height="60dp"
-                android:layout_width="match_parent">
+            <ImageView
+                android:id="@+id/upInfo_Icon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="6dp"
+                android:adjustViewBounds="true"
+                android:src="@mipmap/akari"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintHeight_percent="0.7"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:layout_height="0dp"
-                    android:layout_width="0dp"
-                    android:adjustViewBounds="true"
-                    android:src="@mipmap/akari"
-                    app:layout_constraintHeight_percent="0.7"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginStart="6dp"
-                    android:id="@+id/upInfo_Icon" />
+            <TextView
+                android:id="@+id/upInfo_Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:text="UP主名字"
+                android:textColor="#fff"
+                android:textSize="13sp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toBottomOf="@+id/upInfo_Icon"
+                app:layout_constraintStart_toEndOf="@+id/upInfo_Icon"
+                app:layout_constraintTop_toTopOf="@id/upInfo_Icon" />
 
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:ellipsize="marquee"
-                    app:autoSizeTextType="uniform"
-                    android:textSize="13sp"
-                    android:singleLine="true"
-                    android:textColor="#fff"
-                    app:layout_constraintStart_toEndOf="@+id/upInfo_Icon"
-                    app:layout_constraintBottom_toBottomOf="@+id/upInfo_Icon"
-                    android:layout_marginStart="6dp"
-                    app:layout_constraintTop_toTopOf="@id/upInfo_Icon"
-                    android:id="@+id/upInfo_Name"
-                    android:text="UP主名字" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-        </com.google.android.material.card.MaterialCardView>
-
-        <ImageView
-            android:layout_height="0dp"
-            android:layout_width="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/icon_play"
-            android:alpha="0.5"
-            app:layout_constraintTop_toTopOf="@+id/viewsCount"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/viewsCount"
-            android:layout_marginStart="10dp"
-            android:id="@+id/viewsIcon" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:alpha="0.5"
-            android:textSize="12sp"
-            android:textColor="#fff"
-            app:layout_constraintStart_toEndOf="@+id/viewsIcon"
-            android:layout_marginTop="6dp"
-            android:layout_marginStart="2dp"
-            app:layout_constraintTop_toBottomOf="@+id/cover"
-            android:id="@+id/viewsCount"
-            android:text="114514" />
-
-        <ImageView
-            android:layout_height="0dp"
-            android:layout_width="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/icon_time"
-            android:alpha="0.5"
-            app:layout_constraintTop_toTopOf="@+id/timeText"
-            app:layout_constraintStart_toStartOf="@+id/viewsIcon"
-            app:layout_constraintBottom_toBottomOf="@+id/timeText"
-            android:id="@+id/timeIcon" />
-
-        <TextView
-            android:id="@+id/timeText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:alpha="0.5"
-            android:lines="1"
-            android:text="9999-13-32 25:61"
-            android:textColor="#fff"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/timeIcon"
-            app:layout_constraintTop_toBottomOf="@id/viewsCount" />
-
-        <ImageView
-            android:layout_height="0dp"
-            android:layout_width="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/icon_cv"
-            android:alpha="0.5"
-            app:layout_constraintTop_toTopOf="@+id/cvidText"
-            app:layout_constraintStart_toStartOf="@+id/viewsIcon"
-            app:layout_constraintBottom_toBottomOf="@+id/cvidText"
-            android:id="@+id/bvidIcon" />
-
-        <TextView
-            android:id="@+id/cvidText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:alpha="0.5"
-            android:lines="1"
-            android:text="CV114514"
-            android:textColor="#fff"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/bvidIcon"
-            app:layout_constraintTop_toBottomOf="@id/timeText" />
-
-        <TextView
-            android:id="@+id/keywords"
-            android:alpha="0.5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="10dp"
-            android:text="关键词：???"
-            android:textSize="12sp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cvidText" />
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="6dp"
+        android:gravity="center"
+        android:text="正在加载中..."
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upInfo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
