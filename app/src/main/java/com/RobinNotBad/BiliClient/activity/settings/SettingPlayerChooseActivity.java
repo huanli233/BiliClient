@@ -109,6 +109,14 @@ public class SettingPlayerChooseActivity extends BaseActivity {
             }
         }
         switch(playerList[checkPosition+1]){
+            case "clientPlayer":
+                if(SharedPreferencesUtil.getBoolean("player_inside_firstchoose",true)) {
+                    SharedPreferencesUtil.putBoolean("player_inside_firstchoose",false);
+                    Intent intent = new Intent();
+                    intent.setClass(this,SettingPlayerInsideActivity.class);
+                    startActivity(intent);
+                }
+                break;
             case "mtvPlayer":
                 if(Build.VERSION.SDK_INT <= 19 && !just_create) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，请使用内置播放器或QQ群中提供的改版小电视播放器",-1,false,0);
                 break;
