@@ -17,7 +17,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 public class SettingPlayerInsideActivity extends BaseActivity {
     private MaterialRadioButton SWtexture,SWsurface,SWhard,SWsoft,SWopensles,SWaudiotrack;
     private EditText DMmaxline,danmakusize,danmakuspeed,danmaku_transparency;
-    private SwitchMaterial SWLClick,SWloop,danmaku_allowoverlap,danmaku_mergeduplicate,ui_round,ui_showRotateBtn,ui_showDanmakuBtn,ui_showLoopBtn;
+    private SwitchMaterial SWLClick,SWloop,ui_round,SWscale,SWdoublemove,danmaku_allowoverlap,danmaku_mergeduplicate,ui_showRotateBtn,ui_showDanmakuBtn,ui_showLoopBtn;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,41 +26,49 @@ public class SettingPlayerInsideActivity extends BaseActivity {
         Log.e("debug","设置内置播放器");
 
         findViewById(R.id.top).setOnClickListener(view -> finish());
-        
+
+        SWLClick = findViewById(R.id.SWLClick);
+        SWloop = findViewById(R.id.SWloop);
+        ui_round = findViewById(R.id.ui_round);
+        SWscale = findViewById(R.id.SWscale);
+        SWdoublemove = findViewById(R.id.SWdoublemove);
+
         SWtexture = findViewById(R.id.SWtexture);
         SWsurface = findViewById(R.id.SWsurface);
         SWhard = findViewById(R.id.SWhard);
         SWsoft = findViewById(R.id.SWsoft);
         SWopensles = findViewById(R.id.SWopensles);
         SWaudiotrack = findViewById(R.id.SWaudiotrack);
-        SWLClick = findViewById(R.id.SWLClick);
-        SWloop = findViewById(R.id.SWloop);
+
         DMmaxline = findViewById(R.id.DMmaxline);
         danmakusize = findViewById(R.id.danmakusize);
         danmakuspeed = findViewById(R.id.danmakuspeed);
         danmaku_transparency = findViewById(R.id.danmaku_transparency);
         danmaku_allowoverlap = findViewById(R.id.danmaku_allowoverlap);
         danmaku_mergeduplicate = findViewById(R.id.danmaku_mergeduplicate);
-        ui_round = findViewById(R.id.ui_round);
         ui_showRotateBtn = findViewById(R.id.ui_showRotateBtn);
         ui_showDanmakuBtn = findViewById(R.id.ui_showDanmakuBtn);
         ui_showLoopBtn = findViewById(R.id.ui_showLoopBtn);
-        
+
+        SWaudiotrack.setChecked(!SharedPreferencesUtil.getBoolean("player_audio",false));
+        SWLClick.setChecked(SharedPreferencesUtil.getBoolean("player_longclick",true));
+        SWloop.setChecked(SharedPreferencesUtil.getBoolean("player_loop",false));
+        ui_round.setChecked(SharedPreferencesUtil.getBoolean("player_ui_round",false));
+        SWscale.setChecked(SharedPreferencesUtil.getBoolean("player_scale",true));
+        SWdoublemove.setChecked(SharedPreferencesUtil.getBoolean("player_doublemove",false));
+
         SWtexture.setChecked(SharedPreferencesUtil.getBoolean("player_display",false));
         SWsurface.setChecked(!SharedPreferencesUtil.getBoolean("player_display",false));
         SWhard.setChecked(SharedPreferencesUtil.getBoolean("player_codec",true));
         SWsoft.setChecked(!SharedPreferencesUtil.getBoolean("player_codec",true));
         SWopensles.setChecked(SharedPreferencesUtil.getBoolean("player_audio",false));
-        SWaudiotrack.setChecked(!SharedPreferencesUtil.getBoolean("player_audio",false));
-        SWLClick.setChecked(SharedPreferencesUtil.getBoolean("player_longclick",false));
-        SWloop.setChecked(SharedPreferencesUtil.getBoolean("player_loop",false));
+
         DMmaxline.setText(SharedPreferencesUtil.getInt("player_danmaku_maxline",15)+"");
         danmakusize.setText((SharedPreferencesUtil.getFloat("player_danmaku_size",1.0f))+"");
         danmakuspeed.setText((SharedPreferencesUtil.getFloat("player_danmaku_speed",1.0f))+"");
         danmaku_transparency.setText((SharedPreferencesUtil.getFloat("player_danmaku_transparency",0.5f)*100)+"");
         danmaku_allowoverlap.setChecked(SharedPreferencesUtil.getBoolean("player_danmaku_allowoverlap",true));
         danmaku_mergeduplicate.setChecked(SharedPreferencesUtil.getBoolean("player_danmaku_mergeduplicate",false));
-        ui_round.setChecked(SharedPreferencesUtil.getBoolean("player_ui_round",false));
         ui_showRotateBtn.setChecked(SharedPreferencesUtil.getBoolean("player_ui_showRotateBtn",true));
         ui_showDanmakuBtn.setChecked(SharedPreferencesUtil.getBoolean("player_ui_showDanmakuBtn",true));
         ui_showLoopBtn.setChecked(SharedPreferencesUtil.getBoolean("player_ui_showLoopBtn",true));
@@ -82,6 +90,8 @@ public class SettingPlayerInsideActivity extends BaseActivity {
         SharedPreferencesUtil.putBoolean("player_audio",SWopensles.isChecked());
         SharedPreferencesUtil.putBoolean("player_longclick",SWLClick.isChecked());
         SharedPreferencesUtil.putBoolean("player_loop",SWloop.isChecked());
+        SharedPreferencesUtil.putBoolean("player_scale",SWscale.isChecked());
+        SharedPreferencesUtil.putBoolean("player_doublemove",SWdoublemove.isChecked());
         
         String newline = DMmaxline.getText().toString();
         String newtextsize = danmakusize.getText().toString();

@@ -108,7 +108,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     private ScaleGestureDetector scaleGestureDetector;
     private ViewScaleGestureListener scaleGestureListener;
     private float previousX, previousY;
-    private boolean moving,scaling;
+    private boolean moving,scaling,scaled;
 
     private final float[] speeds = {0.5F, 0.75F, 1.0F, 1.25F, 1.5F, 1.75F, 2.0F, 3.0F};
     private final String[] speedTexts = {"x 0.5", "x 0.75", "x 1.0", "x 1.25", "x 1.5", "x 1.75", "x 2.0", "x 3.0"};
@@ -372,93 +372,113 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
     @SuppressLint("ClickableViewAccessibility")
     private void setVideoGestures() {
-        scaleGestureListener = new ViewScaleGestureListener(videoArea);
-        scaleGestureDetector = new ScaleGestureDetector(this, scaleGestureListener);
+        if(SharedPreferencesUtil.getBoolean("player_scale",true)) {
+            scaleGestureListener = new ViewScaleGestureListener(videoArea);
+            scaleGestureDetector = new ScaleGestureDetector(this, scaleGestureListener);
 
-        control_layout.setOnTouchListener((v, event) -> {
-            int action = event.getActionMasked();
-            int pointerCount = event.getPointerCount();
-            boolean singleTouch = pointerCount == 1;
-            boolean doubleTouch = pointerCount == 2;
+            boolean doublemove_enabled = SharedPreferencesUtil.getBoolean("player_doublemove",false);
 
-            scaleGestureDetector.onTouchEvent(event);
-            scaling = scaleGestureListener.scaling;
+            control_layout.setOnTouchListener((v, event) -> {
+                int action = event.getActionMasked();
+                int pointerCount = event.getPointerCount();
+                boolean singleTouch = pointerCount == 1;
+                boolean doubleTouch = pointerCount == 2;
 
-            //Log.e("debug-gesture", (scaling ? "scaled-yes" : "scaled-no"));
+                scaleGestureDetector.onTouchEvent(event);
+                scaling = scaleGestureListener.scaling;
 
-            switch (action){
-                case MotionEvent.ACTION_MOVE:
-                    if (singleTouch && !scaling) {
-                        float currentX = event.getX(0);  //单指移动
-                        float currentY = event.getY(0);
-                        float deltaX = currentX - previousX;
-                        float deltaY = currentY - previousY;
-                        videoArea.setX(videoArea.getX() + deltaX);
-                        videoArea.setY(videoArea.getY() + deltaY);
-                        previousX = currentX;
-                        previousY = currentY;
-                        moving = true;
-                    }
-                    if(doubleTouch) {
-                        float currentX = (event.getX(0) + event.getX(1)) / 2;
-                        float currentY = (event.getY(0) + event.getY(1)) / 2;
-                        float deltaX = currentX - previousX;
-                        float deltaY = currentY - previousY;
-                        videoArea.setX(videoArea.getX() + deltaX);  //双指移动
-                        videoArea.setY(videoArea.getY() + deltaY);
-                        previousX = currentX;
-                        previousY = currentY;
-                        moving = true;
-                    }
-                    break;
+                if(!scaled && scaling) {scaled = true;}
+                //Log.e("debug-gesture", (scaling ? "scaled-yes" : "scaled-no"));
 
-                case MotionEvent.ACTION_DOWN:
-                    if(singleTouch) {  //如果是单指按下，设置起始位置为当前手指位置
-                        previousX = event.getX(0);
-                        previousY = event.getY(0);
-                        //Log.e("debug-gesture", "touch_start");
-                    }
-                    break;
+                switch (action) {
+                    case MotionEvent.ACTION_MOVE:
+                        if (singleTouch && !scaling && (!doublemove_enabled && !scaled)) {
+                            float currentX = event.getX(0);  //单指移动
+                            float currentY = event.getY(0);
+                            float deltaX = currentX - previousX;
+                            float deltaY = currentY - previousY;
+                            if(deltaX!=0f || deltaY!=0f) {
+                                videoArea.setX(videoArea.getX() + deltaX);
+                                videoArea.setY(videoArea.getY() + deltaY);
+                                previousX = currentX;
+                                previousY = currentY;
+                                if (!moving) {
+                                    moving = true;
+                                    Log.e("debug-gesture", "moved");
+                                    hidecon();
+                                }
+                            }
+                        }
+                        if (doubleTouch && doublemove_enabled) {
+                            float currentX = (event.getX(0) + event.getX(1)) / 2;
+                            float currentY = (event.getY(0) + event.getY(1)) / 2;
+                            float deltaX = currentX - previousX;
+                            float deltaY = currentY - previousY;
+                            if(deltaX!=0f || deltaY!=0f) {
+                                videoArea.setX(videoArea.getX() + deltaX);  //双指移动
+                                videoArea.setY(videoArea.getY() + deltaY);
+                                previousX = currentX;
+                                previousY = currentY;
+                                if (!moving) {
+                                    moving = true;
+                                    Log.e("debug-gesture", "moved");
+                                    hidecon();
+                                }
+                            }
+                        }
+                        break;
 
-                case MotionEvent.ACTION_POINTER_DOWN:
-                    if(doubleTouch){  //如果是双指按下，设置起始位置为两指连线的中心点
-                        previousX = (event.getX(0)+event.getX(1)) / 2;
-                        previousY = (event.getY(0)+event.getY(1)) / 2;
-                        //Log.e("debug-gesture","double_touch");
-                    }
-                    break;
+                    case MotionEvent.ACTION_DOWN:
+                        if (singleTouch) {  //如果是单指按下，设置起始位置为当前手指位置
+                            previousX = event.getX(0);
+                            previousY = event.getY(0);
+                            //Log.e("debug-gesture", "touch_start");
+                        }
+                        break;
 
-                case MotionEvent.ACTION_POINTER_UP:
-                    if(doubleTouch){
-                        int index = event.getActionIndex();  //actionIndex是抬起来的手指位置
-                        previousX = event.getX((index==0 ? 1 : 0));
-                        previousY = event.getY((index==0 ? 1 : 0));
-                        //Log.e("debug-gesture","single_touch");
-                    }
-                    break;
+                    case MotionEvent.ACTION_POINTER_DOWN:
+                        if (doubleTouch) {  //如果是双指按下，设置起始位置为两指连线的中心点
+                            previousX = (event.getX(0) + event.getX(1)) / 2;
+                            previousY = (event.getY(0) + event.getY(1)) / 2;
+                            //Log.e("debug-gesture","double_touch");
+                            hidecon();
+                        }
+                        break;
 
-                case MotionEvent.ACTION_UP:
-                    //Log.e("debug-gesture","touch_stop");
-                    if(onLongClick){
-                        onLongClick = false;
-                        ijkPlayer.setSpeed(speeds[speed_seekbar.getProgress()]);
-                        text_speed.setText(speedTexts[speed_seekbar.getProgress()]);
-                    }
-                    if(moving){
-                        moving = false;
-                        if(scaling) return true;
-                    }
-                    break;
-            }
+                    case MotionEvent.ACTION_POINTER_UP:
+                        if (doubleTouch) {
+                            int index = event.getActionIndex();  //actionIndex是抬起来的手指位置
+                            previousX = event.getX((index == 0 ? 1 : 0));
+                            previousY = event.getY((index == 0 ? 1 : 0));
+                            //Log.e("debug-gesture","single_touch");
+                        }
+                        break;
 
-            return false;
-        });
+                    case MotionEvent.ACTION_UP:
+                        //Log.e("debug-gesture","touch_stop");
+                        if (onLongClick) {
+                            onLongClick = false;
+                            ijkPlayer.setSpeed(speeds[speed_seekbar.getProgress()]);
+                            text_speed.setText(speedTexts[speed_seekbar.getProgress()]);
+                        }
+                        if (moving) {
+                            moving = false;
+                        }
+                        if (scaled) {
+                            scaled = false;
+                        }
+                        break;
+                }
+
+                return false;
+            });
+        }
 
         control_layout.setOnClickListener(view -> clickUI());
         //这个管长按开始
         control_layout.setOnLongClickListener(view -> {
-            if (SharedPreferencesUtil.getBoolean("player_longclick", false) && ijkPlayer != null && (control_btn.getText() == "| |")) {
-                if (!onLongClick && !moving && !scaling) {
+            if (SharedPreferencesUtil.getBoolean("player_longclick", true) && ijkPlayer != null && (control_btn.getText() == "| |")) {
+                if (!onLongClick && !moving && !scaled) {
                     hidecon();
                     ijkPlayer.setSpeed(3.0F);
                     text_speed.setText("x 3.0");
@@ -1006,17 +1026,16 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     @SuppressLint("SetTextI18n")
     public void changeSound(Boolean add_or_cut) {
         autoHideTimer.cancel();
-        int soundnow = audioManager.getStreamVolume(STREAM_MUSIC);
         int maxsound = audioManager.getStreamMaxVolume(STREAM_MUSIC);
-        int added = maxsound;
-        if (soundnow != maxsound) {
-            added = soundnow + (add_or_cut ? 1 : -1);
+        int soundnow = audioManager.getStreamVolume(STREAM_MUSIC);
+        if(soundnow>0 && soundnow<maxsound) {
+            soundnow = soundnow + (add_or_cut ? 1 : -1);
+            audioManager.setStreamVolume(STREAM_MUSIC, soundnow, 0);
         }
-        audioManager.setStreamVolume(STREAM_MUSIC, added, 0);
-        float show = (float) (added) / (float) maxsound * 100;
+        int show = soundnow / maxsound * 100;
         runOnUiThread(() -> {
             showsound.setVisibility(View.VISIBLE);
-            showsound.setText("音量：" + (int) show + "%");
+            showsound.setText("音量：" +  show + "%");
         });
         hidesound();
         autohide();
