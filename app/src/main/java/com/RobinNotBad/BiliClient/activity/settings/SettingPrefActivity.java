@@ -4,14 +4,14 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.appcompat.widget.SwitchCompat;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SettingPrefActivity extends BaseActivity {
 
-    private SwitchCompat back_disable,fav_single,fav_notice, video_tags, video_related, myspace_creativecenter,menu_popular,menu_precious,old_search_enable,copy_enable;
+    private SwitchMaterial back_disable,fav_single,fav_notice, video_tags, video_related, myspace_creativecenter,menu_popular,menu_precious,old_search_enable,copy_enable;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override

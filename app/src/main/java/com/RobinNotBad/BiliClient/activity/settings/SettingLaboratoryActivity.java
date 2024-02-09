@@ -4,15 +4,14 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.appcompat.widget.SwitchCompat;
-
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SettingLaboratoryActivity extends BaseActivity {
 
-    private SwitchCompat refresh_cookie,like_coin_fav_enable;
+    private SwitchMaterial refresh_cookie,like_coin_fav_enable;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override

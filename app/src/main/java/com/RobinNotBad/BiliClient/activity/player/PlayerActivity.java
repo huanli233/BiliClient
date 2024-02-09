@@ -108,7 +108,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     private ScaleGestureDetector scaleGestureDetector;
     private ViewScaleGestureListener scaleGestureListener;
     private float previousX, previousY;
-    private boolean moving,scaling,scaled;
+    private boolean moving,scaling,scaled,click_disabled;
 
     private final float[] speeds = {0.5F, 0.75F, 1.0F, 1.25F, 1.5F, 1.75F, 2.0F, 3.0F};
     private final String[] speedTexts = {"x 0.5", "x 0.75", "x 1.0", "x 1.25", "x 1.5", "x 1.75", "x 2.0", "x 3.0"};
@@ -376,7 +376,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
             scaleGestureListener = new ViewScaleGestureListener(videoArea);
             scaleGestureDetector = new ScaleGestureDetector(this, scaleGestureListener);
 
-            boolean doublemove_enabled = SharedPreferencesUtil.getBoolean("player_doublemove",false);
+            boolean doublemove_enabled = SharedPreferencesUtil.getBoolean("player_doublemove",false);  //是否启用双指移动
 
             control_layout.setOnTouchListener((v, event) -> {
                 int action = event.getActionMasked();
@@ -392,7 +392,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
                 switch (action) {
                     case MotionEvent.ACTION_MOVE:
-                        if (singleTouch && !scaling && (!doublemove_enabled && !scaled)) {
+                        if (singleTouch && !scaling) {
                             float currentX = event.getX(0);  //单指移动
                             float currentY = event.getY(0);
                             float deltaX = currentX - previousX;
@@ -470,11 +470,27 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                         break;
                 }
 
+                if(!click_disabled && (moving || scaled)) click_disabled = true;
+
+                return false;
+            });
+        }
+        else {
+            control_layout.setOnTouchListener((view, motionEvent) -> {
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP && onLongClick) {
+                    onLongClick = false;
+                    ijkPlayer.setSpeed(speeds[speed_seekbar.getProgress()]);
+                    text_speed.setText(speedTexts[speed_seekbar.getProgress()]);
+                }
                 return false;
             });
         }
 
-        control_layout.setOnClickListener(view -> clickUI());
+        //这个管普通点击
+        control_layout.setOnClickListener(view -> {
+            if(click_disabled) click_disabled = false;
+            else clickUI();
+        });
         //这个管长按开始
         control_layout.setOnLongClickListener(view -> {
             if (SharedPreferencesUtil.getBoolean("player_longclick", true) && ijkPlayer != null && (control_btn.getText() == "| |")) {

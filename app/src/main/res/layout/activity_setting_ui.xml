@@ -56,14 +56,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="20dp"
+            android:paddingHorizontal="4dp"
+            android:paddingBottom="6dp"
             android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/reset_default"
                 android:text="恢复默认"
                 android:layout_marginTop="4dp"
-                android:layout_marginHorizontal="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -72,166 +72,179 @@
                 android:id="@+id/preview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="4dp"
                 android:text="查看预览" />
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="界面大小" />
-
-                <EditText
-                    android:id="@+id/ui_scale_input"
-                    style="@style/Widget.AppCompat.EditText"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:background="@drawable/background_edit_text_setting"
-
-                    android:layout_marginTop="2dp"
-                    android:ems="10"
-                    android:hint="请输入倍数"
-                    android:inputType="numberDecimal"
-                    android:minHeight="40dp"
-                    android:textColor="#fff"
+                    android:orientation="vertical"
                     android:paddingHorizontal="6dp"
-                    android:textColorHint="#80ffffff"
-                    android:textCursorDrawable="@drawable/cursor_drawable"
-                    android:textSize="13sp"
-                    tools:ignore="HardcodedText,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+                    android:paddingVertical="4dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:text="@string/setting_ui_desc"
-                    android:textSize="11sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="界面大小"
+                        android:textSize="14sp" />
 
-            </LinearLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-            <LinearLayout
+                        <EditText
+                            android:id="@+id/ui_scale_input"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:minWidth="50dp"
+                            android:textSize="12sp"
+
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/textView1"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="倍"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="2dp"
+                        android:text="@string/setting_ui_desc"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="界面边距" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginTop="2dp"
-                    android:background="@drawable/background_edit_text_setting"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="4dp">
+                    android:paddingHorizontal="4dp"
+                    android:paddingVertical="4dp"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/desc1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="横向"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/ui_padding_horizontal"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:text="界面边距" />
 
-                    <EditText
-                        android:id="@+id/ui_padding_horizontal"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="number"
-                        android:minHeight="40dp"
-                        android:textColor="#fff"
-                        android:textColorHint="#80ffffff"
-                        android:textCursorDrawable="@drawable/cursor_drawable"
-                        android:textSize="13sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/desc2"
-                        app:layout_constraintStart_toEndOf="@+id/desc1"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="HardcodedText,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="4dp">
+
+                        <TextView
+                            android:id="@+id/desc1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="横向"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/ui_padding_horizontal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <EditText
+                            android:id="@+id/ui_padding_horizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:minHeight="40dp"
+                            android:textSize="13sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/desc2"
+                            app:layout_constraintStart_toEndOf="@+id/desc1"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="HardcodedText,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+                        <TextView
+                            android:id="@+id/desc2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="%"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/ui_padding_horizontal"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="4dp">
+
+                        <TextView
+                            android:id="@+id/desc3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="纵向"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/ui_padding_vertical"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <EditText
+                            android:id="@+id/ui_padding_vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:minHeight="40dp"
+                            android:textColor="#fff"
+                            android:textColorHint="#80ffffff"
+                            android:textCursorDrawable="@drawable/cursor_drawable"
+                            android:textSize="13sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/desc4"
+                            app:layout_constraintStart_toEndOf="@+id/desc3"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="HardcodedText,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+                        <TextView
+                            android:id="@+id/desc4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="%"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/ui_padding_vertical"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
-                        android:id="@+id/desc2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="%"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/ui_padding_horizontal"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginHorizontal="2dp"
+                        android:text="第一个输入框为横向边距，第二个输入框为纵向边距，单位百分比。此选项可以用于圆屏适配。\n出于保护，数值超过30不会保存。"
+                        android:textSize="11sp" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginTop="2dp"
-                    android:background="@drawable/background_edit_text_setting"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="4dp">
-
-                    <TextView
-                        android:id="@+id/desc3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="纵向"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/ui_padding_vertical"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <EditText
-                        android:id="@+id/ui_padding_vertical"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="number"
-                        android:minHeight="40dp"
-                        android:textColor="#fff"
-                        android:textColorHint="#80ffffff"
-                        android:textCursorDrawable="@drawable/cursor_drawable"
-                        android:textSize="13sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/desc4"
-                        app:layout_constraintStart_toEndOf="@+id/desc3"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="HardcodedText,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                    <TextView
-                        android:id="@+id/desc4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="%"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/ui_padding_vertical"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:text="第一个输入框为横向边距，第二个输入框为纵向边距，单位百分比。此选项可以用于圆屏适配。\n出于保护，数值超过30不会保存。"
-                    android:textSize="11sp" />
-
-            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
