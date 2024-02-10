@@ -7,13 +7,12 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import java.util.List;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class MessageApi {
@@ -71,7 +70,7 @@ public class MessageApi {
                     replyInfo.rpid = object.getJSONObject("item").getLong("item_id");
                     replyInfo.sender = null;
                     replyInfo.message = object.getJSONObject("item").getString("title");
-                    replyInfo.emote = new JSONArray();
+                    replyInfo.emote = new ArrayList<>();
                     replyInfo.pictureList = new ArrayList<>();
                     replyInfo.likeCount = 0;
                     replyInfo.upLiked = false;
@@ -87,7 +86,7 @@ public class MessageApi {
                     replyInfo.rpid = object.getJSONObject("item").getLong("item_id");
                     replyInfo.sender = null;
                     replyInfo.message = object.getJSONObject("item").getString("title");
-                    replyInfo.emote = new JSONArray();
+                    replyInfo.emote = new ArrayList<>();
                     replyInfo.pictureList = new ArrayList<>();
                     replyInfo.likeCount = 0;
                     replyInfo.upLiked = false;
@@ -137,7 +136,7 @@ public class MessageApi {
                     replyChildInfo.rpid = object.getJSONObject("item").getLong("target_id");
                     replyChildInfo.sender = null;
                     replyChildInfo.message = object.getJSONObject("item").getString("title");
-                    replyChildInfo.emote = new JSONArray();
+                    replyChildInfo.emote = new ArrayList<>();
                     replyChildInfo.pictureList = new ArrayList<>();
                     replyChildInfo.likeCount = 0;
                     replyChildInfo.upLiked = false;
@@ -152,7 +151,7 @@ public class MessageApi {
                     replyChildInfo.rpid = object.getJSONObject("item").getLong("target_id");
                     replyChildInfo.sender = null;
                     replyChildInfo.message = object.getJSONObject("item").getString("title");
-                    replyChildInfo.emote = new JSONArray();
+                    replyChildInfo.emote = new ArrayList<>();
                     replyChildInfo.pictureList = new ArrayList<>();
                     replyChildInfo.likeCount = 0;
                     replyChildInfo.upLiked = false;
@@ -202,7 +201,7 @@ public class MessageApi {
                     replyChildInfo.rpid = object.getJSONObject("item").getLong("target_id");
                     replyChildInfo.sender = null;
                     replyChildInfo.message = object.getJSONObject("item").getString("title");
-                    replyChildInfo.emote = new JSONArray();
+                    replyChildInfo.emote = new ArrayList<>();
                     replyChildInfo.pictureList = new ArrayList<>();
                     replyChildInfo.likeCount = 0;
                     replyChildInfo.upLiked = false;
@@ -217,7 +216,7 @@ public class MessageApi {
                     replyChildInfo.rpid = object.getJSONObject("item").getLong("target_id");
                     replyChildInfo.sender = null;
                     replyChildInfo.message = object.getJSONObject("item").getString("title");
-                    replyChildInfo.emote = new JSONArray();
+                    replyChildInfo.emote = new ArrayList<>();
                     replyChildInfo.pictureList = new ArrayList<>();
                     replyChildInfo.likeCount = 0;
                     replyChildInfo.upLiked = false;

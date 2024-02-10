@@ -83,6 +83,8 @@ public class DynamicApi {
             userInfo.avatar = module_author.getString("face");
             dynamic.userInfo = userInfo;
             Log.e("debug-dynamic-sender",userInfo.name);
+
+            dynamic.pubTime = module_author.getString("pub_time");
         }
 
         //动态主体

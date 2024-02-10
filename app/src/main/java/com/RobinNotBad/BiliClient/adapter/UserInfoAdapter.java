@@ -68,13 +68,13 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             int realPosition = position - 1;
             DynamicHolder dynamicHolder = (DynamicHolder) holder;
 
-            dynamicHolder.showDynamic(dynamicList.get(realPosition),context);
+            dynamicHolder.showDynamic(dynamicList.get(realPosition), context, true);
 
             if(dynamicList.get(realPosition).dynamic_forward != null){
                 Log.e("debug","有子动态！");
                 View childCard = View.inflate(context,R.layout.cell_dynamic_child,dynamicHolder.extraCard);
                 DynamicHolder childHolder = new DynamicHolder(childCard,true);
-                childHolder.showDynamic(dynamicList.get(realPosition).dynamic_forward,context);
+                childHolder.showDynamic(dynamicList.get(realPosition).dynamic_forward, context, true);
             }
         }
         if (holder instanceof UserInfoHolder){

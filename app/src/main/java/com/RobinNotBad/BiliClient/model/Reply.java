@@ -10,7 +10,7 @@ public class Reply {
     public String pubTime;
     public UserInfo sender;
     public String message;
-    public JSONArray emote;
+    public ArrayList<Emote> emote;
     public ArrayList<String> pictureList;
     public int likeCount;
     public boolean upLiked;

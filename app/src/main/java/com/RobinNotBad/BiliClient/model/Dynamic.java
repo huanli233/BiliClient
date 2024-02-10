@@ -1,8 +1,9 @@
 package com.RobinNotBad.BiliClient.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Dynamic {
+public class Dynamic implements Serializable {
     public long dynamicId;
     public String type;
     public long comment_id;
@@ -11,7 +12,7 @@ public class Dynamic {
     public UserInfo userInfo;
     public String content;
     public ArrayList<Emote> emotes;
-    public String pubDate;
+    public String pubTime;
 
     public int view;
     public int like;

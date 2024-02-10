@@ -12,28 +12,23 @@ import androidx.fragment.app.Fragment;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.DynamicHolder;
-import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-
-import org.json.JSONException;
-
-import java.io.IOException;
 
 //真正的视频详情页
 //2023-07-17
 
 public class DynamicInfoFragment extends Fragment {
 
-    long id;
+    Dynamic dynamic;
 
     public DynamicInfoFragment() {
     }
 
-    public static DynamicInfoFragment newInstance(long id) {
+    public static DynamicInfoFragment newInstance(Dynamic dynamic) {
         DynamicInfoFragment fragment = new DynamicInfoFragment();
         Bundle args = new Bundle();
-        args.putLong("id", id);
+        args.putSerializable("dynamic", dynamic);
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,7 +37,7 @@ public class DynamicInfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.id = getArguments().getLong("id");
+            this.dynamic = (Dynamic) getArguments().getSerializable("dynamic");
         }
 
     }
@@ -59,25 +54,18 @@ public class DynamicInfoFragment extends Fragment {
         ScrollView scrollView = view.findViewById(R.id.scrollView);
 
         CenterThreadPool.run(()->{
-            try {
-                Dynamic dynamic = DynamicApi.getDynamic(id);
-                if(isAdded()) requireActivity().runOnUiThread(() -> {
-                    View dynamicView = View.inflate(requireContext(),R.layout.cell_dynamic, scrollView);
-                    DynamicHolder holder = new DynamicHolder(dynamicView,false);
-                    holder.showDynamic(dynamic,requireContext());
+            if(isAdded()) requireActivity().runOnUiThread(() -> {
+                View dynamicView = View.inflate(requireContext(),R.layout.cell_dynamic, scrollView);
+                DynamicHolder holder = new DynamicHolder(dynamicView,false);
+                holder.showDynamic(dynamic,requireContext(),false);
 
-                    if(dynamic.dynamic_forward != null){
-                        Log.e("debug","有子动态！");
-                        View childCard = View.inflate(requireContext(),R.layout.cell_dynamic_child,holder.extraCard);
-                        DynamicHolder childHolder = new DynamicHolder(childCard,true);
-                        childHolder.showDynamic(dynamic.dynamic_forward,requireContext());
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+                if(dynamic.dynamic_forward != null){
+                    Log.e("debug","有子动态！");
+                    View childCard = View.inflate(requireContext(),R.layout.cell_dynamic_child,holder.extraCard);
+                    DynamicHolder childHolder = new DynamicHolder(childCard,true);
+                    childHolder.showDynamic(dynamic.dynamic_forward,requireContext(),true);
+                }
+            });
         });
 
     }

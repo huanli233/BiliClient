@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.api;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
+import com.RobinNotBad.BiliClient.model.Emote;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.JsonUtil;
@@ -89,22 +90,23 @@ public class ReplyApi {
             replyReturn.liked = reply.getInt("action") == 1;
 
             if(content.has("emote") && !content.isNull("emote")) {
-                JSONArray emoteArray = new JSONArray();
-                JSONObject emote = content.getJSONObject("emote");
-                Log.e("debug-emote",emote.toString());
-                ArrayList<String> emoteKeys = JsonUtil.getJsonKeys(emote);
+                ArrayList<Emote> emoteList = new ArrayList<>();
+                JSONObject emoteJson = content.getJSONObject("emote");
+                Log.e("debug-emote",emoteJson.toString());
+                ArrayList<String> emoteKeys = JsonUtil.getJsonKeys(emoteJson);
                 //LsonObject lsonEmote = LsonUtil.parseAsObject(emote.toString());    //最终还是用了Lson的一个功能，因为原生方式确实难以解决，还好这个功能是github版已有的
                 //String[] emoteKeys = lsonEmote.getKeys();                           //你看这多简单，唉，但是仅用这一处却引用整个库确实有些浪费，如果我有时间就自己写了。就当是致敬了罢（
+                //最终结果是自己写了函数，luern的库彻底扔掉了
                 for (String emoteKey:emoteKeys) {
                     Log.e("debug-key",emoteKey);
-                    JSONObject key = emote.getJSONObject(emoteKey);
-                    JSONObject emoteReturn = new JSONObject();
-                    emoteReturn.put("name", emoteKey);
-                    emoteReturn.put("url", key.getString("url"));
-                    emoteReturn.put("size", key.getJSONObject("meta").getInt("size"));  //B站十分贴心的帮你把表情包大小都写好了，快说谢谢蜀黍
-                    emoteArray.put(emoteReturn);
+                    JSONObject key = emoteJson.getJSONObject(emoteKey);
+                    emoteList.add(new Emote(
+                            emoteKey,
+                            key.getString("url"),
+                            key.getJSONObject("meta").getInt("size")
+                    ));
                 }
-                replyReturn.emote = emoteArray;
+                replyReturn.emote = emoteList;
             }
 
             //表情包列表 不知道咋办就直接传json了  显示部分见EmoteUtil

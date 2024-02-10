@@ -38,13 +38,13 @@ public class DynamicAdapter extends RecyclerView.Adapter<DynamicHolder> {
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull DynamicHolder holder, int position) {
-        holder.showDynamic(dynamicList.get(position),context);      //该函数在DynamicHolder里
+        holder.showDynamic(dynamicList.get(position), context, true);      //该函数在DynamicHolder里
 
         if(dynamicList.get(position).dynamic_forward != null){
             Log.e("debug","有子动态！");
             View childCard = View.inflate(context,R.layout.cell_dynamic_child,holder.extraCard);
             DynamicHolder childHolder = new DynamicHolder(childCard,true);
-            childHolder.showDynamic(dynamicList.get(position).dynamic_forward,context);
+            childHolder.showDynamic(dynamicList.get(position).dynamic_forward, context, true);
         }
     }
 

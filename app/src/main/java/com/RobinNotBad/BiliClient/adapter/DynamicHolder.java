@@ -61,9 +61,9 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
 
 
     @SuppressLint("SetTextI18n")
-    public void showDynamic(Dynamic dynamic, Context context){    //公用的显示函数 这样修改和调用都方便
+    public void showDynamic(Dynamic dynamic, Context context, boolean clickable){    //公用的显示函数 这样修改和调用都方便
         username.setText(dynamic.userInfo.name);
-        if(pubdate!=null) pubdate.setText(dynamic.pubDate);
+        if(pubdate!=null) pubdate.setText(dynamic.pubTime);
         if(dynamic.content != null && !dynamic.content.isEmpty()) {
             content.setVisibility(View.VISIBLE);
             content.setText(dynamic.content);
@@ -142,13 +142,11 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 break;
         }
 
-        if(dynamic.dynamicId != 0) {
-            itemView.setOnClickListener(view -> {
+        if(clickable && dynamic.dynamicId != 0) {
+            (isChild ? itemView.findViewById(R.id.cardView) : itemView).setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(context, DynamicInfoActivity.class);
                 intent.putExtra("id", dynamic.dynamicId);
-                intent.putExtra("rid", dynamic.comment_id);
-                intent.putExtra("type", dynamic.comment_type);
                 context.startActivity(intent);
             });
         }
