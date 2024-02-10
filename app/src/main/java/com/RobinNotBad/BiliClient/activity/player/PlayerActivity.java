@@ -102,7 +102,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     private SeekBar progressBar, speed_seekbar;
     private float screen_width, screen_height;
     private boolean ischanging, isdanmakushowing = false;
-    private TextView text_now, text_all, showsound, text_title, loading_text0, loading_text1, text_speed, text_newspeed;
+    private TextView text_now, text_all, volumeText, text_title, loading_text0, loading_text1, text_speed, text_newspeed;
     private AudioManager audioManager;
     private ImageView danmaku_btn, circle, loop_btn, rotate_btn;
     private ScaleGestureDetector scaleGestureDetector;
@@ -325,7 +325,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         loading_text0 = findViewById(R.id.loading_text0);
         loading_text1 = findViewById(R.id.loading_text1);
         text_title = findViewById(R.id.text_title);
-        showsound = findViewById(R.id.showsound);
+        volumeText = findViewById(R.id.showsound);
         videoArea = findViewById(R.id.videoArea);
         mDanmakuView = findViewById(R.id.sv_danmaku);
         batteryView = findViewById(R.id.battery);
@@ -352,8 +352,8 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
         ImageButton sound_add = findViewById(R.id.button_sound_add);
         ImageButton sound_cut = findViewById(R.id.button_sound_cut);
-        sound_add.setOnClickListener(view -> changeSound(true));
-        sound_cut.setOnClickListener(view -> changeSound(false));
+        sound_add.setOnClickListener(view -> changeVolume(true));
+        sound_cut.setOnClickListener(view -> changeVolume(false));
 
     }
 
@@ -1040,18 +1040,18 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     }
 
     @SuppressLint("SetTextI18n")
-    public void changeSound(Boolean add_or_cut) {
+    public void changeVolume(Boolean add_or_cut) {
         autoHideTimer.cancel();
-        int maxsound = audioManager.getStreamMaxVolume(STREAM_MUSIC);
-        int soundnow = audioManager.getStreamVolume(STREAM_MUSIC);
-        if(soundnow>0 && soundnow<maxsound) {
-            soundnow = soundnow + (add_or_cut ? 1 : -1);
-            audioManager.setStreamVolume(STREAM_MUSIC, soundnow, 0);
+        int volumeNow = audioManager.getStreamVolume(STREAM_MUSIC);
+        int volumeMax = audioManager.getStreamMaxVolume(STREAM_MUSIC);
+        if(volumeNow>=0 && volumeNow<=volumeMax) {
+            volumeNow = volumeNow + (add_or_cut ? 1 : -1);
+            audioManager.setStreamVolume(STREAM_MUSIC, volumeNow, 0);
         }
-        int show = soundnow / maxsound * 100;
+        float show = (float) (volumeNow / volumeMax) * 100;
         runOnUiThread(() -> {
-            showsound.setVisibility(View.VISIBLE);
-            showsound.setText("音量：" +  show + "%");
+            volumeText.setVisibility(View.VISIBLE);
+            volumeText.setText("音量：" +  show + "%");
         });
         hidesound();
         autohide();
@@ -1063,7 +1063,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(() -> showsound.setVisibility(View.GONE));
+                runOnUiThread(() -> volumeText.setVisibility(View.GONE));
             }
         };
         sound.schedule(timerTask, 3000);
