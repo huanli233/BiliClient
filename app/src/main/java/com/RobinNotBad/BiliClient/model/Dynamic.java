@@ -14,10 +14,7 @@ public class Dynamic implements Serializable {
     public ArrayList<Emote> emotes;
     public String pubTime;
 
-    public int view;
-    public int like;
-    public int reply;
-    public boolean liked;
+    public Stats stats;
 
     public String major_type;
     public Object major_object;
