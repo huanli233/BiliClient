@@ -1044,14 +1044,15 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         autoHideTimer.cancel();
         int volumeNow = audioManager.getStreamVolume(STREAM_MUSIC);
         int volumeMax = audioManager.getStreamMaxVolume(STREAM_MUSIC);
-        if(volumeNow>=0 && volumeNow<=volumeMax) {
-            volumeNow = volumeNow + (add_or_cut ? 1 : -1);
-            audioManager.setStreamVolume(STREAM_MUSIC, volumeNow, 0);
+        int volumeNew = volumeNow + (add_or_cut ? 1 : -1);
+        if(volumeNew>=0 && volumeNew<=volumeMax) {
+            audioManager.setStreamVolume(STREAM_MUSIC, volumeNew, 0);
+            volumeNow = volumeNew;
         }
-        float show = (float) (volumeNow / volumeMax) * 100;
+        int show = (int) ((float) volumeNow / (float) volumeMax * 100);
         runOnUiThread(() -> {
             volumeText.setVisibility(View.VISIBLE);
-            volumeText.setText("音量：" +  show + "%");
+            volumeText.setText("音量：" + show + "%");
         });
         hidesound();
         autohide();
