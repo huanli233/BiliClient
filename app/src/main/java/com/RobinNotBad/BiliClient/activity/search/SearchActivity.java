@@ -6,27 +6,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
-import com.RobinNotBad.BiliClient.api.SearchApi;
-import com.RobinNotBad.BiliClient.model.ArticleInfo;
-import com.RobinNotBad.BiliClient.model.UserInfo;
-import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +34,10 @@ public class SearchActivity extends InstanceActivity {
     SearchArticleFragment searchArticleFragment;
     SearchUserFragment searchUserFragment;
 
-    public ConstraintLayout searchBar;
-    public int searchBarAlpha = 100;
+    private View searchBar;
+    private boolean searchBarVisible = true;
+
+    //public int searchBarAlpha = 100;
     private String keyword;
     private boolean refreshing = false;
 
@@ -121,5 +120,35 @@ public class SearchActivity extends InstanceActivity {
 
             }
         }
+    }
+
+
+    public void onScrolled(int dy) {
+        int height = searchBar.getHeight() + LittleToolsUtil.dp2px(4f,this);
+
+        if (dy > 0 && searchBarVisible) {
+            if(searchBar.getAnimation()==null || searchBar.getAnimation().hasEnded()) {
+                this.searchBarVisible = false;
+                Log.e("debug", "dy>0");
+                TranslateAnimation hide = new TranslateAnimation(0, 0, 0, -height);
+                doAnimation(hide);
+            }
+        }
+        if (dy < 0 && !searchBarVisible) {
+            if(searchBar.getAnimation()==null || searchBar.getAnimation().hasEnded()) {
+                this.searchBarVisible = true;
+                Log.e("debug", "dy<0");
+                TranslateAnimation show = new TranslateAnimation(0, 0, -height, 0);
+                doAnimation(show);
+            }
+        }
+    }
+
+    private void doAnimation(Animation animation){
+        animation.setDuration(250);
+        animation.setFillAfter(true);
+        AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
+        animation.setInterpolator(interpolator);
+        searchBar.startAnimation(animation);
     }
 }

@@ -154,7 +154,9 @@ public class SettingMainActivity extends InstanceActivity {
             MsgUtil.toast("已经重置教程完成情况",this);
         });
 
+
         MaterialCardView test = findViewById(R.id.test);    //用于测试
+        test.setVisibility(View.GONE);
         test.setOnClickListener(view -> MsgUtil.toast("喵~",this));
     }
 }

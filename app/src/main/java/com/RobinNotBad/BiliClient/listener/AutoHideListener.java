@@ -5,6 +5,8 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.lang.ref.WeakReference;
 
@@ -43,7 +45,7 @@ public class AutoHideListener extends RecyclerView.OnScrollListener {
     }
 
     @Override
-    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
         final Activity activity = _ref.get();
         if (activity == null) return;
 
@@ -68,13 +70,10 @@ public class AutoHideListener extends RecyclerView.OnScrollListener {
                     super.run();
                     if (_onScrollChange) {
                         activity.runOnUiThread(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        _state = Hide;
-                                        _view.setClickable(false);
-                                        _view.startAnimation(_hide);
-                                    }
+                                () -> {
+                                    _state = Hide;
+                                    _view.setClickable(false);
+                                    _view.startAnimation(_hide);
                                 });
                     }
                 }
@@ -103,12 +102,9 @@ public class AutoHideListener extends RecyclerView.OnScrollListener {
                                     }
                                 }
                                 activity.runOnUiThread(
-                                        new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                _view.setClickable(true);
-                                                _view.startAnimation(_show);
-                                            }
+                                        () -> {
+                                            _view.setClickable(true);
+                                            _view.startAnimation(_show);
                                         });
                                 SystemClock.sleep(_showDuration);
                                 _state = Show;
@@ -121,7 +117,7 @@ public class AutoHideListener extends RecyclerView.OnScrollListener {
     }
 
     @Override
-    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
         _onScrollChange = true;
     }

@@ -83,19 +83,7 @@ public class SearchVideoFragment extends Fragment {
 
                         if(requireActivity() instanceof SearchActivity) {
                             SearchActivity activity = (SearchActivity) requireActivity();
-                            int searchbar_alpha = activity.searchBarAlpha - (4*dy);
-                            if (searchbar_alpha < 0) {
-                                searchbar_alpha = 0;
-                                activity.searchBar.setVisibility(View.GONE);
-                            } else {
-                                activity.searchBar.setVisibility(View.VISIBLE);
-                                if (searchbar_alpha > 100) {
-                                    searchbar_alpha = 100;
-                                }
-                                activity.searchBar.setAlpha(searchbar_alpha / 100f);
-                            }
-                            activity.searchBarAlpha = searchbar_alpha;
-                            //Log.e("debug", "dx=" + dx + ",dy=" + dy);
+                            activity.onScrolled(dy);
                         }
                     }
                 });
@@ -126,7 +114,7 @@ public class SearchVideoFragment extends Fragment {
         this.page = 0;
         this.keyword = keyword;
         if(this.videoCardList==null) this.videoCardList = new ArrayList<>();
-        if(this.videoCardAdapter==null) this.videoCardAdapter = new VideoCardAdapter(requireContext(),this.videoCardList);
+        if(this.videoCardAdapter==null) this.videoCardAdapter = new VideoCardAdapter(this.requireContext(),this.videoCardList);
         int size_old = this.videoCardList.size();
         this.videoCardList.clear();
         CenterThreadPool.runOnUiThread(()->{
