@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.activity.settings;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -57,8 +58,8 @@ public class SettingPlayerInsideActivity extends BaseActivity {
         SWscale.setChecked(SharedPreferencesUtil.getBoolean("player_scale",true));
         SWdoublemove.setChecked(SharedPreferencesUtil.getBoolean("player_doublemove",false));
 
-        SWtexture.setChecked(SharedPreferencesUtil.getBoolean("player_display",false));
-        SWsurface.setChecked(!SharedPreferencesUtil.getBoolean("player_display",false));
+        SWtexture.setChecked(SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT<=19));
+        SWsurface.setChecked(!SharedPreferencesUtil.getBoolean("player_display",Build.VERSION.SDK_INT<=19));
         SWhard.setChecked(SharedPreferencesUtil.getBoolean("player_codec",true));
         SWsoft.setChecked(!SharedPreferencesUtil.getBoolean("player_codec",true));
         SWopensles.setChecked(SharedPreferencesUtil.getBoolean("player_audio",false));

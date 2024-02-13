@@ -277,21 +277,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
             }
         });
 
-        if (SharedPreferencesUtil.getBoolean("player_display", false)) {
-            textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
-                @Override
-                public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
-                    mSurfaceTexture = surfaceTexture;
-                }
-                @Override
-                public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {}
-                @Override
-                public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {return false;}
-                @Override
-                public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {}
-            });
-        }
-
         Handler handler = new Handler();
         handler.post(()-> CenterThreadPool.run(()->{    //等界面加载完成
             switch (mode) {
@@ -350,8 +335,18 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         videoArea.setY(0);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        if (SharedPreferencesUtil.getBoolean("player_display", false)) {
+        if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT<=19)) {
             textureView = new TextureView(this);
+            textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+                @Override
+                public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {mSurfaceTexture = surfaceTexture;}
+                @Override
+                public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {}
+                @Override
+                public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {return false;}
+                @Override
+                public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {}
+            });
             videoArea.addView(textureView, params);
         } else {
             surfaceView = new SurfaceView(this);
@@ -660,7 +655,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         }
 
         Log.e("debug","准备设置显示");
-        if (SharedPreferencesUtil.getBoolean("player_display", false)){            //Texture
+        if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT<=19)){            //Texture
             Log.e("debug","使用texture模式");
             Timer textureTimer = new Timer();
             textureTimer.schedule(new TimerTask() {
