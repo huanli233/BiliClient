@@ -83,15 +83,14 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     private IDanmakuView mDanmakuView;
     private DanmakuContext mContext;
     private Timer progresstimer, autoHideTimer, sound, speedTimer, loadingShowTimer;
-    private String url;
-    private String danmaku;
+    private String url,danmaku;
     private int mode;
-    private boolean onLongClick = false;
-    private int videoall;
-    private int videonow;
+    private int videoall,videonow;
+
     private ConstraintLayout control_layout, top_control, bottom_control, speed_layout;
     private RelativeLayout videoArea;
     private LinearLayout right_control, loading_info;
+
     private IjkMediaPlayer ijkPlayer;
     private SurfaceView surfaceView;
     private TextureView textureView;
@@ -113,12 +112,10 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
     private int lastProgress;
     private boolean dmkPlaying;
-
     private boolean prepared = false;
-
     private boolean firstSurfaceHolder = true;
-
     private boolean finishWatching = false;
+    private boolean onLongClick = false;
 
     private BatteryView batteryView;
     private BatteryManager manager;
@@ -263,12 +260,10 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                     ijkPlayer.setSpeed(speeds[position]);
                 }
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 if (speedTimer != null) speedTimer.cancel();
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 speedTimer = new Timer();
@@ -314,7 +309,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                     break;
                 case 2:
                     streamdanmaku(danmaku);
-
                     setDisplay();
                     break;
             }

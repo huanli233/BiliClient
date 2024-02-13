@@ -103,7 +103,7 @@ public class ScaleGestureDetector {
         mListener = listener;
         final ViewConfiguration viewConfiguration = ViewConfiguration.get(context);
         mSpanSlop = viewConfiguration.getScaledTouchSlop() * 2;
-        mMinSpan = 1;
+        mMinSpan = 0;
         mHandler = handler;
 
         final int targetSdkVersion = context.getApplicationInfo().targetSdkVersion;
