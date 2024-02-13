@@ -2,12 +2,10 @@ package com.RobinNotBad.BiliClient.activity.player;
 
 import static android.media.AudioManager.STREAM_MUSIC;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.SurfaceTexture;
@@ -39,8 +37,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.RobinNotBad.BiliClient.BiliClient;
 import com.RobinNotBad.BiliClient.R;
@@ -190,12 +186,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
         IjkMediaPlayer.loadLibrariesOnce(null);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
-        }
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             manager = (BatteryManager) getSystemService(BATTERY_SERVICE);
             batteryView.setPower(manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
@@ -204,7 +194,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         loop = SharedPreferencesUtil.getBoolean("player_loop", false);
         Glide.with(this).load(R.mipmap.load).into(circle);
 
-        File cachepath = getExternalCacheDir();
+        File cachepath = getCacheDir();
         if (!cachepath.exists()) cachepath.mkdirs();
         danmakuFile = new File(cachepath, "danmaku.xml");
 
@@ -307,7 +297,8 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
             });
         }
 
-        CenterThreadPool.run(() -> {
+        Handler handler = new Handler();
+        handler.post(()-> CenterThreadPool.run(()->{    //等界面加载完成
             switch (mode) {
                 case 0:
                     Log.e("debug", "准备在线播放");
@@ -316,17 +307,18 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                         loading_text1.setText("(≧∇≦)");
                     });
                     downdanmu();
-                    setDisplay(url);
+                    setDisplay();
                     break;
                 case 1:
-                    setDisplay(url);
+                    setDisplay();
                     break;
                 case 2:
                     streamdanmaku(danmaku);
-                    setDisplay(url);
+
+                    setDisplay();
                     break;
             }
-        });
+        }));
 
     }
 
@@ -646,9 +638,9 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         Log.e("debug","onResume");
     }
 
-    private void setDisplay(String nowurl) {
+    private void setDisplay() {
         Log.e("debug","创建播放器");
-        Log.e("debug-url",nowurl);
+        Log.e("debug-url",url);
 
 
         runOnUiThread(() -> loading_text0.setText("初始化播放"));
@@ -684,7 +676,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                     if(mSurfaceTexture != null){
                         Surface surface = new Surface(mSurfaceTexture);
                         ijkPlayer.setSurface(surface);
-                        MPPrepare(nowurl);
+                        MPPrepare(url);
                         Log.e("debug","设置surfaceTexture成功！");
                         this.cancel();
                     }
@@ -723,7 +715,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                                 ijkPlayer.setDisplay(null);
                             }
                         });
-                        MPPrepare(nowurl);
+                        MPPrepare(url);
                         Log.e("debug","定时器结束！");
                         this.cancel();
                     }
