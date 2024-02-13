@@ -101,7 +101,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="6dp"
                         android:layout_marginBottom="4dp"
-                        android:text="开启选项后，播放视频时可使用像查看照片一样的双指手势来缩放和移动视频\n对于单点触控的设备，可以先点击一下屏幕，然后立刻按住并上下拖动\n特别感谢：凉腕播放器"
+                        android:text="开启选项后，播放视频时可使用像查看照片一样的手势来缩放和移动视频\n对于单点触控的设备，可以先点击一下屏幕，然后立刻按住并上下拖动来缩放\n！若缩放时视频大小没有变化反而发生位移，请切换下面的“显示方式”！\n特别感谢：凉腕播放器"
                         android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -176,7 +176,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="如果视频无法正常播放请切换该选项\n已知：KidoX3只能Surface，小天才只能Texture"
+                            android:text="！如果视频播放异常、闪退或未响应，请切换该选项！\n已知：KidoX3只能Surface，小天才只能Texture，部分设备需要使用Texture才能进行缩放"
                             android:textSize="11sp" />
                     </LinearLayout>
 

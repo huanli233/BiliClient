@@ -39,12 +39,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -153,13 +155,31 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         if (SharedPreferencesUtil.getBoolean("player_ui_showRotateBtn", true)) rotate_btn.setVisibility(View.VISIBLE);
         else rotate_btn.setVisibility(View.GONE);
 
+        if(SharedPreferencesUtil.getBoolean("player_ui_round",false)){
+            int padding = LittleToolsUtil.dp2px(6,this);
+
+            top_control.setPaddingRelative(0,padding,0,0);
+
+            bottom_control.setPaddingRelative(padding,0,0, padding);
+
+            right_control.setPaddingRelative(0,0,padding,0);
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone(control_layout);
+            constraintSet.connect(right_control.getId(),ConstraintSet.TOP,ConstraintSet.PARENT_ID,ConstraintSet.TOP);
+            constraintSet.connect(right_control.getId(),ConstraintSet.BOTTOM,ConstraintSet.PARENT_ID,ConstraintSet.BOTTOM);
+            constraintSet.applyTo(control_layout);
+            //一种很新的使用ConstraintLayout的方法（
+        }
+
         if (mode == -1) {
             loading_text0.setText("预览中");
             loading_text1.setText("点击上方标题栏退出");
             videoArea.setBackgroundColor(Color.argb(0x50,0xff,0xff,0xff));
             changeVideoSize(640,360);
             if (SharedPreferencesUtil.getBoolean("player_ui_showDanmakuBtn", true)) danmaku_btn.setVisibility(View.VISIBLE);
+            else danmaku_btn.setVisibility(View.GONE);
             if (SharedPreferencesUtil.getBoolean("player_ui_showLoopBtn", true)) loop_btn.setVisibility(View.VISIBLE);
+            else loop_btn.setVisibility(View.GONE);
             return;
         }
 
@@ -392,7 +412,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
                 switch (action) {
                     case MotionEvent.ACTION_MOVE:
-                        if (singleTouch && !scaling) {
+                        if (singleTouch && !scaling && !(scaled && !doublemove_enabled)) {
                             float currentX = event.getX(0);  //单指移动
                             float currentY = event.getY(0);
                             float deltaX = currentX - previousX;
