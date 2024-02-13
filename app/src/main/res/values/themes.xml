@@ -14,6 +14,7 @@
 
         <item name="colorSwitchThumbNormal">@color/textwhite</item>
         <item name="colorControlActivated">@color/textwhite</item>
+        <item name="colorControlNormal">@color/color_ripple</item>
         <item name="android:textColor">@color/textwhite</item>
     </style>
     <style name="Theme.NoSwipe" parent="Theme.BiliClient">

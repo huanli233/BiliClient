@@ -19,7 +19,6 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -107,7 +106,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     private TextView text_now, text_all, volumeText, text_title, loading_text0, loading_text1, text_speed, text_newspeed;
     private AudioManager audioManager;
     private ImageView danmaku_btn, circle, loop_btn, rotate_btn;
-    private ScaleGestureDetector scaleGestureDetector;
+    private com.RobinNotBad.BiliClient.activity.player.ScaleGestureDetector scaleGestureDetector;
     private ViewScaleGestureListener scaleGestureListener;
     private float previousX, previousY;
     private boolean moving,scaling,scaled,click_disabled;

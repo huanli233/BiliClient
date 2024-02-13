@@ -1,9 +1,8 @@
 package com.RobinNotBad.BiliClient.activity.player;
 
-import android.view.ScaleGestureDetector;
 import android.view.View;
 
-public class ViewScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+public class ViewScaleGestureListener extends com.RobinNotBad.BiliClient.activity.player.ScaleGestureDetector.SimpleOnScaleGestureListener {
 
     private final View view;
     public boolean scaling;

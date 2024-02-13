@@ -2,7 +2,6 @@
 <resources>
     <color name="textwhite">#FEFEFE</color>
     <color name="color_ripple">#78FEFEFE</color>
-    <color name="color_ripple_dark">#78242424</color>
     <color name="bgblack">#000000</color>
     <color name="pink">#FBFB8799</color>
     <color name="gray">#70707070</color>
