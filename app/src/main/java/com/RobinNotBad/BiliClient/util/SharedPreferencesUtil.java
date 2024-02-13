@@ -3,6 +3,8 @@ package com.RobinNotBad.BiliClient.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.RobinNotBad.BiliClient.BiliClient;
+
 /**
  * 被 luern0313 创建于 2020/5/4.
  * #以下代码来源于腕上哔哩的开源项目，有修改。感谢开源者做出的贡献！
@@ -22,14 +24,7 @@ public class SharedPreferencesUtil
     public static String cookie_refresh = "cookie_refresh";
 
 
-    private static SharedPreferences sharedPreferences;
-
-    public static void initSharedPrefs(Context context){
-        //实际上在BaseActivity里已经帮你init过了，通常无需再调用此函数
-        if(sharedPreferences == null) {
-            sharedPreferences = context.getSharedPreferences("default", Context.MODE_PRIVATE);
-        }
-    }
+    private static final SharedPreferences sharedPreferences = BiliClient.context.getSharedPreferences("default",Context.MODE_PRIVATE);
 
     public static String getString(String key, String def) {
         return sharedPreferences.getString(key, def);

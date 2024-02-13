@@ -37,9 +37,7 @@ public class SplashActivity extends Activity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        SharedPreferencesUtil.initSharedPrefs(newBase);
-        newBase = BiliClient.getFitDisplayContext(newBase);
-        super.attachBaseContext(newBase);
+        super.attachBaseContext(BiliClient.getFitDisplayContext(newBase));
     }
 
 

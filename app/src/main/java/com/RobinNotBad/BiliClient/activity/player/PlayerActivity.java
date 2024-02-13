@@ -42,6 +42,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.RobinNotBad.BiliClient.BiliClient;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -134,6 +135,11 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     @Override
     public void onBackPressed() {
         if (!SharedPreferencesUtil.getBoolean("back_disable", false)) super.onBackPressed();
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(BiliClient.getFitDisplayContext(newBase));
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -689,24 +695,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
             Log.e("debug","使用surface模式");
             Log.e("debug","获取surfaceHolder");
             SurfaceHolder surfaceHolder = surfaceView.getHolder();       //Surface
-            Log.e("debug","添加callback");
-            surfaceHolder.addCallback(new SurfaceHolder.Callback() {
-                @Override
-                public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-                    if(!firstSurfaceHolder) {ijkPlayer.setDisplay(surfaceHolder);}
-                    if(prepared) {
-                        Log.e("debug", "重新设置Holder");
-                        ijkPlayer.seekTo(progressBar.getProgress());
-                    }
-                }
-                @Override
-                public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {}
-                @Override
-                public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
-                    Log.e("debug", "Holder没了");
-                    ijkPlayer.setDisplay(null);
-                }
-            });
             Timer textureTimer = new Timer();
             textureTimer.schedule(new TimerTask() {
                 @Override
@@ -715,8 +703,28 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                     if(!surfaceHolder.isCreating()){
                         ijkPlayer.setDisplay(surfaceHolder);
                         firstSurfaceHolder = false;
-                        MPPrepare(nowurl);
                         Log.e("debug","设置surfaceHolder成功！");
+                    }
+                    if(!firstSurfaceHolder) {
+                        Log.e("debug","添加callback");
+                        surfaceHolder.addCallback(new SurfaceHolder.Callback() {
+                            @Override
+                            public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+                                if(prepared) {
+                                    Log.e("debug", "重新设置Holder");
+                                    ijkPlayer.seekTo(progressBar.getProgress());
+                                }
+                            }
+                            @Override
+                            public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {}
+                            @Override
+                            public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
+                                Log.e("debug", "Holder没了");
+                                ijkPlayer.setDisplay(null);
+                            }
+                        });
+                        MPPrepare(nowurl);
+                        Log.e("debug","定时器结束！");
                         this.cancel();
                     }
                 }

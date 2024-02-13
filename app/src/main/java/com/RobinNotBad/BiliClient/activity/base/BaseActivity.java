@@ -15,11 +15,12 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class BaseActivity extends AppCompatActivity {
     public int window_width, window_height;
+    public Context old_context;
     //调整应用内dpi的代码，其他Activity要继承于BaseActivity才能调大小
     @Override
     protected void attachBaseContext(Context newBase) {
-        newBase = BiliClient.getFitDisplayContext(newBase);
-        super.attachBaseContext(newBase);
+        old_context = newBase;
+        super.attachBaseContext(BiliClient.getFitDisplayContext(newBase));
     }
 
     //调整页面边距，参考了hankmi的方式
