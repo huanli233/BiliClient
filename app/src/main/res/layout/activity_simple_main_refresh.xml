@@ -57,7 +57,7 @@ tools:context=".activity.video.RecommendActivity">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical" />
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
