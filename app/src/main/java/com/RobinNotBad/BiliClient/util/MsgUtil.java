@@ -29,6 +29,7 @@ public class MsgUtil {
         e.printStackTrace();
         if(e instanceof IOException) toast("网络错误(＃°Д°)",context);
         else if (e instanceof JSONException) toastLong("数据解析错误：\n" + e,context);
+        else toast("错误：" + e , context);
     }
 
     public static void showText(Context context,String title,String text){

@@ -199,6 +199,12 @@ public class VideoInfoFragment extends Fragment {
                         requireContext().startActivity(intent);
                         return false;
                     });
+                    bvidText.setOnLongClickListener(view1 -> {
+                        Intent intent = new Intent(requireContext(), CopyTextActivity.class);
+                        intent.putExtra("content", videoInfo.bvid);
+                        requireContext().startActivity(intent);
+                        return false;
+                    });
                 }
 
                 play.setOnClickListener(view1 -> {

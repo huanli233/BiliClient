@@ -616,15 +616,23 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     protected void onPause() {
         super.onPause();
         Log.e("debug", "onPause");
-        if (ijkPlayer != null && prepared) ijkPlayer.pause();
-        if (mDanmakuView != null && mode != 1) mDanmakuView.pause();
-        if (control_btn != null) control_btn.setText("▶");
+        if(!SharedPreferencesUtil.getBoolean("player_background",false)) {
+            if (ijkPlayer != null && prepared) ijkPlayer.pause();
+            if (mDanmakuView != null && mode != 1) mDanmakuView.pause();
+            if (control_btn != null) control_btn.setText("▶");
+        }
     }
 
     @Override
     protected void onResume(){
         super.onResume();
         Log.e("debug","onResume");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e("debug","onStop");
     }
 
     private void setDisplay() {
@@ -691,6 +699,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
                             @Override
                             public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+                                ijkPlayer.setDisplay(surfaceHolder);
                                 if(prepared) {
                                     Log.e("debug", "重新设置Holder");
                                     ijkPlayer.seekTo(progressBar.getProgress());

@@ -18,7 +18,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 public class SettingPlayerInsideActivity extends BaseActivity {
     private MaterialRadioButton SWtexture,SWsurface,SWhard,SWsoft,SWopensles,SWaudiotrack;
     private EditText DMmaxline,danmakusize,danmakuspeed,danmaku_transparency;
-    private SwitchMaterial SWLClick,SWloop,ui_round,SWscale,SWdoublemove,danmaku_allowoverlap,danmaku_mergeduplicate,ui_showRotateBtn,ui_showDanmakuBtn,ui_showLoopBtn;
+    private SwitchMaterial SWLClick,SWloop,ui_round,SWbackground,SWscale,SWdoublemove,danmaku_allowoverlap,danmaku_mergeduplicate,ui_showRotateBtn,ui_showDanmakuBtn,ui_showLoopBtn;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class SettingPlayerInsideActivity extends BaseActivity {
         SWLClick = findViewById(R.id.SWLClick);
         SWloop = findViewById(R.id.SWloop);
         ui_round = findViewById(R.id.ui_round);
+        SWbackground = findViewById(R.id.SWbackground);
         SWscale = findViewById(R.id.SWscale);
         SWdoublemove = findViewById(R.id.SWdoublemove);
 
@@ -55,6 +56,7 @@ public class SettingPlayerInsideActivity extends BaseActivity {
         SWLClick.setChecked(SharedPreferencesUtil.getBoolean("player_longclick",true));
         SWloop.setChecked(SharedPreferencesUtil.getBoolean("player_loop",false));
         ui_round.setChecked(SharedPreferencesUtil.getBoolean("player_ui_round",false));
+        SWbackground.setChecked(SharedPreferencesUtil.getBoolean("player_background",false));
         SWscale.setChecked(SharedPreferencesUtil.getBoolean("player_scale",true));
         SWdoublemove.setChecked(SharedPreferencesUtil.getBoolean("player_doublemove",false));
 
@@ -91,6 +93,7 @@ public class SettingPlayerInsideActivity extends BaseActivity {
         SharedPreferencesUtil.putBoolean("player_audio",SWopensles.isChecked());
         SharedPreferencesUtil.putBoolean("player_longclick",SWLClick.isChecked());
         SharedPreferencesUtil.putBoolean("player_loop",SWloop.isChecked());
+        SharedPreferencesUtil.putBoolean("player_background",SWbackground.isChecked());
         SharedPreferencesUtil.putBoolean("player_scale",SWscale.isChecked());
         SharedPreferencesUtil.putBoolean("player_doublemove",SWdoublemove.isChecked());
         
