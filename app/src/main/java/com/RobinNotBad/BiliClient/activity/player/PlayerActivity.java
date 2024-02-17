@@ -522,12 +522,8 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(() -> {
-                    right_control.setVisibility(View.GONE);
-                    top_control.setVisibility(View.GONE);
-                    bottom_control.setVisibility(View.GONE);
-                    text_speed.setVisibility(View.GONE);
-                });
+                hidecon();
+                this.cancel();
             }
         };
         autoHideTimer.schedule(timerTask, 4000);
@@ -552,7 +548,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     }
 
     private void hidecon() {
-        if (autoHideTimer != null) autoHideTimer.cancel();
         right_control.setVisibility(View.GONE);
         top_control.setVisibility(View.GONE);
         bottom_control.setVisibility(View.GONE);
