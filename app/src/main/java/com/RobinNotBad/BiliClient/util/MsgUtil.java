@@ -12,19 +12,23 @@ import org.json.JSONException;
 import java.io.IOException;
 
 public class MsgUtil {
+    private static Toast toast;
+
     public static void toast(String str, Context context){
-        Toast toast = Toast.makeText(context, str, Toast.LENGTH_SHORT);
-            toast.show();
+        if(toast!=null)toast.cancel();
+        toast = Toast.makeText(context, str, Toast.LENGTH_SHORT);
+        toast.show();
     }
     public static void toastLong(String str, Context context){
-        Toast toast = Toast.makeText(context, str, Toast.LENGTH_LONG);
+        if(toast!=null)toast.cancel();
+        toast = Toast.makeText(context, str, Toast.LENGTH_LONG);
         toast.show();
     }
 
     public static void err(Exception e,Context context){
+        e.printStackTrace();
         if(e instanceof IOException) toast("网络错误(＃°Д°)",context);
         else if (e instanceof JSONException) toastLong("数据解析错误：\n" + e,context);
-        e.printStackTrace();
     }
 
     public static void showText(Context context,String title,String text){

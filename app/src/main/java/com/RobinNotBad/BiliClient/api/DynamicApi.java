@@ -23,8 +23,8 @@ import okhttp3.Response;
 public class DynamicApi {
     public static long getDynamicList(ArrayList<Dynamic> dynamicList, long offset, long mid) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/"
-                + (mid==0 ? "all?" : "space?host_mid=" + mid + "&")
-                + (offset==0 ? "" : "offset=" + offset);
+                + (mid==0 ? "all?" : "space?host_mid=" + mid)
+                + (offset==0 ? "" : "&offset=" + offset);
 
         Response response = NetWorkUtil.get(url);
         if(response.body()==null) throw new JSONException("动态返回数据为空TAT");
@@ -39,7 +39,7 @@ public class DynamicApi {
 
         JSONArray items = data.getJSONArray("items");
         for (int i = 0; i < items.length(); i++) {
-             dynamicList.add(analyzeDynamic(items.getJSONObject(i)));
+            dynamicList.add(analyzeDynamic(items.getJSONObject(i)));
         }
 
         return offset_new;
@@ -59,9 +59,14 @@ public class DynamicApi {
     }
 
     public static Dynamic analyzeDynamic(JSONObject dynamic_json) throws JSONException {
+        Log.e("debug-dynamic","--------------");
         Dynamic dynamic = new Dynamic();
-        dynamic.dynamicId = Long.parseLong(dynamic_json.getString("id_str"));
+
+        if(!dynamic_json.isNull("id_str")) dynamic.dynamicId = Long.parseLong(dynamic_json.getString("id_str"));
+        else dynamic.dynamicId = 0;
+        Log.e("debug-dynamic-id", String.valueOf(dynamic.dynamicId));
         dynamic.type = dynamic_json.getString("type");
+        Log.e("debug-dynamic-type",dynamic.type);
 
         JSONObject basic = dynamic_json.getJSONObject("basic");
         String comment_id_str = basic.getString("comment_id_str");
@@ -69,22 +74,24 @@ public class DynamicApi {
         dynamic.comment_type = basic.getInt("comment_type");
 
         JSONObject modules = dynamic_json.getJSONObject("modules");
-        Log.e("debug-dynamic","--------------");
-        Log.e("debug-dynamic-id", String.valueOf(dynamic.dynamicId));
-        Log.e("debug-dynamic-type",dynamic.type);
+
 
         //发布者
+        UserInfo userInfo = new UserInfo();
         if(modules.has("module_author") && !modules.isNull("module_author")) {
             JSONObject module_author = modules.getJSONObject("module_author");
-            UserInfo userInfo = new UserInfo();
             userInfo.mid = module_author.getLong("mid");
             userInfo.name = module_author.getString("name");
             if(!module_author.isNull("following")) userInfo.followed = module_author.getBoolean("following");
             userInfo.avatar = module_author.getString("face");
-            dynamic.userInfo = userInfo;
             Log.e("debug-dynamic-sender",userInfo.name);
-
             dynamic.pubTime = module_author.getString("pub_time");
+        }
+        dynamic.userInfo = userInfo;
+
+        if(dynamic.type.equals("DYNAMIC_TYPE_NONE")) {
+            dynamic.content = "[动态不存在]";
+            return dynamic;
         }
 
         //动态主体
@@ -119,6 +126,7 @@ public class DynamicApi {
                 Log.e("debug-dynamic-content",dynamic.content);
                 dynamic.emotes = dynamic_emotes;
             }
+            else dynamic.content = "";
 
             //这里面什么都有，直译为主要的
             if(module_dynamic.has("major") && !module_dynamic.isNull("major")){
@@ -154,8 +162,13 @@ public class DynamicApi {
                         dynamic.major_object = picture_list;
                         break;
 
+                    case "MAJOR_TYPE_COMMON":
+                        dynamic.content = dynamic.content + "\n[无法显示活动类动态的附加内容]";
+                        break;
+
                     default:
-                        dynamic.content = dynamic.content + "\n[*哔哩终端暂时无法此动态的附加信息QwQ|类型：" + major_type + "]";
+                        dynamic.content = dynamic.content + "\n[*哔哩终端暂时无法查看此动态的附加内容QwQ|类型：" + major_type + "]";
+                        break;
                 }
             }
 

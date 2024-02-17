@@ -92,7 +92,6 @@ public class UserInfoApi {
         String url = "https://api.bilibili.com/x/space/wbi/arc/search?";
         String args = "keyword=" + searchKeyword + "&mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
                 + "&ps=30&tid=0";
-        Log.e("debug",url);
         JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.webHeaders).body()).string());
         if(all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");

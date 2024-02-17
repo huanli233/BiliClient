@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.activity.user;
+package com.RobinNotBad.BiliClient.activity.user.info;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -13,36 +13,35 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
+import com.RobinNotBad.BiliClient.adapter.UserInfoAdapter;
+import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
-import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
-//用户视频
+//用户动态
 //2023-09-30
 
-public class UserVideoFragment extends Fragment {
+public class UserDynamicFragment extends Fragment {
 
     private long mid;
     private RecyclerView recyclerView;
-    private ArrayList<VideoCard> videoList;
-    private VideoCardAdapter adapter;
+    private ArrayList<Dynamic> dynamicList;
+    private UserInfoAdapter adapter;
     private boolean refreshing = false;
     private boolean bottom = false;
-    private int page = 1;
+    private long offset = 0;
 
-    public UserVideoFragment() {
+    public UserDynamicFragment() {
 
     }
 
-    public static UserVideoFragment newInstance(long mid) {
-        UserVideoFragment fragment = new UserVideoFragment();
+    public static UserDynamicFragment newInstance(long mid) {
+        UserDynamicFragment fragment = new UserDynamicFragment();
         Bundle args = new Bundle();
         args.putLong("mid", mid);
         fragment.setArguments(args);
@@ -68,14 +67,20 @@ public class UserVideoFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerView);
 
-        videoList = new ArrayList<>();
+        dynamicList = new ArrayList<>();
 
         CenterThreadPool.run(()->{
             try {
-                bottom = (UserInfoApi.getUserVideos(mid,page,"",videoList) == 1);
+                UserInfo userInfo = UserInfoApi.getUserInfo(mid);
+                Log.e("debug","获取到用户信息");
+
+                offset = DynamicApi.getDynamicList(dynamicList,offset,mid);
+                bottom = (offset==-1);
+                Log.e("debug","获取到用户动态");
+
                 if(isAdded()) requireActivity().runOnUiThread(()-> {
-                    adapter = new VideoCardAdapter(requireContext(), videoList);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    adapter = new UserInfoAdapter(requireContext(), dynamicList, userInfo);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
                     recyclerView.setAdapter(adapter);
                     recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override
@@ -97,26 +102,18 @@ public class UserVideoFragment extends Fragment {
                         }
                     });
                 });
-
             } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,requireContext()));}
         });
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void continueLoading() {
-        page++;
         try {
-            int lastSize = videoList.size();
-            int result = UserInfoApi.getUserVideos(mid,page,"",videoList);
-            if(result != -1){
-                Log.e("debug","下一页");
-                if(isAdded()) requireActivity().runOnUiThread(()-> adapter.notifyItemRangeInserted(lastSize, videoList.size() - lastSize));
-                if(result == 1) {
-                    Log.e("debug","到底了");
-                    bottom = true;
-                }
-            }
+            int lastSize = dynamicList.size();
+            offset = DynamicApi.getDynamicList(dynamicList,offset,mid);
+            if(isAdded()) requireActivity().runOnUiThread(()-> adapter.notifyItemRangeInserted(lastSize + 1, dynamicList.size() + 1 - lastSize));
+            bottom = (offset==-1);
             refreshing = false;
-        } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,requireContext()));}
+        } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,getContext()));}
     }
 }

@@ -189,7 +189,7 @@
             android:label="收藏夹列表"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.UserInfoActivity"
+            android:name=".activity.user.info.UserInfoActivity"
             android:exported="false"
             android:label="用户信息"
             android:screenOrientation="portrait" />

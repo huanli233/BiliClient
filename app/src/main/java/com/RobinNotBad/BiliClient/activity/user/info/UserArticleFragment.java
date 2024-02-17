@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.activity.user;
+package com.RobinNotBad.BiliClient.activity.user.info;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -14,16 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.ArticleCardAdapter;
-import com.RobinNotBad.BiliClient.adapter.ArticleCardHolder;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
-import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 //用户专栏
