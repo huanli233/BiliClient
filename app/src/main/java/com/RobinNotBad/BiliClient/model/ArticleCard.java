@@ -1,6 +1,8 @@
 package com.RobinNotBad.BiliClient.model;
 
-public class ArticleCard {
+import java.io.Serializable;
+
+public class ArticleCard implements Serializable {
     public String title;
     public long id;
     public String cover;
