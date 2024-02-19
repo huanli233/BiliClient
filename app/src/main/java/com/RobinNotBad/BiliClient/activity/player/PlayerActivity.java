@@ -522,7 +522,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                hidecon();
+                runOnUiThread(()->hidecon());
                 this.cancel();
             }
         };
