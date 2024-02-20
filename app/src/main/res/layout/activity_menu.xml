@@ -81,7 +81,7 @@
                 android:id="@+id/menu_precious"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="每周必刷"/>
+                android:text="入站必刷"/>
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/menu_search"
                 android:layout_width="match_parent"
