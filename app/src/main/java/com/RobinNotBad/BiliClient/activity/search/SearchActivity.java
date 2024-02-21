@@ -136,16 +136,7 @@ public class SearchActivity extends InstanceActivity {
                 this.searchBarVisible = false;
                 Log.e("debug", "dy>0");
                 TranslateAnimation hide = new TranslateAnimation(0, 0, 0, -height);
-                hide.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {}
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        searchBar.setVisibility(View.GONE);
-                    }
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {}
-                });
+                handler.postDelayed(()->searchBar.setVisibility(View.GONE),250);
                 doAnimation(hide);
             }
         }
