@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity.search;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -41,6 +42,8 @@ public class SearchActivity extends InstanceActivity {
     private String keyword;
     private boolean refreshing = false;
 
+    Handler handler;
+
     @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,8 @@ public class SearchActivity extends InstanceActivity {
         setContentView(R.layout.activity_search);
         setMenuClick(3);
         Log.e("debug","进入搜索页");
+
+        handler = new Handler();
 
         ViewPager viewPager = findViewById(R.id.viewPager);
 
@@ -131,6 +136,16 @@ public class SearchActivity extends InstanceActivity {
                 this.searchBarVisible = false;
                 Log.e("debug", "dy>0");
                 TranslateAnimation hide = new TranslateAnimation(0, 0, 0, -height);
+                hide.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {}
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        searchBar.setVisibility(View.GONE);
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {}
+                });
                 doAnimation(hide);
             }
         }
@@ -139,6 +154,7 @@ public class SearchActivity extends InstanceActivity {
                 this.searchBarVisible = true;
                 Log.e("debug", "dy<0");
                 TranslateAnimation show = new TranslateAnimation(0, 0, -height, 0);
+                searchBar.setVisibility(View.VISIBLE);
                 doAnimation(show);
             }
         }
