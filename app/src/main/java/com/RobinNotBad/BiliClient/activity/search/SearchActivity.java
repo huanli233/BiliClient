@@ -145,11 +145,4 @@ public class SearchActivity extends InstanceActivity {
         }
     }
 
-    private void doAnimation(Animation animation){
-        animation.setDuration(250);
-        animation.setFillAfter(true);
-        AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
-        animation.setInterpolator(interpolator);
-        searchBar.startAnimation(animation);
-    }
 }
