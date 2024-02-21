@@ -8,9 +8,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -23,7 +20,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -40,8 +36,6 @@ public class SearchActivity extends InstanceActivity {
     private ConstraintLayout searchBar;
     private boolean searchBarVisible = true;
 
-    //public int searchBarAlpha = 100;
-    private String keyword;
     private boolean refreshing = false;
 
     Handler handler;
@@ -111,13 +105,13 @@ public class SearchActivity extends InstanceActivity {
             if (str.isEmpty()) {
                 runOnUiThread(() -> Toast.makeText(this, "你还木有输入内容哦~", Toast.LENGTH_SHORT).show());
             } else {
-                keyword = str;
+                //public int searchBarAlpha = 100;
 
                 //CenterThreadPool.run(()->{
                     try {
-                        searchVideoFragment.refresh(keyword);
-                        searchArticleFragment.refresh(keyword);
-                        searchUserFragment.refresh(keyword);
+                        searchVideoFragment.refresh(str);
+                        searchArticleFragment.refresh(str);
+                        searchUserFragment.refresh(str);
                         refreshing = false;
                     }catch (Exception e){
                         refreshing = false;
