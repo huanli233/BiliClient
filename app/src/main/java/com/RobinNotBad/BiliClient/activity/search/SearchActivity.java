@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.search;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -35,7 +37,7 @@ public class SearchActivity extends InstanceActivity {
     SearchArticleFragment searchArticleFragment;
     SearchUserFragment searchUserFragment;
 
-    private View searchBar;
+    private ConstraintLayout searchBar;
     private boolean searchBarVisible = true;
 
     //public int searchBarAlpha = 100;
@@ -111,7 +113,7 @@ public class SearchActivity extends InstanceActivity {
             } else {
                 keyword = str;
 
-                CenterThreadPool.run(()->{
+                //CenterThreadPool.run(()->{
                     try {
                         searchVideoFragment.refresh(keyword);
                         searchArticleFragment.refresh(keyword);
@@ -121,7 +123,7 @@ public class SearchActivity extends InstanceActivity {
                         refreshing = false;
                         runOnUiThread(()->MsgUtil.err(e,this));
                     }
-                });
+                //});
 
             }
         }
@@ -129,25 +131,17 @@ public class SearchActivity extends InstanceActivity {
 
 
     public void onScrolled(int dy) {
-        int height = searchBar.getHeight() + LittleToolsUtil.dp2px(4f,this);
+        float height = searchBar.getHeight() + LittleToolsUtil.dp2px(4f, this);
 
         if (dy > 0 && searchBarVisible) {
-            if(searchBar.getAnimation()==null || searchBar.getAnimation().hasEnded()) {
-                this.searchBarVisible = false;
-                Log.e("debug", "dy>0");
-                TranslateAnimation hide = new TranslateAnimation(0, 0, 0, -height);
-                handler.postDelayed(()->searchBar.setVisibility(View.GONE),250);
-                doAnimation(hide);
-            }
+            this.searchBarVisible = false;
+            @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofFloat(searchBar, "translationY", 0, -height);
+            animator.start();
         }
         if (dy < 0 && !searchBarVisible) {
-            if(searchBar.getAnimation()==null || searchBar.getAnimation().hasEnded()) {
-                this.searchBarVisible = true;
-                Log.e("debug", "dy<0");
-                TranslateAnimation show = new TranslateAnimation(0, 0, -height, 0);
-                searchBar.setVisibility(View.VISIBLE);
-                doAnimation(show);
-            }
+            this.searchBarVisible = true;
+            @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofFloat(searchBar, "translationY", -height, 0);
+            animator.start();
         }
     }
 
