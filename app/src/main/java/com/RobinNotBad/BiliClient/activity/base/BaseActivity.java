@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
@@ -68,7 +67,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void setTopbarExit(){
-        ConstraintLayout view = findViewById(R.id.top);
+        View view = findViewById(R.id.top);
         if(view!=null && !view.hasOnClickListeners()){
             view.setOnClickListener(view1->finish());
             Log.e("debug","set_exit");
