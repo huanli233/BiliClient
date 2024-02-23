@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,14 +13,12 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -29,16 +28,11 @@ import java.util.List;
 
 public class SearchActivity extends InstanceActivity {
 
-    SearchVideoFragment searchVideoFragment;
-    SearchArticleFragment searchArticleFragment;
-    SearchUserFragment searchUserFragment;
-
     private ConstraintLayout searchBar;
     private boolean searchBarVisible = true;
 
     private boolean refreshing = false;
-
-    Handler handler;
+    private FragmentStateAdapter vpfAdapter;
 
     @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged"})
     @Override
@@ -47,28 +41,30 @@ public class SearchActivity extends InstanceActivity {
 
         setContentView(R.layout.activity_search);
         setMenuClick(3);
-        Log.e("debug","进入搜索页");
+        Log.e("debug", "进入搜索页");
 
-        handler = new Handler();
-
-        ViewPager viewPager = findViewById(R.id.viewPager);
+        ViewPager2 viewPager = findViewById(R.id.viewPager);
 
         View searchBtn = findViewById(R.id.search);
         EditText keywordInput = findViewById(R.id.keywordInput);
         searchBar = findViewById(R.id.searchbar);
+        viewPager.setOffscreenPageLimit(3);
+        vpfAdapter = new FragmentStateAdapter(this) {
 
-        List<Fragment> fragmentList = new ArrayList<>();
-        searchVideoFragment = SearchVideoFragment.newInstance();
-        fragmentList.add(searchVideoFragment);
-        searchArticleFragment = SearchArticleFragment.newInstance();
-        fragmentList.add(searchArticleFragment);
-        searchUserFragment = SearchUserFragment.newInstance();
-        fragmentList.add(searchUserFragment);
-        viewPager.setOffscreenPageLimit(fragmentList.size());
+            @Override
+            public int getItemCount() {
+                return 3;
+            }
 
-        ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
+            @Override
+            public Fragment createFragment(int position) {
+                if (position == 0) return SearchVideoFragment.newInstance();
+                if (position == 1) return SearchArticleFragment.newInstance();
+                if (position == 2) return SearchUserFragment.newInstance();
+                throw new IllegalArgumentException("return value of getItemCount() method maybe not associate with argument position");
+            }
+        };
         viewPager.setAdapter(vpfAdapter);
-
         searchBtn.setOnClickListener(view -> searchKeyword(keywordInput.getText().toString()));
         keywordInput.setOnEditorActionListener((textView, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEND || actionId == EditorInfo.IME_ACTION_DONE || event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction()) {
@@ -79,24 +75,24 @@ public class SearchActivity extends InstanceActivity {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void searchKeyword(String str){
-        if(str.contains("Robin") || str.contains("robin")){
-            if(str.contains("撅")){
-                MsgUtil.showText(this,"特殊彩蛋",getString(R.string.egg_special));
+    private void searchKeyword(String str) {
+        if (str.contains("Robin") || str.contains("robin")) {
+            if (str.contains("撅")) {
+                MsgUtil.showText(this, "特殊彩蛋", getString(R.string.egg_special));
                 return;
             }
-            if(str.contains("纳西妲")){
-                MsgUtil.showText(this,"特殊彩蛋",getString(R.string.egg_robin_nahida));
+            if (str.contains("纳西妲")) {
+                MsgUtil.showText(this, "特殊彩蛋", getString(R.string.egg_robin_nahida));
                 return;
             }
         }
 
-        if(!SharedPreferencesUtil.getBoolean("tutorial_search",false)){
-            MsgUtil.showDialog(this,"使用教程","新版搜索页面中展示出来的搜索结果从左向右或从右向左滑动可以切换页面，第一页为视频列表，第二页为专栏列表，第三页为用户列表",R.mipmap.tutorial_search,true,5);
-            SharedPreferencesUtil.putBoolean("tutorial_search",true);
+        if (!SharedPreferencesUtil.getBoolean("tutorial_search", false)) {
+            MsgUtil.showDialog(this, "使用教程", "新版搜索页面中展示出来的搜索结果从左向右或从右向左滑动可以切换页面，第一页为视频列表，第二页为专栏列表，第三页为用户列表", R.mipmap.tutorial_search, true, 5);
+            SharedPreferencesUtil.putBoolean("tutorial_search", true);
         }
 
-        if(!refreshing) {
+        if (!refreshing) {
             refreshing = true;
 
             InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -105,20 +101,19 @@ public class SearchActivity extends InstanceActivity {
             if (str.isEmpty()) {
                 runOnUiThread(() -> Toast.makeText(this, "你还木有输入内容哦~", Toast.LENGTH_SHORT).show());
             } else {
-                //public int searchBarAlpha = 100;
-
-                //CenterThreadPool.run(()->{
-                    try {
-                        searchVideoFragment.refresh(str);
-                        searchArticleFragment.refresh(str);
-                        searchUserFragment.refresh(str);
-                        refreshing = false;
-                    }catch (Exception e){
-                        refreshing = false;
-                        runOnUiThread(()->MsgUtil.err(e,this));
+                try {
+                    for (int i = 0; i < 3; i++) {
+                        //从viewpager中拿真正added的fragment的方法: tag = "f{position}", 得到的fragment将会是真实存在的
+                        Fragment fragmentById = getSupportFragmentManager().findFragmentByTag("f" + i);
+                        if (fragmentById != null) {
+                            ((SearchRefreshable) fragmentById).refresh(str);
+                        }
                     }
-                //});
-
+                    refreshing = false;
+                } catch (Exception e) {
+                    refreshing = false;
+                    runOnUiThread(() -> MsgUtil.err(e, this));
+                }
             }
         }
     }

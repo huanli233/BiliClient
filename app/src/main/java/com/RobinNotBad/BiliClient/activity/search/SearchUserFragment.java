@@ -23,7 +23,7 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
-public class SearchUserFragment extends Fragment {
+public class SearchUserFragment extends Fragment implements SearchRefreshable {
     RecyclerView recyclerView;
     private ArrayList<UserInfo> userInfoList;
 
@@ -109,6 +109,7 @@ public class SearchUserFragment extends Fragment {
         refreshing = false;
     }
 
+    @Override
     public void refresh(String keyword){
         this.refreshing = true;
         this.page = 0;
