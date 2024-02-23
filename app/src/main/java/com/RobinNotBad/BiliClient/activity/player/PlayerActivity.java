@@ -334,6 +334,8 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         videoArea.setX(0);
         videoArea.setY(0);
 
+        top_control.setOnClickListener(view->finish());
+
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT<=19)) {
             textureView = new TextureView(this);
