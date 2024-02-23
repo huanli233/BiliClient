@@ -20,8 +20,6 @@ public class SettingPrefActivity extends BaseActivity {
         setContentView(R.layout.activity_setting_pref);
         Log.e("debug","进入偏好设置");
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
         back_disable = findViewById(R.id.back_disable);
         back_disable.setChecked(SharedPreferencesUtil.getBoolean("back_disable",false));
 

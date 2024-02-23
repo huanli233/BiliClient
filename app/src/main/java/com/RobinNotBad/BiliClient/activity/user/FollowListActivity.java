@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.activity.user;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,12 +38,9 @@ public class FollowListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_list);
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
         recyclerView = findViewById(R.id.recyclerView);
 
-        TextView pageName = findViewById(R.id.pageName);
-        pageName.setText("关注");
+        setPageName("关注");
 
         mid = SharedPreferencesUtil.getLong("mid",0);
         userList = new ArrayList<>();

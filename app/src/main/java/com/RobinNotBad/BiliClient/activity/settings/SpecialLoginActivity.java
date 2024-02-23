@@ -32,8 +32,6 @@ public class SpecialLoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login_special);
         Log.e("debug","使用特殊登录方式");
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
         textInput = findViewById(R.id.loginInput);
         MaterialCardView confirm = findViewById(R.id.confirm);
         TextView desc = findViewById(R.id.desc);

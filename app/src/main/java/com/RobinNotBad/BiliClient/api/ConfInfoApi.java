@@ -1,14 +1,11 @@
 package com.RobinNotBad.BiliClient.api;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
-import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -27,8 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
-import okhttp3.Response;
-
 /**
  * 被 luern0313 创建于 2019/8/25.
  * (人尽皆知的)绝 · 密 · 档 · 案
@@ -41,7 +36,6 @@ public class ConfInfoApi
         return new File(Environment.getExternalStorageDirectory() + "/Android/media/" + context.getPackageName() + "/");
     }
 
-    private static final String TAG = "ConfInfoApi";
     public static final String USER_AGENT_BB = "Mozilla/5.0 BiliDroid/4.34.0 (bbcallen@gmail.com)";
     public static final String USER_AGENT_OWN = "BiliClient/2.2 (robin_0229@qq.com; bilibili@RobinNotBad;)";
     public static final String USER_AGENT_WEB = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.160 Safari/537.36";
@@ -168,61 +162,6 @@ public class ConfInfoApi
         webHeaders.set(1,SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
     }
 
-
-    public static void check(Context context){
-        try {
-            int version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
-
-            int curr = getDateCurr();
-
-            if(SharedPreferencesUtil.getInt("last_check",0) < curr) {    //限制一天一次
-                Log.e("debug","检查更新");
-                SharedPreferencesUtil.putInt("last_check", curr);
-
-                String url = "https://biliclient.rth1.link/check.json";
-                Response response = NetWorkUtil.get(url, webHeaders);
-                JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
-                if (result.getInt("code") == 0) {
-                    int latest = result.getInt("latest_version");
-                    int announcement = result.getInt("announcement");
-                    if (latest > SharedPreferencesUtil.getInt("latest",version)) {
-                        SharedPreferencesUtil.putInt("latest",latest);
-                        getUpdate(context);
-                    } else if (SharedPreferencesUtil.getInt("last_version", 0) < version) {
-                        MsgUtil.showText(context, "更新公告", context.getString(R.string.update_log));
-                        SharedPreferencesUtil.putInt("last_version", version);
-                    }
-                    if (announcement > SharedPreferencesUtil.getInt("announcement", 0)) {
-                        SharedPreferencesUtil.putInt("announcement", announcement);
-                        getAnnouncement(context);
-                    }
-                }
-            }
-        }catch (Exception e){
-            Log.wtf(TAG, e);
-        }
-    }
-
-    public static void getUpdate(Context context) throws IOException, JSONException, PackageManager.NameNotFoundException {
-        String url = "https://biliclient.rth1.link/update.json";
-        Response response = NetWorkUtil.get(url,webHeaders);
-        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
-        String title = result.getString("title");
-        String content = result.getString("content");
-        int latest = result.getInt("pubdate");
-        int version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
-        if(latest>version) MsgUtil.showText(context,title,content);
-        else MsgUtil.showText(context,"检查更新","您现在是最新版本！");
-    }
-
-    public static void getAnnouncement(Context context) throws IOException, JSONException {
-        String url = "https://biliclient.rth1.link/announcement.json";
-        Response response = NetWorkUtil.get(url,webHeaders);
-        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
-        String title = result.getString("title");
-        String content = result.getString("content");
-        MsgUtil.showText(context,title,content);
-    }
 
     public static int getDateCurr(){
         Calendar calendar = Calendar.getInstance();

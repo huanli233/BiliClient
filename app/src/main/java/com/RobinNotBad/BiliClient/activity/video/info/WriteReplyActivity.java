@@ -37,8 +37,6 @@ public class WriteReplyActivity extends BaseActivity {
         long parent = intent.getLongExtra("parent",0);
         String parentSender = intent.getStringExtra("parentSender");
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
         EditText editText = findViewById(R.id.editText);
         MaterialCardView send = findViewById(R.id.send);
 

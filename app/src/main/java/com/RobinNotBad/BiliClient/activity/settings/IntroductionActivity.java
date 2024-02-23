@@ -17,8 +17,6 @@ public class IntroductionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_introduction);
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
         MaterialCardView confirm = findViewById(R.id.confirm);
 
         confirm.setOnClickListener(view -> {

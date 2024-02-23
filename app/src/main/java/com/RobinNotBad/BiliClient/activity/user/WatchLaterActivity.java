@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.activity.user;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,10 +32,7 @@ public class WatchLaterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_list);
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
-        TextView pageName = findViewById(R.id.pageName);
-        pageName.setText("稍后再看");
+        setPageName("稍后再看");
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 

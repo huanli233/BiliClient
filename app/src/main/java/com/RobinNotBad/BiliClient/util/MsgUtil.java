@@ -16,8 +16,10 @@ public class MsgUtil {
 
     public static void toast(String str, Context context){
         if(toast!=null)toast.cancel();
-        toast = Toast.makeText(context, str, Toast.LENGTH_SHORT);
-        toast.show();
+        if(!str.isEmpty()) {
+            toast = Toast.makeText(context, str, Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
     public static void toastLong(String str, Context context){
         if(toast!=null)toast.cancel();

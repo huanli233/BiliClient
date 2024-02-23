@@ -32,7 +32,7 @@ import java.io.IOException;
 public class MySpaceActivity extends InstanceActivity {
 
     private ImageView userAvatar;
-    private TextView userName, userFans, userDesc;
+    private TextView userName, userFans;
     private MaterialCardView myInfo,follow,watchLater,favorite,history,creative,logout;
 
     private boolean confirmLogout = false;
@@ -48,7 +48,6 @@ public class MySpaceActivity extends InstanceActivity {
         userAvatar = findViewById(R.id.userAvatar);
         userName = findViewById(R.id.userName);
         userFans = findViewById(R.id.userFans);
-        userDesc = findViewById(R.id.userDesc);
 
         myInfo = findViewById(R.id.myinfo);
         follow = findViewById(R.id.follow);
@@ -71,7 +70,6 @@ public class MySpaceActivity extends InstanceActivity {
                             .into(userAvatar);
                     userName.setText(userInfo.name);
                     userFans.setText(LittleToolsUtil.toWan(userInfo.fans) + "粉丝 " + userCoin + "硬币");
-                    userDesc.setText(userInfo.sign);
 
                     myInfo.setOnClickListener(view -> {
                         Intent intent = new Intent();

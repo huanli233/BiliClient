@@ -38,7 +38,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
-import com.RobinNotBad.BiliClient.BiliClient;
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -132,7 +132,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(BiliClient.getFitDisplayContext(newBase));
+        super.attachBaseContext(BiliTerminal.getFitDisplayContext(newBase));
     }
 
     @SuppressLint("SimpleDateFormat")

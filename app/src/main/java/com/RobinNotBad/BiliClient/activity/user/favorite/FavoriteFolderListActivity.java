@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.activity.user.favorite;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,11 +32,9 @@ public class FavoriteFolderListActivity extends BaseActivity {
 
         long mid = SharedPreferencesUtil.getLong("mid",0);
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
         recyclerView = findViewById(R.id.recyclerView);
 
-        TextView pageName = findViewById(R.id.pageName);
-        pageName.setText("收藏");
+        setPageName("收藏");
 
         CenterThreadPool.run(()->{
             try {

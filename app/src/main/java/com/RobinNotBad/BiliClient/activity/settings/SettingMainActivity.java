@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.activity.settings;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,15 +10,11 @@ import android.view.View;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
+import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
-
-import org.json.JSONException;
-
-import java.io.IOException;
 
 public class SettingMainActivity extends InstanceActivity {
 
@@ -114,13 +109,9 @@ public class SettingMainActivity extends InstanceActivity {
             MsgUtil.toast("正在获取...",this);
             CenterThreadPool.run(() -> {
                 try {
-                    ConfInfoApi.getUpdate(this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
+                    AppInfoApi.checkUpdate(this,true);
+                } catch (Exception e) {
+                    MsgUtil.err(e,this);
                 }
             });
         });
@@ -128,17 +119,9 @@ public class SettingMainActivity extends InstanceActivity {
         //查看公告
         MaterialCardView announcement = findViewById(R.id.announcement);
         announcement.setOnClickListener(view -> {
-            MsgUtil.toast("正在获取...",this);
-            CenterThreadPool.run(() -> {
-                try {
-                    ConfInfoApi.getAnnouncement(this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            });
+            Intent intent = new Intent();
+            intent.setClass(this,AnnouncementsActivity.class);
+            startActivity(intent);
         });
 
         MaterialCardView reset_tutorial = findViewById(R.id.reset_tutorial);    //用于测试

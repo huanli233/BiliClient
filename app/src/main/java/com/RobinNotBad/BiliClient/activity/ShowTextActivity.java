@@ -16,8 +16,6 @@ public class ShowTextActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_text);
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
         Intent intent = getIntent();
 
         TextView pagename = findViewById(R.id.pageName);

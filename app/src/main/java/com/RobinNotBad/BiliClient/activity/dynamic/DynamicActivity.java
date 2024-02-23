@@ -47,8 +47,7 @@ public class DynamicActivity extends InstanceActivity {
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this::refreshDynamic);
 
-        TextView title = findViewById(R.id.pageName);
-        title.setText("动态");
+        setPageName("动态");
 
         if(!SharedPreferencesUtil.getBoolean("tutorial_dynamic",false)){
             MsgUtil.showDialog(this,"使用教程","点击动态的文字部分可以查看动态详情，打开详情后左右滑动可以查看评论区（被转发的动态和投稿类动态不支持查看详情，暂不支持显示直播预约和专栏动态）",-1,true,5);

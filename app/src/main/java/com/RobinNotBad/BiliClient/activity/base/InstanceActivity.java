@@ -3,14 +3,14 @@ package com.RobinNotBad.BiliClient.activity.base;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.RobinNotBad.BiliClient.BiliClient;
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.MenuActivity;
 
 public class InstanceActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        BiliClient.setInstance(this);
+        BiliTerminal.setInstance(this);
         super.onCreate(savedInstanceState);
     }
 

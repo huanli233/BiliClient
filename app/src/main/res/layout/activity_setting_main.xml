@@ -63,15 +63,9 @@
                 android:id="@+id/login"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:visibility="gone">
 
                 <TextView
                         android:layout_width="match_parent"
@@ -89,16 +83,10 @@
                 android:id="@+id/playerSetting"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:visibility="visible">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -168,16 +156,10 @@
                 android:id="@+id/clientPlayerSetting"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:visibility="visible">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -247,15 +229,9 @@
                 android:id="@+id/uiSetting"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:foreground="?selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -325,16 +301,10 @@
                 android:id="@+id/prefSetting"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:visibility="visible">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -405,15 +375,9 @@
                 android:id="@+id/laboratory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:foreground="?selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -483,15 +447,9 @@
                 android:id="@+id/about"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:foreground="?selectableItemBackground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -561,14 +519,8 @@
                 android:id="@+id/announcement"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="2dp">
 
                 <TextView
                         android:layout_width="match_parent"
@@ -585,38 +537,26 @@
                 android:id="@+id/checkupdate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="2dp">
 
                 <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="35sp"
-                        android:layout_marginHorizontal="8dp"
-                        android:gravity="center_vertical"
-                        android:text="检查更新"
-                        android:textAlignment="textStart"
-                        android:textSize="13sp"
-                        tools:ignore="RtlCompat" app:drawableEndCompat="@drawable/arrow_forward"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
+                    android:layout_marginHorizontal="8dp"
+                    android:gravity="center_vertical"
+                    android:text="检查更新"
+                    android:textAlignment="textStart"
+                    android:textSize="13sp"
+                    tools:ignore="RtlCompat" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/reset_tutorial"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="2dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -633,14 +573,8 @@
                 android:id="@+id/test"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="2dp">
 
                 <TextView
                     android:layout_width="match_parent"

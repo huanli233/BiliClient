@@ -11,7 +11,7 @@
 
 
     <application
-        android:name=".BiliClient"
+        android:name=".BiliTerminal"
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
@@ -30,6 +30,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <activity
+            android:name=".activity.settings.AnnouncementsActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="公告列表" />
         <activity
             android:name=".activity.player.PlayerActivity"
             android:exported="false"
@@ -149,7 +154,7 @@
             android:label="复制文本"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.favorite.AddFavoriteActivity"
+            android:name=".activity.video.info.AddFavoriteActivity"
             android:exported="false"
             android:label="添加收藏"
             android:screenOrientation="portrait" />

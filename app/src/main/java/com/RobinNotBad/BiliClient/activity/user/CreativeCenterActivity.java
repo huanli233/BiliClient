@@ -11,7 +11,6 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CreativeCenterActivity extends BaseActivity {
@@ -20,8 +19,6 @@ public class CreativeCenterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creative_center);
-
-        findViewById(R.id.top).setOnClickListener(view -> finish());
 
         CenterThreadPool.run(() -> {
             try {

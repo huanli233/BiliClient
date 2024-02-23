@@ -35,8 +35,6 @@ public class DynamicInfoActivity extends BaseActivity {
         Intent intent = getIntent();
         long id = intent.getLongExtra("id",0);
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
         TextView pageName = findViewById(R.id.pageName);
         pageName.setText("动态详情");
 

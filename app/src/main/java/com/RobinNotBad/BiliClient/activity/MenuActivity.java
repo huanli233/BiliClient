@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.RobinNotBad.BiliClient.BiliClient;
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
@@ -105,7 +105,7 @@ public class MenuActivity extends BaseActivity {
         findViewById(R.id.menu_exit).setOnClickListener(view -> {
             classList.add(SearchOldActivity.class);
             for(int j = 0;j<classList.size();j++){
-                InstanceActivity instance = BiliClient.instance;
+                InstanceActivity instance = BiliTerminal.instance;
                 if(instance != null && !instance.isDestroyed()) instance.finish();
             }
             finish();
@@ -119,7 +119,7 @@ public class MenuActivity extends BaseActivity {
 
     private void killAndJump(int i){
         if (i <= classList.size() && i != from){
-            InstanceActivity instance = BiliClient.instance;
+            InstanceActivity instance = BiliTerminal.instance;
             if(instance != null && !instance.isDestroyed()) instance.finish();
             if(i != classList.size()) {
                 Intent intent = new Intent();

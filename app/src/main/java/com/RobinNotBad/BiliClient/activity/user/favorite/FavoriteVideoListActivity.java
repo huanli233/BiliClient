@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,10 +46,7 @@ public class FavoriteVideoListActivity extends BaseActivity {
         fid = intent.getLongExtra("fid",0);
         String name = intent.getStringExtra("name");
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
-        TextView pageName = findViewById(R.id.pageName);
-        pageName.setText(name);
+        setPageName(name);
 
         recyclerView = findViewById(R.id.recyclerView);
 

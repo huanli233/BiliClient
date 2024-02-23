@@ -66,8 +66,6 @@ public class PrivateMsgActivity extends BaseActivity {
         uid = intent.getLongExtra("uid",114514);
         Log.e("",String.valueOf(uid));
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-    
         CenterThreadPool.run(()->{
             try {
             	allMsg = PrivateMsgApi.getPrivateMsg(uid,50,0,0);

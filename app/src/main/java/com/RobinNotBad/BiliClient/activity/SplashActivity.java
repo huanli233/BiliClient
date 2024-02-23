@@ -8,11 +8,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.RobinNotBad.BiliClient.BiliClient;
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.settings.SetupUIActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
+import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.CookieRefreshApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -37,10 +38,9 @@ public class SplashActivity extends Activity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(BiliClient.getFitDisplayContext(newBase));
+        super.attachBaseContext(BiliTerminal.getFitDisplayContext(newBase));
     }
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +66,7 @@ public class SplashActivity extends Activity {
                     intent.setClass(SplashActivity.this, RecommendActivity.class);   //已登录且联网，去首页
                     startActivity(intent);
 
-                    CenterThreadPool.run(() -> ConfInfoApi.check(SplashActivity.this));
+                    CenterThreadPool.run(() -> AppInfoApi.check(SplashActivity.this));
 
                     finish();
                 } catch (IOException e) {

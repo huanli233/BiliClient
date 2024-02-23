@@ -26,8 +26,6 @@ public class SettingPlayerInsideActivity extends BaseActivity {
         setContentView(R.layout.activity_setting_insideplayer);
         Log.e("debug","设置内置播放器");
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
         SWLClick = findViewById(R.id.SWLClick);
         SWloop = findViewById(R.id.SWloop);
         ui_round = findViewById(R.id.ui_round);

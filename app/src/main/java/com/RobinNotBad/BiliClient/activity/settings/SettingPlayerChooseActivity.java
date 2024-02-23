@@ -37,7 +37,6 @@ public class SettingPlayerChooseActivity extends BaseActivity {
         setContentView(R.layout.activity_setting_player_choose);
         Log.e("debug","选择播放器");
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
         clientPlayer = findViewById(R.id.clientPlayer);
         mtvPlayer = findViewById(R.id.mtvPlayer);
         aliangPlayer = findViewById(R.id.aliangPlayer);

@@ -3,7 +3,7 @@ package com.RobinNotBad.BiliClient.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.RobinNotBad.BiliClient.BiliClient;
+import com.RobinNotBad.BiliClient.BiliTerminal;
 
 /**
  * 被 luern0313 创建于 2020/5/4.
@@ -24,7 +24,7 @@ public class SharedPreferencesUtil
     public static String cookie_refresh = "cookie_refresh";
 
 
-    private static final SharedPreferences sharedPreferences = BiliClient.context.getSharedPreferences("default",Context.MODE_PRIVATE);
+    private static final SharedPreferences sharedPreferences = BiliTerminal.context.getSharedPreferences("default",Context.MODE_PRIVATE);
 
     public static String getString(String key, String def) {
         return sharedPreferences.getString(key, def);

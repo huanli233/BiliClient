@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import androidx.constraintlayout.widget.Guideline;
 
-import com.RobinNotBad.BiliClient.BiliClient;
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
@@ -48,8 +48,6 @@ public class QRLoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Log.e("debug","进入登录页面");
-
-        findViewById(R.id.top).setOnClickListener(view -> finish());
 
         qrImageView = findViewById(R.id.qrImage);
         scanStat = findViewById(R.id.scanStat);
@@ -195,7 +193,7 @@ public class QRLoginActivity extends BaseActivity {
                             Log.e("refresh_token",SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""));
 
                             if(SharedPreferencesUtil.getBoolean("setup",false)) {
-                                InstanceActivity instance = BiliClient.instance;
+                                InstanceActivity instance = BiliTerminal.instance;
                                 if(instance != null && !instance.isDestroyed()) instance.finish();
                             }
                             else SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup,true);

@@ -66,13 +66,15 @@
                     android:id="@+id/userAvatar"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:adjustViewBounds="true"
+                    android:src="@mipmap/akari"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@mipmap/akari" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/userName"
@@ -97,34 +99,10 @@
                     android:layout_marginBottom="2dp"
                     android:alpha="0.7"
                     android:textColor="#fff"
-                    android:textSize="11sp"
+                    android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@+id/userAvatar"
                     app:layout_constraintStart_toEndOf="@id/userAvatar"
                     app:layout_constraintTop_toBottomOf="@id/userName" />
-
-                <TextView
-                    android:id="@+id/userDesc"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="10dp"
-                    android:textColor="#fff"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/userAvatar"
-                    tools:ignore="TouchTargetSizeCheck" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="4dp"
-                    android:layout_marginHorizontal="8dp"
-                    android:background="#318C8C8C"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/userDesc" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -133,15 +111,8 @@
                 android:id="@+id/myinfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="2dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -180,8 +151,7 @@
                         android:lines="1"
                         android:text="我的主页"
                         android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/myinfo_go"
                         app:layout_constraintStart_toEndOf="@+id/myinfo_icon"
@@ -194,15 +164,8 @@
                 android:id="@+id/follow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="2dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -241,8 +204,7 @@
                         android:lines="1"
                         android:text="关注"
                         android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/follow_go"
                         app:layout_constraintStart_toEndOf="@+id/follow_icon"
@@ -256,15 +218,8 @@
                 android:id="@+id/watchlater"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="2dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -303,8 +258,7 @@
                         android:lines="1"
                         android:text="稍后再看"
                         android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/watchlater_go"
                         app:layout_constraintStart_toEndOf="@+id/watchlater_icon"
@@ -318,15 +272,8 @@
                 android:id="@+id/favorite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="2dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -365,8 +312,7 @@
                         android:lines="1"
                         android:text="收藏"
                         android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/favorite_go"
                         app:layout_constraintStart_toEndOf="@+id/favorite_icon"
@@ -379,15 +325,8 @@
                 android:id="@+id/history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="2dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -426,8 +365,7 @@
                         android:lines="1"
                         android:text="历史记录"
                         android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/history_go"
                         app:layout_constraintStart_toEndOf="@+id/history_icon"
@@ -440,15 +378,8 @@
                 android:id="@+id/creative"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="2dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -487,8 +418,7 @@
                         android:lines="1"
                         android:text="创作中心"
                         android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/creative_go"
                         app:layout_constraintStart_toEndOf="@+id/creative_icon"
@@ -501,15 +431,8 @@
                 android:id="@+id/logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="2dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -548,8 +471,7 @@
                         android:lines="1"
                         android:text="退出登录"
                         android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/logout_go"
                         app:layout_constraintStart_toEndOf="@+id/logout_icon"

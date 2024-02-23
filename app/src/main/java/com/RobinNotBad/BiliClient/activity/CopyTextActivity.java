@@ -19,8 +19,6 @@ public class CopyTextActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_copy);
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
         Intent intent = getIntent();
         
         content = intent.getStringExtra("content");

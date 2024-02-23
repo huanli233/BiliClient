@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.activity.user;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,10 +34,7 @@ public class HistoryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_list);
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
-        TextView pageName = findViewById(R.id.pageName);
-        pageName.setText("历史记录");
+        setPageName("历史记录");
 
         recyclerView = findViewById(R.id.recyclerView);
 

@@ -21,8 +21,6 @@ public class SetupUIActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_ui);
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
         uiScaleInput = findViewById(R.id.ui_scale_input);
         uiScaleInput.setText(String.valueOf(SharedPreferencesUtil.getFloat("dpi",1.0F)));
 

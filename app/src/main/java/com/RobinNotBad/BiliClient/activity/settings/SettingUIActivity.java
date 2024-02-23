@@ -22,8 +22,6 @@ public class SettingUIActivity extends BaseActivity {
         setContentView(R.layout.activity_setting_ui);
         Log.e("debug","进入界面设置");
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
         uiScaleInput = findViewById(R.id.ui_scale_input);
         uiScaleInput.setText(String.valueOf(SharedPreferencesUtil.getFloat("dpi",1.0F)));
 

@@ -66,9 +66,8 @@ public class VideoInfoActivity extends BaseActivity {
 
     public void initMediaInfoView() {
         ViewPager viewPager = findViewById(R.id.viewPager);
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-        TextView pageName = findViewById(R.id.pageName);
-        pageName.setText("视频详情");
+
+        setPageName("视频详情");
 
         fragmentList = new ArrayList<>(2);
         fragmentList.add(BangumiInfoFragment.newInstance(aid));

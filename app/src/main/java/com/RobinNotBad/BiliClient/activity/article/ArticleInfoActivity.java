@@ -32,7 +32,6 @@ public class ArticleInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_simple_viewpager);
         Intent intent = getIntent();
         cvid = intent.getLongExtra("cvid", 114514);
-        findViewById(R.id.top).setOnClickListener(view -> finish());
 
         TextView pageName = findViewById(R.id.pageName);
         pageName.setText("专栏详情");

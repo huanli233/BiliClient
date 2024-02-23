@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.util.DisplayMetrics;
@@ -12,7 +13,7 @@ import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-public class BiliClient extends Application {
+public class BiliTerminal extends Application {
     @SuppressLint("StaticFieldLeak")
     public static Context context;
     @SuppressLint("StaticFieldLeak")
@@ -52,5 +53,9 @@ public class BiliClient extends Application {
             MsgUtil.err(e,old);
             return old;
         }
+    }
+
+    public static int getVersion() throws PackageManager.NameNotFoundException {
+        return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
     }
 }

@@ -34,7 +34,6 @@ public class ImageViewerActivity extends BaseActivity {
         ArrayList<String> imageList = intent.getStringArrayListExtra("imageList");
 
         ViewPager viewPager = findViewById(R.id.viewPager);
-        findViewById(R.id.top).setOnClickListener(view -> finish());
 
         List<PhotoView> photoViewList = new ArrayList<>();
 

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,12 +45,9 @@ public class ReplyInfoActivity extends BaseActivity {
         oid = intent.getLongExtra("oid",0);
         type = intent.getIntExtra("type",1);
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
         recyclerView = findViewById(R.id.recyclerView);
 
-        TextView pageName = findViewById(R.id.pageName);
-        pageName.setText("评论详情");
+        setPageName("评论详情");
 
         replyList = new ArrayList<>();
 

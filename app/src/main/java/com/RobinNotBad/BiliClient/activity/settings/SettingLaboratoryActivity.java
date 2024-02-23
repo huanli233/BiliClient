@@ -20,8 +20,6 @@ public class SettingLaboratoryActivity extends BaseActivity {
         setContentView(R.layout.activity_setting_laboratory);
         Log.e("debug","进入实验性设置");
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
         refresh_cookie = findViewById(R.id.refresh_cookie);
         refresh_cookie.setChecked(SharedPreferencesUtil.getBoolean("dev_refresh_cookie",true));
         like_coin_fav_enable = findViewById(R.id.like_coin_fav_enable);

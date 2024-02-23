@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.activity.user.favorite;
+package com.RobinNotBad.BiliClient.activity.video.info;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,9 +29,9 @@ public class AddFavoriteActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorite_add);
+        setContentView(R.layout.activity_simple_list);
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
+        setPageName("添加收藏");
 
         Intent intent = getIntent();
         aid = intent.getLongExtra("aid",0);

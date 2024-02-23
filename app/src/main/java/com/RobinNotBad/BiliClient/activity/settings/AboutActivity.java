@@ -30,8 +30,6 @@ public class AboutActivity extends BaseActivity {
         setContentView(R.layout.activity_setting_about);
         Log.e("debug","进入关于页面");
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-
         try{
             ((TextView)findViewById(R.id.app_version)).setText(getPackageManager().getPackageInfo(getPackageName(),0).versionName);
         }catch(PackageManager.NameNotFoundException e){

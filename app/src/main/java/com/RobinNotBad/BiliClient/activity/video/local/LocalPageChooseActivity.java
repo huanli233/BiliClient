@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.RobinNotBad.BiliClient.BiliClient;
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
@@ -81,7 +81,7 @@ public class LocalPageChooseActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        InstanceActivity instance = BiliClient.instance;
+        InstanceActivity instance = BiliTerminal.instance;
         if(deleted && instance instanceof LocalListActivity && !instance.isDestroyed()) ((LocalListActivity)(instance)).refresh();
         super.onDestroy();
     }

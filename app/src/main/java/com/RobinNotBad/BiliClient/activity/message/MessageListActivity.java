@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.activity.message;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,10 +26,8 @@ public class MessageListActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_list);
 
-        findViewById(R.id.top).setOnClickListener(view -> finish());
-        
-        ((TextView)findViewById(R.id.pageName)).setText("详情");
-        
+        setPageName("详情");
+
         recyclerView = findViewById(R.id.recyclerView);
 
         messageList = new ArrayList<>();
