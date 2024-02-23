@@ -140,7 +140,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     protected void onCreate(Bundle savedInstanceState) {
         Log.e("加载", "加载");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_player_new);
+        setContentView(R.layout.activity_player);
         findview();
         getExtras();
 
@@ -304,7 +304,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
     private void findview() {
         control_layout = findViewById(R.id.control_layout);
-        top_control = findViewById(R.id.top_control);
+        top_control = findViewById(R.id.top);
         bottom_control = findViewById(R.id.bottom_control);
         right_control = findViewById(R.id.right_control);
 
@@ -353,7 +353,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
             videoArea.addView(surfaceView, params);
         }
 
-        top_control.setOnClickListener(view -> finish());
         rotate_btn.setOnClickListener(view -> rotate());
 
         ImageButton sound_add = findViewById(R.id.button_sound_add);
