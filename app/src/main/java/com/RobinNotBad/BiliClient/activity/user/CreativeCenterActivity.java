@@ -11,6 +11,7 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CreativeCenterActivity extends BaseActivity {
@@ -25,14 +26,14 @@ public class CreativeCenterActivity extends BaseActivity {
                 JSONObject stats = CreativeCenterApi.getVideoStat();
                 runOnUiThread(() -> {
                     try {
-                        ((TextView)findViewById(R.id.totalFans_number)).setText(LittleToolsUtil.toWan(stats.getInt("total_fans")) + ((stats.getInt("incr_fans") < 0) ? "-" : "+") + LittleToolsUtil.toWan(stats.getInt("incr_fans")));
-                        ((TextView)findViewById(R.id.totalClick_number)).setText(LittleToolsUtil.toWan(stats.getInt("total_click")) + ((stats.getInt("incr_click") < 0) ? "-" : "+") + LittleToolsUtil.toWan(stats.getInt("incr_click")));
-                        ((TextView)findViewById(R.id.totalLike_number)).setText(LittleToolsUtil.toWan(stats.getInt("total_like")) + ((stats.getInt("inc_like") < 0) ? "-" : "+") + LittleToolsUtil.toWan(stats.getInt("inc_like")));
-                        ((TextView)findViewById(R.id.totalCoin_number)).setText(LittleToolsUtil.toWan(stats.getInt("total_coin")) + ((stats.getInt("inc_coin") < 0) ? "-" : "+") + LittleToolsUtil.toWan(stats.getInt("inc_coin")));
-                        ((TextView)findViewById(R.id.totalFavourite_number)).setText(LittleToolsUtil.toWan(stats.getInt("total_fav")) + ((stats.getInt("inc_fav") < 0) ? "-" : "+") + LittleToolsUtil.toWan(stats.getInt("inc_fav")));
-                        ((TextView)findViewById(R.id.totalShare_number)).setText(LittleToolsUtil.toWan(stats.getInt("total_share")) + ((stats.getInt("inc_share") < 0) ? "-" : "+") + LittleToolsUtil.toWan(stats.getInt("inc_share")));
-                        ((TextView)findViewById(R.id.totalReply_number)).setText(LittleToolsUtil.toWan(stats.getInt("total_reply")) + ((stats.getInt("incr_reply") < 0) ? "-" : "+") + LittleToolsUtil.toWan(stats.getInt("incr_reply")));
-                        ((TextView)findViewById(R.id.totalDm_number)).setText(LittleToolsUtil.toWan(stats.getInt("total_dm")) + ((stats.getInt("incr_dm") < 0) ? "-" : "+") + LittleToolsUtil.toWan(stats.getInt("incr_dm")));
+                        setStatsText(R.id.totalFans_number, stats, "total_fans", "incr_fans");
+                        setStatsText(R.id.totalClick_number, stats, "total_click", "incr_click");
+                        setStatsText(R.id.totalLike_number, stats, "total_like", "inc_like");
+                        setStatsText(R.id.totalCoin_number, stats, "total_coin", "inc_coin");
+                        setStatsText(R.id.totalFavourite_number, stats, "total_fav", "inc_fav");
+                        setStatsText(R.id.totalShare_number, stats, "total_share", "inc_share");
+                        setStatsText(R.id.totalReply_number, stats, "total_reply", "incr_reply");
+                        setStatsText(R.id.totalDm_number, stats, "total_dm", "incr_dm");
                     } catch (Exception e) {
                         runOnUiThread(() -> MsgUtil.err(e,this));
                     }
@@ -40,5 +41,17 @@ public class CreativeCenterActivity extends BaseActivity {
             } catch (Exception e) {runOnUiThread(() -> MsgUtil.err(e,this));}
 
         });
+    }
+    @SuppressLint("SetTextI18n")
+    private void setStatsText(int viewId, JSONObject jsonObject, String totalKey, String incrKey) throws JSONException {
+        TextView textView = findViewById(viewId);
+        int totalValue = jsonObject.getInt(totalKey);
+        int incrValue = jsonObject.getInt(incrKey);
+
+        String totalText = LittleToolsUtil.toWan(totalValue);
+        String incrSymbol = (incrValue < 0) ? "" : "+";
+        String incrText = LittleToolsUtil.toWan(incrValue);
+
+        textView.setText(totalText + incrSymbol + incrText);
     }
 }
