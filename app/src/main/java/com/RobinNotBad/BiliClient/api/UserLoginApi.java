@@ -32,7 +32,7 @@ public class UserLoginApi
         defaultHeaders = new ArrayList<String>()
         {{
             add("User-Agent");
-            add(ConfInfoApi.USER_AGENT_OWN);
+            add(ConfInfoApi.USER_AGENT_WEB);
         }};
     }
 
@@ -41,8 +41,9 @@ public class UserLoginApi
         ArrayList<String> headers = new ArrayList<String>()
         {{
             add("Cookie"); add("sid=" + sid);
-            add("User-Agent"); add(ConfInfoApi.USER_AGENT_OWN);
+            add("User-Agent"); add(ConfInfoApi.USER_AGENT_WEB);
         }};
+
 
         String url = "https://passport.bilibili.com/x/passport-login/web/qrcode/generate";
         JSONObject loginUrlJson = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, headers).body()).string()).getJSONObject("data");
