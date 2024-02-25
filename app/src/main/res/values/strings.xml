@@ -3,6 +3,7 @@
     <string name="about_description">一个轻量的第三方B站客户端</string>
     <string name="about_say">软件名来自原神中的“虚空终端”\n最低兼容安卓4.2\n愿你在这一方小小的屏幕中，找到属于自己的小小的快乐\n提示，长按设置中“关于”按钮有彩蛋哦！</string>
     <string name="about_group">交流群（闲聊）：482091687\n测试组（反馈）：745414928</string>
+    <string name="about_wearbili">请注意：此项目仅使用了WearBili的旧版页面布局，与WearBili不属于同一系列产品，双方开发者都并不维护另一方的软件喵！\n另：如果你使用的是智能手表且性能足够，欢迎前去搜索和下载Re:WearBili以获得比终端更好的视觉体验！\n（当然：如果设备允许的话，请选择官方客户端以获得最多的功能支持</string>
     <string name="about_opensource">本程序完全开源，代码部分遵循GNU GPL-V3.0协议，界面布局（UI）部分遵循CC BY-NC-SA协议。\n你可以从 https://gitee.com/RobinNotBad/BiliClient 获取源代码</string>
     <string name="about_source">本程序使用或借鉴了下列项目的部分代码及收集的B站API：\nWearBili：https://github.com/SpaceXC/WearBili/\n腕上哔哩：https://github.com/luern0313/WristBilibili/\nBAC Document：https://socialsisteryi.github.io/bilibili-API-collect/\n小电视播放器：https://github.com/xinxiangshiicheng/xinxiangshicheng_wearbili_player/\n程序的界面布局修改借鉴于WearBili开源项目的UI部分，设计者为@JesseGary_（已得到同意）\n\n本程序使用的第三方库：\nOkHttp（用于网络请求）：com.squareup.okhttp3:okhttp:3.12.1\nGlide（用于图片显示）：com.github.bumptech.glide:glide:4.13.2\nPhotoView（用于缩放图片功能）：com.github.chrisbanes:PhotoView:2.3.0\nJsoup（用于解析HTML）：org.jsoup:jsoup:1.10.2\nIJKPlayer（播放器组件）：https://github.com/bilibili/ijkplayer\nDanmakuFlameMaster（弹幕组件）：com.github.ctiao:DanmakuFlameMaster:0.9.25\n\n部分图标来自网络，有修改，版权归原作者所有</string>
     <string name="about_to_uncle">本软件的开发目的是使配置较低的安卓手表与老旧手机能够使用B站网页端提供的部分基本功能。本软件不会对任何API接口进行恶意轰炸，也不收集任何用户信息。软件不存在付费功能，代码完全开源。如果您仍然认为本软件侵犯了您的权利，请联系我们。\n同时，我们也不对学生党用户在不恰当的时间、地点使用本软件导致的财产损失（设备被没收）或精神伤害（？）负责。请尽量自控，不要影响到正常生活哦！（各种意义上）</string>
