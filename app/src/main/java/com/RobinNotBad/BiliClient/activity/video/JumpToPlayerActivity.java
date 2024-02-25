@@ -86,7 +86,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                 String body = Objects.requireNonNull(response.body()).string();
                 Log.e("debug-body", body);
                 JSONObject body1 = new JSONObject(body);
-                JSONObject data = new JSONObject(body1.get("data").toString());
+                JSONObject data = body1.getJSONObject("data");
                 JSONArray durl = data.getJSONArray("durl");
                 JSONObject video_url = durl.getJSONObject(0);
                 videourl = video_url.getString("url");

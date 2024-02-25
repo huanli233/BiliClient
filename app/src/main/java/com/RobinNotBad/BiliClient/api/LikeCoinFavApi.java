@@ -41,8 +41,23 @@ public class LikeCoinFavApi {
         Log.e("debug-添加收藏",result.toString());
         return result.getInt("code");
     }
-    
-    
-    
+
+    public static boolean getLiked(long aid) throws IOException, JSONException {
+        String url = "https://api.bilibili.com/x/web-interface/archive/has/like?aid=" + aid;
+        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+        return (result.getInt("code")==0 && result.getInt("data")==1);
+    }
+
+    public static int getCoined(long aid) throws IOException, JSONException {
+        String url = "https://api.bilibili.com/x/web-interface/archive/coins?aid=" + aid;
+        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+        return (result.getInt("code")==0 ? result.getJSONObject("data").getInt("multiply") : 0);
+    }
+
+    public static boolean getFavoured(long aid) throws IOException, JSONException {
+        String url = "https://api.bilibili.com/x/v2/fav/video/favoured?aid=" + aid;
+        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+        return (result.getInt("code") == 0 && result.getJSONObject("data").getBoolean("favoured"));
+    }
 
 }

@@ -8,12 +8,16 @@ public class Stats implements Serializable {
     public int reply;
     public int coin;
     public int forward;
+    public int danmaku;
+    public int favorite;
 
     public boolean liked;
+    public boolean favoured;
     public int coined;
 
-    public int like_disabled;
-    public int coin_disabled;
-    public int reply_disabled;
-    public int forward_disabled;
+    public boolean like_disabled;
+    public boolean coin_disabled;
+    public boolean reply_disabled;
+    public boolean forward_disabled;
+    public int allow_coin;
 }

@@ -3,6 +3,8 @@ package com.RobinNotBad.BiliClient.api;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
+import com.RobinNotBad.BiliClient.model.Stats;
+import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 
@@ -84,26 +86,21 @@ public class VideoInfoApi {
         Log.e("视频时长",videoInfo.duration);
         
         JSONObject owner = data.getJSONObject("owner");
-        videoInfo.upName = owner.getString("name");
-        Log.e("UP主",videoInfo.upName);
-        videoInfo.upAvatar = owner.getString("face");
-        Log.e("UP主头像",videoInfo.upAvatar);
-        videoInfo.upMid = owner.getLong("mid");
-        Log.e("mid",String.valueOf(videoInfo.upMid));
+        UserInfo userInfo = new UserInfo();
+        userInfo.name = owner.getString("name");
+        userInfo.avatar = owner.getString("face");
+        userInfo.mid = owner.getLong("mid");
+        videoInfo.upInfo = userInfo;
 
         JSONObject stat = data.getJSONObject("stat");
-        videoInfo.view = stat.getInt("view");
-        Log.e("观看数",String.valueOf(videoInfo.view));
-        videoInfo.like = stat.getInt("like");
-        Log.e("点赞数",String.valueOf(videoInfo.like));
-        videoInfo.coin = stat.getInt("coin");
-        Log.e("硬币数",String.valueOf(videoInfo.coin));
-        videoInfo.reply = stat.getInt("reply");
-        Log.e("回复数",String.valueOf(videoInfo.reply));
-        videoInfo.danmaku = stat.getInt("danmaku");
-        Log.e("弹幕数",String.valueOf(videoInfo.danmaku));
-        videoInfo.favorite = stat.getInt("favorite");
-        Log.e("收藏数",String.valueOf(videoInfo.favorite));
+        Stats stats = new Stats();
+        stats.view = stat.getInt("view");
+        stats.like = stat.getInt("like");
+        stats.coin = stat.getInt("coin");
+        stats.reply = stat.getInt("reply");
+        stats.danmaku = stat.getInt("danmaku");
+        stats.favorite = stat.getInt("favorite");
+        videoInfo.stats = stats;
 
         JSONArray pages = data.getJSONArray("pages");
         ArrayList<String> pagenames = new ArrayList<>();
@@ -123,20 +120,4 @@ public class VideoInfoApi {
         return videoInfo;
     }
 
-    public static JSONObject getAiSummary(long aid,int cid,long mid) throws JSONException, IOException {
-        String url = "https://api.bilibili.com/x/web-interface/view/conclusion/get?";
-        String args = "aid=" + aid + "&cid=" + cid + "&up_mid=" + mid;
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.webHeaders).body()).string());
-
-        if(all.getInt("code") == 0) return all.getJSONObject("data");
-        return new JSONObject();
-    }
-    public static JSONObject getAiSummary(String bvid,int cid,long mid) throws JSONException, IOException {
-        String url = "https://api.bilibili.com/x/web-interface/view/conclusion/get?";
-        String args = "bvid=" + bvid + "&cid=" + cid + "&up_mid=" + mid;
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.webHeaders).body()).string());
-
-        if(all.getInt("code") == 0) return all.getJSONObject("data");
-        return new JSONObject();
-    }
 }
