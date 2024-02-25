@@ -36,8 +36,6 @@ public class ConfInfoApi
         return new File(Environment.getExternalStorageDirectory() + "/Android/media/" + context.getPackageName() + "/");
     }
 
-    public static final String USER_AGENT_BB = "Mozilla/5.0 BiliDroid/4.34.0 (bbcallen@gmail.com)";
-    public static final String USER_AGENT_OWN = "BiliClient/2.2 (robin_0229@qq.com; bilibili@RobinNotBad;)";
     public static final String USER_AGENT_WEB = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.160 Safari/537.36";
 
 
@@ -145,20 +143,12 @@ public class ConfInfoApi
         add("https://www.bilibili.com/");
         add("User-Agent");
         add(USER_AGENT_WEB);
-    }};
-
-    public static ArrayList<String> bbHeaders = new ArrayList<String>() {{
-        add("Cookie");
-        add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
-        add("Referer");
-        add("https://www.bilibili.com/");
-        add("User-Agent");
-        add(USER_AGENT_BB);
+        add("Content-Type");
+        add("application/x-www-form-urlencoded");
     }};
 
 
     public static void refreshHeaders(){
-        bbHeaders.set(1,SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
         webHeaders.set(1,SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
     }
 
