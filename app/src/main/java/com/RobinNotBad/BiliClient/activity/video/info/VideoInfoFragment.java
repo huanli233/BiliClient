@@ -64,8 +64,8 @@ public class VideoInfoFragment extends Fragment {
     private TextView title, description, tagsText, upName, views, timeText, durationText, bvidText, danmakuCount;
     private ImageButton fav;
 
-    private boolean desc_expand = false, tags_expand = false,isLiked = false,isCoined = false,isFavourited= false;
-    ActivityResultLauncher<Intent> favoriteActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+    private boolean desc_expand = false, tags_expand = false,isLiked = false,isCoined = false;
+    ActivityResultLauncher<Intent> favLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult o) {
             if(o.getResultCode() == Activity.RESULT_OK){
@@ -116,16 +116,12 @@ public class VideoInfoFragment extends Fragment {
         MaterialButton play = view.findViewById(R.id.play);
         MaterialButton addWatchlater = view.findViewById(R.id.addWatchlater);
         MaterialCardView upCard = view.findViewById(R.id.upInfo);
-        MaterialButton addFavorite = view.findViewById(R.id.addFavorite);
         MaterialButton download = view.findViewById(R.id.download);
-        MaterialCardView like_coin_fav = view.findViewById(R.id.like_coin_fav);
         bvidText = view.findViewById(R.id.bvidText);
         danmakuCount = view.findViewById(R.id.danmakuCount);
         ImageButton like = view.findViewById(R.id.btn_like);
         ImageButton coin = view.findViewById(R.id.btn_coin);
         fav = view.findViewById(R.id.btn_fav);
-
-        if (SharedPreferencesUtil.getBoolean("like_coin_fav_enable", false)) like_coin_fav.setVisibility(View.VISIBLE);
 
         CenterThreadPool.run(() -> {
 
@@ -213,7 +209,7 @@ public class VideoInfoFragment extends Fragment {
                     if (videoInfo.pagenames.size() > 1) {
                         Intent intent = new Intent()
                                 .setClass(requireContext(), MultiPageActivity.class)
-                                .putExtra("videoInfo", (Serializable) videoInfo);
+                                .putExtra("videoInfo", videoInfo);
                         startActivity(intent);
                     } else {
                         PlayerApi.startGettingUrl(requireContext(), videoInfo, 0);
@@ -227,14 +223,17 @@ public class VideoInfoFragment extends Fragment {
                 });
                 like.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     try {
-                        int result = LikeCoinFavApi.like(videoInfo.aid, 1);
+                        int result = LikeCoinFavApi.like(videoInfo.aid, (isLiked ? 0 : 1));
                         if (result == 0) {
-                            requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "点赞成功", Toast.LENGTH_SHORT).show());
-                            like.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_like_1));
-                            like.setOnClickListener(view2 -> CenterThreadPool.run(() -> Toast.makeText(requireContext(), "暂未完成", Toast.LENGTH_SHORT).show()));
+                            isLiked = !isLiked;
+                            requireActivity().runOnUiThread(() -> {
+                                MsgUtil.toast((isLiked ? "点赞成功" : "取消成功"),requireContext());
+                                like.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_like_1));
+                            });
                         } else
-                            requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "点赞失败，错误码：" + result, Toast.LENGTH_SHORT).show());
+                            requireActivity().runOnUiThread(() -> MsgUtil.toast("操作失败："+result,requireContext()));
                     } catch (Exception e) {
+                        requireActivity().runOnUiThread(()->MsgUtil.err(e,requireContext()));
                         e.printStackTrace();
                     }
                 }));
@@ -242,9 +241,8 @@ public class VideoInfoFragment extends Fragment {
                     try {
                         int result = LikeCoinFavApi.coin(videoInfo.aid, 1);
                         if (result == 0) {
-                            requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "投币成功,长按可投2币", Toast.LENGTH_SHORT).show());
+                            requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "投币成功,再次点击可投2币", Toast.LENGTH_SHORT).show());
                             coin.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_coin_1));
-                            coin.setOnClickListener(view2 -> CenterThreadPool.run(() -> Toast.makeText(requireContext(), "暂未完成", Toast.LENGTH_SHORT).show()));
                         } else
                             requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "投币失败，错误码：" + result, Toast.LENGTH_SHORT).show());
                     } catch (Exception e) {
@@ -256,8 +254,10 @@ public class VideoInfoFragment extends Fragment {
                     intent.setClass(requireContext(), AddFavoriteActivity.class);
                     intent.putExtra("aid", videoInfo.aid);
                     intent.putExtra("bvid", videoInfo.bvid);
-                    favoriteActivityLauncher.launch(intent);
+                    favLauncher.launch(intent);
                 });
+
+
                 addWatchlater.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     try {
                         int result = WatchLaterApi.add(videoInfo.aid);
@@ -274,14 +274,6 @@ public class VideoInfoFragment extends Fragment {
                     intent.setClass(requireContext(), WatchLaterActivity.class);
                     startActivity(intent);
                     return true;
-                });
-
-                addFavorite.setOnClickListener(view1 -> {
-                    Intent intent = new Intent();
-                    intent.setClass(requireContext(), AddFavoriteActivity.class);
-                    intent.putExtra("aid", videoInfo.aid);
-                    intent.putExtra("bvid", videoInfo.bvid);
-                    startActivity(intent);
                 });
 
                 download.setOnClickListener(view1 -> {

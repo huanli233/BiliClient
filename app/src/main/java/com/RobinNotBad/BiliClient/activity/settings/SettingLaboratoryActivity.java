@@ -11,7 +11,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SettingLaboratoryActivity extends BaseActivity {
 
-    private SwitchMaterial refresh_cookie,like_coin_fav_enable;
+    private SwitchMaterial refresh_cookie;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -22,13 +22,10 @@ public class SettingLaboratoryActivity extends BaseActivity {
 
         refresh_cookie = findViewById(R.id.refresh_cookie);
         refresh_cookie.setChecked(SharedPreferencesUtil.getBoolean("dev_refresh_cookie",true));
-        like_coin_fav_enable = findViewById(R.id.like_coin_fav_enable);
-        like_coin_fav_enable.setChecked(SharedPreferencesUtil.getBoolean("like_coin_fav_enable",false));
     }
 
     private void save() {
         SharedPreferencesUtil.putBoolean("dev_refresh_cookie", refresh_cookie.isChecked());
-        SharedPreferencesUtil.putBoolean("like_coin_fav_enable", like_coin_fav_enable.isChecked());
     }
 
     @Override

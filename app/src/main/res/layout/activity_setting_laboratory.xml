@@ -87,32 +87,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/like_coin_fav_enable"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00000000"
-                        android:text="点赞投币功能" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="6dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="开启之后会在视频详情页展示点赞和投币按钮\n注意：由于B站风控的关系，点赞和投币功能不一定能正常使用"
-                        android:textSize="11sp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </ScrollView>
 
