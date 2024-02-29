@@ -1,9 +1,13 @@
 package com.RobinNotBad.BiliClient.util;
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import androidx.core.app.ActivityManagerCompat;
 import androidx.core.util.Consumer;
 import androidx.core.util.Supplier;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.bumptech.glide.util.Executors;
 
 import java.util.concurrent.*;
@@ -23,7 +27,7 @@ public class CenterThreadPool {
         while(INSTANCE.get() == null){
             INSTANCE.compareAndSet(null, new ThreadPoolExecutor(
                     1,
-                    Runtime.getRuntime().availableProcessors() * 2,
+                    getBestThreadPoolSize(),
                     60,
                     TimeUnit.SECONDS,
                     new ArrayBlockingQueue<>(20)
@@ -130,6 +134,32 @@ public class CenterThreadPool {
 //        runOnUiThread(() -> callback.onSuccess(res));
 //       });
 //    }
+
+    /**
+     * 考虑到可能有些设备内存可能比cpu核心数乘2还小，在这里做计算
+     * 原理： java 一个线程占内存1mb
+     *  size1 = availableMemory / 1mb
+     *  size2 = cpuCore * 2
+     *  bestSize = min(size1, size2)
+     *  对于多网络请求的情况，最佳线程数量仍为2 * n(百度和google都有说)
+     *  故在这里取最小值
+     * @return 最佳线程数量
+     */
+
+    private static int getBestThreadPoolSize(){
+        try {
+            ActivityManager activityManager = (ActivityManager) BiliTerminal.context.getSystemService(Activity.ACTIVITY_SERVICE);
+            ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+            activityManager.getMemoryInfo(memoryInfo);
+            // 返回的应该是byte， 1mb = 1024kb = 1024 * 1024 byte
+            int size1 = (int) Long.min(memoryInfo.availMem / 1024 / 1024, Integer.MAX_VALUE);
+            int size2 = Runtime.getRuntime().availableProcessors() * 2;
+            return Integer.min(size1, size2);
+        }catch (Throwable e){
+            // 如果获取失败，避免有些设备阉割了ActivityManager返回cpu核心数的2倍
+            return Runtime.getRuntime().availableProcessors();
+        }
+    }
 
 
 }
