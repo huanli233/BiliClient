@@ -44,7 +44,7 @@ public class AppInfoApi {
                 checkUpdate(context,false);
             }
         }catch (Exception e){
-            MsgUtil.err(e,context);
+            CenterThreadPool.runOnUiThread(()->MsgUtil.err(e,context));
         }
     }
 
