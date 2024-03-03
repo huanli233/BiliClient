@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -26,9 +27,8 @@ public class SearchActivity extends InstanceActivity {
 
     private ConstraintLayout searchBar;
     private boolean searchBarVisible = true;
-
     private boolean refreshing = false;
-    private FragmentStateAdapter vpfAdapter;
+    private long animate_last;
 
     @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged"})
     @Override
@@ -45,13 +45,14 @@ public class SearchActivity extends InstanceActivity {
         EditText keywordInput = findViewById(R.id.keywordInput);
         searchBar = findViewById(R.id.searchbar);
         viewPager.setOffscreenPageLimit(3);
-        vpfAdapter = new FragmentStateAdapter(this) {
+        FragmentStateAdapter vpfAdapter = new FragmentStateAdapter(this) {
 
             @Override
             public int getItemCount() {
                 return 3;
             }
 
+            @NonNull
             @Override
             public Fragment createFragment(int position) {
                 if (position == 0) return SearchVideoFragment.newInstance();
@@ -118,15 +119,19 @@ public class SearchActivity extends InstanceActivity {
     public void onScrolled(int dy) {
         float height = searchBar.getHeight() + LittleToolsUtil.dp2px(4f, this);
 
-        if (dy > 0 && searchBarVisible) {
-            this.searchBarVisible = false;
-            @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofFloat(searchBar, "translationY", 0, -height);
-            animator.start();
-        }
-        if (dy < 0 && !searchBarVisible) {
-            this.searchBarVisible = true;
-            @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofFloat(searchBar, "translationY", -height, 0);
-            animator.start();
+        if(System.currentTimeMillis() - animate_last > 200) {
+            if (dy > 0 && searchBarVisible) {
+                animate_last = System.currentTimeMillis();
+                this.searchBarVisible = false;
+                @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofFloat(searchBar, "translationY", 0, -height);
+                animator.start();
+            }
+            if (dy < 0 && !searchBarVisible) {
+                animate_last = System.currentTimeMillis();
+                this.searchBarVisible = true;
+                @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofFloat(searchBar, "translationY", -height, 0);
+                animator.start();
+            }
         }
     }
 
