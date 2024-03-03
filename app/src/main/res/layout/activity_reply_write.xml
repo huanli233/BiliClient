@@ -56,36 +56,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="6dp"
             android:orientation="vertical" >
 
             <EditText
                 android:id="@+id/editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="4dp"
                 android:layout_marginVertical="2dp"
                 android:background="@drawable/background_edit_text"
                 android:hint="写一条友善的评论..."
                 android:minHeight="40dp"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:textColor="#fff"
-                android:textColorHint="#80ffffff"
-                android:textCursorDrawable="@drawable/cursor_drawable"
-                android:textSize="12sp" />
+                android:padding="8dp"
+                android:textSize="13sp" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/send"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="4dp"
-                android:layout_marginTop="4dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginTop="4dp">
 
                 <TextView
                     android:layout_width="match_parent"
