@@ -56,23 +56,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="6dp"
             android:orientation="vertical">
 
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/clientPlayer"
+                android:id="@+id/terminalPlayer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginVertical="2dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -131,16 +123,7 @@
                 android:id="@+id/mtvPlayer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginVertical="2dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -198,16 +181,7 @@
                 android:id="@+id/aliangPlayer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
+                android:layout_marginVertical="2dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -263,11 +237,9 @@
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/high_res"
-                android:layout_marginTop="5dp"
-                android:layout_marginHorizontal="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_edit_text_setting"
+                android:layout_marginVertical="2dp"
                 android:paddingStart="6dp"
                 android:text="获取高清视频"
                 android:textColor="@color/textwhite" />
@@ -276,10 +248,9 @@
                 android:id="@+id/desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
                 android:layout_marginVertical="2dp"
                 android:text="@string/setting_player_desc"
-                android:textSize="11sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
     </ScrollView>

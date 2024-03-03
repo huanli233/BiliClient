@@ -12,6 +12,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,6 +25,8 @@ public class DialogActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog);
+
+        MaterialButton close_btn = findViewById(R.id.close_btn);
 
         Intent intent = getIntent();
 
@@ -54,19 +57,19 @@ public class DialogActivity extends BaseActivity {
                 public void run() {
                     runOnUiThread(() -> {
                         if(wait_time > 0){
-                            ((TextView)findViewById(R.id.close_text)).setText("知道了(" + wait_time + "s)");
+                            close_btn.setText("知道了(" + wait_time + "s)");
                             findViewById(R.id.close_btn).setEnabled(false);
                             wait_time--;
                         }else{
-                            ((TextView)findViewById(R.id.close_text)).setText("知道了");
+                            close_btn.setText("知道了");
                             findViewById(R.id.close_btn).setEnabled(true);
                             timer.cancel();
                         }
                     });
                 }
             },0,1000);
-        }else findViewById(R.id.close_btn).setEnabled(true);
-        findViewById(R.id.close_btn).setOnClickListener(view -> finish());
+        }else close_btn.setEnabled(true);
+        close_btn.setOnClickListener(view -> finish());
     }
 
     @Override

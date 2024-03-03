@@ -49,7 +49,7 @@ public class PlayerApi {
 
         Intent intent = new Intent();
         switch (SharedPreferencesUtil.getString("player", "null")) {
-            case "clientPlayer":
+            case "terminalPlayer":
                 intent.setClass(context,PlayerActivity.class);
                 intent.putExtra("mode", (local ? 2 : 0));
                 intent.putExtra("url", videourl);

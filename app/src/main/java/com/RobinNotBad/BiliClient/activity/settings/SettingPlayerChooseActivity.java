@@ -20,12 +20,12 @@ import java.util.ArrayList;
 
 public class SettingPlayerChooseActivity extends BaseActivity {
 
-    String player = SharedPreferencesUtil.getString("player","null");
-    MaterialCardView clientPlayer,mtvPlayer,aliangPlayer;
+    String playerCurr = SharedPreferencesUtil.getString("player","null");
+    MaterialCardView terminalPlayer,mtvPlayer,aliangPlayer;
     SwitchCompat sw_highres;
     ArrayList<MaterialCardView> cardViewList;
     int checkPosition = -1;
-    final String[] playerList = {"null","clientPlayer","mtvPlayer","aliangPlayer"};
+    final String[] playerList = {"null","terminalPlayer","mtvPlayer","aliangPlayer"};
     
     private boolean just_create = true;
 
@@ -37,7 +37,7 @@ public class SettingPlayerChooseActivity extends BaseActivity {
         setContentView(R.layout.activity_setting_player_choose);
         Log.e("debug","选择播放器");
 
-        clientPlayer = findViewById(R.id.clientPlayer);
+        terminalPlayer = findViewById(R.id.terminalPlayer);
         mtvPlayer = findViewById(R.id.mtvPlayer);
         aliangPlayer = findViewById(R.id.aliangPlayer);
         sw_highres = findViewById(R.id.high_res);
@@ -45,29 +45,19 @@ public class SettingPlayerChooseActivity extends BaseActivity {
         sw_highres.setChecked(SharedPreferencesUtil.getBoolean("high_res",false));
 
         cardViewList = new ArrayList<>();
-        cardViewList.add(clientPlayer);
+        cardViewList.add(terminalPlayer);
         cardViewList.add(mtvPlayer);
         cardViewList.add(aliangPlayer);
 
-        switch (player){
-            case "clientPlayer":
-                setChecked(0);
+        for (int i = 1; i < playerList.length; i++) {
+            if(playerList[i].equals(playerCurr)) {
+                setChecked(i-1);
                 break;
-
-            case "mtvPlayer":
-                setChecked(1);
-                break;
-
-            case "aliangPlayer":
-                setChecked(2);
-                break;
-
-            default:
-                break;
+            }
         }
 
         setOnClick();
-        clientPlayer.setOnLongClickListener(view -> {
+        terminalPlayer.setOnLongClickListener(view -> {
             Intent intent = new Intent();
             intent.setClass(this,SettingPlayerInsideActivity.class);
             startActivity(intent);
@@ -108,7 +98,7 @@ public class SettingPlayerChooseActivity extends BaseActivity {
             }
         }
         if(!just_create) switch(playerList[checkPosition+1]){
-            case "clientPlayer":
+            case "terminalPlayer":
                 if(SharedPreferencesUtil.getBoolean("player_inside_firstchoose",true)) {
                     SharedPreferencesUtil.putBoolean("player_inside_firstchoose",false);
                     Intent intent = new Intent();
@@ -127,6 +117,6 @@ public class SettingPlayerChooseActivity extends BaseActivity {
             default:
                 break;
         }
-        just_create = false;
+        else just_create = false;
     }
 }

@@ -49,7 +49,7 @@ public class AppInfoApi {
     }
 
     public static void checkUpdate(Context context, boolean need_toast) throws IOException, JSONException, PackageManager.NameNotFoundException {
-        String url = "https://api.biliterminal.cn/terminal/version/get_last";
+        String url = "http://api.biliterminal.cn/terminal/version/get_last";
         Response response = NetWorkUtil.get(url, ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
 
@@ -66,7 +66,7 @@ public class AppInfoApi {
     }
 
     public static void checkAnnouncement(Context context) throws IOException, JSONException {
-        String url = "https://api.biliterminal.cn/terminal/announcement/get_last";
+        String url = "http://api.biliterminal.cn/terminal/announcement/get_last";
         Response response = NetWorkUtil.get(url, ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
 
@@ -84,7 +84,7 @@ public class AppInfoApi {
     }
 
     public static ArrayList<Announcement> getAnnouncementList() throws IOException, JSONException {
-        String url = "https://api.biliterminal.cn/terminal/announcement/get_list";
+        String url = "http://api.biliterminal.cn/terminal/announcement/get_list";
         Response response = NetWorkUtil.get(url, ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
 

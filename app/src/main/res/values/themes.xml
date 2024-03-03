@@ -16,6 +16,7 @@
         <item name="colorControlActivated">@color/textwhite</item>
         <item name="colorControlNormal">@color/color_ripple</item>
         <item name="android:textColor">@color/textwhite</item>
+        <item name="android:textSize">14sp</item>
     </style>
     <style name="Theme.NoSwipe" parent="Theme.BiliClient">
         <item name="android:windowSwipeToDismiss" tools:targetApi="kitkat_watch">false</item>
