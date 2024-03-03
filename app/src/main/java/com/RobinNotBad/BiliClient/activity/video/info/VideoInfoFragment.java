@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -281,9 +280,9 @@ public class VideoInfoFragment extends Fragment {
             try {
                 int result = WatchLaterApi.add(videoInfo.aid);
                 if (result == 0)
-                    requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "添加成功", Toast.LENGTH_SHORT).show());
+                    requireActivity().runOnUiThread(() -> MsgUtil.toast("添加成功",requireContext()));
                 else
-                    requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "添加失败，错误码：" + result, Toast.LENGTH_SHORT).show());
+                    requireActivity().runOnUiThread(() -> MsgUtil.toast("添加失败，错误码：" + result, requireContext()));
             } catch (Exception e) {
                 e.printStackTrace();
             }

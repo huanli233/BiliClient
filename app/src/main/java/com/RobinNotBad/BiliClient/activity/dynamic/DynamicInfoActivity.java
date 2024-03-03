@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -55,7 +54,7 @@ public class DynamicInfoActivity extends BaseActivity {
                     viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
 
                     if(SharedPreferencesUtil.getBoolean("first_dynamicinfo",true)){
-                        Toast.makeText(this, "提示：本页面可以左右滑动", Toast.LENGTH_LONG).show();
+                        MsgUtil.toast("下载完成",this);
                         SharedPreferencesUtil.putBoolean("first_dynamicinfo",false);
                     }
                 });

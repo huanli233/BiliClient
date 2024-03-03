@@ -31,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -804,21 +803,14 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         changeVideoSize(mediaPlayer.getVideoWidth(),mediaPlayer.getVideoHeight());
 
         if (SharedPreferencesUtil.getBoolean("player_ui_showDanmakuBtn", true)) {
-            if (mode!=1) {
-                danmaku_btn.setImageResource(R.mipmap.danmakuon);
+            danmaku_btn.setImageResource(R.mipmap.danmakuon);
                 isdanmakushowing = true;
                 mDanmakuView.start();
-            } else {
-                danmaku_btn.setImageResource(R.mipmap.danmakuoff);
-                isdanmakushowing = false;
-            }
+
             danmaku_btn.setOnClickListener(view -> {
-                if(mode==1) Toast.makeText(this, "本视频无弹幕", Toast.LENGTH_SHORT).show();
-                else {
                     mDanmakuView.setVisibility((isdanmakushowing ? View.GONE : View.VISIBLE));
                     danmaku_btn.setImageResource((isdanmakushowing ? R.mipmap.danmakuoff : R.mipmap.danmakuon));
                     isdanmakushowing = !isdanmakushowing;
-                }
             });
             danmaku_btn.setVisibility(View.VISIBLE);
         }

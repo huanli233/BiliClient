@@ -7,10 +7,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.util.DisplayMetrics;
-import android.widget.Toast;
 
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class BiliTerminal extends Application {
@@ -49,8 +47,7 @@ public class BiliTerminal extends Application {
             configuration.densityDpi = (int)(displayMetrics.densityDpi * dpiTimes);
             return old.createConfigurationContext(configuration);
         }catch (Exception e){
-            Toast.makeText(old, "调整缩放失败, 请联系开发者", Toast.LENGTH_SHORT).show();
-            MsgUtil.err(e,old);
+            //MsgUtil.err(e,old);
             return old;
         }
     }

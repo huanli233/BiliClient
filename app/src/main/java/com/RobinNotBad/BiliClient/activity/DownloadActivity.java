@@ -7,7 +7,6 @@ import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
@@ -15,6 +14,7 @@ import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -143,7 +143,7 @@ public class DownloadActivity extends BaseActivity {
             inputStream.close();
             fileOutputStream.close();
             if (exitOnFinish) {
-                runOnUiThread(() -> Toast.makeText(DownloadActivity.this, "下载完成", Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> MsgUtil.toast("下载完成",this));
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
@@ -154,9 +154,9 @@ public class DownloadActivity extends BaseActivity {
                 },200);
             }
         } catch (IOException e) {
-            runOnUiThread(() -> Toast.makeText(DownloadActivity.this, "下载失败", Toast.LENGTH_SHORT).show());
-            finish();
+            runOnUiThread(() -> MsgUtil.toast("下载失败",this));
             e.printStackTrace();
+            finish();
         }
     }
 
@@ -188,7 +188,7 @@ public class DownloadActivity extends BaseActivity {
                 }
             }
         }catch (IOException e){
-            runOnUiThread(() -> Toast.makeText(DownloadActivity.this, "弹幕文件获取失败！", Toast.LENGTH_SHORT).show());
+            runOnUiThread(() -> MsgUtil.toast("弹幕下载失败！",this));
             finish();
             e.printStackTrace();
         }

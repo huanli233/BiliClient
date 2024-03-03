@@ -7,11 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
+import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -48,7 +47,7 @@ public class SpecialLoginActivity extends BaseActivity {
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, NetWorkUtil.getInfoFromCookie("bili_jct", cookies));
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies);
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,jsonObject.getString("refresh_token"));
-                    runOnUiThread(() -> Toast.makeText(SpecialLoginActivity.this, "登录成功！", Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> MsgUtil.toast("登录成功！",this));
                     SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup, true);
 
                     SharedPreferencesUtil.removeValue(SharedPreferencesUtil.cookie_refresh);

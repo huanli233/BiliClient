@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.viewpager.widget.ViewPager;
 
@@ -52,7 +51,7 @@ public class ImageViewerActivity extends BaseActivity {
             int id = i;
             photoView.setOnLongClickListener(view -> {
                 if(longClickPosition != id){
-                    Toast.makeText(this, "再次长按下载图片", Toast.LENGTH_SHORT).show();
+                    MsgUtil.toast("再次长按下载图片",this);
                     longClickPosition = id;
                 }
                 else{
@@ -62,6 +61,7 @@ public class ImageViewerActivity extends BaseActivity {
                             .putExtra("type",0)
                             .putExtra("title", LittleToolsUtil.getFileNameFromLink(imageList.get(id)));
                     startActivity(intent1);
+                    longClickPosition = -1;
                 }
                 return true;
             });

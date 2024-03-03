@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.constraintlayout.widget.Guideline;
 
@@ -98,19 +97,19 @@ public class QRLoginActivity extends BaseActivity {
                     case 0:
                         guideline_left.setGuidelinePercent(0.00f);
                         guideline_right.setGuidelinePercent(1.00f);
-                        Toast.makeText(this, "切换为大二维码", Toast.LENGTH_SHORT).show();
+                        MsgUtil.toast("切换为大二维码",this);
                         qrScale = 1;
                         break;
                     case 1:
                         guideline_left.setGuidelinePercent(0.25f);
                         guideline_right.setGuidelinePercent(0.75f);
-                        Toast.makeText(this, "切换为小二维码", Toast.LENGTH_SHORT).show();
+                        MsgUtil.toast("切换为小二维码",this);
                         qrScale = 2;
                         break;
                     case 2:
                         guideline_left.setGuidelinePercent(0.15f);
                         guideline_right.setGuidelinePercent(0.85f);
-                        Toast.makeText(this, "切换为默认大小", Toast.LENGTH_SHORT).show();
+                        MsgUtil.toast("切换为默认大小",this);
                         qrScale = 0;
                         break;
                 }

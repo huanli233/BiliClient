@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -29,6 +28,7 @@ import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.view.CustomListView;
 import com.bumptech.glide.Glide;
@@ -193,13 +193,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         if (ReplyApi.likeReply(oid, replyList.get(realPosition).rpid, true) == 0) {
                             replyList.get(realPosition).liked = true;
                             ((Activity) context).runOnUiThread(() -> {
-                                Toast.makeText(context, "点赞成功", Toast.LENGTH_SHORT).show();
+                                MsgUtil.toast("点赞成功",context);
                                 replyHolder.likeCount.setText(String.valueOf(replyList.get(realPosition).likeCount + 1));
                                 replyHolder.likeCount.setTextColor(Color.rgb(0xfe,0x67,0x9a));
                                 replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_liked),null,null,null);
                             });
                         } else
-                            ((Activity) context).runOnUiThread(() -> Toast.makeText(context, "点赞失败", Toast.LENGTH_SHORT).show());
+                            ((Activity) context).runOnUiThread(() -> MsgUtil.toast("点赞失败",context));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
@@ -210,13 +210,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         if (ReplyApi.likeReply(oid, replyList.get(realPosition).rpid, false) == 0) {
                             replyList.get(realPosition).liked = false;
                             ((Activity) context).runOnUiThread(() -> {
-                                Toast.makeText(context, "取消成功", Toast.LENGTH_SHORT).show();
+                                MsgUtil.toast("取消成功",context);
                                 replyHolder.likeCount.setText(String.valueOf(replyList.get(realPosition).likeCount));
                                 replyHolder.likeCount.setTextColor(Color.rgb(0xff,0xff,0xff));
                                 replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_like),null,null,null);
                             });
                         } else
-                            ((Activity) context).runOnUiThread(() -> Toast.makeText(context, "取消失败", Toast.LENGTH_SHORT).show());
+                            ((Activity) context).runOnUiThread(() -> MsgUtil.toast("取消失败",context));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {

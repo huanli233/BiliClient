@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +14,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.api.FavoriteApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
 
@@ -73,12 +73,12 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
                             adding = false;
                             if (result == 0) {
                                 chooseState.set(position, false);
-                                ((Activity) context).runOnUiThread(() -> setCardView(cardView,false));
+                                ((Activity) context).runOnUiThread(() -> setCardView(cardView, false));
                                 changed = true;
-                            } else ((Activity) context).runOnUiThread(() ->{
-                                    Toast.makeText(context, "删除失败！错误码：" + result, Toast.LENGTH_SHORT).show();
-                                    ((Activity) context).runOnUiThread(() -> setCardView(cardView,true));
-                                });
+                            } else ((Activity) context).runOnUiThread(() -> {
+                                MsgUtil.toast("删除失败！错误码：" + result, context);
+                                setCardView(cardView, true);
+                            });
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (JSONException e) {
@@ -98,8 +98,8 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
                                 changed = true;
                                 added = true;
                             } else ((Activity) context).runOnUiThread(() -> {
-                                    Toast.makeText(context, "添加失败！错误码：" + result, Toast.LENGTH_SHORT).show();
-                                    ((Activity) context).runOnUiThread(() -> setCardView(cardView,false));
+                                    MsgUtil.toast( "添加失败！错误码：" + result, context);
+                                    setCardView(cardView,false);
                                 });
                             if (SharedPreferencesUtil.getBoolean("fav_single", false))
                                 ((Activity) context).finish();

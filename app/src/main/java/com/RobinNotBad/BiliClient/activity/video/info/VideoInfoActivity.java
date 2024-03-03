@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -78,7 +77,7 @@ public class VideoInfoActivity extends BaseActivity {
         ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(),fragmentList);
         viewPager.setAdapter(vpfAdapter);
         if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
-            Toast.makeText(this, "提示：本页面可以左右滑动", Toast.LENGTH_LONG).show();
+            MsgUtil.toastLong("提示：本页面可以左右滑动",this);
             SharedPreferencesUtil.putBoolean("first_videoinfo", false);
         }
     }
@@ -112,7 +111,7 @@ public class VideoInfoActivity extends BaseActivity {
                     loading.setVisibility(View.GONE);
                     viewPager.setAdapter(vpfAdapter);
                     if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
-                        Toast.makeText(this, "提示：本页面可以左右滑动", Toast.LENGTH_LONG).show();
+                        MsgUtil.toastLong("提示：本页面可以左右滑动",this);
                         SharedPreferencesUtil.putBoolean("first_videoinfo", false);
                     }
                 });

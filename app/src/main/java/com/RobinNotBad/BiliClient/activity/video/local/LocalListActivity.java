@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -20,6 +19,7 @@ import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.model.LocalVideo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class LocalListActivity extends InstanceActivity {
                 if(longClickPosition == position) {
                     File file = new File(ConfInfoApi.getDownloadPath(this), videoList.get(position).title);
                     CenterThreadPool.run(()-> FileUtil.deleteFolder(file));
-                    Toast.makeText(this, "删除成功", Toast.LENGTH_SHORT).show();
+                    MsgUtil.toast("删除成功",this);
                     videoList.remove(position);
                     adapter.notifyItemRemoved(position);
                     adapter.notifyItemRangeChanged(position,videoList.size() - position);
@@ -72,9 +72,8 @@ public class LocalListActivity extends InstanceActivity {
                 }
                 else{
                     longClickPosition = position;
-                    Toast.makeText(this, "再次长按删除", Toast.LENGTH_SHORT).show();
+                    MsgUtil.toast("再次长按删除",this);
                 }
-                        
             });
             runOnUiThread(()->{
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
