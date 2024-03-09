@@ -21,7 +21,7 @@
                 android:layout_marginVertical="3dp"
                 android:layout_marginStart="8dp"
                 android:gravity="center"
-                android:text="杂项设置"
+                android:text="偏好设置"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
