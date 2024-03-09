@@ -76,7 +76,7 @@
                          android:layout_height="0dp"
                          android:layout_width="0dp"
                          android:adjustViewBounds="true"
-                         android:src="@mipmap/default_avatar"
+                         android:src="@mipmap/akari"
                          app:layout_constraintHeight_percent="0.7"
                          app:layout_constraintTop_toTopOf="parent"
                          app:layout_constraintDimensionRatio="1:1"
