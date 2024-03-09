@@ -118,7 +118,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                 runOnUiThread(()->textView.setText("视频获取失败！\n可能的原因：\n1.本视频仅大会员可播放\n2.视频获取接口失效"));
                 e.printStackTrace();
             } catch (ActivityNotFoundException e){
-                runOnUiThread(()->textView.setText("跳转失败！\n请安装对应的播放器\n或将哔哩终端和播放器同时更新到最新版本"));
+                runOnUiThread(()->textView.setText("跳转失败！\n请安装对应的播放器\n或在设置中选择正确的播放器\n或将哔哩终端和播放器同时更新到最新版本"));
                 e.printStackTrace();
             }
         });
