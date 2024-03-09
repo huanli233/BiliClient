@@ -19,7 +19,7 @@
         android:id="@+id/searchbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/top">
@@ -36,7 +36,7 @@
             android:hint="搜点什么"
             android:imeOptions="actionDone"
             android:inputType="textPersonName"
-            android:minHeight="46dp"
+            android:minHeight="42dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:textColor="#fff"

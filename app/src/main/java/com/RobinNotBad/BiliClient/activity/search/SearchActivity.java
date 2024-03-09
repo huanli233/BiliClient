@@ -66,6 +66,15 @@ public class SearchActivity extends InstanceActivity {
             }
         };
         viewPager.setAdapter(vpfAdapter);
+        /*
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                onScrolled(6);
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+        });
+         */
         searchBtn.setOnClickListener(view -> searchKeyword(keywordInput.getText().toString()));
         keywordInput.setOnEditorActionListener((textView, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEND || actionId == EditorInfo.IME_ACTION_DONE || event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction()) {
@@ -121,7 +130,7 @@ public class SearchActivity extends InstanceActivity {
 
 
     public void onScrolled(int dy) {
-        float height = searchBar.getHeight() + LittleToolsUtil.dp2px(4f, this);
+        float height = searchBar.getHeight() + LittleToolsUtil.dp2px(2f, this);
 
         if(System.currentTimeMillis() - animate_last > 200) {
             if (dy > 1 && searchBarVisible) {
