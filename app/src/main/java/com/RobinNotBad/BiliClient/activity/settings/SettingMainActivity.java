@@ -19,6 +19,7 @@ import com.google.android.material.card.MaterialCardView;
 public class SettingMainActivity extends InstanceActivity {
 
     private int eggClick = 0;
+    private boolean tutorialReset_clicked = false;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -111,7 +112,7 @@ public class SettingMainActivity extends InstanceActivity {
                 try {
                     AppInfoApi.checkUpdate(this,true);
                 } catch (Exception e) {
-                    MsgUtil.err(e,this);
+                    runOnUiThread(()->MsgUtil.err(e,this));
                 }
             });
         });
@@ -126,15 +127,22 @@ public class SettingMainActivity extends InstanceActivity {
 
         MaterialCardView reset_tutorial = findViewById(R.id.reset_tutorial);    //用于测试
         reset_tutorial.setOnClickListener(view -> {
-            SharedPreferencesUtil.putBoolean("tutorial_recommend",false);
-            SharedPreferencesUtil.putBoolean("tutorial_menu",false);
-            SharedPreferencesUtil.putBoolean("tutorial_search",false);
-            SharedPreferencesUtil.putBoolean("tutorial_media",false);
-            SharedPreferencesUtil.putBoolean("tutorial_video",false);
-            SharedPreferencesUtil.putBoolean("tutorial_user",false);
-            SharedPreferencesUtil.putBoolean("tutorial_dynamic",false);
-            SharedPreferencesUtil.putBoolean("tutorial_article",false);
-            MsgUtil.toast("已经重置教程完成情况",this);
+            if(tutorialReset_clicked) {
+                SharedPreferencesUtil.putBoolean("tutorial_recommend", false);
+                SharedPreferencesUtil.putBoolean("tutorial_menu", false);
+                SharedPreferencesUtil.putBoolean("tutorial_search", false);
+                SharedPreferencesUtil.putBoolean("tutorial_media", false);
+                SharedPreferencesUtil.putBoolean("tutorial_video", false);
+                SharedPreferencesUtil.putBoolean("tutorial_user", false);
+                SharedPreferencesUtil.putBoolean("tutorial_dynamic", false);
+                SharedPreferencesUtil.putBoolean("tutorial_article", false);
+                MsgUtil.toast("已经重置教程完成情况", this);
+                tutorialReset_clicked = false;
+            }
+            else {
+                tutorialReset_clicked = true;
+                MsgUtil.toast("你确定吗？我不确定\n再点一次重置！", this);
+            }
         });
 
 
