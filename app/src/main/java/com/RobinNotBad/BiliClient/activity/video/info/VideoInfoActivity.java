@@ -50,13 +50,13 @@ public class VideoInfoActivity extends BaseActivity {
         if(type.equals("media")) {
             initMediaInfoView();
             if(!SharedPreferencesUtil.getBoolean("tutorial_media",false)){
-                MsgUtil.showDialog(this,"使用教程","此页面从左向右或从右向左滑动可以切换页面，第一页为视频详情，第二页为评论区",R.mipmap.tutorial_media,true,5);
+                MsgUtil.showTutorial(this,"使用教程","此页面从左向右或从右向左滑动可以切换页面，第一页为视频详情，第二页为评论区",R.mipmap.tutorial_media);
                 SharedPreferencesUtil.putBoolean("tutorial_media",true);
             }
         } else {
             initVideoInfoView();
             if(!SharedPreferencesUtil.getBoolean("tutorial_video",false)){
-                MsgUtil.showDialog(this,"使用教程","此页面从左向右或从右向左滑动可以切换页面，第一页为视频详情，第二页为评论区，第三页为推荐（可在设置里开关）",R.mipmap.tutorial_video,true,5);
+                MsgUtil.showTutorial(this,"使用教程","此页面从左向右或从右向左滑动可以切换页面，第一页为视频详情，第二页为评论区，第三页为推荐（可在设置里开关）",R.mipmap.tutorial_video);
                 SharedPreferencesUtil.putBoolean("tutorial_video",true);
             }
         }

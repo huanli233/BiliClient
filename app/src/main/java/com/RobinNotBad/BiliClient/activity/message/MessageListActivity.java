@@ -33,7 +33,7 @@ public class MessageListActivity extends BaseActivity{
         messageList = new ArrayList<>();
 
         if(!SharedPreferencesUtil.getBoolean("tutorial_message_list",false)){
-            MsgUtil.showDialog(this,"使用教程","点击头像打开打开用户的主页，点击下方卡片可以跳转到对应视频（无法跳转动态）",R.mipmap.tutorial_message_list,true,5);
+            MsgUtil.showTutorial(this,"使用教程","点击头像打开打开用户的主页，点击下方卡片可以跳转到对应视频（无法跳转动态）",R.mipmap.tutorial_message_list);
             SharedPreferencesUtil.putBoolean("tutorial_message_list",true);
         }
 

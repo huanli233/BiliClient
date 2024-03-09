@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -51,7 +50,7 @@ public class ArticleInfoActivity extends BaseActivity {
                     viewPager.setAdapter(vpfAdapter);
 
                     if(!SharedPreferencesUtil.getBoolean("tutorial_article",false)){
-                        MsgUtil.showDialog(this,"使用教程","此页面从左向右或从右向左滑动可以切换页面，第一页为专栏详情和内容，第二页为评论区",R.mipmap.tutorial_article,true,5);
+                        MsgUtil.showTutorial(this,"使用教程","此页面从左向右或从右向左滑动可以切换页面，第一页为专栏详情和内容，第二页为评论区",R.mipmap.tutorial_article);
                         SharedPreferencesUtil.putBoolean("tutorial_article",true);
                     }
                 });

@@ -81,7 +81,7 @@ public class WriteReplyActivity extends BaseActivity {
                     });
                 }
                 else MsgUtil.toast("正在发送中",this);
-            }else MsgUtil.showDialog(this,"无法发送","上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作",-1,false,0);
+            }else MsgUtil.showDialog(this,"无法发送","上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作",-1);
         });
     }
 }

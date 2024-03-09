@@ -107,11 +107,11 @@ public class SettingPlayerChooseActivity extends BaseActivity {
                 }
                 break;
             case "mtvPlayer":
-                if(Build.VERSION.SDK_INT <= 19) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，请使用内置播放器或QQ群中提供的改版小电视播放器",-1,false,0);
+                if(Build.VERSION.SDK_INT <= 19) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，请使用内置播放器或QQ群中提供的改版小电视播放器",-1);
                 break;
             
             case "aliangPlayer":
-                if(Build.VERSION.SDK_INT <= 19) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，可能无法使用凉腕播放器，可以使用内置播放器或QQ群中提供的改版小电视播放器",-1,false,0);
+                if(Build.VERSION.SDK_INT <= 19) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，可能无法使用凉腕播放器，可以使用内置播放器或QQ群中提供的改版小电视播放器",-1);
                 break;
 
             default:

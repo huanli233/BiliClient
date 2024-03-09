@@ -50,7 +50,7 @@ public class RecommendActivity extends InstanceActivity {
         title.setText("推荐");
 
         if(!SharedPreferencesUtil.getBoolean("tutorial_recommend",false)){
-            MsgUtil.showDialog(this,"使用教程","点击上方标题栏可以打开菜单",R.mipmap.tutorial_recommend,true,5);
+            MsgUtil.showTutorial(this,"使用教程","点击上方标题栏可以打开菜单",R.mipmap.tutorial_recommend);
             SharedPreferencesUtil.putBoolean("tutorial_recommend",true);
         }
 
