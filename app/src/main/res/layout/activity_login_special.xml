@@ -68,11 +68,9 @@
 
             <EditText
                 android:id="@+id/loginInput"
-                style="@style/Widget.AppCompat.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/background_edit_text_setting"
                 android:hint="请输入登录信息"
                 android:padding="8dp"
                 android:minHeight="40dp"

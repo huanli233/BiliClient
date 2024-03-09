@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -29,6 +30,7 @@ public class SearchActivity extends InstanceActivity {
     private boolean searchBarVisible = true;
     private boolean refreshing = false;
     private long animate_last;
+    Handler handler;
 
     @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged"})
     @Override
@@ -38,6 +40,8 @@ public class SearchActivity extends InstanceActivity {
         setContentView(R.layout.activity_search);
         setMenuClick(3);
         Log.e("debug", "进入搜索页");
+
+        handler = new Handler();
 
         ViewPager2 viewPager = findViewById(R.id.viewPager);
 
@@ -120,15 +124,17 @@ public class SearchActivity extends InstanceActivity {
         float height = searchBar.getHeight() + LittleToolsUtil.dp2px(4f, this);
 
         if(System.currentTimeMillis() - animate_last > 200) {
-            if (dy > 3 && searchBarVisible) {
+            if (dy > 1 && searchBarVisible) {
                 animate_last = System.currentTimeMillis();
                 this.searchBarVisible = false;
                 @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofFloat(searchBar, "translationY", 0, -height);
                 animator.start();
+                handler.postDelayed(()->searchBar.setVisibility(View.GONE),200);
             }
-            if (dy < -3 && !searchBarVisible) {
+            if (dy < -1 && !searchBarVisible) {
                 animate_last = System.currentTimeMillis();
                 this.searchBarVisible = true;
+                searchBar.setVisibility(View.VISIBLE);
                 @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofFloat(searchBar, "translationY", -height, 0);
                 animator.start();
             }

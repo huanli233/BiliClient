@@ -60,9 +60,10 @@ dependencies {
     //noinspection GradleCompatible
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     //danmaku
-    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
-    implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
-    implementation 'com.github.ctiao:ndkbitmap-x86:0.9.21'
+    //implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+    //implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
+    //implementation 'com.github.ctiao:ndkbitmap-x86:0.9.21'
     //ijk
     implementation project(path: ':ijkplayer-java')
+    implementation project(path: ':DanmakuFlameMaster')
 }

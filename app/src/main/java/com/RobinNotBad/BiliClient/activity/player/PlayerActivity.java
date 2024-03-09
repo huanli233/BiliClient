@@ -62,7 +62,6 @@ import java.util.zip.Inflater;
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.controller.IDanmakuView;
 import master.flame.danmaku.danmaku.loader.ILoader;
-import master.flame.danmaku.danmaku.loader.IllegalDataException;
 import master.flame.danmaku.danmaku.loader.android.DanmakuLoaderFactory;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
@@ -71,6 +70,7 @@ import master.flame.danmaku.danmaku.model.android.DanmakuContext;
 import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.danmaku.parser.IDataSource;
+import master.flame.danmaku.danmaku.parser.android.BiliDanmukuParser;
 import okhttp3.Response;
 import okio.BufferedSink;
 import okio.Okio;
@@ -110,7 +110,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     private final String[] speedTexts = {"x 0.5", "x 0.75", "x 1.0", "x 1.25", "x 1.5", "x 1.75", "x 2.0", "x 3.0"};
 
     private int lastProgress;
-    private boolean dmkPlaying;
     private boolean prepared = false;
     private boolean firstSurfaceHolder = true;
     private boolean finishWatching = false;
@@ -257,6 +256,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                     text_newspeed.setText(speedTexts[position]);
                     text_speed.setText(speedTexts[position]);
                     ijkPlayer.setSpeed(speeds[position]);
+                    DrawHandler.setSpeed(speeds[position]);
                 }
             }
             @Override
@@ -465,6 +465,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                         if (onLongClick) {
                             onLongClick = false;
                             ijkPlayer.setSpeed(speeds[speed_seekbar.getProgress()]);
+                            DrawHandler.setSpeed(speeds[speed_seekbar.getProgress()]);
                             text_speed.setText(speedTexts[speed_seekbar.getProgress()]);
                         }
                         if (moving) {
@@ -486,6 +487,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP && onLongClick) {
                     onLongClick = false;
                     ijkPlayer.setSpeed(speeds[speed_seekbar.getProgress()]);
+                    DrawHandler.setSpeed(speeds[speed_seekbar.getProgress()]);
                     text_speed.setText(speedTexts[speed_seekbar.getProgress()]);
                 }
                 return false;
@@ -503,6 +505,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                 if (!onLongClick && !moving && !scaled) {
                     hidecon();
                     ijkPlayer.setSpeed(3.0F);
+                    DrawHandler.setSpeed(3.0f);
                     text_speed.setText("x 3.0");
                     onLongClick = true;
                     Log.e("debug-gesture","longclick_down");
@@ -576,12 +579,8 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
         ILoader loader = DanmakuLoaderFactory.create(DanmakuLoaderFactory.TAG_BILI);
 
-        try {
-            assert loader != null;
-            loader.load(stream);
-        } catch (IllegalDataException e) {
-            e.printStackTrace();
-        }
+        assert loader != null;
+        loader.load(stream);
         BaseDanmakuParser parser = new BiliDanmukuParser();
         IDataSource<?> dataSource = loader.getDataSource();
         parser.load(dataSource);
@@ -774,15 +773,13 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                     loading_info.setVisibility(View.VISIBLE);
                     loading_text0.setText("正在缓冲");
                     showLoadingSpeed();
-                    if (mode!=1 && dmkPlaying) {
-                        mDanmakuView.pause();
-                        dmkPlaying = false;
-                    }
+                    mDanmakuView.pause();
                 });
             } else if(what == IMediaPlayer.MEDIA_INFO_BUFFERING_END){
                 runOnUiThread(() -> {
                     if(loadingShowTimer!=null)loadingShowTimer.cancel();
                     loading_info.setVisibility(View.GONE);
+                    mDanmakuView.start(ijkPlayer.getCurrentPosition());
                 });
             }
 
@@ -930,10 +927,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                     if (lastProgress != videonow) {               //检测进度是否在变动
                         lastProgress = videonow;
                         progressBar.setProgress(videonow);
-                        if (mode!=1 && !dmkPlaying) {
-                            mDanmakuView.resume();
-                            dmkPlaying = true;
-                        }
                         int minute = videonow / 60000;
                         int second = videonow % 60000 / 1000;
                         if (minute < 10) minuteSTR = "0" + minute;
@@ -983,9 +976,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                 @Override
                 public void prepared() {adddanmaku();}
                 @Override
-                public void updateTimer(DanmakuTimer timer) {
-                    if(prepared) timer.update(ijkPlayer.getCurrentPosition());
-                }
+                public void updateTimer(DanmakuTimer timer) {}
                 @Override
                 public void danmakuShown(BaseDanmaku danmaku) {}
                 @Override

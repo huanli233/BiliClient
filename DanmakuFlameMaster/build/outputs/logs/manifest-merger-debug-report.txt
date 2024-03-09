@@ -1,0 +1,29 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml:18:1-27:12
+INJECTED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml:18:1-27:12
+INJECTED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml:18:1-27:12
+	package
+		ADDED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml:19:5-35
+		INJECTED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml
+		INJECTED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml
+	android:versionName
+		ADDED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml:21:5-33
+	xmlns:android
+		ADDED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml:18:11-69
+	android:versionCode
+		ADDED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml:20:5-31
+uses-sdk
+ADDED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml:23:5-25:41
+INJECTED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml:23:5-25:41
+INJECTED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml:23:5-25:41
+INJECTED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml:23:5-25:41
+INJECTED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml:23:5-25:41
+	android:targetSdkVersion
+		ADDED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml:25:9-38
+		INJECTED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml
+		INJECTED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml:24:9-34
+		INJECTED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml
+		INJECTED from C:\AndroidStudio\BiliClient\DanmakuFlameMaster\src\main\AndroidManifest.xml

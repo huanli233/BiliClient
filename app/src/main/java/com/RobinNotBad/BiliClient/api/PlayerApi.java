@@ -1,8 +1,12 @@
 package com.RobinNotBad.BiliClient.api;
 
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.R;
@@ -13,6 +17,9 @@ import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.io.File;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerApi {
     public static void startGettingUrl(Context context, VideoInfo videoInfo, int page){
@@ -68,21 +75,21 @@ public class PlayerApi {
                 break;
 
             case "aliangPlayer":
+                intent.setClassName(context.getString(R.string.player_aliang_package), "com.aliangmaker.media.PlayVideoActivity");
                 if(local) {
-                    intent.setClassName(context.getString(R.string.player_aliang_package), "com.aliangmaker.meida.VideoPlayerActivity");
-                    File videoFile = new File(videourl);
-                    intent.putExtra("getVideoPath",videoFile.getPath());
-                    intent.putExtra("internet",false);
-                    intent.putExtra("activity",true);
-                    intent.putExtra("videoName", title);
+                    intent.setData(getVideoUri(context,videourl));
                 }
                 else {
-                    intent.setClassName(context.getString(R.string.player_aliang_package), "com.aliangmaker.meida.GetIntentActivity");
                     intent.setData(Uri.parse(videourl));
-                    intent.putExtra("cookie", SharedPreferencesUtil.getString("cookies", ""));
-                    intent.putExtra("danmaku_url", danmakuurl);
-                    intent.putExtra("title", title);
+                    Map<String,String> headers = new HashMap<>();
+                    headers.put("Cookie",SharedPreferencesUtil.getString("cookies", ""));
+                    headers.put("Referer","https://www.bilibili.com/");
+                    intent.putExtra("cookie",(Serializable) headers);
+                    intent.putExtra("agent",ConfInfoApi.USER_AGENT_WEB);
                 }
+                Log.e("uri",intent.getData().toString());
+                intent.putExtra("danmaku", danmakuurl);
+                intent.putExtra("name", title);
                 intent.setAction(Intent.ACTION_VIEW);
 
                 break;
@@ -92,5 +99,24 @@ public class PlayerApi {
                 break;
         }
         context.startActivity(intent);
+    }
+
+    public static Uri getVideoUri(Context context, String path){
+        Cursor cursor = context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.Video.Media._ID},
+                MediaStore.Video.Media.DATA + "=? ",
+                new String[]{path},null);
+        if(cursor!=null && cursor.moveToFirst()){
+            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns._ID));
+            Uri baseUri = Uri.parse("content://media/external/video/media");
+            cursor.close();
+            return Uri.withAppendedPath(baseUri,String.valueOf(id));
+        }
+        else {
+            if(cursor!=null) cursor.close();
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Video.Media.DATA,path);
+            return context.getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,values);
+        }
     }
 }
