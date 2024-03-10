@@ -57,13 +57,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/login"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp"
                 android:visibility="gone">
 
@@ -83,7 +83,6 @@
                 android:id="@+id/playerSetting"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
                 android:visibility="visible">
@@ -156,7 +155,6 @@
                 android:id="@+id/clientPlayerSetting"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
                 android:visibility="visible">
@@ -229,7 +227,6 @@
                 android:id="@+id/uiSetting"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground">
 
@@ -301,7 +298,6 @@
                 android:id="@+id/prefSetting"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground"
                 android:visibility="visible">
@@ -375,7 +371,6 @@
                 android:id="@+id/laboratory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground">
 
@@ -447,7 +442,6 @@
                 android:id="@+id/about"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp"
                 android:foreground="?selectableItemBackground">
 
@@ -519,7 +513,6 @@
                 android:id="@+id/announcement"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp">
 
                 <TextView
@@ -537,7 +530,6 @@
                 android:id="@+id/checkupdate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp">
 
                 <TextView
@@ -555,7 +547,6 @@
                 android:id="@+id/reset_tutorial"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp">
 
                 <TextView
@@ -573,7 +564,6 @@
                 android:id="@+id/test"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
                 android:layout_marginVertical="2dp">
 
                 <TextView

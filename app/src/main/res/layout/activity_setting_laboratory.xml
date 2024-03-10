@@ -57,8 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="6dp"
-            android:paddingHorizontal="4dp">
+            android:paddingHorizontal="8dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -68,6 +67,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingVertical="2dp"
                     android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
