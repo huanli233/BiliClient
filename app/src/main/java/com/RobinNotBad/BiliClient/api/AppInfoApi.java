@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
@@ -14,10 +13,8 @@ import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -48,12 +45,12 @@ public class AppInfoApi {
         }
     }
 
-    public static void checkUpdate(Context context, boolean need_toast) throws IOException, JSONException, PackageManager.NameNotFoundException {
+    public static void checkUpdate(Context context, boolean need_toast) throws Exception {
         String url = "http://api.biliterminal.cn/terminal/version/get_last";
         Response response = NetWorkUtil.get(url, ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
 
-        if(result.getInt("code")!=0) throw new JSONException("错误："+result.getInt("code"));
+        if(result.getInt("code")!=0) throw new Exception("错误："+result.getString("msg"));
         JSONObject data = result.getJSONObject("data");
 
         String version_name = data.getString("version_name");
@@ -65,12 +62,12 @@ public class AppInfoApi {
         else if(need_toast) CenterThreadPool.runOnUiThread(()->MsgUtil.toast("当前是最新版本！",context));
     }
 
-    public static void checkAnnouncement(Context context) throws IOException, JSONException {
+    public static void checkAnnouncement(Context context) throws Exception {
         String url = "http://api.biliterminal.cn/terminal/announcement/get_last";
         Response response = NetWorkUtil.get(url, ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
 
-        if(result.getInt("code")!=0) throw new JSONException("错误："+result.getInt("code"));
+        if(result.getInt("code")!=0) throw new Exception("错误："+result.getString("msg"));
         JSONObject data = result.getJSONObject("data");
 
         int id = data.getInt("id");
@@ -83,12 +80,12 @@ public class AppInfoApi {
         }
     }
 
-    public static ArrayList<Announcement> getAnnouncementList() throws IOException, JSONException {
+    public static ArrayList<Announcement> getAnnouncementList() throws Exception {
         String url = "http://api.biliterminal.cn/terminal/announcement/get_list";
         Response response = NetWorkUtil.get(url, ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
 
-        if(result.getInt("code")!=0) throw new JSONException("错误："+result.getInt("code"));
+        if(result.getInt("code")!=0) throw new Exception("错误："+result.getString("msg"));
         JSONArray data = result.getJSONArray("data");
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
