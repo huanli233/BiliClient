@@ -10,7 +10,7 @@
         android:id="@+id/viewsIcon"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="6dp"
+        android:layout_marginStart="8dp"
         android:adjustViewBounds="true"
         android:alpha="0.5"
         android:src="@drawable/icon_play"

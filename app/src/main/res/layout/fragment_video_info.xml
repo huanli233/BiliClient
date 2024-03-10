@@ -19,7 +19,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
-            android:paddingHorizontal="6dp"
+            android:paddingHorizontal="8dp"
              android:paddingBottom="4dp">
 
             <ImageView
@@ -289,6 +289,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="13sp"
                             android:text="点赞" />
                     </LinearLayout>
 
@@ -311,6 +312,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="13sp"
                             android:text="投币" />
                     </LinearLayout>
 
@@ -333,6 +335,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="13sp"
                             android:text="收藏" />
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>

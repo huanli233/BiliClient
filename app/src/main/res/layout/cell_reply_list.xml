@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:paddingHorizontal="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -9,7 +10,6 @@
         android:id="@+id/replyAvatar"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="6dp"
         android:layout_marginTop="12dp"
         android:adjustViewBounds="true"
         app:layout_constraintBottom_toBottomOf="@+id/replyPubDate"
@@ -22,21 +22,19 @@
         android:id="@+id/replyUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="8dp"
-        android:paddingTop="4dp"
+        android:layout_marginStart="4dp"
         android:singleLine="true"
         android:text="蔡徐坤"
         android:textColor="#fff"
+        app:layout_constraintBottom_toTopOf="@+id/replyPubDate"
         app:layout_constraintStart_toEndOf="@+id/replyAvatar"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/replyAvatar" />
 
     <TextView
         android:id="@+id/replyPubDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginStart="4dp"
         android:alpha="0.7"
         android:text="11-45-14"
         android:textColor="#fff"
@@ -48,65 +46,46 @@
         android:id="@+id/replyText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="6dp"
-        android:textSize="13sp"
+        android:layout_marginTop="4dp"
         android:text="只因你太美！"
         android:textColor="#fff"
+        android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/replyAvatar"
         tools:ignore="TouchTargetSizeCheck" />
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="9dp"
-        android:layout_marginBottom="2dp"
-        android:background="#318C8C8C"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repliesCard" />
-
     <TextView
         android:id="@+id/likes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:alpha="0.7"
         android:text="514"
         android:textColor="#fff"
         android:textSize="12sp"
+        app:drawableStartCompat="@drawable/icon_like"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageCard"
-        app:drawableStartCompat="@drawable/icon_like"/>
+        app:layout_constraintTop_toBottomOf="@id/imageCard" />
 
     <ImageView
         android:id="@+id/dislikeBtn"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="6dp"
+        android:layout_marginStart="8dp"
         android:adjustViewBounds="true"
         android:alpha="0.7"
+        android:src="@drawable/icon_dislike"
         app:layout_constraintBottom_toBottomOf="@+id/likes"
         app:layout_constraintStart_toEndOf="@+id/likes"
         app:layout_constraintTop_toTopOf="@+id/likes"
-        app:layout_constraintVertical_bias="0.5"
-        android:src="@drawable/icon_dislike" />
+        app:layout_constraintVertical_bias="0.5" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/imageCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="6dp"
+        android:layout_marginTop="4dp"
         android:adjustViewBounds="true"
         android:clickable="true"
         android:focusable="true"
@@ -135,7 +114,7 @@
         android:id="@+id/upLiked"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/background_grey_cardview"
         android:gravity="center"
         android:paddingStart="12dp"
@@ -153,7 +132,7 @@
         android:id="@+id/repliesCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/background_grey_cardview"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="@+id/replyText"
@@ -186,7 +165,6 @@
         android:id="@+id/replyBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="6dp"
         android:alpha="0.7"
         android:gravity="center"
         android:text="回复"
@@ -197,5 +175,19 @@
         app:layout_constraintTop_toTopOf="@+id/likes"
         app:layout_constraintVertical_bias="0.0"
         app:drawableStartCompat="@drawable/reply"/>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="2dp"
+        android:background="#318C8C8C"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repliesCard" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

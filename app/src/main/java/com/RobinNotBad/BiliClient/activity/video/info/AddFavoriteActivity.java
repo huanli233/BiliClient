@@ -25,6 +25,8 @@ public class AddFavoriteActivity extends BaseActivity {
     ArrayList<Boolean> stateList = new ArrayList<>();
     ArrayList<Long> fidList = new ArrayList<>();
     long aid;
+    int RESULT_ADDED = 1;
+    int RESULT_DELETED = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +64,12 @@ public class AddFavoriteActivity extends BaseActivity {
                 else if (adapter.changed) MsgUtil.toast("更改成功", this);
             }
             Intent intent = new Intent();
-            intent.putExtra("is_changed", adapter.changed);
-            setResult(RESULT_OK, intent);
+            if(adapter.added) {
+                setResult(RESULT_ADDED, intent);
+            }
+            else if(adapter.isAllDeleted()){
+                setResult(RESULT_DELETED,intent);
+            }
         }
         
         super.onDestroy();

@@ -278,32 +278,6 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/old_search_enable"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00000000"
-                        android:text="使用旧版搜索页" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="6dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="打开此选项，搜索页面会使用旧版的形式(注意：旧版页面仅可搜索视频及番剧)"
-                        android:textSize="11sp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/copy_enable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

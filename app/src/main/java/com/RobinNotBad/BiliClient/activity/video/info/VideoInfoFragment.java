@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -61,12 +60,19 @@ public class VideoInfoFragment extends Fragment {
     private TextView tagsText;
     private ImageButton fav;
 
+    int RESULT_ADDED = 1;
+    int RESULT_DELETED = -1;
+
     private boolean desc_expand = false, tags_expand = false;
     ActivityResultLauncher<Intent> favLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult o) {
-            if(o.getResultCode() == Activity.RESULT_OK){
+            int code = o.getResultCode();
+            if (code == RESULT_ADDED){
                 fav.setBackgroundResource(R.drawable.icon_favourite_1);
+            }
+            if (code == RESULT_DELETED){
+                fav.setBackgroundResource(R.drawable.icon_favourite_0);
             }
         }
     });

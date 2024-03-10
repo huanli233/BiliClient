@@ -14,7 +14,6 @@ import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
 import com.RobinNotBad.BiliClient.activity.message.MessageActivity;
 import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
-import com.RobinNotBad.BiliClient.activity.search.SearchOldActivity;
 import com.RobinNotBad.BiliClient.activity.settings.QRLoginActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingMainActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SpecialLoginActivity;
@@ -103,7 +102,6 @@ public class MenuActivity extends BaseActivity {
         
         //我求求你了退出按钮能用吧....
         findViewById(R.id.menu_exit).setOnClickListener(view -> {
-            classList.add(SearchOldActivity.class);
             for(int j = 0;j<classList.size();j++){
                 InstanceActivity instance = BiliTerminal.instance;
                 if(instance != null && !instance.isDestroyed()) instance.finish();
@@ -123,10 +121,7 @@ public class MenuActivity extends BaseActivity {
             if(instance != null && !instance.isDestroyed()) instance.finish();
             if(i != classList.size()) {
                 Intent intent = new Intent();
-
-                if(i==3 && SharedPreferencesUtil.getBoolean("old_search_enable",false)) intent.setClass(this,SearchOldActivity.class);
-                else intent.setClass(MenuActivity.this, classList.get(i));
-
+                intent.setClass(MenuActivity.this, classList.get(i));
                 startActivity(intent);
             }
         }

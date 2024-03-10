@@ -39,8 +39,9 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     Context context;
     ArrayList<Dynamic> dynamicList;
     UserInfo userInfo;
+    boolean desc_expand,announcement_expand;
 
-    private boolean follow_onprocess = false;
+    boolean follow_onprocess;
 
     public UserInfoAdapter(Context context, ArrayList<Dynamic> dynamicList, UserInfo userInfo) {
         this.context = context;
@@ -52,11 +53,11 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if(viewType == 0) {
-            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_user_info, parent, false);
+            View view = LayoutInflater.from(context).inflate(R.layout.cell_user_info, parent, false);
             return new UserInfoHolder(view);
         }
         else {
-            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic, parent, false);
+            View view = LayoutInflater.from(context).inflate(R.layout.cell_dynamic, parent, false);
             return new DynamicHolder(view,false);
         }
     }

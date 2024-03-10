@@ -139,4 +139,11 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
             cardView.setStrokeWidth(LittleToolsUtil.dp2px(0.1f,context));
         }
     }
+
+    public boolean isAllDeleted(){
+        for (boolean b:chooseState) {
+            if(b) return false;
+        }
+        return true;
+    }
 }

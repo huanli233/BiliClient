@@ -11,7 +11,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SettingPrefActivity extends BaseActivity {
 
-    private SwitchMaterial back_disable,fav_single,fav_notice, video_tags, video_related, myspace_creativecenter,menu_popular,menu_precious,old_search_enable,copy_enable;
+    private SwitchMaterial back_disable,fav_single,fav_notice, video_tags, video_related, myspace_creativecenter,menu_popular,menu_precious,copy_enable;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -43,10 +43,7 @@ public class SettingPrefActivity extends BaseActivity {
 
         menu_precious = findViewById(R.id.menu_precious);
         menu_precious.setChecked(SharedPreferencesUtil.getBoolean("menu_precious",false));
-        
-        old_search_enable = findViewById(R.id.old_search_enable);
-        old_search_enable.setChecked(SharedPreferencesUtil.getBoolean("old_search_enable",false));
-                
+
         copy_enable = findViewById(R.id.copy_enable);
         copy_enable.setChecked(SharedPreferencesUtil.getBoolean("copy_enable",true));
     }
@@ -60,7 +57,6 @@ public class SettingPrefActivity extends BaseActivity {
         SharedPreferencesUtil.putBoolean("creative_enable", myspace_creativecenter.isChecked());
         SharedPreferencesUtil.putBoolean("menu_popular", menu_popular.isChecked());
         SharedPreferencesUtil.putBoolean("menu_precious", menu_precious.isChecked());
-        SharedPreferencesUtil.putBoolean("old_search_enable", old_search_enable.isChecked());
         SharedPreferencesUtil.putBoolean("copy_enable", copy_enable.isChecked());
     }
 

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     app:layout_constraintBottom_toBottomOf="parent"
-    android:layout_marginHorizontal="6dp"
+    android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="2dp"
     android:id="@+id/cardView"
     app:layout_constraintTop_toTopOf="parent"
