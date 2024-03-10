@@ -142,13 +142,19 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 break;
         }
 
-        if(clickable && dynamic.dynamicId != 0) {
-            (isChild ? itemView.findViewById(R.id.cardView) : itemView).setOnClickListener(view -> {
-                Intent intent = new Intent();
-                intent.setClass(context, DynamicInfoActivity.class);
-                intent.putExtra("id", dynamic.dynamicId);
-                context.startActivity(intent);
-            });
+        if(clickable) {
+            content.setMaxLines(5);
+            if(dynamic.dynamicId != 0) {
+                (isChild ? itemView.findViewById(R.id.cardView) : itemView).setOnClickListener(view -> {
+                    Intent intent = new Intent();
+                    intent.setClass(context, DynamicInfoActivity.class);
+                    intent.putExtra("id", dynamic.dynamicId);
+                    context.startActivity(intent);
+                });
+            }
+        }
+        else {
+            content.setMaxLines(999);
         }
 
 
