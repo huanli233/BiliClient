@@ -191,7 +191,7 @@ public class VideoInfoFragment extends Fragment {
 
         viewCount.setText(LittleToolsUtil.toWan(videoInfo.stats.view));
 
-        danmakuCount.setText(String.valueOf(videoInfo.danmaku));
+        danmakuCount.setText(String.valueOf(videoInfo.stats.danmaku));
         bvidText.setText(videoInfo.bvid);
         title.setText(videoInfo.title);
         timeText.setText(videoInfo.timeDesc);
