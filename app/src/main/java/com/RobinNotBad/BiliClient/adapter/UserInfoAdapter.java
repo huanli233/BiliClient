@@ -39,7 +39,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     Context context;
     ArrayList<Dynamic> dynamicList;
     UserInfo userInfo;
-    boolean desc_expand,announcement_expand;
+    boolean desc_expand, notice_expand;
 
     boolean follow_onprocess;
 
@@ -137,6 +137,18 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Intent intent = new Intent(context, PrivateMsgActivity.class);
                 intent.putExtra("uid",userInfo.mid);
                 context.startActivity(intent);
+            });
+
+            userInfoHolder.userDesc.setOnClickListener(view1 -> {
+                if (desc_expand) userInfoHolder.userDesc.setMaxLines(2);
+                else userInfoHolder.userDesc.setMaxLines(32);
+                desc_expand = !desc_expand;
+            });
+
+            userInfoHolder.userNotice.setOnClickListener(view1 -> {
+                if (desc_expand) userInfoHolder.userNotice.setMaxLines(2);
+                else userInfoHolder.userNotice.setMaxLines(32);
+                notice_expand = !notice_expand;
             });
         }
     }
