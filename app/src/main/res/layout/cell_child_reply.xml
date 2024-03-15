@@ -5,6 +5,6 @@
     android:layout_height="wrap_content"
     android:maxLines="2"
     android:ellipsize="end"
-    android:paddingBottom="4dp"
+    android:paddingVertical="2dp"
     android:textSize="12sp"
     android:text="你干嘛哈哈哎哟" />

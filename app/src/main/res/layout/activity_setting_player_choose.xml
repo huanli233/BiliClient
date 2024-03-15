@@ -56,15 +56,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="6dp"
+            android:paddingHorizontal="@dimen/activity_padding_horizontal"
+            android:divider="@drawable/divider"
+            android:showDividers="middle"
+            android:paddingVertical="2dp"
             android:orientation="vertical">
 
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/terminalPlayer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -92,9 +94,7 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="内置播放器"
-                        android:textColor="#fff"
                         android:textSize="12sp"
-                        app:autoSizeTextType="uniform"
                         app:layout_constraintBottom_toTopOf="@+id/clientPlayer_desc"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/clientPlayer_icon"
@@ -108,7 +108,6 @@
                         android:layout_marginBottom="10dp"
                         android:lines="1"
                         android:text="长按这里进入设置"
-                        android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -122,8 +121,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/mtvPlayer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -151,9 +149,7 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="小电视播放器"
-                        android:textColor="#fff"
                         android:textSize="12sp"
-                        app:autoSizeTextType="uniform"
                         app:layout_constraintBottom_toTopOf="@+id/mtvPlayer_desc"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/mtvPlayer_icon"
@@ -167,7 +163,6 @@
                         android:layout_marginBottom="10dp"
                         android:lines="1"
                         android:text="一款开源播放器"
-                        android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -180,8 +175,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/aliangPlayer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -209,9 +203,7 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="凉腕播放器"
-                        android:textColor="#fff"
                         android:textSize="12sp"
-                        app:autoSizeTextType="uniform"
                         app:layout_constraintBottom_toTopOf="@+id/aliangPlayer_desc"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/aliangPlayer_icon"
@@ -225,7 +217,6 @@
                         android:layout_marginBottom="10dp"
                         android:lines="1"
                         android:text="支持缩放视频"
-                        android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -239,16 +230,13 @@
                 android:id="@+id/high_res"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp"
                 android:paddingStart="6dp"
-                android:text="获取高清视频"
-                android:textColor="@color/textwhite" />
+                android:text="获取高清视频"/>
 
             <TextView
                 android:id="@+id/desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp"
                 android:text="@string/setting_player_desc"
                 android:textSize="12sp" />
 

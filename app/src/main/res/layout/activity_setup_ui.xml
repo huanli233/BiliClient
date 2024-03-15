@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingVertical="30dp"
-            android:paddingHorizontal="10dp"
+            android:paddingHorizontal="@dimen/activity_padding_horizontal"
             android:orientation="vertical">
 
             <TextView
@@ -84,7 +84,6 @@
                     android:id="@+id/ui_scale_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
                     android:layout_marginTop="2dp"
                     android:background="@drawable/background_edit_text_setting"
                     android:ems="10"
@@ -102,7 +101,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="2dp"
                     android:text="有效范围：0.25倍-5.00倍，建议少量多次调节"
                     android:textSize="11sp" />
 
@@ -124,11 +123,10 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:background="@drawable/background_edit_text_setting"
 
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="2dp"
                     android:paddingHorizontal="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginHorizontal="4dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -171,12 +169,11 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="2dp"
                     android:paddingHorizontal="4dp"
                     android:background="@drawable/background_edit_text_setting"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginHorizontal="4dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -220,7 +217,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="2dp"
                     android:text="第一个输入框为横向边距，第二个输入框为纵向边距，单位百分比。此选项可以用于圆屏适配。\n出于保护，数值超过30不会保存。"
                     android:textSize="11sp" />
 

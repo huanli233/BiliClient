@@ -58,7 +58,7 @@
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
              android:orientation="vertical"
-            android:paddingHorizontal="4dp"
+            android:paddingHorizontal="@dimen/activity_padding_horizontal"
              android:paddingBottom="20dp">
 
             <ImageView

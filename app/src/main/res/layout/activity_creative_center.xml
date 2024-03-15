@@ -57,26 +57,19 @@
         <LinearLayout
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
+            android:paddingHorizontal="@dimen/activity_padding_horizontal"
+            android:divider="@drawable/divider"
+            android:showDividers="middle"
+            android:paddingVertical="2dp"
              android:orientation="vertical">
+
              <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="3dp"
                 android:text="投稿总数据"/>
             <com.google.android.material.card.MaterialCardView
                  android:layout_height="match_parent"
                  android:layout_width="match_parent"
-                 android:visibility="visible"
-                 app:cardMaxElevation="0dp"
-                 android:layout_marginVertical="2dp"
-                 app:strokeColor="#70707070"
-                 app:cardElevation="0dp"
-                 app:cardBackgroundColor="#78242424"
-                 android:foreground="?selectableItemBackground"
-                 android:layout_marginHorizontal="8dp"
-                 app:strokeWidth="0.1dp"
-                 app:cardCornerRadius="4dp"
                  android:id="@+id/totalFans">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -118,16 +111,6 @@
             <com.google.android.material.card.MaterialCardView
                  android:layout_height="match_parent"
                  android:layout_width="match_parent"
-                 android:visibility="visible"
-                 app:cardMaxElevation="0dp"
-                 android:layout_marginVertical="2dp"
-                 app:strokeColor="#70707070"
-                 app:cardElevation="0dp"
-                 app:cardBackgroundColor="#78242424"
-                 android:foreground="?selectableItemBackground"
-                 android:layout_marginHorizontal="8dp"
-                 app:strokeWidth="0.1dp"
-                 app:cardCornerRadius="4dp"
                  android:id="@+id/totalClick">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -169,16 +152,6 @@
             <com.google.android.material.card.MaterialCardView
                  android:layout_height="match_parent"
                  android:layout_width="match_parent"
-                 android:visibility="visible"
-                 app:cardMaxElevation="0dp"
-                 android:layout_marginVertical="2dp"
-                 app:strokeColor="#70707070"
-                 app:cardElevation="0dp"
-                 app:cardBackgroundColor="#78242424"
-                 android:foreground="?selectableItemBackground"
-                 android:layout_marginHorizontal="8dp"
-                 app:strokeWidth="0.1dp"
-                 app:cardCornerRadius="4dp"
                  android:id="@+id/totalLike">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -220,16 +193,6 @@
             <com.google.android.material.card.MaterialCardView
                  android:layout_height="match_parent"
                  android:layout_width="match_parent"
-                 android:visibility="visible"
-                 app:cardMaxElevation="0dp"
-                 android:layout_marginVertical="2dp"
-                 app:strokeColor="#70707070"
-                 app:cardElevation="0dp"
-                 app:cardBackgroundColor="#78242424"
-                 android:foreground="?selectableItemBackground"
-                 android:layout_marginHorizontal="8dp"
-                 app:strokeWidth="0.1dp"
-                 app:cardCornerRadius="4dp"
                  android:id="@+id/totalCoin">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -271,16 +234,6 @@
             <com.google.android.material.card.MaterialCardView
                  android:layout_height="match_parent"
                  android:layout_width="match_parent"
-                 android:visibility="visible"
-                 app:cardMaxElevation="0dp"
-                 android:layout_marginVertical="2dp"
-                 app:strokeColor="#70707070"
-                 app:cardElevation="0dp"
-                 app:cardBackgroundColor="#78242424"
-                 android:foreground="?selectableItemBackground"
-                 android:layout_marginHorizontal="8dp"
-                 app:strokeWidth="0.1dp"
-                 app:cardCornerRadius="4dp"
                  android:id="@+id/totalFavourite">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -322,16 +275,6 @@
             <com.google.android.material.card.MaterialCardView
                  android:layout_height="match_parent"
                  android:layout_width="match_parent"
-                 android:visibility="visible"
-                 app:cardMaxElevation="0dp"
-                 android:layout_marginVertical="2dp"
-                 app:strokeColor="#70707070"
-                 app:cardElevation="0dp"
-                 app:cardBackgroundColor="#78242424"
-                 android:foreground="?selectableItemBackground"
-                 android:layout_marginHorizontal="8dp"
-                 app:strokeWidth="0.1dp"
-                 app:cardCornerRadius="4dp"
                  android:id="@+id/totalShare">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -373,16 +316,6 @@
             <com.google.android.material.card.MaterialCardView
                  android:layout_height="match_parent"
                  android:layout_width="match_parent"
-                 android:visibility="visible"
-                 app:cardMaxElevation="0dp"
-                 android:layout_marginVertical="2dp"
-                 app:strokeColor="#70707070"
-                 app:cardElevation="0dp"
-                 app:cardBackgroundColor="#78242424"
-                 android:foreground="?selectableItemBackground"
-                 android:layout_marginHorizontal="8dp"
-                 app:strokeWidth="0.1dp"
-                 app:cardCornerRadius="4dp"
                  android:id="@+id/totalReply">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -424,16 +357,6 @@
             <com.google.android.material.card.MaterialCardView
                  android:layout_height="match_parent"
                  android:layout_width="match_parent"
-                 android:visibility="visible"
-                 app:cardMaxElevation="0dp"
-                 android:layout_marginVertical="2dp"
-                 app:strokeColor="#70707070"
-                 app:cardElevation="0dp"
-                 app:cardBackgroundColor="#78242424"
-                 android:foreground="?selectableItemBackground"
-                 android:layout_marginHorizontal="8dp"
-                 app:strokeWidth="0.1dp"
-                 app:cardCornerRadius="4dp"
                  android:id="@+id/totalDm">
 
                 <androidx.constraintlayout.widget.ConstraintLayout

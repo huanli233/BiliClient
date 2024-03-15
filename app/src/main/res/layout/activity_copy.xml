@@ -55,7 +55,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
+            android:layout_marginHorizontal="@dimen/activity_padding_horizontal"
                 android:orientation="vertical">
 
             <TextView
@@ -67,7 +67,6 @@
 
             <EditText
                 android:id="@+id/content"
-                style="@style/Widget.AppCompat.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
@@ -77,8 +76,6 @@
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:text=""
-                android:textColor="#fff"
-                android:textColorHint="#80ffffff"
                 android:textCursorDrawable="@drawable/cursor_drawable"
                 android:textSize="13sp"
                 tools:ignore="HardcodedText,SpeakableTextPresentCheck,TouchTargetSizeCheck" />

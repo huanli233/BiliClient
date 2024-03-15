@@ -56,14 +56,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="8dp"
+            android:paddingHorizontal="@dimen/activity_padding_horizontal"
+            android:divider="@drawable/divider"
+            android:showDividers="middle"
+            android:paddingVertical="2dp"
             android:orientation="vertical">
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/ui_round"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp"
                 android:paddingVertical="2dp"
                 android:text="圆屏适配" />
 
@@ -71,7 +73,6 @@
                 android:id="@+id/SWLClick"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp"
                 android:paddingVertical="2dp"
                 android:text="长按倍速" />
 
@@ -79,7 +80,6 @@
                 android:id="@+id/SWloop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp"
                 android:paddingVertical="2dp"
                 android:text="洗脑循环" />
 
@@ -87,14 +87,12 @@
                 android:id="@+id/SWbackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp"
                 android:paddingVertical="2dp"
                 android:text="熄屏继续播放" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp">
+                android:layout_height="wrap_content">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -120,8 +118,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp">
+                android:layout_height="wrap_content">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -146,7 +143,6 @@
 
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_marginVertical="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -197,7 +193,6 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_marginVertical="2dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:paddingHorizontal="6dp"
@@ -245,7 +240,6 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_marginVertical="2dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:paddingHorizontal="6dp"
@@ -295,14 +289,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="2dp"
-                android:layout_marginVertical="2dp"
                 android:background="#318C8C8C"/>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/danmaku_allowoverlap"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp"
                 android:paddingVertical="2dp"
                 android:text="弹幕允许重叠" />
 
@@ -310,7 +302,6 @@
                 android:id="@+id/danmaku_mergeduplicate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp"
                 android:paddingVertical="2dp"
                 android:text="合并重复弹幕" />
 
@@ -318,7 +309,6 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_marginVertical="2dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:paddingHorizontal="6dp"
@@ -344,7 +334,6 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_marginVertical="2dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:paddingHorizontal="6dp"
@@ -369,7 +358,6 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_marginVertical="2dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:paddingHorizontal="6dp"
@@ -394,7 +382,6 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_marginVertical="2dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:paddingHorizontal="6dp"
@@ -431,12 +418,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="2dp"
-                android:layout_marginVertical="2dp"
                 android:background="#318C8C8C"/>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/ui_showRotateBtn"
-                android:layout_marginVertical="2dp"
                 android:paddingVertical="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -445,7 +430,6 @@
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/ui_showDanmakuBtn"
                 android:layout_width="match_parent"
-                android:layout_marginVertical="2dp"
                 android:paddingVertical="2dp"
                 android:layout_height="wrap_content"
                 android:text="显示弹幕按钮" />
@@ -455,14 +439,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="显示循环按钮"
-                android:layout_marginVertical="2dp"
                 android:paddingVertical="2dp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="2dp"
-                android:layout_marginVertical="2dp"
                 android:background="#318C8C8C"/>
 
             <com.google.android.material.button.MaterialButton

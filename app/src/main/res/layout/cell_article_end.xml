@@ -3,14 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="4dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/viewsIcon"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/activity_padding_horizontal"
         android:adjustViewBounds="true"
         android:alpha="0.5"
         android:src="@drawable/icon_play"

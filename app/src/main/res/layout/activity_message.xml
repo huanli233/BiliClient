@@ -57,21 +57,15 @@
         <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:paddingHorizontal="@dimen/activity_padding_horizontal"
+            android:divider="@drawable/divider"
+            android:showDividers="middle"
+            android:paddingVertical="2dp"
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:visibility="visible"
-                app:cardMaxElevation="0dp"
-                android:layout_marginVertical="2dp"
-                app:strokeColor="#70707070"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="#78242424"
-                android:foreground="?selectableItemBackground"
-                android:layout_marginHorizontal="8dp"
-                app:strokeWidth="0.1dp"
-                app:cardCornerRadius="4dp"
                 android:id="@+id/reply">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -125,16 +119,6 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:visibility="visible"
-                app:cardMaxElevation="0dp"
-                android:layout_marginVertical="2dp"
-                app:strokeColor="#70707070"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="#78242424"
-                android:foreground="?selectableItemBackground"
-                android:layout_marginHorizontal="8dp"
-                app:strokeWidth="0.1dp"
-                app:cardCornerRadius="4dp"
                 android:id="@+id/at">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -188,16 +172,6 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:visibility="visible"
-                app:cardMaxElevation="0dp"
-                android:layout_marginVertical="2dp"
-                app:strokeColor="#70707070"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="#78242424"
-                android:foreground="?selectableItemBackground"
-                android:layout_marginHorizontal="8dp"
-                app:strokeWidth="0.1dp"
-                app:cardCornerRadius="4dp"
                 android:id="@+id/like">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -251,16 +225,6 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:visibility="visible"
-                app:cardMaxElevation="0dp"
-                android:layout_marginVertical="2dp"
-                app:strokeColor="#70707070"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="#78242424"
-                android:foreground="?selectableItemBackground"
-                android:layout_marginHorizontal="8dp"
-                app:strokeWidth="0.1dp"
-                app:cardCornerRadius="4dp"
                 android:id="@+id/system">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -310,17 +274,11 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
-            <View
-                android:layout_height="1dp"
-                android:layout_width="match_parent"
-                android:layout_margin="6dp"
-                android:background="#70707070"/>
+
             <TextView
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="3dp"
-                android:text="近期消息"/>
+                android:layout_height="wrap_content"
+                android:text="私信列表" />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/sessions_list"
                 android:layout_height="match_parent"
