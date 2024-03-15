@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:adjustViewBounds="true"
-    app:round="4dp"
+    app:round="@dimen/card_round"
     android:layout_marginVertical="2dp"
     android:layout_marginHorizontal="@dimen/activity_padding_horizontal"
     android:clickable="true"

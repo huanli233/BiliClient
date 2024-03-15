@@ -2,13 +2,13 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="false">
         <shape>
-            <corners android:radius="6dp" />
+            <corners android:radius="@dimen/card_round" />
             <solid android:color="#FEF05D8E" />
         </shape>
     </item>
     <item android:state_checked="true">
         <shape>
-            <corners android:radius="6dp" />
+            <corners android:radius="@dimen/card_round" />
             <solid android:color="#DD262626" />
         </shape>
     </item>

@@ -139,7 +139,7 @@ public class SettingMainActivity extends InstanceActivity {
             }
             else {
                 tutorialReset_clicked = true;
-                MsgUtil.toast("你确定吗？我不确定（\n再点一次重置！", this);
+                MsgUtil.toast("再点一次重置！", this);
             }
         });
 

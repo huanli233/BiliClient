@@ -94,7 +94,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/replyText"
-        app:round="4dp" />
+        app:round="@dimen/card_round" />
 
 
     <TextView

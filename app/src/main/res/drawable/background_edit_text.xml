@@ -3,8 +3,8 @@
     <item>
         <shape>
             <solid android:color="#80242424" />
-            <stroke android:width="0.1dp" android:color="#707070" />
-            <corners android:radius="4dp" />
+            <stroke android:width="@dimen/card_stroke" android:color="#707070" />
+            <corners android:radius="@dimen/card_round" />
         </shape>
     </item>
 </selector>

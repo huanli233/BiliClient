@@ -41,7 +41,7 @@ public class AppInfoApi {
                 checkUpdate(context,false);
             }
         }catch (Exception e){
-            CenterThreadPool.runOnUiThread(()->MsgUtil.err(e,context));
+            CenterThreadPool.runOnUiThread(()->MsgUtil.toast(e.getMessage(),context));
         }
     }
 
@@ -50,7 +50,7 @@ public class AppInfoApi {
         Response response = NetWorkUtil.get(url, ConfInfoApi.webHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
 
-        if(result.getInt("code")!=0) throw new Exception("错误："+result.getString("msg"));
+        if(result.getInt("code")!=0) throw new Exception(result.getString("msg"));
         JSONObject data = result.getJSONObject("data");
 
         String version_name = data.getString("version_name");

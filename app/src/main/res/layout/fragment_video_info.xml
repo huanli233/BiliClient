@@ -37,6 +37,25 @@
                 tools:ignore="ImageContrastCheck,SpeakableTextPresentCheck" />
 
             <TextView
+                android:id="@+id/durationText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.9"
+                android:lines="1"
+                android:paddingEnd="4dp"
+                android:paddingBottom="2dp"
+                android:shadowColor="@color/bgblack"
+                android:shadowDx="3"
+                android:shadowDy="3"
+                android:shadowRadius="5"
+                android:text="00:00"
+                android:textColor="#fff"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/cover"
+                app:layout_constraintEnd_toEndOf="@+id/cover" />
+
+            <TextView
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -169,27 +188,6 @@
                 app:layout_constraintStart_toEndOf="@+id/timeIcon"
                 app:layout_constraintTop_toBottomOf="@id/viewsCount" />
 
-            <TextView
-                android:id="@+id/durationText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="0.9"
-                android:lines="1"
-                android:shadowColor="@color/bgblack"
-                android:shadowDx="3"
-                android:shadowDy="3"
-                android:shadowRadius="5"
-                android:text="00:00"
-                android:textColor="#fff"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/cover"
-                app:layout_constraintEnd_toEndOf="@+id/cover"
-                app:layout_constraintHorizontal_bias="0.98"
-                app:layout_constraintStart_toStartOf="@+id/cover"
-                app:layout_constraintTop_toTopOf="@+id/cover"
-                app:layout_constraintVertical_bias="0.98" />
-            
             <ImageView
                  android:layout_height="0dp"
                  android:layout_width="wrap_content"

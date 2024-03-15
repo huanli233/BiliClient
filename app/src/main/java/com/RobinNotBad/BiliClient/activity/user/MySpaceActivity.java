@@ -129,7 +129,7 @@ public class MySpaceActivity extends InstanceActivity {
                             Intent intent = new Intent(this, QRLoginActivity.class);
                             startActivity(intent);
                             finish();
-                        }else MsgUtil.toast("你确定吗？我不确定（\n再点一次退出登录！",this);
+                        }else MsgUtil.toast("再点一次退出登录！",this);
                         confirmLogout = !confirmLogout;
                     });
                 });
