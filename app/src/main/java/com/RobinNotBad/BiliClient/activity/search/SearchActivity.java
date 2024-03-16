@@ -103,14 +103,13 @@ public class SearchActivity extends InstanceActivity {
         }
 
         if (!refreshing) {
-            refreshing = true;
-
             InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
             if (str.isEmpty()) {
                 runOnUiThread(() -> MsgUtil.toast("你还没输入内容哦",this));
             } else {
+                refreshing = true;
                 try {
                     for (int i = 0; i < 3; i++) {
                         //从viewpager中拿真正added的fragment的方法: tag = "f{position}", 得到的fragment将会是真实存在的
