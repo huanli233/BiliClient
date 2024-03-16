@@ -107,7 +107,7 @@ public class SearchActivity extends InstanceActivity {
             manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
             if (str.isEmpty()) {
-                runOnUiThread(() -> MsgUtil.toast("你还没输入内容哦",this));
+                runOnUiThread(() -> MsgUtil.toast("还没输入内容喵~",this));
             } else {
                 refreshing = true;
                 try {
