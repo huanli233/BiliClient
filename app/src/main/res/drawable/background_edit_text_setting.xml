@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <solid android:color="#78242424" />
+            <solid android:color="#cc262626" />
             <stroke android:width="@dimen/card_stroke" android:color="#70707070" />
             <corners android:radius="@dimen/card_round" />
         </shape>

@@ -60,7 +60,6 @@
         android:id="@+id/userNotice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="14dp"
         android:layout_marginTop="2dp"
         android:alpha="0.7"
         android:ellipsize="end"
@@ -74,8 +73,8 @@
 
     <ImageView
         android:id="@+id/officialIcon"
-        android:layout_width="24dp"
-        android:layout_height="0dp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:adjustViewBounds="true"
         android:alpha="0.5"
         android:src="@mipmap/icon_verified"

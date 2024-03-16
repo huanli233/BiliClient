@@ -3,13 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/imageCard"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardBackgroundColor="#78161616"
-    app:cardCornerRadius="4dp"
-    app:cardElevation="0dp"
-    app:cardMaxElevation="0dp"
-    app:strokeColor="#70707070"
-    app:strokeWidth="0.1dp">
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

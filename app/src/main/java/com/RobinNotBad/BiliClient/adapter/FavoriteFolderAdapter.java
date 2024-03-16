@@ -49,7 +49,7 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
     public void onBindViewHolder(@NonNull FavoriteHolder holder, int position) {
         holder.name.setText(LittleToolsUtil.htmlToString(folderList.get(position).name));
         holder.count.setText(folderList.get(position).videoCount + "/" + folderList.get(position).maxCount);
-        Glide.with(this.context).load(folderList.get(position).cover)
+        Glide.with(this.context).load(folderList.get(position).cover + "@20q.webp")
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(5,context))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.cover);
