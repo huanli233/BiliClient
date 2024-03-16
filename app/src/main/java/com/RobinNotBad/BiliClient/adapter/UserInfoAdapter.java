@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +71,6 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             dynamicHolder.showDynamic(dynamicList.get(realPosition), context, true);
 
             if(dynamicList.get(realPosition).dynamic_forward != null){
-                Log.e("debug","有子动态！");
                 View childCard = View.inflate(context,R.layout.cell_dynamic_child,dynamicHolder.extraCard);
                 DynamicHolder childHolder = new DynamicHolder(childCard,true);
                 childHolder.showDynamic(dynamicList.get(realPosition).dynamic_forward, context, true);
@@ -87,10 +85,15 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             userInfoHolder.userFans.setText("Lv" + userInfo.level + "\n" + LittleToolsUtil.toWan(userInfo.fans) + "粉丝");
 
             if(userInfo.official != 0) {
+                userInfoHolder.officialIcon.setVisibility(View.VISIBLE);
+                userInfoHolder.userOfficial.setVisibility(View.VISIBLE);
                 String[] official_signs = {"哔哩哔哩不知名UP主","哔哩哔哩知名UP主","哔哩哔哩大V达人","哔哩哔哩企业认证",
                         "哔哩哔哩组织认证","哔哩哔哩媒体认证","哔哩哔哩政府认证","哔哩哔哩高能主播","社会知名人士"};
                 userInfoHolder.userOfficial.setText(official_signs[userInfo.official] + (userInfo.officialDesc.isEmpty() ? "" : ("\n" + userInfo.officialDesc)));
-            } else userInfoHolder.userOfficial.setVisibility(View.GONE);
+            } else {
+                userInfoHolder.officialIcon.setVisibility(View.GONE);
+                userInfoHolder.userOfficial.setVisibility(View.GONE);
+            }
 
             Glide.with(this.context).load(userInfo.avatar + "@20q.webp")
                     .placeholder(R.mipmap.akari)
@@ -146,7 +149,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             });
 
             userInfoHolder.userNotice.setOnClickListener(view1 -> {
-                if (desc_expand) userInfoHolder.userNotice.setMaxLines(2);
+                if (notice_expand) userInfoHolder.userNotice.setMaxLines(2);
                 else userInfoHolder.userNotice.setMaxLines(32);
                 notice_expand = !notice_expand;
             });
@@ -172,7 +175,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public static class UserInfoHolder extends RecyclerView.ViewHolder{
         TextView userName,userFans,userDesc,userNotice,userOfficial;
-        ImageView userAvatar;
+        ImageView userAvatar,officialIcon;
 
         MaterialButton followBtn,msgBtn;
 
@@ -183,6 +186,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             userNotice = itemView.findViewById(R.id.userNotice);
             userFans = itemView.findViewById(R.id.userFans);
             userOfficial = itemView.findViewById(R.id.userOfficial);
+            officialIcon = itemView.findViewById(R.id.officialIcon);
             userAvatar = itemView.findViewById(R.id.userAvatar);
             followBtn = itemView.findViewById(R.id.followBtn);
             msgBtn = itemView.findViewById(R.id.msgBtn);

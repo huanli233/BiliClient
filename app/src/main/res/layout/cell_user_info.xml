@@ -89,7 +89,6 @@
         android:layout_marginTop="4dp"
         android:alpha="0.6"
         android:text="小黑子认证"
-        android:textColor="#fff"
         android:textSize="11sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/officialIcon"

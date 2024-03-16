@@ -926,7 +926,6 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                     videonow = (int) ijkPlayer.getCurrentPosition();
                     if (lastProgress != videonow) {               //检测进度是否在变动
                         lastProgress = videonow;
-                        progressBar.setProgress(videonow);
                         int minute = videonow / 60000;
                         int second = videonow % 60000 / 1000;
                         if (minute < 10) minuteSTR = "0" + minute;
@@ -934,13 +933,14 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                         if (second < 10) secondSTR = "0" + second;
                         else secondSTR = String.valueOf(second);
                         runOnUiThread(() -> {
+                            progressBar.setProgress(videonow);
                             text_now.setText(minuteSTR + ":" + secondSTR);
                         });
                     }
                 }
             }
         };
-        progresstimer.schedule(task, 0, 200);
+        progresstimer.schedule(task, 0, 500);
     }
 
     private void downdanmu() {
