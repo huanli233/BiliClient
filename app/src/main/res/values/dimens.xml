@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="activity_padding_horizontal">8dp</dimen>
+    <dimen name="activity_padding_horizontal">6dp</dimen>
     <dimen name="list_margin_vertical">2dp</dimen>
     <dimen name="linearlayout_divider">4dp</dimen>
     <dimen name="card_round">6dp</dimen>
