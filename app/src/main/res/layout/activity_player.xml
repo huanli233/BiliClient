@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.player.PlayerActivity"
-    android:id="@+id/root_layout"
-    tools:ignore="MissingClass">
+    android:id="@+id/root_layout">
 
 
     <RelativeLayout
@@ -59,7 +58,7 @@
                 android:text="原小电视播放器"
                 android:textAlignment="center"
                 android:textColor="#fff"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -122,7 +121,7 @@
                     android:id="@+id/text_now"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
+                    android:layout_marginStart="1dp"
                     android:text="00:00"
                     android:textColor="#D3B8BDBF"
                     android:textSize="12sp"
@@ -135,7 +134,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:progressTint="#00A4DA"
-                    android:thumb="@drawable/thumb_player_selector"
+                    android:thumb="@drawable/selector_progress"
                     android:thumbOffset="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/text_all"
@@ -148,7 +147,7 @@
                     android:id="@+id/text_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="2dp"
+                    android:layout_marginEnd="1dp"
                     android:text="00:00"
                     android:textColor="#D3B8BDBF"
                     android:textSize="12sp"
@@ -161,8 +160,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="3dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -170,25 +168,25 @@
 
                 <ImageButton
                     android:id="@+id/button_sound_cut"
-                    android:layout_width="34dp"
-                    android:layout_height="34dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginEnd="10dp"
                     android:background="?attr/selectableItemBackground"
                     android:scaleType="fitXY"
                     android:src="@mipmap/soundcut"
+                    android:adjustViewBounds="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/button_video"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/button_video"
-                    android:layout_width="34dp"
-                    android:layout_height="34dp"
-                    android:background="@drawable/round_button"
-                    android:text="▶"
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="14sp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:adjustViewBounds="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/btn_player_loading"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -196,12 +194,13 @@
 
                 <ImageButton
                     android:id="@+id/button_sound_add"
-                    android:layout_width="34dp"
-                    android:layout_height="34dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginStart="10dp"
                     android:background="?attr/selectableItemBackground"
                     android:scaleType="fitXY"
                     android:src="@mipmap/soundadd"
+                    android:adjustViewBounds="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/button_video"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -219,23 +218,32 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/top">
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/danmaku_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                app:srcCompat="@mipmap/danmakuoff" />
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="fitXY"
+                android:src="@mipmap/danmakuoff" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/rotate_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                app:srcCompat="@mipmap/rotate" />
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="fitXY"
+                android:src="@mipmap/rotate" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/loop_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                app:srcCompat="@mipmap/loopoff" />
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="fitXY"
+                android:src="@mipmap/loopoff" />
         </LinearLayout>
 
         <TextView
@@ -340,7 +348,7 @@
                     android:id="@+id/seekbar_speed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="14dp"
+                    android:layout_marginHorizontal="18dp"
                     android:indeterminate="false"
                     android:max="7"
                     android:progress="2" />

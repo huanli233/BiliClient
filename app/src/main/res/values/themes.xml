@@ -1,16 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.BiliClient" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+    <style name="Theme.BiliClient" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@color/bgblack</item>
         <item name="statusBarBackground">@color/pink</item>
         <item name="android:colorForeground">@color/textwhite</item>
+        <item name="colorOnPrimary">@color/textwhite</item>
         <item name="android:windowIsTranslucent">false</item>
-        <item name="android:windowSwipeToDismiss">true</item>
+        <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">true</item>
 
         <item name="editTextStyle">@style/EditTextStyle</item>
         <item name="materialCardViewStyle">@style/CardStyle</item>
         <item name="materialButtonStyle">@style/ButtonStyle</item>
         <item name="switchStyle">@style/SwitchCompatStyle</item>
+        <item name="radioButtonStyle">@style/RadioButtonStyle</item>
+        <item name="android:dialogTheme">@style/DialogTheme</item>
 
         <item name="colorSwitchThumbNormal">@color/textwhite</item>
         <item name="colorControlActivated">@color/textwhite</item>
@@ -19,6 +22,6 @@
         <item name="android:textSize">14sp</item>
     </style>
     <style name="Theme.NoSwipe" parent="Theme.BiliClient">
-        <item name="android:windowSwipeToDismiss">false</item>
+        <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">false</item>
     </style>
 </resources>

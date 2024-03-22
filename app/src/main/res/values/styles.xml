@@ -29,4 +29,12 @@
         <item name="android:textColor">@color/textwhite</item>
     </style>
 
+    <style name="RadioButtonStyle" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="android:minHeight">10dp</item>
+    </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Dialog">
+        <item name="backgroundColor">@color/bgblack</item>
+        <item name="android:textColor">@color/textwhite</item>
+    </style>
 </resources>

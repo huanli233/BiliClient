@@ -45,9 +45,14 @@ public class AppInfoApi {
         }
     }
 
+    private static final ArrayList<String> customHeaders = new ArrayList<String>(){{
+        add("User-Agent");
+        add(ConfInfoApi.USER_AGENT_WEB);
+    }};
+
     public static void checkUpdate(Context context, boolean need_toast) throws Exception {
         String url = "http://api.biliterminal.cn/terminal/version/get_last";
-        Response response = NetWorkUtil.get(url, ConfInfoApi.webHeaders);
+        Response response = NetWorkUtil.get(url, customHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
 
         if(result.getInt("code")!=0) throw new Exception(result.getString("msg"));
@@ -64,7 +69,7 @@ public class AppInfoApi {
 
     public static void checkAnnouncement(Context context) throws Exception {
         String url = "http://api.biliterminal.cn/terminal/announcement/get_last";
-        Response response = NetWorkUtil.get(url, ConfInfoApi.webHeaders);
+        Response response = NetWorkUtil.get(url, customHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
 
         if(result.getInt("code")!=0) throw new Exception("错误："+result.getString("msg"));
@@ -82,7 +87,7 @@ public class AppInfoApi {
 
     public static ArrayList<Announcement> getAnnouncementList() throws Exception {
         String url = "http://api.biliterminal.cn/terminal/announcement/get_list";
-        Response response = NetWorkUtil.get(url, ConfInfoApi.webHeaders);
+        Response response = NetWorkUtil.get(url, customHeaders);
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
 
         if(result.getInt("code")!=0) throw new Exception("错误："+result.getString("msg"));
