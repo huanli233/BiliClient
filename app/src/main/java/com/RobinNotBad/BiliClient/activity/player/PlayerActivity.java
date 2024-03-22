@@ -81,7 +81,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     private IDanmakuView mDanmakuView;
     private DanmakuContext mContext;
     private Timer progresstimer, autoHideTimer, sound, speedTimer, loadingShowTimer;
-    private String url,danmaku;
+    private String video_url, danmaku_url;
     private int mode;
     private int videoall,videonow;
 
@@ -104,7 +104,9 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     private com.RobinNotBad.BiliClient.activity.player.ScaleGestureDetector scaleGestureDetector;
     private ViewScaleGestureListener scaleGestureListener;
     private float previousX, previousY;
-    private boolean moving,scaling,scaled,click_disabled;
+
+    private boolean gesture_moved, gesture_scaling, gesture_scaled,click_disabled;
+    private boolean video_can_reset;
 
     private final float[] speeds = {0.5F, 0.75F, 1.0F, 1.25F, 1.5F, 1.75F, 2.0F, 3.0F};
     private final String[] speedTexts = {"x 0.5", "x 0.75", "x 1.0", "x 1.25", "x 1.5", "x 1.75", "x 2.0", "x 3.0"};
@@ -296,7 +298,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                     setDisplay();
                     break;
                 case 2:
-                    streamdanmaku(danmaku);
+                    streamdanmaku(danmaku_url);
                     setDisplay();
                     break;
             }
@@ -370,11 +372,11 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     private void getExtras() {
         Intent intent = getIntent();
         mode = intent.getIntExtra("mode", 0);//新增：模式  0=普通播放，1=本地无弹幕视频，2=本地有弹幕视频
-        url = intent.getStringExtra("url");//视频链接
-        danmaku = intent.getStringExtra("danmaku");//弹幕链接
+        video_url = intent.getStringExtra("url");//视频链接
+        danmaku_url = intent.getStringExtra("danmaku");//弹幕链接
         String title = intent.getStringExtra("title");//视频标题
-        if (danmaku != null) Log.e("弹幕", danmaku);
-        if (url != null) Log.e("视频", url);
+        if (danmaku_url != null) Log.e("弹幕", danmaku_url);
+        if (video_url != null) Log.e("视频", video_url);
         if (title != null) Log.e("标题", title);
         Log.e("mode", String.valueOf(mode));
         if (title != null) text_title.setText(title);
@@ -395,14 +397,17 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                 boolean doubleTouch = pointerCount == 2;
 
                 scaleGestureDetector.onTouchEvent(event);
-                scaling = scaleGestureListener.scaling;
+                gesture_scaling = scaleGestureListener.scaling;
 
-                if(!scaled && scaling) {scaled = true;}
+                if(!gesture_scaled && gesture_scaling) {
+                    gesture_scaled = true;
+                    if(!video_can_reset) video_can_reset = true;
+                }
                 //Log.e("debug-gesture", (scaling ? "scaled-yes" : "scaled-no"));
 
                 switch (action) {
                     case MotionEvent.ACTION_MOVE:
-                        if (singleTouch && !scaling && !(scaled && !doublemove_enabled)) {
+                        if (singleTouch && !gesture_scaling && !(gesture_scaled && !doublemove_enabled)) {
                             float currentX = event.getX(0);  //单指移动
                             float currentY = event.getY(0);
                             float deltaX = currentX - previousX;
@@ -411,8 +416,9 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                                 videoMoveTo(videoArea.getX() + deltaX, videoArea.getY() + deltaY);
                                 previousX = currentX;
                                 previousY = currentY;
-                                if (!moving) {
-                                    moving = true;
+                                if (!gesture_moved) {
+                                    gesture_moved = true;
+                                    if(!video_can_reset) video_can_reset = true;
                                     Log.e("debug-gesture", "moved");
                                     hidecon();
                                 }
@@ -427,8 +433,9 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                                 videoMoveTo(videoArea.getX() + deltaX, videoArea.getY() + deltaY);
                                 previousX = currentX;
                                 previousY = currentY;
-                                if (!moving) {
-                                    moving = true;
+                                if (!gesture_moved) {
+                                    gesture_moved = true;
+                                    if(!video_can_reset) video_can_reset = true;
                                     Log.e("debug-gesture", "moved");
                                     hidecon();
                                 }
@@ -470,16 +477,16 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                             DrawHandler.setSpeed(speeds[speed_seekbar.getProgress()]);
                             text_speed.setText(speedTexts[speed_seekbar.getProgress()]);
                         }
-                        if (moving) {
-                            moving = false;
+                        if (gesture_moved) {
+                            gesture_moved = false;
                         }
-                        if (scaled) {
-                            scaled = false;
+                        if (gesture_scaled) {
+                            gesture_scaled = false;
                         }
                         break;
                 }
 
-                if(!click_disabled && (moving || scaled)) click_disabled = true;
+                if(!click_disabled && (gesture_moved || gesture_scaled)) click_disabled = true;
 
                 return false;
             });
@@ -504,7 +511,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
         //这个管长按开始
         control_layout.setOnLongClickListener(view -> {
             if (SharedPreferencesUtil.getBoolean("player_longclick", true) && ijkPlayer != null && (playing)) {
-                if (!onLongClick && !moving && !scaled) {
+                if (!onLongClick && !gesture_moved && !gesture_scaled) {
                     hidecon();
                     ijkPlayer.setSpeed(3.0F);
                     DrawHandler.setSpeed(3.0f);
@@ -535,12 +542,20 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
     }
 
     private void clickUI() {
-
         long now_timestamp = System.currentTimeMillis();
         if(now_timestamp - click_timestamp < 300){
-            if(playing) playerPause();
-            else playerResume();
-            showcon();
+            if(video_can_reset){
+                video_can_reset = false;
+                videoArea.setX(video_origX);
+                videoArea.setY(video_origY);
+                videoArea.setScaleX(1.0f);
+                videoArea.setScaleY(1.0f);
+            }
+            else{
+                if(playing) playerPause();
+                else playerResume();
+                showcon();
+            }
         }
         else {
             click_timestamp = now_timestamp;
@@ -601,7 +616,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
     private void setDisplay() {
         Log.e("debug","创建播放器");
-        Log.e("debug-url",url);
+        Log.e("debug-url", video_url);
 
 
         runOnUiThread(() -> loading_text0.setText("初始化播放"));
@@ -637,7 +652,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                     if(mSurfaceTexture != null){
                         Surface surface = new Surface(mSurfaceTexture);
                         ijkPlayer.setSurface(surface);
-                        MPPrepare(url);
+                        MPPrepare(video_url);
                         Log.e("debug","设置surfaceTexture成功！");
                         this.cancel();
                     }
@@ -677,7 +692,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
                                 ijkPlayer.setDisplay(null);
                             }
                         });
-                        MPPrepare(url);
+                        MPPrepare(video_url);
                         Log.e("debug","定时器结束！");
                         this.cancel();
                     }
@@ -917,7 +932,7 @@ public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.
 
     private void downdanmu() {
         try {
-            Response response = NetWorkUtil.get(danmaku, ConfInfoApi.webHeaders);
+            Response response = NetWorkUtil.get(danmaku_url, ConfInfoApi.webHeaders);
             BufferedSink bufferedSink = null;
             try {
                 if (!danmakuFile.exists()) danmakuFile.createNewFile();
