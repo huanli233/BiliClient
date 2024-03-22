@@ -6,6 +6,7 @@
         <item name="cardBackgroundColor">#cc262626</item>
         <item name="cardCornerRadius">@dimen/card_round</item>
         <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
@@ -14,6 +15,8 @@
         <item name="android:textColor">@color/textwhite</item>
         <item name="android:insetTop">2dp</item>
         <item name="android:insetBottom">2dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="EditTextStyle" parent="Widget.AppCompat.EditText">

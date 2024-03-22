@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity.player;
 import static android.media.AudioManager.STREAM_MUSIC;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -32,7 +33,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
@@ -77,7 +77,7 @@ import okio.Sink;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
-public class PlayerActivity extends AppCompatActivity implements IjkMediaPlayer.OnPreparedListener {
+public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPreparedListener {
     private IDanmakuView mDanmakuView;
     private DanmakuContext mContext;
     private Timer progresstimer, autoHideTimer, sound, speedTimer, loadingShowTimer;

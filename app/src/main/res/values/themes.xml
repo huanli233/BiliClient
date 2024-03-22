@@ -24,4 +24,8 @@
     <style name="Theme.NoSwipe" parent="Theme.BiliClient">
         <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">false</item>
     </style>
+    <style name="Theme.Player" parent="android:Theme.Black.NoTitleBar.Fullscreen">
+        <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">false</item>
+        <item name="colorOnPrimary">@color/textwhite</item>
+    </style>
 </resources>
