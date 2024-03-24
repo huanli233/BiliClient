@@ -3,6 +3,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="CardStyle" parent="Widget.MaterialComponents.CardView">
         <item name="rippleColor" tools:ignore="PrivateResource">@color/mtrl_btn_ripple_color</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
         <item name="cardBackgroundColor">#cc262626</item>
         <item name="cardCornerRadius">@dimen/card_round</item>
         <item name="android:clickable">true</item>
@@ -39,5 +40,9 @@
     <style name="DialogTheme" parent="Theme.AppCompat.Dialog">
         <item name="backgroundColor">@color/bgblack</item>
         <item name="android:textColor">@color/textwhite</item>
+    </style>
+
+    <style name="ListStyle">
+        <item name="android:descendantFocusability">afterDescendants</item>
     </style>
 </resources>

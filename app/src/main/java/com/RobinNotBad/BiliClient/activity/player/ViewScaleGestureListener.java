@@ -6,6 +6,7 @@ public class ViewScaleGestureListener extends com.RobinNotBad.BiliClient.activit
 
     private final View view;
     public boolean scaling;
+    public boolean can_reset;
 
     public ViewScaleGestureListener(View view) {
         super();
@@ -21,12 +22,15 @@ public class ViewScaleGestureListener extends com.RobinNotBad.BiliClient.activit
         newScale = Math.max(1f, Math.min(5f, newScale));
         view.setScaleX(newScale);
         view.setScaleY(newScale);
+
+        if(newScale==1.0f) can_reset = false;
         return true;
     }
 
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
         scaling = true;
+        if(!can_reset) can_reset = true;
         return super.onScaleBegin(detector);
     }
 

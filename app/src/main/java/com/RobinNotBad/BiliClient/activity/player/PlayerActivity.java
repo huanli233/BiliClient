@@ -401,8 +401,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
                 if(!gesture_scaled && gesture_scaling) {
                     gesture_scaled = true;
-                    if(!video_can_reset) video_can_reset = true;
                 }
+
+                video_can_reset = scaleGestureListener.can_reset;
+
                 //Log.e("debug-gesture", (scaling ? "scaled-yes" : "scaled-no"));
 
                 switch (action) {
@@ -416,12 +418,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                                 videoMoveTo(videoArea.getX() + deltaX, videoArea.getY() + deltaY);
                                 previousX = currentX;
                                 previousY = currentY;
-                                if (!gesture_moved) {
-                                    gesture_moved = true;
-                                    if(!video_can_reset) video_can_reset = true;
-                                    Log.e("debug-gesture", "moved");
-                                    hidecon();
-                                }
                             }
                         }
                         if (doubleTouch && doublemove_enabled) {
@@ -433,12 +429,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                                 videoMoveTo(videoArea.getX() + deltaX, videoArea.getY() + deltaY);
                                 previousX = currentX;
                                 previousY = currentY;
-                                if (!gesture_moved) {
-                                    gesture_moved = true;
-                                    if(!video_can_reset) video_can_reset = true;
-                                    Log.e("debug-gesture", "moved");
-                                    hidecon();
-                                }
                             }
                         }
                         break;
@@ -1079,20 +1069,27 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     }
 
     private void videoMoveTo(float x, float y){
-        float width_half = video_width*0.5f * videoArea.getScaleX();
-        float height_half = video_height*0.5f * videoArea.getScaleY();
-        float video_x_min = video_origX - width_half;
-        float video_x_max = video_origX + width_half;
-        float video_y_min = video_origY - height_half;
-        float video_y_max = video_origY + height_half;
+        float width_delta = 0.5f * video_width * (videoArea.getScaleX() - 1f);
+        float height_delta = 0.5f * video_height * (videoArea.getScaleY() - 1f);
+        float video_x_min = video_origX - width_delta;
+        float video_x_max = video_origX + width_delta;
+        float video_y_min = video_origY - height_delta;
+        float video_y_max = video_origY + height_delta;
 
         if(x < video_x_min) x = video_x_min;
         if(x > video_x_max) x = video_x_max;
         if(y < video_y_min) y = video_y_min;
         if(y > video_y_max) y = video_y_max;
 
-        videoArea.setX(x);
-        videoArea.setY(y);
+        if(videoArea.getX() != x || videoArea.getY() != y) {
+            Log.e("debug-gesture","moveto:" + x + "," + y);
+            videoArea.setX(x);
+            videoArea.setY(y);
+            if(!gesture_moved) {
+                gesture_moved = true;
+                hidecon();
+            }
+        }
     }
 
     private void playerPause(){

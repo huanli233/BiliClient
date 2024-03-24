@@ -13,6 +13,7 @@
         <item name="materialButtonStyle">@style/ButtonStyle</item>
         <item name="switchStyle">@style/SwitchCompatStyle</item>
         <item name="radioButtonStyle">@style/RadioButtonStyle</item>
+        <item name="recyclerViewStyle">@style/ListStyle</item>
         <item name="android:dialogTheme">@style/DialogTheme</item>
 
         <item name="colorSwitchThumbNormal">@color/textwhite</item>
@@ -24,7 +25,7 @@
     <style name="Theme.NoSwipe" parent="Theme.BiliClient">
         <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">false</item>
     </style>
-    <style name="Theme.Player" parent="android:Theme.Black.NoTitleBar.Fullscreen">
+    <style name="Theme.Player" parent="android:Theme.Black.NoTitleBar">
         <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">false</item>
         <item name="colorOnPrimary">@color/textwhite</item>
     </style>
