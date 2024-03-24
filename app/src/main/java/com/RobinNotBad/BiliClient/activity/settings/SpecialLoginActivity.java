@@ -50,8 +50,6 @@ public class SpecialLoginActivity extends BaseActivity {
                     runOnUiThread(() -> MsgUtil.toast("登录成功！",this));
                     SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup, true);
 
-                    SharedPreferencesUtil.removeValue(SharedPreferencesUtil.cookie_refresh);
-
                     ConfInfoApi.refreshHeaders();
 
                     Intent intent1 = new Intent();

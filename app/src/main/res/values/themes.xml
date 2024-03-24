@@ -1,10 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.BiliClient" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="Theme.BiliClient" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@color/bgblack</item>
         <item name="statusBarBackground">@color/pink</item>
         <item name="android:colorForeground">@color/textwhite</item>
         <item name="colorOnPrimary">@color/textwhite</item>
+        <item name="colorPrimary">@color/textwhite</item>
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">true</item>
 
@@ -27,6 +28,9 @@
     </style>
     <style name="Theme.Player" parent="android:Theme.Black.NoTitleBar">
         <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@color/bgblack</item>
+        <item name="statusBarBackground">@color/pink</item>
         <item name="colorOnPrimary">@color/textwhite</item>
     </style>
 </resources>

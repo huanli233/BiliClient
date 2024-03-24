@@ -21,6 +21,7 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -103,7 +104,7 @@ public class SplashActivity extends Activity {
             JSONObject cookieInfo = CookieRefreshApi.cookieInfo();
             if(cookieInfo.getBoolean("refresh")){
                 Log.e("Cookie","需要刷新");
-                if(Objects.equals(SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), "")) runOnUiThread(()-> MsgUtil.toast("无法刷新Cookie，请重新登录",this));
+                if(Objects.equals(SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), "")) runOnUiThread(()-> MsgUtil.toastLong("无法刷新Cookie，请重新登录！",this));
                 else{
                     String correspondPath = CookieRefreshApi.getCorrespondPath(cookieInfo.getLong("timestamp"));
                     Log.e("CorrespondPath",correspondPath);
@@ -112,18 +113,26 @@ public class SplashActivity extends Activity {
                     if(CookieRefreshApi.refreshCookie(refreshCsrf)){
                         ConfInfoApi.refreshHeaders();
                         runOnUiThread(()-> MsgUtil.toast("Cookie已刷新",this));
-                        SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cookie_refresh,true);
                     }
                     else {
-                        SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cookie_refresh,false);
-                        MsgUtil.showDialog(this,"Cookie刷新失败","您可能需要重新登陆获取新的登录数据，以确保可以进行敏感操作（如发评论等）",-1);
+                        runOnUiThread(()->MsgUtil.toastLong("登录信息过期，请重新登录！",this));
+                        resetLogin();
                     }
                 }
             }
-        }catch (Exception e){
-            SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cookie_refresh,false);
-            MsgUtil.showDialog(this,"Cookie刷新失败","您可能需要重新登陆获取新的登录数据，以确保可以进行敏感操作（如发评论等）",-1);
-            e.printStackTrace();
+        }catch (JSONException e){
+            runOnUiThread(()->MsgUtil.toastLong("登录信息过期，请重新登录！",this));
+            resetLogin();
+        }catch (IOException e){
+            runOnUiThread(()->MsgUtil.err(e,this));
         }
+    }
+
+    private void resetLogin(){
+        SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, 0L);
+        SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, "");
+        SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, "");
+        SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token, "");
+        ConfInfoApi.refreshHeaders();
     }
 }
