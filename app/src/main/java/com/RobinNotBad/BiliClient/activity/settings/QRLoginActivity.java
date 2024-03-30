@@ -101,8 +101,8 @@ public class QRLoginActivity extends BaseActivity {
                         qrScale = 1;
                         break;
                     case 1:
-                        guideline_left.setGuidelinePercent(0.25f);
-                        guideline_right.setGuidelinePercent(0.75f);
+                        guideline_left.setGuidelinePercent(0.30f);
+                        guideline_right.setGuidelinePercent(0.70f);
                         MsgUtil.toast("切换为小二维码",this);
                         qrScale = 2;
                         break;

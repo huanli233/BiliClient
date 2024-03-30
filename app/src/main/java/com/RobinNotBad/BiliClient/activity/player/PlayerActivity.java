@@ -341,7 +341,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         top_control.setOnClickListener(view->finish());
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
         if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT<=19)) {
             textureView = new TextureView(this);
             textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
@@ -876,6 +875,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
 
         runOnUiThread(()-> {
+
             videoArea.setLayoutParams(new ConstraintLayout.LayoutParams(video_width, video_height));
             Log.e("debug-改变视频区域大小",video_width + "x" + video_height);
             video_origX = (screen_width - video_width) / 2;
@@ -886,7 +886,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 videoArea.setX(video_origX);
                 videoArea.setY(video_origY);
                 Log.e("debug-改变视频位置",((screen_width - video_width) / 2) + "," + ((screen_height - video_height) / 2));
-            },25);  //别问为什么，问就是必须这么写，要等上面的绘制完成
+            },60);  //别问为什么，问就是必须这么写，要等上面的绘制完成
         });
     }
 
