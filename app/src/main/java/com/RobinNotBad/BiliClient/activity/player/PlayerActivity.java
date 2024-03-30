@@ -106,7 +106,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private float previousX, previousY;
 
     private boolean gesture_moved, gesture_scaling, gesture_scaled,click_disabled;
-    private boolean video_can_reset;
 
     private final float[] speeds = {0.5F, 0.75F, 1.0F, 1.25F, 1.5F, 1.75F, 2.0F, 3.0F};
     private final String[] speedTexts = {"x 0.5", "x 0.75", "x 1.0", "x 1.25", "x 1.5", "x 1.75", "x 2.0", "x 3.0"};
@@ -342,6 +341,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         top_control.setOnClickListener(view->finish());
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
         if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT<=19)) {
             textureView = new TextureView(this);
             textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
@@ -402,8 +402,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 if(!gesture_scaled && gesture_scaling) {
                     gesture_scaled = true;
                 }
-
-                video_can_reset = scaleGestureListener.can_reset;
 
                 //Log.e("debug-gesture", (scaling ? "scaled-yes" : "scaled-no"));
 
@@ -534,8 +532,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private void clickUI() {
         long now_timestamp = System.currentTimeMillis();
         if(now_timestamp - click_timestamp < 300){
-            if(video_can_reset){
-                video_can_reset = false;
+            if(scaleGestureListener.can_reset){
+                scaleGestureListener.can_reset = false;
                 videoArea.setX(video_origX);
                 videoArea.setY(video_origY);
                 videoArea.setScaleX(1.0f);

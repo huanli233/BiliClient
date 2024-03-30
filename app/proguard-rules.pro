@@ -21,5 +21,5 @@
 #-renamesourcefileattribute SourceFile
 
 -keeppackagenames org.jsoup.nodes
--keeppackagenames com.RobinNotBad.BiliClient
+-keep class com.RobinNotBad.BiliClient.** {*;}
 -keep class tv.danmaku.ijk.media.** {*;}
