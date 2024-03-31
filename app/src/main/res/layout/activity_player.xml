@@ -172,11 +172,11 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="10dp"
-                    android:theme="@style/Theme.BiliClient"
-                    android:background="?attr/selectableItemBackground"
+                    android:adjustViewBounds="true"
+                    android:background="?android:attr/selectableItemBackground"
                     android:scaleType="fitXY"
                     android:src="@mipmap/soundcut"
-                    android:adjustViewBounds="true"
+                    android:theme="@style/Theme.BiliClient"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/button_video"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -187,7 +187,7 @@
                     android:layout_height="30dp"
                     android:adjustViewBounds="true"
                     android:theme="@style/Theme.BiliClient"
-                    android:background="?attr/selectableItemBackground"
+                    android:background="?android:attr/selectableItemBackground"
                     android:scaleType="fitXY"
                     android:src="@drawable/btn_player_loading"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -201,7 +201,7 @@
                     android:layout_height="30dp"
                     android:layout_marginStart="10dp"
                     android:theme="@style/Theme.BiliClient"
-                    android:background="?attr/selectableItemBackground"
+                    android:background="?android:attr/selectableItemBackground"
                     android:scaleType="fitXY"
                     android:src="@mipmap/soundadd"
                     android:adjustViewBounds="true"
@@ -228,7 +228,7 @@
                 android:layout_height="28dp"
                 android:adjustViewBounds="true"
                 android:theme="@style/Theme.BiliClient"
-                android:background="?attr/selectableItemBackground"
+                android:background="?android:attr/selectableItemBackground"
                 android:scaleType="fitXY"
                 android:src="@mipmap/danmakuoff" />
 
@@ -238,7 +238,7 @@
                 android:layout_height="28dp"
                 android:adjustViewBounds="true"
                 android:theme="@style/Theme.BiliClient"
-                android:background="?attr/selectableItemBackground"
+                android:background="?android:attr/selectableItemBackground"
                 android:scaleType="fitXY"
                 android:src="@mipmap/rotate" />
 
@@ -248,7 +248,7 @@
                 android:layout_height="28dp"
                 android:adjustViewBounds="true"
                 android:theme="@style/Theme.BiliClient"
-                android:background="?attr/selectableItemBackground"
+                android:background="?android:attr/selectableItemBackground"
                 android:scaleType="fitXY"
                 android:src="@mipmap/loopoff" />
         </LinearLayout>
