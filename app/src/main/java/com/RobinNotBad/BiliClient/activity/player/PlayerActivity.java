@@ -242,13 +242,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if (ijkPlayer != null) {
+                if (prepared) {
                     ijkPlayer.seekTo(progressBar.getProgress());
                     ischanging = false;
-                    if (mDanmakuView != null && mode != 1) {
-                        mDanmakuView.start(progressBar.getProgress());
-                        mDanmakuView.pause();
-                    }
                 }
                 autohide();
             }
@@ -282,7 +278,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         });
 
         Handler handler = new Handler();
-        handler.post(()-> CenterThreadPool.run(()->{    //等界面加载完成
+        handler.postDelayed(()-> CenterThreadPool.run(()->{    //等界面加载完成
             switch (mode) {
                 case 0:
                     Log.e("debug", "准备在线播放");
@@ -301,7 +297,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     setDisplay();
                     break;
             }
-        }));
+        }),30);
 
     }
 
@@ -334,9 +330,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         speed_layout = findViewById(R.id.layout_speed);
         speed_seekbar = findViewById(R.id.seekbar_speed);
         text_newspeed = findViewById(R.id.text_newspeed);
-
-        videoArea.setX(0);
-        videoArea.setY(0);
 
         top_control.setOnClickListener(view->finish());
 
@@ -710,10 +703,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             if(loop){
                 ijkPlayer.seekTo(0);
                 ijkPlayer.start();
-                if(mode!=1 && mDanmakuView != null) {
-                    mDanmakuView.seekTo(0L);
-                    mDanmakuView.resume();          //别问为啥要seekto+resume而不是start(0)，问就是我也不知道！！！反正bug修好了！！！  ----RobinNotBad
-                }
                 Log.e("debug","循环播放");
             }
             else {
@@ -730,29 +719,22 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             return false;
         });
 
-        ijkPlayer.setOnSeekCompleteListener(iMediaPlayer -> {
-            if(playing) {
-                if (mode!=1 && mDanmakuView != null) {
-                    mDanmakuView.resume();
-                }
-            }
-        });
-
         ijkPlayer.setOnBufferingUpdateListener((mp, percent) -> progressBar.setSecondaryProgress(percent * videoall / 100));
 
-        if(mode==0) ijkPlayer.setOnInfoListener((mp, what, extra) -> {
+        //if(mode==0)
+            ijkPlayer.setOnInfoListener((mp, what, extra) -> {
             if(what == IMediaPlayer.MEDIA_INFO_BUFFERING_START){
                 runOnUiThread(() -> {
                     loading_info.setVisibility(View.VISIBLE);
                     loading_text0.setText("正在缓冲");
                     showLoadingSpeed();
-                    mDanmakuView.pause();
+                    if(playing) mDanmakuView.pause();
                 });
             } else if(what == IMediaPlayer.MEDIA_INFO_BUFFERING_END){
                 runOnUiThread(() -> {
                     if(loadingShowTimer!=null)loadingShowTimer.cancel();
                     loading_info.setVisibility(View.GONE);
-                    mDanmakuView.start(ijkPlayer.getCurrentPosition());
+                    if(playing) mDanmakuView.start(ijkPlayer.getCurrentPosition());
                 });
             }
 
@@ -1059,7 +1041,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         windowManager.getDefaultDisplay().getMetrics(displayMetrics);
         screen_width = displayMetrics.widthPixels;//获取屏宽
         screen_height = displayMetrics.heightPixels;//获取屏高
-        if (ijkPlayer != null) {
+        if (prepared) {
             changeVideoSize(ijkPlayer.getVideoWidth(), ijkPlayer.getVideoHeight());
         }
 
