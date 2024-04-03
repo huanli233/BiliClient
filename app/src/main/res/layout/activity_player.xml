@@ -125,7 +125,7 @@
                     android:layout_marginStart="1dp"
                     android:text="00:00"
                     android:textColor="#D3B8BDBF"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -152,7 +152,7 @@
                     android:layout_marginEnd="1dp"
                     android:text="00:00"
                     android:textColor="#D3B8BDBF"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -170,27 +170,27 @@
 
                 <ImageButton
                     android:id="@+id/button_sound_cut"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="10dp"
-                    android:theme="@style/Theme.BiliClient"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginEnd="8dp"
+                    android:adjustViewBounds="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:scaleType="fitXY"
                     android:src="@mipmap/soundcut"
-                    android:adjustViewBounds="true"
+                    android:theme="@style/Theme.BiliClient"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/button_video"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
                     android:id="@+id/button_video"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:adjustViewBounds="true"
-                    android:theme="@style/Theme.BiliClient"
                     android:background="?android:attr/selectableItemBackground"
                     android:scaleType="fitXY"
-                    android:src="@drawable/btn_player_loading"
+                    android:src="@drawable/btn_player_play"
+                    android:theme="@style/Theme.BiliClient"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -198,14 +198,14 @@
 
                 <ImageButton
                     android:id="@+id/button_sound_add"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="10dp"
-                    android:theme="@style/Theme.BiliClient"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="8dp"
+                    android:adjustViewBounds="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:scaleType="fitXY"
                     android:src="@mipmap/soundadd"
-                    android:adjustViewBounds="true"
+                    android:theme="@style/Theme.BiliClient"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/button_video"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -225,33 +225,33 @@
 
             <ImageButton
                 android:id="@+id/danmaku_btn"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:adjustViewBounds="true"
-                android:theme="@style/Theme.BiliClient"
                 android:background="?android:attr/selectableItemBackground"
                 android:scaleType="fitXY"
-                android:src="@mipmap/danmakuoff" />
+                android:src="@mipmap/danmakuoff"
+                android:theme="@style/Theme.BiliClient" />
 
             <ImageButton
                 android:id="@+id/rotate_btn"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:adjustViewBounds="true"
-                android:theme="@style/Theme.BiliClient"
                 android:background="?android:attr/selectableItemBackground"
                 android:scaleType="fitXY"
-                android:src="@mipmap/rotate" />
+                android:src="@mipmap/rotate"
+                android:theme="@style/Theme.BiliClient" />
 
             <ImageButton
                 android:id="@+id/loop_btn"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:adjustViewBounds="true"
-                android:theme="@style/Theme.BiliClient"
                 android:background="?android:attr/selectableItemBackground"
                 android:scaleType="fitXY"
-                android:src="@mipmap/loopoff" />
+                android:src="@mipmap/loopoff"
+                android:theme="@style/Theme.BiliClient" />
         </LinearLayout>
 
         <TextView

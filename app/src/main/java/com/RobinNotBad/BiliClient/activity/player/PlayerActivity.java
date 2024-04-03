@@ -80,7 +80,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPreparedListener {
     private IDanmakuView mDanmakuView;
     private DanmakuContext mContext;
-    private Timer progresstimer, autoHideTimer, sound, speedTimer, loadingShowTimer;
+    private Timer progressTimer, autoHideTimer, soundTimer, speedTimer, loadingShowTimer;
     private String video_url, danmaku_url;
     private int mode;
     private int videoall,videonow;
@@ -119,8 +119,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     private BatteryView batteryView;
     private BatteryManager manager;
-    private String minuteSTR;
-    private String secondSTR;
     private boolean loop;
 
     private File danmakuFile;
@@ -220,18 +218,16 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             @SuppressLint("SetTextI18n")
             @Override
             public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
-                if (fromUser) {
-                    int cgminute = position / 60000;
-                    int cgsecond = position % 60000 / 1000;
-                    String cgminStr;
-                    String cgsecStr;
-                    if (cgminute < 10) cgminStr = "0" + cgminute;
-                    else cgminStr = String.valueOf(cgminute);
-                    if (cgsecond < 10) cgsecStr = "0" + cgsecond;
-                    else cgsecStr = String.valueOf(cgsecond);
+                int cgminute = position / 60000;
+                int cgsecond = position % 60000 / 1000;
+                String cgminStr;
+                String cgsecStr;
+                if (cgminute < 10) cgminStr = "0" + cgminute;
+                else cgminStr = String.valueOf(cgminute);
+                if (cgsecond < 10) cgsecStr = "0" + cgsecond;
+                else cgsecStr = String.valueOf(cgsecond);
 
-                    runOnUiThread(() -> text_now.setText(cgminStr + ":" + cgsecStr));
-                }
+                runOnUiThread(() -> text_now.setText(cgminStr + ":" + cgsecStr));
             }
 
             @Override
@@ -791,19 +787,18 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         String totalSecSTR;
         if (seconds < 10) totalSecSTR = "0" + seconds;
         else totalSecSTR = String.valueOf(seconds);
+        text_all.setText(totalMinSTR + ":" + totalSecSTR);
 
 
         loading_info.setVisibility(View.GONE);
         playing = true;
         control_btn.setImageResource(R.drawable.btn_player_pause);
-        text_all.setText(totalMinSTR + ":" + totalSecSTR);
 
         text_speed.setVisibility(top_control.getVisibility());
         text_speed.setOnClickListener(view -> speed_layout.setVisibility(View.VISIBLE));
         speed_layout.setOnClickListener(view -> speed_layout.setVisibility(View.GONE));
 
-
-        progresschange();
+        progressChange();
 
         mediaPlayer.start();
 
@@ -815,8 +810,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         loadingShowTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                float tcpSpeed = ijkPlayer.getTcpSpeed() / 1024f;
-                String text = String.format(Locale.CHINA, "%.1f", tcpSpeed) + "KB/s";
+                String text = String.format(Locale.CHINA, "%.1f", ijkPlayer.getTcpSpeed() / 1024f) + "KB/s";
                 runOnUiThread(()-> loading_text1.setText(text));
             }
         },0,500);
@@ -857,7 +851,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
 
         runOnUiThread(()-> {
-
             videoArea.setLayoutParams(new ConstraintLayout.LayoutParams(video_width, video_height));
             Log.e("debug-改变视频区域大小",video_width + "x" + video_height);
             video_origX = (screen_width - video_width) / 2;
@@ -873,8 +866,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     }
 
 
-    private void progresschange() {
-        progresstimer = new Timer();
+    private void progressChange() {
+        progressTimer = new Timer();
         TimerTask task = new TimerTask() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -883,21 +876,13 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     videonow = (int) ijkPlayer.getCurrentPosition();
                     if (lastProgress != videonow) {               //检测进度是否在变动
                         lastProgress = videonow;
-                        int minute = videonow / 60000;
-                        int second = videonow % 60000 / 1000;
-                        if (minute < 10) minuteSTR = "0" + minute;
-                        else minuteSTR = String.valueOf(minute);
-                        if (second < 10) secondSTR = "0" + second;
-                        else secondSTR = String.valueOf(second);
-                        runOnUiThread(() -> {
-                            progressBar.setProgress(videonow);
-                            text_now.setText(minuteSTR + ":" + secondSTR);
-                        });
+                        runOnUiThread(() -> progressBar.setProgress(videonow));
+                        //progressBar上有一个onProgressChange的监听器，文字更改在那里
                     }
                 }
             }
         };
-        progresstimer.schedule(task, 0, 500);
+        progressTimer.schedule(task, 0, 500);
     }
 
     private void downdanmu() {
@@ -1002,29 +987,29 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             volumeNow = volumeNew;
         }
         int show = (int) ((float) volumeNow / (float) volumeMax * 100);
-        runOnUiThread(() -> {
-            volumeText.setVisibility(View.VISIBLE);
-            volumeText.setText("音量：" + show + "%");
-        });
+
+        volumeText.setVisibility(View.VISIBLE);
+        volumeText.setText("音量：" + show + "%");
+
         hidesound();
         autohide();
     }
 
     private void hidesound() {
-        if (sound != null) sound.cancel();
-        sound = new Timer();
+        if (soundTimer != null) soundTimer.cancel();
+        soundTimer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 runOnUiThread(() -> volumeText.setVisibility(View.GONE));
             }
         };
-        sound.schedule(timerTask, 3000);
+        soundTimer.schedule(timerTask, 3000);
     }
 
     public void rotate(){
         Log.e("debug","点击旋转按钮");
-        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -1121,8 +1106,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         playerPause();
         Log.e("debug", "结束");
         if (autoHideTimer != null) autoHideTimer.cancel();
-        if (sound != null) sound.cancel();
-        if (progresstimer != null) progresstimer.cancel();
+        if (soundTimer != null) soundTimer.cancel();
+        if (progressTimer != null) progressTimer.cancel();
         if (ijkPlayer != null) ijkPlayer.release();
         if (mDanmakuView != null) mDanmakuView.release();
         if (loadingShowTimer != null) loadingShowTimer.cancel();
