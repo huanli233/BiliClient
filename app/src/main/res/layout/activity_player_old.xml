@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:keepScreenOn="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MissingClass">
+    <ImageView
+        android:id="@+id/circle"
+        android:layout_above="@id/downloadprogress"
+        android:layout_centerInParent="true"
+        android:layout_width="48px"
+        android:layout_height="48px"
+        />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/downloadprogress"
+        android:layout_centerInParent="true">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#676A6D"
+                android:textSize="10dp"
+                android:id="@+id/partprogress0"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#676A6D"
+                android:visibility="gone"
+                android:textSize="10sp"
+                android:id="@+id/partprogress1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#676A6D"
+                android:visibility="gone"
+                android:textSize="10sp"
+                android:id="@+id/partprogress2"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#676A6D"
+                android:visibility="gone"
+                android:textSize="10sp"
+                android:id="@+id/partprogress3"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#676A6D"
+                android:visibility="gone"
+                android:textSize="10sp"
+                android:id="@+id/partprogress4"/>
+        </LinearLayout>
+
+    </FrameLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+        <RelativeLayout
+            android:id="@+id/realtive"
+            android:layout_width="1px"
+            android:layout_height="1px">
+
+            <TextureView
+                android:id="@+id/textureview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </RelativeLayout>
+    <master.flame.danmaku.ui.widget.DanmakuView
+        android:id="@+id/sv_danmaku"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
+    <LinearLayout
+        android:id="@+id/Topcontrol"
+        android:onClick="finish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#348A8A8A"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/showtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"
+            android:ellipsize="marquee"
+            android:text="作者：心想事成"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:singleLine="true"
+            android:textSize="10dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10px"
+        android:id="@+id/showtime"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.RobinNotBad.BiliClient.view.BatteryView
+            android:layout_width="30px"
+            android:layout_gravity="center"
+            android:layout_height="15px"
+            android:id="@+id/power"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="15px"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="8sp"
+            android:text="彩蛋"
+            android:id="@+id/time"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="15sp"
+        android:id="@+id/showsound"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/video_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
+        android:onClick="videospeed"
+        android:paddingLeft="10px"
+        android:paddingBottom="10px"
+        android:visibility="gone"
+        android:text="x 1.0"
+        android:textSize="15sp" />
+
+    <ImageButton
+        android:id="@+id/rotate_btn"
+        android:layout_width="42px"
+        android:layout_height="42px"
+        android:layout_above="@id/danmaku"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15px"
+        android:layout_marginBottom="10px"
+        android:background="@mipmap/rotate"
+        android:onClick="rotate" />
+
+    <ImageView
+        android:id="@+id/danmaku"
+        android:layout_width="45px"
+        android:layout_height="45px"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="15px"
+        android:onClick="danmakucontrol" />
+
+    <LinearLayout
+        android:id="@+id/Bottomcontrol"
+        android:layout_width="match_parent"
+        android:onClick="asdfgh"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#348A8A8A"
+        android:orientation="vertical">
+
+        <SeekBar
+            android:id="@+id/videoprogress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:thumb="@drawable/selector_progress" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="8dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="55px"
+                android:layout_height="55px"
+                android:layout_gravity="center"
+                android:layout_marginRight="5px"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="cutsound"
+                android:scaleType="fitXY"
+                android:src="@mipmap/soundcut" />
+
+            <TextView
+                android:id="@+id/timenow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="8px"
+                android:text="00:00"
+                android:textColor="#D3B8BDBF" />
+
+            <Button
+                android:id="@+id/control"
+                android:layout_width="60px"
+                android:layout_height="60px"
+                android:layout_gravity="center"
+                android:background="@drawable/round_button"
+                android:onClick="controlvideo"
+                android:text="‣"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/alltime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8px"
+                android:text="00:00"
+                android:textColor="#D3B8BDBF" />
+
+            <ImageButton
+                android:layout_width="55px"
+                android:layout_height="55px"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5px"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="addsound"
+                android:scaleType="fitXY"
+                android:src="@mipmap/soundadd" />
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

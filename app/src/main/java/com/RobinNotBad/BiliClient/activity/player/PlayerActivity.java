@@ -98,7 +98,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private float screen_width, screen_height;
     private int video_width, video_height;
     private boolean ischanging, isdanmakushowing = false;
-    private TextView text_now, text_all, volumeText, text_title, loading_text0, loading_text1, text_speed, text_newspeed;
+    private TextView text_progress, text_volume, text_title, loading_text0, loading_text1, text_speed, text_newspeed;
+    private String progress_all_str;
     private AudioManager audioManager;
     private ImageView circle;
     private com.RobinNotBad.BiliClient.activity.player.ScaleGestureDetector scaleGestureDetector;
@@ -214,6 +215,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         setVideoGestures();
         autohide();
 
+
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -227,7 +229,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 if (cgsecond < 10) cgsecStr = "0" + cgsecond;
                 else cgsecStr = String.valueOf(cgsecond);
 
-                runOnUiThread(() -> text_now.setText(cgminStr + ":" + cgsecStr));
+                runOnUiThread(() -> text_progress.setText(cgminStr + ":" + cgsecStr + "/" + progress_all_str));
             }
 
             @Override
@@ -307,8 +309,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         loading_info = findViewById(R.id.loading_info);
 
         circle = findViewById(R.id.circle);
-        text_now = findViewById(R.id.text_now);
-        text_all = findViewById(R.id.text_all);
+        text_progress = findViewById(R.id.text_progress);
         danmaku_btn = findViewById(R.id.danmaku_btn);
         loop_btn = findViewById(R.id.loop_btn);
         rotate_btn = findViewById(R.id.rotate_btn);
@@ -317,7 +318,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         loading_text0 = findViewById(R.id.loading_text0);
         loading_text1 = findViewById(R.id.loading_text1);
         text_title = findViewById(R.id.text_title);
-        volumeText = findViewById(R.id.showsound);
+        text_volume = findViewById(R.id.showsound);
         videoArea = findViewById(R.id.videoArea);
         mDanmakuView = findViewById(R.id.sv_danmaku);
         batteryView = findViewById(R.id.battery);
@@ -423,7 +424,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         if (singleTouch) {  //如果是单指按下，设置起始位置为当前手指位置
                             previousX = event.getX(0);
                             previousY = event.getY(0);
-                            Log.e("debug-gesture", "touch_start:" + previousX + "," + previousY);
+                            //Log.e("debug-gesture", "touch_start:" + previousX + "," + previousY);
                         }
                         break;
 
@@ -756,9 +757,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 mDanmakuView.start();
 
             danmaku_btn.setOnClickListener(view -> {
-                    mDanmakuView.setVisibility((isdanmakushowing ? View.GONE : View.VISIBLE));
-                    danmaku_btn.setImageResource((isdanmakushowing ? R.mipmap.danmakuoff : R.mipmap.danmakuon));
-                    isdanmakushowing = !isdanmakushowing;
+                if(isdanmakushowing) mDanmakuView.hide();
+                else mDanmakuView.show();
+                danmaku_btn.setImageResource((isdanmakushowing ? R.mipmap.danmakuoff : R.mipmap.danmakuon));
+                isdanmakushowing = !isdanmakushowing;
             });
             danmaku_btn.setVisibility(View.VISIBLE);
         }
@@ -787,7 +789,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         String totalSecSTR;
         if (seconds < 10) totalSecSTR = "0" + seconds;
         else totalSecSTR = String.valueOf(seconds);
-        text_all.setText(totalMinSTR + ":" + totalSecSTR);
+        progress_all_str = totalMinSTR + ":" + totalSecSTR;
 
 
         loading_info.setVisibility(View.GONE);
@@ -988,8 +990,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
         int show = (int) ((float) volumeNow / (float) volumeMax * 100);
 
-        volumeText.setVisibility(View.VISIBLE);
-        volumeText.setText("音量：" + show + "%");
+        text_volume.setVisibility(View.VISIBLE);
+        text_volume.setText("音量：" + show + "%");
 
         hidesound();
         autohide();
@@ -1001,7 +1003,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(() -> volumeText.setVisibility(View.GONE));
+                runOnUiThread(() -> text_volume.setVisibility(View.GONE));
             }
         };
         soundTimer.schedule(timerTask, 3000);

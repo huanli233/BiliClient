@@ -39,36 +39,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/text_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:text="00:00/00:00"
+            android:textAlignment="textEnd"
+            android:textColor="#D3B8BDBF"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_control"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/top"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#348A8A8A"
-            android:orientation="vertical"
+            android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/text_title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="4dp"
                 android:ellipsize="marquee"
                 android:singleLine="true"
                 android:text="原小电视播放器"
-                android:textColor="#fff"
-                android:textAlignment="center"
                 android:textSize="12sp"
+                android:drawableStart="@drawable/arrow_back"
+                android:focusableInTouchMode="true"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/cl_1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -109,55 +123,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/progress_layout"
-                android:layout_width="0dp"
+            <SeekBar
+                android:id="@+id/videoprogress"
+                style="@style/Widget.AppCompat.SeekBar"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:progressTint="#00A4DA"
+                android:thumb="@drawable/selector_progress"
+                android:thumbOffset="8dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/text_now"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:text="00:00"
-                    android:textColor="#D3B8BDBF"
-                    android:textSize="11sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <SeekBar
-                    android:id="@+id/videoprogress"
-                    style="@style/Widget.AppCompat.SeekBar"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:progressTint="#00A4DA"
-                    android:thumb="@drawable/selector_progress"
-                    android:thumbOffset="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/text_all"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@id/text_now"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <TextView
-                    android:id="@+id/text_all"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="1dp"
-                    android:text="00:00"
-                    android:textColor="#D3B8BDBF"
-                    android:textSize="11sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toBottomOf="@+id/text_progress" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -166,18 +144,17 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/progress_layout">
+                app:layout_constraintTop_toBottomOf="@id/videoprogress">
 
                 <ImageButton
                     android:id="@+id/button_sound_cut"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="6dp"
                     android:adjustViewBounds="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:scaleType="fitXY"
                     android:src="@mipmap/soundcut"
-                    android:theme="@style/Theme.BiliClient"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/button_video"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -190,7 +167,6 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:scaleType="fitXY"
                     android:src="@drawable/btn_player_play"
-                    android:theme="@style/Theme.BiliClient"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -200,14 +176,13 @@
                     android:id="@+id/button_sound_add"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="6dp"
                     android:adjustViewBounds="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:scaleType="fitXY"
                     android:src="@mipmap/soundadd"
-                    android:theme="@style/Theme.BiliClient"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/button_video"
+                    app:layout_constraintStart_toEndOf="@id/button_video"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -225,33 +200,30 @@
 
             <ImageButton
                 android:id="@+id/danmaku_btn"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:adjustViewBounds="true"
                 android:background="?android:attr/selectableItemBackground"
                 android:scaleType="fitXY"
-                android:src="@mipmap/danmakuoff"
-                android:theme="@style/Theme.BiliClient" />
+                android:src="@mipmap/danmakuoff" />
 
             <ImageButton
                 android:id="@+id/rotate_btn"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:adjustViewBounds="true"
                 android:background="?android:attr/selectableItemBackground"
                 android:scaleType="fitXY"
-                android:src="@mipmap/rotate"
-                android:theme="@style/Theme.BiliClient" />
+                android:src="@mipmap/rotate" />
 
             <ImageButton
                 android:id="@+id/loop_btn"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:adjustViewBounds="true"
                 android:background="?android:attr/selectableItemBackground"
                 android:scaleType="fitXY"
-                android:src="@mipmap/loopoff"
-                android:theme="@style/Theme.BiliClient" />
+                android:src="@mipmap/loopoff" />
         </LinearLayout>
 
         <TextView
