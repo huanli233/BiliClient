@@ -135,7 +135,7 @@
                 android:paddingEnd="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_progress" />
+                app:layout_constraintTop_toBottomOf="@+id/bottom_control" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
