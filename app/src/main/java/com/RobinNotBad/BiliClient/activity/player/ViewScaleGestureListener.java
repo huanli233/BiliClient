@@ -23,14 +23,13 @@ public class ViewScaleGestureListener extends com.RobinNotBad.BiliClient.activit
         view.setScaleX(newScale);
         view.setScaleY(newScale);
 
-        if(newScale==1.0f) can_reset = false;
+        can_reset = newScale != 1.0f;
         return true;
     }
 
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
         scaling = true;
-        if(!can_reset) can_reset = true;
         return super.onScaleBegin(detector);
     }
 

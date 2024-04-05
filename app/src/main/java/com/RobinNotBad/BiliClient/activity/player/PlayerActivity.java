@@ -396,15 +396,20 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
                 switch (action) {
                     case MotionEvent.ACTION_MOVE:
-                        if (singleTouch && !gesture_scaling && !(gesture_scaled && !doublemove_enabled)) {
-                            float currentX = event.getX(0);  //单指移动
-                            float currentY = event.getY(0);
-                            float deltaX = currentX - previousX;
-                            float deltaY = currentY - previousY;
-                            if(deltaX!=0f || deltaY!=0f) {
-                                videoMoveTo(videoArea.getX() + deltaX, videoArea.getY() + deltaY);
-                                previousX = currentX;
-                                previousY = currentY;
+                        if(singleTouch){
+                            if(gesture_scaling){
+                                videoMoveTo(videoArea.getX(),videoArea.getY());    //防止单指缩放出框
+                            }
+                            else if(!(gesture_scaled && !doublemove_enabled)){
+                                float currentX = event.getX(0);  //单指移动
+                                float currentY = event.getY(0);
+                                float deltaX = currentX - previousX;
+                                float deltaY = currentY - previousY;
+                                if(deltaX!=0f || deltaY!=0f) {
+                                    videoMoveTo(videoArea.getX() + deltaX, videoArea.getY() + deltaY);
+                                    previousX = currentX;
+                                    previousY = currentY;
+                                }
                             }
                         }
                         if (doubleTouch && doublemove_enabled) {
