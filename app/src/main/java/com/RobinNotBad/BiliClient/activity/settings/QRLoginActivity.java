@@ -130,7 +130,7 @@ public class QRLoginActivity extends BaseActivity {
                 runOnUiThread(() -> {
                     Log.e("debug-image", QRImage.getWidth() + "," + QRImage.getHeight());
                     qrImageView.setImageBitmap(QRImage);
-                    detectLogin();
+                    startLoginDetect();
                 });
             } catch (IOException e) {
                 runOnUiThread(() -> {
@@ -154,7 +154,7 @@ public class QRLoginActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    public void detectLogin(){
+    public void startLoginDetect(){
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override

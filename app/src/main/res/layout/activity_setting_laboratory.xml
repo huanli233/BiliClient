@@ -60,35 +60,7 @@
             android:paddingHorizontal="@dimen/activity_padding_horizontal"
             android:divider="@drawable/divider"
             android:showDividers="middle"
-            android:paddingVertical="2dp">
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/refresh_cookie"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00000000"
-                        android:text="刷新Cookie" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="6dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="在启动哔哩终端时检查Cookie是否需要刷新，在Cookie需要刷新时自动请求新的Cookie\n从2.4.0以下版本升级到2.4.0及以上版本需要重新登录以使用此功能\n介绍：Cookie会因为敏感操作被风控而失效，此时仍可继续使用，但无法进行例如发评论之类的敏感操作，便需要刷新"
-                        android:textSize="11sp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
+            android:paddingVertical="2dp"/>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

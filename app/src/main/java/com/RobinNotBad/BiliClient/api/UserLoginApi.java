@@ -24,26 +24,18 @@ public class UserLoginApi
 {
     private static String oauthKey;
     private static String sid;
-    private static ArrayList<String> defaultHeaders = new ArrayList<>();
-
-    public UserLoginApi()
-    {
-        sid = String.valueOf(Math.round(Math.random() * 100000000));
-        defaultHeaders = new ArrayList<String>()
-        {{
-            add("User-Agent");
-            add(ConfInfoApi.USER_AGENT_WEB);
-        }};
-    }
+    private static ArrayList<String> headers = new ArrayList<>();
 
     public static Bitmap getLoginQR() throws JSONException,IOException
     {
-        ArrayList<String> headers = new ArrayList<String>()
+        sid = String.valueOf(Math.round(Math.random() * 100000000));
+
+        headers = new ArrayList<String>()
         {{
             add("Cookie"); add("sid=" + sid);
             add("User-Agent"); add(ConfInfoApi.USER_AGENT_WEB);
+            add("Referer"); add("https://www.bilibili.com/");
         }};
-
 
         String url = "https://passport.bilibili.com/x/passport-login/web/qrcode/generate";
         JSONObject loginUrlJson = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, headers).body()).string()).getJSONObject("data");
@@ -52,7 +44,7 @@ public class UserLoginApi
     }
 
     public static Response getLoginState() throws IOException {
-        return NetWorkUtil.get("https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key=" + oauthKey, defaultHeaders);
+        return NetWorkUtil.get("https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key=" + oauthKey, headers);
     }
 
 }

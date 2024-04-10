@@ -58,10 +58,9 @@ public class SplashActivity extends Activity {
             if(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.setup,false)) {//判断是否设置完成
                 try {
 
-                    NetWorkUtil.get("https://bilibili.com",ConfInfoApi.webHeaders);
+                    NetWorkUtil.get("https://www.bilibili.com",ConfInfoApi.webHeaders);
 
-                    if (SharedPreferencesUtil.getLong("mid", 0) != 0
-                            && SharedPreferencesUtil.getBoolean("dev_refresh_cookie",true)) checkCookie();
+                    if (SharedPreferencesUtil.getLong("mid", 0) != 0) checkCookie();
 
                     Intent intent = new Intent();
                     intent.setClass(SplashActivity.this, RecommendActivity.class);   //已登录且联网，去首页

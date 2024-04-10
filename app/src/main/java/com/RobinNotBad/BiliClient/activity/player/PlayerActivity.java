@@ -526,7 +526,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private void clickUI() {
         long now_timestamp = System.currentTimeMillis();
         if(now_timestamp - click_timestamp < 300){
-            if(scaleGestureListener.can_reset){
+            if(SharedPreferencesUtil.getBoolean("player_scale",true) && scaleGestureListener.can_reset){
                 scaleGestureListener.can_reset = false;
                 videoArea.setX(video_origX);
                 videoArea.setY(video_origY);
