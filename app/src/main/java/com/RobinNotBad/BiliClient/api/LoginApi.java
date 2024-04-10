@@ -20,7 +20,7 @@ import okhttp3.Response;
  * #以下代码修改自腕上哔哩的开源项目，感谢开源者做出的贡献！
  */
 
-public class UserLoginApi
+public class LoginApi
 {
     private static String oauthKey;
     private static String sid;

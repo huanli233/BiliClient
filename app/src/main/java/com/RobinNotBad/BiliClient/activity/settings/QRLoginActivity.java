@@ -15,7 +15,7 @@ import com.RobinNotBad.BiliClient.activity.SplashActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
-import com.RobinNotBad.BiliClient.api.UserLoginApi;
+import com.RobinNotBad.BiliClient.api.LoginApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -125,7 +125,7 @@ public class QRLoginActivity extends BaseActivity {
         CenterThreadPool.run(() ->{
             try{
                 runOnUiThread(() -> scanStat.setText("正在获取二维码"));
-                QRImage = UserLoginApi.getLoginQR();
+                QRImage = LoginApi.getLoginQR();
 
                 runOnUiThread(() -> {
                     Log.e("debug-image", QRImage.getWidth() + "," + QRImage.getHeight());
@@ -160,7 +160,7 @@ public class QRLoginActivity extends BaseActivity {
             @Override
             public void run() {
                 try {
-                    Response response = UserLoginApi.getLoginState();
+                    Response response = LoginApi.getLoginState();
                     assert response.body() != null;
 
                     JSONObject loginJson = new JSONObject(response.body().string());

@@ -80,7 +80,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPreparedListener {
     private IDanmakuView mDanmakuView;
     private DanmakuContext mContext;
-    private Timer progressTimer, autoHideTimer, soundTimer, speedTimer, loadingShowTimer;
+    private Timer progressTimer, autoHideTimer, volumeTimer, speedTimer, loadingShowTimer;
     private String video_url, danmaku_url;
     private int mode;
     private int videoall,videonow;
@@ -567,34 +567,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     }
 
 
-    private void adddanmaku() {
-        BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
-        danmaku.text = "弹幕君准备完毕～(*≧ω≦)";
-        danmaku.padding = 5;
-        danmaku.priority = 1;
-        danmaku.textColor = Color.WHITE;
-        mDanmakuView.addDanmaku(danmaku);
-    }
-
-    private BaseDanmakuParser createParser(String stream) {
-        if (stream == null) {
-            return new BaseDanmakuParser() {
-                @Override
-                protected Danmakus parse() {
-                    return new Danmakus();
-                }
-            };
-        }
-
-        ILoader loader = DanmakuLoaderFactory.create(DanmakuLoaderFactory.TAG_BILI);
-
-        assert loader != null;
-        loader.load(stream);
-        BaseDanmakuParser parser = new BiliDanmukuParser();
-        IDataSource<?> dataSource = loader.getDataSource();
-        parser.load(dataSource);
-        return parser;
-    }
 
     private void setDisplay() {
         Log.e("debug","创建播放器");
@@ -916,6 +888,26 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
     }
 
+    private BaseDanmakuParser createParser(String stream) {
+        if (stream == null) {
+            return new BaseDanmakuParser() {
+                @Override
+                protected Danmakus parse() {
+                    return new Danmakus();
+                }
+            };
+        }
+
+        ILoader loader = DanmakuLoaderFactory.create(DanmakuLoaderFactory.TAG_BILI);
+
+        assert loader != null;
+        loader.load(stream);
+        BaseDanmakuParser parser = new BiliDanmukuParser();
+        IDataSource<?> dataSource = loader.getDataSource();
+        parser.load(dataSource);
+        return parser;
+    }
+
     private void streamdanmaku(String danmakuPath) {
         Log.e("debug","streamdanmaku");
         Log.e("debug",danmakuPath);
@@ -934,6 +926,15 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             mDanmakuView.prepare(mParser, mContext);
             mDanmakuView.enableDanmakuDrawingCache(true);
         }
+    }
+
+    private void adddanmaku() {
+        BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
+        danmaku.text = "弹幕君准备完毕～(*≧ω≦)";
+        danmaku.padding = 5;
+        danmaku.priority = 1;
+        danmaku.textColor = Color.WHITE;
+        mDanmakuView.addDanmaku(danmaku);
     }
 
     public static byte[] decompress(byte[] data) {
@@ -998,20 +999,20 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         text_volume.setVisibility(View.VISIBLE);
         text_volume.setText("音量：" + show + "%");
 
-        hidesound();
+        hideVolume();
         autohide();
     }
 
-    private void hidesound() {
-        if (soundTimer != null) soundTimer.cancel();
-        soundTimer = new Timer();
+    private void hideVolume() {
+        if (volumeTimer != null) volumeTimer.cancel();
+        volumeTimer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 runOnUiThread(() -> text_volume.setVisibility(View.GONE));
             }
         };
-        soundTimer.schedule(timerTask, 3000);
+        volumeTimer.schedule(timerTask, 3000);
     }
 
     public void rotate(){
@@ -1113,7 +1114,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         playerPause();
         Log.e("debug", "结束");
         if (autoHideTimer != null) autoHideTimer.cancel();
-        if (soundTimer != null) soundTimer.cancel();
+        if (volumeTimer != null) volumeTimer.cancel();
         if (progressTimer != null) progressTimer.cancel();
         if (ijkPlayer != null) ijkPlayer.release();
         if (mDanmakuView != null) mDanmakuView.release();

@@ -148,8 +148,8 @@
 
                 <ImageButton
                     android:id="@+id/button_sound_cut"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_marginEnd="6dp"
                     android:adjustViewBounds="true"
                     android:background="?android:attr/selectableItemBackground"
@@ -161,8 +161,8 @@
 
                 <ImageButton
                     android:id="@+id/button_video"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:adjustViewBounds="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:scaleType="fitXY"
@@ -174,8 +174,8 @@
 
                 <ImageButton
                     android:id="@+id/button_sound_add"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_marginStart="6dp"
                     android:adjustViewBounds="true"
                     android:background="?android:attr/selectableItemBackground"
@@ -200,8 +200,8 @@
 
             <ImageButton
                 android:id="@+id/danmaku_btn"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:adjustViewBounds="true"
                 android:background="?android:attr/selectableItemBackground"
                 android:scaleType="fitXY"
@@ -209,8 +209,8 @@
 
             <ImageButton
                 android:id="@+id/rotate_btn"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:adjustViewBounds="true"
                 android:background="?android:attr/selectableItemBackground"
                 android:scaleType="fitXY"
@@ -218,8 +218,8 @@
 
             <ImageButton
                 android:id="@+id/loop_btn"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:adjustViewBounds="true"
                 android:background="?android:attr/selectableItemBackground"
                 android:scaleType="fitXY"
