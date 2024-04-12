@@ -8,7 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerImageAdapter;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -59,7 +59,7 @@ public class ImageViewerActivity extends BaseActivity {
                             .setClass(ImageViewerActivity.this,DownloadActivity.class)
                             .putExtra("link",imageList.get(id))
                             .putExtra("type",0)
-                            .putExtra("title", LittleToolsUtil.getFileNameFromLink(imageList.get(id)));
+                            .putExtra("title", ToolsUtil.getFileNameFromLink(imageList.get(id)));
                     startActivity(intent1);
                     longClickPosition = -1;
                 }

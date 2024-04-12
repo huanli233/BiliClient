@@ -18,7 +18,7 @@ import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.ArticleLine;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -79,7 +79,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                         textView.setAlpha(0.92f);
                         break;
                     case "br":
-                        textView.setHeight(LittleToolsUtil.dp2px(6f,context));
+                        textView.setHeight(ToolsUtil.dp2px(6f,context));
                         break;
                 }
                 break;
@@ -114,7 +114,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 if(articleInfo.banner.isEmpty()) cover.setVisibility(View.GONE);
                 else{
                     Glide.with(context).load(articleInfo.banner).placeholder(R.mipmap.placeholder)
-                            .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(4,context))))
+                            .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4,context))))
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(cover);
                 }

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.api.FavoriteApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
@@ -64,7 +64,7 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
             if(!adding) {
                 adding = true;
                 cardView.setStrokeColor(context.getResources().getColor(R.color.low_pink));
-                cardView.setStrokeWidth(LittleToolsUtil.dp2px(1f, context));
+                cardView.setStrokeWidth(ToolsUtil.dp2px(1f, context));
 
                 if (chooseState.get(position)) {
                     CenterThreadPool.run(() -> {
@@ -87,7 +87,7 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
                     });
                 } else {
                     cardView.setStrokeColor(context.getResources().getColor(R.color.gray));
-                    cardView.setStrokeWidth(LittleToolsUtil.dp2px(0.1f, context));
+                    cardView.setStrokeWidth(ToolsUtil.dp2px(0.1f, context));
                     CenterThreadPool.run(() -> {
                         try {
                             int result = FavoriteApi.addFavorite(aid, fidList.get(position));
@@ -132,11 +132,11 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
     private void setCardView(MaterialCardView cardView, boolean bool){
         if(bool){
             cardView.setStrokeColor(context.getResources().getColor(R.color.pink));
-            cardView.setStrokeWidth(LittleToolsUtil.dp2px(1,context));
+            cardView.setStrokeWidth(ToolsUtil.dp2px(1,context));
         }
         else{
             cardView.setStrokeColor(context.getResources().getColor(R.color.gray));
-            cardView.setStrokeWidth(LittleToolsUtil.dp2px(0.1f,context));
+            cardView.setStrokeWidth(ToolsUtil.dp2px(0.1f,context));
         }
     }
 

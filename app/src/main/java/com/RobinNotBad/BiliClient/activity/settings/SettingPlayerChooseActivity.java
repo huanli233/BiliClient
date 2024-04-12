@@ -9,7 +9,7 @@ import android.util.Log;
 import androidx.appcompat.widget.SwitchCompat;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
@@ -90,11 +90,11 @@ public class SettingPlayerChooseActivity extends BaseActivity {
         for (int i = 0; i < cardViewList.size(); i++) {
             if(position==i) {
                 cardViewList.get(i).setStrokeColor(getResources().getColor(R.color.pink));
-                cardViewList.get(i).setStrokeWidth(LittleToolsUtil.dp2px(1,this));
+                cardViewList.get(i).setStrokeWidth(ToolsUtil.dp2px(1,this));
             }
             else{
                 cardViewList.get(i).setStrokeColor(getResources().getColor(R.color.gray));
-                cardViewList.get(i).setStrokeWidth(LittleToolsUtil.dp2px(0.1f,this));
+                cardViewList.get(i).setStrokeWidth(ToolsUtil.dp2px(0.1f,this));
             }
         }
         if(!just_create) switch(playerList[checkPosition+1]){

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.user.favorite.FavoriteVideoListActivity;
 import com.RobinNotBad.BiliClient.model.FavoriteFolder;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -47,10 +47,10 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull FavoriteHolder holder, int position) {
-        holder.name.setText(LittleToolsUtil.htmlToString(folderList.get(position).name));
+        holder.name.setText(ToolsUtil.htmlToString(folderList.get(position).name));
         holder.count.setText(folderList.get(position).videoCount + "/" + folderList.get(position).maxCount);
         Glide.with(this.context).load(folderList.get(position).cover + "@20q.webp")
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(5,context))))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.cover);
         holder.itemView.setOnClickListener(view -> {

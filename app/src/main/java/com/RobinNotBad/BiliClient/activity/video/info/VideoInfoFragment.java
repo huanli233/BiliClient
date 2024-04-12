@@ -22,7 +22,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.CopyTextActivity;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.user.WatchLaterActivity;
@@ -36,9 +35,9 @@ import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.api.WatchLaterApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -171,7 +170,7 @@ public class VideoInfoFragment extends Fragment {
         });
 
         Glide.with(requireContext()).load(videoInfo.cover + "@20q.webp").placeholder(R.mipmap.placeholder)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(4, requireContext()))))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, requireContext()))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(cover);
         Glide.with(requireContext()).load(videoInfo.upInfo.avatar + "@20q.webp").placeholder(R.mipmap.akari)
@@ -189,7 +188,7 @@ public class VideoInfoFragment extends Fragment {
             view1.getContext().startActivity(intent);
         });
 
-        viewCount.setText(LittleToolsUtil.toWan(videoInfo.stats.view));
+        viewCount.setText(ToolsUtil.toWan(videoInfo.stats.view));
 
         danmakuCount.setText(String.valueOf(videoInfo.stats.danmaku));
         bvidText.setText(videoInfo.bvid);
@@ -204,20 +203,9 @@ public class VideoInfoFragment extends Fragment {
             desc_expand = !desc_expand;
         });
 
-        if (SharedPreferencesUtil.getBoolean("copy_enable", true)) {
-            description.setOnLongClickListener(view1 -> {
-                Intent intent = new Intent(requireContext(), CopyTextActivity.class);
-                intent.putExtra("content", videoInfo.description);
-                requireContext().startActivity(intent);
-                return false;
-            });
-            bvidText.setOnLongClickListener(view1 -> {
-                Intent intent = new Intent(requireContext(), CopyTextActivity.class);
-                intent.putExtra("content", videoInfo.bvid);
-                requireContext().startActivity(intent);
-                return false;
-            });
-        }
+        ToolsUtil.setCopy(description,requireContext());
+        ToolsUtil.setCopy(bvidText,requireContext());
+
 
         play.setOnClickListener(view1 -> {
             Glide.get(requireContext()).clearMemory();
@@ -305,7 +293,7 @@ public class VideoInfoFragment extends Fragment {
                     ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
             } else {
-                File downPath = new File(ConfInfoApi.getDownloadPath(requireContext()), LittleToolsUtil.stringToFile(videoInfo.title));
+                File downPath = new File(ConfInfoApi.getDownloadPath(requireContext()), ToolsUtil.stringToFile(videoInfo.title));
 
                 if (downPath.exists() && videoInfo.pagenames.size() == 1)
                     MsgUtil.toast("已经缓存过了~", requireContext());

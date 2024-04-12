@@ -13,7 +13,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -73,7 +73,7 @@ public class DownloadActivity extends BaseActivity {
         Intent intent = getIntent();
 
         type = intent.getIntExtra("type",0);  //0=单个文件，1=视频，2=分页视频
-        String title = LittleToolsUtil.stringToFile(intent.getStringExtra("title"));
+        String title = ToolsUtil.stringToFile(intent.getStringExtra("title"));
         link = intent.getStringExtra("link");
 
 
@@ -98,7 +98,7 @@ public class DownloadActivity extends BaseActivity {
                     rootPath = downPath;
                 }
                 if(type==2) {
-                    rootPath = new File(rootPath, LittleToolsUtil.stringToFile(intent.getStringExtra("parent_title")));
+                    rootPath = new File(rootPath, ToolsUtil.stringToFile(intent.getStringExtra("parent_title")));
                     downPath = new File(rootPath, title);
                 }
 

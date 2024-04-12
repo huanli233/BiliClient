@@ -56,7 +56,7 @@ public class EmoteUtil {
     public static void replaceSingle(String origText, SpannableString spannableString, String name, String url, int size, float scale, Context context) throws ExecutionException, InterruptedException {
         Drawable drawable = Glide.with(context).asDrawable().load(url).submit().get();  //获得url并通过glide得到一张图片
 
-        drawable.setBounds(0, 0, (int) (size * LittleToolsUtil.sp2px(18,context) * scale), (int) (size * LittleToolsUtil.sp2px(18,context) * scale));  //参考了隔壁腕上哔哩并进行了改进
+        drawable.setBounds(0, 0, (int) (size * ToolsUtil.sp2px(18,context) * scale), (int) (size * ToolsUtil.sp2px(18,context) * scale));  //参考了隔壁腕上哔哩并进行了改进
 
         int start = origText.indexOf(name);    //检测此字符串的起始位置
         while (start>=0) {

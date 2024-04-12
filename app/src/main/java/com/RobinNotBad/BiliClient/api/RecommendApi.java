@@ -1,7 +1,7 @@
 package com.RobinNotBad.BiliClient.api;
 
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -38,7 +38,7 @@ public class RecommendApi {
             String cover = card.getString("pic");    //封面图片
             String title = card.getString("title");    //标题
             String upName = card.getJSONObject("owner").getString("name");  //up主名字
-            String view = LittleToolsUtil.toWan(card.getJSONObject("stat").getInt("view")) + "观看";    //播放量
+            String view = ToolsUtil.toWan(card.getJSONObject("stat").getInt("view")) + "观看";    //播放量
             videoCardList.add(new VideoCard(title, upName, view, cover, 0, bvid));
         }
     }
@@ -56,7 +56,7 @@ public class RecommendApi {
                 JSONObject card = data.getJSONObject(i);
                 VideoCard videoCard = new VideoCard();
                 videoCard.aid = card.getLong("aid");
-                videoCard.view = LittleToolsUtil.toWan(card.getJSONObject("stat").getLong("view")) + "观看";
+                videoCard.view = ToolsUtil.toWan(card.getJSONObject("stat").getLong("view")) + "观看";
                 videoCard.cover = card.getString("pic");
                 videoCard.title = card.getString("title");
                 videoCard.upName = card.getJSONObject("owner").getString("name");
@@ -86,7 +86,7 @@ public class RecommendApi {
                     videoCard.cover = card.getString("pic");
                     videoCard.title = card.getString("title");
                     videoCard.upName = card.getJSONObject("owner").getString("name");
-                    videoCard.view = LittleToolsUtil.toWan(card.getJSONObject("stat").getLong("view")) + "观看";
+                    videoCard.view = ToolsUtil.toWan(card.getJSONObject("stat").getLong("view")) + "观看";
                     videoCardList.add(videoCard);
                 }
             }
@@ -110,7 +110,7 @@ public class RecommendApi {
                     videoCard.cover = card.getString("pic");
                     videoCard.title = card.getString("title");
                     videoCard.upName = card.getJSONObject("owner").getString("name");
-                    videoCard.view = LittleToolsUtil.toWan(card.getJSONObject("stat").getLong("view")) + "观看";
+                    videoCard.view = ToolsUtil.toWan(card.getJSONObject("stat").getLong("view")) + "观看";
                     videoCardList.add(videoCard);
                 }
             }

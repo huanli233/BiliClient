@@ -1,12 +1,16 @@
 package com.RobinNotBad.BiliClient.util;
 
 import android.content.Context;
+import android.content.Intent;
+import android.widget.TextView;
+
+import com.RobinNotBad.BiliClient.activity.CopyTextActivity;
 
 import java.util.Locale;
 
 //2023-07-25
 
-public class LittleToolsUtil {
+public class ToolsUtil {
     public static String toWan(long num){
         if(num>=10000){
             return String.format(Locale.CHINA, "%.1f", (float)num/10000) + "万";
@@ -82,4 +86,14 @@ public class LittleToolsUtil {
         return "fail";
     }
 
+    public static void setCopy(TextView textView,Context context){
+        if (SharedPreferencesUtil.getBoolean("copy_enable", true)) {
+            textView.setOnLongClickListener(view1 -> {
+                Intent intent = new Intent(context, CopyTextActivity.class);
+                intent.putExtra("content", textView.getText().toString());
+                context.startActivity(intent);
+                return true;
+            });
+        }
+    }
 }

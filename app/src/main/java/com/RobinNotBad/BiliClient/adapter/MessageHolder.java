@@ -19,7 +19,7 @@ import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.model.MessageCard;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -52,8 +52,8 @@ public class MessageHolder extends RecyclerView.ViewHolder{
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .apply(RequestOptions.circleCropTransform())
                     .into(imageView);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(LittleToolsUtil.dp2px(32,context),LittleToolsUtil.dp2px(32,context)));
-            imageView.setLeft(LittleToolsUtil.dp2px(3,context));
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(ToolsUtil.dp2px(32,context), ToolsUtil.dp2px(32,context)));
+            imageView.setLeft(ToolsUtil.dp2px(3,context));
             int finalI = i;
             imageView.setOnClickListener(view1 -> {
                 Intent intent = new Intent();
@@ -65,7 +65,7 @@ public class MessageHolder extends RecyclerView.ViewHolder{
 
             //这个View什么都没有，用来当间隔的
             View view = new View(context);
-            view.setLayoutParams(new ViewGroup.LayoutParams(LittleToolsUtil.dp2px(3,context),LittleToolsUtil.dp2px(32,context)));
+            view.setLayoutParams(new ViewGroup.LayoutParams(ToolsUtil.dp2px(3,context), ToolsUtil.dp2px(32,context)));
             avaterList.addView(view);
         }
 

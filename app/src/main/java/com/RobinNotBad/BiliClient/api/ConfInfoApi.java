@@ -5,7 +5,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -51,8 +51,8 @@ public class ConfInfoApi
     public static String getWBIRawKey() throws IOException, JSONException {
         JSONObject getJson = new JSONObject(Objects.requireNonNull(NetWorkUtil.get("https://api.bilibili.com/x/web-interface/nav", webHeaders).body()).string());
         JSONObject wbi_img = getJson.getJSONObject("data").getJSONObject("wbi_img");  //不要被名称骗了，这玩意是签名用的
-        String img_key = LittleToolsUtil.getFileFirstName(LittleToolsUtil.getFileNameFromLink(wbi_img.getString("img_url")));  //得到文件名
-        String sub_key = LittleToolsUtil.getFileFirstName(LittleToolsUtil.getFileNameFromLink(wbi_img.getString("sub_url")));
+        String img_key = ToolsUtil.getFileFirstName(ToolsUtil.getFileNameFromLink(wbi_img.getString("img_url")));  //得到文件名
+        String sub_key = ToolsUtil.getFileFirstName(ToolsUtil.getFileNameFromLink(wbi_img.getString("sub_url")));
 
         return img_key + sub_key;  //相连
     }

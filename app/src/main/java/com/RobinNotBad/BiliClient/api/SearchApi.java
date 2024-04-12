@@ -5,7 +5,7 @@ import android.util.Log;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 
 import org.json.JSONArray;
@@ -81,7 +81,7 @@ public class SearchApi {
                     String title = card.getString("title");
                     title = title.replace("<em class=\"keyword\">","").replace("</em>","");
                     //标题里的红字，知道怎么显示但因为懒所以直接删（//显示方式可以用imagespan，参照表情包那部分程序（EmoteUtil），期待后人补齐（
-                    title = LittleToolsUtil.htmlToString(title);
+                    title = ToolsUtil.htmlToString(title);
 
                     String bvid = card.getString("bvid");
                     long aid = card.getLong("aid");
@@ -89,7 +89,7 @@ public class SearchApi {
                     String upName = card.getString("author");
 
                     long play = card.getLong("play");
-                    String playTimesStr = LittleToolsUtil.toWan(play) + "观看";
+                    String playTimesStr = ToolsUtil.toWan(play) + "观看";
 
                     videoCardList.add(new VideoCard(title,upName,playTimesStr,cover,aid,bvid,type));
                 }
@@ -101,7 +101,7 @@ public class SearchApi {
                     String title = card.getString("title");
                     title = title.replace("<em class=\"keyword\">","").replace("</em>","");
                     //标题里的红字,直接上面复制粘贴
-                    title = LittleToolsUtil.htmlToString(title);
+                    title = ToolsUtil.htmlToString(title);
                     String cover = card.getString("cover");
                     String upName = card.getString("areas");
                     long aid = card.getLong("media_id");
@@ -137,8 +137,8 @@ public class SearchApi {
             if(card.getJSONArray("image_urls").length() > 0) articleCard.cover = "http:" + card.getJSONArray("image_urls").getString(0);
             else articleCard.cover = "";
             articleCard.upName = card.getString("category_name");
-            articleCard.title = LittleToolsUtil.htmlReString(card.getString("title"));
-            articleCard.view = LittleToolsUtil.toWan(card.getInt("view")) + "阅读";
+            articleCard.title = ToolsUtil.htmlReString(card.getString("title"));
+            articleCard.view = ToolsUtil.toWan(card.getInt("view")) + "阅读";
 
             articleCardList.add(articleCard);
         }

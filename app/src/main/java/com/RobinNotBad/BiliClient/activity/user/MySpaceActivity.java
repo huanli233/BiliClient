@@ -17,7 +17,7 @@ import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.bumptech.glide.Glide;
@@ -69,7 +69,7 @@ public class MySpaceActivity extends InstanceActivity {
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(userAvatar);
                     userName.setText(userInfo.name);
-                    userFans.setText(LittleToolsUtil.toWan(userInfo.fans) + "粉丝 " + userCoin + "硬币");
+                    userFans.setText(ToolsUtil.toWan(userInfo.fans) + "粉丝 " + userCoin + "硬币");
 
                     myInfo.setOnClickListener(view -> {
                         Intent intent = new Intent();

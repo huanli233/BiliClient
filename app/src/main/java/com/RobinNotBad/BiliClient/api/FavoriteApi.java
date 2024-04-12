@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.RobinNotBad.BiliClient.model.FavoriteFolder;
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -74,7 +74,7 @@ public class FavoriteApi {
                     String upName = owner.getString("name");
 
                     JSONObject stat = video.getJSONObject("stat");
-                    String view = LittleToolsUtil.toWan(stat.getLong("view")) + "观看";
+                    String view = ToolsUtil.toWan(stat.getLong("view")) + "观看";
                     videoList.add(new VideoCard(title, upName, view, cover, aid,""));
                 }
                 return 0;

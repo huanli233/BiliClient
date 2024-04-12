@@ -40,7 +40,7 @@ import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -156,7 +156,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         else rotate_btn.setVisibility(View.GONE);
 
         if(SharedPreferencesUtil.getBoolean("player_ui_round",false)){
-            int padding = LittleToolsUtil.dp2px(6,this);
+            int padding = ToolsUtil.dp2px(6,this);
 
             top_control.setPaddingRelative(0,padding,0,0);
 

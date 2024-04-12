@@ -20,7 +20,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -129,7 +129,7 @@ public class SearchActivity extends InstanceActivity {
 
 
     public void onScrolled(int dy) {
-        float height = searchBar.getHeight() + LittleToolsUtil.dp2px(2f, this);
+        float height = searchBar.getHeight() + ToolsUtil.dp2px(2f, this);
 
         if(System.currentTimeMillis() - animate_last > 200) {
             if (dy > 0 && searchBarVisible) {

@@ -1,7 +1,7 @@
 package com.RobinNotBad.BiliClient.api;
 
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 
 import org.json.JSONException;
@@ -33,7 +33,7 @@ public class ArticleApi {
         articleInfo.upFans = author.getInt("fans");
         articleInfo.upLevel = author.getInt("level");
         JSONObject stats = data.getJSONObject("stats");
-        articleInfo.view = LittleToolsUtil.toWan(stats.getInt("view")) + "阅读";
+        articleInfo.view = ToolsUtil.toWan(stats.getInt("view")) + "阅读";
         articleInfo.favourite = stats.getInt("favorite");
         articleInfo.like = stats.getInt("like");
         articleInfo.reply = stats.getInt("reply");

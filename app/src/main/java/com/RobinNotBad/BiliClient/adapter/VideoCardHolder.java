@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -31,7 +31,7 @@ public class VideoCardHolder extends RecyclerView.ViewHolder{
     }
 
     public void showVideoCard(VideoCard videoCard, Context context){
-        title.setText(LittleToolsUtil.htmlToString(videoCard.title));
+        title.setText(ToolsUtil.htmlToString(videoCard.title));
         String upNameStr = videoCard.upName;
         if(upNameStr.isEmpty()){
             upName.setVisibility(View.GONE);
@@ -48,7 +48,7 @@ public class VideoCardHolder extends RecyclerView.ViewHolder{
 
         Glide.with(context).load(videoCard.cover + "@20q.webp")
                 .placeholder(R.mipmap.placeholder)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(5,context))))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(cover);
     }

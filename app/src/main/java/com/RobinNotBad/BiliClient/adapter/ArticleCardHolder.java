@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -31,7 +31,7 @@ public class ArticleCardHolder extends RecyclerView.ViewHolder{
     }
 
     public void showArticleCard(ArticleCard articleCard, Context context){
-        title.setText(LittleToolsUtil.htmlToString(articleCard.title));
+        title.setText(ToolsUtil.htmlToString(articleCard.title));
         String upNameStr = articleCard.upName;
         if(upNameStr.isEmpty()){
             upName.setVisibility(View.GONE);
@@ -47,7 +47,7 @@ public class ArticleCardHolder extends RecyclerView.ViewHolder{
 
         Glide.with(context).load(articleCard.cover)
                 .placeholder(R.mipmap.placeholder)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(LittleToolsUtil.dp2px(5,context))))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(cover);
     }

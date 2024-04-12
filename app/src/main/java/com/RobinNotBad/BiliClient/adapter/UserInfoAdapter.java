@@ -21,7 +21,7 @@ import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.bumptech.glide.Glide;
@@ -82,7 +82,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             userInfoHolder.userDesc.setText(userInfo.sign);
             if (!userInfo.notice.isEmpty()) userInfoHolder.userNotice.setText(userInfo.notice);
             else userInfoHolder.userNotice.setVisibility(View.GONE);
-            userInfoHolder.userFans.setText("Lv" + userInfo.level + "\n" + LittleToolsUtil.toWan(userInfo.fans) + "粉丝");
+            userInfoHolder.userFans.setText("Lv" + userInfo.level + "\n" + ToolsUtil.toWan(userInfo.fans) + "粉丝");
 
             if(userInfo.official != 0) {
                 userInfoHolder.officialIcon.setVisibility(View.VISIBLE);

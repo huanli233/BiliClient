@@ -1,7 +1,7 @@
 package com.RobinNotBad.BiliClient.api;
 
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -36,7 +36,7 @@ public class WatchLaterApi {
             String cover = videoCard.getString("pic");
             String upName = videoCard.getJSONObject("owner").getString("name");
             long view = videoCard.getJSONObject("stat").getLong("view");
-            String viewStr = LittleToolsUtil.toWan(view) + "观看";
+            String viewStr = ToolsUtil.toWan(view) + "观看";
             videoCardList.add(new VideoCard(title,upName,viewStr,cover,aid,bvid));
         }
         return videoCardList;

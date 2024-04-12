@@ -187,6 +187,7 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                     holder.nameTv.setVisibility(View.VISIBLE);
                     holder.videoCard.setVisibility(View.GONE);
             }
+
             holder.textContentCard.setOnLongClickListener(view->{
                 try {
                 	Intent intent = new Intent(context,CopyTextActivity.class);

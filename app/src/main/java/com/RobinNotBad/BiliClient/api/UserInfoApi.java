@@ -5,7 +5,7 @@ import android.util.Log;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -103,7 +103,7 @@ public class UserInfoApi {
                     JSONObject card = vlist.getJSONObject(i);
                     String cover = card.getString("pic");
                     long play = card.getLong("play");
-                    String playStr = LittleToolsUtil.toWan(play) + "观看";
+                    String playStr = ToolsUtil.toWan(play) + "观看";
                     long aid = card.getLong("aid");
                     String bvid = card.getString("bvid");
                     String upName = card.getString("author");
@@ -136,7 +136,7 @@ public class UserInfoApi {
                     articleCard.id = card.getLong("id");
                     articleCard.title = card.getString("title");
                     JSONObject stats = card.getJSONObject("stats");
-                    articleCard.view = LittleToolsUtil.toWan(stats.getInt("view")) + "阅读";
+                    articleCard.view = ToolsUtil.toWan(stats.getInt("view")) + "阅读";
                     articleCard.cover = card.getString("banner_url");
                     JSONObject author = card.getJSONObject("author");
                     articleCard.upName = author.getString("name");

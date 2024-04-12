@@ -14,7 +14,7 @@ import com.RobinNotBad.BiliClient.adapter.PageChooseAdapter;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import java.io.File;
@@ -42,8 +42,8 @@ public class MultiPageActivity extends BaseActivity {
 
         if(intent.getIntExtra("download",0) == 1) {    //下载模式
             adapter.setOnItemClickListener(position -> {
-                File rootPath = new File(ConfInfoApi.getDownloadPath(this), LittleToolsUtil.stringToFile(videoInfo.title));
-                File downPath = new File(rootPath, LittleToolsUtil.stringToFile(videoInfo.pagenames.get(position)));
+                File rootPath = new File(ConfInfoApi.getDownloadPath(this), ToolsUtil.stringToFile(videoInfo.title));
+                File downPath = new File(rootPath, ToolsUtil.stringToFile(videoInfo.pagenames.get(position)));
                 if(downPath.exists()) MsgUtil.toast("已经缓存过了~",this);
                 else PlayerApi.startDownloadingVideo(this,videoInfo,position);
             });

@@ -7,7 +7,7 @@ import com.RobinNotBad.BiliClient.model.Emote;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.JsonUtil;
-import com.RobinNotBad.BiliClient.util.LittleToolsUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -82,7 +82,7 @@ public class ReplyApi {
             replyReturn.sender = userInfo;    //发送者
 
             JSONObject content = reply.getJSONObject("content");
-            String message = LittleToolsUtil.htmlToString(content.getString("message"));
+            String message = ToolsUtil.htmlToString(content.getString("message"));
             replyReturn.message = message;
             //Log.e("debug-评论内容", message);
 
