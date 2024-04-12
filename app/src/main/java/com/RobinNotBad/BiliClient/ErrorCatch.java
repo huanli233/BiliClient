@@ -32,7 +32,7 @@ public class ErrorCatch implements Thread.UncaughtExceptionHandler{
         PrintWriter printWriter = new PrintWriter(writer);
         throwable.printStackTrace(printWriter);
 
-        MsgUtil.showText(context,"错误报告","哔哩终端崩溃了，请将以下内容截图发送给开发团队：\n" + writer.toString());
+        MsgUtil.showText(context,"错误报告","哔哩终端崩溃了，请将以下内容截图发送给开发团队（通常来说截取最前面一部分即可）：\n" + writer);
         
         throwable.printStackTrace();
         android.os.Process.killProcess(android.os.Process.myPid());

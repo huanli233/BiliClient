@@ -3,12 +3,16 @@ package com.RobinNotBad.BiliClient;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.util.DisplayMetrics;
 
+import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
+import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
+import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class BiliTerminal extends Application {
@@ -54,5 +58,35 @@ public class BiliTerminal extends Application {
 
     public static int getVersion() throws PackageManager.NameNotFoundException {
         return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+    }
+
+    public static void jumpToVideo(long aid){
+        Intent intent = new Intent();
+        intent.setClass(context, VideoInfoActivity.class);
+        intent.putExtra("aid",aid);
+        intent.putExtra("bvid","");
+        context.startActivity(intent);
+    }
+
+    public static void jumpToVideo(String bvid){
+        Intent intent = new Intent();
+        intent.setClass(context, VideoInfoActivity.class);
+        intent.putExtra("aid",0);
+        intent.putExtra("bvid",bvid);
+        context.startActivity(intent);
+    }
+
+    public static void jumpToArticle(long cvid){
+        Intent intent = new Intent();
+        intent.setClass(context, ArticleInfoActivity.class);
+        intent.putExtra("cvid",cvid);
+        context.startActivity(intent);
+    }
+
+    public static void jumpToUser(long mid){
+        Intent intent = new Intent();
+        intent.setClass(context, UserInfoActivity.class);
+        intent.putExtra("mid",mid);
+        context.startActivity(intent);
     }
 }

@@ -31,10 +31,15 @@
                 android:resource="@xml/file_paths" />
         </provider>
         <activity
+            android:name=".activity.GetIntentActivity"
+            android:exported="true"
+            android:label="外部传入"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.settings.AnnouncementsActivity"
             android:exported="false"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="公告列表" />
+            android:label="公告列表"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.player.PlayerActivity"
             android:exported="false"

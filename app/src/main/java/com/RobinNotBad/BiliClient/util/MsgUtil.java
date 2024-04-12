@@ -10,6 +10,9 @@ import com.RobinNotBad.BiliClient.activity.ShowTextActivity;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 
 public class MsgUtil {
     private static Toast toast;
@@ -30,7 +33,15 @@ public class MsgUtil {
     public static void err(Exception e,Context context){
         e.printStackTrace();
         if(e instanceof IOException) toast("网络错误(＃°Д°)",context);
-        else if (e instanceof JSONException) toastLong("数据解析错误：\n" + e,context);
+        else if (e instanceof JSONException) {
+            if(SharedPreferencesUtil.getBoolean("develop_error_detailed",false)) {
+                Writer writer = new StringWriter();
+                PrintWriter printWriter = new PrintWriter(writer);
+                e.printStackTrace(printWriter);
+                showText(context,"数据解析错误",writer.toString());
+            }
+            else toastLong("数据解析错误：\n" + e,context);
+        }
         else toast("错误：" + e , context);
     }
 

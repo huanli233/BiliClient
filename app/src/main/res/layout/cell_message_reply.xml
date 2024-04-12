@@ -18,8 +18,9 @@
         <TextView
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
-             android:layout_marginStart="6dp"
-             android:layout_marginTop="5dp"
+             android:layout_marginHorizontal="6dp"
+             android:layout_marginTop="4dp"
+            android:textSize="13sp"
              android:maxLines="3"
              android:ellipsize="end"
              android:id="@+id/content"
@@ -28,20 +29,19 @@
         <View
              android:layout_height="1dp"
              android:layout_width="match_parent"
-             android:layout_marginEnd="9dp"
+             android:layout_marginHorizontal="8dp"
              android:background="#318C8C8C"
-             android:layout_marginTop="5dp"
-             android:layout_marginStart="9dp" />
+             android:layout_marginTop="5dp" />
 
         <TextView
             android:id="@+id/tip"
              android:layout_height="wrap_content"
              android:layout_width="wrap_content"
-             android:layout_marginBottom="4dp"
+             android:layout_marginBottom="5dp"
              android:alpha="0.9"
              android:textSize="11sp"
-             android:layout_marginTop="3dp"
-             android:layout_marginStart="7dp"
+             android:layout_marginTop="4dp"
+             android:layout_marginHorizontal="6dp"
              android:text="点击跳转到视频" />
 
     </LinearLayout>

@@ -2,23 +2,17 @@ package com.RobinNotBad.BiliClient.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.model.Announcement;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
@@ -49,7 +43,8 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         Announcement announcement = list.get(position);
 
         holder.name.setText(announcement.title);
-        holder.content.setText(announcement.content);
+        int extra_start = announcement.content.indexOf("<extra_insert>");
+        holder.content.setText(extra_start==-1 ? announcement.content : announcement.content.substring(0,extra_start) + "[附加内容]");
         holder.info.setText("ID:" + announcement.id + " | " + announcement.ctime);
 
         holder.cardView.setOnClickListener(view -> MsgUtil.showText(context, announcement.title, announcement.content));

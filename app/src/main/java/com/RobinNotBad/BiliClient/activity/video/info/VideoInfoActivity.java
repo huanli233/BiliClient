@@ -94,7 +94,7 @@ public class VideoInfoActivity extends BaseActivity {
             JSONObject data;
             try {
                 VideoInfo videoInfo;
-                if (bvid == null || TextUtils.isEmpty(bvid)) data = VideoInfoApi.getJsonByAid(aid);
+                if (TextUtils.isEmpty(bvid)) data = VideoInfoApi.getJsonByAid(aid);
                 else data = VideoInfoApi.getJsonByBvid(bvid);
                 videoInfo = VideoInfoApi.getInfoByJson(data);
 

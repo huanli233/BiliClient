@@ -112,13 +112,13 @@ public class JumpToPlayerActivity extends BaseActivity {
                     finish();
                 }
             } catch (IOException e) {
-                runOnUiThread(()->textView.setText("网络错误！\n请检查你的网络连接是否正常"));
+                runOnUiThread(()-> setClickExit("网络错误！\n请检查你的网络连接是否正常"));
                 e.printStackTrace();
             } catch (JSONException e) {
-                runOnUiThread(()->textView.setText("视频获取失败！\n可能的原因：\n1.本视频仅大会员可播放\n2.视频获取接口失效"));
+                runOnUiThread(()-> setClickExit("视频获取失败！\n可能的原因：\n1.本视频仅大会员可播放\n2.视频获取接口失效"));
                 e.printStackTrace();
             } catch (ActivityNotFoundException e){
-                runOnUiThread(()->textView.setText("跳转失败！\n请安装对应的播放器\n或在设置中选择正确的播放器\n或将哔哩终端和播放器同时更新到最新版本"));
+                runOnUiThread(()-> setClickExit("跳转失败！\n请安装对应的播放器\n或在设置中选择正确的播放器\n或将哔哩终端和播放器同时更新到最新版本"));
                 e.printStackTrace();
             }
         });
@@ -127,6 +127,11 @@ public class JumpToPlayerActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    private void setClickExit(String reason){
+        textView.setText(reason);
+        findViewById(R.id.root_layout).setOnClickListener((view)-> finish());
     }
 
     @Override
