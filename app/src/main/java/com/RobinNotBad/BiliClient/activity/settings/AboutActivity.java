@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -22,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AboutActivity extends BaseActivity {
-    int eggClick = 0;
+    int eggClick_authorWords = 0, eggClick_toUncle = 0;
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,14 +81,18 @@ public class AboutActivity extends BaseActivity {
         }
 
         findViewById(R.id.author_words).setOnClickListener(view -> {
-            eggClick++;
-            if (eggClick == 7) {
-                eggClick = 0;
-                MsgUtil.toastLong("无论当下的境遇如何，\n这片星空下永远有你的一片位置。\n抱抱屏幕前的你，\n真诚地祝愿你永远快乐幸福。\n让我们一起，迈入“下一个远方”。",this);
-                Intent intent = new Intent();
-                intent.setClass(this, VideoInfoActivity.class);
-                intent.putExtra("bvid", "BV1UC411B7Co");
-                startActivity(intent);
+            eggClick_authorWords++;
+            if (eggClick_authorWords == 7) {
+                eggClick_authorWords = 0;
+                MsgUtil.showText(this,"作者的话","无论当下的境遇如何，\n这片星空下永远有你的一片位置。\n抱抱屏幕前的你，\n真诚地祝愿你永远快乐幸福。\n让我们一起，迈入“下一个远方”。<extra_insert>{\"type\":\"video\",\"content\":\"BV1UC411B7Co\",\"title\":\"【原神新春会】下一个远方\"}");
+            }
+        });
+
+        findViewById(R.id.toUncle).setOnClickListener(view ->{
+            eggClick_toUncle++;
+            if (eggClick_toUncle == 7) {
+                eggClick_toUncle = 0;
+                MsgUtil.showText(this,"给叔叔","\"你指尖跃动的电光，是我此生不灭的信仰。\"<extra_insert>{\"type\":\"video\",\"content\":\"BV157411v76Z\",\"title\":\"【B站入站曲】\"}");
             }
         });
     }
