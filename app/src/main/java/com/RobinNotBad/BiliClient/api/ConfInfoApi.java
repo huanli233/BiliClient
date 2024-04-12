@@ -66,8 +66,6 @@ public class ConfInfoApi
         return key.toString();
     }
 
-    //计算时需要按字母顺序排列
-    //使用时记得切换web的请求头
     public static String signWBI(String url_query) throws JSONException, IOException {
         String mixin_key;
         int curr = getDateCurr();

@@ -132,7 +132,7 @@ public class SearchActivity extends InstanceActivity {
         float height = searchBar.getHeight() + LittleToolsUtil.dp2px(2f, this);
 
         if(System.currentTimeMillis() - animate_last > 200) {
-            if (dy > 1 && searchBarVisible) {
+            if (dy > 0 && searchBarVisible) {
                 animate_last = System.currentTimeMillis();
                 this.searchBarVisible = false;
                 @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofFloat(searchBar, "translationY", 0, -height);

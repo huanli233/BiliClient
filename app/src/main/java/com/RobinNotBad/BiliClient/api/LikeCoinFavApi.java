@@ -14,7 +14,7 @@ public class LikeCoinFavApi {
     
     
       public static int like(long aid,int likeState) throws IOException, JSONException {  //likeState 1点赞0取消
-        String url = "http://api.bilibili.com/x/web-interface/archive/like";
+        String url = "https://api.bilibili.com/x/web-interface/archive/like";
         String per = "aid=" + aid + "&like=" + likeState + "&csrf=" + SharedPreferencesUtil.getString("csrf","");
 
         JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, ConfInfoApi.webHeaders).body()).string());
@@ -23,7 +23,7 @@ public class LikeCoinFavApi {
     }
     
       public static int coin(long aid,int multiply) throws IOException, JSONException {  
-        String url = "http://api.bilibili.com/x/web-interface/coin/add";
+        String url = "https://api.bilibili.com/x/web-interface/coin/add";
         String per = "aid=" + aid + "&multiply=" + multiply + "&csrf=" + SharedPreferencesUtil.getString("csrf","");
 
         JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, ConfInfoApi.webHeaders).body()).string());

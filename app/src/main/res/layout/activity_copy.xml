@@ -58,48 +58,30 @@
             android:layout_marginHorizontal="@dimen/activity_padding_horizontal"
                 android:orientation="vertical">
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="长按选择下方文本框中的文本复制，如果无法选择请复制全部（部分手表如小天才阉割了剪贴板，无法复制任何东西）"
-                android:textSize="12sp" />
+                android:id="@+id/copy_all"
+                android:text="复制全部"/>
 
             <EditText
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/background_edit_text_setting"
-                android:hint="文本内容..."
+                android:background="@drawable/background_edit_text"
+                android:hint="啥都木有"
                 android:minHeight="40dp"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:text=""
-                android:textCursorDrawable="@drawable/cursor_drawable"
-                android:textSize="13sp"
-                tools:ignore="HardcodedText,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:textSize="13sp"/>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/copy_all"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="4dp"
-                app:cardBackgroundColor="#78242424"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:strokeColor="#70707070"
-                app:strokeWidth="0.1dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:gravity="center_vertical"
-                    android:text="复制全部"
-                    android:textSize="13sp"
-                    android:textAlignment="center"
-                    tools:ignore="RtlCompat" />
-            </com.google.android.material.card.MaterialCardView>
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="*部分设备可能阉割剪贴板导致无法复制，此处点名表扬小天才*" />
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
