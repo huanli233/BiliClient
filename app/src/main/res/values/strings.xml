@@ -38,5 +38,5 @@
     <string name="player_aliang_package">com.aliangmaker.media</string>
     <string name="player_mtv_package">com.xinxiangshicheng.wearbiliplayer.cn</string>
 
-    <string name="update_log">请注意：从2.4.0以前的版本升级到现版本的用户请前往 我的-退出登录 或者 清除APP数据，然后重新扫码！\n\n2.5.0更新内容：\n1.将小电视改版合并作为内置播放器，并修复了一些问题\n2.修复了离开登录页面时直接回到桌面的问题\n3.修复了一些bug和崩溃问题\n4.调整统一了部分页面的布局，将按钮点击效果改为白色，下个版本将会继续修改界面\n5.公告和更新检测接入了我们自己的服务器（别炸我们服务器谢谢\n\n2.5.1更新内容：\n略微修改界面、修复了一些小问题</string>
+    <string name="update_log">2.5.2更新内容：\n\n1.大改UI（后续会继续优化，欢迎进群提出建议）\n2.对内置播放器的缩放功能进行优化，并解决了部分设备内置播放器卡顿问题\n3.登录时将被识别为Chrome浏览器，不再是“未知设备”\n4.公告和彩蛋中现可插入视频卡片\n\n*我们已注意到部分用户出现个人主页打不开的情况，但很大的问题是我们开发团队里一个出现问题的都没有，导致修复困难（很抱歉，但是请等待后续更新TAT</string>
 </resources>
