@@ -26,6 +26,7 @@ import com.RobinNotBad.BiliClient.adapter.MediaEpisodesAdapter;
 import com.RobinNotBad.BiliClient.api.BangumiApi;
 import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -87,7 +88,7 @@ public class BangumiInfoFragment extends Fragment {
         selectedSection = 0;
 
         Glide.with(this)
-                .load(bangumi.info.cover_horizontal)
+                .load(GlideUtil.url(bangumi.info.cover_horizontal) )
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .placeholder(R.mipmap.loading_2233)
                 .into(imageMediaCover);

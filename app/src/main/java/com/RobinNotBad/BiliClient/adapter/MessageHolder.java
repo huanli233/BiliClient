@@ -19,6 +19,7 @@ import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.model.MessageCard;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -47,7 +48,7 @@ public class MessageHolder extends RecyclerView.ViewHolder{
         for(int i = 0;i<message.user.size();i++){
             ImageView imageView = new ImageView(context);
             Glide.with(context)
-                    .load(message.user.get(i).avatar + "@20q.webp")
+                    .load(GlideUtil.url(message.user.get(i).avatar))
                     .placeholder(R.mipmap.akari)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .apply(RequestOptions.circleCropTransform())

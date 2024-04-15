@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.model.UserInfo;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -45,7 +46,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Ho
 
         holder.name.setText(userList.get(position).name);
         holder.desc.setText(userList.get(position).sign);
-        Glide.with(context).load(userList.get(position).avatar + "@20q.webp")
+        Glide.with(context).load(GlideUtil.url(userList.get(position).avatar))
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

@@ -17,6 +17,7 @@ import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -64,7 +65,7 @@ public class MySpaceActivity extends InstanceActivity {
                 UserInfo userInfo = UserInfoApi.getCurrentUserInfo();
                 int userCoin = UserInfoApi.getCurrentUserCoin();
                 runOnUiThread(() -> {
-                    Glide.with(MySpaceActivity.this).load(userInfo.avatar + "@20q.webp")
+                    Glide.with(MySpaceActivity.this).load(GlideUtil.url(userInfo.avatar))
                             .placeholder(R.mipmap.akari).apply(RequestOptions.circleCropTransform())
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(userAvatar);

@@ -60,7 +60,7 @@ public class BiliTerminal extends Application {
         return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
     }
 
-    public static void jumpToVideo(long aid){
+    public static void jumpToVideo(Context context, long aid){
         Intent intent = new Intent();
         intent.setClass(context, VideoInfoActivity.class);
         intent.putExtra("aid",aid);
@@ -68,7 +68,7 @@ public class BiliTerminal extends Application {
         context.startActivity(intent);
     }
 
-    public static void jumpToVideo(String bvid){
+    public static void jumpToVideo(Context context, String bvid){
         Intent intent = new Intent();
         intent.setClass(context, VideoInfoActivity.class);
         intent.putExtra("aid",0);
@@ -76,14 +76,14 @@ public class BiliTerminal extends Application {
         context.startActivity(intent);
     }
 
-    public static void jumpToArticle(long cvid){
+    public static void jumpToArticle(Context context, long cvid){
         Intent intent = new Intent();
         intent.setClass(context, ArticleInfoActivity.class);
         intent.putExtra("cvid",cvid);
         context.startActivity(intent);
     }
 
-    public static void jumpToUser(long mid){
+    public static void jumpToUser(Context context, long mid){
         Intent intent = new Intent();
         intent.setClass(context, UserInfoActivity.class);
         intent.putExtra("mid",mid);

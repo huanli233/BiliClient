@@ -16,16 +16,16 @@ public class GetIntentActivity extends Activity {
         Intent intent = getIntent();
         switch (intent.getStringExtra("type")){
             case "video_av":
-                BiliTerminal.jumpToVideo(intent.getLongExtra("content",0));
+                BiliTerminal.jumpToVideo(this,intent.getLongExtra("content",0));
                 break;
             case "video_bv":
-                BiliTerminal.jumpToVideo(intent.getStringExtra("content"));
+                BiliTerminal.jumpToVideo(this,intent.getStringExtra("content"));
                 break;
             case "article":
-                BiliTerminal.jumpToArticle(intent.getLongExtra("content",0));
+                BiliTerminal.jumpToArticle(this,intent.getLongExtra("content",0));
                 break;
             case "user":
-                BiliTerminal.jumpToUser(intent.getLongExtra("content",0));
+                BiliTerminal.jumpToUser(this,intent.getLongExtra("content",0));
                 break;
             default:
                 finish();

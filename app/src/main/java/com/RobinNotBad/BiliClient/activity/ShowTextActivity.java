@@ -36,7 +36,7 @@ public class ShowTextActivity extends BaseActivity {
                 if (jsonObject.getString("type").equals("video")) {
                     View videoCard = View.inflate(this, R.layout.cell_message_reply, findViewById(R.id.linearLayout));
                     MaterialCardView cardView = videoCard.findViewById(R.id.cardView);
-                    cardView.setOnClickListener((view) -> BiliTerminal.jumpToVideo(jsonObject.optString("content")));
+                    cardView.setOnClickListener((view) -> BiliTerminal.jumpToVideo(this,jsonObject.optString("content")));
                     TextView textView = videoCard.findViewById(R.id.content);
                     textView.setText(jsonObject.optString("title"));
                     content = content.substring(0,extra_start);

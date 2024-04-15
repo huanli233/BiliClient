@@ -35,6 +35,7 @@ import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.api.WatchLaterApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -169,11 +170,11 @@ public class VideoInfoFragment extends Fragment {
             } catch (Exception e) {if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));}
         });
 
-        Glide.with(requireContext()).load(videoInfo.cover + "@20q.webp").placeholder(R.mipmap.placeholder)
+        Glide.with(requireContext()).load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, requireContext()))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(cover);
-        Glide.with(requireContext()).load(videoInfo.upInfo.avatar + "@20q.webp").placeholder(R.mipmap.akari)
+        Glide.with(requireContext()).load(GlideUtil.url(videoInfo.upInfo.avatar)).placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(upIcon);

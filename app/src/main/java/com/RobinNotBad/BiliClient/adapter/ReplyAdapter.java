@@ -27,6 +27,7 @@ import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.view.CustomListView;
@@ -90,7 +91,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             int realPosition = position - 1;
             ReplyHolder replyHolder = (ReplyHolder) holder;
 
-            Glide.with(context).load(replyList.get(realPosition).sender.avatar + "@20q.webp")
+            Glide.with(context).load(GlideUtil.url(replyList.get(realPosition).sender.avatar))
                     .placeholder(R.mipmap.akari)
                     .apply(RequestOptions.circleCropTransform())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -146,7 +147,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (replyList.get(realPosition).pictureList != null && !replyList.get(realPosition).pictureList.isEmpty()) {  //图片显示相关
                 replyHolder.imageCard.setVisibility(View.VISIBLE);
                 replyHolder.imageCount.setVisibility(View.VISIBLE);
-                Glide.with(context).load(replyList.get(realPosition).pictureList.get(0) + "@25q.webp")
+                Glide.with(context).load(GlideUtil.url(replyList.get(realPosition).pictureList.get(0)))
                         .placeholder(R.mipmap.placeholder)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(replyHolder.imageCard);

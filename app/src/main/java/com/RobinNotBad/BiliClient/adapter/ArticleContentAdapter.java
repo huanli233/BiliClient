@@ -18,6 +18,7 @@ import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.ArticleLine;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -89,7 +90,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
 
 
                 String url = article.get(realPosition).content;
-                    Glide.with(context).load(url + (url.endsWith("webp") ? "" : "@25q.webp")).placeholder(R.mipmap.placeholder)
+                    Glide.with(context).load(GlideUtil.url(url)).placeholder(R.mipmap.placeholder)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(imageView);
 
@@ -113,12 +114,12 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 upName.setText(articleInfo.upName);
                 if(articleInfo.banner.isEmpty()) cover.setVisibility(View.GONE);
                 else{
-                    Glide.with(context).load(articleInfo.banner).placeholder(R.mipmap.placeholder)
+                    Glide.with(context).load(GlideUtil.url(articleInfo.banner)).placeholder(R.mipmap.placeholder)
                             .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4,context))))
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(cover);
                 }
-                Glide.with(context).load(articleInfo.upAvatar + "@20q.webp").placeholder(R.mipmap.akari)
+                Glide.with(context).load(GlideUtil.url(articleInfo.upAvatar)).placeholder(R.mipmap.akari)
                         .apply(RequestOptions.circleCropTransform())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(upIcon);

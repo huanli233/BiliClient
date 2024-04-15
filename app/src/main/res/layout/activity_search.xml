@@ -33,6 +33,7 @@
             android:drawableEnd="@drawable/icon_search"
             android:ems="10"
             android:hint="搜点什么"
+            android:inputType="text"
             android:imeOptions="actionDone"
             android:minHeight="42dp"
             android:paddingStart="8dp"

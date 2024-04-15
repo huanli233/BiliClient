@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.user.favorite.FavoriteVideoListActivity;
 import com.RobinNotBad.BiliClient.model.FavoriteFolder;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -49,7 +50,7 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
     public void onBindViewHolder(@NonNull FavoriteHolder holder, int position) {
         holder.name.setText(ToolsUtil.htmlToString(folderList.get(position).name));
         holder.count.setText(folderList.get(position).videoCount + "/" + folderList.get(position).maxCount);
-        Glide.with(this.context).load(folderList.get(position).cover + "@20q.webp")
+        Glide.with(this.context).load(GlideUtil.url(folderList.get(position).cover))
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.cover);

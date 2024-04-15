@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerImageAdapter;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.bumptech.glide.Glide;
@@ -39,7 +40,7 @@ public class ImageViewerActivity extends BaseActivity {
         for (int i = 0; i < imageList.size(); i++) {
             PhotoView photoView = new PhotoView(this);
             try {
-                Glide.with(this).load(imageList.get(i) + "@80q.webp")  //让b站自己压缩一下以加速获取
+                Glide.with(this).load(GlideUtil.url(imageList.get(i)))  //让b站自己压缩一下以加速获取
                         .override(Target.SIZE_ORIGINAL)//override这一项一定要加，这样才会显示原图，不然一放大就糊成使
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(photoView);

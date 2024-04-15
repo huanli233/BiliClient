@@ -23,6 +23,7 @@ import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -82,7 +83,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 });
             }
         }else content.setVisibility(View.GONE);
-        Glide.with(context).load(dynamic.userInfo.avatar + "@20q.webp")
+        Glide.with(context).load(GlideUtil.url(dynamic.userInfo.avatar))
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -126,7 +127,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 ArrayList<String> pictureList = (ArrayList<String>) dynamic.major_object;
                 View imageCard = View.inflate(context,R.layout.cell_dynamic_image,extraCard);
                 ImageView imageView = imageCard.findViewById(R.id.imageView);
-                Glide.with(context).load(pictureList.get(0)+"@30q.webp")
+                Glide.with(context).load(GlideUtil.url(pictureList.get(0)))
                         .placeholder(R.mipmap.placeholder)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(imageView);

@@ -17,6 +17,7 @@ import com.RobinNotBad.BiliClient.activity.message.PrivateMsgActivity;
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.model.PrivateMsgSession;
 import com.RobinNotBad.BiliClient.model.UserInfo;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -62,7 +63,7 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
             	holder.contentText.setText("[撤回消息]");
             }
             holder.nameText.setText(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).name);
-            Glide.with(context).load(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).avatar + "@20q.webp")
+            Glide.with(context).load(GlideUtil.url(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).avatar))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .placeholder(R.mipmap.akari)
                             .apply(RequestOptions.circleCropTransform())
