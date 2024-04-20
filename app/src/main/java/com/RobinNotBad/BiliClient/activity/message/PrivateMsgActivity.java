@@ -176,19 +176,20 @@ public class PrivateMsgActivity extends BaseActivity {
                 int oldListSize = list.size();
             	JSONObject msgResult = PrivateMsgApi.getPrivateMsg(uid,50,list.get(list.size()-1).msgSeqno,0);
                 ArrayList<PrivateMessage> newList = PrivateMsgApi.getPrivateMsgList(msgResult);
-                for(int i = 0; i < PrivateMsgApi.getEmoteJsonArray(msgResult).length(); ++i) {
-                	JSONObject emote = PrivateMsgApi.getEmoteJsonArray(msgResult).getJSONObject(i);
-                    emoteArray.put(emote);
-                }
-                Collections.reverse(newList);
-                runOnUiThread(()->{
-                    for(PrivateMessage msg : newList) {
-                        list.add(msg);
-                        adapter.notifyItemInserted(list.size()-1);
+                if(newList.size()>0) {
+                    for (int i = 0; i < PrivateMsgApi.getEmoteJsonArray(msgResult).length(); ++i) {
+                        JSONObject emote = PrivateMsgApi.getEmoteJsonArray(msgResult).getJSONObject(i);
+                        emoteArray.put(emote);
                     }
-                    adapter.notifyItemRangeChanged(oldListSize-1,list.size());
-                });    
-                
+                    Collections.reverse(newList);
+                    runOnUiThread(() -> {
+                        for (PrivateMessage msg : newList) {
+                            list.add(msg);
+                            adapter.notifyItemInserted(list.size() - 1);
+                        }
+                        adapter.notifyItemRangeChanged(oldListSize - 1, list.size());
+                    });
+                }
             } catch(Exception e) {
             	runOnUiThread(()->MsgUtil.err(e,this));}
         });
@@ -196,6 +197,7 @@ public class PrivateMsgActivity extends BaseActivity {
     @SuppressLint("SuspiciousIndentation")
     private void loadMore() {
         isLoadingMore = true;
+        MsgUtil.toast("加载更多中...",this);
     	CenterThreadPool.run(()->{
             try {
             	if(allMsg.getInt("has_more")==1) {
@@ -214,14 +216,12 @@ public class PrivateMsgActivity extends BaseActivity {
                             
                     Log.e("loadMore","loadMore");
                     runOnUiThread(()->{
-                        MsgUtil.toast("加载更多中。。",this);
-                        adapter.addItem(newList);            
-                    });    
-                        
-                    
+                        adapter.addItem(newList);
+                        MsgUtil.toast("已加载更多消息！",this);
+                    });
+                    isLoadingMore=false;
             	}else runOnUiThread(()-> MsgUtil.toast("没有更多消息了",this));
             } catch(Exception e) {runOnUiThread(()->MsgUtil.err(e,this));}
         });
-        isLoadingMore=false;
     }
 }

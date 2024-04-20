@@ -51,16 +51,29 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
     public void onBindViewHolder(@NonNull PrivateMsgSessionsHolder holder, int position) {
         PrivateMsgSession msgContent = sessionsList.get(position);
         try {
-            if (msgContent.contentType == PrivateMessage.TYPE_TEXT) {
-                holder.contentText.setText(msgContent.content.getString("content"));
-            }if(msgContent.contentType == PrivateMessage.TYPE_PIC) {
-            	holder.contentText.setText("[图片消息]");
-            }if(msgContent.contentType == PrivateMessage.TYPE_VIDEO||msgContent.contentType==PrivateMessage.TYPE_PIC_CARD||msgContent.contentType  == PrivateMessage.TYPE_NOMAL_CARD) {
-            	holder.contentText.setText(msgContent.content.getString("title"));
-            }if(msgContent.contentType == PrivateMessage.TYPE_TEXT_WITH_VIDEO) {
-            	holder.contentText.setText(msgContent.content.getString("reply_content"));
-            }if(msgContent.contentType == PrivateMessage.TYPE_RETRACT) {
-            	holder.contentText.setText("[撤回消息]");
+            switch (msgContent.contentType){
+                case PrivateMessage.TYPE_TEXT:
+                    holder.contentText.setText(msgContent.content.getString("content"));
+                    break;
+                case PrivateMessage.TYPE_PIC:
+                    holder.contentText.setText("[图片消息]");
+                    break;
+
+                case PrivateMessage.TYPE_VIDEO:
+                case PrivateMessage.TYPE_PIC_CARD:
+                case PrivateMessage.TYPE_NOMAL_CARD:
+                    holder.contentText.setText(msgContent.content.getString("title"));
+                    break;
+
+                case PrivateMessage.TYPE_TEXT_WITH_VIDEO:
+                    holder.contentText.setText(msgContent.content.getString("reply_content"));
+                    break;
+                case PrivateMessage.TYPE_RETRACT:
+                    holder.contentText.setText("[撤回消息]");
+                    break;
+
+                default:
+                    holder.contentText.setText("");
             }
             holder.nameText.setText(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).name);
             Glide.with(context).load(GlideUtil.url(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).avatar))

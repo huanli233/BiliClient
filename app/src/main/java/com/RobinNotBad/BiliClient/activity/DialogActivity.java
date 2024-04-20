@@ -24,6 +24,7 @@ public class DialogActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_BiliClient);
         setContentView(R.layout.activity_dialog);
 
         MaterialButton close_btn = findViewById(R.id.close_btn);

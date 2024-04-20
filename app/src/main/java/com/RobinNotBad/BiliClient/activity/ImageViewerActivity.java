@@ -29,6 +29,7 @@ public class ImageViewerActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_BiliClient);
         setContentView(R.layout.activity_image_viewer);
         Intent intent = getIntent();
         ArrayList<String> imageList = intent.getStringArrayListExtra("imageList");

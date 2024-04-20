@@ -23,10 +23,7 @@
         <item name="android:textColor">@color/textwhite</item>
         <item name="android:textSize">14sp</item>
     </style>
-    <style name="Theme.NoSwipe" parent="Theme.BiliClient">
-        <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">false</item>
-    </style>
-    <style name="Theme.Player" parent="android:Theme.Black.NoTitleBar">
+    <style name="Theme.NoSwipe" parent="android:Theme.Black.NoTitleBar">
         <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@color/bgblack</item>

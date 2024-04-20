@@ -43,7 +43,7 @@
         <activity
             android:name=".activity.player.PlayerActivity"
             android:exported="false"
-            android:theme="@style/Theme.Player"
+            android:theme="@style/Theme.NoSwipe"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="内置播放器" />
         <activity
@@ -122,7 +122,7 @@
             android:label="消息"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.message.MessageListActivity"
+            android:name=".activity.message.NoticeActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

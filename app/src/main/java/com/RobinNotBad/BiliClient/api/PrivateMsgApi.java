@@ -45,55 +45,46 @@ public class PrivateMsgApi {
     public static ArrayList<PrivateMessage> getPrivateMsgList(JSONObject allMsgJson)
             throws IOException, JSONException {
         ArrayList<PrivateMessage> list = new ArrayList<>();
-        JSONArray messages = allMsgJson.getJSONArray("messages");
-        UserInfo myInfo = UserInfoApi.getCurrentUserInfo();
-        UserInfo targetInfo = new UserInfo();
+        if(!allMsgJson.isNull("messages")) {
+            JSONArray messages = allMsgJson.getJSONArray("messages");
+            UserInfo myInfo = UserInfoApi.getCurrentUserInfo();
+            UserInfo targetInfo = new UserInfo();
 
-        // list.add(new PrivateMessage(114514,1,new JSONObject("{\"content\":\"
-        // 。\"}"),11111111,"aaaaa",111));
+            // list.add(new PrivateMessage(114514,1,new JSONObject("{\"content\":\"
+            // 。\"}"),11111111,"aaaaa",111));
 
-        boolean isReqTargetInfo = false;
-        for (int i = 0; i < messages.length(); i++) {
-            PrivateMessage msgObject = new PrivateMessage();
-            JSONObject msgJson = messages.getJSONObject(i);
-            msgObject.uid = msgJson.getLong("sender_uid");
-            msgObject.type = msgJson.getInt("msg_type");
-            if (msgObject.uid == myInfo.mid) {
-                msgObject.name = myInfo.name;
-            } else {
-                if (!isReqTargetInfo) {
-                    targetInfo = UserInfoApi.getUserInfo(msgObject.uid);
-                    isReqTargetInfo = true;
+            boolean isReqTargetInfo = false;
+            for (int i = 0; i < messages.length(); i++) {
+                PrivateMessage msgObject = new PrivateMessage();
+                JSONObject msgJson = messages.getJSONObject(i);
+                msgObject.uid = msgJson.getLong("sender_uid");
+                msgObject.type = msgJson.getInt("msg_type");
+                if (msgObject.uid == myInfo.mid) {
+                    msgObject.name = myInfo.name;
+                } else {
+                    if (!isReqTargetInfo) {
+                        targetInfo = UserInfoApi.getUserInfo(msgObject.uid);
+                        isReqTargetInfo = true;
+                    }
+                    if (targetInfo != null) msgObject.name = targetInfo.name;
                 }
-                if(targetInfo!=null) msgObject.name = targetInfo.name;
-            }
-            msgObject.content = new JSONObject("{\"content\":\" .\"}"); // 防止内容不为json时解析错误
-            if (msgJson.getString("content").endsWith("}")
-                    && msgJson.getString("content").startsWith("{")) {
-                msgObject.content =
-                        new JSONObject(msgJson.getString("content") /*.replace("\\","")*/);
-            }
-            msgObject.timestamp = msgJson.getLong("timestamp");
-            msgObject.msgId = msgJson.getLong("msg_key");
-            msgObject.msgSeqno = msgJson.getLong("msg_seqno");
-            list.add(msgObject);
+                msgObject.content = new JSONObject("{\"content\":\" .\"}"); // 防止内容不为json时解析错误
+                if (msgJson.getString("content").endsWith("}")
+                        && msgJson.getString("content").startsWith("{")) {
+                    msgObject.content =
+                            new JSONObject(msgJson.getString("content") /*.replace("\\","")*/);
+                }
+                msgObject.timestamp = msgJson.getLong("timestamp");
+                msgObject.msgId = msgJson.getLong("msg_key");
+                msgObject.msgSeqno = msgJson.getLong("msg_seqno");
+                list.add(msgObject);
 
-        }
-        Log.e("", "返回msgList");
-        for (PrivateMessage i : list) {
-            Log.e(
-                    "msg",
-                    i.name
-                            + "."
-                            + i.uid
-                            + "."
-                            + i.msgId
-                            + "."
-                            + i.timestamp
-                            + "."
-                            + i.content
-                            + "."
-                            + i.type);
+            }
+            Log.e("", "返回msgList");
+            for (PrivateMessage i : list) {
+                Log.e("msg",
+                        i.name + "." + i.uid + "." + i.msgId + "." + i.timestamp + "." + i.content + "." + i.type);
+            }
         }
         return list;
     }
@@ -134,8 +125,7 @@ public class PrivateMsgApi {
     public static ArrayList<PrivateMsgSession> getSessionsList(int size)
             throws IOException, JSONException {
         String url =
-                "https://api.vc.bilibili.com/session_svr/v1/session_svr/get_sessions?session_type=1&size="
-                        + size;
+                "https://api.vc.bilibili.com/session_svr/v1/session_svr/get_sessions?session_type=1&size=" + size;
         JSONObject root = NetWorkUtil.getJson(url);
         ArrayList<PrivateMsgSession> sessionList = new ArrayList<>();
         if (root.has("data") && !root.isNull("data")) {

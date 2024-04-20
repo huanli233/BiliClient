@@ -17,7 +17,7 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 
-public class MessageListActivity extends BaseActivity{
+public class NoticeActivity extends BaseActivity{
     private RecyclerView recyclerView;
     private ArrayList<MessageCard> messageList;
     private MessageAdapter messageAdapter;

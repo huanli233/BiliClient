@@ -37,7 +37,7 @@ public class MessageActivity extends InstanceActivity {
         MaterialCardView reply = findViewById(R.id.reply);
         reply.setOnClickListener(view -> {
             Intent intent = new Intent();
-            intent.setClass(this, MessageListActivity.class);
+            intent.setClass(this, NoticeActivity.class);
             intent.putExtra("type","reply");
             startActivity(intent);
             ((TextView)findViewById(R.id.reply_text)).setText("回复我的");
@@ -47,7 +47,7 @@ public class MessageActivity extends InstanceActivity {
         MaterialCardView like = findViewById(R.id.like);
         like.setOnClickListener(view -> {
             Intent intent = new Intent();
-            intent.setClass(this, MessageListActivity.class);
+            intent.setClass(this, NoticeActivity.class);
             intent.putExtra("type","like");
             startActivity(intent);
             ((TextView)findViewById(R.id.like_text)).setText("收到的赞");
@@ -56,7 +56,7 @@ public class MessageActivity extends InstanceActivity {
         MaterialCardView at = findViewById(R.id.at);
         at.setOnClickListener(view -> {
             Intent intent = new Intent();
-            intent.setClass(this, MessageListActivity.class);
+            intent.setClass(this, NoticeActivity.class);
             intent.putExtra("type","at");
             startActivity(intent);
             ((TextView)findViewById(R.id.at_text)).setText("@我");
@@ -65,7 +65,7 @@ public class MessageActivity extends InstanceActivity {
         MaterialCardView system = findViewById(R.id.system);
         system.setOnClickListener(view -> {
             Intent intent = new Intent();
-            intent.setClass(this, MessageListActivity.class);
+            intent.setClass(this, NoticeActivity.class);
             intent.putExtra("type","system");
             startActivity(intent);
         });
