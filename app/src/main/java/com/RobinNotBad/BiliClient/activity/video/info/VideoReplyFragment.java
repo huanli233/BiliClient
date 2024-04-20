@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.ReplyAdapter;
@@ -29,8 +30,10 @@ public class VideoReplyFragment extends Fragment {
 
     private boolean dontload;
     private long aid;
+    private int sort = 2;
     private int type;
     private RecyclerView recyclerView;
+    private SwipeRefreshLayout refreshLayout;
     private ArrayList<Reply> replyList;
     private ReplyAdapter replyAdapter;
     private boolean refreshing = false;
@@ -72,7 +75,7 @@ public class VideoReplyFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_simple_list, container, false);
+        return inflater.inflate(R.layout.fragment_simple_refresh, container, false);
     }
 
     @Override
@@ -80,6 +83,8 @@ public class VideoReplyFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.recyclerView);
+        refreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        refreshLayout.setOnRefreshListener(() -> refresh(aid));
 
         Log.e("debug-av号",String.valueOf(aid));
 
@@ -105,32 +110,44 @@ public class VideoReplyFragment extends Fragment {
                 }
             }
         });
-        if(!dontload) CenterThreadPool.run(()->{
-            try {
-                int result = ReplyApi.getReplies(aid,0,page,type,replyList);
-                if(result != -1) {
-                    if(isAdded()) requireActivity().runOnUiThread(()-> {
-                        replyAdapter = new ReplyAdapter(requireContext(), replyList,aid,0,type);
-                        recyclerView.setAdapter(replyAdapter);
-                    });
-                    if(result == 1) {
-                        Log.e("debug","到底了");
-                        bottom = true;
+        if(!dontload) {
+            refreshLayout.setRefreshing(true);
+            CenterThreadPool.run(()->{
+                try {
+                    int result = ReplyApi.getReplies(aid,0,page,type,sort,replyList);
+                    if(result != -1) {
+                        if(isAdded()) requireActivity().runOnUiThread(()-> {
+                            replyAdapter = new ReplyAdapter(requireContext(), replyList,aid,0,type,sort);
+                            setOnSortSwitch();
+                            recyclerView.setAdapter(replyAdapter);
+                            refreshLayout.setRefreshing(false);
+                        });
+                        if(result == 1) {
+                            Log.e("debug","到底了");
+                            bottom = true;
+                        }
                     }
-                }
-            } catch (Exception e) {requireActivity().runOnUiThread(()-> MsgUtil.err(e,getContext()));}
-        });
+                } catch (Exception e) {requireActivity().runOnUiThread(()-> {
+                    MsgUtil.err(e,getContext());
+                    refreshLayout.setRefreshing(false);
+                });}
+            });
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void continueLoading() {
         page++;
+        if(isAdded())requireActivity().runOnUiThread(()->refreshLayout.setRefreshing(true));
         try {
             int lastSize = replyList.size();
-            int result = ReplyApi.getReplies(aid,0,page,type,replyList);
+            int result = ReplyApi.getReplies(aid,0,page,type,sort,replyList);
             if(result != -1){
                 Log.e("debug","下一页");
-                if(isAdded()) requireActivity().runOnUiThread(()-> replyAdapter.notifyItemRangeInserted(lastSize + 1, replyList.size() + 1 - lastSize));
+                if(isAdded()) requireActivity().runOnUiThread(()-> {
+                    replyAdapter.notifyItemRangeInserted(lastSize + 1, replyList.size() + 1 - lastSize);
+                    refreshLayout.setRefreshing(false);
+                });
                 if(result == 1) {
                     //requireActivity().runOnUiThread(()-> MsgUtil.toast("到底啦QwQ",requireContext()));
                     Log.e("debug", "到底了");
@@ -138,21 +155,27 @@ public class VideoReplyFragment extends Fragment {
                 }
             }
             refreshing = false;
-        } catch (Exception e) {if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,getContext()));}
+        } catch (Exception e) {if(isAdded()) requireActivity().runOnUiThread(()-> {
+            MsgUtil.err(e,getContext());
+            refreshLayout.setRefreshing(false);
+        });}
     }
 
     public void refresh(long aid){
+        page = 1;
         this.aid = aid;
-        Log.e("","ok");
+        if(isAdded())requireActivity().runOnUiThread(()->refreshLayout.setRefreshing(true));
         if(replyList!=null) replyList.clear();
         else replyList = new ArrayList<>();
         CenterThreadPool.run(()->{
             try {
-                int result = ReplyApi.getReplies(aid,0,page,type,replyList);
+                int result = ReplyApi.getReplies(aid,0,page,type,sort,replyList);
                 if(result != -1) {
                     if(isAdded()) requireActivity().runOnUiThread(()->{
-                        replyAdapter = new ReplyAdapter(requireContext(),replyList,aid,0,type);
+                        replyAdapter = new ReplyAdapter(requireContext(),replyList,aid,0,type,sort);
+                        setOnSortSwitch();
                         recyclerView.setAdapter(replyAdapter);
+                        refreshLayout.setRefreshing(false);
                         //replyAdapter.notifyItemRangeInserted(0,replyList.size());
                     });
                     if(result == 1) {
@@ -161,7 +184,17 @@ public class VideoReplyFragment extends Fragment {
                     }
                     else bottom=false;
                 }
-            } catch (Exception e) {if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,getContext()));}
+            } catch (Exception e) {if(isAdded()) requireActivity().runOnUiThread(()-> {
+                MsgUtil.err(e,getContext());
+                refreshLayout.setRefreshing(false);
+            });}
+        });
+    }
+
+    private void setOnSortSwitch(){
+        replyAdapter.setOnSortSwitchListener(position -> {
+            sort = (sort == 0 ? 2 : 0);
+            refresh(aid);
         });
     }
 }

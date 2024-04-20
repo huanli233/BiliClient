@@ -24,6 +24,7 @@ import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.ReplyInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.WriteReplyActivity;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
+import com.RobinNotBad.BiliClient.listener.OnItemClickListener;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
@@ -34,6 +35,7 @@ import com.RobinNotBad.BiliClient.view.CustomListView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
 
@@ -47,16 +49,22 @@ import java.util.concurrent.ExecutionException;
 public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
-    private final ArrayList<Reply> replyList;
+    ArrayList<Reply> replyList;
     long oid, root;
-    int type;
+    int type, sort;
+    OnItemClickListener listener;
 
-    public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type) {
+    public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort) {
         this.context = context;
         this.replyList = replyList;
         this.oid = oid;
         this.root = root;
         this.type = type;
+        this.sort = sort;
+    }
+
+    public void setOnSortSwitchListener(OnItemClickListener listener){
+        this.listener = listener;
     }
 
     @NonNull
@@ -77,7 +85,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof WriteReply){
             WriteReply writeReply = (WriteReply) holder;
-            writeReply.itemView.setOnClickListener(view -> {
+            writeReply.write_reply.setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(context, WriteReplyActivity.class);
                 intent.putExtra("oid",oid);
@@ -85,6 +93,11 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 intent.putExtra("parent",root);
                 intent.putExtra("parentSender","");
                 context.startActivity(intent);
+            });
+            String[] sorts = {"时间排序","点赞排序","回复排序"};
+            writeReply.sort.setText(sorts[sort]);
+            writeReply.sort.setOnClickListener(view -> {
+                if(this.listener!=null) listener.onItemClick(0);
             });
         }
         if(holder instanceof ReplyHolder) {
@@ -268,12 +281,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public static class WriteReply extends RecyclerView.ViewHolder{
-        TextView text;
+        MaterialButton write_reply, sort;
 
         public WriteReply(@NonNull View itemView) {
             super(itemView);
 
-            text = itemView.findViewById(R.id.text);
+            write_reply = itemView.findViewById(R.id.write_reply);
+            sort = itemView.findViewById(R.id.sort);
         }
     }
 }

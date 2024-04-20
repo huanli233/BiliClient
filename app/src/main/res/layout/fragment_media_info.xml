@@ -81,7 +81,7 @@
                 android:orientation="horizontal"
 
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/cell_button_only_text" />
+                tools:listitem="@layout/cell_episode" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

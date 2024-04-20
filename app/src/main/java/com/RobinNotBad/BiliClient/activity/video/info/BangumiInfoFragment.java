@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
-import com.RobinNotBad.BiliClient.adapter.MediaEpisodesAdapter;
+import com.RobinNotBad.BiliClient.adapter.MediaEpisodeAdapter;
 import com.RobinNotBad.BiliClient.api.BangumiApi;
 import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -94,7 +94,7 @@ public class BangumiInfoFragment extends Fragment {
                 .into(imageMediaCover);
         title.setText(bangumi.info.title);
         //section selector setting.
-        MediaEpisodesAdapter adapter = new MediaEpisodesAdapter();
+        MediaEpisodeAdapter adapter = new MediaEpisodeAdapter();
 
         adapter.setOnItemClickListener(index -> {
             selectedEpisode = index;
@@ -143,7 +143,7 @@ public class BangumiInfoFragment extends Fragment {
             refreshReplies();
             Bangumi.Section section = bangumi.sectionList.get(which);
             section_choose.setText(section.title + " 点击切换");
-            MediaEpisodesAdapter adapter = (MediaEpisodesAdapter) eposideRecyclerView.getAdapter();
+            MediaEpisodeAdapter adapter = (MediaEpisodeAdapter) eposideRecyclerView.getAdapter();
             if (adapter != null) {
                 adapter.setData(bangumi.sectionList.get(which).episodeList);
                 eposideRecyclerView.scrollToPosition(0);
@@ -170,7 +170,7 @@ public class BangumiInfoFragment extends Fragment {
             selectedEpisode = which;
             refreshReplies();
 
-            MediaEpisodesAdapter adapter = (MediaEpisodesAdapter) eposideRecyclerView.getAdapter();
+            MediaEpisodeAdapter adapter = (MediaEpisodeAdapter) eposideRecyclerView.getAdapter();
             if (adapter != null) {
                 adapter.setSelectedItemIndex(which);
                 eposideRecyclerView.scrollToPosition(which);

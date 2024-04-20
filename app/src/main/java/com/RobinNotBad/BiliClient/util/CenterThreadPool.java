@@ -1,16 +1,17 @@
 package com.RobinNotBad.BiliClient.util;
 
-import android.app.Activity;
-import android.app.ActivityManager;
-import androidx.core.app.ActivityManagerCompat;
 import androidx.core.util.Consumer;
 import androidx.core.util.Supplier;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import com.RobinNotBad.BiliClient.BiliTerminal;
+
 import com.bumptech.glide.util.Executors;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -147,6 +148,7 @@ public class CenterThreadPool {
      */
 
     private static int getBestThreadPoolSize(){
+        /*
         try {
             ActivityManager activityManager = (ActivityManager) BiliTerminal.context.getSystemService(Activity.ACTIVITY_SERVICE);
             ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
@@ -156,9 +158,11 @@ public class CenterThreadPool {
             int size2 = Runtime.getRuntime().availableProcessors() * 2;
             return Integer.min(size1, size2);
         }catch (Throwable e){
-            // 如果获取失败，避免有些设备阉割了ActivityManager返回cpu核心数的2倍
-            return Runtime.getRuntime().availableProcessors();
+            // 如果获取失败，避免有些设备阉割了ActivityManager返回cpu核心数的2倍      //然而还真就有设备不能用
+            return Runtime.getRuntime().availableProcessors() * 2;
         }
+         */
+        return Runtime.getRuntime().availableProcessors() * 2;
     }
 
 

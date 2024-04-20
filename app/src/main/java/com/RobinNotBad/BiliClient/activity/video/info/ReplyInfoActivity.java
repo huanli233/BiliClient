@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
@@ -26,8 +27,10 @@ public class ReplyInfoActivity extends BaseActivity {
 
     private long oid;
     private long rpid;
+    private int sort = 0;
     private int type;
     private RecyclerView recyclerView;
+    private SwipeRefreshLayout refreshLayout;
     private ArrayList<Reply> replyList;
     private ReplyAdapter replyAdapter;
     private boolean bottom = false;
@@ -38,24 +41,28 @@ public class ReplyInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simple_list);
+        setContentView(R.layout.activity_simple_refresh);
 
         Intent intent = getIntent();
         rpid = intent.getLongExtra("rpid", 0);
         oid = intent.getLongExtra("oid",0);
         type = intent.getIntExtra("type",1);
 
+        refreshLayout = findViewById(R.id.swipeRefreshLayout);
         recyclerView = findViewById(R.id.recyclerView);
+        refreshLayout.setOnRefreshListener(this::refresh);
 
         setPageName("评论详情");
 
         replyList = new ArrayList<>();
 
+        refreshLayout.setRefreshing(true);
         CenterThreadPool.run(()->{
             try {
-                int result = ReplyApi.getReplies(oid,rpid,page,type,replyList);
+                int result = ReplyApi.getReplies(oid,rpid,page,type,sort,replyList);
                 if(result != -1) {
-                    replyAdapter = new ReplyAdapter(this, replyList,oid,rpid,type);
+                    replyAdapter = new ReplyAdapter(this, replyList,oid,rpid,type,sort);
+                    setOnSortSwitch();
                     runOnUiThread(()->{
                         recyclerView.setLayoutManager(new LinearLayoutManager(this));
                         recyclerView.setAdapter(replyAdapter);
@@ -78,6 +85,7 @@ public class ReplyInfoActivity extends BaseActivity {
                                 }
                             }
                         });
+                        refreshLayout.setRefreshing(false);
                     });
                     if(result == 1) {
                         Log.e("debug","到底了");
@@ -85,18 +93,25 @@ public class ReplyInfoActivity extends BaseActivity {
                     }
                 }
 
-            } catch (Exception e) {runOnUiThread(()-> MsgUtil.err(e,this));}
+            } catch (Exception e) {runOnUiThread(()-> {
+                MsgUtil.err(e,this);
+                refreshLayout.setRefreshing(false);
+            });}
         });
     }
 
     private void continueLoading() {
+        runOnUiThread(()->refreshLayout.setRefreshing(true));
         page++;
         try {
             int lastSize = replyList.size();
-            int result = ReplyApi.getReplies(oid,rpid,page,type,replyList);
+            int result = ReplyApi.getReplies(oid,rpid,page,type,sort,replyList);
             if(result != -1){
                 Log.e("debug","下一页");
-                runOnUiThread(()-> replyAdapter.notifyItemRangeInserted(lastSize + 1,replyList.size() + 1 - lastSize));
+                runOnUiThread(()-> {
+                    replyAdapter.notifyItemRangeInserted(lastSize + 1,replyList.size() + 1 - lastSize);
+                    refreshLayout.setRefreshing(false);
+                });
                 if(result == 1) {
                     //runOnUiThread(()-> MsgUtil.toast("到底啦QwQ",this));
                     Log.e("debug","到底了");
@@ -104,6 +119,45 @@ public class ReplyInfoActivity extends BaseActivity {
                 }
             }
             refreshing = false;
-        } catch (Exception e) {runOnUiThread(()-> MsgUtil.err(e,this));}
+        } catch (Exception e) {runOnUiThread(()-> {
+            MsgUtil.err(e,this);
+            refreshLayout.setRefreshing(false);
+        });}
+    }
+
+    private void refresh(){
+        page = 1;
+        replyList.clear();
+        refreshLayout.setRefreshing(true);
+
+        CenterThreadPool.run(()->{
+            try {
+                int result = ReplyApi.getReplies(oid,rpid,page,type,sort,replyList);
+                if(result != -1) {
+                    runOnUiThread(()->{
+                        replyAdapter = new ReplyAdapter(this,replyList,oid,rpid,type,sort);
+                        setOnSortSwitch();
+                        recyclerView.setAdapter(replyAdapter);
+                        refreshLayout.setRefreshing(false);
+                        //replyAdapter.notifyItemRangeInserted(0,replyList.size());
+                    });
+                    if(result == 1) {
+                        Log.e("debug","到底了");
+                        bottom = true;
+                    }
+                    else bottom=false;
+                }
+            } catch (Exception e) {runOnUiThread(()-> {
+                MsgUtil.err(e,this);
+                refreshLayout.setRefreshing(false);
+            });}
+        });
+    }
+
+    private void setOnSortSwitch(){
+        replyAdapter.setOnSortSwitchListener(position -> {
+            sort = (sort == 0 ? 1 : 0);
+            refresh();
+        });
     }
 }

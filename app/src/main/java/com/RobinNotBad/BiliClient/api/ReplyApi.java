@@ -29,8 +29,8 @@ public class ReplyApi {
 
     //oid：评论区id，可以是视频aid
     //rpid：若要查看子评论，这个参数是父评论的id，否则填0
-    public static int getReplies(long oid, long rpid, int pn, int type, ArrayList<Reply> replyArrayList) throws JSONException, IOException {
-        String sort = rpid == 0 ? "2" : "0";
+    //sort：评论区排序方式，0=时间；1=点赞数量；2=回复数量
+    public static int getReplies(long oid, long rpid, int pn, int type, int sort, ArrayList<Reply> replyArrayList) throws JSONException, IOException {
 
         String url = "https://api.bilibili.com/x/v2/reply" + (rpid == 0 ? "" : "/reply") + "?pn=" + pn
                 + "&type=" + type + "&oid=" + oid + "&sort=" + sort + (rpid == 0 ? "" : ("&root=" + rpid));

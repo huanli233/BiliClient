@@ -15,7 +15,7 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
-public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdapter.EposidesHolder> {
+public class MediaEpisodeAdapter extends RecyclerView.Adapter<MediaEpisodeAdapter.EposidesHolder> {
     private ArrayList<Bangumi.Episode> episodeList;
 
     public OnItemClickListener listener;
@@ -43,7 +43,7 @@ public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdap
     @NonNull
     @Override
     public EposidesHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_button_only_text, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_episode, parent, false);
         return new EposidesHolder(view);
     }
 
@@ -71,11 +71,11 @@ public class MediaEpisodesAdapter extends RecyclerView.Adapter<MediaEpisodesAdap
         void bind(int currentIndex, boolean isSelected) {
             button.setText(episodeList.get(currentIndex).title);
             if (isSelected) {
-                button.setTextColor(0x78242424);
+                button.setTextColor(0xcc262626);
                 ViewCompat.setBackgroundTintList(button, AppCompatResources.getColorStateList(itemView.getContext(), R.color.background_button_selected));
                 button.setOnClickListener(null);
             } else {
-                button.setTextColor(0xFFFFFFFF);
+                button.setTextColor(0xffebe0e2);
                 ViewCompat.setBackgroundTintList(button, AppCompatResources.getColorStateList(itemView.getContext(), R.color.background_button));
                 button.setOnClickListener(v -> {
                     setSelectedItemIndex(currentIndex);
