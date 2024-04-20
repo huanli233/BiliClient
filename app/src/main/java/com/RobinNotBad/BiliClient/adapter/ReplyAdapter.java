@@ -71,7 +71,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if(viewType == 0){
-            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_write_reply,parent,false);
+            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_reply_action,parent,false);
             return new WriteReply(view);
         }
         else{
@@ -148,7 +148,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 else replyHolder.childCount.setText("共" + replyList.get(realPosition).childCount + "条回复");
 
                 if(replyList.get(realPosition).childMsgList != null) {
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.cell_child_reply, replyList.get(realPosition).childMsgList);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.cell_reply_child, replyList.get(realPosition).childMsgList);
                     replyHolder.childReplies.setAdapter(adapter);
                 }
             } else replyHolder.childReplyCard.setVisibility(View.GONE);

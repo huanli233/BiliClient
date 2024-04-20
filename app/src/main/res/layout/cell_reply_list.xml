@@ -59,7 +59,7 @@
         android:layout_marginTop="4dp"
         android:alpha="0.7"
         android:text="514"
-        android:textSize="12sp"
+        android:textSize="13sp"
         app:drawableStartCompat="@drawable/icon_like"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageCard" />
@@ -71,6 +71,7 @@
         android:layout_marginStart="8dp"
         android:adjustViewBounds="true"
         android:alpha="0.7"
+        android:scaleType="centerInside"
         android:src="@drawable/icon_dislike"
         app:layout_constraintBottom_toBottomOf="@+id/likes"
         app:layout_constraintStart_toEndOf="@+id/likes"
@@ -163,12 +164,12 @@
         android:alpha="0.7"
         android:gravity="center"
         android:text="回复"
-        android:textSize="12sp"
+        android:textSize="13sp"
+        app:drawableStartCompat="@drawable/reply"
         app:layout_constraintBottom_toBottomOf="@+id/likes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/likes"
-        app:layout_constraintVertical_bias="0.0"
-        app:drawableStartCompat="@drawable/reply"/>
+        app:layout_constraintVertical_bias="0.0" />
 
     <View
         android:id="@+id/divider"
