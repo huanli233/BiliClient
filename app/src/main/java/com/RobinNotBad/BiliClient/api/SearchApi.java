@@ -15,7 +15,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 //搜索API 自己写的
@@ -33,12 +32,11 @@ public class SearchApi {
             seid = "";
         }
 
-        String url = "https://api.bilibili.com/x/web-interface/wbi/search/all/v2?page=" + page +
-                "&keyword=" + URLEncoder.encode(search_keyword, "UTF-8") + "&seid=" + seid;
-        url = ConfInfoApi.signWBI(url);
-        Log.e("debug-搜索链接",url);
+        String url = "https://api.bilibili.com/x/web-interface/wbi/search/all/v2?";
+        String args = "page=" + page +
+        "&keyword=" + URLEncoder.encode(search_keyword, "UTF-8") + "&seid=" + seid;
 
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());  //得到一整个json
+        JSONObject all = NetWorkUtil.getJson(url + ConfInfoApi.signWBI(args));  //得到一整个json
 
         JSONObject data = all.getJSONObject("data");  //搜索列表中的data项又是一个json，把它提出来
 
@@ -54,12 +52,11 @@ public class SearchApi {
             seid = "";
         }
 
-        String url = "https://api.bilibili.com/x/web-interface/wbi/search/type?page=" + page +
-                "&keyword=" + URLEncoder.encode(search_keyword, "UTF-8") + "&search_type=" + type + "&seid=" + seid;
-        url = ConfInfoApi.signWBI(url);
-        Log.e("debug-搜索链接",url);
+        String url = "https://api.bilibili.com/x/web-interface/wbi/search/type?";
+        String args = "page=" + page +
+        "&keyword=" + URLEncoder.encode(search_keyword, "UTF-8") + "&search_type=" + type + "&seid=" + seid;
 
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());  //得到一整个json
+        JSONObject all = NetWorkUtil.getJson(url + ConfInfoApi.signWBI(args));  //得到一整个json
 
         JSONObject data = all.getJSONObject("data");  //搜索列表中的data项又是一个json，把它提出来
 

@@ -81,7 +81,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                 url=ConfInfoApi.signWBI(url);
                 Log.e("debug-哔哩终端-跳转页","请求链接：" + url);
 
-                Response response = NetWorkUtil.get(url, ConfInfoApi.webHeaders);
+                Response response = NetWorkUtil.get(url, NetWorkUtil.webHeaders);
 
                 String body = Objects.requireNonNull(response.body()).string();
                 Log.e("debug-body", body);

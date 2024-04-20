@@ -14,7 +14,6 @@ import com.RobinNotBad.BiliClient.activity.settings.SetupUIActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.CookieRefreshApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -58,7 +57,7 @@ public class SplashActivity extends Activity {
             if(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.setup,false)) {//判断是否设置完成
                 try {
 
-                    NetWorkUtil.get("https://www.bilibili.com",ConfInfoApi.webHeaders);
+                    NetWorkUtil.get("https://www.bilibili.com", NetWorkUtil.webHeaders);
 
                     if (SharedPreferencesUtil.getLong("mid", 0) != 0) checkCookie();
 
@@ -110,7 +109,7 @@ public class SplashActivity extends Activity {
                     String refreshCsrf = CookieRefreshApi.getRefreshCsrf(correspondPath);
                     Log.e("RefreshCsrf",refreshCsrf);
                     if(CookieRefreshApi.refreshCookie(refreshCsrf)){
-                        ConfInfoApi.refreshHeaders();
+                        NetWorkUtil.refreshHeaders();
                         runOnUiThread(()-> MsgUtil.toast("Cookie已刷新",this));
                     }
                     else {
@@ -132,6 +131,6 @@ public class SplashActivity extends Activity {
         SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, "");
         SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, "");
         SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token, "");
-        ConfInfoApi.refreshHeaders();
+        NetWorkUtil.refreshHeaders();
     }
 }

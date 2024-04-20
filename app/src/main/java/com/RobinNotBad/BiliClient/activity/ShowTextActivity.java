@@ -29,6 +29,7 @@ public class ShowTextActivity extends BaseActivity {
         TextView pagename = findViewById(R.id.pageName);
         pagename.setText(intent.getStringExtra("title"));
 
+        content.replace("[extra_insert]","<extra_insert>");
         int extra_start = content.indexOf("<extra_insert>");
         if (extra_start != -1){
             try {

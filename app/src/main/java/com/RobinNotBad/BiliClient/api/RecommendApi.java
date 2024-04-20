@@ -1,9 +1,9 @@
 package com.RobinNotBad.BiliClient.api;
 
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,9 +11,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
-
-import okhttp3.Response;
 
 
 //推荐API 自己写的
@@ -25,8 +22,7 @@ public class RecommendApi {
     public static void getRecommend(ArrayList<VideoCard> videoCardList) throws IOException, JSONException {
         String url = (SharedPreferencesUtil.getLong("mid",0) == 0 ? "https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd" : "https://api.bilibili.com/x/web-interface/index/top/rcmd");
 
-        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
-        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());  //得到一整个json
+        JSONObject result = NetWorkUtil.getJson(url);  //得到一整个json
 
         JSONObject data = result.getJSONObject("data");  //推荐列表中的data项又是一个json，把它提出来
 
@@ -46,8 +42,7 @@ public class RecommendApi {
     public static ArrayList<VideoCard> getRelated(long aid) throws JSONException, IOException {
         String url = "https://api.bilibili.com/x/web-interface/archive/related?aid=" + aid;
 
-        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
-        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());  //得到一整个json
+        JSONObject result = NetWorkUtil.getJson(url);  //得到一整个json
 
         ArrayList<VideoCard> videoList = new ArrayList<>();
         if(result.has("data") && !result.isNull("data")) {
@@ -73,8 +68,7 @@ public class RecommendApi {
 
         String url = "https://api.bilibili.com/x/web-interface/popular?pn=" + page + "&ps=10";
 
-        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
-        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());  //得到一整个json
+        JSONObject result = NetWorkUtil.getJson(url);  //得到一整个json
 
         if(result.has("data") && !result.isNull("data")){
             if(result.getJSONObject("data").has("list")){
@@ -97,8 +91,7 @@ public class RecommendApi {
 
         String url = "https://api.bilibili.com/x/web-interface/popular/precious?page=" + page + "&page_size=10";
 
-        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
-        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());  //得到一整个json
+        JSONObject result = NetWorkUtil.getJson(url);  //得到一整个json
 
         if(result.has("data") && !result.isNull("data")){
             if(result.getJSONObject("data").has("list")){

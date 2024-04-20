@@ -38,7 +38,6 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -591,7 +590,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         //这个坑死我！请允许我为解决此问题而大大地兴奋一下ohhhhhhhhhhhhhhhhhhhhhhhhhhhh
         //ijkplayer是自带一个useragent的，要把默认的改掉才能用！
         if(mode==0) {
-            ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "user_agent", ConfInfoApi.USER_AGENT_WEB);
+            ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "user_agent", NetWorkUtil.USER_AGENT_WEB);
             Log.e("debug","设置ua");
         }
 
@@ -866,7 +865,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     private void downdanmu() {
         try {
-            Response response = NetWorkUtil.get(danmaku_url, ConfInfoApi.webHeaders);
+            Response response = NetWorkUtil.get(danmaku_url, NetWorkUtil.webHeaders);
             BufferedSink bufferedSink = null;
             try {
                 if (!danmakuFile.exists()) danmakuFile.createNewFile();

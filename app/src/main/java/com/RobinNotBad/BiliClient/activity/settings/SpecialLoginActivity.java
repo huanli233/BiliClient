@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -50,7 +49,7 @@ public class SpecialLoginActivity extends BaseActivity {
                     runOnUiThread(() -> MsgUtil.toast("登录成功！",this));
                     SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup, true);
 
-                    ConfInfoApi.refreshHeaders();
+                    NetWorkUtil.refreshHeaders();
 
                     Intent intent1 = new Intent();
                     intent1.setClass(SpecialLoginActivity.this, SplashActivity.class);

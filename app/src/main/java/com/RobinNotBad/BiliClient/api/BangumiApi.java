@@ -25,9 +25,7 @@ public class BangumiApi {
 
     public static Bangumi.Info getInfo(long mediaId) throws IOException, JSONException {
         String url = "https://api.bilibili.com/pgc/review/user?media_id=" + mediaId;
-        ResponseBody body = NetWorkUtil.get(url, ConfInfoApi.webHeaders).body();
-        if (body == null) throw new JSONException("返回数据为空");
-        JSONObject all = new JSONObject(body.string());
+        JSONObject all = NetWorkUtil.getJson(url);
 
         int code = all.getInt("code");
         if (code != 0) {throw new JSONException("错误码：" + code);}

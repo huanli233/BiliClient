@@ -21,9 +21,8 @@ import okhttp3.Response;
 public class WatchLaterApi {
     public static ArrayList<VideoCard> getWatchLaterList() throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/v2/history/toview/web";
-        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
 
-        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
+        JSONObject result = NetWorkUtil.getJson(url);
         JSONObject data = result.getJSONObject("data");
         JSONArray list = data.getJSONArray("list");
 
@@ -46,7 +45,7 @@ public class WatchLaterApi {
         String url = "https://api.bilibili.com/x/v2/history/toview/del";
         String per = "aid=" + aid + "&csrf=" + SharedPreferencesUtil.getString("csrf","");
 
-        Response response = NetWorkUtil.post(url,per,ConfInfoApi.webHeaders);
+        Response response = NetWorkUtil.post(url,per, NetWorkUtil.webHeaders);
 
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
 
@@ -57,7 +56,7 @@ public class WatchLaterApi {
         String url = "https://api.bilibili.com/x/v2/history/toview/add";
         String per = "aid=" + aid + "&csrf=" + SharedPreferencesUtil.getString("csrf","");
 
-        Response response = NetWorkUtil.post(url,per,ConfInfoApi.webHeaders);
+        Response response = NetWorkUtil.post(url,per, NetWorkUtil.webHeaders);
 
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
 

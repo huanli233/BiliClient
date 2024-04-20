@@ -32,18 +32,11 @@ public class PrivateMsgApi {
     public static JSONObject getPrivateMsg(long talkerId, int size,long beginSeqno,long endSeqno)
             throws IOException, JSONException {
         String url =
-                "https://api.vc.bilibili.com/svr_sync/v1/svr_sync/fetch_session_msgs?session_type=1&talker_id="
-                        + talkerId
-                        + "&size="
-                        + size
-                        + "&begin_seqno="
-                        + beginSeqno
-                        + "&end_seqno="
-                        + endSeqno;
-        JSONObject allMsgJson =
-                new JSONObject(
-                        Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body())
-                                .string());
+                "https://api.vc.bilibili.com/svr_sync/v1/svr_sync/fetch_session_msgs?session_type=1&talker_id=" + talkerId
+                        + "&size=" + size
+                        + "&begin_seqno=" + beginSeqno
+                        + "&end_seqno=" + endSeqno;
+        JSONObject allMsgJson = NetWorkUtil.getJson(url);
         if (allMsgJson.has("data") && !allMsgJson.isNull("data"))
             return allMsgJson.getJSONObject("data");
         else return new JSONObject();
@@ -119,14 +112,10 @@ public class PrivateMsgApi {
         for (Long uid : uidList) {
             userString.append(uid).append(",");
         }
-        String url =
-                "https://api.vc.bilibili.com/account/v1/user/cards?uids="
+        String url = "https://api.vc.bilibili.com/account/v1/user/cards?uids="
                         + userString.substring(0, userString.length() - 1);
         HashMap<Long, UserInfo> userMap = new HashMap<>();
-        JSONObject root =
-                new JSONObject(
-                        Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body())
-                                .string());
+        JSONObject root = NetWorkUtil.getJson(url);
         if (root.has("data") && !root.isNull("data")) {
             JSONArray data = root.getJSONArray("data");
             for (int i = 0; i < data.length(); ++i) {
@@ -147,10 +136,7 @@ public class PrivateMsgApi {
         String url =
                 "https://api.vc.bilibili.com/session_svr/v1/session_svr/get_sessions?session_type=1&size="
                         + size;
-        JSONObject root =
-                new JSONObject(
-                        Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body())
-                                .string());
+        JSONObject root = NetWorkUtil.getJson(url);
         ArrayList<PrivateMsgSession> sessionList = new ArrayList<>();
         if (root.has("data") && !root.isNull("data")) {
             JSONArray sessions = root.getJSONObject("data").getJSONArray("session_list");
@@ -180,29 +166,18 @@ public class PrivateMsgApi {
             throws IOException, JSONException {
         String url = "https://api.vc.bilibili.com/web_im/v1/web_im/send_msg?";
         String per =
-                "msg[dev_id]="
-                        + getDevId()
-                        + "&msg[msg_type]="
-                        + msgType
-                        + "&msg[content]="
-                        + content
-                        + "&msg[receiver_type]=1&csrf="
-                        + SharedPreferencesUtil.getString("csrf", "")
-                        + "&msg[sender_uid]="
-                        + senderUid
-                        + "&msg[receiver_id]="
-                        + receiverUid
-                        + "&msg[timestamp]="
-                        + timestamp;
+                "msg[dev_id]=" + getDevId()
+                        + "&msg[msg_type]=" + msgType
+                        + "&msg[content]=" + content
+                        + "&msg[receiver_type]=1&csrf=" + SharedPreferencesUtil.getString("csrf", "")
+                        + "&msg[sender_uid]=" + senderUid
+                        + "&msg[receiver_id]=" + receiverUid
+                        + "&msg[timestamp]=" + timestamp;
 
-        JSONObject result =
-                new JSONObject(
-                        Objects.requireNonNull(
-                                        NetWorkUtil.post(url, per, ConfInfoApi.webHeaders).body())
-                                .string());
+        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, NetWorkUtil.webHeaders).body()).string());
         
         Log.e("debug-发送私信", result.toString());
-        Log.e("debug-发送私信", ConfInfoApi.webHeaders.toString());
+        Log.e("debug-发送私信", NetWorkUtil.webHeaders.toString());
         return result;
     }
 

@@ -14,7 +14,6 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.LoginApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -197,7 +196,7 @@ public class QRLoginActivity extends BaseActivity {
                             }
                             else SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup,true);
 
-                            ConfInfoApi.refreshHeaders();
+                            NetWorkUtil.refreshHeaders();
 
                             Intent intent = new Intent();
                             intent.setClass(QRLoginActivity.this, SplashActivity.class);

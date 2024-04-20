@@ -15,9 +15,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Objects;
-
-import okhttp3.Response;
 
 
 //视频信息API 自己写的
@@ -26,30 +23,26 @@ import okhttp3.Response;
 public class VideoInfoApi {
     public static JSONObject getJsonByBvid(String bvid) throws IOException, JSONException {  //通过bvid获取json
         String url = "https://api.bilibili.com/x/web-interface/view?bvid=" + bvid;
-        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
-        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
+        JSONObject result = NetWorkUtil.getJson(url);
         return result.getJSONObject("data");
     }
 
     public static JSONObject getJsonByAid(long aid) throws IOException, JSONException {  //通过aid获取json
         String url = "https://api.bilibili.com/x/web-interface/view?aid=" + aid;
-        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
-        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
+        JSONObject result = NetWorkUtil.getJson(url);
         return result.getJSONObject("data");
     }
 
     
     public static String getTagsByBvid(String bvid) throws IOException, JSONException {  //通过bvid获取tag
         String url = "https://api.bilibili.com/x/tag/archive/tags?bvid=" + bvid;
-        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
-        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
+        JSONObject result = NetWorkUtil.getJson(url);
         return analyzeTags(result.getJSONArray("data"));
     }
 
     public static String getTagsByAid(long aid) throws IOException, JSONException {  //通过aid获取tag
         String url = "https://api.bilibili.com/x/tag/archive/tags?aid=" + aid;
-        Response response = NetWorkUtil.get(url,ConfInfoApi.webHeaders);
-        JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
+        JSONObject result = NetWorkUtil.getJson(url);
         return analyzeTags(result.getJSONArray("data"));
     }
 

@@ -5,9 +5,9 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,11 +17,9 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
 
 /**
@@ -36,8 +34,6 @@ public class ConfInfoApi
         return new File(Environment.getExternalStorageDirectory() + "/Android/media/" + context.getPackageName() + "/");
     }
 
-    public static final String USER_AGENT_WEB = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.160 Safari/537.36";
-
 
     /*
     这里是WBI签名校验
@@ -49,7 +45,7 @@ public class ConfInfoApi
         36, 20, 34, 44, 52};
 
     public static String getWBIRawKey() throws IOException, JSONException {
-        JSONObject getJson = new JSONObject(Objects.requireNonNull(NetWorkUtil.get("https://api.bilibili.com/x/web-interface/nav", webHeaders).body()).string());
+        JSONObject getJson = NetWorkUtil.getJson("https://api.bilibili.com/x/web-interface/nav");
         JSONObject wbi_img = getJson.getJSONObject("data").getJSONObject("wbi_img");  //不要被名称骗了，这玩意是签名用的
         String img_key = ToolsUtil.getFileFirstName(ToolsUtil.getFileNameFromLink(wbi_img.getString("img_url")));  //得到文件名
         String sub_key = ToolsUtil.getFileFirstName(ToolsUtil.getFileNameFromLink(wbi_img.getString("sub_url")));
@@ -132,22 +128,6 @@ public class ConfInfoApi
             md5code.insert(0, "0");
         }
         return md5code.toString();
-    }
-
-    public static ArrayList<String> webHeaders = new ArrayList<String>() {{
-        add("Cookie");
-        add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
-        add("Referer");
-        add("https://www.bilibili.com/");
-        add("User-Agent");
-        add(USER_AGENT_WEB);
-        add("Content-Type");
-        add("application/x-www-form-urlencoded");
-    }};
-
-
-    public static void refreshHeaders(){
-        webHeaders.set(1,SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
     }
 
 

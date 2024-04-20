@@ -16,8 +16,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import okhttp3.Response;
-
 //新的动态api，旧的那个实在太蛋疼而且说不定随时会被弃用（
 
 public class DynamicApi {
@@ -26,11 +24,8 @@ public class DynamicApi {
                 + (mid==0 ? "all?" : "space?host_mid=" + mid)
                 + (offset==0 ? "" : "&offset=" + offset);
 
-        Response response = NetWorkUtil.get(url);
-        if(response.body()==null) throw new JSONException("动态返回数据为空TAT");
-        JSONObject all = new JSONObject(response.body().string());
+        JSONObject all = NetWorkUtil.getJson(url);
         if(all.getInt("code")!=0) throw new JSONException(all.getString("message"));
-        //以后API也按照这个写吧，提供的报错信息清楚些也不会爆黄
 
         JSONObject data = all.getJSONObject("data");
 
@@ -48,9 +43,7 @@ public class DynamicApi {
     public static Dynamic getDynamic(long id) throws JSONException, IOException {
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/detail?id=" + id;
 
-        Response response = NetWorkUtil.get(url);
-        if(response.body()==null) throw new JSONException("动态返回数据为空TAT");
-        JSONObject all = new JSONObject(response.body().string());
+        JSONObject all = NetWorkUtil.getJson(url);
         if(all.getInt("code")!=0) throw new JSONException(all.getString("message"));
 
         JSONObject data = all.getJSONObject("data");

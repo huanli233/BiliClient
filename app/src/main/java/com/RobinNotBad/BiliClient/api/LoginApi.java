@@ -33,12 +33,12 @@ public class LoginApi
         headers = new ArrayList<String>()
         {{
             add("Cookie"); add("sid=" + sid);
-            add("User-Agent"); add(ConfInfoApi.USER_AGENT_WEB);
+            add("User-Agent"); add(NetWorkUtil.USER_AGENT_WEB);
             add("Referer"); add("https://www.bilibili.com/");
         }};
 
         String url = "https://passport.bilibili.com/x/passport-login/web/qrcode/generate";
-        JSONObject loginUrlJson = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, headers).body()).string()).getJSONObject("data");
+        JSONObject loginUrlJson = NetWorkUtil.getJson(url,headers).getJSONObject("data");
         oauthKey = (String) loginUrlJson.get("qrcode_key");
         return QRCodeUtil.createQRCodeBitmap((String) loginUrlJson.get("url"), 320, 320);
     }

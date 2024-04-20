@@ -1,14 +1,13 @@
 package com.RobinNotBad.BiliClient.api;
 
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Objects;
 
 /*
 专栏API
@@ -18,7 +17,7 @@ public class ArticleApi {
     public static ArticleInfo getArticle(long id) throws JSONException, IOException {
         String url = "https://api.bilibili.com/x/article/view?";
         String args = "id=" + id + "&gaia_source=main_web&web_location=333.976";
-        JSONObject data = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.webHeaders).body()).string()).getJSONObject("data");
+        JSONObject data = NetWorkUtil.getJson(url + ConfInfoApi.signWBI(args)).getJSONObject("data");
 
         ArticleInfo articleInfo = new ArticleInfo();
         articleInfo.id = id;

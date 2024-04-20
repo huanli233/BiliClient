@@ -14,9 +14,9 @@ import com.RobinNotBad.BiliClient.activity.player.PlayerActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
+import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -85,7 +85,7 @@ public class PlayerApi {
                     headers.put("Cookie",SharedPreferencesUtil.getString("cookies", ""));
                     headers.put("Referer","https://www.bilibili.com/");
                     intent.putExtra("cookie",(Serializable) headers);
-                    intent.putExtra("agent",ConfInfoApi.USER_AGENT_WEB);
+                    intent.putExtra("agent", NetWorkUtil.USER_AGENT_WEB);
                 }
                 Log.e("uri",intent.getData().toString());
                 intent.putExtra("danmaku", danmakuurl);

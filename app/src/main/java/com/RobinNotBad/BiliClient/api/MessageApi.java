@@ -13,12 +13,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class MessageApi {
     public static JSONObject getUnread() throws IOException, JSONException{
         String url = "https://api.bilibili.com/x/msgfeed/unread";
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+        JSONObject all = NetWorkUtil.getJson(url);
         JSONObject jsonObject = new JSONObject();
         if(all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
@@ -36,7 +35,7 @@ public class MessageApi {
     }
     public static ArrayList<MessageCard> getLikeMsg() throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/msgfeed/like?platform=web&build=0&mobi_app=web";
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+        JSONObject all = NetWorkUtil.getJson(url);
         if(all.has("data") && !all.isNull("data")) {
             //所有消息
             ArrayList<MessageCard> totalArray = new ArrayList<>();
@@ -107,7 +106,7 @@ public class MessageApi {
     
     public static ArrayList<MessageCard> getReplyMsg() throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/msgfeed/reply?platform=web&build=0&mobi_app=web";
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+        JSONObject all = NetWorkUtil.getJson(url);
         if(all.has("data") && !all.isNull("data")) {
             ArrayList<MessageCard> totalArray = new ArrayList<>();
             for(int i = 0;i < all.getJSONObject("data").getJSONArray("items").length();i++) {
@@ -172,7 +171,7 @@ public class MessageApi {
 
     public static ArrayList<MessageCard> getAtMsg() throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/msgfeed/at?platform=web&build=0&mobi_app=web";
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+        JSONObject all = NetWorkUtil.getJson(url);
         if(all.has("data") && !all.isNull("data")) {
             ArrayList<MessageCard> totalArray = new ArrayList<>();
             for(int i = 0;i < all.getJSONObject("data").getJSONArray("items").length();i++) {
@@ -236,7 +235,7 @@ public class MessageApi {
 
     public static ArrayList<MessageCard> getSystemMsg() throws IOException, JSONException {
         String url = "https://message.bilibili.com/x/sys-msg/query_user_notify?csrf=" + NetWorkUtil.getInfoFromCookie("bili_jct", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""))  + "&page_size=35&build=0&mobi_app=web";
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+        JSONObject all = NetWorkUtil.getJson(url);
         if(all.has("data") && !all.isNull("data")) {
             ArrayList<MessageCard> totalArray = new ArrayList<>();
             for(int i = 0;i < all.getJSONObject("data").getJSONArray("system_notify_list").length();i++) {

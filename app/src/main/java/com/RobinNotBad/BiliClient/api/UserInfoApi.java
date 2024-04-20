@@ -23,9 +23,9 @@ public class UserInfoApi {
 
     public static UserInfo getUserInfo(long mid) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/web-interface/card?mid=" + mid;
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+        JSONObject all = NetWorkUtil.getJson(url);
         if(all.has("data") && !all.isNull("data")) {
-            JSONObject notice_all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get("https://api.bilibili.com/x/space/notice?mid=" + mid, ConfInfoApi.webHeaders).body()).string());
+            JSONObject notice_all = NetWorkUtil.getJson("https://api.bilibili.com/x/space/notice?mid=" + mid);
             String notice;
             if(notice_all.has("data") && !notice_all.isNull("data")) notice = notice_all.getString("data");
             else notice = "";
@@ -51,7 +51,7 @@ public class UserInfoApi {
 
     public static UserInfo getCurrentUserInfo() throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/space/myinfo";
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+        JSONObject all = NetWorkUtil.getJson(url);
         if(all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
             long mid = data.getLong("mid");
@@ -72,7 +72,7 @@ public class UserInfoApi {
     public static int getCurrentUserCoin()  {
         try{
             String url = "https://account.bilibili.com/site/getCoin";
-            JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url, ConfInfoApi.webHeaders).body()).string());
+            JSONObject all = NetWorkUtil.getJson(url);
             if(all.has("data") && !all.isNull("data")) {
                 JSONObject data = all.getJSONObject("data");
                 return data.has("money") ? data.getInt("money") : 0;
@@ -92,7 +92,7 @@ public class UserInfoApi {
         String url = "https://api.bilibili.com/x/space/wbi/arc/search?";
         String args = "keyword=" + searchKeyword + "&mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
                 + "&ps=30&tid=0";
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.webHeaders).body()).string());
+        JSONObject all = NetWorkUtil.getJson(url + ConfInfoApi.signWBI(args));
         if(all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
             JSONObject list = data.getJSONObject("list");
@@ -123,7 +123,7 @@ public class UserInfoApi {
         String args = "mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
                 + "&ps=30&tid=0";
         Log.e("debug",url);
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url + ConfInfoApi.signWBI(args), ConfInfoApi.webHeaders).body()).string());
+        JSONObject all = NetWorkUtil.getJson(url + ConfInfoApi.signWBI(args), NetWorkUtil.webHeaders);
         if(all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
             if(data.has("articles")){
@@ -153,14 +153,14 @@ public class UserInfoApi {
         String arg = "fid=" + mid + "&csrf=" + NetWorkUtil.getInfoFromCookie("bili_jct", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
         if (isFollow) arg += "&act=1"; //关注
         else arg += "&act=2"; //取消关注
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, arg, ConfInfoApi.webHeaders).body()).string());
+        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, arg, NetWorkUtil.webHeaders).body()).string());
         return all.getInt("code");
     }
 
     public static void exitLogin(){
         try {
             String url = "https://passport.bilibili.com/login/exit/v2";
-            NetWorkUtil.get(url, ConfInfoApi.webHeaders);
+            NetWorkUtil.get(url, NetWorkUtil.webHeaders);
         }catch (Exception e){
             e.printStackTrace();
         }

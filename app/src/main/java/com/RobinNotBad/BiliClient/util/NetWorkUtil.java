@@ -2,7 +2,8 @@ package com.RobinNotBad.BiliClient.util;
 
 import android.util.Log;
 
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * 被 luern0313 创建于 2019/10/13.
@@ -28,6 +30,7 @@ import okhttp3.Response;
 public class NetWorkUtil
 {
     private static final AtomicReference<OkHttpClient> INSTANCE = new AtomicReference<>();
+
     private static OkHttpClient getOkHttpInstance() {
         while(INSTANCE.get() == null){
             INSTANCE.compareAndSet(null, new OkHttpClient
@@ -38,9 +41,21 @@ public class NetWorkUtil
         return INSTANCE.get();
     }
 
+    public static JSONObject getJson(String url) throws IOException, JSONException{
+        ResponseBody body = get(url).body();
+        if(body!=null) return new JSONObject(body.string());
+        else throw new JSONException("在访问" + url + "时返回数据为空");
+    }
+
+    public static JSONObject getJson(String url, ArrayList<String> headers) throws IOException, JSONException{
+        ResponseBody body = get(url,headers).body();
+        if(body!=null) return new JSONObject(body.string());
+        else throw new JSONException("在访问" + url + "时返回数据为空");
+    }
+
     public static Response get(String url) throws IOException
     {
-        return get(url,ConfInfoApi.webHeaders);
+        return get(url, webHeaders);
     }
 
     public static Response get(String url, ArrayList<String> headers) throws IOException
@@ -164,7 +179,23 @@ public class NetWorkUtil
         if(setCookies.length() >= 2) {
             Log.e("debug-save-result", setCookies.substring(0, setCookies.length() - 2));
             SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, setCookies.substring(0, setCookies.length() - 2));
-            ConfInfoApi.refreshHeaders();
+            refreshHeaders();
         }
+    }
+
+    public static final String USER_AGENT_WEB = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.160 Safari/537.36";
+    public static ArrayList<String> webHeaders = new ArrayList<String>() {{
+        add("Cookie");
+        add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
+        add("Referer");
+        add("https://www.bilibili.com/");
+        add("User-Agent");
+        add(USER_AGENT_WEB);
+        add("Content-Type");
+        add("application/x-www-form-urlencoded");
+    }};
+
+    public static void refreshHeaders(){
+        webHeaders.set(1,SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
     }
 }

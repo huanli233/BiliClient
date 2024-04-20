@@ -37,7 +37,7 @@ public class ReplyApi {
 
         //Log.e("debug-评论区链接", url);
 
-        JSONObject all = new JSONObject(Objects.requireNonNull(NetWorkUtil.get(url).body()).string());
+        JSONObject all = NetWorkUtil.getJson(url);
 
         //Log.e("debug-评论区",all.toString());
 
@@ -171,7 +171,7 @@ public class ReplyApi {
         String url = "https://api.bilibili.com/x/v2/reply/add";
         String arg = "oid=" + oid + "&type=1" + (root == 0 ? "" : ("&root=" + root + "&parent=" + parent))
                 + "&message=" + text + "&jsonp=jsonp&csrf=" + SharedPreferencesUtil.getString("csrf","");
-        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, arg, ConfInfoApi.webHeaders).body()).string());
+        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, arg, NetWorkUtil.webHeaders).body()).string());
         Log.e("debug-发送评论",result.toString());
         return result.getInt("code");
     }
@@ -179,7 +179,7 @@ public class ReplyApi {
     public static int likeReply(long oid, long root, boolean action) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/v2/reply/action";
         String arg = "oid=" + oid + "&type=1&rpid=" + root + "&action=" + (action ? "1" : "0") + "&jsonp=jsonp&csrf=" + SharedPreferencesUtil.getString("csrf","");
-        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, arg, ConfInfoApi.webHeaders).body()).string());
+        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, arg, NetWorkUtil.webHeaders).body()).string());
         Log.e("debug-点赞评论",result.toString());
         return result.getInt("code");
     }

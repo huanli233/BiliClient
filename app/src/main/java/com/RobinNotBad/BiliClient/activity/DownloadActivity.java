@@ -13,6 +13,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
+import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -124,7 +125,7 @@ public class DownloadActivity extends BaseActivity {
         Request request = new Request.Builder().url(url)
                 .addHeader("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""))
                 .addHeader("Connection", "Keep-Alive")
-                .addHeader("User-Agent", ConfInfoApi.USER_AGENT_WEB)
+                .addHeader("User-Agent", NetWorkUtil.USER_AGENT_WEB)
                 .addHeader("Referer", "https://www.bilibili.com/")
                 .build();
         try {
@@ -166,7 +167,7 @@ public class DownloadActivity extends BaseActivity {
         Request request = new Request.Builder().url(danmaku)
                 .addHeader("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""))
                 .addHeader("Connection", "Keep-Alive")
-                .addHeader("User-Agent", ConfInfoApi.USER_AGENT_WEB)
+                .addHeader("User-Agent", NetWorkUtil.USER_AGENT_WEB)
                 .addHeader("Referer", "https://www.bilibili.com/")
                 .build();
         try {
