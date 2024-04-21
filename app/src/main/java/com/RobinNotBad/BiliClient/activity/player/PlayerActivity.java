@@ -126,6 +126,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private float video_origX, video_origY;
     private long click_timestamp;
 
+    private boolean landscape = false;
+
     @Override
     public void onBackPressed() {
         if (!SharedPreferencesUtil.getBoolean("back_disable", false)) super.onBackPressed();
@@ -141,6 +143,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     protected void onCreate(Bundle savedInstanceState) {
         Log.e("加载", "加载");
         super.onCreate(savedInstanceState);
+
+        landscape = SharedPreferencesUtil.getBoolean("player_autolandscape", false);
+        setRequestedOrientation(landscape ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         setContentView(R.layout.activity_player);
         findview();
         getExtras();
@@ -384,6 +390,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 boolean singleTouch = pointerCount == 1;
                 boolean doubleTouch = pointerCount == 2;
 
+                Log.e("debug-gesture",event.getEventTime() + "");
                 scaleGestureDetector.onTouchEvent(event);
                 gesture_scaling = scaleGestureListener.scaling;
 
@@ -1016,11 +1023,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     public void rotate(){
         Log.e("debug","点击旋转按钮");
-        if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
+        landscape = !landscape;
+        setRequestedOrientation(landscape ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override
@@ -1054,7 +1058,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if(y > video_y_max) y = video_y_max;
 
         if(videoArea.getX() != x || videoArea.getY() != y) {
-            Log.e("debug-gesture","moveto:" + x + "," + y);
+            //Log.e("debug-gesture","moveto:" + x + "," + y);
             videoArea.setX(x);
             videoArea.setY(y);
             if(!gesture_moved) {

@@ -90,6 +90,13 @@
                 android:paddingVertical="2dp"
                 android:text="熄屏继续播放" />
 
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/SWautolandscape"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="2dp"
+                android:text="默认横屏" />
+
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
