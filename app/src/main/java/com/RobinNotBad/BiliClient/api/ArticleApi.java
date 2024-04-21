@@ -1,6 +1,8 @@
 package com.RobinNotBad.BiliClient.api;
 
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
+import com.RobinNotBad.BiliClient.model.Stats;
+import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
@@ -25,21 +27,28 @@ public class ArticleApi {
         articleInfo.summary = data.getString("summary");
         articleInfo.banner = data.getString("banner_url");
         articleInfo.ctime = data.getLong("ctime");
+
         JSONObject author = data.getJSONObject("author");
-        articleInfo.upMid = author.getLong("mid");
-        articleInfo.upName = author.getString("name");
-        articleInfo.upAvatar = author.getString("face");
-        articleInfo.upFans = author.getInt("fans");
-        articleInfo.upLevel = author.getInt("level");
-        JSONObject stats = data.getJSONObject("stats");
-        articleInfo.view = ToolsUtil.toWan(stats.getInt("view")) + "阅读";
-        articleInfo.favourite = stats.getInt("favorite");
-        articleInfo.like = stats.getInt("like");
-        articleInfo.reply = stats.getInt("reply");
-        articleInfo.share = stats.getInt("share");
-        articleInfo.coin = stats.getInt("coin");
+        UserInfo upInfo = new UserInfo();
+        upInfo.mid = author.getLong("mid");
+        upInfo.name = author.getString("name");
+        upInfo.avatar = author.getString("face");
+        upInfo.fans = author.getInt("fans");
+        upInfo.level = author.getInt("level");
+        articleInfo.upInfo = upInfo;
+
+        JSONObject jsonStats = data.getJSONObject("stats");
+        Stats stats = new Stats();
+        stats.view = jsonStats.getInt("view");
+        stats.favorite = jsonStats.getInt("favorite");
+        stats.like = jsonStats.getInt("like");
+        stats.reply = jsonStats.getInt("reply");
+        stats.share = jsonStats.getInt("share");
+        stats.coin = jsonStats.getInt("coin");
+        stats.liked = data.getBoolean("is_like");
+        articleInfo.stats = stats;
+
         articleInfo.wordCount = data.getInt("words");
-        articleInfo.isLike = data.getBoolean("is_like");
         articleInfo.content = data.getString("content");
         articleInfo.keywords = data.getString("keywords");
         return articleInfo;

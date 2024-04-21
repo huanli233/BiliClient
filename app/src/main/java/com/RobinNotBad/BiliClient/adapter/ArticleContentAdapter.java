@@ -111,7 +111,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 TextView upName = holder.itemView.findViewById(R.id.upInfo_Name);
                 MaterialCardView upCard = holder.itemView.findViewById(R.id.upInfo);
 
-                upName.setText(articleInfo.upName);
+                upName.setText(articleInfo.upInfo.name);
                 if(articleInfo.banner.isEmpty()) cover.setVisibility(View.GONE);
                 else{
                     Glide.with(context).load(GlideUtil.url(articleInfo.banner)).placeholder(R.mipmap.placeholder)
@@ -119,14 +119,14 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(cover);
                 }
-                Glide.with(context).load(GlideUtil.url(articleInfo.upAvatar)).placeholder(R.mipmap.akari)
+                Glide.with(context).load(GlideUtil.url(articleInfo.upInfo.avatar)).placeholder(R.mipmap.akari)
                         .apply(RequestOptions.circleCropTransform())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(upIcon);
                 upCard.setOnClickListener(view1 ->{
                     Intent intent = new Intent();
                     intent.setClass(context, UserInfoActivity.class);
-                    intent.putExtra("mid",articleInfo.upMid);
+                    intent.putExtra("mid",articleInfo.upInfo.mid);
                     context.startActivity(intent);
                 });
                 title.setText(articleInfo.title);
@@ -137,7 +137,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 TextView timeText = holder.itemView.findViewById(R.id.timeText);
                 TextView cvidText = holder.itemView.findViewById(R.id.cvidText);
                 cvidText.setText("cv" + articleInfo.id + " | " + articleInfo.wordCount + "字");
-                views.setText(articleInfo.view);
+                views.setText(ToolsUtil.toWan(articleInfo.stats.view) + "阅读");
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 timeText.setText(sdf.format(articleInfo.ctime * 1000));
                 break;

@@ -7,7 +7,7 @@ public class Stats implements Serializable {
     public int like;
     public int reply;
     public int coin;
-    public int forward;
+    public int share;
     public int danmaku;
     public int favorite;
 
@@ -18,6 +18,6 @@ public class Stats implements Serializable {
     public boolean like_disabled;
     public boolean coin_disabled;
     public boolean reply_disabled;
-    public boolean forward_disabled;
+    public boolean share_disabled;
     public int allow_coin;
 }
