@@ -12,7 +12,6 @@ import com.RobinNotBad.BiliClient.adapter.FavoriteFolderAdapter;
 import com.RobinNotBad.BiliClient.api.FavoriteApi;
 import com.RobinNotBad.BiliClient.model.FavoriteFolder;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class FavoriteFolderListActivity extends BaseActivity {
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
                     recyclerView.setAdapter(adapter);
                 });
-            } catch (Exception e) {runOnUiThread(()-> MsgUtil.err(e,this));}
+            } catch (Exception e) {report(e);}
         });
     }
 }

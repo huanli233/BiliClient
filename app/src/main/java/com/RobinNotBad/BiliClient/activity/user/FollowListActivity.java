@@ -29,7 +29,6 @@ public class FollowListActivity extends RefreshListActivity {
         super.onCreate(savedInstanceState);
 
         setPageName("关注");
-        setRefreshable(false);
 
         mid = SharedPreferencesUtil.getLong("mid",0);
         userList = new ArrayList<>();

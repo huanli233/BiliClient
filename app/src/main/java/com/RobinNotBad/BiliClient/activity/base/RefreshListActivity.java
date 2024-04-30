@@ -22,7 +22,7 @@ public class RefreshListActivity extends BaseActivity{
     public RecyclerView recyclerView;
     public OnLoadMoreListener listener;
     public boolean bottom = false;
-    public int page = 0;
+    public int page = 1;
     public long lastLoadTimestamp;
 
     @Override
@@ -31,6 +31,7 @@ public class RefreshListActivity extends BaseActivity{
         setContentView(R.layout.activity_simple_refresh);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setEnabled(false);
         recyclerView = findViewById(R.id.recyclerView);
     }
 
@@ -64,9 +65,10 @@ public class RefreshListActivity extends BaseActivity{
         });
     }
 
-    public void setRefreshable(boolean bool){swipeRefreshLayout.setEnabled(bool);}
-
-    public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener){swipeRefreshLayout.setOnRefreshListener(listener);}
+    public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener){
+        swipeRefreshLayout.setOnRefreshListener(listener);
+        swipeRefreshLayout.setEnabled(true);
+    }
 
     public void setRefreshing(boolean bool){runOnUiThread(()->swipeRefreshLayout.setRefreshing(bool));}
 

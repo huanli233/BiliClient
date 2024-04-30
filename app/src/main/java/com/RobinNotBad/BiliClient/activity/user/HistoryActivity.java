@@ -8,7 +8,6 @@ import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import java.util.ArrayList;
 
@@ -26,7 +25,6 @@ public class HistoryActivity extends RefreshListActivity {
         super.onCreate(savedInstanceState);
 
         setPageName("历史记录");
-        setRefreshable(false);
 
         videoList = new ArrayList<>();
 
