@@ -18,17 +18,13 @@ import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
-
-import org.json.JSONException;
-
-import java.io.IOException;
 
 public class MySpaceActivity extends InstanceActivity {
 
@@ -64,7 +60,7 @@ public class MySpaceActivity extends InstanceActivity {
             try {
                 UserInfo userInfo = UserInfoApi.getCurrentUserInfo();
                 int userCoin = UserInfoApi.getCurrentUserCoin();
-                runOnUiThread(() -> {
+                if(!this.isDestroyed()) runOnUiThread(() -> {
                     Glide.with(MySpaceActivity.this).load(GlideUtil.url(userInfo.avatar))
                             .placeholder(R.mipmap.akari).apply(RequestOptions.circleCropTransform())
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -134,10 +130,8 @@ public class MySpaceActivity extends InstanceActivity {
                         confirmLogout = !confirmLogout;
                     });
                 });
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                report(e);
             }
         });
     }

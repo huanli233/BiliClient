@@ -36,14 +36,19 @@ public class HistoryActivity extends RefreshListActivity {
                 if(result != -1) {
                     videoCardAdapter = new VideoCardAdapter(this, videoList);
                     setLoadMoreListener(this::continueLoading);
-                    runOnUiThread(()-> setAdapter(videoCardAdapter));
+                    setRefreshing(false);
+                    setAdapter(videoCardAdapter);
+
                     if(result == 1) {
                         Log.e("debug","到底了");
                         setBottom(true);
                     }
                 }
 
-            } catch (Exception e) {runOnUiThread(()-> MsgUtil.err(e,this));}
+            } catch (Exception e) {
+                report(e);
+                setRefreshing(false);
+            }
         });
     }
 
@@ -60,8 +65,12 @@ public class HistoryActivity extends RefreshListActivity {
                         setBottom(true);
                     }
                 }
-                setLoading(false);
-            } catch (Exception e) {runOnUiThread(()-> MsgUtil.err(e,this));}
+                setRefreshing(false);
+            } catch (Exception e) {
+                report(e);
+                setRefreshing(false);
+                this.page--;
+            }
         });
     }
 }

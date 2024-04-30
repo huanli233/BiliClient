@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 
@@ -73,6 +75,8 @@ public class BaseActivity extends AppCompatActivity {
             Log.e("debug","set_exit");
         }
     }
+
+    public void report(Exception e){runOnUiThread(()-> MsgUtil.err(e,this));}
 
     @Override
     protected void onStart() {
