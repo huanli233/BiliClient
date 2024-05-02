@@ -112,6 +112,7 @@ public class VideoInfoFragment extends Fragment {
         TextView title = view.findViewById(R.id.title);
         description = view.findViewById(R.id.description);
         tagsText = view.findViewById(R.id.tags);
+        MaterialCardView exclusiveTip = view.findViewById(R.id.exclusiveTip);
         TextView upName = view.findViewById(R.id.upInfo_Name);
         TextView viewCount = view.findViewById(R.id.viewsCount);
         TextView timeText = view.findViewById(R.id.timeText);
@@ -169,6 +170,8 @@ public class VideoInfoFragment extends Fragment {
                 });
             } catch (Exception e) {if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));}
         });
+
+        if(!videoInfo.upowerExclusive) exclusiveTip.setVisibility(View.GONE);
 
         Glide.with(requireContext()).load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, requireContext()))))

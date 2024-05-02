@@ -69,7 +69,7 @@ public class VideoInfoApi {
         videoInfo.aid = data.getLong("aid");
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        videoInfo.timeDesc = sdf.format(data.getLong("ctime") * 1000);
+        videoInfo.timeDesc = sdf.format(data.getLong("pubdate") * 1000);
         Log.e("发布时间",String.valueOf(videoInfo.timeDesc));
 
         int duration = data.getInt("duration");
@@ -109,6 +109,8 @@ public class VideoInfoApi {
         }
         videoInfo.pagenames = pagenames;
         videoInfo.cids = cids;
+
+        videoInfo.upowerExclusive = data.getBoolean("is_upower_exclusive");
 
         return videoInfo;
     }
