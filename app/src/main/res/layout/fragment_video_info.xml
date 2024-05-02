@@ -72,11 +72,13 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
                 android:alpha="0.6"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title">
 
                 <TextView
+                    android:id="@+id/exclusiveTipLabel"
                     android:layout_width="match_parent"
                     android:layout_height="35sp"
                     android:layout_marginHorizontal="8dp"

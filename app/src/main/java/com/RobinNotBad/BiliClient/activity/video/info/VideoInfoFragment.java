@@ -113,6 +113,7 @@ public class VideoInfoFragment extends Fragment {
         description = view.findViewById(R.id.description);
         tagsText = view.findViewById(R.id.tags);
         MaterialCardView exclusiveTip = view.findViewById(R.id.exclusiveTip);
+        TextView exclusiveTipLabel = view.findViewById(R.id.exclusiveTipLabel);
         TextView upName = view.findViewById(R.id.upInfo_Name);
         TextView viewCount = view.findViewById(R.id.viewsCount);
         TextView timeText = view.findViewById(R.id.timeText);
@@ -171,7 +172,15 @@ public class VideoInfoFragment extends Fragment {
             } catch (Exception e) {if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));}
         });
 
-        if(!videoInfo.upowerExclusive) exclusiveTip.setVisibility(View.GONE);
+        if(videoInfo.upowerExclusive || !videoInfo.argueMsg.isEmpty()){
+            String tip_text = videoInfo.argueMsg;
+            if(videoInfo.upowerExclusive) {
+                if(!tip_text.isEmpty()) tip_text += "\n";
+                tip_text += "该视频为充电专属视频";
+            }
+            exclusiveTipLabel.setText(tip_text);
+            exclusiveTip.setVisibility(View.VISIBLE);
+        }
 
         Glide.with(requireContext()).load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, requireContext()))))

@@ -111,6 +111,7 @@ public class VideoInfoApi {
         videoInfo.cids = cids;
 
         videoInfo.upowerExclusive = data.getBoolean("is_upower_exclusive");
+        videoInfo.argueMsg = data.getJSONObject("argue_info").getString("argue_msg");
 
         return videoInfo;
     }
