@@ -37,7 +37,7 @@ public class FollowListActivity extends RefreshListActivity {
             try {
                 int result = FollowApi.getFollowList(mid, page, userList);
                 adapter = new FollowListAdapter(this,userList);
-                setLoadMoreListener(this::continueLoading);
+                setOnLoadMoreListener(this::continueLoading);
                 setRefreshing(false);
                 setAdapter(adapter);
 

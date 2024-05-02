@@ -1,9 +1,12 @@
 package com.RobinNotBad.BiliClient.activity.base;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -12,13 +15,12 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.listener.OnLoadMoreListener;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
-
 /*
-尝试造轮子以减少代码量
-2024-05-01
+跟RefreshListActivity基本相同
+2024-05-02
  */
 
-public class RefreshListActivity extends BaseActivity{
+public class RefreshListFragment extends Fragment {
     public SwipeRefreshLayout swipeRefreshLayout;
     public RecyclerView recyclerView;
     public OnLoadMoreListener listener;
@@ -26,16 +28,19 @@ public class RefreshListActivity extends BaseActivity{
     public int page = 1;
     public long lastLoadTimestamp;
 
-    //帮你findView和设置滚动监测器，自动显示转圈动画
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simple_refresh);
-        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_simple_refresh, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setEnabled(false);
         swipeRefreshLayout.setRefreshing(true);
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -74,7 +79,6 @@ public class RefreshListActivity extends BaseActivity{
 
     public void setOnLoadMoreListener(OnLoadMoreListener loadMore){listener = loadMore;}
 
-    //自动
     private void goOnLoad(){
         long timeCurrent = System.currentTimeMillis();
         if(timeCurrent - lastLoadTimestamp > 100) {
@@ -87,9 +91,22 @@ public class RefreshListActivity extends BaseActivity{
 
     public void setBottom(boolean bool){bottom = bool;}
 
+    public void runOnUiThread(Runnable runnable){
+        if(isAdded()) requireActivity().runOnUiThread(runnable);
+    }
+
+    public boolean isRefreshing(){
+        if(swipeRefreshLayout!=null) return swipeRefreshLayout.isRefreshing();
+        return false;
+    }
+
+    public void report(Exception e){
+        runOnUiThread(()-> MsgUtil.err(e,requireContext()));
+    }
+
     public void loadFail(){
         page--;
-        MsgUtil.toastLong("加载失败",this);
+        runOnUiThread(()->MsgUtil.toastLong("加载失败",requireContext()));
         setRefreshing(false);
     }
 

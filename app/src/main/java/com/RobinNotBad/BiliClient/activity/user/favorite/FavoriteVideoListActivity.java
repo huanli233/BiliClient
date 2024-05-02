@@ -69,7 +69,7 @@ public class FavoriteVideoListActivity extends RefreshListActivity {
                         }
                     });
 
-                    setLoadMoreListener(this::continueLoading);
+                    setOnLoadMoreListener(this::continueLoading);
                     setAdapter(videoCardAdapter);
                     setRefreshing(false);
 

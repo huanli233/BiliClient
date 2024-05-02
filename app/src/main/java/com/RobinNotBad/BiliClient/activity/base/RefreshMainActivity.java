@@ -15,10 +15,10 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 /*
 尝试造轮子以减少代码量
-2024-05-01
+2024-05-02
  */
 
-public class RefreshListActivity extends BaseActivity{
+public class RefreshMainActivity extends InstanceActivity{
     public SwipeRefreshLayout swipeRefreshLayout;
     public RecyclerView recyclerView;
     public OnLoadMoreListener listener;
@@ -30,7 +30,7 @@ public class RefreshListActivity extends BaseActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simple_refresh);
+        setContentView(R.layout.activity_simple_main_refresh);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setEnabled(false);
         swipeRefreshLayout.setRefreshing(true);

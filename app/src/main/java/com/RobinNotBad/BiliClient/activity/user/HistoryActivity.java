@@ -33,7 +33,7 @@ public class HistoryActivity extends RefreshListActivity {
                 int result = HistoryApi.getHistory(page,videoList);
                 if(result != -1) {
                     videoCardAdapter = new VideoCardAdapter(this, videoList);
-                    setLoadMoreListener(this::continueLoading);
+                    setOnLoadMoreListener(this::continueLoading);
                     setRefreshing(false);
                     setAdapter(videoCardAdapter);
 

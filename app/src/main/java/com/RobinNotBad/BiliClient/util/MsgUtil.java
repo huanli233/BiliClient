@@ -40,9 +40,9 @@ public class MsgUtil {
                 e.printStackTrace(printWriter);
                 showText(context,"数据解析错误",writer.toString());
             }
-            else toastLong("数据解析错误：\n" + e,context);
+            else toastLong("数据解析错误：\n" + e.toString().replace("org.json.JSONException:",""),context);
         }
-        else toast("错误：" + e , context);
+        else toastLong("错误：" + e , context);
     }
 
     public static void showText(Context context,String title,String text){
