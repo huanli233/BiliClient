@@ -76,6 +76,9 @@ public class PlayerApi {
 
             case "aliangPlayer":
                 intent.setClassName(context.getString(R.string.player_aliang_package), "com.aliangmaker.media.PlayVideoActivity");
+                intent.putExtra("name", title);
+                intent.putExtra("progress",0);
+                intent.putExtra("danmaku", danmakuurl);
                 if(local) {
                     intent.setData(getVideoUri(context,videourl));
                 }
@@ -88,8 +91,6 @@ public class PlayerApi {
                     intent.putExtra("agent", NetWorkUtil.USER_AGENT_WEB);
                 }
                 Log.e("uri",intent.getData().toString());
-                intent.putExtra("danmaku", danmakuurl);
-                intent.putExtra("name", title);
                 intent.setAction(Intent.ACTION_VIEW);
 
                 break;
