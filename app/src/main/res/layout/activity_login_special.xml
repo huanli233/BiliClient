@@ -71,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/background_edit_text"
+                android:background="@drawable/background_edittext"
                 android:hint="请输入登录信息"
                 android:padding="8dp"
                 android:minHeight="40dp"

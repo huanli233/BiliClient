@@ -3,11 +3,7 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
 import com.RobinNotBad.BiliClient.adapter.FolderChooseAdapter;
 import com.RobinNotBad.BiliClient.api.FavoriteApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -19,7 +15,7 @@ import java.util.ArrayList;
 //添加收藏
 //2023-08-28
 
-public class AddFavoriteActivity extends BaseActivity {
+public class AddFavoriteActivity extends RefreshListActivity {
     FolderChooseAdapter adapter;
     ArrayList<String> folderList = new ArrayList<>();
     ArrayList<Boolean> stateList = new ArrayList<>();
@@ -31,14 +27,11 @@ public class AddFavoriteActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simple_list);
 
         setPageName("添加收藏");
 
         Intent intent = getIntent();
         aid = intent.getLongExtra("aid",0);
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         CenterThreadPool.run(()->{
             try {
@@ -46,12 +39,11 @@ public class AddFavoriteActivity extends BaseActivity {
 
                 adapter = new FolderChooseAdapter(this,folderList,fidList,stateList,aid);
 
-                runOnUiThread(()->{
-                    recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                    recyclerView.setAdapter(adapter);
-                });
+                setAdapter(adapter);
+
+                setRefreshing(false);
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.err(e, this));
+                loadFail(e);
             }
         });
     }

@@ -85,7 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:background="@drawable/background_edit_text_setting"
+                    android:background="@drawable/background_edittext_setting"
                     android:ems="10"
                     android:hint="请输入倍数"
                     android:inputType="numberDecimal"
@@ -121,7 +121,7 @@
                     android:text="界面边距" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:background="@drawable/background_edit_text_setting"
+                    android:background="@drawable/background_edittext_setting"
 
                     android:layout_marginTop="2dp"
                     android:paddingHorizontal="4dp"
@@ -171,7 +171,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_marginTop="2dp"
                     android:paddingHorizontal="4dp"
-                    android:background="@drawable/background_edit_text_setting"
+                    android:background="@drawable/background_edittext_setting"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">

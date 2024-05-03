@@ -52,46 +52,42 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <LinearLayout
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_input"
+        android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:padding="4dp"
-            app:strokeWidth="2dp"
-            app:strokeColor="#505050"
-            app:cardBackgroundColor="#202020"
-            style="@style/CardStyle"
-            app:cardCornerRadius="20dp"
-            android:layout_weight="1">
-            <EditText
-                android:id="@+id/msg_input_et"
-                android:layout_width="match_parent"
-                android:layout_marginHorizontal="10dp"
-                android:layout_height="40dp"
-                android:singleLine="true"
-                android:background="@null"
-                android:textCursorDrawable="@drawable/cursor_drawable"
-                android:textColorHint="#80ffffff"
-                android:textSize="14sp"
-                android:hint="说点什么..." />
-        </com.google.android.material.card.MaterialCardView>
+        android:paddingHorizontal="4dp"
+        android:paddingBottom="4dp">
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/msg_input_et"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="20dp"
-            android:layout_margin="2dp">
-            <ImageButton
-                android:id="@+id/send_btn"
-                android:layout_height="40dp"
-                android:layout_width="40dp"
-                android:src="@drawable/send"
-                android:background="@color/pink" />
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/background_edittext_privatemsg"
+            android:hint="说点什么..."
+            android:maxHeight="128dp"
+            android:minHeight="38dp"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="6dp"
+            android:textColorHint="#80ffffff"
+            android:textCursorDrawable="@drawable/cursor_drawable"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/send_btn"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageButton
+            android:id="@+id/send_btn"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/background_privatemsg_send"
+            android:src="@drawable/send"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

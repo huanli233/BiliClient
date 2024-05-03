@@ -66,7 +66,7 @@
                 android:id="@+id/editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_edit_text"
+                android:background="@drawable/background_edittext"
                 android:hint="写一条友善的评论..."
                 android:minHeight="40dp"
                 android:padding="8dp"

@@ -1,19 +1,18 @@
 package com.RobinNotBad.BiliClient.activity.message;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +20,6 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.PrivateMsgAdapter;
 import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
-import com.RobinNotBad.BiliClient.listener.AutoHideListener;
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -45,11 +43,14 @@ public class PrivateMsgActivity extends BaseActivity {
     RecyclerView msgView;
     EditText contentEt;
     ImageButton sendBtn;
+    ConstraintLayout layout_input;
     PrivateMsgAdapter adapter;
-    LinearLayout inputLayout;
     long uid;
     boolean isLoadingMore = false;
     Timer refreshTimer;
+    Handler handler;
+
+    boolean animVisible = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +60,9 @@ public class PrivateMsgActivity extends BaseActivity {
         msgView = findViewById(R.id.msg_view);
         contentEt = findViewById(R.id.msg_input_et);
         sendBtn = findViewById(R.id.send_btn);
-        inputLayout = findViewById(R.id.layout_input);
-        
+        layout_input = findViewById(R.id.layout_input);
+
+        handler = new Handler();
         
         Intent intent = getIntent();
         uid = intent.getLongExtra("uid",114514);
@@ -76,22 +78,33 @@ public class PrivateMsgActivity extends BaseActivity {
                 runOnUiThread(()->{
                     msgView.setLayoutManager(new LinearLayoutManager(this));
                     msgView.setAdapter(adapter);
-                    setViewAutoHide(this,inputLayout,msgView,0);
-                    setViewAutoHide(this, findViewById(R.id.top),msgView,1);
                     ((LinearLayoutManager) Objects.requireNonNull(msgView.getLayoutManager())).scrollToPositionWithOffset(list.size()-1,0);
                     msgView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override
                         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                             super.onScrollStateChanged(recyclerView, newState);
-                            if (!recyclerView.canScrollVertically(-1)&&!isLoadingMore&&newState==RecyclerView.SCROLL_STATE_DRAGGING) {
-                                loadMore();
-                                Log.e("","滑动到顶部，开始刷新");
+                            switch (newState){
+                                case RecyclerView.SCROLL_STATE_DRAGGING:
+                                    if (!recyclerView.canScrollVertically(-1)&&!isLoadingMore) {
+                                        loadMore();
+                                        Log.e("","滑动到顶部，开始刷新");
+                                    }
+                                    break;
+                                case RecyclerView.SCROLL_STATE_IDLE:
+                                    if(!animVisible){
+                                        animVisible=true;
+                                        handler.postDelayed(()->layout_input.startAnimation(getViewAnimation(layout_input,true,true)),250);
+                                    }
+                                    break;
                             }
                         }
                         @Override
                         public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                             super.onScrolled(recyclerView, dx, dy);
-                            
+                            if(animVisible && recyclerView.canScrollVertically(0)) {
+                                animVisible=false;
+                                layout_input.startAnimation(getViewAnimation(layout_input,false,false));
+                            }
                         }
                     });
 
@@ -136,32 +149,18 @@ public class PrivateMsgActivity extends BaseActivity {
         }));
     }
     //1在上面0在下面
-    private static void setViewAutoHide(final Activity activity, final View view, final RecyclerView list,int azimuth) {
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int height = view.getMeasuredHeight() + 2;
-                Log.i("TAGAAA", "height=" + height);
-                TranslateAnimation hide;
-                if(azimuth==0){hide = new TranslateAnimation(0, 0, 0, height);}
-                else {hide = new TranslateAnimation(0, 0, 0, -height);}
-                final int hideDuration = 250;
-                hide.setDuration(hideDuration);
-                AccelerateDecelerateInterpolator i = new AccelerateDecelerateInterpolator();
-                hide.setInterpolator(i);
-                hide.setFillAfter(true);
-                TranslateAnimation show;
-                if(azimuth==0){show = new TranslateAnimation(0, 0, height, 0);}
-                else{show = new TranslateAnimation(0, 0, -height, 0);}
-                final int showDuration = 250;
-                show.setDuration(showDuration);
-                show.setInterpolator(i);
-                show.setFillAfter(true);
-                
-                list.addOnScrollListener(new AutoHideListener(activity,view,hide,hideDuration,show,showDuration));
-            }
-        });
+
+    private TranslateAnimation getViewAnimation(View view, boolean show_or_hide, boolean up_or_down){
+        int height = view.getMeasuredHeight() + 2;
+        TranslateAnimation anim;
+        anim = new TranslateAnimation(0,0,
+                (show_or_hide ? (up_or_down ? height : -height) : 0),
+                (show_or_hide ? 0 : (up_or_down ? -height : height)));
+        anim.setDuration(200);
+        AccelerateDecelerateInterpolator i = new AccelerateDecelerateInterpolator();
+        anim.setInterpolator(i);
+        anim.setFillAfter(true);
+        return anim;
     }
 
     @Override
