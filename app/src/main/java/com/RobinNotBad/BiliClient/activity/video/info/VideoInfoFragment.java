@@ -114,6 +114,7 @@ public class VideoInfoFragment extends Fragment {
 
         ImageView cover = view.findViewById(R.id.cover);
         ImageView upIcon = view.findViewById(R.id.upInfo_Icon);
+        TextView titleTip = view.findViewById(R.id.title_tip);
         TextView title = view.findViewById(R.id.title);
         description = view.findViewById(R.id.description);
         tagsText = view.findViewById(R.id.tags);
@@ -178,19 +179,25 @@ public class VideoInfoFragment extends Fragment {
             } catch (Exception e) {if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));}
         });
 
-        if(videoInfo.upowerExclusive || !videoInfo.argueMsg.isEmpty()){
-            String tip_text = videoInfo.argueMsg;
-            if(videoInfo.upowerExclusive) {
-                if(!tip_text.isEmpty()) tip_text += "\n";
-                tip_text += "该视频为充电专属视频";
-            }
-            exclusiveTipLabel.setText(tip_text);
+        title.setText(videoInfo.title);
+
+        if(videoInfo.upowerExclusive) {
+            titleTip.setVisibility(View.VISIBLE);
+            titleTip.setText("充电专属");
+            title.setText("              " + videoInfo.title); //简单粗暴
+        }
+        if(!videoInfo.argueMsg.isEmpty()){
+            exclusiveTipLabel.setText(videoInfo.argueMsg);
             exclusiveTip.setVisibility(View.VISIBLE);
         }
 
         if(videoInfo.isCooperation){ //如果是联合投稿
             upCard.setVisibility(View.GONE); //隐藏普通的UP详情
             up_recyclerView.setVisibility(View.VISIBLE); //显示联合列表
+            titleTip.setVisibility(View.VISIBLE);
+            titleTip.setText("联合投稿");
+            title.setText("              " + videoInfo.title); //简单粗暴
+
             if (isAdded()) requireActivity().runOnUiThread(() -> {
                 UpListAdapter adapter = new UpListAdapter(requireContext(),videoInfo.staff);
                 up_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -221,7 +228,6 @@ public class VideoInfoFragment extends Fragment {
 
         danmakuCount.setText(String.valueOf(videoInfo.stats.danmaku));
         bvidText.setText(videoInfo.bvid);
-        title.setText(videoInfo.title);
         timeText.setText(videoInfo.timeDesc);
         durationText.setText(videoInfo.duration);
 

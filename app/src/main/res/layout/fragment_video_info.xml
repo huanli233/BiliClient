@@ -56,15 +56,29 @@
                 app:layout_constraintEnd_toEndOf="@+id/cover" />
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/title_tip"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:background="@drawable/background_follow_btn"
+                android:padding="2dp"
+                android:textSize="12sp"
+                android:text="视频"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cover"
+                tools:ignore="MissingConstraints" />
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="2dp"
                 android:text="正在加载中..."
                 android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cover" />
+                app:layout_constraintTop_toBottomOf="@id/cover" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/exclusiveTip"
