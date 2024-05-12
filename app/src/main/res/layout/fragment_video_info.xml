@@ -56,11 +56,11 @@
                 app:layout_constraintEnd_toEndOf="@+id/cover" />
 
             <TextView
-                android:id="@+id/title_tip"
+                android:id="@+id/title_badge"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:background="@drawable/background_follow_btn"
+                android:background="@drawable/background_badge"
                 android:padding="2dp"
                 android:textSize="12sp"
                 android:text="视频"

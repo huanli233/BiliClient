@@ -114,7 +114,7 @@ public class VideoInfoFragment extends Fragment {
 
         ImageView cover = view.findViewById(R.id.cover);
         ImageView upIcon = view.findViewById(R.id.upInfo_Icon);
-        TextView titleTip = view.findViewById(R.id.title_tip);
+        TextView titleBadge = view.findViewById(R.id.title_badge);
         TextView title = view.findViewById(R.id.title);
         description = view.findViewById(R.id.description);
         tagsText = view.findViewById(R.id.tags);
@@ -182,8 +182,8 @@ public class VideoInfoFragment extends Fragment {
         title.setText(videoInfo.title);
 
         if(videoInfo.upowerExclusive) {
-            titleTip.setVisibility(View.VISIBLE);
-            titleTip.setText("充电专属");
+            titleBadge.setVisibility(View.VISIBLE);
+            titleBadge.setText("充电专属");
             title.setText("              " + ToolsUtil.ToDBC(videoInfo.title)); //简单粗暴
         }
         if(!videoInfo.argueMsg.isEmpty()){
@@ -194,8 +194,8 @@ public class VideoInfoFragment extends Fragment {
         if(videoInfo.isCooperation){ //如果是联合投稿
             upCard.setVisibility(View.GONE); //隐藏普通的UP详情
             up_recyclerView.setVisibility(View.VISIBLE); //显示联合列表
-            titleTip.setVisibility(View.VISIBLE);
-            titleTip.setText("联合投稿");
+            titleBadge.setVisibility(View.VISIBLE);
+            titleBadge.setText("联合投稿");
             title.setText("              " + ToolsUtil.ToDBC(videoInfo.title)); //简单粗暴
 
             if (isAdded()) requireActivity().runOnUiThread(() -> {

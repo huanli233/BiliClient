@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="false">
+        <shape>
+            <corners android:radius="@dimen/card_round" />
+            <solid android:color="#FECA4571" />
+        </shape>
+    </item>
+    <item android:state_checked="true">
+        <shape>
+            <corners android:radius="@dimen/card_round" />
+            <solid android:color="#DD262626" />
+        </shape>
+    </item>
+</selector>
