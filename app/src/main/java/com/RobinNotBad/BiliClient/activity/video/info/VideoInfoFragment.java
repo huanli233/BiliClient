@@ -184,7 +184,7 @@ public class VideoInfoFragment extends Fragment {
         if(videoInfo.upowerExclusive) {
             titleTip.setVisibility(View.VISIBLE);
             titleTip.setText("充电专属");
-            title.setText("              " + videoInfo.title); //简单粗暴
+            title.setText("              " + ToolsUtil.ToDBC(videoInfo.title)); //简单粗暴
         }
         if(!videoInfo.argueMsg.isEmpty()){
             exclusiveTipLabel.setText(videoInfo.argueMsg);
@@ -196,7 +196,7 @@ public class VideoInfoFragment extends Fragment {
             up_recyclerView.setVisibility(View.VISIBLE); //显示联合列表
             titleTip.setVisibility(View.VISIBLE);
             titleTip.setText("联合投稿");
-            title.setText("              " + videoInfo.title); //简单粗暴
+            title.setText("              " + ToolsUtil.ToDBC(videoInfo.title)); //简单粗暴
 
             if (isAdded()) requireActivity().runOnUiThread(() -> {
                 UpListAdapter adapter = new UpListAdapter(requireContext(),videoInfo.staff);
