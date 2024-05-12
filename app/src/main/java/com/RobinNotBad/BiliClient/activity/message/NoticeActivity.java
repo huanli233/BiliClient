@@ -61,7 +61,9 @@ public class NoticeActivity extends BaseActivity{
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
                     recyclerView.setAdapter(messageAdapter);
                 });
-            } catch (Exception e) {runOnUiThread(()-> MsgUtil.err(e,this));}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 }
