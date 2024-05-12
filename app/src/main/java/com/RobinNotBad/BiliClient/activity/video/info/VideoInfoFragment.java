@@ -134,6 +134,9 @@ public class VideoInfoFragment extends Fragment {
         TextView danmakuCount = view.findViewById(R.id.danmakuCount);
         ImageButton like = view.findViewById(R.id.btn_like);
         ImageButton coin = view.findViewById(R.id.btn_coin);
+        TextView likeLabel = view.findViewById(R.id.like_label);
+        TextView coinLabel = view.findViewById(R.id.coin_label);
+        TextView favLabel = view.findViewById(R.id.fav_label);
         fav = view.findViewById(R.id.btn_fav);
 
         if(videoInfo.epid != -1){ //不是空的的话就应该跳转到番剧页面了
@@ -238,6 +241,9 @@ public class VideoInfoFragment extends Fragment {
         });
 
         viewCount.setText(ToolsUtil.toWan(videoInfo.stats.view));
+        likeLabel.setText(ToolsUtil.toWan(videoInfo.stats.like));
+        coinLabel.setText(ToolsUtil.toWan(videoInfo.stats.coin));
+        favLabel.setText(ToolsUtil.toWan(videoInfo.stats.favorite));
 
         danmakuCount.setText(String.valueOf(videoInfo.stats.danmaku));
         bvidText.setText(videoInfo.bvid);
@@ -282,6 +288,9 @@ public class VideoInfoFragment extends Fragment {
                     videoInfo.stats.liked = !videoInfo.stats.liked;
                     if(isAdded()) requireActivity().runOnUiThread(() -> {
                         MsgUtil.toast((videoInfo.stats.liked ? "点赞成功" : "取消成功"), requireContext());
+
+                        if(videoInfo.stats.liked) likeLabel.setText(ToolsUtil.toWan(++videoInfo.stats.like));
+                        else likeLabel.setText(ToolsUtil.toWan(--videoInfo.stats.like));
                         like.setBackground(ContextCompat.getDrawable(requireContext(), (videoInfo.stats.liked ? R.drawable.icon_like_1 : R.drawable.icon_like_0)));
                     });
                 } else if(isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.toast("操作失败：" + result, requireContext()));
@@ -298,6 +307,7 @@ public class VideoInfoFragment extends Fragment {
                         videoInfo.stats.coined++;
                         if(isAdded()) requireActivity().runOnUiThread(() -> {
                             MsgUtil.toast("投币成功", requireContext());
+                            coinLabel.setText(ToolsUtil.toWan(++videoInfo.stats.coin));
                             coin.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_coin_1));
                         });
                     } else if(isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.toast("投币失败："+result,requireContext()));

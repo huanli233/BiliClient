@@ -328,6 +328,7 @@
                             android:background="@drawable/icon_like_0" />
 
                         <TextView
+                            android:id="@+id/like_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="13sp"
@@ -351,6 +352,7 @@
                             android:background="@drawable/icon_coin_0" />
 
                         <TextView
+                            android:id="@+id/coin_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="13sp"
@@ -374,6 +376,7 @@
                             android:background="@drawable/icon_favourite_0" />
 
                         <TextView
+                            android:id="@+id/fav_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="13sp"
