@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -111,6 +112,29 @@ public class VideoInfoApi {
         videoInfo.cids = cids;
 
         videoInfo.upowerExclusive = data.getBoolean("is_upower_exclusive");
+        videoInfo.isCooperation = (data.getJSONObject("rights").getInt("is_cooperation") == 1 ? true : false);
+        if(videoInfo.isCooperation) { //如果是联合投稿就存储联合UP列表
+            ArrayList<UserInfo> staff_list = new ArrayList<>();
+            JSONArray staff = data.getJSONArray("staff");
+            for( int i = 0;i < staff.length();i++){
+                UserInfo staff_member = new UserInfo();
+                JSONObject staff_info = staff.getJSONObject(i);
+
+                staff_member.mid = staff_info.getLong("mid");
+                staff_member.sign = staff_info.getString("title"); //卡片的简介用来显示参与的事物
+                staff_member.name = staff_info.getString("name");
+                staff_member.avatar = staff_info.getString("face");
+                staff_member.fans = staff_info.getInt("follower");
+                staff_member.level = 6;
+                staff_member.followed = false;
+                staff_member.notice = "";
+                staff_member.official = staff_info.getJSONObject("official").getInt("role");
+                staff_member.officialDesc = staff_info.getJSONObject("official").getString("title");
+
+                staff_list.add(staff_member);
+            }
+            videoInfo.staff = staff_list;
+        } else videoInfo.staff = new ArrayList<>();
         videoInfo.argueMsg = data.getJSONObject("argue_info").getString("argue_msg");
 
         return videoInfo;

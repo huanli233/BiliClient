@@ -19,7 +19,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
-            android:paddingHorizontal="@dimen/activity_padding_horizontal"
+             android:paddingHorizontal="@dimen/activity_padding_horizontal"
              android:paddingBottom="4dp">
 
             <ImageView
@@ -134,6 +134,14 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/up_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/upInfo"
+                app:layout_constraintTop_toBottomOf="@id/viewsCount" />
+
             <ImageView
                 android:id="@+id/viewsIcon"
                 android:layout_width="wrap_content"
@@ -150,13 +158,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:layout_marginTop="4dp"
                 android:alpha="0.5"
                 android:text="114514"
                 android:textColor="#fff"
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@+id/viewsIcon"
-                app:layout_constraintTop_toBottomOf="@+id/upInfo" />
+                app:layout_constraintTop_toBottomOf="@+id/up_recyclerView" />
 
             <ImageView
                  android:layout_height="0dp"

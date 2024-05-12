@@ -19,6 +19,8 @@ public class VideoInfo implements Serializable {    //自定义类需要加这�
 
     public boolean upowerExclusive; //充电专属
     public String argueMsg; //争议信息
+    public boolean isCooperation; //联合投稿
+    public ArrayList<UserInfo> staff; //联合投稿UP主列表
 
 
     public VideoInfo(){}

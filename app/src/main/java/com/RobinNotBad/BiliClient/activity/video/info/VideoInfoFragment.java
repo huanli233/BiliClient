@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
@@ -27,6 +30,8 @@ import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.user.WatchLaterActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.MultiPageActivity;
+import com.RobinNotBad.BiliClient.adapter.FollowListAdapter;
+import com.RobinNotBad.BiliClient.adapter.UpListAdapter;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.LikeCoinFavApi;
@@ -113,6 +118,7 @@ public class VideoInfoFragment extends Fragment {
         description = view.findViewById(R.id.description);
         tagsText = view.findViewById(R.id.tags);
         MaterialCardView exclusiveTip = view.findViewById(R.id.exclusiveTip);
+        RecyclerView up_recyclerView = view.findViewById(R.id.up_recyclerView);
         TextView exclusiveTipLabel = view.findViewById(R.id.exclusiveTipLabel);
         TextView upName = view.findViewById(R.id.upInfo_Name);
         TextView viewCount = view.findViewById(R.id.viewsCount);
@@ -180,6 +186,16 @@ public class VideoInfoFragment extends Fragment {
             }
             exclusiveTipLabel.setText(tip_text);
             exclusiveTip.setVisibility(View.VISIBLE);
+        }
+
+        if(videoInfo.isCooperation){ //如果是联合投稿
+            upCard.setVisibility(View.GONE); //隐藏普通的UP详情
+            up_recyclerView.setVisibility(View.VISIBLE); //显示联合列表
+            if (isAdded()) requireActivity().runOnUiThread(() -> {
+                UpListAdapter adapter = new UpListAdapter(requireContext(),videoInfo.staff);
+                up_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                up_recyclerView.setAdapter(adapter);
+            });
         }
 
         Glide.with(requireContext()).load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
