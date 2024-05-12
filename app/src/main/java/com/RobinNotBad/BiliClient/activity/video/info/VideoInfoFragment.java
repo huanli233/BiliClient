@@ -32,6 +32,7 @@ import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.MultiPageActivity;
 import com.RobinNotBad.BiliClient.adapter.FollowListAdapter;
 import com.RobinNotBad.BiliClient.adapter.UpListAdapter;
+import com.RobinNotBad.BiliClient.api.BangumiApi;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.LikeCoinFavApi;
@@ -135,6 +136,17 @@ public class VideoInfoFragment extends Fragment {
         ImageButton coin = view.findViewById(R.id.btn_coin);
         fav = view.findViewById(R.id.btn_fav);
 
+        if(videoInfo.epid != -1){ //不是空的的话就应该跳转到番剧页面了
+            CenterThreadPool.run(() -> {
+                Intent intent = new Intent(requireContext(), VideoInfoActivity.class);
+                intent.putExtra("type","media");
+                intent.putExtra("aid", BangumiApi.getMdidFromEpid(videoInfo.epid));
+                requireActivity().runOnUiThread(() -> {
+                    startActivity(intent);
+                    requireActivity().finish();
+                });
+            });
+        }
 
         CenterThreadPool.run(() -> {
             try {
@@ -180,6 +192,7 @@ public class VideoInfoFragment extends Fragment {
         });
 
         title.setText(videoInfo.title);
+        ToolsUtil.setCopy(title,requireContext());
 
         if(videoInfo.upowerExclusive) {
             titleBadge.setVisibility(View.VISIBLE);

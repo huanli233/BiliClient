@@ -22,6 +22,8 @@ public class VideoInfo implements Serializable {    //自定义类需要加这�
     public boolean isCooperation; //联合投稿
     public ArrayList<UserInfo> staff; //联合投稿UP主列表
 
+    public long epid; //如果是番剧则不为空，应自动跳转
+
 
     public VideoInfo(){}
 }

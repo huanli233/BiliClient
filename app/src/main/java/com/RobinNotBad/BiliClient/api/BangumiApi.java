@@ -1,5 +1,7 @@
 package com.RobinNotBad.BiliClient.api;
 
+import android.util.Log;
+
 import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 
@@ -21,6 +23,24 @@ public class BangumiApi {
         bangumi.info = getInfo(mediaId);
         bangumi.sectionList = getSections(bangumi.info.season_id);
         return bangumi;
+    }
+
+
+    public static Long getMdidFromEpid(long epid) {
+        try {
+            String url = "https://api.bilibili.com/pgc/view/web/season?ep_id=" + epid;
+            JSONObject all = NetWorkUtil.getJson(url);
+
+            Log.e("debug-epid",String.valueOf(epid));
+
+            int code = all.getInt("code");
+            if (code != 0) return 0L;
+
+            return all.getJSONObject("result").getLong("media_id");
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0L;
+        }
     }
 
     public static Bangumi.Info getInfo(long mediaId) throws IOException, JSONException {
