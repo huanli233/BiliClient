@@ -116,7 +116,7 @@ public class SearchActivity extends InstanceActivity {
         });
 
         try {
-            searchHistory = JsonUtil.jsonToArrayList(new JSONArray(SharedPreferencesUtil.getString(SharedPreferencesUtil.search_history,"[]")),true);
+            searchHistory = JsonUtil.jsonToArrayList(new JSONArray(SharedPreferencesUtil.getString(SharedPreferencesUtil.search_history,"[]")),false);
         } catch (JSONException e) {
             runOnUiThread(() -> MsgUtil.err(e, this));
             searchHistory = new ArrayList<>();
