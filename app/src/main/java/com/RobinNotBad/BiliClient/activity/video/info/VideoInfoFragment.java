@@ -4,8 +4,12 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +34,6 @@ import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.user.WatchLaterActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.MultiPageActivity;
-import com.RobinNotBad.BiliClient.adapter.FollowListAdapter;
 import com.RobinNotBad.BiliClient.adapter.UpListAdapter;
 import com.RobinNotBad.BiliClient.api.BangumiApi;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
@@ -45,6 +48,7 @@ import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.view.RadiusBackgroundSpan;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -115,7 +119,6 @@ public class VideoInfoFragment extends Fragment {
 
         ImageView cover = view.findViewById(R.id.cover);
         ImageView upIcon = view.findViewById(R.id.upInfo_Icon);
-        TextView titleBadge = view.findViewById(R.id.title_badge);
         TextView title = view.findViewById(R.id.title);
         description = view.findViewById(R.id.description);
         tagsText = view.findViewById(R.id.tags);
@@ -194,14 +197,11 @@ public class VideoInfoFragment extends Fragment {
             } catch (Exception e) {if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));}
         });
 
-        title.setText(videoInfo.title);
-        ToolsUtil.setCopy(title,requireContext());
+        SpannableString titleStr = new SpannableString(videoInfo.title);
+        RadiusBackgroundSpan badgeBG = new RadiusBackgroundSpan(0,8,Color.WHITE,Color.rgb(255,55,86));
 
-        if(videoInfo.upowerExclusive) {
-            titleBadge.setVisibility(View.VISIBLE);
-            titleBadge.setText("充电专属");
-            title.setText("              " + ToolsUtil.ToDBC(videoInfo.title)); //简单粗暴
-        }
+        ToolsUtil.setCopy(title,requireContext(),videoInfo.title);
+
         if(!videoInfo.argueMsg.isEmpty()){
             exclusiveTipLabel.setText(videoInfo.argueMsg);
             exclusiveTip.setVisibility(View.VISIBLE);
@@ -210,9 +210,8 @@ public class VideoInfoFragment extends Fragment {
         if(videoInfo.isCooperation){ //如果是联合投稿
             upCard.setVisibility(View.GONE); //隐藏普通的UP详情
             up_recyclerView.setVisibility(View.VISIBLE); //显示联合列表
-            titleBadge.setVisibility(View.VISIBLE);
-            titleBadge.setText("联合投稿");
-            title.setText("              " + ToolsUtil.ToDBC(videoInfo.title)); //简单粗暴
+            titleStr = new SpannableString("联合投稿 " + videoInfo.title);
+            titleStr.setSpan(badgeBG, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
             if (isAdded()) requireActivity().runOnUiThread(() -> {
                 UpListAdapter adapter = new UpListAdapter(requireContext(),videoInfo.staff);
@@ -220,6 +219,13 @@ public class VideoInfoFragment extends Fragment {
                 up_recyclerView.setAdapter(adapter);
             });
         }
+
+        if(videoInfo.upowerExclusive) {
+            titleStr = new SpannableString("充电专属 " + videoInfo.title);
+            titleStr.setSpan(badgeBG, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
+
+        title.setText(titleStr);
 
         Glide.with(requireContext()).load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, requireContext()))))
