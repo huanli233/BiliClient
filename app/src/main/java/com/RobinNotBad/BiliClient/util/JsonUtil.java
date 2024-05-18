@@ -2,6 +2,8 @@ package com.RobinNotBad.BiliClient.util;
 
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -60,6 +62,20 @@ public class JsonUtil {
             }
         }
         return defaultValue;
+    }
+
+    public static ArrayList jsonToArrayList(JSONArray jsonArray,boolean reverse) throws JSONException {
+        ArrayList<Object> arrayList = new ArrayList<Object>();
+        if(reverse) {
+            for (int i = jsonArray.length()-1; i >= 0; i--) {
+                arrayList.add(jsonArray.get(i));
+            }
+        } else {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                arrayList.add(jsonArray.get(i));
+            }
+        }
+        return arrayList;
     }
 
     //json列项函数 用于表情包，自己写的以替换luern的库

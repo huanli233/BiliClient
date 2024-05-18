@@ -11,26 +11,46 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
+import com.RobinNotBad.BiliClient.adapter.SearchHistoryAdapter;
+import com.RobinNotBad.BiliClient.api.ConfInfoApi;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.FileUtil;
+import com.RobinNotBad.BiliClient.util.JsonUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
-public class SearchActivity extends InstanceActivity {
+import org.json.JSONArray;
+import org.json.JSONException;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Objects;
+
+public class SearchActivity extends InstanceActivity {
+    private String lastKeyword = "≠~`";
+    private RecyclerView historyRecyclerview;
+    private ScrollView historyScrollview;
+    SearchHistoryAdapter searchHistoryAdapter;
     private ConstraintLayout searchBar;
     private boolean searchBarVisible = true;
     private boolean refreshing = false;
     private long animate_last;
     Handler handler;
+    ArrayList<String> searchHistory;
 
     @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged"})
     @Override
@@ -48,7 +68,17 @@ public class SearchActivity extends InstanceActivity {
         View searchBtn = findViewById(R.id.search);
         EditText keywordInput = findViewById(R.id.keywordInput);
         searchBar = findViewById(R.id.searchbar);
+        historyRecyclerview = findViewById(R.id.history_recyclerview);
+        historyScrollview = findViewById(R.id.history_scrollview);
         viewPager.setOffscreenPageLimit(3);
+        keywordInput.setOnFocusChangeListener((view, b) -> {
+            if(b){
+                historyScrollview.setVisibility(View.VISIBLE);
+            }else{
+                historyScrollview.setVisibility(View.GONE);
+            }
+        });
+        historyScrollview.setVisibility(View.VISIBLE);
         FragmentStateAdapter vpfAdapter = new FragmentStateAdapter(this) {
 
             @Override
@@ -82,10 +112,20 @@ public class SearchActivity extends InstanceActivity {
             }
             return false;
         });
+
+        try {
+            searchHistory = JsonUtil.jsonToArrayList(new JSONArray(SharedPreferencesUtil.getString(SharedPreferencesUtil.search_history,"[]")),true);
+        } catch (JSONException e) {
+            runOnUiThread(() -> MsgUtil.err(e, this));
+            searchHistory = new ArrayList<>();
+        }
+        searchHistoryAdapter = new SearchHistoryAdapter(this, searchHistory, this);
+        historyRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+        historyRecyclerview.setAdapter(searchHistoryAdapter);
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void searchKeyword(String str) {
+    public void searchKeyword(String str) {
         if (str.contains("Robin") || str.contains("robin")) {
             if (str.contains("撅")) {
                 MsgUtil.showText(this, "特殊彩蛋", getString(R.string.egg_special));
@@ -102,6 +142,9 @@ public class SearchActivity extends InstanceActivity {
             SharedPreferencesUtil.putBoolean("tutorial_search", true);
         }
 
+        if(!Objects.equals(lastKeyword, str)) lastKeyword = str;
+        else return;
+
         if (!refreshing) {
             InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -109,6 +152,19 @@ public class SearchActivity extends InstanceActivity {
             if (str.isEmpty()) {
                 runOnUiThread(() -> MsgUtil.toast("还没输入内容喵~",this));
             } else {
+                //搜索记录
+                try {
+                    searchHistory.add(0,str);
+                    SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history,new JSONArray(searchHistory).toString());
+                    runOnUiThread(() -> {
+                        ((TextView)findViewById(R.id.keywordInput)).setText(str);
+                        historyScrollview.setVisibility(View.GONE);
+                    });
+                }catch (Exception e){
+                    runOnUiThread(() -> MsgUtil.err(e,this));
+                }
+
+
                 refreshing = true;
                 try {
                     for (int i = 0; i < 3; i++) {
