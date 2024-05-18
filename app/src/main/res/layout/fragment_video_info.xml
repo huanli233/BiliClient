@@ -71,12 +71,13 @@
                 android:id="@+id/exclusiveTip"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="4dp"
                 android:alpha="0.6"
                 android:visibility="gone"
+                android:layout_marginVertical="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title">
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintBottom_toTopOf="@id/up_recyclerView">
 
                 <TextView
                     android:id="@+id/exclusiveTipLabel"
@@ -84,64 +85,18 @@
                     android:layout_height="35sp"
                     android:layout_marginHorizontal="8dp"
                     android:gravity="center_vertical"
-                    android:text="该视频为充电专属视频"
+                    android:text="1"
                     android:textAlignment="textStart"
                     android:textSize="13sp"
                     tools:ignore="RtlCompat" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/upInfo"
-                android:layout_marginTop="4dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/exclusiveTip">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp">
-
-                    <ImageView
-                        android:id="@+id/upInfo_Icon"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="6dp"
-                        android:adjustViewBounds="true"
-                        android:src="@mipmap/akari"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintDimensionRatio="1:1"
-                        app:layout_constraintHeight_percent="0.7"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/upInfo_Name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:ellipsize="marquee"
-                        android:singleLine="true"
-                        android:text="UP主名字"
-                        android:textColor="#fff"
-                        android:textSize="13sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintBottom_toBottomOf="@+id/upInfo_Icon"
-                        app:layout_constraintStart_toEndOf="@+id/upInfo_Icon"
-                        app:layout_constraintTop_toTopOf="@id/upInfo_Icon" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
             </com.google.android.material.card.MaterialCardView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/up_recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/upInfo"
-                app:layout_constraintTop_toBottomOf="@id/viewsCount" />
+                app:layout_constraintTop_toBottomOf="@id/exclusiveTip"
+                app:layout_constraintBottom_toTopOf="@id/viewsCount" />
 
             <ImageView
                 android:id="@+id/viewsIcon"

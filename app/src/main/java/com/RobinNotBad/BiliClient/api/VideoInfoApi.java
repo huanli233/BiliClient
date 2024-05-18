@@ -78,13 +78,6 @@ public class VideoInfoApi {
         int sec = duration % 60;
         videoInfo.duration = (min<10 ? "0" : "") + min + ":" + (sec<10 ? "0" : "") + sec;
         Log.e("视频时长",videoInfo.duration);
-        
-        JSONObject owner = data.getJSONObject("owner");
-        UserInfo userInfo = new UserInfo();
-        userInfo.name = owner.getString("name");
-        userInfo.avatar = owner.getString("face");
-        userInfo.mid = owner.getLong("mid");
-        videoInfo.upInfo = userInfo;
 
         JSONObject stat = data.getJSONObject("stat");
         Stats stats = new Stats();
@@ -112,9 +105,14 @@ public class VideoInfoApi {
         videoInfo.cids = cids;
 
         videoInfo.upowerExclusive = data.getBoolean("is_upower_exclusive");
-        videoInfo.isCooperation = (data.getJSONObject("rights").getInt("is_cooperation") == 1 ? true : false);
+
+        JSONObject rights = data.getJSONObject("rights");
+        videoInfo.isCooperation = (rights.getInt("is_cooperation") == 1 ? true : false);
+        videoInfo.isSteinGate = (rights.getInt("is_stein_gate") == 1 ? true : false);
+        videoInfo.is360 = (rights.getInt("is_360") == 1 ? true : false);
+
+        ArrayList<UserInfo> staff_list = new ArrayList<>();
         if(videoInfo.isCooperation) { //如果是联合投稿就存储联合UP列表
-            ArrayList<UserInfo> staff_list = new ArrayList<>();
             JSONArray staff = data.getJSONArray("staff");
             for( int i = 0;i < staff.length();i++){
                 UserInfo staff_member = new UserInfo();
@@ -133,8 +131,17 @@ public class VideoInfoApi {
 
                 staff_list.add(staff_member);
             }
-            videoInfo.staff = staff_list;
-        } else videoInfo.staff = new ArrayList<>();
+        } else {
+            JSONObject owner = data.getJSONObject("owner");
+            UserInfo userInfo = new UserInfo();
+            userInfo.name = owner.getString("name");
+            userInfo.avatar = owner.getString("face");
+            userInfo.mid = owner.getLong("mid");
+            userInfo.sign = "UP主";
+            staff_list.add(userInfo);
+        }
+        videoInfo.staff = staff_list;
+
         videoInfo.argueMsg = data.getJSONObject("argue_info").getString("argue_msg");
 
         try {

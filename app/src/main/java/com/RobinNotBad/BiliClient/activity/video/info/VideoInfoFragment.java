@@ -118,14 +118,12 @@ public class VideoInfoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ImageView cover = view.findViewById(R.id.cover);
-        ImageView upIcon = view.findViewById(R.id.upInfo_Icon);
         TextView title = view.findViewById(R.id.title);
         description = view.findViewById(R.id.description);
         tagsText = view.findViewById(R.id.tags);
         MaterialCardView exclusiveTip = view.findViewById(R.id.exclusiveTip);
         RecyclerView up_recyclerView = view.findViewById(R.id.up_recyclerView);
         TextView exclusiveTipLabel = view.findViewById(R.id.exclusiveTipLabel);
-        TextView upName = view.findViewById(R.id.upInfo_Name);
         TextView viewCount = view.findViewById(R.id.viewsCount);
         TextView timeText = view.findViewById(R.id.timeText);
         TextView durationText = view.findViewById(R.id.durationText);
@@ -156,7 +154,7 @@ public class VideoInfoFragment extends Fragment {
 
         CenterThreadPool.run(() -> {
             try {
-                HistoryApi.reportHistory(videoInfo.aid, videoInfo.cids.get(0), videoInfo.upInfo.mid, 0);
+                HistoryApi.reportHistory(videoInfo.aid, videoInfo.cids.get(0), videoInfo.staff.get(0).mid, 0);
             } catch (Exception e) {
                 if (isAdded())
                     requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
@@ -207,17 +205,25 @@ public class VideoInfoFragment extends Fragment {
             exclusiveTip.setVisibility(View.VISIBLE);
         }
 
+        if (isAdded()) requireActivity().runOnUiThread(() -> {
+            UpListAdapter adapter = new UpListAdapter(requireContext(),videoInfo.staff);
+            up_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            up_recyclerView.setAdapter(adapter);
+        }); //加载UP主
+
         if(videoInfo.isCooperation){ //如果是联合投稿
-            upCard.setVisibility(View.GONE); //隐藏普通的UP详情
-            up_recyclerView.setVisibility(View.VISIBLE); //显示联合列表
             titleStr = new SpannableString(" 联合投稿  " + videoInfo.title);
             titleStr.setSpan(badgeBG, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
 
-            if (isAdded()) requireActivity().runOnUiThread(() -> {
-                UpListAdapter adapter = new UpListAdapter(requireContext(),videoInfo.staff);
-                up_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                up_recyclerView.setAdapter(adapter);
-            });
+        if(videoInfo.isSteinGate){
+            titleStr = new SpannableString(" 互动视频  " + videoInfo.title);
+            titleStr.setSpan(badgeBG, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
+
+        if(videoInfo.is360){
+            titleStr = new SpannableString(" 全景视频  " + videoInfo.title);
+            titleStr.setSpan(badgeBG, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
 
         if(videoInfo.upowerExclusive) {
@@ -231,11 +237,6 @@ public class VideoInfoFragment extends Fragment {
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, requireContext()))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(cover);
-        Glide.with(requireContext()).load(GlideUtil.url(videoInfo.upInfo.avatar)).placeholder(R.mipmap.akari)
-                .apply(RequestOptions.circleCropTransform())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(upIcon);
-        upName.setText(videoInfo.upInfo.name);
 
         cover.setOnClickListener(view1 -> {
             Intent intent = new Intent();
@@ -374,14 +375,5 @@ public class VideoInfoFragment extends Fragment {
                 }
             }
         });
-
-        upCard.setOnClickListener(view1 -> {
-            Intent intent = new Intent();
-            intent.setClass(requireContext(), UserInfoActivity.class);
-            intent.putExtra("mid", videoInfo.upInfo.mid);
-            startActivity(intent);
-        });
     }
-
-
 }
