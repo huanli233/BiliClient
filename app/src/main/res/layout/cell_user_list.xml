@@ -28,10 +28,11 @@
             android:layout_marginStart="8dp"
             android:id="@+id/userAvatar" />
 
-        <TextView
+        <com.RobinNotBad.BiliClient.view.FocusTextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:ellipsize="end"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             app:layout_constraintStart_toEndOf="@id/userAvatar"
             android:layout_marginTop="2dp"
@@ -43,10 +44,11 @@
             android:id="@+id/userName"
             android:text="NappuHidda" />
 
-        <TextView
+        <com.RobinNotBad.BiliClient.view.FocusTextView
             android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:ellipsize="end"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             android:textSize="11sp"
             android:singleLine="true"
             app:layout_constraintStart_toEndOf="@id/userAvatar"

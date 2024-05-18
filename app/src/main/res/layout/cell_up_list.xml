@@ -27,10 +27,11 @@
             android:layout_marginStart="8dp"
             android:id="@+id/userAvatar" />
 
-        <TextView
+        <com.RobinNotBad.BiliClient.view.FocusTextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:ellipsize="end"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             app:layout_constraintStart_toEndOf="@id/userAvatar"
             android:layout_marginTop="2dp"
@@ -42,7 +43,7 @@
             android:id="@+id/userName"
             android:text="NappuHidda" />
 
-        <TextView
+        <com.RobinNotBad.BiliClient.view.FocusTextView
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:ellipsize="end"
@@ -57,7 +58,7 @@
             android:alpha="0.8"
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/userDesc"
-            android:text="年少时的怦然心动，送给了永远无法企及的人。热爱与梦让人无法不作为。" />
+            android:text="UP主" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

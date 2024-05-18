@@ -19,11 +19,12 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
-        <TextView
+        <com.RobinNotBad.BiliClient.view.FocusTextView
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             android:textSize="13sp"
             android:text="新春快乐！"

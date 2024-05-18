@@ -21,14 +21,12 @@
             android:layout_width="wrap_content"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:singleLine="true"
             android:layout_marginStart="6dp"
             android:layout_marginBottom="1dp"
             android:padding="5dp"
             android:id="@+id/text"
-            android:text="未命名11111111111111111111111"
+            android:text="按钮"
             tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
