@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 
 import com.RobinNotBad.BiliClient.R;
@@ -30,6 +31,14 @@ public class CopyTextActivity extends BaseActivity {
 
         EditText beginEdit = findViewById(R.id.begin_index);
         EditText endEdit = findViewById(R.id.end_index);
+
+        edittext.setOnFocusChangeListener((view, b) -> {
+            if(!b) {
+                beginEdit.setText(String.valueOf(edittext.getSelectionStart()));
+                endEdit.setText(String.valueOf(edittext.getSelectionEnd()));
+            }
+        });
+
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -79,7 +88,7 @@ public class CopyTextActivity extends BaseActivity {
         });
         findViewById(R.id.begin_right).setOnClickListener(view -> {
             try {
-                if(Integer.parseInt(String.valueOf(beginEdit.getText())) + 1 > content.length() - 1) beginEdit.setText(String.valueOf(content.length()-1));
+                if(Integer.parseInt(String.valueOf(beginEdit.getText())) + 1 > content.length()) beginEdit.setText(String.valueOf(content.length()));
                 else beginEdit.setText(String.valueOf(Integer.parseInt(String.valueOf(beginEdit.getText())) + 1));
             }catch (Exception e){
                 beginEdit.setText("0");
@@ -95,7 +104,7 @@ public class CopyTextActivity extends BaseActivity {
         });
         findViewById(R.id.end_right).setOnClickListener(view -> {
             try {
-                if(Integer.parseInt(String.valueOf(endEdit.getText())) + 1 > content.length() - 1) endEdit.setText(String.valueOf(content.length()-1));
+                if(Integer.parseInt(String.valueOf(endEdit.getText())) + 1 > content.length()) endEdit.setText(String.valueOf(content.length()));
                 else endEdit.setText(String.valueOf(Integer.parseInt(String.valueOf(endEdit.getText())) + 1));
             }catch (Exception e){
                 endEdit.setText("0");
