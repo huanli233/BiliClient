@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
-        <TextView
+        <com.RobinNotBad.BiliClient.view.FocusTextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:ellipsize="marquee"
@@ -24,7 +24,6 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:singleLine="true"
-            android:layout_marginTop="2dp"
             android:layout_marginStart="6dp"
             android:layout_marginBottom="1dp"
             android:padding="5dp"

@@ -79,7 +79,7 @@
             app:layout_constraintTop_toBottomOf="@+id/listCover"
             app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
+        <com.RobinNotBad.BiliClient.view.FocusTextView
             android:id="@+id/listUpName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

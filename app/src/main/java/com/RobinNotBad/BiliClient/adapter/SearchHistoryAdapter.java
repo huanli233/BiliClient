@@ -29,7 +29,6 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<BtnListHolder> {
     ArrayList<String> historyList;
     OnItemLongClickListener longClickListener;
     SearchActivity activity;
-    private int longClickPosition=-1;
 
     public SearchHistoryAdapter(Context context, ArrayList<String> historyList, SearchActivity activity) {
         this.context = context;
@@ -56,6 +55,14 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<BtnListHolder> {
             if(activity != null){
                 activity.searchKeyword(historyList.get(position));
             }
+        });
+
+        holder.itemView.setOnLongClickListener(view -> {
+            if(longClickListener != null) {
+                longClickListener.onItemLongClick(position);
+                return true;    //必须要true哦，不然上面的点按也会触发
+            }
+            else return false;
         });
     }
 

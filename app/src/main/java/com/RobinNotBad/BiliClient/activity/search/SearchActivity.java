@@ -52,6 +52,8 @@ public class SearchActivity extends InstanceActivity {
     Handler handler;
     ArrayList<String> searchHistory;
 
+    private int longClickPosition = -1;
+
     @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +122,20 @@ public class SearchActivity extends InstanceActivity {
             searchHistory = new ArrayList<>();
         }
         searchHistoryAdapter = new SearchHistoryAdapter(this, searchHistory, this);
+        searchHistoryAdapter.setOnLongClickListener(position -> {
+            if(longClickPosition == position) {
+                MsgUtil.toast("删除成功",this);
+                searchHistory.remove(position);
+                searchHistoryAdapter.notifyItemRemoved(position);
+                searchHistoryAdapter.notifyItemRangeChanged(position,searchHistory.size() - position);
+                SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history,new JSONArray(searchHistory).toString());
+                longClickPosition = -1;
+            }
+            else{
+                longClickPosition = position;
+                MsgUtil.toast("再次长按删除",this);
+            }
+        });
         historyRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         historyRecyclerview.setAdapter(searchHistoryAdapter);
     }
@@ -159,6 +175,7 @@ public class SearchActivity extends InstanceActivity {
                     runOnUiThread(() -> {
                         ((TextView)findViewById(R.id.keywordInput)).setText(str);
                         historyScrollview.setVisibility(View.GONE);
+                        searchHistoryAdapter.notifyItemInserted(0);
                     });
                 }catch (Exception e){
                     runOnUiThread(() -> MsgUtil.err(e,this));
