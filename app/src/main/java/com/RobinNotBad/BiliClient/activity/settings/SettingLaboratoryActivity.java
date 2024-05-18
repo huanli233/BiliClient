@@ -6,8 +6,6 @@ import android.util.Log;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SettingLaboratoryActivity extends BaseActivity {
 

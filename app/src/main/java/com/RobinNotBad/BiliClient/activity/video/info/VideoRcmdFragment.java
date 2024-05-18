@@ -18,9 +18,6 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 //视频下推荐页面

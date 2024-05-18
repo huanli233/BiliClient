@@ -7,9 +7,9 @@ import com.RobinNotBad.BiliClient.model.Emote;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.JsonUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;

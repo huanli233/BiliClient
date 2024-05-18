@@ -7,11 +7,12 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.widget.SwitchCompat;
+
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;

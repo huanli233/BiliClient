@@ -1,7 +1,5 @@
 package com.RobinNotBad.BiliClient.model;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 
 public class Reply {

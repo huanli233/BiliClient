@@ -10,8 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-
 import com.RobinNotBad.BiliClient.model.MessageCard;
+
 import java.util.ArrayList;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageHolder> {

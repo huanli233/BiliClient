@@ -1,12 +1,10 @@
 package com.RobinNotBad.BiliClient.api;
 
-import android.util.Log;
-
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;

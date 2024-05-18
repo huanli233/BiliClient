@@ -4,8 +4,8 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
-
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;

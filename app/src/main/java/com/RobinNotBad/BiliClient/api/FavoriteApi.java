@@ -4,9 +4,9 @@ import android.util.Log;
 
 import com.RobinNotBad.BiliClient.model.FavoriteFolder;
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;

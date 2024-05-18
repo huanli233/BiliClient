@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import okhttp3.ResponseBody;
-
 public class BangumiApi {
 
     //获取番剧信息, 详情页需要有基本的cover, 信息等

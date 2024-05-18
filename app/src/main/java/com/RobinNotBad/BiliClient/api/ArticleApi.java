@@ -4,7 +4,6 @@ import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.Stats;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;

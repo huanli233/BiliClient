@@ -14,8 +14,8 @@ import com.RobinNotBad.BiliClient.adapter.PageChooseAdapter;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import java.io.File;
 
