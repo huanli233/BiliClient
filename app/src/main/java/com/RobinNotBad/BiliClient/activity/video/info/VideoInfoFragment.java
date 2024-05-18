@@ -198,7 +198,7 @@ public class VideoInfoFragment extends Fragment {
         });
 
         SpannableString titleStr = new SpannableString(videoInfo.title);
-        RadiusBackgroundSpan badgeBG = new RadiusBackgroundSpan(0,8,Color.WHITE,Color.rgb(255,55,86));
+        RadiusBackgroundSpan badgeBG = new RadiusBackgroundSpan(0,8,Color.WHITE,Color.rgb(207,75,95));
 
         ToolsUtil.setCopy(title,requireContext(),videoInfo.title);
 
