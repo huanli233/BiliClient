@@ -210,8 +210,8 @@ public class VideoInfoFragment extends Fragment {
         if(videoInfo.isCooperation){ //如果是联合投稿
             upCard.setVisibility(View.GONE); //隐藏普通的UP详情
             up_recyclerView.setVisibility(View.VISIBLE); //显示联合列表
-            titleStr = new SpannableString("联合投稿 " + videoInfo.title);
-            titleStr.setSpan(badgeBG, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            titleStr = new SpannableString(" 联合投稿  " + videoInfo.title);
+            titleStr.setSpan(badgeBG, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
             if (isAdded()) requireActivity().runOnUiThread(() -> {
                 UpListAdapter adapter = new UpListAdapter(requireContext(),videoInfo.staff);
@@ -221,8 +221,8 @@ public class VideoInfoFragment extends Fragment {
         }
 
         if(videoInfo.upowerExclusive) {
-            titleStr = new SpannableString("充电专属 " + videoInfo.title);
-            titleStr.setSpan(badgeBG, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            titleStr = new SpannableString(" 充电专属  " + videoInfo.title);
+            titleStr.setSpan(badgeBG, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
 
         title.setText(titleStr);
