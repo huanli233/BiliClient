@@ -166,6 +166,13 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:text="*长按选择到开头/结尾*" />
+
             <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

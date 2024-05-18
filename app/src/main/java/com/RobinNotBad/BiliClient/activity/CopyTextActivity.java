@@ -110,5 +110,21 @@ public class CopyTextActivity extends BaseActivity {
                 endEdit.setText("0");
             }
         });
+        findViewById(R.id.begin_left).setOnLongClickListener(view -> {
+            beginEdit.setText("0");
+            return false;
+        });
+        findViewById(R.id.begin_right).setOnLongClickListener(view -> {
+            beginEdit.setText(String.valueOf(content.length()));
+            return false;
+        });
+        findViewById(R.id.end_left).setOnLongClickListener(view -> {
+            endEdit.setText("0");
+            return false;
+        });
+        findViewById(R.id.end_right).setOnLongClickListener(view -> {
+            endEdit.setText(String.valueOf(content.length()));
+            return false;
+        });
     }
 }
