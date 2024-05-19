@@ -126,7 +126,6 @@ public class VideoInfoFragment extends Fragment {
         TextView durationText = view.findViewById(R.id.durationText);
         MaterialButton play = view.findViewById(R.id.play);
         MaterialButton addWatchlater = view.findViewById(R.id.addWatchlater);
-        MaterialCardView upCard = view.findViewById(R.id.upInfo);
         MaterialButton download = view.findViewById(R.id.download);
         TextView bvidText = view.findViewById(R.id.bvidText);
         TextView danmakuCount = view.findViewById(R.id.danmakuCount);
@@ -192,9 +191,6 @@ public class VideoInfoFragment extends Fragment {
             } catch (Exception e) {if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));}
         });
 
-        SpannableString titleStr = new SpannableString(videoInfo.title);
-        RadiusBackgroundSpan badgeBG = new RadiusBackgroundSpan(0,8,Color.WHITE,Color.rgb(207,75,95));
-
         ToolsUtil.setCopy(title,requireContext(),videoInfo.title);
 
         if(!videoInfo.argueMsg.isEmpty()){
@@ -208,27 +204,7 @@ public class VideoInfoFragment extends Fragment {
             up_recyclerView.setAdapter(adapter);
         }); //加载UP主
 
-        if(videoInfo.isCooperation){ //如果是联合投稿
-            titleStr = new SpannableString(" 联合投稿  " + videoInfo.title);
-            titleStr.setSpan(badgeBG, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        }
-
-        if(videoInfo.isSteinGate){
-            titleStr = new SpannableString(" 互动视频  " + videoInfo.title);
-            titleStr.setSpan(badgeBG, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        }
-
-        if(videoInfo.is360){
-            titleStr = new SpannableString(" 全景视频  " + videoInfo.title);
-            titleStr.setSpan(badgeBG, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        }
-
-        if(videoInfo.upowerExclusive) {
-            titleStr = new SpannableString(" 充电专属  " + videoInfo.title);
-            titleStr.setSpan(badgeBG, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        }
-
-        title.setText(titleStr);
+        title.setText(getTitleSpan());
 
         Glide.with(requireContext()).load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, requireContext()))))
@@ -372,5 +348,21 @@ public class VideoInfoFragment extends Fragment {
                 }
             }
         });
+    }
+
+
+    private SpannableString getTitleSpan(){
+        String string = "";
+        if(videoInfo.isCooperation) string = "联合投稿";
+        else if (videoInfo.isSteinGate) string = "互动视频";
+        else if(videoInfo.is360) string = "全景视频";
+        else if(videoInfo.upowerExclusive) string = "充电专属";
+
+        if(string.isEmpty()) return new SpannableString(videoInfo.title);
+
+        SpannableString titleStr = new SpannableString(" " + string + " " + videoInfo.title);
+        RadiusBackgroundSpan badgeBG = new RadiusBackgroundSpan(0, (int) getResources().getDimension(R.dimen.card_round),Color.WHITE,Color.argb(0xfb,0xfb,0x87,0x99));
+        titleStr.setSpan(badgeBG, 0, string.length()+2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        return titleStr;
     }
 }

@@ -125,7 +125,7 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
 
         public FolderHolder(@NonNull View itemView) {
             super(itemView);
-            folder_name = itemView.findViewById(R.id.folder_name);
+            folder_name = itemView.findViewById(R.id.text);
         }
     }
 

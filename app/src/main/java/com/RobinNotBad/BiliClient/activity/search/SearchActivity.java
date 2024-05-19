@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -25,9 +23,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.SearchHistoryAdapter;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.JsonUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -36,23 +31,20 @@ import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class SearchActivity extends InstanceActivity {
     private String lastKeyword = "≠~`";
     private RecyclerView historyRecyclerview;
-    private ScrollView historyScrollview;
     SearchHistoryAdapter searchHistoryAdapter;
+    EditText keywordInput;
     private ConstraintLayout searchBar;
     private boolean searchBarVisible = true;
     private boolean refreshing = false;
     private long animate_last;
     Handler handler;
     ArrayList<String> searchHistory;
-
-    private int longClickPosition = -1;
 
     @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged"})
     @Override
@@ -68,19 +60,12 @@ public class SearchActivity extends InstanceActivity {
         ViewPager2 viewPager = findViewById(R.id.viewPager);
 
         View searchBtn = findViewById(R.id.search);
-        EditText keywordInput = findViewById(R.id.keywordInput);
+        keywordInput = findViewById(R.id.keywordInput);
         searchBar = findViewById(R.id.searchbar);
         historyRecyclerview = findViewById(R.id.history_recyclerview);
-        historyScrollview = findViewById(R.id.history_scrollview);
         viewPager.setOffscreenPageLimit(3);
-        keywordInput.setOnFocusChangeListener((view, b) -> {
-            if(b){
-                historyScrollview.setVisibility(View.VISIBLE);
-            }else{
-                historyScrollview.setVisibility(View.GONE);
-            }
-        });
-        historyScrollview.setVisibility(View.VISIBLE);
+        keywordInput.setOnFocusChangeListener((view, b) -> historyRecyclerview.setVisibility(b ? View.VISIBLE : View.GONE));
+        historyRecyclerview.setVisibility(View.VISIBLE);
         FragmentStateAdapter vpfAdapter = new FragmentStateAdapter(this) {
 
             @Override
@@ -121,20 +106,14 @@ public class SearchActivity extends InstanceActivity {
             runOnUiThread(() -> MsgUtil.err(e, this));
             searchHistory = new ArrayList<>();
         }
-        searchHistoryAdapter = new SearchHistoryAdapter(this, searchHistory, this);
+        searchHistoryAdapter = new SearchHistoryAdapter(this, searchHistory);
+        searchHistoryAdapter.setOnClickListener(position -> keywordInput.setText(searchHistory.get(position)));
         searchHistoryAdapter.setOnLongClickListener(position -> {
-            if(longClickPosition == position) {
-                MsgUtil.toast("删除成功",this);
-                searchHistory.remove(position);
-                searchHistoryAdapter.notifyItemRemoved(position);
-                searchHistoryAdapter.notifyItemRangeChanged(position,searchHistory.size() - position);
-                SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history,new JSONArray(searchHistory).toString());
-                longClickPosition = -1;
-            }
-            else{
-                longClickPosition = position;
-                MsgUtil.toast("再次长按删除",this);
-            }
+            MsgUtil.toast("删除成功",this);
+            searchHistory.remove(position);
+            searchHistoryAdapter.notifyItemRemoved(position);
+            searchHistoryAdapter.notifyItemRangeChanged(position,searchHistory.size() - position);
+            SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history,new JSONArray(searchHistory).toString());
         });
         historyRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         historyRecyclerview.setAdapter(searchHistoryAdapter);
@@ -158,8 +137,6 @@ public class SearchActivity extends InstanceActivity {
             SharedPreferencesUtil.putBoolean("tutorial_search", true);
         }
 
-        if(!Objects.equals(lastKeyword, str)) lastKeyword = str;
-        else return;
 
         if (!refreshing) {
             InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -167,22 +144,33 @@ public class SearchActivity extends InstanceActivity {
 
             if (str.isEmpty()) {
                 runOnUiThread(() -> MsgUtil.toast("还没输入内容喵~",this));
+            } else if(Objects.equals(lastKeyword, str)) {
+                runOnUiThread(()-> {
+                    keywordInput.clearFocus();
+                    historyRecyclerview.setVisibility(View.GONE);
+                });
             } else {
+                refreshing = true;
+                lastKeyword = str;
+
                 //搜索记录
-                try {
-                    searchHistory.add(0,str);
-                    SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history,new JSONArray(searchHistory).toString());
-                    runOnUiThread(() -> {
-                        ((TextView)findViewById(R.id.keywordInput)).setText(str);
-                        historyScrollview.setVisibility(View.GONE);
-                        searchHistoryAdapter.notifyItemInserted(0);
-                    });
-                }catch (Exception e){
-                    runOnUiThread(() -> MsgUtil.err(e,this));
+                runOnUiThread(()-> {
+                    historyRecyclerview.setVisibility(View.GONE);
+                    keywordInput.clearFocus();
+                });
+
+                if(!searchHistory.contains(str)) {
+                    try {
+                        searchHistory.add(0, str);
+                        SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history, new JSONArray(searchHistory).toString());
+                        runOnUiThread(() -> {
+                            searchHistoryAdapter.notifyItemInserted(0);
+                        });
+                    } catch (Exception e) {
+                        runOnUiThread(() -> MsgUtil.err(e, this));
+                    }
                 }
 
-
-                refreshing = true;
                 try {
                     for (int i = 0; i < 3; i++) {
                         //从viewpager中拿真正added的fragment的方法: tag = "f{position}", 得到的fragment将会是真实存在的

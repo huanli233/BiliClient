@@ -76,7 +76,7 @@ public class PageChooseAdapter extends RecyclerView.Adapter<PageChooseAdapter.Ho
 
         public Holder(@NonNull View itemView) {
             super(itemView);
-            folder_name = itemView.findViewById(R.id.folder_name);
+            folder_name = itemView.findViewById(R.id.text);
         }
     }
 }

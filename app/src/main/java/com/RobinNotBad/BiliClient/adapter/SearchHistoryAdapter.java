@@ -4,46 +4,44 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
+import com.RobinNotBad.BiliClient.listener.OnItemClickListener;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.FileUtil;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
-import org.json.JSONArray;
-
-import java.io.File;
 import java.util.ArrayList;
 
 
-public class SearchHistoryAdapter extends RecyclerView.Adapter<BtnListHolder> {
+public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdapter.BtnListHolder> {
 
     Context context;
     ArrayList<String> historyList;
     OnItemLongClickListener longClickListener;
-    SearchActivity activity;
+    OnItemClickListener clickListener;
 
-    public SearchHistoryAdapter(Context context, ArrayList<String> historyList, SearchActivity activity) {
+    public SearchHistoryAdapter(Context context, ArrayList<String> historyList) {
         this.context = context;
         this.historyList = historyList;
-        this.activity = activity;
     }
 
     public void setOnLongClickListener(OnItemLongClickListener listener){
         this.longClickListener = listener;
     }
 
+    public void setOnClickListener(OnItemClickListener listener){
+        this.clickListener = listener;
+    }
+
     @NonNull
     @Override
     public BtnListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_btn_list,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_choose,parent,false);
         return new BtnListHolder(view);
     }
 
@@ -52,8 +50,8 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<BtnListHolder> {
         holder.show(historyList.get(position));
 
         holder.itemView.setOnClickListener(view -> {
-            if(activity != null){
-                activity.searchKeyword(historyList.get(position));
+            if(clickListener != null){
+                clickListener.onItemClick(position);
             }
         });
 
@@ -71,4 +69,16 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<BtnListHolder> {
         return historyList.size();
     }
 
+    public static class BtnListHolder extends RecyclerView.ViewHolder{
+        TextView text_view;
+
+        public BtnListHolder(@NonNull View itemView) {
+            super(itemView);
+            text_view = itemView.findViewById(R.id.text);
+        }
+
+        public void show(String text){
+            text_view.setText(ToolsUtil.htmlToString(text));
+        }
+    }
 }

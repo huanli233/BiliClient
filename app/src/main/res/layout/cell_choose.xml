@@ -12,11 +12,11 @@
     app:layout_constraintTop_toTopOf="parent">
 
     <TextView
-        android:id="@+id/folder_name"
+        android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
         android:layout_marginVertical="8dp"
-        android:text="收藏夹名称" />
+        android:text="文本文本文本" />
 
 </com.google.android.material.card.MaterialCardView>

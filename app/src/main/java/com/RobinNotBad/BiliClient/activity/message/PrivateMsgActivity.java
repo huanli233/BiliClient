@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -47,8 +48,7 @@ public class PrivateMsgActivity extends BaseActivity {
     PrivateMsgAdapter adapter;
     long uid;
     boolean isLoadingMore = false;
-    Timer refreshTimer;
-    Handler handler;
+    Timer refreshTimer,animTimer;
 
     boolean animVisible = true;
 
@@ -62,8 +62,6 @@ public class PrivateMsgActivity extends BaseActivity {
         sendBtn = findViewById(R.id.send_btn);
         layout_input = findViewById(R.id.layout_input);
 
-        handler = new Handler();
-        
         Intent intent = getIntent();
         uid = intent.getLongExtra("uid",114514);
         Log.e("",String.valueOf(uid));
@@ -92,8 +90,15 @@ public class PrivateMsgActivity extends BaseActivity {
                                     break;
                                 case RecyclerView.SCROLL_STATE_IDLE:
                                     if(!animVisible){
-                                        animVisible=true;
-                                        handler.postDelayed(()->layout_input.startAnimation(getViewAnimation(layout_input,true,true)),250);
+                                        if(animTimer!=null) animTimer.cancel();
+                                        animTimer = new Timer();
+                                        animTimer.schedule(new TimerTask() {
+                                            @Override
+                                            public void run() {
+                                                runOnUiThread(()->layout_input.startAnimation(getViewAnimation(layout_input,true,true)));
+                                                layout_input.postDelayed(()->animVisible=true,200);
+                                            }
+                                        },500);
                                     }
                                     break;
                             }
@@ -101,7 +106,7 @@ public class PrivateMsgActivity extends BaseActivity {
                         @Override
                         public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                             super.onScrolled(recyclerView, dx, dy);
-                            if(animVisible && recyclerView.canScrollVertically(0)) {
+                            if(animVisible && recyclerView.canScrollVertically(0) && dy!=0) {
                                 animVisible=false;
                                 layout_input.startAnimation(getViewAnimation(layout_input,false,false));
                             }
@@ -160,6 +165,14 @@ public class PrivateMsgActivity extends BaseActivity {
         AccelerateDecelerateInterpolator i = new AccelerateDecelerateInterpolator();
         anim.setInterpolator(i);
         anim.setFillAfter(true);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {if(show_or_hide) view.setVisibility(View.VISIBLE);}
+            @Override
+            public void onAnimationEnd(Animation animation) {if(!show_or_hide) view.setVisibility(View.GONE);}
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        });
         return anim;
     }
 

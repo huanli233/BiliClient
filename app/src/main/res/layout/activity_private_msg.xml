@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:background="@drawable/background_edittext_privatemsg"
-            android:hint="说点什么..."
+            android:hint="爱国诚信友善..."
             android:maxHeight="128dp"
             android:minHeight="38dp"
             android:paddingHorizontal="6dp"
