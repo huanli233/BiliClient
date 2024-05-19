@@ -6,7 +6,7 @@ android {
     namespace 'com.RobinNotBad.BiliClient'
     compileSdk 32
 
-    sourceSets{
+    sourceSets {
         main{
             jniLibs.srcDirs = ['libs']
         }
@@ -33,6 +33,9 @@ android {
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {
