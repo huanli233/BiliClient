@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -21,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -209,6 +211,11 @@ public class VideoInfoFragment extends Fragment {
                 .into(cover);
 
         cover.setOnClickListener(view1 -> {
+            if(SharedPreferencesUtil.getString("player", null) == null){
+                SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.click_image_play_enable, true);
+                Toast.makeText(requireContext(),"将播放视频, 如需变更点击行为请至设置->偏好设置喵", Toast.LENGTH_SHORT).show();
+                clickCoverPlayEnable = true;
+            }
             if(clickCoverPlayEnable){
                 play();
                 return;
