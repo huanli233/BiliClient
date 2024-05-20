@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.settings.SettingPrefActivity">
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   tools:context=".activity.settings.SettingPrefActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+            android:id="@+id/top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
         <TextView
                 android:id="@+id/pageName"
@@ -29,260 +29,283 @@
                 app:drawableStartCompat="@drawable/arrow_back"/>
 
         <TextClock
-            android:id="@+id/timeText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginVertical="3dp"
-            android:format12Hour="hh:mm"
-            android:format24Hour="HH:mm"
-            android:gravity="center"
-            android:text="11:45"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                android:id="@+id/timeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginVertical="3dp"
+                android:format12Hour="hh:mm"
+                android:format24Hour="HH:mm"
+                android:gravity="center"
+                android:text="11:45"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top"
-        app:layout_constraintBottom_toBottomOf="parent">
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/top"
+            app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/activity_padding_horizontal"
-            android:divider="@drawable/divider"
-            android:showDividers="middle"
-            android:paddingVertical="2dp"
-            android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/activity_padding_horizontal"
+                android:divider="@drawable/divider"
+                android:showDividers="middle"
+                android:paddingVertical="2dp"
+                android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/back_disable"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00000000"
-                        android:text="禁用返回键" />
+                            android:id="@+id/back_disable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#00000000"
+                            android:text="禁用返回键"/>
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="6dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="在某些手表上，从左向右滑会相当于按下返回键，导致在可以左右滑动的页面（如视频详情页、个人主页）内无法正常翻页。\n打开此选项可以解决这个问题，但也会导致无法滑动退出，你可以通过菜单最底部的退出按钮结束程序。\n正常用户建议不要开启此选项，在一些手表上会导致滑动卡死。"
-                        android:textSize="11sp" />
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="6dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="在某些手表上，从左向右滑会相当于按下返回键，导致在可以左右滑动的页面（如视频详情页、个人主页）内无法正常翻页。\n打开此选项可以解决这个问题，但也会导致无法滑动退出，你可以通过菜单最底部的退出按钮结束程序。\n正常用户建议不要开启此选项，在一些手表上会导致滑动卡死。"
+                            android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/fav_single"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00000000"
-                        android:text="收藏夹单选" />
+                            android:id="@+id/fav_single"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#00000000"
+                            android:text="收藏夹单选"/>
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="6dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="打开此选项，添加收藏后即退出收藏页面，取消收藏不自动退出。"
-                        android:textSize="11sp" />
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="6dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="打开此选项，添加收藏后即退出收藏页面，取消收藏不自动退出。"
+                            android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/fav_notice"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00000000"
-                        android:text="收藏成功提示" />
+                            android:id="@+id/fav_notice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#00000000"
+                            android:text="收藏成功提示"/>
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="6dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="打开此选项，退出收藏页面会提示收藏成功。\n但其实在你框选了收藏夹的时候就已经收藏了，这个选项只是为了看上去放心（"
-                        android:textSize="11sp" />
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="6dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="打开此选项，退出收藏页面会提示收藏成功。\n但其实在你框选了收藏夹的时候就已经收藏了，这个选项只是为了看上去放心（"
+                            android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/menu_popular"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00000000"
-                        android:text="显示“热门”" />
+                            android:id="@+id/menu_popular"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#00000000"
+                            android:text="显示“热门”"/>
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="6dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="打开此选项，在菜单页面会显示热门按钮"
-                        android:textSize="11sp" />
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="6dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="打开此选项，在菜单页面会显示热门按钮"
+                            android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/menu_precious"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00000000"
-                        android:text="显示“入站必刷”" />
+                            android:id="@+id/menu_precious"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#00000000"
+                            android:text="显示“入站必刷”"/>
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="6dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="打开此选项，在菜单页面会显示入站必刷按钮"
-                        android:textSize="11sp" />
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="6dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="打开此选项，在菜单页面会显示入站必刷按钮"
+                            android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/tags_enable"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00000000"
-                        android:text="显示视频标签" />
+                            android:id="@+id/tags_enable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#00000000"
+                            android:text="显示视频标签"/>
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="6dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="打开此选项，视频详情页会显示形如“原神UP主激励计划/原神/纳西妲/手机游戏”的视频标签"
-                        android:textSize="11sp" />
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="6dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="打开此选项，视频详情页会显示形如“原神UP主激励计划/原神/纳西妲/手机游戏”的视频标签"
+                            android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/related_enable"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00000000"
-                        android:text="启用视频相关推荐" />
+                            android:id="@+id/related_enable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#00000000"
+                            android:text="启用视频相关推荐"/>
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="6dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="打开此选项，视频评论区右侧会有相关视频推荐"
-                        android:textSize="11sp" />
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="6dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="打开此选项，视频评论区右侧会有相关视频推荐"
+                            android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/creative_enable"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00000000"
-                        android:text="创作中心" />
+                            android:id="@+id/creative_enable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#00000000"
+                            android:text="创作中心"/>
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="6dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="打开此选项，在“我的”页面会显示创作中心（可查看投稿视频的数据变化情况）"
-                        android:textSize="11sp" />
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="6dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="打开此选项，在“我的”页面会显示创作中心（可查看投稿视频的数据变化情况）"
+                            android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/copy_enable"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00000000"
-                        android:text="长按复制" />
+                            android:id="@+id/copy_enable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#00000000"
+                            android:text="长按复制"/>
                     <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="6dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="打开此选项，长按视频描述或评论可以打开复制界面以复制这些文本"
+                            android:textSize="11sp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="6dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="打开此选项，长按视频描述或评论可以打开复制界面以复制这些文本"
-                        android:textSize="11sp" />
+                        android:orientation="vertical">
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/click_image_play_enable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#00000000"
+                            android:text="详情页封面播放视频"/>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="6dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="打开此选项，视频详情页点击封面行为变更为播放"
+                            android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
