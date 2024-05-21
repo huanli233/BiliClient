@@ -5,6 +5,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class VideoInfo implements Serializable {    //自定义类需要加这个才能传输
+
+    public static final int COPYRIGHT_SELF = 1;
+    public static final int COPYRIGHT_REPRINT = 2;
+
     public String bvid;
     public long aid;
     public String title;
@@ -24,6 +28,7 @@ public class VideoInfo implements Serializable {    //自定义类需要加这�
     public boolean is360; //全景视频
 
     public long epid; //如果是番剧则不为空，应自动跳转
+    public int copyright; // 是否转载
 
 
     public VideoInfo(){}

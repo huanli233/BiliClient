@@ -182,7 +182,7 @@ public class VideoInfoFragment extends Fragment {
                 videoInfo.stats.coined = LikeCoinFavApi.getCoined(videoInfo.aid);
                 videoInfo.stats.liked = LikeCoinFavApi.getLiked(videoInfo.aid);
                 videoInfo.stats.favoured = LikeCoinFavApi.getFavoured(videoInfo.aid);
-                videoInfo.stats.allow_coin = 2;
+                videoInfo.stats.allow_coin = (videoInfo.copyright == VideoInfo.COPYRIGHT_REPRINT) ? 1 : 2;
                 if(isAdded()) requireActivity().runOnUiThread(()->{
                     if(videoInfo.stats.coined!=0) coin.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_coin_1));
                     if(videoInfo.stats.liked) like.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_like_1));
