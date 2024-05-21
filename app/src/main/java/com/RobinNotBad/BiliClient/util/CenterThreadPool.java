@@ -118,10 +118,10 @@ public class CenterThreadPool {
      * @param runnable 要运行的任务
      */
     public static void runOnUiThread(Runnable runnable){
-       /* BuildersKt.launch(INSTANCE, Dispatchers.getMain(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation continuation) -> {
-            runnable.run();
-            return Unit.INSTANCE;
-        });*/
+//       BuildersKt.launch(INSTANCE, Dispatchers.getMain(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation continuation) -> {
+//            runnable.run();
+//            return Unit.INSTANCE;
+//        });
         Executors.mainThreadExecutor().execute(runnable);
     }
 

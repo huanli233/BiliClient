@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,29 +22,19 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.user.WatchLaterActivity;
 import com.RobinNotBad.BiliClient.activity.video.MultiPageActivity;
 import com.RobinNotBad.BiliClient.adapter.UpListAdapter;
-import com.RobinNotBad.BiliClient.api.BangumiApi;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
-import com.RobinNotBad.BiliClient.api.HistoryApi;
-import com.RobinNotBad.BiliClient.api.LikeCoinFavApi;
-import com.RobinNotBad.BiliClient.api.PlayerApi;
-import com.RobinNotBad.BiliClient.api.VideoInfoApi;
-import com.RobinNotBad.BiliClient.api.WatchLaterApi;
+import com.RobinNotBad.BiliClient.api.*;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.GlideUtil;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.*;
 import com.RobinNotBad.BiliClient.view.RadiusBackgroundSpan;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -67,6 +57,8 @@ public class VideoInfoFragment extends Fragment {
     private TextView tagsText;
     private ImageButton fav;
 
+    private Boolean clickCoverPlayEnable = SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.click_image_play_enable, false);
+
     int RESULT_ADDED = 1;
     int RESULT_DELETED = -1;
 
@@ -75,10 +67,10 @@ public class VideoInfoFragment extends Fragment {
         @Override
         public void onActivityResult(ActivityResult o) {
             int code = o.getResultCode();
-            if (code == RESULT_ADDED){
+            if (code == RESULT_ADDED) {
                 fav.setBackgroundResource(R.drawable.icon_favourite_1);
             }
-            if (code == RESULT_DELETED){
+            if (code == RESULT_DELETED) {
                 fav.setBackgroundResource(R.drawable.icon_favourite_0);
             }
         }
@@ -136,10 +128,10 @@ public class VideoInfoFragment extends Fragment {
         TextView favLabel = view.findViewById(R.id.fav_label);
         fav = view.findViewById(R.id.btn_fav);
 
-        if(videoInfo.epid != -1){ //不是空的的话就应该跳转到番剧页面了
+        if (videoInfo.epid != -1) { //不是空的的话就应该跳转到番剧页面了
             CenterThreadPool.run(() -> {
                 Intent intent = new Intent(requireContext(), VideoInfoActivity.class);
-                intent.putExtra("type","media");
+                intent.putExtra("type", "media");
                 intent.putExtra("aid", BangumiApi.getMdidFromEpid(videoInfo.epid));
                 requireActivity().runOnUiThread(() -> {
                     startActivity(intent);
@@ -159,7 +151,7 @@ public class VideoInfoFragment extends Fragment {
 
 
         if (SharedPreferencesUtil.getBoolean("tags_enable", true)) {
-            CenterThreadPool.run(()->{
+            CenterThreadPool.run(() -> {
                 try {
                     String tags;
                     if (videoInfo.bvid == null || videoInfo.bvid.isEmpty())
@@ -173,11 +165,13 @@ public class VideoInfoFragment extends Fragment {
                             tags_expand = !tags_expand;
                         });
                     });
-                } catch (Exception e) {if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));}
+                } catch (Exception e) {
+                    if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                }
             });
         } else tagsText.setVisibility(View.GONE);
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 videoInfo.stats.coined = LikeCoinFavApi.getCoined(videoInfo.aid);
                 videoInfo.stats.liked = LikeCoinFavApi.getLiked(videoInfo.aid);
@@ -188,18 +182,20 @@ public class VideoInfoFragment extends Fragment {
                     if(videoInfo.stats.liked) like.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_like_1));
                     if(videoInfo.stats.favoured) fav.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_favourite_1));
                 });
-            } catch (Exception e) {if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));}
+            } catch (Exception e) {
+                if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+            }
         });
 
-        ToolsUtil.setCopy(title,requireContext(),videoInfo.title);
+        ToolsUtil.setCopy(title, requireContext(), videoInfo.title);
 
-        if(!videoInfo.argueMsg.isEmpty()){
+        if (!videoInfo.argueMsg.isEmpty()) {
             exclusiveTipLabel.setText(videoInfo.argueMsg);
             exclusiveTip.setVisibility(View.VISIBLE);
         }
 
         if (isAdded()) requireActivity().runOnUiThread(() -> {
-            UpListAdapter adapter = new UpListAdapter(requireContext(),videoInfo.staff);
+            UpListAdapter adapter = new UpListAdapter(requireContext(), videoInfo.staff);
             up_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             up_recyclerView.setAdapter(adapter);
         }); //加载UP主
@@ -212,6 +208,15 @@ public class VideoInfoFragment extends Fragment {
                 .into(cover);
 
         cover.setOnClickListener(view1 -> {
+            if(SharedPreferencesUtil.getString("player", null) == null){
+                SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.click_image_play_enable, true);
+                Toast.makeText(requireContext(),"将播放视频, 如需变更点击行为请至设置->偏好设置喵", Toast.LENGTH_SHORT).show();
+                clickCoverPlayEnable = true;
+            }
+            if(clickCoverPlayEnable){
+                play();
+                return;
+            }
             Intent intent = new Intent();
             intent.setClass(view1.getContext(), ImageViewerActivity.class);
             ArrayList<String> imageList = new ArrayList<>();
@@ -237,22 +242,11 @@ public class VideoInfoFragment extends Fragment {
             desc_expand = !desc_expand;
         });
 
-        ToolsUtil.setCopy(description,requireContext());
-        ToolsUtil.setCopy(bvidText,requireContext());
+        ToolsUtil.setCopy(description, requireContext());
+        ToolsUtil.setCopy(bvidText, requireContext());
 
-
-        play.setOnClickListener(view1 -> {
-            Glide.get(requireContext()).clearMemory();
-            //在播放前清除内存缓存，因为手表内存太小了，播放完回来经常把Activity全释放掉
-            //...经过测试，还是会释放，但会好很多
-            if (videoInfo.pagenames.size() > 1) {
-                Intent intent = new Intent()
-                        .setClass(requireContext(), MultiPageActivity.class)
-                        .putExtra("videoInfo", videoInfo);
-                startActivity(intent);
-            } else {
-                PlayerApi.startGettingUrl(requireContext(), videoInfo, 0);
-            }
+        play.setOnClickListener(view1 ->{
+            play();
         });
         play.setOnLongClickListener(view1 -> {
             Intent intent = new Intent();
@@ -266,16 +260,17 @@ public class VideoInfoFragment extends Fragment {
                 int result = LikeCoinFavApi.like(videoInfo.aid, (videoInfo.stats.liked ? 2 : 1));
                 if (result == 0) {
                     videoInfo.stats.liked = !videoInfo.stats.liked;
-                    if(isAdded()) requireActivity().runOnUiThread(() -> {
+                    if (isAdded()) requireActivity().runOnUiThread(() -> {
                         MsgUtil.toast((videoInfo.stats.liked ? "点赞成功" : "取消成功"), requireContext());
 
-                        if(videoInfo.stats.liked) likeLabel.setText(ToolsUtil.toWan(++videoInfo.stats.like));
+                        if (videoInfo.stats.liked) likeLabel.setText(ToolsUtil.toWan(++videoInfo.stats.like));
                         else likeLabel.setText(ToolsUtil.toWan(--videoInfo.stats.like));
                         like.setBackground(ContextCompat.getDrawable(requireContext(), (videoInfo.stats.liked ? R.drawable.icon_like_1 : R.drawable.icon_like_0)));
                     });
-                } else if(isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.toast("操作失败：" + result, requireContext()));
+                } else if (isAdded())
+                    requireActivity().runOnUiThread(() -> MsgUtil.toast("操作失败：" + result, requireContext()));
             } catch (Exception e) {
-                if(isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
             }
         }));
 
@@ -285,17 +280,19 @@ public class VideoInfoFragment extends Fragment {
                     int result = LikeCoinFavApi.coin(videoInfo.aid, 1);
                     if (result == 0) {
                         videoInfo.stats.coined++;
-                        if(isAdded()) requireActivity().runOnUiThread(() -> {
+                        if (isAdded()) requireActivity().runOnUiThread(() -> {
                             MsgUtil.toast("投币成功", requireContext());
                             coinLabel.setText(ToolsUtil.toWan(++videoInfo.stats.coin));
                             coin.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_coin_1));
                         });
-                    } else if(isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.toast("投币失败："+result,requireContext()));
+                    } else if (isAdded())
+                        requireActivity().runOnUiThread(() -> MsgUtil.toast("投币失败：" + result, requireContext()));
                 } catch (Exception e) {
-                    if(isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                    if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
                 }
             } else {
-                if(isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.toast("投币数量到达上限", requireContext()));
+                if (isAdded())
+                    requireActivity().runOnUiThread(() -> MsgUtil.toast("投币数量到达上限", requireContext()));
             }
         }));
 
@@ -312,7 +309,7 @@ public class VideoInfoFragment extends Fragment {
             try {
                 int result = WatchLaterApi.add(videoInfo.aid);
                 if (result == 0)
-                    requireActivity().runOnUiThread(() -> MsgUtil.toast("添加成功",requireContext()));
+                    requireActivity().runOnUiThread(() -> MsgUtil.toast("添加成功", requireContext()));
                 else
                     requireActivity().runOnUiThread(() -> MsgUtil.toast("添加失败，错误码：" + result, requireContext()));
             } catch (Exception e) {
@@ -351,18 +348,32 @@ public class VideoInfoFragment extends Fragment {
     }
 
 
-    private SpannableString getTitleSpan(){
+    private SpannableString getTitleSpan() {
         String string = "";
-        if(videoInfo.isCooperation) string = "联合投稿";
+        if (videoInfo.isCooperation) string = "联合投稿";
         else if (videoInfo.isSteinGate) string = "互动视频";
-        else if(videoInfo.is360) string = "全景视频";
-        else if(videoInfo.upowerExclusive) string = "充电专属";
+        else if (videoInfo.is360) string = "全景视频";
+        else if (videoInfo.upowerExclusive) string = "充电专属";
 
-        if(string.isEmpty()) return new SpannableString(videoInfo.title);
+        if (string.isEmpty()) return new SpannableString(videoInfo.title);
 
         SpannableString titleStr = new SpannableString(" " + string + " " + videoInfo.title);
-        RadiusBackgroundSpan badgeBG = new RadiusBackgroundSpan(0, (int) getResources().getDimension(R.dimen.card_round),Color.WHITE,Color.argb(0xfb,0xfb,0x87,0x99));
-        titleStr.setSpan(badgeBG, 0, string.length()+2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        RadiusBackgroundSpan badgeBG = new RadiusBackgroundSpan(0, (int) getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.argb(0xfb, 0xfb, 0x87, 0x99));
+        titleStr.setSpan(badgeBG, 0, string.length() + 2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         return titleStr;
+    }
+
+    private void play() {
+        Glide.get(requireContext()).clearMemory();
+        //在播放前清除内存缓存，因为手表内存太小了，播放完回来经常把Activity全释放掉
+        //...经过测试，还是会释放，但会好很多
+        if (videoInfo.pagenames.size() > 1) {
+            Intent intent = new Intent()
+                    .setClass(requireContext(), MultiPageActivity.class)
+                    .putExtra("videoInfo", videoInfo);
+            startActivity(intent);
+        } else {
+            PlayerApi.startGettingUrl(requireContext(), videoInfo, 0);
+        }
     }
 }
