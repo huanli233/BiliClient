@@ -250,7 +250,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemViewType(int position) {
-        return (position==0 ? 0 : 1);
+        return (position == 0 ? 0 : 1);
     }
 
     public static class ReplyHolder extends RecyclerView.ViewHolder{
