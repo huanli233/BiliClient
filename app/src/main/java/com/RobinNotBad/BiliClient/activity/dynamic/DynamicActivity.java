@@ -5,13 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
 import com.RobinNotBad.BiliClient.adapter.DynamicAdapter;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
@@ -32,26 +28,23 @@ public class DynamicActivity extends RefreshMainActivity {
     private long offset = 0;
     private boolean firstRefresh = true;
 
-    public ActivityResultLauncher<Intent> writeDynamicLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            int code = result.getResultCode();
-            Intent data = result.getData();
-            if (code == RESULT_OK && data != null) {
-                String text = data.getStringExtra("text");
-                CenterThreadPool.run(() -> {
-                    try {
-                        long dynId = DynamicApi.publishTextContent(text);
-                        if (!(dynId == -1)) {
-                            runOnUiThread(() -> MsgUtil.toast("发送成功~", DynamicActivity.this));
-                        } else {
-                            runOnUiThread(() -> MsgUtil.toast("发送失败", DynamicActivity.this));
-                        }
-                    } catch (Exception e) {
-                        runOnUiThread(() -> MsgUtil.err(e, DynamicActivity.this));
+    public ActivityResultLauncher<Intent> writeDynamicLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
+        int code = result.getResultCode();
+        Intent data = result.getData();
+        if (code == RESULT_OK && data != null) {
+            String text = data.getStringExtra("text");
+            CenterThreadPool.run(() -> {
+                try {
+                    long dynId = DynamicApi.publishTextContent(text);
+                    if (!(dynId == -1)) {
+                        runOnUiThread(() -> MsgUtil.toast("发送成功~", DynamicActivity.this));
+                    } else {
+                        runOnUiThread(() -> MsgUtil.toast("发送失败", DynamicActivity.this));
                     }
-                });
-            }
+                } catch (Exception e) {
+                    runOnUiThread(() -> MsgUtil.err(e, DynamicActivity.this));
+                }
+            });
         }
     });
 
