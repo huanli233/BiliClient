@@ -1,5 +1,7 @@
 package com.RobinNotBad.BiliClient.activity.video.info;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -22,12 +24,12 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
+import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.user.WatchLaterActivity;
 import com.RobinNotBad.BiliClient.activity.video.MultiPageActivity;
@@ -50,7 +52,6 @@ import java.util.ArrayList;
 //2023-07-17
 
 public class VideoInfoFragment extends Fragment {
-
     private VideoInfo videoInfo;
 
     private TextView description;
@@ -72,6 +73,31 @@ public class VideoInfoFragment extends Fragment {
             }
             if (code == RESULT_DELETED) {
                 fav.setBackgroundResource(R.drawable.icon_favourite_0);
+            }
+        }
+    });
+
+    // 其实我不会用，也是抄的上面的😡
+    ActivityResultLauncher<Intent> writeDynamicLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            int code = result.getResultCode();
+            Intent data = result.getData();
+            if (code == RESULT_OK && data != null) {
+                String text = data.getStringExtra("text");
+                CenterThreadPool.run(() -> {
+                    try {
+                        long dynId = DynamicApi.relayVideo(text, videoInfo.aid);
+                        if (!(dynId == -1)) {
+                            // 迷惑逻辑。
+                            if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.toast("转发成功~", requireContext()));
+                        } else {
+                            if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.toast("转发失败", requireContext()));
+                        }
+                    } catch (Exception e) {
+                        if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                    }
+                });
             }
         }
     });
@@ -119,6 +145,7 @@ public class VideoInfoFragment extends Fragment {
         MaterialButton play = view.findViewById(R.id.play);
         MaterialButton addWatchlater = view.findViewById(R.id.addWatchlater);
         MaterialButton download = view.findViewById(R.id.download);
+        MaterialButton relay = view.findViewById(R.id.relay);
         TextView bvidText = view.findViewById(R.id.bvidText);
         TextView danmakuCount = view.findViewById(R.id.danmakuCount);
         ImageButton like = view.findViewById(R.id.btn_like);
@@ -245,9 +272,7 @@ public class VideoInfoFragment extends Fragment {
         ToolsUtil.setCopy(description, requireContext());
         ToolsUtil.setCopy(bvidText, requireContext());
 
-        play.setOnClickListener(view1 ->{
-            play();
-        });
+        play.setOnClickListener(view1 -> play());
         play.setOnLongClickListener(view1 -> {
             Intent intent = new Intent();
             intent.setClass(requireContext(), SettingPlayerChooseActivity.class);
@@ -344,6 +369,12 @@ public class VideoInfoFragment extends Fragment {
                     }
                 }
             }
+        });
+
+        relay.setOnClickListener((view1) -> {
+            Intent intent = new Intent();
+            intent.setClass(requireContext(), SendDynamicActivity.class);
+            writeDynamicLauncher.launch(intent);
         });
     }
 

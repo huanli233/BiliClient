@@ -2,12 +2,15 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.Emote;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,10 +18,94 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
+
+import okhttp3.Response;
 
 //新的动态api，旧的那个实在太蛋疼而且说不定随时会被弃用（
 
 public class DynamicApi {
+
+    /**
+     * 发送纯文本动态（未支持at）
+     * @param content 文字内容
+     * @return 发送成功返回的动态id，失败返回-1
+     */
+    public static long publishTextContent(String content) throws IOException {
+        String url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/create";
+        Response resp = Objects.requireNonNull(NetWorkUtil.post(url, new NetWorkUtil.FormData()
+                .put("dynamic_id", 0)
+                .put("type", 4)
+                .put("rid", 0)
+                .put("content", content)
+                .put("csrf", SharedPreferencesUtil.getString("csrf",""))
+                .toString(), NetWorkUtil.webHeaders));
+        try {
+            JSONObject respBody = new JSONObject(resp.body().string());
+            if (respBody.getString("code").equals("0") && respBody.has("data"))
+                return respBody.getJSONObject("data").getLong("dynamic_id");
+        } catch (JSONException ignored) {
+            return -1;
+        }
+        return -1;
+    }
+
+    /**
+     * 发送复杂动态
+     * @param contents 动态内容
+     * @param pics 携带图片
+     * @param option 选项
+     * @param topic 话题
+     * @param scene 动态类型
+     * @return 发送成功返回的动态id，失败返回-1
+     */
+    public static long publishComplex(@NonNull JSONArray contents, JSONArray pics, JSONObject option, JSONObject topic, int scene, Map<String, Object> otherArgs) throws IOException, JSONException {
+        String url = "https://api.bilibili.com/x/dynamic/feed/create/dyn?csrf=" + SharedPreferencesUtil.getString("csrf", "");
+        JSONObject reqBody = new JSONObject()
+                .put("content", new JSONObject().put("contents", contents))
+                .put("scene", scene)
+                .put("meta", new JSONObject().put("app_meta", new JSONObject()
+                        .put("from", "create.dynamic.web")
+                        .put("mobi_app", "web")));
+        if (pics != null) reqBody.put("pics", pics);
+        if (option != null) reqBody.put("option", option);
+        if (topic != null) reqBody.put("topic", topic);
+        reqBody = new JSONObject().put("dyn_req", reqBody);
+        if (otherArgs != null) {
+            for (Map.Entry<String, Object> entry : otherArgs.entrySet()) {
+                String key = entry.getKey();
+                Object val = entry.getValue();
+                reqBody.put(key, val);
+            }
+        }
+        Log.d("debug", "publishComplex reqBody=" + reqBody);
+        Response resp = Objects.requireNonNull(NetWorkUtil.postJson(url, reqBody.toString()));
+        try {
+            JSONObject respBody = new JSONObject(resp.body().string());
+            if (respBody.getString("code").equals("0") && respBody.has("data"))
+                return respBody.getJSONObject("data").getLong("dyn_id");
+        } catch (JSONException e) {
+            Log.e("debug", "publishComplex", e);
+            return -1;
+        }
+        return -1;
+    }
+
+    /**
+     * 转发视频到动态，瞎扒的api
+     * @param text 附加文字
+     * @param aid aid
+     * @return 发送成功返回的动态id，失败返回-1
+     */
+    public static long relayVideo(String text, long aid) throws JSONException, IOException {
+        return publishComplex(new JSONArray().put(Content.create(text == null ? "" : text, 1, null)), null, null, null,
+                5, Map.of("web_repost_src",
+                new JSONObject().put("revs_id", new JSONObject()
+                        .put("dyn_type", 8)
+                        .put("rid", aid))));
+    }
+
     public static long getDynamicList(ArrayList<Dynamic> dynamicList, long offset, long mid) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/"
                 + (mid==0 ? "all?" : "space?host_mid=" + mid)
@@ -193,5 +280,14 @@ public class DynamicApi {
                 Long.parseLong(jsonObject.getString("aid")),
                 jsonObject.getString("bvid")
         );
+    }
+
+    public static class Content {
+        public static JSONObject create(@NonNull String raw_text, int type, String biz_id) throws JSONException {
+            return new JSONObject()
+                    .put("raw_text", raw_text)
+                    .put("type", type)
+                    .put("biz_id", biz_id == null ? "" : biz_id);
+        }
     }
 }

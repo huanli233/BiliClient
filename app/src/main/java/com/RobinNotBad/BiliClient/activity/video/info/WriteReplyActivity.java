@@ -18,6 +18,16 @@ import java.util.Map;
 
 public class WriteReplyActivity extends BaseActivity {
 
+    private static final Map<Integer,String> msgMap = new HashMap<Integer,String>(){{
+        put(-101,"没有登录or登录信息有误？");
+        put(-102,"账号被封禁！");
+        put(-509,"请求过于频繁！");
+        put(12015,"需要评论验证码...？");
+        put(12016,"包含敏感内容！");
+        put(12025,"字数过多啦QAQ");
+        put(12035,"被拉黑了...");
+    }};
+
     boolean sent = false;
 
     @Override
@@ -61,15 +71,6 @@ public class WriteReplyActivity extends BaseActivity {
                                     finish();
                                 }
                                 else {
-                                    Map<Integer,String> msgMap = new HashMap<Integer,String>(){{
-                                        put(-101,"没有登录or登录信息有误？");
-                                        put(-102,"账号被封禁！");
-                                        put(-509,"请求过于频繁！");
-                                        put(12015,"需要评论验证码...？");
-                                        put(12016,"包含敏感内容！");
-                                        put(12025,"字数过多啦QAQ");
-                                        put(12035,"被拉黑了...");
-                                    }};
                                     String toast_msg = "评论发送失败：\n" + (msgMap.containsKey(result) ? msgMap.get(result) : result);
                                     runOnUiThread(() -> MsgUtil.toast(toast_msg,this));
                                 }
@@ -81,7 +82,7 @@ public class WriteReplyActivity extends BaseActivity {
                     });
                 }
                 else MsgUtil.toast("正在发送中",this);
-            }else MsgUtil.showDialog(this,"无法发送","上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作",-1);
+            } else MsgUtil.showDialog(this,"无法发送","上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作",-1);
         });
     }
 }
