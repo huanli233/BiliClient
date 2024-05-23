@@ -1,6 +1,9 @@
 package com.RobinNotBad.BiliClient.activity.base;
 
+import static com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity.getRelayDynamicLauncher;
+
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,6 +25,7 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 public class BaseActivity extends AppCompatActivity {
     public int window_width, window_height;
     public Context old_context;
+    public ActivityResultLauncher<Intent> relayDynamicLauncher = getRelayDynamicLauncher(this);
 
     //调整应用内dpi的代码，其他Activity要继承于BaseActivity才能调大小
     @Override

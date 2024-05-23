@@ -1,10 +1,13 @@
 package com.RobinNotBad.BiliClient.activity.dynamic;
 
+import static com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity.getRelayDynamicLauncher;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -25,6 +28,7 @@ import java.util.List;
 //2023-10-03
 
 public class DynamicInfoActivity extends BaseActivity {
+
 
     @SuppressLint("MissingInflatedId")
     @Override

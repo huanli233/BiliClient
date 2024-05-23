@@ -1,7 +1,5 @@
 package com.RobinNotBad.BiliClient.adapter;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -10,20 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
-import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -35,13 +27,14 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     Context context;
     ArrayList<Dynamic> dynamicList;
+    DynamicActivity dynamicActivity;
 
     ActivityResultLauncher<Intent> writeDynamicLauncher;
 
     public DynamicAdapter(Context context, ArrayList<Dynamic> dynamicList) {
         this.context = context;
         this.dynamicList = dynamicList;
-        DynamicActivity dynamicActivity = (DynamicActivity) context;
+        dynamicActivity = (DynamicActivity) context;
         this.writeDynamicLauncher = dynamicActivity.writeDynamicLauncher;
     }
 
@@ -57,8 +50,8 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             View view = LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic_send, parent,false);
             return new WriteDynamic(view);
         } else {
-            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic,parent,false);
-            return new DynamicHolder(view,false);
+            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic, parent,false);
+            return new DynamicHolder(view, dynamicActivity, false);
         }
     }
 
@@ -79,7 +72,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (dynamicList.get(position).dynamic_forward != null){
                 Log.e("debug","有子动态！");
                 View childCard = View.inflate(context,R.layout.cell_dynamic_child,dynamicHolder.extraCard);
-                DynamicHolder childHolder = new DynamicHolder(childCard,true);
+                DynamicHolder childHolder = new DynamicHolder(childCard, dynamicActivity, true);
                 childHolder.showDynamic(dynamicList.get(position).dynamic_forward, context, true);
             }
         }

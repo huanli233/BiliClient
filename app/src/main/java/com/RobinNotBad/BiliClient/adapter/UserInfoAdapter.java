@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
+import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.message.PrivateMsgActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
@@ -58,7 +59,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         else {
             View view = LayoutInflater.from(context).inflate(R.layout.cell_dynamic, parent, false);
-            return new DynamicHolder(view,false);
+            return new DynamicHolder(view, (BaseActivity) context, false);
         }
     }
 
@@ -73,7 +74,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             if(dynamicList.get(realPosition).dynamic_forward != null){
                 View childCard = View.inflate(context,R.layout.cell_dynamic_child,dynamicHolder.extraCard);
-                DynamicHolder childHolder = new DynamicHolder(childCard,true);
+                DynamicHolder childHolder = new DynamicHolder(childCard, (BaseActivity) context, true);
                 childHolder.showDynamic(dynamicList.get(realPosition).dynamic_forward, context, true);
             }
         }

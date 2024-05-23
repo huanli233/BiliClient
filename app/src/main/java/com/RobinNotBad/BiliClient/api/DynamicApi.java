@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.api;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -28,7 +29,7 @@ import okhttp3.Response;
 public class DynamicApi {
 
     /**
-     * 发送纯文本动态（未支持at）
+     * 发送纯文本动态
      * @param content 文字内容
      * @return 发送成功返回的动态id，失败返回-1
      */
@@ -104,6 +105,29 @@ public class DynamicApi {
                 new JSONObject().put("revs_id", new JSONObject()
                         .put("dyn_type", 8)
                         .put("rid", aid))));
+    }
+
+    /**
+     * 转发动态
+     * @param text 文字内容
+     * @param dyid 动态id
+     * @return 发送成功返回的动态id，失败返回-1
+     */
+    public static long relayDynamic(String text, long dyid) throws IOException {
+        String url = "https://api.vc.bilibili.com/dynamic_repost/v1/dynamic_repost/repost";
+        Response resp = Objects.requireNonNull(NetWorkUtil.post(url, new NetWorkUtil.FormData()
+                .put("dynamic_id", dyid)
+                .put("content", text)
+                .put("csrf_token", SharedPreferencesUtil.getString("csrf",""))
+                .toString(), NetWorkUtil.webHeaders));
+        try {
+            JSONObject respBody = new JSONObject(resp.body().string());
+            if (respBody.getString("code").equals("0") && respBody.has("data"))
+                return respBody.getJSONObject("data").getLong("dynamic_id");
+        } catch (JSONException ignored) {
+            return -1;
+        }
+        return -1;
     }
 
     public static long getDynamicList(ArrayList<Dynamic> dynamicList, long offset, long mid) throws IOException, JSONException {
@@ -246,13 +270,16 @@ public class DynamicApi {
                         dynamic.content = dynamic.content + "\n[无法显示活动类动态的附加内容]";
                         break;
 
+                    case "MAJOR_TYPE_LIVE_RCMD":
+                        dynamic.content = (TextUtils.isEmpty(dynamic.content) ? "" : dynamic.content + "\n") + "[无法显示直播类动态的附加内容]";
+                        break;
+
                     default:
                         dynamic.content = dynamic.content + "\n[*哔哩终端暂时无法查看此动态的附加内容QwQ|类型：" + major_type + "]";
                         break;
                 }
             }
-
-            if(modules.has("module_additional") && !modules.isNull("module_additional")){
+            if (modules.has("module_additional") && !modules.isNull("module_additional")){
                 JSONObject module_additional = modules.getJSONObject("module_additional");
                 if(module_additional.getString("type").equals("ADDITIONAL_TYPE_UGC")){
                     dynamic.major_type = "MAJOR_TYPE_ARCHIVE";
@@ -260,8 +287,6 @@ public class DynamicApi {
                 }
                 else Log.e("debug-dynamic-addi",module_additional.getString("type"));
             }
-
-
         }
 
         if(dynamic_json.has("orig") && !dynamic_json.isNull("orig")){

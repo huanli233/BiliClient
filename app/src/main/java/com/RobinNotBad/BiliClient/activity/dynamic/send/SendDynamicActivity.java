@@ -10,6 +10,8 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.card.MaterialCardView;
 
+import java.util.Set;
+
 /**
  * 发送动态输入Activity，直接copy的WriteReplyActivity
  * 换成了ActivityResult
@@ -45,6 +47,9 @@ public class SendDynamicActivity extends BaseActivity {
             if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cookie_refresh,true)){
                 String text = editText.getText().toString();
                 Intent result = new Intent();
+                // 原神级的传数据
+                Bundle bundle = SendDynamicActivity.this.getIntent().getExtras();
+                if (bundle != null) result.putExtras(bundle);
                 result.putExtra("text", text);
                 setResult(RESULT_OK, result);
                 finish();

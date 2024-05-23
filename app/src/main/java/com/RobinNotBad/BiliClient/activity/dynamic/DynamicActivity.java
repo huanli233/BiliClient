@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
+import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
 import com.RobinNotBad.BiliClient.adapter.DynamicAdapter;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
@@ -47,6 +48,30 @@ public class DynamicActivity extends RefreshMainActivity {
             });
         }
     });
+
+
+    public static ActivityResultLauncher<Intent> getRelayDynamicLauncher(BaseActivity activity) {
+        return activity.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
+            int code = result.getResultCode();
+            Intent data = result.getData();
+            if (code == RESULT_OK && data != null) {
+                String text = data.getStringExtra("text");
+                long dynamicId = data.getLongExtra("dynamicId", -1);
+                CenterThreadPool.run(() -> {
+                    try {
+                        long dynId = DynamicApi.relayDynamic(text, dynamicId);
+                        if (!(dynId == -1)) {
+                            activity.runOnUiThread(() -> MsgUtil.toast("转发成功~", activity));
+                        } else {
+                            activity.runOnUiThread(() -> MsgUtil.toast("转发失败", activity));
+                        }
+                    } catch (Exception e) {
+                        activity.runOnUiThread(() -> MsgUtil.err(e, activity));
+                    }
+                });
+            }
+        });
+    }
 
     @SuppressLint("MissingInflatedId")
     @Override
