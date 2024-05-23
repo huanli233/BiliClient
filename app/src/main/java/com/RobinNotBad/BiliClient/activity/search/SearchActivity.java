@@ -140,7 +140,10 @@ public class SearchActivity extends InstanceActivity {
 
         if (!refreshing) {
             InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            View curFocus;
+            if ((curFocus = getCurrentFocus()) != null) {
+                manager.hideSoftInputFromWindow(curFocus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
 
             if (str.isEmpty()) {
                 runOnUiThread(() -> MsgUtil.toast("还没输入内容喵~",this));

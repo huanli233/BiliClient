@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import android.widget.Toast;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
+import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
+import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
@@ -32,6 +34,7 @@ import com.google.android.material.card.MaterialCardView;
 
 import org.json.JSONException;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -40,13 +43,18 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
     public ImageView avatar;
     public ConstraintLayout extraCard;
     public View itemView;
+    public ImageView item_dynamic_share_img;
+    public TextView item_dynamic_share;
     public boolean isChild;
+    BaseActivity mActivity;
+    public ActivityResultLauncher<Intent> relayDynamicLauncher;
 
-    public DynamicHolder(@NonNull View itemView, boolean isChild) {
+    public DynamicHolder(@NonNull View itemView, BaseActivity mActivity, boolean isChild) {
         super(itemView);
         this.itemView = itemView;
         this.isChild = isChild;
-        if(isChild) {
+        this.mActivity = mActivity;
+        if (isChild) {
             username = itemView.findViewById(R.id.child_username);
             content = itemView.findViewById(R.id.child_content);
             avatar = itemView.findViewById(R.id.child_avatar);
@@ -58,6 +66,9 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
             content = itemView.findViewById(R.id.content);
             avatar = itemView.findViewById(R.id.avatar);
             extraCard = itemView.findViewById(R.id.extraCard);
+            item_dynamic_share_img = itemView.findViewById(R.id.item_dynamic_share_img);
+            item_dynamic_share = itemView.findViewById(R.id.item_dynamic_share);
+            relayDynamicLauncher = mActivity.relayDynamicLauncher;
         }
     }
 
@@ -74,12 +85,16 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                     try {
                         SpannableString spannableString = EmoteUtil.textReplaceEmote(dynamic.content, dynamic.emotes, 1.0f, context);
                         CenterThreadPool.runOnUiThread(() -> content.setText(spannableString));
-                    } catch (Exception e) {
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 });
             }
-        }else content.setVisibility(View.GONE);
+        } else content.setVisibility(View.GONE);
         Glide.with(context).load(GlideUtil.url(dynamic.userInfo.avatar))
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
@@ -87,10 +102,6 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 .into(avatar);
 
         avatar.setOnClickListener(view -> {
-            if(dynamic.type.equals(Dynamic.DYNAMIC_TYPE_UGC_SEASON)){
-                Toast.makeText(context, "该动态为合集,无法查看用户信息", Toast.LENGTH_SHORT).show();
-                return;
-            }
             Intent intent = new Intent();
             intent.setClass(context, UserInfoActivity.class);
             intent.putExtra("mid", dynamic.userInfo.mid);
@@ -159,6 +170,22 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
             content.setMaxLines(999);
         }
 
-
+        View.OnClickListener onRelayClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (relayDynamicLauncher == null) {
+                    return;
+                }
+                Intent intent = new Intent();
+                intent.setClass(mActivity, SendDynamicActivity.class);
+                intent.putExtra("dynamicId", dynamic.dynamicId);
+                intent.putExtra("forward", dynamic);
+                relayDynamicLauncher.launch(intent);
+            }
+        };
+        if (item_dynamic_share != null && item_dynamic_share_img != null) {
+            item_dynamic_share.setOnClickListener(onRelayClick);
+            item_dynamic_share_img.setOnClickListener(onRelayClick);
+        }
     }
 }

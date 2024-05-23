@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.DynamicHolder;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -21,6 +22,7 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 public class DynamicInfoFragment extends Fragment {
 
     Dynamic dynamic;
+
 
     public DynamicInfoFragment() {
     }
@@ -39,7 +41,6 @@ public class DynamicInfoFragment extends Fragment {
         if (getArguments() != null) {
             this.dynamic = (Dynamic) getArguments().getSerializable("dynamic");
         }
-
     }
 
     @Override
@@ -56,13 +57,13 @@ public class DynamicInfoFragment extends Fragment {
         CenterThreadPool.run(()->{
             if(isAdded()) requireActivity().runOnUiThread(() -> {
                 View dynamicView = View.inflate(requireContext(),R.layout.cell_dynamic, scrollView);
-                DynamicHolder holder = new DynamicHolder(dynamicView,false);
+                DynamicHolder holder = new DynamicHolder(dynamicView, (BaseActivity) getActivity(), false);
                 holder.showDynamic(dynamic,requireContext(),false);
 
                 if(dynamic.dynamic_forward != null){
                     Log.e("debug","有子动态！");
                     View childCard = View.inflate(requireContext(),R.layout.cell_dynamic_child,holder.extraCard);
-                    DynamicHolder childHolder = new DynamicHolder(childCard,true);
+                    DynamicHolder childHolder = new DynamicHolder(childCard, (BaseActivity) getActivity(), true);
                     childHolder.showDynamic(dynamic.dynamic_forward,requireContext(),true);
                 }
             });

@@ -167,13 +167,21 @@ public class ReplyApi {
     }
 
 
-    public static int sendReply(long oid, long root, long parent, String text) throws IOException, JSONException {
+    public static int sendReply(long oid, long root, long parent, String text, int type) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/v2/reply/add";
-        String arg = "oid=" + oid + "&type=1" + (root == 0 ? "" : ("&root=" + root + "&parent=" + parent))
+        String arg = "oid=" + oid + "&type=" + type + (root == 0 ? "" : ("&root=" + root + "&parent=" + parent))
                 + "&message=" + text + "&jsonp=jsonp&csrf=" + SharedPreferencesUtil.getString("csrf","");
         JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, arg, NetWorkUtil.webHeaders).body()).string());
         Log.e("debug-发送评论",result.toString());
         return result.getInt("code");
+    }
+
+    public static int sendReply(long oid, long root, long parent, String text) throws IOException, JSONException {
+        return sendReply(oid, root, parent, text, 1);
+    }
+
+    public static int sendDynamicReply(long oid, long root, long parent, String text) throws IOException, JSONException {
+        return sendReply(oid, root, parent, text, 17);
     }
 
     public static int likeReply(long oid, long root, boolean action) throws IOException, JSONException {

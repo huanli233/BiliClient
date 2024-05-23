@@ -1,10 +1,13 @@
 package com.RobinNotBad.BiliClient.activity.dynamic;
 
+import static com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity.getRelayDynamicLauncher;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -26,6 +29,7 @@ import java.util.List;
 
 public class DynamicInfoActivity extends BaseActivity {
 
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,7 @@ public class DynamicInfoActivity extends BaseActivity {
                 DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance(dynamic);
                 fragmentList.add(diFragment);
                 VideoReplyFragment rFragment = VideoReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type);
+                rFragment.isDynamic = true;
                 fragmentList.add(rFragment);
 
                 ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);

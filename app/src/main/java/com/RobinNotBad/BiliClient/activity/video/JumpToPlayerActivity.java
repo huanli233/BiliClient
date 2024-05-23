@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.TextView;
 
 import com.RobinNotBad.BiliClient.R;
@@ -31,6 +32,8 @@ public class JumpToPlayerActivity extends BaseActivity {
     private String title;
     private TextView textView;
 
+    int qn;
+
     int download;
 
     boolean destroyed = false;
@@ -55,6 +58,8 @@ public class JumpToPlayerActivity extends BaseActivity {
 
         html5 = intent.getBooleanExtra("html5",true);
 
+        qn = intent.getIntExtra("qn", -1);
+
         Log.e("debug-哔哩终端-跳转页", "cid=" + cid);
         danmakuurl = "https://comment.bilibili.com/" + cid + ".xml";
         if (aid == 0) {
@@ -67,34 +72,12 @@ public class JumpToPlayerActivity extends BaseActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void requestVideo(long aid, String bvid, long cid) {
+    private void requestVideo(long aid, String bvid, long cid, int qn) {
         CenterThreadPool.run(()->{
-
-            String url = "https://api.bilibili.com/x/player/wbi/playurl?"
-                    + (aid == 0 ? ("bvid=" + bvid): ("avid=" + aid))
-                    + "&cid=" + cid + "&type=mp4"
-                    + (SharedPreferencesUtil.getBoolean("high_res",false) ? (html5 ? "&high_quality=1&qn=80" : "&qn=80") : "&qn=16")
-                    + "&platform=" + (html5 ? "html5" : "pc");
-            //顺便把platform html5给删了,实测删除后放和番剧相关的东西不会404了 (不到为啥)
-
             try {
-                url=ConfInfoApi.signWBI(url);
-                Log.e("debug-哔哩终端-跳转页","请求链接：" + url);
-
-                Response response = NetWorkUtil.get(url, NetWorkUtil.webHeaders);
-
-                String body = Objects.requireNonNull(response.body()).string();
-                Log.e("debug-body", body);
-                JSONObject body1 = new JSONObject(body);
-                JSONObject data = body1.getJSONObject("data");
-                JSONArray durl = data.getJSONArray("durl");
-                JSONObject video_url = durl.getJSONObject(0);
-                videourl = video_url.getString("url");
-                Log.e("debug-哔哩终端-跳转页", "得到链接：" + videourl);
-
-                Log.e("debug-哔哩终端-传出cookie",SharedPreferencesUtil.getString("cookies", ""));
-
-                if(!destroyed) {
+                Pair<String, String> video = PlayerApi.getVideo(aid, bvid, cid, html5, qn);
+                videourl = video.first;
+                if (!destroyed) {
                     if (download != 0) {
                         Intent intent = new Intent();
                         intent.setClass(this, DownloadActivity.class);
@@ -122,6 +105,10 @@ public class JumpToPlayerActivity extends BaseActivity {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void requestVideo(long aid, String bvid, long cid) {
+        requestVideo(aid, bvid, cid, (qn != -1 ? qn : SharedPreferencesUtil.getBoolean("high_res",false) ? 80 : 16));
     }
 
     @Override

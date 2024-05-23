@@ -9,6 +9,7 @@ import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,15 +53,21 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     ArrayList<Reply> replyList;
     long oid, root;
     int type, sort;
+    public boolean isDynamic;
     OnItemClickListener listener;
 
-    public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort) {
+    public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort, boolean isDynamic) {
         this.context = context;
         this.replyList = replyList;
         this.oid = oid;
         this.root = root;
         this.type = type;
         this.sort = sort;
+        this.isDynamic = isDynamic;
+    }
+
+    public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort) {
+        this(context, replyList, oid, root, type, sort, false);
     }
 
     public void setOnSortSwitchListener(OnItemClickListener listener){
@@ -92,6 +99,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 intent.putExtra("rpid",root);
                 intent.putExtra("parent",root);
                 intent.putExtra("parentSender","");
+                intent.putExtra("isDynamic", isDynamic);
                 context.startActivity(intent);
             });
             String[] sorts = {"时间排序","点赞排序","回复排序"};
@@ -178,12 +186,10 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
 
             replyHolder.childReplyCard.setOnClickListener(view -> {
-                Intent intent = new Intent();
-                intent.setClass(context, ReplyInfoActivity.class);
-                intent.putExtra("rpid", replyList.get(realPosition).rpid);
-                intent.putExtra("oid", oid);
-                intent.putExtra("type",type);
-                context.startActivity(intent);
+                startReplyInfoActivity(replyList.get(realPosition).rpid, oid, type);
+            });
+            replyHolder.childReplies.setOnItemClickListener((adapterView, view, i, l) -> {
+                startReplyInfoActivity(replyList.get(realPosition).rpid, oid, type);
             });
 
             replyHolder.replyAvatar.setOnClickListener(view -> {
@@ -237,11 +243,21 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 intent.putExtra("oid",oid);
                 intent.putExtra("rpid",replyList.get(realPosition).rpid);
                 intent.putExtra("parent",replyList.get(realPosition).rpid);
+                intent.putExtra("isDynamic", isDynamic);
                 if(root!=0) intent.putExtra("parentSender",replyList.get(realPosition).sender.name);
                 else intent.putExtra("parentSender","");
                 context.startActivity(intent);
             });
         }
+    }
+
+    public void startReplyInfoActivity(long rpid, long oid, int type) {
+        Intent intent = new Intent();
+        intent.setClass(context, ReplyInfoActivity.class);
+        intent.putExtra("rpid", rpid);
+        intent.putExtra("oid", oid);
+        intent.putExtra("type",type);
+        context.startActivity(intent);
     }
     @Override
     public int getItemCount() {
@@ -250,7 +266,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemViewType(int position) {
-        return (position==0 ? 0 : 1);
+        return (position == 0 ? 0 : 1);
     }
 
     public static class ReplyHolder extends RecyclerView.ViewHolder{

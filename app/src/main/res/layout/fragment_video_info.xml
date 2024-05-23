@@ -356,6 +356,16 @@
                 app:layout_constraintStart_toEndOf="@+id/addWatchlater"
                 app:layout_constraintTop_toBottomOf="@+id/like_coin_fav" />
 
+            <!-- 我不会写。 -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/relay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="转发"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/download" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

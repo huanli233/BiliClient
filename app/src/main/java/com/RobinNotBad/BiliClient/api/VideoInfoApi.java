@@ -151,6 +151,8 @@ public class VideoInfoApi {
             videoInfo.epid = -1;
         }
 
+        if (data.has("copyright") && !data.isNull("copyright")) videoInfo.copyright = data.getInt("copyright");
+
         return videoInfo;
     }
 

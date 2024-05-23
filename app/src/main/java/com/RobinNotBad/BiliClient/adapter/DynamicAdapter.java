@@ -2,62 +2,103 @@ package com.RobinNotBad.BiliClient.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
+import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
 import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
 //动态Adapter 显示部分在单独的DynamicHolder里
 //2023-09-28
 
-public class DynamicAdapter extends RecyclerView.Adapter<DynamicHolder> {
+public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
     ArrayList<Dynamic> dynamicList;
+    DynamicActivity dynamicActivity;
+
+    ActivityResultLauncher<Intent> writeDynamicLauncher;
 
     public DynamicAdapter(Context context, ArrayList<Dynamic> dynamicList) {
         this.context = context;
         this.dynamicList = dynamicList;
+        dynamicActivity = (DynamicActivity) context;
+        this.writeDynamicLauncher = dynamicActivity.writeDynamicLauncher;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return (position == 0 ? 0 : 1);
     }
 
     @NonNull
     @Override
-    public DynamicHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic,parent,false);
-        return new DynamicHolder(view,false);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == 0) {
+            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic_send, parent,false);
+            return new WriteDynamic(view);
+        } else {
+            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic, parent,false);
+            return new DynamicHolder(view, dynamicActivity, false);
+        }
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull DynamicHolder holder, int position) {
-        holder.showDynamic(dynamicList.get(position), context, true);      //该函数在DynamicHolder里
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof WriteDynamic) {
+            WriteDynamic writeDynamic = (WriteDynamic) holder;
+            writeDynamic.write_dynamic.setOnClickListener((view) -> {
+                Intent intent = new Intent();
+                intent.setClass(context, SendDynamicActivity.class);
+                writeDynamicLauncher.launch(intent);
+            });
+        } else if (holder instanceof DynamicHolder) {
+            DynamicHolder dynamicHolder = (DynamicHolder) holder;
+            dynamicHolder.showDynamic(dynamicList.get(position), context, true);      //该函数在DynamicHolder里
 
-        if(dynamicList.get(position).dynamic_forward != null){
-            Log.e("debug","有子动态！");
-            View childCard = View.inflate(context,R.layout.cell_dynamic_child,holder.extraCard);
-            DynamicHolder childHolder = new DynamicHolder(childCard,true);
-            childHolder.showDynamic(dynamicList.get(position).dynamic_forward, context, true);
+            if (dynamicList.get(position).dynamic_forward != null){
+                Log.e("debug","有子动态！");
+                View childCard = View.inflate(context,R.layout.cell_dynamic_child,dynamicHolder.extraCard);
+                DynamicHolder childHolder = new DynamicHolder(childCard, dynamicActivity, true);
+                childHolder.showDynamic(dynamicList.get(position).dynamic_forward, context, true);
+            }
         }
     }
 
 
     @Override
-    public void onViewRecycled(@NonNull DynamicHolder holder) {
-        holder.extraCard.removeAllViews();
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        if (holder instanceof DynamicHolder) {
+            ((DynamicHolder) holder).extraCard.removeAllViews();
+        }
         super.onViewRecycled(holder);
     }
 
     @Override
     public int getItemCount() {
         return dynamicList.size();
+    }
+
+    public static class WriteDynamic extends RecyclerView.ViewHolder {
+        MaterialButton write_dynamic;
+
+        public WriteDynamic(@NonNull View itemView) {
+            super(itemView);
+            write_dynamic = itemView.findViewById(R.id.write_dynamic);
+        }
     }
 
 }

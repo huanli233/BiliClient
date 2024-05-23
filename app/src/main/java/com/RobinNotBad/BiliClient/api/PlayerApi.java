@@ -1,6 +1,7 @@
 package com.RobinNotBad.BiliClient.api;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -8,8 +9,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Pair;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.DownloadActivity;
 import com.RobinNotBad.BiliClient.activity.player.PlayerActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
@@ -17,9 +20,17 @@ import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
+import okhttp3.Response;
 
 public class PlayerApi {
     public static void startGettingUrl(Context context, VideoInfo videoInfo, int page){
@@ -33,6 +44,10 @@ public class PlayerApi {
     }
 
     public static void startDownloadingVideo(Context context, VideoInfo videoInfo, int page){
+        startDownloadingVideo(context, videoInfo, page, -1);
+    }
+
+    public static void startDownloadingVideo(Context context, VideoInfo videoInfo, int page, int qn){
         Intent intent = new Intent()
                 .putExtra("aid", videoInfo.aid)
                 .putExtra("bvid", videoInfo.bvid)
@@ -41,11 +56,40 @@ public class PlayerApi {
                 .putExtra("download", (videoInfo.pagenames.size()==1 ? 1 : 2))  //1：单页  2：分页
                 .putExtra("cover", videoInfo.cover)
                 .putExtra("parent_title", videoInfo.title)
+                .putExtra("qn", qn)
                 .setClass(context, JumpToPlayerActivity.class);
         context.startActivity(intent);
     }
 
+    /**
+     * 解析视频，从JumpToPlayerActivity弄出来的，懒得改很多所以搞了个莫名其妙的Pair
+     * @param aid aid
+     * @param bvid bvid
+     * @param cid cid
+     * @param html5 html5(boolean)
+     * @param qn qn
+     * @return 视频url与完整返回信息
+     */
+    public static Pair<String, String> getVideo(long aid, String bvid, long cid, boolean html5, int qn) throws JSONException, IOException {
+        String url = "https://api.bilibili.com/x/player/wbi/playurl?"
+                + (aid == 0 ? ("bvid=" + bvid): ("avid=" + aid))
+                + "&cid=" + cid + "&type=mp4"
+                + (html5 ? "&high_quality=1&qn=" + qn : "&qn=" + qn)
+                + "&platform=" + (html5 ? "html5" : "pc");
+        //顺便把platform html5给删了,实测删除后放和番剧相关的东西不会404了 (不到为啥)
+        url = ConfInfoApi.signWBI(url);
 
+        Response response = NetWorkUtil.get(url, NetWorkUtil.webHeaders);
+
+        String body = Objects.requireNonNull(response.body()).string();
+        Log.e("debug-body", body);
+        JSONObject body1 = new JSONObject(body);
+        JSONObject data = body1.getJSONObject("data");
+        JSONArray durl = data.getJSONArray("durl");
+        JSONObject video_url = durl.getJSONObject(0);
+        String videourl = video_url.getString("url");
+        return new Pair<>(videourl, body);
+    }
 
     public static void jumpToPlayer(Context context, String videourl, String danmakuurl, String title, boolean local){
         Log.e("debug-准备跳转","--------");

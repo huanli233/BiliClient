@@ -2,15 +2,24 @@ package com.RobinNotBad.BiliClient.util;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.Inflater;
@@ -73,21 +82,41 @@ public class NetWorkUtil
         return response;
     }
 
-    public static Response post(String url, String data, ArrayList<String> headers) throws IOException
+    public static Response post(String url, String data, ArrayList<String> headers, String contentType) throws IOException
     {
         Log.e("debug-post","----------------");
         Log.e("debug-post-url",url);
         Log.e("debug-post-data",data);
         Log.e("debug-post","----------------");
         OkHttpClient client = getOkHttpInstance();
-        RequestBody body = RequestBody.create(MediaType.parse("application/x-www-form-urlencoded; charset=utf-8"), data);
+        RequestBody body = RequestBody.create(MediaType.parse(contentType + "; charset=utf-8"), data);
         Request.Builder requestBuilder = new Request.Builder().url(url).post(body);
-        for(int i = 0; i < headers.size(); i+=2)
-            requestBuilder = requestBuilder.addHeader(headers.get(i), headers.get(i+1));
+        for (int i = 0; i < headers.size(); i+=2) {
+            String key = headers.get(i);
+            String val = headers.get(i + 1);
+            if (key.equalsIgnoreCase("Content-Type")) val = contentType;
+            requestBuilder = requestBuilder.addHeader(key, val);
+        }
         Request request = requestBuilder.build();
         Response response =  client.newCall(request).execute();
         saveCookiesFromResponse(response);
         return response;
+    }
+
+    public static Response post(String url, String data, ArrayList<String> headers) throws IOException {
+        return post(url, data, headers, "application/x-www-form-urlencoded");
+    }
+
+    public static Response postJson(String url, String data, ArrayList<String> headers) throws IOException {
+        return post(url, data, headers, "application/json");
+    }
+
+    public static Response postJson(String url, String data) throws IOException {
+        return post(url, data, webHeaders, "application/json");
+    }
+
+    public static Response post(String url, String data) throws IOException {
+        return post(url, data, webHeaders);
     }
 
 
@@ -198,4 +227,43 @@ public class NetWorkUtil
     public static void refreshHeaders(){
         webHeaders.set(1,SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
     }
+    public static class FormData {
+        private Map<String, String> data;
+
+        public FormData() {
+            data = new HashMap<>();
+        }
+
+        public FormData remove(String key) {
+            data.remove(key);
+            return this;
+        }
+
+        public FormData put(String key, Object value) {
+            data.put(key, String.valueOf(value));
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+
+            try {
+                for (String key : data.keySet()) {
+                    if (sb.length() > 0) {
+                        sb.append("&");
+                    }
+                    sb.append(URLEncoder.encode(key, "UTF-8"));
+                    sb.append("=");
+                    sb.append(URLEncoder.encode(data.get(key), "UTF-8"));
+                }
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+
+            return sb.toString();
+        }
+    }
+
 }
