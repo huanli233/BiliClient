@@ -78,7 +78,9 @@ public class VideoCard implements Parcelable, Serializable {
         parcel.writeString(upName);
         parcel.writeString(view);
         parcel.writeString(cover);
+        parcel.writeString(type);
         parcel.writeLong(aid);
         parcel.writeString(bvid);
+        parcel.writeLong(cid);
     }
 }

@@ -72,9 +72,9 @@ public class UserInfo implements Serializable, Parcelable {
         parcel.writeString(sign);
         parcel.writeInt(fans);
         parcel.writeInt(level);
+        parcel.writeInt((followed ? 1 : 0));
         parcel.writeString(notice);
         parcel.writeInt(official);
         parcel.writeString(officialDesc);
-        parcel.writeInt((followed ? 1 : 0));
     }
 }

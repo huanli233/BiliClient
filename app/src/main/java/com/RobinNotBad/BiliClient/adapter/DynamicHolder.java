@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,11 +74,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                     try {
                         SpannableString spannableString = EmoteUtil.textReplaceEmote(dynamic.content, dynamic.emotes, 1.0f, context);
                         CenterThreadPool.runOnUiThread(() -> content.setText(spannableString));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 });
@@ -90,6 +87,10 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 .into(avatar);
 
         avatar.setOnClickListener(view -> {
+            if(dynamic.type.equals(Dynamic.DYNAMIC_TYPE_UGC_SEASON)){
+                Toast.makeText(context, "该动态为合集,无法查看用户信息", Toast.LENGTH_SHORT).show();
+                return;
+            }
             Intent intent = new Intent();
             intent.setClass(context, UserInfoActivity.class);
             intent.putExtra("mid", dynamic.userInfo.mid);
