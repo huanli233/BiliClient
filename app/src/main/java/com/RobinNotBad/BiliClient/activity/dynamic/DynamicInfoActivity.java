@@ -49,6 +49,7 @@ public class DynamicInfoActivity extends BaseActivity {
                 DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance(dynamic);
                 fragmentList.add(diFragment);
                 VideoReplyFragment rFragment = VideoReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type);
+                rFragment.isDynamic = true;
                 fragmentList.add(rFragment);
 
                 ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);

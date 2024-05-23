@@ -22,11 +22,12 @@ import java.util.ArrayList;
 public class VideoReplyFragment extends RefreshListFragment {
 
     private boolean dontload;
-    private long aid;
-    private int sort = 2;
-    private int type;
-    private ArrayList<Reply> replyList;
-    private ReplyAdapter replyAdapter;
+    protected long aid;
+    protected int sort = 2;
+    protected int type;
+    protected ArrayList<Reply> replyList;
+    protected ReplyAdapter replyAdapter;
+    public boolean isDynamic = false;
 
     public VideoReplyFragment() {
 
@@ -77,7 +78,7 @@ public class VideoReplyFragment extends RefreshListFragment {
                     int result = ReplyApi.getReplies(aid,0,page,type,sort,replyList);
                     setRefreshing(false);
                     if(result != -1 && isAdded()) {
-                        replyAdapter = new ReplyAdapter(requireContext(), replyList, aid, 0, type, sort);
+                        replyAdapter = getReplyAdapter();
                         setOnSortSwitch();
                         setAdapter(replyAdapter);
 
@@ -91,6 +92,10 @@ public class VideoReplyFragment extends RefreshListFragment {
                 }
             });
         }
+    }
+
+    private ReplyAdapter getReplyAdapter() {
+        return new ReplyAdapter(requireContext(), replyList, aid, 0, type, sort, isDynamic);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -126,7 +131,7 @@ public class VideoReplyFragment extends RefreshListFragment {
                 int result = ReplyApi.getReplies(aid,0,page,type,sort,replyList);
                 setRefreshing(false);
                 if(result != -1 && isAdded()) {
-                    replyAdapter = new ReplyAdapter(requireContext(),replyList,aid,0,type,sort);
+                    replyAdapter = getReplyAdapter();
                     setOnSortSwitch();
                     setAdapter(replyAdapter);
                     //replyAdapter.notifyItemRangeInserted(0,replyList.size());
