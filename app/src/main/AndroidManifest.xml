@@ -179,6 +179,11 @@
             android:label="发动态"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.video.QualityChooserActivity"
+            android:exported="false"
+            android:label="选择清晰度"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.user.HistoryActivity"
             android:exported="true"
             android:label="历史记录"

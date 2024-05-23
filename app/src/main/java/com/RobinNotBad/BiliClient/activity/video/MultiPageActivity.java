@@ -40,15 +40,16 @@ public class MultiPageActivity extends BaseActivity {
 
         PageChooseAdapter adapter = new PageChooseAdapter(this,videoInfo.pagenames);
 
-        if(intent.getIntExtra("download",0) == 1) {    //下载模式
+        if (intent.getIntExtra("download",0) == 1) {    //下载模式
             adapter.setOnItemClickListener(position -> {
                 File rootPath = new File(ConfInfoApi.getDownloadPath(this), ToolsUtil.stringToFile(videoInfo.title));
                 File downPath = new File(rootPath, ToolsUtil.stringToFile(videoInfo.pagenames.get(position)));
-                if(downPath.exists()) MsgUtil.toast("已经缓存过了~",this);
-                else PlayerApi.startDownloadingVideo(this,videoInfo,position);
+                if (downPath.exists()) MsgUtil.toast("已经缓存过了~",this);
+                else {
+                    startActivity(new Intent().putExtra("page", position).putExtra("videoInfo", videoInfo).setClass(this, QualityChooserActivity.class));
+                }
             });
-        }
-        else{        //普通播放模式
+        } else {        //普通播放模式
             adapter.setOnItemClickListener(position -> PlayerApi.startGettingUrl(this,videoInfo,position));
         }
 

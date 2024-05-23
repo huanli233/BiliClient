@@ -33,6 +33,7 @@ import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.user.WatchLaterActivity;
 import com.RobinNotBad.BiliClient.activity.video.MultiPageActivity;
+import com.RobinNotBad.BiliClient.activity.video.QualityChooserActivity;
 import com.RobinNotBad.BiliClient.adapter.UpListAdapter;
 import com.RobinNotBad.BiliClient.api.*;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
@@ -365,7 +366,7 @@ public class VideoInfoFragment extends Fragment {
                         intent.putExtra("videoInfo", videoInfo);
                         startActivity(intent);
                     } else {
-                        PlayerApi.startDownloadingVideo(requireContext(), videoInfo, 0);
+                        startActivity(new Intent().putExtra("videoInfo", videoInfo).putExtra("page", 0).setClass(requireContext(), QualityChooserActivity.class));
                     }
                 }
             }
