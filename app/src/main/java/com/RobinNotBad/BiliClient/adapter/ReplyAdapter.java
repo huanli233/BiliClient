@@ -9,6 +9,7 @@ import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -185,12 +186,10 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
 
             replyHolder.childReplyCard.setOnClickListener(view -> {
-                Intent intent = new Intent();
-                intent.setClass(context, ReplyInfoActivity.class);
-                intent.putExtra("rpid", replyList.get(realPosition).rpid);
-                intent.putExtra("oid", oid);
-                intent.putExtra("type",type);
-                context.startActivity(intent);
+                startReplyInfoActivity(replyList.get(realPosition).rpid, oid, type);
+            });
+            replyHolder.childReplies.setOnItemClickListener((adapterView, view, i, l) -> {
+                startReplyInfoActivity(replyList.get(realPosition).rpid, oid, type);
             });
 
             replyHolder.replyAvatar.setOnClickListener(view -> {
@@ -250,6 +249,15 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 context.startActivity(intent);
             });
         }
+    }
+
+    public void startReplyInfoActivity(long rpid, long oid, int type) {
+        Intent intent = new Intent();
+        intent.setClass(context, ReplyInfoActivity.class);
+        intent.putExtra("rpid", rpid);
+        intent.putExtra("oid", oid);
+        intent.putExtra("type",type);
+        context.startActivity(intent);
     }
     @Override
     public int getItemCount() {
