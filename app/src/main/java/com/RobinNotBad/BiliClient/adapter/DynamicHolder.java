@@ -179,6 +179,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 Intent intent = new Intent();
                 intent.setClass(mActivity, SendDynamicActivity.class);
                 intent.putExtra("dynamicId", dynamic.dynamicId);
+                intent.putExtra("forward", dynamic);
                 relayDynamicLauncher.launch(intent);
             }
         };

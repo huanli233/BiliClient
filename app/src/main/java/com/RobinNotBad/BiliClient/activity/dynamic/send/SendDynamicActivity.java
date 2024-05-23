@@ -2,15 +2,41 @@ package com.RobinNotBad.BiliClient.activity.dynamic.send;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
+import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
+import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
+import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
+import com.RobinNotBad.BiliClient.adapter.ArticleCardHolder;
+import com.RobinNotBad.BiliClient.adapter.VideoCardHolder;
+import com.RobinNotBad.BiliClient.model.ArticleCard;
+import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.EmoteUtil;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
 
+import org.json.JSONException;
+
+import java.util.ArrayList;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 /**
  * 发送动态输入Activity，直接copy的WriteReplyActivity
@@ -18,15 +44,6 @@ import java.util.Set;
  * （我并不怎么会写）
  */
 public class SendDynamicActivity extends BaseActivity {
-
-    // idk
-//    private static final Map<Integer,String> msgMap = new HashMap<Integer,String>(){{
-//        put(-101,"没有登录or登录信息有误？");
-//        put(-102,"账号被封禁！");
-//        put(-509,"请求过于频繁！");
-//        put(12016,"包含敏感内容！");
-//        put(12025,"字数过多啦QAQ");
-//    }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +59,13 @@ public class SendDynamicActivity extends BaseActivity {
         EditText editText = findViewById(R.id.editText);
         MaterialCardView send = findViewById(R.id.send);
 
+        ConstraintLayout extraCard = findViewById(R.id.extraCard);
+        Dynamic forward = (Dynamic) getIntent().getSerializableExtra("forward");
+        if (forward != null) {
+            View childCard = View.inflate(this, R.layout.cell_dynamic_child, extraCard);
+            showChildDyn(childCard, forward);
+        }
+
         send.setOnClickListener(view -> {
             // 不了解遂直接保留cookie刷新判断了
             if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cookie_refresh,true)){
@@ -55,5 +79,95 @@ public class SendDynamicActivity extends BaseActivity {
                 finish();
             } else MsgUtil.showDialog(this,"无法发送","上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作",-1);
         });
+    }
+
+    private void showChildDyn(View itemView, Dynamic dynamic) {
+        TextView username, content;
+        ImageView avatar;
+        ConstraintLayout extraCard;
+        username = itemView.findViewById(R.id.child_username);
+        content = itemView.findViewById(R.id.child_content);
+        avatar = itemView.findViewById(R.id.child_avatar);
+        extraCard = itemView.findViewById(R.id.child_extraCard);
+        username.setText(dynamic.userInfo.name);
+        if(dynamic.content != null && !dynamic.content.isEmpty()) {
+            content.setVisibility(View.VISIBLE);
+            content.setText(dynamic.content);
+            if (dynamic.emotes != null) {
+                CenterThreadPool.run(() -> {
+                    try {
+                        SpannableString spannableString = EmoteUtil.textReplaceEmote(dynamic.content, dynamic.emotes, 1.0f, this);
+                        CenterThreadPool.runOnUiThread(() -> content.setText(spannableString));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        } else content.setVisibility(View.GONE);
+        Glide.with(this).load(GlideUtil.url(dynamic.userInfo.avatar))
+                .placeholder(R.mipmap.akari)
+                .apply(RequestOptions.circleCropTransform())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(avatar);
+
+        avatar.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            intent.setClass(this, UserInfoActivity.class);
+            intent.putExtra("mid", dynamic.userInfo.mid);
+            this.startActivity(intent);
+        });
+
+        if(dynamic.major_type != null) switch (dynamic.major_type) {
+            case "MAJOR_TYPE_ARCHIVE":
+            case "MAJOR_TYPE_UGC_SEASON":
+                VideoCard childVideoCard = (VideoCard) dynamic.major_object;
+                VideoCardHolder video_holder = new VideoCardHolder(View.inflate(this,R.layout.cell_dynamic_video,extraCard));
+                video_holder.showVideoCard(childVideoCard,this);
+                video_holder.itemView.findViewById(R.id.cardView).setOnClickListener(view -> {
+                    Intent intent = new Intent();
+                    intent.setClass(this, VideoInfoActivity.class);
+                    intent.putExtra("bvid", "");
+                    intent.putExtra("aid", childVideoCard.aid);
+                    this.startActivity(intent);
+                });
+                break;
+
+            case "MAJOR_TYPE_ARTICLE":
+                ArticleCard articleCard = (ArticleCard) dynamic.major_object;
+                ArticleCardHolder article_holder = new ArticleCardHolder(View.inflate(this,R.layout.cell_dynamic_article,extraCard));
+                article_holder.showArticleCard(articleCard,this);
+                article_holder.itemView.findViewById(R.id.cardView).setOnClickListener(view -> {
+                    Intent intent = new Intent();
+                    intent.setClass(this, ArticleInfoActivity.class);
+                    intent.putExtra("cvid", articleCard.id);
+                    this.startActivity(intent);
+                });
+                break;
+
+            case "MAJOR_TYPE_DRAW":
+                ArrayList<String> pictureList = (ArrayList<String>) dynamic.major_object;
+                View imageCard = View.inflate(this,R.layout.cell_dynamic_image,extraCard);
+                ImageView imageView = imageCard.findViewById(R.id.imageView);
+                Glide.with(this).load(GlideUtil.url(pictureList.get(0)))
+                        .placeholder(R.mipmap.placeholder)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .into(imageView);
+                TextView textView = imageCard.findViewById(R.id.imageCount);
+                textView.setText("共" + pictureList.size() + "张图片");
+                MaterialCardView cardView = imageCard.findViewById(R.id.imageCard);
+                cardView.setOnClickListener(view -> {
+                    Intent intent = new Intent();
+                    intent.setClass(this, ImageViewerActivity.class);
+                    intent.putExtra("imageList", pictureList);
+                    this.startActivity(intent);
+                });
+                break;
+        } else {
+            content.setMaxLines(999);
+        }
     }
 }

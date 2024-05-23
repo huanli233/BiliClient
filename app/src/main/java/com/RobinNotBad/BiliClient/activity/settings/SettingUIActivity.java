@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity.settings;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -13,7 +14,7 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class SettingUIActivity extends BaseActivity {
 
-    private EditText uiScaleInput,uiPaddingH,uiPaddingV;
+    private EditText uiScaleInput,uiPaddingH,uiPaddingV,density_input;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -30,6 +31,11 @@ public class SettingUIActivity extends BaseActivity {
         uiPaddingV = findViewById(R.id.ui_padding_vertical);
         uiPaddingV.setText(String.valueOf(SharedPreferencesUtil.getInt("paddingV_percent",0)));
 
+        density_input = findViewById(R.id.density_input);
+        int density = SharedPreferencesUtil.getInt("density",-1);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        density_input.setText(String.valueOf((density == -1 ? displayMetrics.densityDpi + "(默认)" : density)));
 
         findViewById(R.id.preview).setOnClickListener(view -> {
             save();
@@ -41,9 +47,12 @@ public class SettingUIActivity extends BaseActivity {
             SharedPreferencesUtil.putInt("paddingH_percent", 0);
             SharedPreferencesUtil.putInt("paddingV_percent", 0);
             SharedPreferencesUtil.putFloat("dpi", 1.0f);
+            SharedPreferencesUtil.putInt("density", -1);
             uiScaleInput.setText("1.0");
             uiPaddingH.setText("0");
             uiPaddingV.setText("0");
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            density_input.setText(displayMetrics.densityDpi + "(默认)");
             MsgUtil.toast("恢复完成",this);
         });
     }
@@ -66,6 +75,13 @@ public class SettingUIActivity extends BaseActivity {
             int paddingV = Integer.parseInt(uiPaddingV.getText().toString());
             if(paddingV <= 30) SharedPreferencesUtil.putInt("paddingV_percent", paddingV);
             Log.e("paddingV", uiPaddingV.getText().toString());
+        }
+
+        if (!density_input.getText().toString().isEmpty()) {
+            try {
+                int density = Integer.parseInt(density_input.getText().toString());
+                if (density >= 72) SharedPreferencesUtil.putInt("density", density);
+            } catch (Throwable ignored) {}
         }
 
     }

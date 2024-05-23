@@ -4,6 +4,8 @@ import static com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity.getRel
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -61,7 +63,14 @@ public class BaseActivity extends AppCompatActivity {
             window_width = scrW;
             window_height = scrH;
         }
+
+        // 随便加的
+        int density;
+        if ((density = SharedPreferencesUtil.getInt("density", -1)) >= 72) {
+            setDensity(density);
+        }
     }
+
     @Override
     public void onBackPressed() {
         if(!SharedPreferencesUtil.getBoolean("back_disable",false)) super.onBackPressed();
@@ -86,5 +95,14 @@ public class BaseActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if(!(this instanceof InstanceActivity)) setTopbarExit();
+    }
+
+    public void setDensity(int targetDensityDpi) {
+        Resources resources = getResources();
+
+        Configuration configuration = resources.getConfiguration();
+        configuration.densityDpi = targetDensityDpi;
+        configuration.fontScale = 1f;
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
     }
 }
