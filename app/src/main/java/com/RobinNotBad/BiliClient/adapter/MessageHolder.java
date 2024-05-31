@@ -1,6 +1,7 @@
 package com.RobinNotBad.BiliClient.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -14,12 +15,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
+import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
+import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.model.MessageCard;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -89,22 +94,72 @@ public class MessageHolder extends RecyclerView.ViewHolder{
                 context.startActivity(intent);
             });
         }
-        if(message.replyInfo != null){
-            Reply childReply = message.replyInfo;
-            ReplyCardHolder holder = new ReplyCardHolder(View.inflate(context,R.layout.cell_message_reply,extraCard));
+        if(message.replyInfo != null || message.dynamicInfo != null){
+            Reply childReply = message.replyInfo != null ? message.replyInfo : message.dynamicInfo;
+            ReplyCardHolder holder = new ReplyCardHolder(View.inflate(context, R.layout.cell_message_reply,extraCard));
             holder.showReplyCard(childReply);
             holder.itemView.findViewById(R.id.cardView).setOnClickListener(view -> {
                 Intent intent = new Intent();
-                intent.setClass(context, VideoInfoActivity.class);
-                intent.putExtra("bvid", childReply.ofBvid);
-                intent.putExtra("aid", 0);
-                context.startActivity(intent);
+                switch (message.getType) {
+                    case MessageCard.GET_TYPE_REPLY:
+                        switch (message.businessId) {
+                            case ReplyApi.REPLY_TYPE_VIDEO:
+                                intent.setClass(context, VideoInfoActivity.class);
+                                intent.putExtra("bvid", childReply.ofBvid);
+                                intent.putExtra("aid", 0);
+                                break;
+                            case ReplyApi.REPLY_TYPE_DYNAMIC:
+                                intent.setClass(context, DynamicInfoActivity.class);
+                                intent.putExtra("id", message.subjectId);
+                                break;
+                            case ReplyApi.REPLY_TYPE_ARTICLE:
+                                intent.setClass(context, ArticleInfoActivity.class);
+                                intent.putExtra("cvid", message.subjectId);
+                                break;
+                        }
+                        break;
+                    case MessageCard.GET_TYPE_LIKE:
+                    case MessageCard.GET_TYPE_AT:
+                        switch (message.itemType) {
+                            case "video":
+                                intent.setClass(context, VideoInfoActivity.class);
+                                intent.putExtra("bvid", childReply.ofBvid);
+                                intent.putExtra("aid", 0);
+                                break;
+                            case "dynamic":
+                                intent.setClass(context, DynamicInfoActivity.class);
+                                intent.putExtra("id", message.subjectId);
+                                break;
+                            case "article":
+                                intent.setClass(context, ArticleInfoActivity.class);
+                                intent.putExtra("cvid", message.subjectId);
+                                break;
+                            case "reply":
+                                switch (message.businessId) {
+                                    case ReplyApi.REPLY_TYPE_VIDEO:
+                                        intent.setClass(context, VideoInfoActivity.class);
+                                        intent.putExtra("bvid", childReply.ofBvid);
+                                        intent.putExtra("aid", 0);
+                                        break;
+                                    case ReplyApi.REPLY_TYPE_DYNAMIC:
+                                        intent.setClass(context, DynamicInfoActivity.class);
+                                        intent.putExtra("id", message.subjectId);
+                                        break;
+                                    case ReplyApi.REPLY_TYPE_ARTICLE:
+                                        intent.setClass(context, ArticleInfoActivity.class);
+                                        intent.putExtra("cvid", message.subjectId);
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                }
+                try {
+                    context.startActivity(intent);
+                } catch (ActivityNotFoundException ignored) {
+                    MsgUtil.toast("此类型暂不支持跳转", context);
+                }
             });
-        }
-        if(message.dynamicInfo != null){
-            Reply childReply = message.dynamicInfo;
-            ReplyCardHolder holder = new ReplyCardHolder(View.inflate(context,R.layout.cell_message_reply,extraCard));
-            holder.showReplyCard(childReply);
         }
     }
 }

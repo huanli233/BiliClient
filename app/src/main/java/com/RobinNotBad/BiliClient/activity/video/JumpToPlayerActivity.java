@@ -108,7 +108,7 @@ public class JumpToPlayerActivity extends BaseActivity {
     }
 
     private void requestVideo(long aid, String bvid, long cid) {
-        requestVideo(aid, bvid, cid, (qn != -1 ? qn : SharedPreferencesUtil.getBoolean("high_res",false) ? 80 : 16));
+        requestVideo(aid, bvid, cid, (qn != -1 ? qn : SharedPreferencesUtil.getInt("play_qn",16)));
     }
 
     @Override

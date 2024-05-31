@@ -15,11 +15,13 @@ import com.RobinNotBad.BiliClient.listener.OnItemClickListener;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class QualityChooseAdapter extends RecyclerView.Adapter<QualityChooseAdapter.Holder> {
 
     Context context;
-    ArrayList<String> nameList = new ArrayList<>();
+
+    List<String> nameList = new ArrayList<>();
 
     OnItemClickListener onItemClickListener;
     OnItemLongClickListener onItemLongClickListener;
@@ -32,15 +34,15 @@ public class QualityChooseAdapter extends RecyclerView.Adapter<QualityChooseAdap
         this.onItemClickListener = listener;
     }
 
-    public void setOnItemLongClickListener(OnItemLongClickListener listener){
-        this.onItemLongClickListener = listener;
-    }
-
     // 勾使。
     @SuppressLint("NotifyDataSetChanged")
-    public void setNameList(ArrayList<String> newList) {
+    public void setNameList(List<String> newList) {
         this.nameList = newList;
         notifyDataSetChanged();
+    }
+
+    public String getName(int index) {
+        return nameList == null ? null : nameList.get(index);
     }
 
     @NonNull

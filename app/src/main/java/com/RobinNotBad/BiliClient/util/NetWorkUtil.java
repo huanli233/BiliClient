@@ -11,6 +11,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -24,12 +26,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.Inflater;
 
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okhttp3.internal.http.RetryAndFollowUpInterceptor;
 
 /**
  * 被 luern0313 创建于 2019/10/13.
@@ -41,9 +45,30 @@ public class NetWorkUtil
     private static final AtomicReference<OkHttpClient> INSTANCE = new AtomicReference<>();
 
     private static OkHttpClient getOkHttpInstance() {
-        while(INSTANCE.get() == null){
-            INSTANCE.compareAndSet(null, new OkHttpClient
-                    .Builder()
+        while (INSTANCE.get() == null) {
+            INSTANCE.compareAndSet(null, new OkHttpClient.Builder()
+                    .followRedirects(false)
+                    .addInterceptor(chain -> {
+                        Request request = chain.request();
+                        Response response = chain.proceed(request);
+                        RedirectHandler handler;
+                        String location = response.header("Location");
+                        boolean isSslRedirect = false;
+                        try {
+                            isSslRedirect = location != null && !request.isHttps() && new URI(location).getScheme().equalsIgnoreCase("https") && request.url().host().equalsIgnoreCase(new URI(location).getHost());
+                        } catch (URISyntaxException ignored) {}
+                        if ((response.code() == 301 || response.code() == 302) && location != null && request.url().host().equals("b23.tv") && !isSslRedirect && (handler = request.tag(RedirectHandler.class)) != null) {
+                            handler.handleRedirect(location);
+                        } else if (response.isRedirect() && location != null) {
+                            Request newRequest = request.newBuilder()
+                                    .url(location)
+                                    .build();
+
+                            response = chain.proceed(newRequest);
+                        }
+
+                        return response;
+                    })
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(15, TimeUnit.SECONDS).build());
         }
@@ -67,8 +92,11 @@ public class NetWorkUtil
         return get(url, webHeaders);
     }
 
-    public static Response get(String url, ArrayList<String> headers) throws IOException
-    {
+    public static Response get(String url, ArrayList<String> headers) throws IOException {
+        return get(url, headers, null);
+    }
+
+    public static Response get(String url, ArrayList<String> headers, RedirectHandler redirectHandler) throws IOException {
         Log.e("debug-get","----------------");
         Log.e("debug-get-url",url);
         Log.e("debug-get","----------------");
@@ -76,6 +104,7 @@ public class NetWorkUtil
         Request.Builder requestBuilder = new Request.Builder().url(url).get();
         for(int i = 0; i < headers.size(); i+=2)
             requestBuilder = requestBuilder.addHeader(headers.get(i), headers.get(i+1));
+        if (redirectHandler != null) requestBuilder.tag(RedirectHandler.class, redirectHandler);
         Request request = requestBuilder.build();
         Response response =  client.newCall(request).execute();
         saveCookiesFromResponse(response);
@@ -213,9 +242,9 @@ public class NetWorkUtil
     }
 
     public static final String USER_AGENT_WEB = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.160 Safari/537.36";
-    public static ArrayList<String> webHeaders = new ArrayList<String>() {{
+    public static ArrayList<String> webHeaders = new ArrayList<>() {{
         add("Cookie");
-        add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
+        add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
         add("Referer");
         add("https://www.bilibili.com/");
         add("User-Agent");
@@ -228,7 +257,7 @@ public class NetWorkUtil
         webHeaders.set(1,SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
     }
     public static class FormData {
-        private Map<String, String> data;
+        private final Map<String, String> data;
 
         public FormData() {
             data = new HashMap<>();
@@ -264,6 +293,10 @@ public class NetWorkUtil
 
             return sb.toString();
         }
+    }
+
+    public interface RedirectHandler {
+        void handleRedirect(String location);
     }
 
 }

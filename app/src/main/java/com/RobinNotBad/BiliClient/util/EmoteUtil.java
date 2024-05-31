@@ -37,8 +37,8 @@ public class EmoteUtil {
         return result;
     }
 
-    public static SpannableString textReplaceEmote(String text, ArrayList<Emote> emotes, float scale, Context context) throws JSONException, ExecutionException, InterruptedException {
-        SpannableString result = new SpannableString(text);
+    public static SpannableString textReplaceEmote(String text, ArrayList<Emote> emotes, float scale, Context context, CharSequence source) throws JSONException, ExecutionException, InterruptedException {
+        SpannableString result = source == null ? new SpannableString(text) : new SpannableString(source);
         if(emotes!=null && emotes.size()>0) {
             for (int i = 0; i < emotes.size(); i++) {    //遍历每一个表情包
                 Emote key = emotes.get(i);
@@ -51,6 +51,10 @@ public class EmoteUtil {
             }
         }
         return result;
+    }
+
+    public static SpannableString textReplaceEmote(String text, ArrayList<Emote> emotes, float scale, Context context) throws JSONException, ExecutionException, InterruptedException {
+        return textReplaceEmote(text, emotes, scale, context, null);
     }
 
     public static void replaceSingle(String origText, SpannableString spannableString, String name, String url, int size, float scale, Context context) throws ExecutionException, InterruptedException {

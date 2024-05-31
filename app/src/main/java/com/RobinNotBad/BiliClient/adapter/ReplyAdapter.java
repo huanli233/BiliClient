@@ -9,7 +9,6 @@ import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,13 +23,18 @@ import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.ReplyInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.WriteReplyActivity;
+import com.RobinNotBad.BiliClient.api.ArticleApi;
+import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
+import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.listener.OnItemClickListener;
 import com.RobinNotBad.BiliClient.model.Reply;
+import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.view.CustomListView;
 import com.bumptech.glide.Glide;
@@ -42,6 +46,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 //评论Adapter
@@ -49,25 +54,26 @@ import java.util.concurrent.ExecutionException;
 
 public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    public boolean isDetail = false;
     Context context;
     ArrayList<Reply> replyList;
     long oid, root;
     int type, sort;
-    public boolean isDynamic;
+    public int replyType;
     OnItemClickListener listener;
 
-    public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort, boolean isDynamic) {
+    public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort, int replyType) {
         this.context = context;
         this.replyList = replyList;
         this.oid = oid;
         this.root = root;
         this.type = type;
         this.sort = sort;
-        this.isDynamic = isDynamic;
+        this.replyType = type;
     }
 
     public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort) {
-        this(context, replyList, oid, root, type, sort, false);
+        this(context, replyList, oid, root, type, sort, ReplyApi.REPLY_TYPE_VIDEO);
     }
 
     public void setOnSortSwitchListener(OnItemClickListener listener){
@@ -80,8 +86,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if(viewType == 0){
             View view = LayoutInflater.from(this.context).inflate(R.layout.cell_reply_action,parent,false);
             return new WriteReply(view);
-        }
-        else{
+        } else {
             View view = LayoutInflater.from(this.context).inflate(R.layout.cell_reply_list,parent,false);
             return new ReplyHolder(view);
         }
@@ -99,7 +104,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 intent.putExtra("rpid",root);
                 intent.putExtra("parent",root);
                 intent.putExtra("parentSender","");
-                intent.putExtra("isDynamic", isDynamic);
+                intent.putExtra("replyType", replyType);
                 context.startActivity(intent);
             });
             String[] sorts = {"时间排序","点赞排序","回复排序"};
@@ -109,7 +114,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
         }
         if(holder instanceof ReplyHolder) {
-            int realPosition = position - 1;
+            int tmpPosition;
+            if (isDetail) {
+                tmpPosition = position != 0 ? position - 1 : 0;
+            } else {
+                tmpPosition = position - 1;
+            }
+            int realPosition = tmpPosition;
             ReplyHolder replyHolder = (ReplyHolder) holder;
 
             Glide.with(context).load(GlideUtil.url(replyList.get(realPosition).sender.avatar))
@@ -119,15 +130,18 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .into(replyHolder.replyAvatar);
             replyHolder.userName.setText(replyList.get(realPosition).sender.name);
 
-
             String text = replyList.get(realPosition).message;
             replyHolder.message.setText(text);  //防止加载速度慢时露出鸡脚
             ToolsUtil.setCopy(replyHolder.message,context);
-            if(replyList.get(realPosition).emote != null) {
+            if(replyList.get(realPosition).emotes != null) {
                 CenterThreadPool.run(() -> {
                     try {
-                        SpannableString spannableString = EmoteUtil.textReplaceEmote(text, replyList.get(realPosition).emote, 1.0f, context);
-                        ((Activity) context).runOnUiThread(() -> replyHolder.message.setText(spannableString));
+                        SpannableString spannableString = EmoteUtil.textReplaceEmote(text, replyList.get(realPosition).emotes, 1.0f, context, replyHolder.message.getText());
+                        ((Activity) context).runOnUiThread(() -> {
+                            replyHolder.message.setText(spannableString);
+                            ToolsUtil.setLink(replyHolder.message);
+                            ToolsUtil.setAtLink(replyList.get(realPosition).atNameToMid, replyHolder.message);
+                        });
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
@@ -138,18 +152,20 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 });
             }
 
+            ToolsUtil.setLink(replyHolder.message);
+            ToolsUtil.setAtLink(replyList.get(realPosition).atNameToMid, replyHolder.message);
+
             replyHolder.likeCount.setText(String.valueOf(replyList.get(realPosition).likeCount));
 
-            if(replyList.get(realPosition).liked){           //这里，还有下面，一定要加else！否则会导致错乱
+            if (replyList.get(realPosition).liked) {
                 replyHolder.likeCount.setTextColor(Color.rgb(0xfe,0x67,0x9a));
                 replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_liked),null,null,null);
-            }
-            else {
+            } else {
                 replyHolder.likeCount.setTextColor(Color.rgb(0xff,0xff,0xff));
                 replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_like),null,null,null);
             }
 
-            if (replyList.get(realPosition).childCount != 0) {
+            if (replyList.get(realPosition).childCount != 0 && !(realPosition == 0 && isDetail)) {
                 replyHolder.childReplyCard.setVisibility(View.VISIBLE);
 
                 if (replyList.get(realPosition).upReplied) replyHolder.childCount.setText("UP主在内 共" + replyList.get(realPosition).childCount + "条回复");
@@ -186,11 +202,15 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
 
             replyHolder.childReplyCard.setOnClickListener(view -> {
-                startReplyInfoActivity(replyList.get(realPosition).rpid, oid, type);
+                startReplyInfoActivity(replyList.get(realPosition));
             });
             replyHolder.childReplies.setOnItemClickListener((adapterView, view, i, l) -> {
-                startReplyInfoActivity(replyList.get(realPosition).rpid, oid, type);
+                startReplyInfoActivity(replyList.get(realPosition));
             });
+            if (!isDetail) {
+                replyHolder.itemView.setOnClickListener((view) -> startReplyInfoActivity(replyList.get(realPosition)));
+                replyHolder.message.setOnClickListener((view) -> startReplyInfoActivity(replyList.get(realPosition)));
+            }
 
             replyHolder.replyAvatar.setOnClickListener(view -> {
                 Intent intent = new Intent();
@@ -237,13 +257,99 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             }));
 
+            View.OnClickListener onDeleteClick = view -> {
+                MsgUtil.toast("长按删除", context);
+            };
+            replyHolder.item_reply_delete_img.setOnClickListener(onDeleteClick);
+            replyHolder.item_reply_delete.setOnClickListener(onDeleteClick);
+            View.OnLongClickListener onDeleteLongClick = new View.OnLongClickListener() {
+                private int longClickPosition = -1;
+                private long longClickTime = -1;
+                @Override
+                public boolean onLongClick(View view) {
+                    long currentTime = System.currentTimeMillis();
+                    if (longClickPosition == realPosition && currentTime - longClickTime < 10000) {
+                        CenterThreadPool.run(() -> {
+                            try {
+                                int result = ReplyApi.deleteReply(oid, replyList.get(realPosition).rpid, replyType);
+                                if (result == 0) {
+                                    replyList.remove(realPosition);
+                                    ((Activity) context).runOnUiThread(() -> {
+                                        notifyItemRemoved(position);
+                                        notifyItemRangeChanged(position, replyList.size() - realPosition);
+                                        longClickPosition = -1;
+                                        MsgUtil.toast("删除成功~", context);
+                                    });
+                                } else {
+                                    String msg = "操作失败：" + result;
+                                    switch (result) {
+                                        case -404:
+                                            msg = "没有这条评论！";
+                                            break;
+                                        case -403:
+                                            msg = "权限不足！";
+                                            break;
+                                    }
+                                    String finalMsg = msg;
+                                    ((Activity) context).runOnUiThread(() -> MsgUtil.toast(finalMsg, context));
+                                }
+                            } catch (Exception e) {
+                                ((Activity) context).runOnUiThread(() -> MsgUtil.err(e, context));
+                            }
+                        });
+                    } else {
+                        longClickPosition = realPosition;
+                        longClickTime = currentTime;
+                        MsgUtil.toast("再次长按删除", context);
+                    }
+                    return true;
+                }
+            };
+            replyHolder.item_reply_delete_img.setOnLongClickListener(onDeleteLongClick);
+            replyHolder.item_reply_delete.setOnLongClickListener(onDeleteLongClick);
+            if (!(replyList.get(realPosition).sender.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)) || replyList.get(realPosition).sender.mid == 0 || replyList.get(realPosition).forceDelete) {
+                replyHolder.item_reply_delete_img.setVisibility(View.GONE);
+                replyHolder.item_reply_delete.setVisibility(View.GONE);
+                CenterThreadPool.run(() -> {
+                    try {
+                        Reply reply = replyList.get(realPosition);
+                        boolean isManager = false;
+                        switch (replyType) {
+                            case ReplyApi.REPLY_TYPE_VIDEO:
+                                ArrayList<UserInfo> staffs = VideoInfoApi.getInfoByJson(Objects.requireNonNull(VideoInfoApi.getJsonByAid(reply.oid))).staff;
+                                for (UserInfo userInfo : staffs) {
+                                    if (userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)) {
+                                        isManager = true;
+                                        break;
+                                    }
+                                }
+                                break;
+                            case ReplyApi.REPLY_TYPE_DYNAMIC:
+                                isManager = DynamicApi.getDynamic(reply.oid).userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
+                                break;
+                            case ReplyApi.REPLY_TYPE_ARTICLE:
+                                isManager = Objects.requireNonNull(ArticleApi.getArticle(reply.oid)).upInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
+                                break;
+                        }
+                        if (isManager) {
+                            ((Activity) context).runOnUiThread(() -> {
+                                replyHolder.item_reply_delete_img.setVisibility(View.VISIBLE);
+                                replyHolder.item_reply_delete.setVisibility(View.VISIBLE);
+                            });
+                        }
+                    } catch (Exception e) {
+                        ((Activity) context).runOnUiThread(() -> MsgUtil.err(e, context));
+                    }
+                });
+            }
+
             replyHolder.replyBtn.setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(context, WriteReplyActivity.class);
                 intent.putExtra("oid",oid);
                 intent.putExtra("rpid",replyList.get(realPosition).rpid);
                 intent.putExtra("parent",replyList.get(realPosition).rpid);
-                intent.putExtra("isDynamic", isDynamic);
+                intent.putExtra("replyType", replyType);
                 if(root!=0) intent.putExtra("parentSender",replyList.get(realPosition).sender.name);
                 else intent.putExtra("parentSender","");
                 context.startActivity(intent);
@@ -251,12 +357,16 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public void startReplyInfoActivity(long rpid, long oid, int type) {
+    public void startReplyInfoActivity(Reply reply) {
+        long rpid = reply.rpid;
+        long oid = reply.oid;
+        int type = replyType;
         Intent intent = new Intent();
         intent.setClass(context, ReplyInfoActivity.class);
         intent.putExtra("rpid", rpid);
         intent.putExtra("oid", oid);
         intent.putExtra("type",type);
+        intent.putExtra("origReply", reply);
         context.startActivity(intent);
     }
     @Override
@@ -266,13 +376,18 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemViewType(int position) {
-        return (position == 0 ? 0 : 1);
+        if (isDetail && position == 1) {
+            return 0;
+        } else if (!isDetail && position == 0) {
+            return 0;
+        }
+         return 1;
     }
 
     public static class ReplyHolder extends RecyclerView.ViewHolder{
-        ImageView replyAvatar,dislikeBtn;
+        ImageView replyAvatar, dislikeBtn, item_reply_delete_img;
         CustomListView childReplies;
-        TextView message,userName,pubDate,childCount,likeCount,replyBtn,upLiked,imageCount;
+        TextView message,userName,pubDate,childCount,likeCount,replyBtn,upLiked,imageCount, item_reply_delete;
         LinearLayout childReplyCard;
         ImageView imageCard;
 
@@ -293,6 +408,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             childReplyCard = itemView.findViewById(R.id.repliesCard);
             imageCount = itemView.findViewById(R.id.imageCount);
             imageCard = itemView.findViewById(R.id.imageCard);
+            item_reply_delete_img = itemView.findViewById(R.id.item_reply_delete_img);
+            item_reply_delete = itemView.findViewById(R.id.item_reply_delete);
         }
     }
 

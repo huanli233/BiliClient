@@ -30,7 +30,7 @@ public class MsgUtil {
         toast.show();
     }
 
-    public static void err(Exception e,Context context){
+    public static void err(Throwable e, Context context){
         e.printStackTrace();
         if(e instanceof IOException) toast("网络错误(＃°Д°)",context);
         else if (e instanceof JSONException) {

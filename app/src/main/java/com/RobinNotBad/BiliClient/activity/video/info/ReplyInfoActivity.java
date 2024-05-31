@@ -14,9 +14,13 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.ReplyAdapter;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
+import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -33,6 +37,7 @@ public class ReplyInfoActivity extends BaseActivity {
     private SwipeRefreshLayout refreshLayout;
     private ArrayList<Reply> replyList;
     private ReplyAdapter replyAdapter;
+    public Reply origReply;
     private boolean bottom = false;
     private int page = 1;
     private boolean refreshing = false;
@@ -47,6 +52,7 @@ public class ReplyInfoActivity extends BaseActivity {
         rpid = intent.getLongExtra("rpid", 0);
         oid = intent.getLongExtra("oid",0);
         type = intent.getIntExtra("type",1);
+        origReply = (Reply) intent.getSerializableExtra("origReply");
 
         refreshLayout = findViewById(R.id.swipeRefreshLayout);
         recyclerView = findViewById(R.id.recyclerView);
@@ -61,7 +67,9 @@ public class ReplyInfoActivity extends BaseActivity {
             try {
                 int result = ReplyApi.getReplies(oid,rpid,page,type,sort,replyList);
                 if(result != -1) {
+                    replyList.add(0, origReply);
                     replyAdapter = new ReplyAdapter(this, replyList,oid,rpid,type,sort);
+                    replyAdapter.isDetail = true;
                     setOnSortSwitch();
                     runOnUiThread(()->{
                         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -77,7 +85,7 @@ public class ReplyInfoActivity extends BaseActivity {
                                 super.onScrolled(recyclerView, dx, dy);
                                 LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
                                 assert manager != null;
-                                int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();  //获取最后一个完全显示的itemPosition
+                                int lastItemPosition = manager.findLastVisibleItemPosition();  //获取最后一个显示的itemPosition
                                 int itemCount = manager.getItemCount();
                                 if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                                     refreshing = true;
@@ -133,13 +141,15 @@ public class ReplyInfoActivity extends BaseActivity {
         CenterThreadPool.run(()->{
             try {
                 int result = ReplyApi.getReplies(oid,rpid,page,type,sort,replyList);
+
                 if(result != -1) {
+                    replyList.add(0, origReply);
                     runOnUiThread(()->{
                         replyAdapter = new ReplyAdapter(this,replyList,oid,rpid,type,sort);
+                        replyAdapter.isDetail = true;
                         setOnSortSwitch();
                         recyclerView.setAdapter(replyAdapter);
                         refreshLayout.setRefreshing(false);
-                        //replyAdapter.notifyItemRangeInserted(0,replyList.size());
                     });
                     if(result == 1) {
                         Log.e("debug","到底了");
@@ -158,6 +168,22 @@ public class ReplyInfoActivity extends BaseActivity {
         replyAdapter.setOnSortSwitchListener(position -> {
             sort = (sort == 0 ? 1 : 0);
             refresh();
+        });
+    }
+
+    @Override
+    protected boolean eventBusEnabled() {
+        return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC, sticky = true, priority = 1)
+    public void onEvent(ReplyEvent event){
+        replyList.add(1, event.getMessage());
+        runOnUiThread(() -> {
+            if (replyAdapter != null) {
+                replyAdapter.notifyItemInserted(0);
+                replyAdapter.notifyItemRangeChanged(0, replyList.size());
+            }
         });
     }
 }

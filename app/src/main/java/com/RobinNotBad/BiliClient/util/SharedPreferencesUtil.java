@@ -13,6 +13,9 @@ import java.util.ArrayList;
  */
 public class SharedPreferencesUtil
 {
+    public static final String LINK_ENABLE = "link_enable";
+    public static final String DISABLE_NETWORK_CHECK = "disable_network_check";
+
     public static String cookies = "cookies";
     public static String mid = "mid";
     public static String csrf = "csrf";

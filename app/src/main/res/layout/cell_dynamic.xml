@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:src="@mipmap/akari" />
 
-    <TextView
+    <com.RobinNotBad.BiliClient.view.MarqueeTextView
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,6 +76,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/extraCard"/>
 
+    <TextView
+        android:id="@+id/likes"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:textColor="#a2a2a2"
+        android:alpha="0.7"
+        android:text="514"
+        android:textSize="14sp"
+        app:drawableStartCompat="@drawable/icon_like"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/extraCard" />
+
     <ImageView
         android:id="@+id/item_dynamic_share_img"
         android:layout_width="20dp"
@@ -83,7 +97,7 @@
         android:layout_margin="4dp"
         android:src="@drawable/icon_share"
         app:layout_constraintEnd_toStartOf="@id/item_dynamic_share"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/likes"
         app:layout_constraintTop_toBottomOf="@id/extraCard" />
 
     <TextView
@@ -91,12 +105,36 @@
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_margin="1dp"
+        android:alpha="0.7"
         android:gravity="center_vertical"
         android:textColor="#a2a2a2"
         android:text="转发"
         app:layout_constraintStart_toEndOf="@+id/item_dynamic_share_img"
         app:layout_constraintTop_toTopOf="@+id/item_dynamic_share_img"
         app:layout_constraintBottom_toBottomOf="@+id/item_dynamic_share_img"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/item_dynamic_delete_img"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="4dp"
+        android:src="@drawable/icon_delete"
+        app:layout_constraintStart_toEndOf="@id/item_dynamic_share"
+        app:layout_constraintTop_toBottomOf="@id/extraCard" />
+
+    <TextView
+        android:id="@+id/item_dynamic_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_margin="1dp"
+        android:alpha="0.7"
+        android:gravity="center_vertical"
+        android:textColor="#a2a2a2"
+        android:text="删除"
+        app:layout_constraintStart_toEndOf="@+id/item_dynamic_delete_img"
+        app:layout_constraintTop_toTopOf="@+id/item_dynamic_delete_img"
+        app:layout_constraintBottom_toBottomOf="@+id/item_dynamic_delete_img"
         android:textSize="12sp" />
 
     <View

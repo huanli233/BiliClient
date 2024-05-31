@@ -24,6 +24,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.SearchHistoryAdapter;
 import com.RobinNotBad.BiliClient.util.JsonUtil;
+import com.RobinNotBad.BiliClient.util.LinkUrlUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -93,6 +94,7 @@ public class SearchActivity extends InstanceActivity {
         });
          */
         searchBtn.setOnClickListener(view -> searchKeyword(keywordInput.getText().toString()));
+        searchBtn.setOnLongClickListener(this::jumpToTargetId);
         keywordInput.setOnEditorActionListener((textView, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEND || actionId == EditorInfo.IME_ACTION_DONE || event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction()) {
                 searchKeyword(keywordInput.getText().toString());
@@ -117,6 +119,12 @@ public class SearchActivity extends InstanceActivity {
         });
         historyRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         historyRecyclerview.setAdapter(searchHistoryAdapter);
+    }
+
+    public boolean jumpToTargetId(View view) {
+        String text = keywordInput.getText().toString();
+        LinkUrlUtil.handleId(this, text);
+        return true;
     }
 
     @SuppressLint("NotifyDataSetChanged")

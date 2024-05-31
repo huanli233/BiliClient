@@ -184,6 +184,11 @@
             android:label="选择清晰度"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.settings.PlayQualitySettingActivity"
+            android:exported="false"
+            android:label="清晰度设置"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.user.HistoryActivity"
             android:exported="true"
             android:label="历史记录"

@@ -281,7 +281,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="6dp"
                             android:layout_marginBottom="4dp"
-                            android:text="打开此选项，长按视频描述或评论可以打开复制界面以复制这些文本"
+                            android:text="打开此选项，长按一些文字（如视频描述或评论）可以打开复制界面以复制这些文本"
                             android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -306,6 +306,56 @@
                             android:layout_marginBottom="4dp"
                             android:text="打开此选项，视频详情页点击封面行为变更为播放"
                             android:textSize="11sp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/text_link_enable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="识别链接和视频/专栏编号"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="打开此选项，会识别部分文本中的链接/BV号/AV号/CV号并标记为链接，点击可打开"
+                        android:textSize="11sp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- 先隐藏了 -->
+            <com.google.android.material.card.MaterialCardView
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/disable_network_check"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="禁用启动时检查网络"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="打开此选项，会跳过启动时连接bilibili.com进行检查网络的步骤"
+                        android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

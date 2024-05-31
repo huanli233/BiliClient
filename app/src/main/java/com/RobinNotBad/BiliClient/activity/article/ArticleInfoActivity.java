@@ -13,9 +13,13 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
+import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +28,7 @@ public class ArticleInfoActivity extends BaseActivity {
     private static final String TAG = "ArticleInfoActivity";
     private long cvid;
 
+    private VideoReplyFragment replyFragment;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +47,8 @@ public class ArticleInfoActivity extends BaseActivity {
                 List<Fragment> fragmentList = new ArrayList<>();
                 ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance(cvid);
                 fragmentList.add(articleInfoFragment);
-                VideoReplyFragment vrFragment = VideoReplyFragment.newInstance(cvid,12);
-                fragmentList.add(vrFragment);
+                replyFragment = VideoReplyFragment.newInstance(cvid, 12);
+                fragmentList.add(replyFragment);
 
                 runOnUiThread(() -> {
                     ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
@@ -58,5 +63,15 @@ public class ArticleInfoActivity extends BaseActivity {
                 Log.wtf(TAG, e);
             }
         });
+    }
+
+    @Override
+    protected boolean eventBusEnabled() {
+        return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC, sticky = true, priority = 1)
+    public void onEvent(ReplyEvent event){
+        replyFragment.notifyReplyInserted(event.getMessage());
     }
 }

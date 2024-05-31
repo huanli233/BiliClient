@@ -1,21 +1,31 @@
 package com.RobinNotBad.BiliClient.model;
 
-import java.util.ArrayList;
+import com.RobinNotBad.BiliClient.api.ReplyApi;
 
-public class Reply {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class Reply implements Serializable {
     public long rpid;
+    public long oid;
+    public long root;
+    public long parent;
+    public boolean forceDelete;
     public String ofBvid = "";
     public String pubTime;
     public UserInfo sender;
     public String message;
-    public ArrayList<Emote> emote;
+    public ArrayList<Emote> emotes;
+    public Map<String, Long> atNameToMid;
     public ArrayList<String> pictureList;
     public int likeCount;
     public boolean upLiked;
     public boolean upReplied;
     public boolean liked;
     public int childCount;
-    public boolean isDynamic = false;
+    public boolean isDynamic;
     public ArrayList<String> childMsgList;
 
     public Reply(){}

@@ -23,6 +23,8 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
+import org.greenrobot.eventbus.EventBus;
+
 
 public class BaseActivity extends AppCompatActivity {
     public int window_width, window_height;
@@ -91,10 +93,24 @@ public class BaseActivity extends AppCompatActivity {
 
     public void report(Exception e){runOnUiThread(()-> MsgUtil.err(e,this));}
 
+    private boolean eventBusInit = false;
     @Override
     protected void onStart() {
         super.onStart();
         if(!(this instanceof InstanceActivity)) setTopbarExit();
+        if (eventBusEnabled() && !eventBusInit) {
+            EventBus.getDefault().register(this);
+            eventBusInit = true;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    protected boolean eventBusEnabled() {
+        return false;
     }
 
     public void setDensity(int targetDensityDpi) {

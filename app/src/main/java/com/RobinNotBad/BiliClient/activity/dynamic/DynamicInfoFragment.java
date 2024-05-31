@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.dynamic;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,6 +60,13 @@ public class DynamicInfoFragment extends Fragment {
                 View dynamicView = View.inflate(requireContext(),R.layout.cell_dynamic, scrollView);
                 DynamicHolder holder = new DynamicHolder(dynamicView, (BaseActivity) getActivity(), false);
                 holder.showDynamic(dynamic,requireContext(),false);
+                View.OnLongClickListener onDeleteLongClick = DynamicHolder.getDeleteListener(requireActivity(), dynamic);
+                holder.item_dynamic_delete_img.setOnLongClickListener(onDeleteLongClick);
+                holder.item_dynamic_delete.setOnLongClickListener(onDeleteLongClick);
+                if (dynamic.canDelete) {
+                    holder.item_dynamic_delete.setVisibility(View.VISIBLE);
+                    holder.item_dynamic_delete_img.setVisibility(View.VISIBLE);
+                }
 
                 if(dynamic.dynamic_forward != null){
                     Log.e("debug","有子动态！");

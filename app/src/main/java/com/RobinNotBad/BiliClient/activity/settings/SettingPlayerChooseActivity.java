@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -16,14 +17,14 @@ import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 //选择播放器
 
 public class SettingPlayerChooseActivity extends BaseActivity {
 
     String playerCurr = SharedPreferencesUtil.getString("player","null");
-    MaterialCardView terminalPlayer,mtvPlayer,aliangPlayer;
-    SwitchCompat sw_highres;
+    MaterialCardView terminalPlayer,mtvPlayer,aliangPlayer, qn_choose;
     ArrayList<MaterialCardView> cardViewList;
     int checkPosition = -1;
     final String[] playerList = {"null","terminalPlayer","mtvPlayer","aliangPlayer"};
@@ -41,9 +42,9 @@ public class SettingPlayerChooseActivity extends BaseActivity {
         terminalPlayer = findViewById(R.id.terminalPlayer);
         mtvPlayer = findViewById(R.id.mtvPlayer);
         aliangPlayer = findViewById(R.id.aliangPlayer);
-        sw_highres = findViewById(R.id.high_res);
+        qn_choose = findViewById(R.id.qn_choose);
 
-        sw_highres.setChecked(SharedPreferencesUtil.getBoolean("high_res",false));
+        qn_choose.setOnClickListener((view) -> handleQnChoose());
 
         cardViewList = new ArrayList<>();
         cardViewList.add(terminalPlayer);
@@ -66,11 +67,26 @@ public class SettingPlayerChooseActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int savedVal = SharedPreferencesUtil.getInt("play_qn", 16);
+        for (Map.Entry<String, Integer> entry : PlayQualitySettingActivity.qnMap.entrySet()) {
+            if (entry.getValue() == savedVal) {
+                ((TextView) findViewById(R.id.qn_tv)).setText(entry.getKey());
+                break;
+            }
+        }
+    }
+
+    private void handleQnChoose() {
+        startActivity(new Intent(this, PlayQualitySettingActivity.class));
+    }
+
     @SuppressLint("SuspiciousIndentation")
     @Override
     protected void onDestroy() {
         SharedPreferencesUtil.putString("player",playerList[checkPosition+1]);
-        SharedPreferencesUtil.putBoolean("high_res",sw_highres.isChecked());
         Log.e("debug-选择",playerList[checkPosition+1]);
 
         super.onDestroy();

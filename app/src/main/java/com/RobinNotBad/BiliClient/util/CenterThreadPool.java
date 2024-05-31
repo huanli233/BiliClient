@@ -27,13 +27,11 @@ public class CenterThreadPool {
     private static ExecutorService getInstance(){
         while(INSTANCE.get() == null){
             INSTANCE.compareAndSet(null, new ThreadPoolExecutor(
-                    1,
+                    getBestThreadPoolSize(),
                     getBestThreadPoolSize(),
                     60,
                     TimeUnit.SECONDS,
                     new ArrayBlockingQueue<>(20)
-
-
             ));
         }
         return INSTANCE.get();

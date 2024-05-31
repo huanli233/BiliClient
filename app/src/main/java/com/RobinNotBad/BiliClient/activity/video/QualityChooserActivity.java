@@ -70,7 +70,7 @@ public class QualityChooserActivity extends BaseActivity {
         });
         adapter.setOnItemClickListener((position -> {
             int qn = qns.get(position);
-            PlayerApi.startDownloadingVideo(this, videoInfo, position, qn);
+            PlayerApi.startDownloadingVideo(this, videoInfo, page, qn);
             finish();
         }));
 

@@ -8,6 +8,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListFragment;
+import com.RobinNotBad.BiliClient.adapter.DynamicHolder;
 import com.RobinNotBad.BiliClient.adapter.UserInfoAdapter;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
@@ -86,5 +87,11 @@ public class UserDynamicFragment extends RefreshListFragment {
                 setRefreshing(false);
             } catch (Exception e){loadFail(e);}
         });
+    }
+
+    public void onDynamicRemove(int position) {
+        try {
+            DynamicHolder.removeDynamicFromList(dynamicList, position, adapter);
+        } catch (Throwable ignored) {}
     }
 }

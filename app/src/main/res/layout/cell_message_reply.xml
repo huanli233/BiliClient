@@ -42,7 +42,7 @@
              android:textSize="11sp"
              android:layout_marginTop="4dp"
              android:layout_marginHorizontal="6dp"
-             android:text="点击跳转到视频" />
+             android:text="点击跳转" />
 
     </LinearLayout>
 

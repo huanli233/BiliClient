@@ -48,6 +48,10 @@ import com.google.android.material.card.MaterialCardView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //真正的视频详情页
 //2023-07-17
@@ -88,7 +92,18 @@ public class VideoInfoFragment extends Fragment {
                 String text = data.getStringExtra("text");
                 CenterThreadPool.run(() -> {
                     try {
-                        long dynId = DynamicApi.relayVideo(text, videoInfo.aid);
+                        long dynId;
+                        Map<String, Long> atUids = new HashMap<>();
+                        Pattern pattern = Pattern.compile("@(\\S+)\\s");
+                        Matcher matcher = pattern.matcher(text);
+                        while (matcher.find()) {
+                            String matchedString = matcher.group(1);
+                            long uid;
+                            if ((uid = DynamicApi.mentionAtFindUser(matchedString)) != -1) {
+                                atUids.put(matchedString, uid);
+                            }
+                        }
+                        dynId = DynamicApi.relayVideo(text, (atUids.isEmpty() ? null : atUids), videoInfo.aid);
                         if (!(dynId == -1)) {
                             // 迷惑逻辑。
                             if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.toast("转发成功~", requireContext()));
@@ -269,6 +284,8 @@ public class VideoInfoFragment extends Fragment {
             else description.setMaxLines(512);
             desc_expand = !desc_expand;
         });
+        ToolsUtil.setLink(description);
+        ToolsUtil.setAtLink(videoInfo.descAts, description);
 
         ToolsUtil.setCopy(description, requireContext());
         ToolsUtil.setCopy(bvidText, requireContext());
@@ -374,7 +391,7 @@ public class VideoInfoFragment extends Fragment {
 
         relay.setOnClickListener((view1) -> {
             Intent intent = new Intent();
-            intent.setClass(requireContext(), SendDynamicActivity.class);
+            intent.setClass(requireContext(), SendDynamicActivity.class).putExtra("video", videoInfo);
             writeDynamicLauncher.launch(intent);
         });
     }

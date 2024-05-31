@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class VideoInfo implements Serializable {    //自定义类需要加这个才能传输
 
@@ -20,6 +21,7 @@ public class VideoInfo implements Serializable {    //自定义类需要加这�
     public String timeDesc;
     public ArrayList<String> pagenames;
     public ArrayList<Long> cids;
+    public List<At> descAts;
 
     public boolean upowerExclusive; //充电专属
     public String argueMsg; //争议信息

@@ -1,9 +1,14 @@
 package com.RobinNotBad.BiliClient.adapter;
 
+import static com.RobinNotBad.BiliClient.util.ToolsUtil.toWan;
+
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +16,7 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
@@ -21,12 +27,15 @@ import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
+import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -34,20 +43,25 @@ import com.google.android.material.card.MaterialCardView;
 
 import org.json.JSONException;
 
-import java.lang.reflect.Field;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class DynamicHolder extends RecyclerView.ViewHolder{
+    public static final int GO_TO_INFO_REQUEST = 71;
     public TextView username,content,pubdate;
     public ImageView avatar;
     public ConstraintLayout extraCard;
     public View itemView;
-    public ImageView item_dynamic_share_img;
-    public TextView item_dynamic_share;
+    public ImageView item_dynamic_share_img, item_dynamic_delete_img;
+    public TextView item_dynamic_share, item_dynamic_delete;
+    public TextView likeCount;
     public boolean isChild;
     BaseActivity mActivity;
     public ActivityResultLauncher<Intent> relayDynamicLauncher;
+
+    private long longClickTime = -1;
 
     public DynamicHolder(@NonNull View itemView, BaseActivity mActivity, boolean isChild) {
         super(itemView);
@@ -68,13 +82,114 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
             extraCard = itemView.findViewById(R.id.extraCard);
             item_dynamic_share_img = itemView.findViewById(R.id.item_dynamic_share_img);
             item_dynamic_share = itemView.findViewById(R.id.item_dynamic_share);
+            likeCount = itemView.findViewById(R.id.likes);
+            item_dynamic_delete_img = itemView.findViewById(R.id.item_dynamic_delete_img);
+            item_dynamic_delete = itemView.findViewById(R.id.item_dynamic_delete);
             relayDynamicLauncher = mActivity.relayDynamicLauncher;
         }
     }
 
+    public static void removeDynamicFromList(List<Dynamic> dynamicList, int finalPosition, RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
+        dynamicList.remove(finalPosition);
+        adapter.notifyItemRemoved(finalPosition + 1);
+        adapter.notifyItemRangeChanged(finalPosition + 1, dynamicList.size() - finalPosition);
+    }
+
+    public static View.OnLongClickListener getDeleteListener(Activity dynamicActivity, List<Dynamic> dynamicList, int finalPosition, RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
+        return new View.OnLongClickListener() {
+            private int longClickPosition = -1;
+            private long longClickTime = -1;
+            @Override
+            public boolean onLongClick(View view) {
+                if (dynamicList.get(finalPosition).canDelete) {
+                    long currentTime = System.currentTimeMillis();
+                    if (longClickPosition == finalPosition && currentTime - longClickTime < 10000) {
+                        CenterThreadPool.run(() -> {
+                            try {
+                                int result = DynamicApi.deleteDynamic(dynamicList.get(finalPosition).dynamicId);
+                                if (result == 0) {
+                                    dynamicList.remove(finalPosition);
+                                    dynamicActivity.runOnUiThread(() -> {
+                                        adapter.notifyItemRemoved(finalPosition + 1);
+                                        adapter.notifyItemRangeChanged(finalPosition + 1, dynamicList.size() - finalPosition);
+                                        longClickPosition = -1;
+                                        MsgUtil.toast("删除成功~", dynamicActivity);
+                                    });
+                                } else {
+                                    String msg = "操作失败：" + result;
+                                    switch (result) {
+                                        case 500404:
+                                            msg = "已经删除过了哦~";
+                                            break;
+                                        case 500406:
+                                            msg = "不是自己的动态！";
+                                            break;
+                                    }
+                                    String finalMsg = msg;
+                                    dynamicActivity.runOnUiThread(() -> MsgUtil.toast(finalMsg, dynamicActivity));
+                                }
+                            } catch (IOException e) {
+                                dynamicActivity.runOnUiThread(() -> MsgUtil.err(e, dynamicActivity));
+                            }
+                        });
+                    } else {
+                        longClickPosition = finalPosition;
+                        longClickTime = currentTime;
+                        MsgUtil.toast("再次长按删除", dynamicActivity);
+                    }
+                }
+                return true;
+            }
+        };
+    }
+
+    public static View.OnLongClickListener getDeleteListener(Activity dynamicActivity, Dynamic dynamic) {
+        return new View.OnLongClickListener() {
+            private long longClickTime = -1;
+            @Override
+            public boolean onLongClick(View view) {
+                if (dynamic.canDelete) {
+                    long currentTime = System.currentTimeMillis();
+                    if (currentTime - longClickTime < 10000) {
+                        CenterThreadPool.run(() -> {
+                            try {
+                                int result = DynamicApi.deleteDynamic(dynamic.dynamicId);
+                                if (result == 0) {
+                                    dynamicActivity.runOnUiThread(() -> {
+                                        dynamicActivity.setResult(Activity.RESULT_OK, dynamicActivity.getIntent().getExtras() != null ? new Intent().putExtras(dynamicActivity.getIntent().getExtras()) : new Intent());
+                                        dynamicActivity.finish();
+                                        MsgUtil.toast("删除成功~", dynamicActivity);
+                                    });
+                                } else {
+                                    String msg = "操作失败：" + result;
+                                    switch (result) {
+                                        case 500404:
+                                            msg = "已经删除过了哦~";
+                                            break;
+                                        case 500406:
+                                            msg = "不是自己的动态！";
+                                            break;
+                                    }
+                                    String finalMsg = msg;
+                                    dynamicActivity.runOnUiThread(() -> MsgUtil.toast(finalMsg, dynamicActivity));
+                                }
+                            } catch (IOException e) {
+                                dynamicActivity.runOnUiThread(() -> MsgUtil.err(e, dynamicActivity));
+                            }
+                        });
+                    } else {
+                        longClickTime = currentTime;
+                        MsgUtil.toast("再次长按删除", dynamicActivity);
+                    }
+                }
+                return true;
+            }
+        };
+    }
 
     @SuppressLint("SetTextI18n")
     public void showDynamic(Dynamic dynamic, Context context, boolean clickable){    //公用的显示函数 这样修改和调用都方便
+        ToolsUtil.setCopy(content, context);
         username.setText(dynamic.userInfo.name);
         if(pubdate!=null) pubdate.setText(dynamic.pubTime);
         if(dynamic.content != null && !dynamic.content.isEmpty()) {
@@ -83,8 +198,12 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
             if (dynamic.emotes != null) {
                 CenterThreadPool.run(() -> {
                     try {
-                        SpannableString spannableString = EmoteUtil.textReplaceEmote(dynamic.content, dynamic.emotes, 1.0f, context);
-                        CenterThreadPool.runOnUiThread(() -> content.setText(spannableString));
+                        SpannableString spannableString = EmoteUtil.textReplaceEmote(dynamic.content, dynamic.emotes, 1.0f, context, content.getText());
+                        CenterThreadPool.runOnUiThread(() -> {
+                            content.setText(spannableString);
+                            ToolsUtil.setLink(content);
+                            ToolsUtil.setAtLink(dynamic.ats, content);
+                        });
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
@@ -94,6 +213,8 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                     }
                 });
             }
+            ToolsUtil.setLink(content);
+            ToolsUtil.setAtLink(dynamic.ats, content);
         } else content.setVisibility(View.GONE);
         Glide.with(context).load(GlideUtil.url(dynamic.userInfo.avatar))
                 .placeholder(R.mipmap.akari)
@@ -155,20 +276,26 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 break;
         }
 
-        if(clickable) {
+        if (clickable) {
             content.setMaxLines(5);
             if(dynamic.dynamicId != 0) {
                 (isChild ? itemView.findViewById(R.id.cardView) : itemView).setOnClickListener(view -> {
                     Intent intent = new Intent();
                     intent.setClass(context, DynamicInfoActivity.class);
                     intent.putExtra("id", dynamic.dynamicId);
-                    context.startActivity(intent);
+                    intent.putExtra("position", getAdapterPosition());
+                    if (context instanceof Activity) {
+                        ((Activity) context).startActivityForResult(intent, GO_TO_INFO_REQUEST);
+                    } else {
+                        context.startActivity(intent);
+                    }
                 });
+                content.setOnClickListener(view -> (isChild ? itemView.findViewById(R.id.cardView) : itemView).callOnClick());
             }
-        }
-        else {
+        } else {
             content.setMaxLines(999);
         }
+        content.setEllipsize(TextUtils.TruncateAt.END);
 
         View.OnClickListener onRelayClick = new View.OnClickListener() {
             @Override
@@ -186,6 +313,67 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
         if (item_dynamic_share != null && item_dynamic_share_img != null) {
             item_dynamic_share.setOnClickListener(onRelayClick);
             item_dynamic_share_img.setOnClickListener(onRelayClick);
+        }
+
+        View.OnClickListener onDeleteClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MsgUtil.toast("长按删除", context);
+            }
+        };
+        if (item_dynamic_delete != null && item_dynamic_delete_img != null) {
+            item_dynamic_delete.setOnClickListener(onDeleteClick);
+            item_dynamic_delete_img.setOnClickListener(onDeleteClick);
+            item_dynamic_delete.setVisibility(View.GONE);
+            item_dynamic_delete_img.setVisibility(View.GONE);
+        }
+
+        if (likeCount != null) {
+            if (dynamic.stats != null) {
+                if (dynamic.stats.liked){           //这里，还有下面，一定要加else！否则会导致错乱
+                    likeCount.setTextColor(Color.rgb(0xfe,0x67,0x9a));
+                    likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_liked),null,null,null);
+                } else {
+                    likeCount.setTextColor(Color.rgb(0xff,0xff,0xff));
+                    likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_like),null,null,null);
+                }
+                likeCount.setText(toWan(dynamic.stats.like));
+            } else {
+                likeCount.setVisibility(View.GONE);
+            }
+            likeCount.setOnClickListener(view -> CenterThreadPool.run(() -> {
+                if (!dynamic.stats.liked) {
+                    try {
+                        if (DynamicApi.likeDynamic(dynamic.dynamicId, true) == 0) {
+                            dynamic.stats.liked = true;
+                            ((Activity) context).runOnUiThread(() -> {
+                                MsgUtil.toast("点赞成功",context);
+                                likeCount.setText(String.valueOf(dynamic.stats.like + 1));
+                                likeCount.setTextColor(Color.rgb(0xfe,0x67,0x9a));
+                                likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_liked),null,null,null);
+                            });
+                        } else
+                            ((Activity) context).runOnUiThread(() -> MsgUtil.toast("点赞失败",context));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        if (DynamicApi.likeDynamic(dynamic.dynamicId, false) == 0) {
+                            dynamic.stats.liked = false;
+                            ((Activity) context).runOnUiThread(() -> {
+                                MsgUtil.toast("取消成功",context);
+                                likeCount.setText(String.valueOf(dynamic.stats.like));
+                                likeCount.setTextColor(Color.rgb(0xff,0xff,0xff));
+                                likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_like),null,null,null);
+                            });
+                        } else
+                            ((Activity) context).runOnUiThread(() -> MsgUtil.toast("取消失败",context));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }));
         }
     }
 }

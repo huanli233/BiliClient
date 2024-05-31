@@ -19,6 +19,5 @@ public class ReplyCardHolder extends RecyclerView.ViewHolder{
     }
     public void showReplyCard(Reply replyInfo){
         content.setText(ToolsUtil.htmlToString(replyInfo.message));
-        if(replyInfo.isDynamic) tiptext.setText("不支持查看动态");
     }
 }

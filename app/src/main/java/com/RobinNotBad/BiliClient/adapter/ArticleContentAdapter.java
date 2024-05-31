@@ -83,6 +83,8 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                         textView.setHeight(ToolsUtil.dp2px(6f,context));
                         break;
                 }
+                ToolsUtil.setCopy(context, textView);
+                ToolsUtil.setLink(textView);
                 break;
 
             case 1:
@@ -111,6 +113,8 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 TextView upName = holder.itemView.findViewById(R.id.upInfo_Name);
                 MaterialCardView upCard = holder.itemView.findViewById(R.id.upInfo);
 
+                ToolsUtil.setCopy(context, title);
+
                 upName.setText(articleInfo.upInfo.name);
                 if(articleInfo.banner.isEmpty()) cover.setVisibility(View.GONE);
                 else{
@@ -137,6 +141,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 TextView timeText = holder.itemView.findViewById(R.id.timeText);
                 TextView cvidText = holder.itemView.findViewById(R.id.cvidText);
                 cvidText.setText("cv" + articleInfo.id + " | " + articleInfo.wordCount + "字");
+                ToolsUtil.setCopy(cvidText, context, "cv" + articleInfo.id);
                 views.setText(ToolsUtil.toWan(articleInfo.stats.view) + "阅读");
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 timeText.setText(sdf.format(articleInfo.ctime * 1000));

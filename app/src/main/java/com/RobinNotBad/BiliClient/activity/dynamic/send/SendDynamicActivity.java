@@ -1,8 +1,11 @@
 package com.RobinNotBad.BiliClient.activity.dynamic.send;
 
+import static com.RobinNotBad.BiliClient.util.ToolsUtil.toWan;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,13 +25,16 @@ import com.RobinNotBad.BiliClient.adapter.VideoCardHolder;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
 
@@ -61,9 +67,13 @@ public class SendDynamicActivity extends BaseActivity {
 
         ConstraintLayout extraCard = findViewById(R.id.extraCard);
         Dynamic forward = (Dynamic) getIntent().getSerializableExtra("forward");
+        VideoInfo video = (VideoInfo) getIntent().getSerializableExtra("video");
         if (forward != null) {
             View childCard = View.inflate(this, R.layout.cell_dynamic_child, extraCard);
             showChildDyn(childCard, forward);
+        } else if (video != null) {
+            View view = LayoutInflater.from(this).inflate(R.layout.cell_video_list, extraCard);
+            showVideo(view, video);
         }
 
         send.setOnClickListener(view -> {
@@ -96,8 +106,12 @@ public class SendDynamicActivity extends BaseActivity {
             if (dynamic.emotes != null) {
                 CenterThreadPool.run(() -> {
                     try {
-                        SpannableString spannableString = EmoteUtil.textReplaceEmote(dynamic.content, dynamic.emotes, 1.0f, this);
-                        CenterThreadPool.runOnUiThread(() -> content.setText(spannableString));
+                        SpannableString spannableString = EmoteUtil.textReplaceEmote(dynamic.content, dynamic.emotes, 1.0f, this, content.getText());
+                        CenterThreadPool.runOnUiThread(() -> {
+                            content.setText(spannableString);
+                            ToolsUtil.setLink(content);
+                            ToolsUtil.setAtLink(dynamic.ats, content);
+                        });
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
@@ -108,6 +122,8 @@ public class SendDynamicActivity extends BaseActivity {
                 });
             }
         } else content.setVisibility(View.GONE);
+        ToolsUtil.setLink(content);
+        ToolsUtil.setAtLink(dynamic.ats, content);
         Glide.with(this).load(GlideUtil.url(dynamic.userInfo.avatar))
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
@@ -170,4 +186,38 @@ public class SendDynamicActivity extends BaseActivity {
             content.setMaxLines(999);
         }
     }
+
+    private void showVideo(View itemView, VideoInfo videoInfo) {
+        TextView title,upName,playTimes;
+        ImageView cover,playIcon,upIcon;
+        title = itemView.findViewById(R.id.listVideoTitle);
+        upName = itemView.findViewById(R.id.listUpName);
+        playTimes = itemView.findViewById(R.id.listPlayTimes);
+        cover = itemView.findViewById(R.id.listCover);
+        playIcon = itemView.findViewById(R.id.imageView3);
+        upIcon = itemView.findViewById(R.id.avatarIcon);
+
+        title.setText(ToolsUtil.htmlToString(videoInfo.title));
+        String upNameStr = videoInfo.staff.get(0).name;
+        if (upNameStr.isEmpty()){
+            upName.setVisibility(View.GONE);
+            upIcon.setVisibility(View.GONE);
+        }
+        else upName.setText(upNameStr);
+
+        // 很抽象的方法名
+        String playTimesStr = toWan(videoInfo.stats.view);
+        if(playTimesStr.isEmpty()){
+            playIcon.setVisibility(View.GONE);
+            playTimes.setVisibility(View.GONE);
+        }
+        else playTimes.setText(playTimesStr);
+
+        Glide.with(this).load(GlideUtil.url(videoInfo.cover))
+                .placeholder(R.mipmap.placeholder)
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, this))))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(cover);
+    }
+
 }
