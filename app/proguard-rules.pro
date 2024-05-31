@@ -33,3 +33,6 @@
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
+
+# 抛出异常时保留代码行号 
+-keepattributes SourceFile,LineNumberTable

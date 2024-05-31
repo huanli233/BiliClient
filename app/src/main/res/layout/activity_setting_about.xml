@@ -493,7 +493,7 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:textSize="13sp"
-                        android:text="更新日志"
+                        android:text="版本提醒"
                         android:layout_gravity="center" />
 
                     <TextView
@@ -501,8 +501,17 @@
                         android:layout_width="match_parent"
                         android:gravity="center"
                         android:textSize="11sp"
-                        android:layout_marginVertical="2dp"
-                        android:text="@string/update_log"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/update_tip"
+                        android:layout_gravity="center" />
+                    
+                    <TextView
+                        android:id="@+id/updatelog_view"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:textSize="11sp"
+                        android:layout_marginBottom="2dp"
                         android:layout_gravity="center" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

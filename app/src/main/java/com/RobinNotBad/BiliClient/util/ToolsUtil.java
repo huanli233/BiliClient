@@ -34,6 +34,8 @@ import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.model.At;
 
+import com.RobinNotBad.BiliClient.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -326,5 +328,11 @@ public class ToolsUtil {
             }
             return false;
         }
+    }
+    
+    public static String getUpdateLog(Context context){
+        String str = "";
+        for(String s : context.getResources().getStringArray(R.array.update_log_items)) str += s + "\n";
+        return str;
     }
 }

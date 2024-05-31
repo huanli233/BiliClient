@@ -41,5 +41,35 @@
     <string name="player_aliang_package">com.aliangmaker.media</string>
     <string name="player_mtv_package">com.xinxiangshicheng.wearbiliplayer.cn</string>
 
-    <string name="update_log">提示：当前为测试版本\n2.5.4更新内容：\n\n1.评论区可以切换排序和下拉刷新\n2.修复了部分手表上打开即崩溃的问题\n3.修复了私信报错问题，修复了消息页面的一处布局错误和显示错误，改动私信输入框\n4.对网络请求相关代码进行优化\n5.对列表和下拉刷新处理代码进行合并简化，对一些页面增加了加载转圈动画，修复了偶尔滑动无法继续加载的问题\n6.增加了争议信息显示\n7.实现了联合投稿UP主展示\n8.番剧视频自动跳转到番剧详情页\n9.点赞投币收藏的数量显示\n10.搜索历史记录\n11.部分文字超出长度时的跑马灯效果\n12.复制文本页面可选择复制的范围\n\n*我们已注意到部分用户出现个人主页打不开的情况，但很大的问题是我们开发团队里一个出现问题的都没有，导致修复困难（很抱歉，但是请等待后续更新TAT</string>
+    <string name="update_tip">当前版本为测试版</string>
+
+    //新增功能放到上面，修复问题放下面，方便用户看见
+    <string-array name="update_log_items">
+        <item>新增了视频清晰度的设置项</item>
+        <item>新增了转发动态功能</item>
+        <item>新增了发布动态功能</item>
+        <item>新增了视频争议信息的显示</item>
+        <item>新增了三连数量显示</item>
+        <item>新增了搜索历史记录</item>
+        <item>新增了文字超出长度时的跑马灯</item>
+        <item>新增了复制文本页面的选择复制范围</item>
+        <item>新增了自己发布的评论的删除按钮</item>
+        <item>新增了专栏的三连功能</item>
+        <item>实现了视频的转发功能</item>
+        <item>实现了动态点赞功能</item>
+        <item>实现了@的高亮</item>
+        <item>实现了视频评论区BV号、CV号和链接的点击跳转</item>
+        <item>实现了评论区的切换排序和下拉刷新</item>
+        <item>实现了联合投稿UP主们展示</item>
+        <item>实现了番剧视频自动跳转到番剧详情页</item>
+        <item>实现了消息中心更多类型的跳转</item>
+        <item>修复了发送评论后不实时显示的问题</item>
+        <item>修复了动态、专栏评论区的发送问题</item>
+        <item>修复了部分列表划到底部后无法继续加载的问题</item>
+        <item>修复了部分手表打开终端后立即崩溃的问题</item>
+        <item>修复了私信报错问题</item>
+        <item>修复了消息页面的一处布局错误和显示错误，并改动私信输入框</item>
+        <item>优化了网络请求相关代码</item>
+        <item>优化了列表和下拉刷新代码</item>
+    </string-array>
 </resources>

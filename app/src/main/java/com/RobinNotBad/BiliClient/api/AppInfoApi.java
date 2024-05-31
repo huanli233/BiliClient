@@ -12,6 +12,7 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -27,7 +28,7 @@ public class AppInfoApi {
             checkAnnouncement(context);
 
             if (SharedPreferencesUtil.getInt("app_version_last", 0) < version) {
-                MsgUtil.showText(context, "更新公告", context.getString(R.string.update_log));
+                MsgUtil.showText(context, "更新公告", context.getResources().getString(R.string.update_tip) + "\n\n更新日志：\n" + ToolsUtil.getUpdateLog(context));
                 SharedPreferencesUtil.putInt("app_version_last", version);
             }
 
