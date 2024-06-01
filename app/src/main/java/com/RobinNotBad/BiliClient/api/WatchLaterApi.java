@@ -24,19 +24,22 @@ public class WatchLaterApi {
 
         JSONObject result = NetWorkUtil.getJson(url);
         JSONObject data = result.getJSONObject("data");
-        JSONArray list = data.getJSONArray("list");
+
 
         ArrayList<VideoCard> videoCardList = new ArrayList<>();
-        for (int i = 0; i < list.length(); i++) {
-            JSONObject videoCard = list.getJSONObject(i);
-            long aid = videoCard.getLong("aid");
-            String bvid = videoCard.getString("bvid");
-            String title = videoCard.getString("title");
-            String cover = videoCard.getString("pic");
-            String upName = videoCard.getJSONObject("owner").getString("name");
-            long view = videoCard.getJSONObject("stat").getLong("view");
-            String viewStr = ToolsUtil.toWan(view) + "观看";
-            videoCardList.add(new VideoCard(title,upName,viewStr,cover,aid,bvid));
+        if(!data.isNull("list")){
+            JSONArray list = data.getJSONArray("list");
+            for (int i = 0; i < list.length(); i++) {
+                JSONObject videoCard = list.getJSONObject(i);
+                long aid = videoCard.getLong("aid");
+                String bvid = videoCard.getString("bvid");
+                String title = videoCard.getString("title");
+                String cover = videoCard.getString("pic");
+                String upName = videoCard.getJSONObject("owner").getString("name");
+                long view = videoCard.getJSONObject("stat").getLong("view");
+                String viewStr = ToolsUtil.toWan(view) + "观看";
+                videoCardList.add(new VideoCard(title,upName,viewStr,cover,aid,bvid));
+            }
         }
         return videoCardList;
     }

@@ -29,4 +29,7 @@
         <item name="statusBarBackground">@color/pink</item>
         <item name="colorOnPrimary">@color/textwhite</item>
     </style>
+    <style name="Theme.NoSwipe.AppCompat" parent="Theme.BiliClient">
+        <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">false</item>
+    </style>
 </resources>

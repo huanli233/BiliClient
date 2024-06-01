@@ -53,11 +53,6 @@ public class ArticleInfoActivity extends BaseActivity {
                 runOnUiThread(() -> {
                     ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
                     viewPager.setAdapter(vpfAdapter);
-
-                    if(!SharedPreferencesUtil.getBoolean("tutorial_article",false)){
-                        MsgUtil.showTutorial(this,"使用教程","此页面从左向右或从右向左滑动可以切换页面，第一页为专栏详情和内容，第二页为评论区",R.mipmap.tutorial_article);
-                        SharedPreferencesUtil.putBoolean("tutorial_article",true);
-                    }
                 });
             }catch (Exception e){
                 Log.wtf(TAG, e);

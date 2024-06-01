@@ -29,6 +29,7 @@ public class SharedPreferencesUtil
     public static String cookie_refresh = "cookie_refresh";
     public static String search_history = "search_history";
     public static String click_image_play_enable = "click_image_play_enable";
+    public static String tutorial_finished = "tutorial_finished";
 
 
     private static final SharedPreferences sharedPreferences = BiliTerminal.context.getSharedPreferences("default",Context.MODE_PRIVATE);

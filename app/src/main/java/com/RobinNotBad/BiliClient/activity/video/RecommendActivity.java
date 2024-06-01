@@ -1,11 +1,13 @@
 package com.RobinNotBad.BiliClient.activity.video;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
+import com.RobinNotBad.BiliClient.activity.tutorial.TutorialActivity;
 import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.RecommendApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
@@ -36,12 +38,13 @@ public class RecommendActivity extends RefreshMainActivity {
 
         setPageName("推荐");
 
-        if(!SharedPreferencesUtil.getBoolean("tutorial_recommend",false)){
-            MsgUtil.showTutorial(this,"使用教程","点击上方标题栏可以打开菜单\n\n*我知道你可能不喜欢强制看教程，但这是必要的，敬请谅解QwQ",R.mipmap.tutorial_recommend);
-            SharedPreferencesUtil.putBoolean("tutorial_recommend",true);
-        }
-
         refreshRecommend();
+
+        if(!SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.tutorial_finished,false)){
+            Intent intent = new Intent(this, TutorialActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

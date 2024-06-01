@@ -139,11 +139,6 @@ public class DynamicActivity extends RefreshMainActivity {
 
         setPageName("动态");
 
-        if(!SharedPreferencesUtil.getBoolean("tutorial_dynamic",false)){
-            MsgUtil.showTutorial(this,"使用教程","点击动态的文字部分可以查看动态详情，打开详情后左右滑动可以查看评论区（被转发的动态和投稿类动态不支持查看详情，暂不支持显示直播预约和专栏动态）",-1);
-            SharedPreferencesUtil.putBoolean("tutorial_dynamic",true);
-        }
-
         refreshDynamic();
     }
 

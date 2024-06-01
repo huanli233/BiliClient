@@ -49,11 +49,6 @@ public class UserInfoActivity extends BaseActivity {
         ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
 
         viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
-
-        if(!SharedPreferencesUtil.getBoolean("tutorial_user",false)){
-            MsgUtil.showTutorial(this,"使用教程","此页面从左向右或从右向左滑动可以切换页面，第一页为动态列表，第二页为视频列表，第三页为专栏列表\n登录后可以关注用户，关注过的用户会显示私信按钮\n点击动态的文字部分可以查看动态详情",R.mipmap.tutorial_user);
-            SharedPreferencesUtil.putBoolean("tutorial_user",true);
-        }
     }
 
     @Override

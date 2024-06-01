@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
+import com.RobinNotBad.BiliClient.activity.tutorial.TutorialActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -130,12 +131,7 @@ public class SettingMainActivity extends InstanceActivity {
         MaterialCardView reset_tutorial = findViewById(R.id.reset_tutorial);    //用于测试
         reset_tutorial.setOnClickListener(view -> {
             if(tutorialReset_clicked) {
-                SharedPreferencesUtil.putBoolean("tutorial_search", false);
-                SharedPreferencesUtil.putBoolean("tutorial_media", false);
-                SharedPreferencesUtil.putBoolean("tutorial_video", false);
-                SharedPreferencesUtil.putBoolean("tutorial_user", false);
-                SharedPreferencesUtil.putBoolean("tutorial_dynamic", false);
-                SharedPreferencesUtil.putBoolean("tutorial_article", false);
+                SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.tutorial_finished,false);
                 MsgUtil.toast("已经重置教程完成情况", this);
                 tutorialReset_clicked = false;
             }
@@ -149,7 +145,8 @@ public class SettingMainActivity extends InstanceActivity {
         MaterialCardView test = findViewById(R.id.test);    //用于测试
         test.setVisibility(View.GONE);
         test.setOnClickListener(view -> {
-//            throw new OutOfMemoryError("测试");
+//            Intent intent = new Intent(this, TutorialActivity.class);
+//            startActivity(intent);
             //MsgUtil.toast("喵~",this)
             //MsgUtil.showText(this,"test","你干嘛~哈哈~哎哟<extra_insert>{\"type\":\"video\",\"content\":\"BV1Bo4y1c7gW\",\"title\":\"纳西妲纳西妲纳西妲嘿嘿嘿\"}");
         });

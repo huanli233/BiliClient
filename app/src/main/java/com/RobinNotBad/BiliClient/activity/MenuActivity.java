@@ -108,11 +108,6 @@ public class MenuActivity extends BaseActivity {
             }
             finish();
         });
-
-        if(!SharedPreferencesUtil.getBoolean("tutorial_menu",false)){
-            MsgUtil.showTutorial(this,"使用教程","点击上方标题栏可以返回上一个页面",R.mipmap.tutorial_menu);
-            SharedPreferencesUtil.putBoolean("tutorial_menu",true);
-        }
     }
 
     private void killAndJump(int i){
