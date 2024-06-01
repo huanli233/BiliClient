@@ -115,8 +115,8 @@ public class AppInfoApi {
             post_data.put("device_sdk_version", Build.VERSION.SDK_INT);
             post_data.put("device_product",Build.PRODUCT);
             post_data.put("device_brand",Build.BRAND);
-
-            JSONObject res = new JSONObject(NetWorkUtil.post(url,post_data.toString(),customHeaders).body().string());
+            
+            JSONObject res = new JSONObject(NetWorkUtil.postJson(url,post_data.toString(),customHeaders).body().string());
             if(res.getInt("code") == 200) return "上传成功";
             else return res.getString("msg");
         }catch (Throwable e){

@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.google.android.material.button.MaterialButton;
 
 public class CatchActivity extends BaseActivity {
@@ -39,7 +40,7 @@ public class CatchActivity extends BaseActivity {
         stack_str.setSpan(new RelativeSizeSpan(0.85f),5,stack_str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
         stack_view.setText(stack_str);
 
-        ((MaterialButton)findViewById(R.id.upload_btn)).setOnClickListener(view -> Toast.makeText(this,AppInfoApi.uploadStack(stack),Toast.LENGTH_SHORT).show());
+        ((MaterialButton)findViewById(R.id.upload_btn)).setOnClickListener(view -> CenterThreadPool.run(() -> Toast.makeText(this,AppInfoApi.uploadStack(stack),Toast.LENGTH_SHORT).show()));
         ((MaterialButton)findViewById(R.id.exit_btn)).setOnClickListener(view -> System.exit(-1));
 
         SpannableString reason_str = null;
