@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
@@ -101,5 +102,24 @@ public class AppInfoApi {
             list.add(announcement);
         }
         return list;
+    }
+
+    public static boolean uploadStack(String stack){
+        //上传崩溃堆栈
+        try {
+            String url = "http://api.biliterminal.cn/terminal/upload/stack";
+
+            JSONObject post_data = new JSONObject();
+            post_data.put("stack",stack);
+            post_data.put("device_sdk_version", Build.VERSION.SDK_INT);
+            post_data.put("device_product",Build.PRODUCT);
+            post_data.put("device_brand",Build.BRAND);
+
+            NetWorkUtil.post(url,post_data.toString(),customHeaders);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }

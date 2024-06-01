@@ -331,7 +331,7 @@ public class ToolsUtil {
     public static String getUpdateLog(Context context){
         String str = "";
         String[] logItems = context.getResources().getStringArray(R.array.update_log_items);
-        for(int i = 0;i < logItems.length;i++) str += i + "." + logItems[i] + "\n";
+        for(int i = 0;i < logItems.length;i++) str += (i+1) + "." + logItems[i] + "\n";
         return str;
     }
 }

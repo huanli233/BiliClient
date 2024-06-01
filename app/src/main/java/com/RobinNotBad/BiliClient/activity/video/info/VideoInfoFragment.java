@@ -399,10 +399,12 @@ public class VideoInfoFragment extends Fragment {
 
     private SpannableString getTitleSpan() {
         String string = "";
-        if (videoInfo.isCooperation) string = "联合投稿";
+
+        //优先级要对
+        if (videoInfo.upowerExclusive) string = "充电专属";
         else if (videoInfo.isSteinGate) string = "互动视频";
         else if (videoInfo.is360) string = "全景视频";
-        else if (videoInfo.upowerExclusive) string = "充电专属";
+        else if (videoInfo.isCooperation) string = "联合投稿";
 
         if (string.isEmpty()) return new SpannableString(videoInfo.title);
 

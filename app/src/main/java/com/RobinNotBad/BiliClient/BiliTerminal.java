@@ -26,10 +26,8 @@ public class BiliTerminal extends Application {
         super.onCreate();
         if(context==null && getApplicationContext()!=null){
             context = getApplicationContext();
-            if(Build.VERSION.SDK_INT > 19) {
-                ErrorCatch errorCatch = ErrorCatch.getInstance();
-                errorCatch.init(context);
-            }
+            ErrorCatch errorCatch = ErrorCatch.getInstance();
+            errorCatch.init(context);
         }
     }
 

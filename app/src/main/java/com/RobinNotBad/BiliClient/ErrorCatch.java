@@ -2,9 +2,12 @@ package com.RobinNotBad.BiliClient;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 
+import com.RobinNotBad.BiliClient.activity.CatchActivity;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import java.io.PrintWriter;
@@ -32,8 +35,15 @@ public class ErrorCatch implements Thread.UncaughtExceptionHandler{
         PrintWriter printWriter = new PrintWriter(writer);
         throwable.printStackTrace(printWriter);
 
-        MsgUtil.showText(context,"错误报告","哔哩终端崩溃了，请将以下内容截图发送给开发团队（通常来说截取最前面一部分即可）：\n" + writer);
-        
+        try {
+            Intent intent = new Intent(context, CatchActivity.class);
+            intent.putExtra("stack",writer.toString());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //这句是安卓4必须有的
+            context.startActivity(intent);
+        }catch (Throwable t){
+            t.printStackTrace();
+        }
+
         throwable.printStackTrace();
         android.os.Process.killProcess(android.os.Process.myPid());
     }
