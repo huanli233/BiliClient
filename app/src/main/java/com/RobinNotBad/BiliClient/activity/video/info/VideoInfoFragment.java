@@ -409,7 +409,7 @@ public class VideoInfoFragment extends Fragment {
         if (string.isEmpty()) return new SpannableString(videoInfo.title);
 
         SpannableString titleStr = new SpannableString(" " + string + " " + videoInfo.title);
-        RadiusBackgroundSpan badgeBG = new RadiusBackgroundSpan(0, (int) getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.argb(0xfb, 0xfb, 0x87, 0x99));
+        RadiusBackgroundSpan badgeBG = new RadiusBackgroundSpan(0, (int) getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207,75,95));
         titleStr.setSpan(badgeBG, 0, string.length() + 2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         return titleStr;
     }
