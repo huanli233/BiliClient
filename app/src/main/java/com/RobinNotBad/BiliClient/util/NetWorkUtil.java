@@ -258,6 +258,7 @@ public class NetWorkUtil
     }
     public static class FormData {
         private final Map<String, String> data;
+        private boolean isUrlParam;
 
         public FormData() {
             data = new HashMap<>();
@@ -273,10 +274,17 @@ public class NetWorkUtil
             return this;
         }
 
+        public FormData setUrlParam(boolean isUrlParam) {
+            this.isUrlParam = isUrlParam;
+            return this;
+        }
+
         @NonNull
         @Override
         public String toString() {
             StringBuilder sb = new StringBuilder();
+
+            if (isUrlParam) sb.append("?");
 
             try {
                 for (String key : data.keySet()) {

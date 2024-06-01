@@ -16,6 +16,7 @@ import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.api.CookieRefreshApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.Cookies;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -56,10 +57,17 @@ public class SplashActivity extends Activity {
 
             if(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.setup,false)) {//判断是否设置完成
                 try {
-
-                    NetWorkUtil.get("https://www.bilibili.com", NetWorkUtil.webHeaders);
-
-                    if (SharedPreferencesUtil.getLong("mid", 0) != 0) checkCookie();
+                    Cookies cookies = new Cookies(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
+                    boolean needGetWebBuvid = !cookies.containsKey("buvid3");
+                    if (SharedPreferencesUtil.getLong("mid", 0) != 0) {
+                        checkCookie();
+                        if (needGetWebBuvid) {
+                            NetWorkUtil.get("https://www.bilibili.com", NetWorkUtil.webHeaders);
+                        }
+                    } else {
+                        // [开发者]RobinNotBad: 如果提前不请求bilibili.com，未登录时的推荐有概率一直返回同样的内容
+                        NetWorkUtil.get("https://www.bilibili.com", NetWorkUtil.webHeaders);
+                    }
 
                     Intent intent = new Intent();
                     intent.setClass(SplashActivity.this, RecommendActivity.class);   //已登录且联网，去首页
