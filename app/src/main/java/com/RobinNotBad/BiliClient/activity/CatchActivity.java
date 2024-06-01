@@ -40,7 +40,10 @@ public class CatchActivity extends BaseActivity {
         stack_str.setSpan(new RelativeSizeSpan(0.85f),5,stack_str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
         stack_view.setText(stack_str);
 
-        ((MaterialButton)findViewById(R.id.upload_btn)).setOnClickListener(view -> CenterThreadPool.run(() -> Toast.makeText(this,AppInfoApi.uploadStack(stack),Toast.LENGTH_SHORT).show()));
+        ((MaterialButton)findViewById(R.id.upload_btn)).setOnClickListener(view -> CenterThreadPool.run(() -> {
+            String res = AppInfoApi.uploadStack(stack);
+            runOnUiThread(() -> Toast.makeText(this,res,Toast.LENGTH_SHORT).show());
+        }));
         ((MaterialButton)findViewById(R.id.exit_btn)).setOnClickListener(view -> System.exit(-1));
 
         SpannableString reason_str = null;
