@@ -63,6 +63,8 @@ dependencies {
     //noinspection GradleCompatible
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation 'org.greenrobot:eventbus:3.2.0'
+    // Geetest
+    implementation 'com.geetest.sensebot:sensebot:4.4.2.1'
     //danmaku
     //implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
     //implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
