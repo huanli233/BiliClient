@@ -22,7 +22,7 @@ public class IntroductionActivity extends BaseActivity {
         confirm.setOnClickListener(view -> {
             Intent intent = new Intent();
             if(Build.VERSION.SDK_INT>=19) {
-                intent.setClass(IntroductionActivity.this, QRLoginActivity.class);   //去扫码登录页面
+                intent.setClass(IntroductionActivity.this, LoginActivity.class);   //去扫码登录页面
             }
             else{
                 intent.setClass(IntroductionActivity.this, SpecialLoginActivity.class);   //4.4以下系统去特殊登录页面

@@ -14,7 +14,7 @@ import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
 import com.RobinNotBad.BiliClient.activity.message.MessageActivity;
 import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
-import com.RobinNotBad.BiliClient.activity.settings.QRLoginActivity;
+import com.RobinNotBad.BiliClient.activity.settings.LoginActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingMainActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SpecialLoginActivity;
 import com.RobinNotBad.BiliClient.activity.user.MySpaceActivity;
@@ -79,7 +79,7 @@ public class MenuActivity extends BaseActivity {
             findViewById(R.id.menu_message).setVisibility(View.GONE);
             findViewById(R.id.menu_login).setOnClickListener(view -> {
                 Intent intent1 = new Intent();
-                if(Build.VERSION.SDK_INT>=19) intent1.setClass(this,QRLoginActivity.class);
+                if(Build.VERSION.SDK_INT>=19) intent1.setClass(this, LoginActivity.class);
                 else{
                     intent1.setClass(this, SpecialLoginActivity.class);
                     intent1.putExtra("login",true);

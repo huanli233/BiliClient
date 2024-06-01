@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.activity.settings.QRLoginActivity;
+import com.RobinNotBad.BiliClient.activity.settings.LoginActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SpecialLoginActivity;
 import com.RobinNotBad.BiliClient.activity.user.favorite.FavoriteFolderListActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
@@ -123,7 +123,7 @@ public class MySpaceActivity extends InstanceActivity {
                             SharedPreferencesUtil.removeValue(SharedPreferencesUtil.refresh_token);
                             SharedPreferencesUtil.removeValue(SharedPreferencesUtil.cookie_refresh);
                             MsgUtil.toast("账号已退出",this);
-                            Intent intent = new Intent(this, QRLoginActivity.class);
+                            Intent intent = new Intent(this, LoginActivity.class);
                             startActivity(intent);
                             finish();
                         }else MsgUtil.toast("再点一次退出登录！",this);

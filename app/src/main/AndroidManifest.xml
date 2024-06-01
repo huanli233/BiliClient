@@ -9,6 +9,12 @@
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-sdk tools:overrideLibrary="com.geetest.sdk" />
+    <!-- Geetest -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
 
     <application
         android:name=".BiliTerminal"
@@ -303,7 +309,7 @@
             android:label="推荐"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.settings.QRLoginActivity"
+            android:name=".activity.settings.LoginActivity"
             android:exported="true"
             android:label="登录"
             android:screenOrientation="portrait" />
