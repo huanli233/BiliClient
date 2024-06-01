@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,15 +34,12 @@ public class CatchActivity extends BaseActivity {
         String stack = intent.getStringExtra("stack");
         if(stack == null) finish();
 
-        SpannableString stack_str = new SpannableString("错误堆栈\n" + stack);
-        StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
-        stack_str.setSpan(styleSpan,0,4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        SpannableString stack_str = new SpannableString("错误堆栈：\n" + stack);
+        stack_str.setSpan(new StyleSpan(Typeface.BOLD),0,5, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        stack_str.setSpan(new RelativeSizeSpan(0.85f),5,stack_str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
         stack_view.setText(stack_str);
 
-        ((MaterialButton)findViewById(R.id.upload_btn)).setOnClickListener(view -> {
-            if(AppInfoApi.uploadStack(stack)) Toast.makeText(this,"上传成功",Toast.LENGTH_SHORT).show();
-            else Toast.makeText(this,"上传失败，您可以选择截图",Toast.LENGTH_SHORT).show();
-        });
+        ((MaterialButton)findViewById(R.id.upload_btn)).setOnClickListener(view -> Toast.makeText(this,AppInfoApi.uploadStack(stack),Toast.LENGTH_SHORT).show());
         ((MaterialButton)findViewById(R.id.exit_btn)).setOnClickListener(view -> System.exit(-1));
 
         SpannableString reason_str = null;
@@ -50,12 +48,13 @@ public class CatchActivity extends BaseActivity {
         else if(stack.contains("java.lang.OutOfMemoryError")) reason_str = new SpannableString("可能的崩溃原因：\n内存溢出");
 
         if(reason_str != null) {
-            reason_str.setSpan(styleSpan,0,8,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            reason_str.setSpan(new StyleSpan(Typeface.BOLD),0,8,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            reason_str.setSpan(new RelativeSizeSpan(1.08f),8,reason_str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
             reason_view.setText(reason_str);
         } else reason_view.setText("未知的崩溃原因");
 
         stack_view.setOnClickListener(view -> {
-            if(openStack) stack_view.setMaxLines(9999);
+            if(openStack) stack_view.setMaxLines(200);
             else stack_view.setMaxLines(5);
             openStack = !openStack;
         });

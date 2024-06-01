@@ -17,7 +17,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:layout_marginBottom="1dp"
                 android:text="哔哩终端崩溃了"
                 android:gravity="center"
                 android:textSize="18sp" />
@@ -55,8 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
-                    android:gravity="center"
-                    android:text="错误堆栈\nxxx.xxx.xxx.xxxException\nAt ...\nAt ...\nAt ...\nAt ...\nAt ..."
+                    android:text="错误堆栈：\nxxx.xxx.xxx.xxxException\nAt ...\nAt ...\nAt ...\nAt ...\nAt ..."
                     android:maxLines="5"
                     android:ellipsize="end"
                     android:textSize="13sp"
@@ -65,7 +63,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="点击可以展开错误堆栈"
+                android:text="点击展开错误堆栈"
                 android:alpha="0.7"
                 android:gravity="center"
                 android:textSize="11sp" />
@@ -73,19 +71,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="你可以上传报错，或将错误堆栈截图给开发者"
+                android:text="你可以上传，或将错误堆栈截图给开发者"
                 android:alpha="0.85"
                 android:gravity="center"
                 android:textSize="12sp" />
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/upload_btn"
-                android:text="上传日志"
+                android:text="上传堆栈"
                 android:layout_marginTop="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/exit_btn"
-                android:text="退出应用"
+                android:text="退出捕捉"
                 android:layout_marginBottom="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

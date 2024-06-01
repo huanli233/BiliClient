@@ -14,6 +14,7 @@ import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -104,7 +105,7 @@ public class AppInfoApi {
         return list;
     }
 
-    public static boolean uploadStack(String stack){
+    public static String uploadStack(String stack){
         //上传崩溃堆栈
         try {
             String url = "http://api.biliterminal.cn/terminal/upload/stack";
@@ -115,11 +116,12 @@ public class AppInfoApi {
             post_data.put("device_product",Build.PRODUCT);
             post_data.put("device_brand",Build.BRAND);
 
-            NetWorkUtil.post(url,post_data.toString(),customHeaders);
-            return true;
-        }catch (Exception e){
+            JSONObject res = new JSONObject(NetWorkUtil.post(url,post_data.toString(),customHeaders).body().string());
+            if(res.getInt("code") == 200) return "上传成功";
+            else return res.getString("msg");
+        }catch (Throwable e){
             e.printStackTrace();
-            return false;
+            return "上传失败";
         }
     }
 }
