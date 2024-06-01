@@ -55,18 +55,23 @@ public class SplashActivity extends Activity {
             //FileUtil.clearCache(this);  //先清个缓存（为了防止占用过大）
             //不需要了，我把大部分图片的硬盘缓存都关闭了，只有表情包保留，这样既可以缩减缓存占用又能在一定程度上减少流量消耗
 
+            long lastGetWebBuvidTime = SharedPreferencesUtil.getLong(SharedPreferencesUtil.LAST_GET_WEB_BUVID_TIME, -1);
             if(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.setup,false)) {//判断是否设置完成
                 try {
+                    long currentTime = System.currentTimeMillis();
                     Cookies cookies = new Cookies(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
-                    boolean needGetWebBuvid = !cookies.containsKey("buvid3");
+                    // 未登录或无buvid时请求 上次获取超过3天也请求 虽然可能不会更换？
+                    boolean needGetWebBuvid = !cookies.containsKey("buvid3") || lastGetWebBuvidTime == -1 || (lastGetWebBuvidTime < currentTime && currentTime - lastGetWebBuvidTime >= (3 * 24 * 60 * 60 * 100));
                     if (SharedPreferencesUtil.getLong("mid", 0) != 0) {
                         checkCookie();
                         if (needGetWebBuvid) {
                             NetWorkUtil.get("https://www.bilibili.com", NetWorkUtil.webHeaders);
+                            SharedPreferencesUtil.putLong(SharedPreferencesUtil.LAST_GET_WEB_BUVID_TIME, currentTime);
                         }
                     } else {
                         // [开发者]RobinNotBad: 如果提前不请求bilibili.com，未登录时的推荐有概率一直返回同样的内容
                         NetWorkUtil.get("https://www.bilibili.com", NetWorkUtil.webHeaders);
+                        SharedPreferencesUtil.putLong(SharedPreferencesUtil.LAST_GET_WEB_BUVID_TIME, currentTime);
                     }
 
                     Intent intent = new Intent();
