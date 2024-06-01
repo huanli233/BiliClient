@@ -9,7 +9,7 @@
         android:id="@+id/splashText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="正在连接..."
+        android:text="正在获取登录配置..."
         android:layout_centerInParent="true"/>
 
 </RelativeLayout>

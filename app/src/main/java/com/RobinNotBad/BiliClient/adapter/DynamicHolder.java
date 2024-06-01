@@ -54,7 +54,6 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
     public ImageView avatar;
     public ConstraintLayout extraCard;
     public View itemView;
-    public ImageView item_dynamic_share_img, item_dynamic_delete_img;
     public TextView item_dynamic_share, item_dynamic_delete;
     public TextView likeCount;
     public boolean isChild;
@@ -80,10 +79,8 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
             content = itemView.findViewById(R.id.content);
             avatar = itemView.findViewById(R.id.avatar);
             extraCard = itemView.findViewById(R.id.extraCard);
-            item_dynamic_share_img = itemView.findViewById(R.id.item_dynamic_share_img);
             item_dynamic_share = itemView.findViewById(R.id.item_dynamic_share);
             likeCount = itemView.findViewById(R.id.likes);
-            item_dynamic_delete_img = itemView.findViewById(R.id.item_dynamic_delete_img);
             item_dynamic_delete = itemView.findViewById(R.id.item_dynamic_delete);
             relayDynamicLauncher = mActivity.relayDynamicLauncher;
         }
@@ -310,10 +307,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 relayDynamicLauncher.launch(intent);
             }
         };
-        if (item_dynamic_share != null && item_dynamic_share_img != null) {
-            item_dynamic_share.setOnClickListener(onRelayClick);
-            item_dynamic_share_img.setOnClickListener(onRelayClick);
-        }
+        if (item_dynamic_share != null) item_dynamic_share.setOnClickListener(onRelayClick);
 
         View.OnClickListener onDeleteClick = new View.OnClickListener() {
             @Override
@@ -321,11 +315,9 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 MsgUtil.toast("长按删除", context);
             }
         };
-        if (item_dynamic_delete != null && item_dynamic_delete_img != null) {
+        if (item_dynamic_delete != null) {
             item_dynamic_delete.setOnClickListener(onDeleteClick);
-            item_dynamic_delete_img.setOnClickListener(onDeleteClick);
             item_dynamic_delete.setVisibility(View.GONE);
-            item_dynamic_delete_img.setVisibility(View.GONE);
         }
 
         if (likeCount != null) {

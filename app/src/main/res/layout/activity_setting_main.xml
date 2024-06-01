@@ -134,14 +134,14 @@
                         app:layout_constraintStart_toEndOf="@+id/playerSetting_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
                         android:id="@+id/playerSetting_desc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
-                        android:lines="1"
-                        android:text="切换播放器、清晰度"
+                        android:singleLine="true"
+                        android:text="切换播放器、视频清晰度"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -205,14 +205,14 @@
                         app:layout_constraintStart_toEndOf="@+id/clientPlayerSetting_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
                         android:id="@+id/clientPlayerSetting_desc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
-                        android:lines="1"
-                        android:text="哔哩终端内置播放器"
+                        android:singleLine="true"
+                        android:text="哔哩终端内置播放器设置项"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -275,13 +275,13 @@
                         app:layout_constraintStart_toEndOf="@+id/uiSetting_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
                         android:id="@+id/uiSetting_desription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
-                        android:lines="1"
+                        android:singleLine="true"
                         android:text="界面大小、边距等"
                         android:textColor="#fff"
                         android:textSize="11sp"
@@ -346,14 +346,14 @@
                         app:layout_constraintStart_toEndOf="@+id/prefSetting_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
                         android:id="@+id/prefSetting_desription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
-                        android:lines="1"
-                        android:text="或许对你有帮助"
+                        android:singleLine="true"
+                        android:text="寻找某些功能时看看这里吧"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -488,14 +488,14 @@
                         app:layout_constraintStart_toEndOf="@+id/about_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
                         android:id="@+id/about_desription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
-                        android:lines="1"
-                        android:text="作者的话、联系方式"
+                        android:singleLine="true"
+                        android:text="版本号、开发团队、联系方式等"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -548,7 +548,7 @@
                     android:layout_height="35sp"
                     android:layout_marginHorizontal="8dp"
                     android:gravity="center_vertical"
-                    android:text="重新查看使用教程"
+                    android:text="重置教程完成进度"
                     android:textAlignment="textStart"
                     android:textSize="13sp"
                     tools:ignore="RtlCompat" />

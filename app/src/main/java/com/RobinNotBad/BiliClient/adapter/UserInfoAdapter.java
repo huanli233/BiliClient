@@ -83,12 +83,8 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
 
             View.OnLongClickListener onDeleteLongClick = DynamicHolder.getDeleteListener((Activity) context, dynamicList, realPosition, this);
-            dynamicHolder.item_dynamic_delete_img.setOnLongClickListener(onDeleteLongClick);
             dynamicHolder.item_dynamic_delete.setOnLongClickListener(onDeleteLongClick);
-            if (dynamicList.get(realPosition).canDelete) {
-                dynamicHolder.item_dynamic_delete.setVisibility(View.VISIBLE);
-                dynamicHolder.item_dynamic_delete_img.setVisibility(View.VISIBLE);
-            }
+            if (dynamicList.get(realPosition).canDelete) dynamicHolder.item_dynamic_delete.setVisibility(View.VISIBLE);
         }
         if (holder instanceof UserInfoHolder){
             UserInfoHolder userInfoHolder = (UserInfoHolder) holder;

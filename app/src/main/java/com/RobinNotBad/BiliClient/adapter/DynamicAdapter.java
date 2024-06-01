@@ -83,12 +83,8 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             int finalPosition = position;
             View.OnLongClickListener onDeleteLongClick = DynamicHolder.getDeleteListener(dynamicActivity, dynamicList, finalPosition, this);
-            dynamicHolder.item_dynamic_delete_img.setOnLongClickListener(onDeleteLongClick);
             dynamicHolder.item_dynamic_delete.setOnLongClickListener(onDeleteLongClick);
-            if (dynamicList.get(position).canDelete) {
-                dynamicHolder.item_dynamic_delete.setVisibility(View.VISIBLE);
-                dynamicHolder.item_dynamic_delete_img.setVisibility(View.VISIBLE);
-            }
+            if (dynamicList.get(position).canDelete) dynamicHolder.item_dynamic_delete.setVisibility(View.VISIBLE);
         }
     }
 

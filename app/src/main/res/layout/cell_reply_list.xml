@@ -68,7 +68,7 @@
         android:id="@+id/dislikeBtn"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="6dp"
         android:adjustViewBounds="true"
         android:alpha="0.7"
         android:scaleType="centerInside"
@@ -79,29 +79,21 @@
         app:layout_constraintVertical_bias="0.5" />
 
     <!-- 过于使的布局 但是我不会写 -->
-    <ImageView
-        android:id="@+id/item_reply_delete_img"
-        android:layout_width="18dp"
-        android:layout_margin="3dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:adjustViewBounds="true"
-        android:src="@drawable/icon_delete"
-        app:layout_constraintStart_toEndOf="@id/dislikeBtn"
-        app:layout_constraintTop_toBottomOf="@id/imageCard" />
-
+    <!-- Re:给你修了下 -->
+    <!-- MMP哪个B在代码里设置了点赞的颜色害得我排除半天色调不对的问题 -->
     <TextView
         android:id="@+id/item_reply_delete"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:alpha="0.7"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:alpha="0.75"
         android:gravity="center_vertical"
-        android:textColor="#a2a2a2"
         android:text="删除"
-        app:layout_constraintStart_toEndOf="@+id/item_reply_delete_img"
-        app:layout_constraintTop_toTopOf="@+id/item_reply_delete_img"
-        app:layout_constraintBottom_toBottomOf="@+id/item_reply_delete_img"
-        android:textSize="11sp" />
+        android:textSize="13sp"
+        android:textColor="#fff"
+        app:drawableStartCompat="@drawable/icon_delete"
+        app:layout_constraintStart_toEndOf="@+id/dislikeBtn"
+        app:layout_constraintTop_toTopOf="@+id/likes" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/imageCard"

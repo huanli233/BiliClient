@@ -141,13 +141,11 @@ public class ToolsUtil {
     }
 
     public static void setCopy(TextView textView, Context context){
-        setCopy(textView, context, null);
+        setCopy(textView, context, null); //直接传getText()会导致文本变化后点击不了
     }
 
     public static void setCopy(Context context, TextView... textViews){
-        for (TextView textView : textViews) {
-            setCopy(textView, context, null);
-        }
+        for (TextView textView : textViews) setCopy(textView, context);
     }
 
     public static void setLink(TextView... textViews) {
@@ -329,10 +327,11 @@ public class ToolsUtil {
             return false;
         }
     }
-    
+
     public static String getUpdateLog(Context context){
         String str = "";
-        for(String s : context.getResources().getStringArray(R.array.update_log_items)) str += s + "\n";
+        String[] logItems = context.getResources().getStringArray(R.array.update_log_items);
+        for(int i = 0;i < logItems.length;i++) str += i + "." + logItems[i] + "\n";
         return str;
     }
 }

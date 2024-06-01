@@ -41,7 +41,7 @@
     <string name="player_aliang_package">com.aliangmaker.media</string>
     <string name="player_mtv_package">com.xinxiangshicheng.wearbiliplayer.cn</string>
 
-    <string name="update_tip">当前版本为测试版</string>
+    <string name="update_tip">本次更新感谢huanli233的贡献\n当前版本为测试版</string>
 
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
