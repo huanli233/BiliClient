@@ -33,12 +33,12 @@ public class SearchFragment extends Fragment {
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.argb(190,230,42,42));
 
         TextView text1_view = view.findViewById(R.id.text1);
-        SpannableString text1 = new SpannableString("这是终端的搜索，搜索结果可以左右滑动\n第一页是视频列表\n第二页是专栏列表\n第二页是专栏列表");
+        SpannableString text1 = new SpannableString("这是终端的搜索，搜索结果可以左右滑动\n第一页是视频列表\n第二页是专栏列表\n第三页是用户列表");
         text1.setSpan(foregroundColorSpan,8,19,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         //多个加粗只能每次new一个StyleSpan
         text1.setSpan(new StyleSpan(Typeface.BOLD),8,19, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         text1.setSpan(new StyleSpan(Typeface.BOLD),23,28, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        text1.setSpan(new StyleSpan(Typeface.BOLD),33,36, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        text1.setSpan(new StyleSpan(Typeface.BOLD),32,36, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         text1.setSpan(new StyleSpan(Typeface.BOLD),41,45, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         text1_view.setText(text1);
     }

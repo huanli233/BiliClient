@@ -36,8 +36,8 @@ public class ArticleFragment extends Fragment {
         SpannableString text1 = new SpannableString("这是专栏，这个页面也可以左右滑动\n第一页是专栏详情和内容\n第二页是评论区");
         text1.setSpan(foregroundColorSpan,7,14,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         //多个加粗只能每次new一个StyleSpan
-        text1.setSpan(new StyleSpan(Typeface.BOLD),7,14, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        text1.setSpan(new StyleSpan(Typeface.BOLD),31,34, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        text1.setSpan(new StyleSpan(Typeface.BOLD),9,16, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        text1.setSpan(new StyleSpan(Typeface.BOLD),33,36, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         text1_view.setText(text1);
     }
 }
