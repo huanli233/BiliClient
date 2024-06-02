@@ -14,18 +14,11 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
 import com.RobinNotBad.BiliClient.adapter.DynamicAdapter;
 import com.RobinNotBad.BiliClient.adapter.DynamicHolder;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import org.json.JSONException;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -131,7 +124,7 @@ public class DynamicActivity extends RefreshMainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setMenuClick(4);
+        setMenuClick();
         Log.e("debug","进入动态页");
 
         setOnRefreshListener(this::refreshDynamic);

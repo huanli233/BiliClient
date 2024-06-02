@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.activity.tutorial.TutorialActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -26,7 +25,7 @@ public class SettingMainActivity extends InstanceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_main);
-        setMenuClick(8);
+        setMenuClick();
         Log.e("debug","进入设置页");
 
         //登录

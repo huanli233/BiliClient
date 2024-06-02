@@ -5,14 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
 import com.RobinNotBad.BiliClient.activity.tutorial.TutorialActivity;
 import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.RecommendApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
@@ -30,7 +28,7 @@ public class RecommendActivity extends RefreshMainActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setMenuClick(0);
+        setMenuClick();
         Log.e("debug","进入推荐页");
 
         setOnRefreshListener(this::refreshRecommend);

@@ -39,7 +39,7 @@ public class MySpaceActivity extends InstanceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myspace);
-        setMenuClick(5);
+        setMenuClick();
         Log.e("debug","进入个人页");
 
         userAvatar = findViewById(R.id.userAvatar);

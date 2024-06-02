@@ -32,7 +32,7 @@ public class MessageActivity extends InstanceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        setMenuClick(6);
+        setMenuClick();
                 
         MaterialCardView reply = findViewById(R.id.reply);
         reply.setOnClickListener(view -> {

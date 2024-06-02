@@ -53,7 +53,7 @@ public class SearchActivity extends InstanceActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_search);
-        setMenuClick(3);
+        setMenuClick();
         Log.e("debug", "进入搜索页");
 
         handler = new Handler();

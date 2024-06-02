@@ -39,7 +39,7 @@ public class PreciousActivity extends InstanceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_main_refresh);
-        setMenuClick(2);
+        setMenuClick();
         Log.e("debug","进入入站必刷页");
 
         recyclerView = findViewById(R.id.recyclerView);
