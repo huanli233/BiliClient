@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.TextView;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
@@ -25,6 +27,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -74,8 +79,31 @@ public class SplashActivity extends Activity {
                         SharedPreferencesUtil.putLong(SharedPreferencesUtil.LAST_GET_WEB_BUVID_TIME, currentTime);
                     }
 
+                    int firstItemId = -1;
+
+                    String sortConf = SharedPreferencesUtil.getString(SharedPreferencesUtil.MENU_SORT, "");
+                    if (!TextUtils.isEmpty(sortConf)) {
+                        String[] splitName = sortConf.split(";");
+                        for (String name : splitName) {
+                            if (!MenuActivity.btnNames.containsKey(name)) {
+                                for (Map.Entry<String, Pair<String, Integer>> entry : MenuActivity.btnNames.entrySet()) {
+                                    firstItemId = entry.getValue().second;
+                                    break;
+                                }
+                            } else {
+                                firstItemId = Objects.requireNonNull(MenuActivity.btnNames.get(name)).second;
+                            }
+                            break;
+                        }
+                    } else {
+                        for (Map.Entry<String, Pair<String, Integer>> entry : MenuActivity.btnNames.entrySet()) {
+                            firstItemId = entry.getValue().second;
+                            break;
+                        }
+                    }
                     Intent intent = new Intent();
-                    intent.setClass(SplashActivity.this, RecommendActivity.class);   //已登录且联网，去首页
+                    Class<?> activityClass = MenuActivity.activityClasses.get(firstItemId);
+                    intent.setClass(SplashActivity.this, activityClass != null ? activityClass : RecommendActivity.class);   //已登录且联网，去首页
                     intent.putExtra("from", R.id.menu_recommend);
                     startActivity(intent);
 

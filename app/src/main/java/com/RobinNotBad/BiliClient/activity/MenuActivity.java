@@ -42,7 +42,7 @@ import java.util.Objects;
 public class MenuActivity extends BaseActivity {
 
     private int from;
-    private static final Map<Integer, Class<? extends InstanceActivity>> activityClasses = new HashMap<>() {{
+    public static final Map<Integer, Class<? extends InstanceActivity>> activityClasses = new HashMap<>() {{
         put(R.id.menu_recommend, RecommendActivity.class);
         put(R.id.menu_popular, PopularActivity.class);
         put(R.id.menu_precious, PreciousActivity.class);
