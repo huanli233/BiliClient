@@ -102,7 +102,12 @@ public class MenuActivity extends BaseActivity {
         layout.removeAllViews();
         for (int i = 0; i < cardList.size(); i++) {
             MaterialButton button = cardList.get(i);
-            layout.addView(button);
+            try {
+                layout.addView(button);
+            } catch (IllegalStateException e) {
+                layout.removeView(button);
+                layout.addView(button);
+            }
             button.setOnClickListener(view -> killAndJump(view.getId()));
         }
 
