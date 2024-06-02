@@ -109,6 +109,11 @@
             android:label="内置播放器设置"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.settings.SortSettingActivity"
+            android:exported="true"
+            android:label="菜单排序设置"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.settings.UIPreviewActivity"
             android:exported="true"
             android:label="界面预览"

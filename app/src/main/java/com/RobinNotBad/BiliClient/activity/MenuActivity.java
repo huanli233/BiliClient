@@ -4,8 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
@@ -28,8 +31,10 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 //菜单页面
 //2023-07-14
@@ -37,7 +42,7 @@ import java.util.Map;
 public class MenuActivity extends BaseActivity {
 
     private int from;
-    private final Map<Integer, Class<? extends InstanceActivity>> activityClasses = new HashMap<>() {{
+    private static final Map<Integer, Class<? extends InstanceActivity>> activityClasses = new HashMap<>() {{
         put(R.id.menu_recommend, RecommendActivity.class);
         put(R.id.menu_popular, PopularActivity.class);
         put(R.id.menu_precious, PreciousActivity.class);
@@ -47,6 +52,17 @@ public class MenuActivity extends BaseActivity {
         put(R.id.menu_message, MessageActivity.class);
         put(R.id.menu_local, LocalListActivity.class);
         put(R.id.menu_settings, SettingMainActivity.class);
+    }};
+
+    public static final Map<String, Pair<String, Integer>> btnNames = new LinkedHashMap<>() {{
+        put("recommend", new Pair<>("推荐", R.id.menu_recommend));
+        put("popular", new Pair<>("热门", R.id.menu_popular));
+        put("precious", new Pair<>("入站必刷", R.id.menu_precious));
+        put("search", new Pair<>("搜索", R.id.menu_search));
+        put("dynamic", new Pair<>("动态", R.id.menu_dynamic));
+        put("myspace", new Pair<>("我的", R.id.menu_myspace));
+        put("local", new Pair<>("缓存", R.id.menu_local));
+        put("settings", new Pair<>("设置", R.id.menu_settings));
     }};
 
     @SuppressLint("MissingInflatedId")
@@ -61,18 +77,34 @@ public class MenuActivity extends BaseActivity {
 
         findViewById(R.id.top).setOnClickListener(view -> finish());
 
-        List<MaterialButton> cardList = new ArrayList<>() {{
-            add(findViewById(R.id.menu_recommend));
-            add(findViewById(R.id.menu_popular));
-            add(findViewById(R.id.menu_precious));
-            add(findViewById(R.id.menu_search));
-            add(findViewById(R.id.menu_dynamic));
-            add(findViewById(R.id.menu_myspace));
-            add(findViewById(R.id.menu_message));
-            add(findViewById(R.id.menu_local));
-            add(findViewById(R.id.menu_settings));
-            add(findViewById(R.id.menu_exit));
-        }};
+        List<MaterialButton> cardList;
+
+        String sortConf = SharedPreferencesUtil.getString(SharedPreferencesUtil.MENU_SORT, "");
+        if (!TextUtils.isEmpty(sortConf)) {
+            cardList = new ArrayList<>();
+            String[] splitName = sortConf.split(";");
+            for (String name : splitName) {
+                if (!btnNames.containsKey(name)) {
+                    cardList = getDefaultSortList();
+                    break;
+                } else {
+                    int id = Objects.requireNonNull(btnNames.get(name)).second;
+                    cardList.add(findViewById(id));
+                }
+            }
+        } else {
+            cardList = getDefaultSortList();
+        }
+
+        LinearLayout layout = findViewById(R.id.menu_layout);
+        cardList.add(0, findViewById(R.id.menu_login));
+        cardList.add(findViewById(R.id.menu_exit));
+        layout.removeAllViews();
+        for (int i = 0; i < cardList.size(); i++) {
+            MaterialButton button = cardList.get(i);
+            layout.addView(button);
+            button.setOnClickListener(view -> killAndJump(view.getId()));
+        }
 
         if(SharedPreferencesUtil.getLong("mid",0) == 0) {
             findViewById(R.id.menu_myspace).setVisibility(View.GONE);
@@ -80,7 +112,7 @@ public class MenuActivity extends BaseActivity {
             findViewById(R.id.menu_message).setVisibility(View.GONE);
             findViewById(R.id.menu_login).setOnClickListener(view -> {
                 Intent intent1 = new Intent();
-                if(Build.VERSION.SDK_INT>=19) intent1.setClass(this, LoginActivity.class);
+                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT) intent1.setClass(this, LoginActivity.class);
                 else{
                     intent1.setClass(this, SpecialLoginActivity.class);
                     intent1.putExtra("login",true);
@@ -96,17 +128,10 @@ public class MenuActivity extends BaseActivity {
         if(!SharedPreferencesUtil.getBoolean("menu_precious",false))
             findViewById(R.id.menu_precious).setVisibility(View.GONE);
 
-        for (int i = 0; i < cardList.size(); i++) {
-            int finalI = i;
-            cardList.get(i).setOnClickListener(view -> killAndJump(view.getId()));
-        }
-        
         //我求求你了退出按钮能用吧....
         findViewById(R.id.menu_exit).setOnClickListener(view -> {
-            for(int j = 0;j<activityClasses.size();j++){
-                InstanceActivity instance = BiliTerminal.instance;
-                if(instance != null && !instance.isDestroyed()) instance.finish();
-            }
+            InstanceActivity instance = BiliTerminal.instance;
+            if(instance != null && !instance.isDestroyed()) instance.finish();
             finish();
         });
     }
@@ -122,6 +147,21 @@ public class MenuActivity extends BaseActivity {
             startActivity(intent);
         }
         finish();
+    }
+
+    private List<MaterialButton> getDefaultSortList() {
+        return new ArrayList<>() {{
+            add(findViewById(R.id.menu_recommend));
+            add(findViewById(R.id.menu_popular));
+            add(findViewById(R.id.menu_precious));
+            add(findViewById(R.id.menu_search));
+            add(findViewById(R.id.menu_dynamic));
+            add(findViewById(R.id.menu_myspace));
+            add(findViewById(R.id.menu_message));
+            add(findViewById(R.id.menu_local));
+            add(findViewById(R.id.menu_settings));
+            add(findViewById(R.id.menu_exit));
+        }};
     }
 
 }
