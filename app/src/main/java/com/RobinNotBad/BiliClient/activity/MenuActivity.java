@@ -46,7 +46,7 @@ public class MenuActivity extends BaseActivity {
         put(R.id.menu_recommend, RecommendActivity.class);
         put(R.id.menu_popular, PopularActivity.class);
         put(R.id.menu_precious, PreciousActivity.class);
-        put(R.id.menu_search, DynamicActivity.class);
+        put(R.id.menu_search, SearchActivity.class);
         put(R.id.menu_dynamic, DynamicActivity.class);
         put(R.id.menu_myspace, MySpaceActivity.class);
         put(R.id.menu_message, MessageActivity.class);
