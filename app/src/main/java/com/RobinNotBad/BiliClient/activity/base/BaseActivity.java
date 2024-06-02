@@ -117,6 +117,8 @@ public class BaseActivity extends AppCompatActivity {
     public void setDensity(int targetDensityDpi) {
         Resources resources = getResources();
 
+        if (resources.getConfiguration().densityDpi == targetDensityDpi) return;
+
         Configuration configuration = resources.getConfiguration();
         configuration.densityDpi = targetDensityDpi;
         configuration.fontScale = 1f;

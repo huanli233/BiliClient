@@ -76,6 +76,7 @@ public class SplashActivity extends Activity {
 
                     Intent intent = new Intent();
                     intent.setClass(SplashActivity.this, RecommendActivity.class);   //已登录且联网，去首页
+                    intent.putExtra("from", R.id.menu_recommend);
                     startActivity(intent);
 
                     CenterThreadPool.run(() -> AppInfoApi.check(SplashActivity.this));

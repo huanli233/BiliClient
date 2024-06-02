@@ -27,7 +27,9 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //菜单页面
 //2023-07-14
@@ -35,17 +37,16 @@ import java.util.List;
 public class MenuActivity extends BaseActivity {
 
     private int from;
-
-    private final List<Class<? extends InstanceActivity>> classList = new ArrayList<Class<? extends InstanceActivity>>(){{
-        add(RecommendActivity.class);
-        add(PopularActivity.class);
-        add(PreciousActivity.class);
-        add(SearchActivity.class);
-        add(DynamicActivity.class);
-        add(MySpaceActivity.class);
-        add(MessageActivity.class);
-        add(LocalListActivity.class);
-        add(SettingMainActivity.class);
+    private final Map<Integer, Class<? extends InstanceActivity>> activityClasses = new HashMap<>() {{
+        put(R.id.menu_recommend, RecommendActivity.class);
+        put(R.id.menu_popular, PopularActivity.class);
+        put(R.id.menu_precious, PreciousActivity.class);
+        put(R.id.menu_search, DynamicActivity.class);
+        put(R.id.menu_dynamic, DynamicActivity.class);
+        put(R.id.menu_myspace, MySpaceActivity.class);
+        put(R.id.menu_message, MessageActivity.class);
+        put(R.id.menu_local, LocalListActivity.class);
+        put(R.id.menu_settings, SettingMainActivity.class);
     }};
 
     @SuppressLint("MissingInflatedId")
@@ -60,7 +61,7 @@ public class MenuActivity extends BaseActivity {
 
         findViewById(R.id.top).setOnClickListener(view -> finish());
 
-        List<MaterialButton> cardList = new ArrayList<MaterialButton>() {{
+        List<MaterialButton> cardList = new ArrayList<>() {{
             add(findViewById(R.id.menu_recommend));
             add(findViewById(R.id.menu_popular));
             add(findViewById(R.id.menu_precious));
@@ -97,12 +98,12 @@ public class MenuActivity extends BaseActivity {
 
         for (int i = 0; i < cardList.size(); i++) {
             int finalI = i;
-            cardList.get(i).setOnClickListener(view -> killAndJump(finalI));
+            cardList.get(i).setOnClickListener(view -> killAndJump(view.getId()));
         }
         
         //我求求你了退出按钮能用吧....
         findViewById(R.id.menu_exit).setOnClickListener(view -> {
-            for(int j = 0;j<classList.size();j++){
+            for(int j = 0;j<activityClasses.size();j++){
                 InstanceActivity instance = BiliTerminal.instance;
                 if(instance != null && !instance.isDestroyed()) instance.finish();
             }
@@ -111,14 +112,14 @@ public class MenuActivity extends BaseActivity {
     }
 
     private void killAndJump(int i){
-        if (i <= classList.size() && i != from){
+        if (activityClasses.containsKey(i) && i != from) {
             InstanceActivity instance = BiliTerminal.instance;
             if(instance != null && !instance.isDestroyed()) instance.finish();
-            if(i != classList.size()) {
-                Intent intent = new Intent();
-                intent.setClass(MenuActivity.this, classList.get(i));
-                startActivity(intent);
-            }
+
+            Intent intent = new Intent();
+            intent.setClass(MenuActivity.this, activityClasses.get(i));
+            intent.putExtra("from", i);
+            startActivity(intent);
         }
         finish();
     }

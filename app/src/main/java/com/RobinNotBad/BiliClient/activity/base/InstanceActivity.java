@@ -14,11 +14,11 @@ public class InstanceActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
-    public void setMenuClick(int from){
+    public void setMenuClick() {
         findViewById(R.id.top).setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setClass(this, MenuActivity.class);
-            intent.putExtra("from",from);
+            if (getIntent().hasExtra("from")) intent.putExtra("from", getIntent().getIntExtra("from", 0));
             startActivity(intent);
         });
     }
