@@ -340,7 +340,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                             dynamic.stats.liked = true;
                             ((Activity) context).runOnUiThread(() -> {
                                 MsgUtil.toast("点赞成功",context);
-                                likeCount.setText(String.valueOf(dynamic.stats.like + 1));
+                                likeCount.setText(toWan(dynamic.stats.like + 1));
                                 likeCount.setTextColor(Color.rgb(0xfe,0x67,0x9a));
                                 likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_liked),null,null,null);
                             });
@@ -355,7 +355,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                             dynamic.stats.liked = false;
                             ((Activity) context).runOnUiThread(() -> {
                                 MsgUtil.toast("取消成功",context);
-                                likeCount.setText(String.valueOf(dynamic.stats.like));
+                                likeCount.setText(toWan(dynamic.stats.like));
                                 likeCount.setTextColor(Color.rgb(0xff,0xff,0xff));
                                 likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_like),null,null,null);
                             });
