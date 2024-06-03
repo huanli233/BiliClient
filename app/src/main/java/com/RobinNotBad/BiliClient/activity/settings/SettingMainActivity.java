@@ -130,10 +130,10 @@ public class SettingMainActivity extends InstanceActivity {
             startActivity(intent);
         });
 
-        MaterialCardView reset_tutorial = findViewById(R.id.reset_tutorial);    //用于测试
+        MaterialCardView reset_tutorial = findViewById(R.id.reset_tutorial);
         reset_tutorial.setOnClickListener(view -> {
             if(tutorialReset_clicked) {
-                SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.tutorial_finished,false);
+                SharedPreferencesUtil.removeValue(SharedPreferencesUtil.tutorial_version);
                 MsgUtil.toast("已经重置教程完成情况", this);
                 tutorialReset_clicked = false;
             }

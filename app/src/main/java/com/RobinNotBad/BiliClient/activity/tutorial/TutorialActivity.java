@@ -18,6 +18,8 @@ import java.util.List;
 public class TutorialActivity extends BaseActivity {
     private List<Fragment> fragmentList;
     VideoReplyFragment replyFragment;
+    
+    public static int tutorial_version = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

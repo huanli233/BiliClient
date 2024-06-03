@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.settings.SetupUIActivity;
+import com.RobinNotBad.BiliClient.activity.tutorial.TutorialActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
@@ -101,11 +102,17 @@ public class SplashActivity extends Activity {
                             break;
                         }
                     }
-                    Intent intent = new Intent();
-                    Class<?> activityClass = MenuActivity.activityClasses.get(firstItemId);
-                    intent.setClass(SplashActivity.this, activityClass != null ? activityClass : RecommendActivity.class);   //已登录且联网，去首页
-                    intent.putExtra("from", R.id.menu_recommend);
-                    startActivity(intent);
+                        
+                    if(SharedPreferencesUtil.getInt(SharedPreferencesUtil.tutorial_version,0) < TutorialActivity.tutorial_version){
+                        Intent intent = new Intent(this, TutorialActivity.class);
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent();
+                        Class<?> activityClass = MenuActivity.activityClasses.get(firstItemId);
+                        intent.setClass(SplashActivity.this, activityClass != null ? activityClass : RecommendActivity.class);
+                        intent.putExtra("from", R.id.menu_recommend);
+                        startActivity(intent);
+                    }
 
                     CenterThreadPool.run(() -> AppInfoApi.check(SplashActivity.this));
 

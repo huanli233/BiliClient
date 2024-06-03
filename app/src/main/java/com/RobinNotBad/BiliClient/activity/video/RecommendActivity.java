@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
-import com.RobinNotBad.BiliClient.activity.tutorial.TutorialActivity;
 import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.RecommendApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
@@ -37,12 +36,6 @@ public class RecommendActivity extends RefreshMainActivity {
         setPageName("推荐");
 
         refreshRecommend();
-
-        if(!SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.tutorial_finished,false)){
-            Intent intent = new Intent(this, TutorialActivity.class);
-            startActivity(intent);
-            finish();
-        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

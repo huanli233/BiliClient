@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  * 被 luern0313 创建于 2020/5/4.
- * #以下代码来源于腕上哔哩的开源项目，有修改。感谢开源者做出的贡献！
+ * #以下代码部分来源于腕上哔哩的开源项目，有修改。感谢开源者做出的贡献！
  */
 public class SharedPreferencesUtil
 {
@@ -31,7 +31,7 @@ public class SharedPreferencesUtil
     public static String cookie_refresh = "cookie_refresh";
     public static String search_history = "search_history";
     public static String click_image_play_enable = "click_image_play_enable";
-    public static String tutorial_finished = "tutorial_finished";
+    public static String tutorial_version = "tutorial_version";
 
 
     private static final SharedPreferences sharedPreferences = BiliTerminal.context.getSharedPreferences("default",Context.MODE_PRIVATE);
