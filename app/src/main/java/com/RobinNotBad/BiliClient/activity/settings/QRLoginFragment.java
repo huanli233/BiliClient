@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.constraintlayout.widget.Guideline;
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,7 @@ import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
+import com.RobinNotBad.BiliClient.api.CookiesApi;
 import com.RobinNotBad.BiliClient.api.LoginApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -120,6 +122,7 @@ public class QRLoginFragment extends Fragment {
 
         CenterThreadPool.run(() ->{
             try{
+                CookiesApi.checkCookies();
                 requireActivity().runOnUiThread(() -> scanStat.setText("正在获取二维码"));
                 QRImage = LoginApi.getLoginQR();
 
@@ -194,6 +197,11 @@ public class QRLoginFragment extends Fragment {
                             else SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup,true);
 
                             NetWorkUtil.refreshHeaders();
+
+                            int activeResult = CookiesApi.activeCookieInfo();
+                            if (activeResult != 0) {
+                                Toast.makeText(requireContext(), "警告：激活Cookies失败", Toast.LENGTH_SHORT).show();
+                            }
 
                             Intent intent = new Intent();
                             intent.setClass(requireContext(), SplashActivity.class);

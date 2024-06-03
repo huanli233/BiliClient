@@ -14,26 +14,21 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.Inflater;
 
-import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okhttp3.internal.http.RetryAndFollowUpInterceptor;
 
 /**
  * 被 luern0313 创建于 2019/10/13.
@@ -111,7 +106,7 @@ public class NetWorkUtil
         return response;
     }
 
-    public static Response post(String url, String data, ArrayList<String> headers, String contentType) throws IOException
+    public static Response post(String url, String data, List<String> headers, String contentType) throws IOException
     {
         Log.e("debug-post","----------------");
         Log.e("debug-post-url",url);
@@ -132,11 +127,11 @@ public class NetWorkUtil
         return response;
     }
 
-    public static Response post(String url, String data, ArrayList<String> headers) throws IOException {
+    public static Response post(String url, String data, List<String> headers) throws IOException {
         return post(url, data, headers, "application/x-www-form-urlencoded");
     }
 
-    public static Response postJson(String url, String data, ArrayList<String> headers) throws IOException {
+    public static Response postJson(String url, String data, List<String> headers) throws IOException {
         return post(url, data, headers, "application/json");
     }
 
