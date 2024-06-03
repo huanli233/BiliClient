@@ -52,8 +52,8 @@ public class SortSettingActivity extends BaseActivity {
         Toast.makeText(this, "拖动以排序~", Toast.LENGTH_SHORT).show();
 
         String sortConf = SharedPreferencesUtil.getString(SharedPreferencesUtil.MENU_SORT, "");
-        if (!TextUtils.isEmpty(sortConf)) {
-            String[] splitName = sortConf.split(";");
+        String[] splitName;
+        if (!TextUtils.isEmpty(sortConf) && (splitName = sortConf.split(";")).length == MenuActivity.btnNames.size()) {
             for (String name : splitName) {
                 if (!MenuActivity.btnNames.containsKey(name)) {
                     data.clear();

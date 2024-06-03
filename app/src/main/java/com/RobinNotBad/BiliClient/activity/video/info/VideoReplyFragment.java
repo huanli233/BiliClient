@@ -29,10 +29,6 @@ public class VideoReplyFragment extends RefreshListFragment {
     protected ReplyAdapter replyAdapter;
     public int replyType = ReplyApi.REPLY_TYPE_VIDEO;
 
-    public VideoReplyFragment() {
-
-    }
-
     public static VideoReplyFragment newInstance(long aid, int type) {
         VideoReplyFragment fragment = new VideoReplyFragment();
         Bundle args = new Bundle();

@@ -61,6 +61,7 @@ public class MenuActivity extends BaseActivity {
         put("search", new Pair<>("搜索", R.id.menu_search));
         put("dynamic", new Pair<>("动态", R.id.menu_dynamic));
         put("myspace", new Pair<>("我的", R.id.menu_myspace));
+        put("message", new Pair<>("消息", R.id.menu_message));
         put("local", new Pair<>("缓存", R.id.menu_local));
         put("settings", new Pair<>("设置", R.id.menu_settings));
     }};
@@ -83,13 +84,17 @@ public class MenuActivity extends BaseActivity {
         if (!TextUtils.isEmpty(sortConf)) {
             cardList = new ArrayList<>();
             String[] splitName = sortConf.split(";");
-            for (String name : splitName) {
-                if (!btnNames.containsKey(name)) {
-                    cardList = getDefaultSortList();
-                    break;
-                } else {
-                    int id = Objects.requireNonNull(btnNames.get(name)).second;
-                    cardList.add(findViewById(id));
+            if (splitName.length != btnNames.size()) {
+                cardList = getDefaultSortList();
+            } else {
+                for (String name : splitName) {
+                    if (!btnNames.containsKey(name)) {
+                        cardList = getDefaultSortList();
+                        break;
+                    } else {
+                        int id = Objects.requireNonNull(btnNames.get(name)).second;
+                        cardList.add(findViewById(id));
+                    }
                 }
             }
         } else {
