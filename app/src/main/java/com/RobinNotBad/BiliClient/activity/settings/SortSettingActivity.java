@@ -47,7 +47,9 @@ public class SortSettingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting_sort);
+        setContentView(R.layout.activity_simple_list);
+        
+        setPageName("菜单排序");
 
         Toast.makeText(this, "拖动以排序~", Toast.LENGTH_SHORT).show();
 

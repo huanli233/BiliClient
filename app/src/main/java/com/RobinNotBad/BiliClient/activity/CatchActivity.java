@@ -47,13 +47,12 @@ public class CatchActivity extends BaseActivity {
         ((MaterialButton)findViewById(R.id.exit_btn)).setOnClickListener(view -> System.exit(-1));
 
         SpannableString reason_str = null;
-        if(stack.contains("java.lang.IndexOutOfBoundsException")) reason_str = new SpannableString("可能的崩溃原因：\n滑太快啦");
+        if(stack.contains("java.lang.IndexOutOfBoundsException")) reason_str = new SpannableString("可能的崩溃原因：\n滑动速度太快或触发了列表bug");
         else if(stack.contains("org.json.JSONException")) reason_str = new SpannableString("可能的崩溃原因：\n数据解析错误");
-        else if(stack.contains("java.lang.OutOfMemoryError")) reason_str = new SpannableString("可能的崩溃原因：\n内存溢出");
+        else if(stack.contains("java.lang.OutOfMemoryError")) reason_str = new SpannableString("可能的崩溃原因：\n内存溢出，这在小内存设备上很正常");
 
         if(reason_str != null) {
-            reason_str.setSpan(new StyleSpan(Typeface.BOLD),0,8,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            reason_str.setSpan(new RelativeSizeSpan(1.08f),8,reason_str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            reason_str.setSpan(new StyleSpan(Typeface.BOLD),8,reason_str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
             reason_view.setText(reason_str);
         } else reason_view.setText("未知的崩溃原因");
 

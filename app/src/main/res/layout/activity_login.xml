@@ -123,7 +123,7 @@
                     android:layout_height="35sp"
                     android:layout_marginHorizontal="@dimen/activity_padding_horizontal"
                     android:gravity="center_vertical"
-                    android:text="但是我拒绝"
+                    android:text="跳过登录"
                     android:textAlignment="textStart"
                     android:textSize="13sp"
                     android:visibility="visible"

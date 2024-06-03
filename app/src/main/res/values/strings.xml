@@ -57,6 +57,7 @@
         <item>新增了复制文本页面的选择复制范围</item>
         <item>新增了自己发布的评论的删除按钮</item>
         <item>新增了专栏的三连功能</item>
+        <item>新增了菜单排序功能</item>
         <item>实现了视频的转发功能</item>
         <item>实现了动态点赞功能</item>
         <item>实现了@的高亮</item>
@@ -74,6 +75,7 @@
         <item>修复了私信报错问题</item>
         <item>修复了消息页面的一处布局错误和显示错误，并改动私信输入框</item>
         <item>优化了网络请求相关代码</item>
+        <item>优化了进入哔哩终端时的逻辑</item>
         <item>优化了列表和下拉刷新代码</item>
     </string-array>
 </resources>
