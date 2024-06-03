@@ -95,7 +95,7 @@ public class CookiesApi {
                 .put("key_id", "ec02")
                 .put("hexsign", o)
                 .put("context[ts]", String.valueOf(ts))
-                .put("csrf", SharedPreferencesUtil.getString("csrf", ""))
+                .put("csrf", "")
                 .toString()).body()).string());
         if (result.has("data") && !result.isNull("data")) {
             JSONObject data = result.getJSONObject("data");
@@ -157,7 +157,7 @@ public class CookiesApi {
         }
 
         // bili_ticket
-        if (!cookies.containsKey("bili_ticket" ) || !cookies.containsKey("bili_ticket_expires")) {
+//        if (!cookies.containsKey("bili_ticket" ) || !cookies.containsKey("bili_ticket_expires")) {
             try {
                 Pair<String, Integer> bili_ticket = genBiliTicket();
                 NetWorkUtil.putCookie("bili_ticket", bili_ticket.first);
@@ -167,7 +167,7 @@ public class CookiesApi {
             } catch (InvalidKeyException e) {
                 throw new RuntimeException(e);
             }
-        }
+//        }
 
         // Others
         for (Map.Entry<String, String> entry : otherCookieMap.entrySet()) {
