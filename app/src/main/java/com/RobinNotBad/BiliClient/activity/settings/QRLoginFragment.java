@@ -122,7 +122,7 @@ public class QRLoginFragment extends Fragment {
 
         CenterThreadPool.run(() ->{
             try{
-                CookiesApi.checkCookies();
+                CookiesApi.activeCookieInfo();
                 requireActivity().runOnUiThread(() -> scanStat.setText("正在获取二维码"));
                 QRImage = LoginApi.getLoginQR();
 
