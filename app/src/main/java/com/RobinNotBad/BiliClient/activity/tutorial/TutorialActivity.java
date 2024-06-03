@@ -12,6 +12,8 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,8 @@ public class TutorialActivity extends BaseActivity {
         setPageName("教程");
 
         findViewById(R.id.top).setOnClickListener(view -> Toast.makeText(this,"看完教程吧",Toast.LENGTH_SHORT).show());
+
+        if(SharedPreferencesUtil.getInt(SharedPreferencesUtil.tutorial_version,-114) != -114) Toast.makeText(this,"教程已更新",Toast.LENGTH_SHORT).show();
 
         fragmentList = new ArrayList<>(8);
         fragmentList.add(new MainFragment());
