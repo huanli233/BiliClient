@@ -241,6 +241,39 @@ public class NetWorkUtil
         }
     }
 
+    /**
+     * 存储单个Cookie
+     * @param key 键
+     * @param val 值
+     */
+    public static void putCookie(String key, String val) {
+        synchronized (NetWorkUtil.class) {
+            Cookies cookies = new Cookies(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
+            cookies.set(key, val);
+            SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies.toString());
+        }
+    }
+
+    /**
+     * 存储Cookies（覆盖写入）
+     * @param cookies cookies
+     */
+    public static void setCookies(Cookies cookies) {
+        synchronized (NetWorkUtil.class) {
+            SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies.toString());
+        }
+    }
+
+    /**
+     * 获取存储的Cookies
+     * @return 存储的Cookies
+     */
+    public static Cookies getCookies() {
+        synchronized (NetWorkUtil.class) {
+            return new Cookies(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
+        }
+    }
+
     public static final String USER_AGENT_WEB = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.160 Safari/537.36";
     public static ArrayList<String> webHeaders = new ArrayList<>() {{
         add("Cookie");

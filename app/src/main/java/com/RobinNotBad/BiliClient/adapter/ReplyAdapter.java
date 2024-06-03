@@ -278,6 +278,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                         notifyItemRangeChanged(position, replyList.size() - realPosition);
                                         longClickPosition = -1;
                                         MsgUtil.toast("删除成功~", context);
+                                        if (position == 0 && isDetail && context instanceof Activity) {
+                                            ((Activity) context).finish();
+                                        }
                                     });
                                 } else {
                                     String msg = "操作失败：" + result;
