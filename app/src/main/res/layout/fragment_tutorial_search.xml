@@ -30,9 +30,11 @@
                 android:layout_height="wrap_content"
                 android:text="进入搜索页面时会显示搜索记录，搜索后点击搜索框也会弹出搜索记录"
                 android:textSize="12sp" />
-            <ImageView
+            <androidx.constraintlayout.utils.widget.ImageFilterView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                app:round="@dimen/card_round"
                 android:src="@mipmap/tutorial_search" />
             <TextView
                 android:layout_width="match_parent"

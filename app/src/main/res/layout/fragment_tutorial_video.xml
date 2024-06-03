@@ -46,9 +46,11 @@
                 android:textStyle="bold"
                 android:text="推荐使用内置播放器"
                 android:textSize="12sp" />
-            <ImageView
+            <androidx.constraintlayout.utils.widget.ImageFilterView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                app:round="@dimen/card_round"
                 android:src="@mipmap/tutorial_video" />
             <TextView
                 android:layout_width="match_parent"

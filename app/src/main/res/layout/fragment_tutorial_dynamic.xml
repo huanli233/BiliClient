@@ -35,9 +35,11 @@
                 android:layout_height="wrap_content"
                 android:text="哔哩终端暂不支持查看直播"
                 android:textSize="12sp" />
-            <ImageView
+            <androidx.constraintlayout.utils.widget.ImageFilterView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                app:round="@dimen/card_round"
                 android:src="@mipmap/tutorial_dynamic" />
             <TextView
                 android:layout_width="match_parent"
