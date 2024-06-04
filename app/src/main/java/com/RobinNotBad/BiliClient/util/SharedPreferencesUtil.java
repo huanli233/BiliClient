@@ -15,7 +15,6 @@ public class SharedPreferencesUtil
 {
     public static final String LINK_ENABLE = "link_enable";
     public static final String DISABLE_NETWORK_CHECK = "disable_network_check";
-    public static final String LAST_GET_WEB_BUVID_TIME = "last_get_web_buvid_time";
     public static final String MENU_SORT = "menu_sort";
 
     public static String cookies = "cookies";

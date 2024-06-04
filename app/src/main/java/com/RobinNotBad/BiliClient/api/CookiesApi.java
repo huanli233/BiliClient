@@ -89,14 +89,17 @@ public class CookiesApi {
     public static Pair<String, Integer> genBiliTicket() throws IOException, NoSuchAlgorithmException, InvalidKeyException, JSONException {
         int ts = (int) (System.currentTimeMillis() / 1000);
         String o = hmacSha256("XgwSnGZ1p", "ts" + ts);
-        Log.d("huanli233", String.valueOf(ts));
         String url = "https://api.bilibili.com/bapis/bilibili.api.ticket.v1.Ticket/GenWebTicket";
-        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.postJson(url, new JSONObject()
-                .put("key_id", "ec02")
-                .put("hexsign", o)
-                .put("context[ts]", String.valueOf(ts))
-                .put("csrf", "")
-                .toString()).body()).string());
+        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.postJson(url + new NetWorkUtil.FormData()
+                        .setUrlParam(true)
+                        .put("key_id", "ec02")
+                        .put("hexsign", o)
+                        .put("context[ts]", String.valueOf(ts))
+                        .put("csrf", ""),
+                "", new ArrayList<>() {{
+                    add("User-Agent");
+                    add(NetWorkUtil.USER_AGENT_WEB);
+        }}).body()).string());
         if (result.has("data") && !result.isNull("data")) {
             JSONObject data = result.getJSONObject("data");
             return new Pair<>(data.optString("ticket"), data.optInt("created_at"));
@@ -129,6 +132,19 @@ public class CookiesApi {
     public static void checkCookies() throws JSONException, IOException {
         Cookies cookies = NetWorkUtil.getCookies();
 
+        // bili_ticket
+        if (!cookies.containsKey("bili_ticket" ) || cookies.get("bili_ticket").equals("null") || !cookies.containsKey("bili_ticket_expires") || parseInt(cookies.get("bili_ticket_expires")) == null || parseInt(cookies.get("bili_ticket_expires")) < (int) (System.currentTimeMillis() / 1000)) {
+            try {
+                Pair<String, Integer> bili_ticket = genBiliTicket();
+                NetWorkUtil.putCookie("bili_ticket", bili_ticket.first);
+                NetWorkUtil.putCookie("bili_ticket_expires", String.valueOf(bili_ticket.second + (3 * 24 * 60 * 60)));
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            } catch (InvalidKeyException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         // _uuid
         if (!cookies.containsKey("_uuid")) {
             NetWorkUtil.putCookie("_uuid", gen_uuid_infoc());
@@ -156,24 +172,19 @@ public class CookiesApi {
             NetWorkUtil.putCookie("b_nut", gen_b_nut());
         }
 
-        // bili_ticket
-//        if (!cookies.containsKey("bili_ticket" ) || !cookies.containsKey("bili_ticket_expires")) {
-            try {
-                Pair<String, Integer> bili_ticket = genBiliTicket();
-                NetWorkUtil.putCookie("bili_ticket", bili_ticket.first);
-                NetWorkUtil.putCookie("bili_ticket_expires", String.valueOf(bili_ticket.second + (3 * 24 * 60 * 60)));
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            } catch (InvalidKeyException e) {
-                throw new RuntimeException(e);
-            }
-//        }
-
         // Others
         for (Map.Entry<String, String> entry : otherCookieMap.entrySet()) {
             if (!cookies.containsKey(entry.getKey())) {
                 NetWorkUtil.putCookie(entry.getKey(), entry.getValue());
             }
+        }
+    }
+    
+    private static Integer parseInt(String string) {
+        try {
+            return Integer.parseInt(string);
+        } catch (Throwable ignored) {
+            return null;
         }
     }
 
