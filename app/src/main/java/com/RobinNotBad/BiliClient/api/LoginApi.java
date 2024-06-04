@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.QRCodeUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,6 +45,17 @@ public class LoginApi
 
     public static Response getLoginState() throws IOException {
         return NetWorkUtil.get("https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key=" + oauthKey, headers);
+    }
+
+    public static void requestSSOs() throws JSONException, IOException {
+        String listUrl = "https://passport.bilibili.com/x/passport-login/web/sso/list";
+        JSONObject listResult = NetWorkUtil.getJson(listUrl);
+        if (listResult.has("data") && !listResult.isNull("data")) {
+            JSONArray sso = listResult.getJSONObject("data").getJSONArray("sso");
+            for (int i = 0; i < sso.length(); i++) {
+                NetWorkUtil.get(sso.getString(i));
+            }
+        }
     }
 
 }

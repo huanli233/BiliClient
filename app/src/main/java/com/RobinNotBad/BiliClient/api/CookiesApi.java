@@ -155,9 +155,9 @@ public class CookiesApi {
             NetWorkUtil.putCookie("b_lsid", gen_b_lsid());
         }
 
-        // buvid_fp. The generation of this parameter may not be accurate, can you also consider it as just a random generation?
+        // buvid_fp. Hardcoded.
         if (!cookies.containsKey("buvid_fp")) {
-            NetWorkUtil.putCookie("buvid_fp", gen_buvid_fp(NetWorkUtil.USER_AGENT_WEB + System.currentTimeMillis(), 31));
+            NetWorkUtil.putCookie("buvid_fp", /* gen_buvid_fp(NetWorkUtil.USER_AGENT_WEB + System.currentTimeMillis(), 31) */ "30c3020be6cee8345ddc4c3c6b77f60f");
         }
 
         // buvid3 & buvid4. Get from http API.

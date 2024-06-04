@@ -201,6 +201,9 @@ public class NetWorkUtil
 
         for (String newCookie : newCookies) {  //对每一条新cookie遍历
 
+            Cookies cookies = new Cookies(newCookie);
+            if (cookies.containsKey("Domain") && !cookies.get("Domain").endsWith("bilibili.com")) continue;
+
             int index = newCookie.indexOf("; ");
             if (index != -1) newCookie = newCookie.substring(0, index);  //如果没有分号不做处理
 

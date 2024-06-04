@@ -122,9 +122,10 @@ public class QRLoginFragment extends Fragment {
 
         CenterThreadPool.run(() ->{
             try{
-                CookiesApi.activeCookieInfo();
                 requireActivity().runOnUiThread(() -> scanStat.setText("正在获取二维码"));
                 QRImage = LoginApi.getLoginQR();
+
+                CookiesApi.activeCookieInfo();
 
                 requireActivity().runOnUiThread(() -> {
                     Log.e("debug-image", QRImage.getWidth() + "," + QRImage.getHeight());
@@ -201,6 +202,12 @@ public class QRLoginFragment extends Fragment {
                             int activeResult = CookiesApi.activeCookieInfo();
                             if (activeResult != 0) {
                                 Toast.makeText(requireContext(), "警告：激活Cookies失败", Toast.LENGTH_SHORT).show();
+                            }
+                            LoginApi.requestSSOs();
+                            if (loginJson.getJSONObject("data").has("url")) {
+                                try {
+                                    NetWorkUtil.get(loginJson.getJSONObject("data").optString("url"));
+                                } catch (Throwable ignored) {}
                             }
 
                             Intent intent = new Intent();
