@@ -310,8 +310,16 @@ public class VideoInfoFragment extends Fragment {
                         else likeLabel.setText(ToolsUtil.toWan(--videoInfo.stats.like));
                         like.setBackground(ContextCompat.getDrawable(requireContext(), (videoInfo.stats.liked ? R.drawable.icon_like_1 : R.drawable.icon_like_0)));
                     });
-                } else if (isAdded())
-                    requireActivity().runOnUiThread(() -> MsgUtil.toast("操作失败：" + result, requireContext()));
+                } else if (isAdded()) {
+                    String msg = "操作失败：" + result;
+                    switch (result) {
+                        case -403:
+                            msg = "当前请求触发B站风控";
+                            break;
+                    }
+                    String finalMsg = msg;
+                    requireActivity().runOnUiThread(() -> MsgUtil.toast(finalMsg, requireContext()));
+                }
             } catch (Exception e) {
                 if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
             }
@@ -328,8 +336,16 @@ public class VideoInfoFragment extends Fragment {
                             coinLabel.setText(ToolsUtil.toWan(++videoInfo.stats.coin));
                             coin.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_coin_1));
                         });
-                    } else if (isAdded())
-                        requireActivity().runOnUiThread(() -> MsgUtil.toast("投币失败：" + result, requireContext()));
+                    } else if (isAdded()) {
+                        String msg = "投币失败：" + result;
+                        switch (result) {
+                            case -403:
+                                msg = "当前请求触发B站风控";
+                                break;
+                        }
+                        String finalMsg = msg;
+                        requireActivity().runOnUiThread(() -> MsgUtil.toast(finalMsg, requireContext()));
+                    }
                 } catch (Exception e) {
                     if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
                 }
