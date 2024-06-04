@@ -25,7 +25,6 @@ import com.RobinNotBad.BiliClient.activity.video.PopularActivity;
 import com.RobinNotBad.BiliClient.activity.video.PreciousActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.button.MaterialButton;
 

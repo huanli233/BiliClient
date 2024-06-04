@@ -68,8 +68,8 @@ public class VideoRcmdFragment extends Fragment {
 
                 ArrayList<VideoCard> videoList = RecommendApi.getRelated(aid);
                 if (isAdded()) requireActivity().runOnUiThread(() -> {
-                    VideoCardAdapter adapter = new VideoCardAdapter(requireContext(), videoList);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    VideoCardAdapter adapter = new VideoCardAdapter(requireActivity(), videoList);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
                     recyclerView.setAdapter(adapter);
                 });
 

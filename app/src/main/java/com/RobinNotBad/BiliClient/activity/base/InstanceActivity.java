@@ -20,6 +20,7 @@ public class InstanceActivity extends BaseActivity {
             intent.setClass(this, MenuActivity.class);
             if (getIntent().hasExtra("from")) intent.putExtra("from", getIntent().getIntExtra("from", 0));
             startActivity(intent);
+            overridePendingTransition(R.anim.anim_activity_in_down, 0);
         });
     }
 }

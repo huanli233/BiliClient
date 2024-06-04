@@ -105,11 +105,6 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
     protected boolean eventBusEnabled() {
         return false;
     }
