@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.DialogActivity">
+    tools:context=".activity.TutorialActivity">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,36 +14,26 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tip_title"
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:gravity="center"
-                android:text="提示"
+                android:text="教程"
                 android:textSize="17sp" />
 
-            <com.google.android.material.card.MaterialCardView
+            <TextView
                  android:layout_height="wrap_content"
                  android:layout_width="match_parent"
-                 android:layout_marginTop="5dp"
-                android:alpha="0.8"
-                android:padding="8dp">
-
-                <TextView
-                     android:layout_height="wrap_content"
-                     android:layout_width="match_parent"
-                     android:gravity="center"
-                     android:alpha="0.88"
-                     android:textSize="14sp"
-                     android:id="@+id/content"
-                     android:layout_margin="6dp"
-                     android:text="内容" />
-
-            </com.google.android.material.card.MaterialCardView>
-
+                 android:gravity="center"
+                 android:textSize="14sp"
+                 android:id="@+id/content"
+                 android:layout_margin="6dp"
+                 android:text="内容" />
+            
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/close_btn"
-                android:text="知道了"
+                android:text="已阅"
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

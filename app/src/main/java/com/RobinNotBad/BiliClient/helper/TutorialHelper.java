@@ -1,6 +1,13 @@
 package com.RobinNotBad.BiliClient.helper;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.XmlResourceParser;
+import android.graphics.Typeface;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
+import com.RobinNotBad.BiliClient.activity.TutorialActivity;
 import com.RobinNotBad.BiliClient.model.CustomText;
 import com.RobinNotBad.BiliClient.model.Tutorial;
 import java.util.ArrayList;
@@ -91,5 +98,27 @@ public class TutorialHelper {
         List<Tutorial> tutorials = new ArrayList<>();
         for(XmlResourceParser parser : xmls) tutorials.add(loadTutorial(parser));
         return tutorials;
+    }
+    
+    public static SpannableStringBuilder loadText(List<CustomText> texts){
+        SpannableStringBuilder str = new SpannableStringBuilder("");
+        for(CustomText text : texts){
+            if(text.type == 0){
+                str.append(text.text);
+                switch(text.style){
+                    case "bold":
+                        str.setSpan(new StyleSpan(Typeface.BOLD),str.length() - text.text.length(),str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                        break;
+                }
+            }
+            else if(text.type == 1) str.append("\n");
+        }
+        return str;
+    }
+    
+    public static void show(int xml_res_id,Context context){
+        Intent intent = new Intent(context,TutorialActivity.class);
+        intent.putExtra("xml_id",xml_res_id);
+        context.startActivity(intent);
     }
 }

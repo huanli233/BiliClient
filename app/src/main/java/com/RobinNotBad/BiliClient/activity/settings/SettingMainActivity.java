@@ -10,6 +10,7 @@ import android.view.View;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
+import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -147,7 +148,7 @@ public class SettingMainActivity extends InstanceActivity {
         MaterialCardView test = findViewById(R.id.test);    //用于测试
         //test.setVisibility(View.GONE);
         test.setOnClickListener(view -> {
-            MsgUtil.showDialog(this,"测试","this is a test");
+                TutorialHelper.show(R.xml.tutorial_recommend,this);
         });
     }
 }

@@ -42,7 +42,7 @@
             android:label="崩溃捕捉"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.tutorial.TutorialActivity"
+            android:name=".activity.TutorialActivity"
             android:label="教程"
             android:exported="true"
             android:theme="@style/Theme.NoSwipe.AppCompat"

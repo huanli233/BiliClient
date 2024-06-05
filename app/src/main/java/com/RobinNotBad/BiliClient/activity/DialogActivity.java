@@ -30,7 +30,7 @@ public class DialogActivity extends BaseActivity {
         ((TextView)findViewById(R.id.content)).setText(intent.getStringExtra("content"));
 
         if(intent.getIntExtra("wait_time",-1) > 0){
-            findViewById(R.id.close_btn).setEnabled(false);
+            close_btn.setEnabled(false);
             wait_time = intent.getIntExtra("wait_time",0);
             Timer timer = new Timer();
             timer.scheduleAtFixedRate(new TimerTask() {
@@ -40,10 +40,10 @@ public class DialogActivity extends BaseActivity {
                     runOnUiThread(() -> {
                         if(wait_time-- > 0){
                             close_btn.setText("知道了(" + wait_time + "s)");
-                            findViewById(R.id.close_btn).setEnabled(false);
+                            close_btn.setEnabled(false);
                         }else{
                             close_btn.setText("知道了");
-                            findViewById(R.id.close_btn).setEnabled(true);
+                            close_btn.setEnabled(true);
                             timer.cancel();
                         }
                     });
