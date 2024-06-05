@@ -178,6 +178,8 @@ public class CookiesApi {
                 NetWorkUtil.putCookie(entry.getKey(), entry.getValue());
             }
         }
+
+        NetWorkUtil.refreshHeaders();
     }
     
     private static Integer parseInt(String string) {

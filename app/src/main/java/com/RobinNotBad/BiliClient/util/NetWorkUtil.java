@@ -272,7 +272,7 @@ public class NetWorkUtil
         }
     }
 
-    public static final String USER_AGENT_WEB = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.160 Safari/537.36";
+    public static final String USER_AGENT_WEB = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.5414.75 Safari/537.36";
     public static ArrayList<String> webHeaders = new ArrayList<>() {{
         add("Cookie");
         add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));

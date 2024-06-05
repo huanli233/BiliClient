@@ -30,12 +30,25 @@ public class LoginApi
     public static Bitmap getLoginQR() throws JSONException,IOException
     {
         sid = String.valueOf(Math.round(Math.random() * 100000000));
+        CookiesApi.checkCookies();
 
-        headers = new ArrayList<String>()
-        {{
-            add("Cookie"); add("sid=" + sid);
-            add("User-Agent"); add(NetWorkUtil.USER_AGENT_WEB);
-            add("Referer"); add("https://www.bilibili.com/");
+        headers = new ArrayList<>() {{
+            /* 我抓到的登录generate请求似乎不需要sid？ */
+//            NetWorkUtil.putCookie("sid", sid);
+            NetWorkUtil.refreshHeaders();
+            addAll(NetWorkUtil.webHeaders);
+            add("Sec-Ch-Ua");
+            add("\"Chromium\";v=\"109\", \"Not_A Brand\";v=\"99\"");
+            add("Sec-Ch-Ua-Platform");
+            add("\"Windows\"");
+            add("Sec-Ch-Ua-Mobile");
+            add("?0");
+            add("Sec-Fetch-Site");
+            add("same-site");
+            add("Sec-Fetch-Mode");
+            add("cors");
+            add("Sec-Fetch-Dest");
+            add("empty");
         }};
 
         String url = "https://passport.bilibili.com/x/passport-login/web/qrcode/generate?source=main-fe-header";
