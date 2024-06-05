@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TutorialActivity extends BaseActivity {
-    private List<Fragment> fragmentList;
-    ReplyFragment replyFragment;
-    
+
     public static int tutorial_version = 1;
 
     @Override
@@ -36,7 +34,7 @@ public class TutorialActivity extends BaseActivity {
 
         if(SharedPreferencesUtil.getInt(SharedPreferencesUtil.tutorial_version,-114) != -114) Toast.makeText(this,"教程已更新",Toast.LENGTH_SHORT).show();
 
-        fragmentList = new ArrayList<>(8);
+        final List<Fragment> fragmentList = new ArrayList<>(8);
         fragmentList.add(new MainFragment());
         fragmentList.add(new RecommendFragment());
         fragmentList.add(new VideoFragment());
@@ -46,7 +44,7 @@ public class TutorialActivity extends BaseActivity {
         fragmentList.add(new SearchFragment());
         fragmentList.add(new OtherFragment());
         viewPager.setOffscreenPageLimit(fragmentList.size());
-        ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(),fragmentList);
+        ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(vpfAdapter);
     }
 

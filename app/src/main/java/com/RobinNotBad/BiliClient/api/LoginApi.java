@@ -45,7 +45,7 @@ public class LoginApi
     }
 
     public static Response getLoginState() throws IOException {
-        return NetWorkUtil.get("https://passport.bilibili.com/x/passport-login/web/qrcode/poll?source=main-fe-header?qrcode_key=" + oauthKey, headers);
+        return NetWorkUtil.get("https://passport.bilibili.com/x/passport-login/web/qrcode/poll?source=main-fe-header&qrcode_key=" + oauthKey, headers);
     }
 
     public static void requestSSOs() throws JSONException, IOException {
