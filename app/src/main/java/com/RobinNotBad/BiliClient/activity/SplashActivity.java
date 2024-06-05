@@ -52,6 +52,7 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_BiliClient);
         setContentView(R.layout.activity_splash);
         Log.e("debug","进入应用");
 
@@ -104,7 +105,7 @@ public class SplashActivity extends Activity {
                         Intent intent = new Intent();
                         Class<?> activityClass = MenuActivity.activityClasses.get(firstItemId);
                         intent.setClass(SplashActivity.this, activityClass != null ? activityClass : RecommendActivity.class);
-                        intent.putExtra("from", R.id.menu_recommend);
+                        intent.putExtra("from", firstItemId);
                         startActivity(intent);
                     }
 

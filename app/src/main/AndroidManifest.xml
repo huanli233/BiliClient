@@ -325,6 +325,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SplashActivity"
+            android:theme="@style/Theme.BiliClient.Splash"
             android:exported="true"
             android:label="哔哩终端"
             android:screenOrientation="portrait">
