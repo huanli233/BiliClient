@@ -30,6 +30,7 @@ public class TutorialHelper {
             boolean isInName = false;
             boolean isInDescrption = false;
             boolean isInType = false;
+            boolean isInImg = false;
             boolean isInContentItem = false;
             boolean isInContentItemType = false;
             boolean isInContentItemText = false;
@@ -41,43 +42,74 @@ public class TutorialHelper {
             CustomText item = null;
             
             while(eventType != XmlPullParser.END_DOCUMENT){
-                //听我说，写的可能很屎，但能用就行
+                //听我说，写的可能有点屎，但能用就行
                 if(eventType == XmlPullParser.START_TAG){
-                    if(xml.getName().equals("name")) isInName = true;
-                    else if(xml.getName().equals("description")) isInDescrption = true;
-                    else if(xml.getName().equals("type")){
-                        if(isInContentItem) isInContentItemType = true;
-                        else isInType = true;
+                    switch(xml.getName()){
+                        case "name":
+                            isInName = true;
+                            break;
+                        case "description":
+                            isInName = true;
+                            break;
+                        case "img":
+                            isInImg = true;
+                            break;
+                        case "type":
+                            if(isInContentItem) isInContentItemType = true;
+                            else isInType = true;
+                            break;
+                        case "item":
+                            isInContentItem = true;
+                            item = new CustomText();
+                            break;
+                        case "text":
+                            isInContentItemText = true;
+                            break;
+                        case "style":
+                            isInContentItemStyle = true;
+                            break;
+                        case "color":
+                            isInContentItemColor = true;
+                            break;
                     }
-                    else if(xml.getName().equals("item")) {
-                        isInContentItem = true;
-                        item = new CustomText();
-                    }
-                    else if(xml.getName().equals("text")) isInContentItemText = true;
-                    else if(xml.getName().equals("style")) isInContentItemStyle = true;
-                    else if(xml.getName().equals("color")) isInContentItemColor = true;
                 }
                 
                 else if(eventType == XmlPullParser.END_TAG){
-                    if(xml.getName().equals("name")) isInName = false;
-                    else if(xml.getName().equals("description")) isInDescrption = false;
-                    else if(xml.getName().equals("type")){
-                        if(isInContentItem) isInContentItemType = false;
-                        else isInType = false;
+                    switch(xml.getName()){
+                        case "name":
+                            isInName = false;
+                            break;
+                        case "description":
+                            isInName = false;
+                            break;
+                        case "img":
+                            isInImg = false;
+                            break;
+                        case "type":
+                            if(isInContentItem) isInContentItemType = false;
+                            else isInType = false;
+                            break;
+                        case "item":
+                            isInContentItem = false;
+                            content.add(item);
+                            item = null;
+                            break;
+                        case "text":
+                            isInContentItemText = false;
+                            break;
+                        case "style":
+                            isInContentItemStyle = false;
+                            break;
+                        case "color":
+                            isInContentItemColor = false;
+                            break;
                     }
-                    else if(xml.getName().equals("item")) {
-                        isInContentItem = false;
-                        content.add(item);
-                        item = null;
-                    }
-                    else if(xml.getName().equals("text")) isInContentItemText = false;
-                    else if(xml.getName().equals("style")) isInContentItemStyle = false;
-                    else if(xml.getName().equals("color")) isInContentItemColor = false;
                 }
                 
                 else if(eventType == XmlPullParser.TEXT){
                     if(isInName) turtorial.name = xml.getText();
                     else if(isInDescrption) turtorial.description = xml.getText();
+                    else if(isInImg) turtorial.imgid = Integer.valueOf(xml.getText());
                     else if(isInType) turtorial.type = Integer.valueOf(xml.getText());
                     else if(item != null){
                         if(isInContentItemType) item.type = Integer.valueOf(xml.getText());
