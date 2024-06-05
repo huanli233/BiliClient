@@ -244,9 +244,9 @@
         <activity
             android:name=".activity.DialogActivity"
             android:exported="false"
-            android:label="提示对话框"
+            android:label="提示框"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.NoSwipe" />
+            android:theme="@style/Theme.NoSwipe.AppCompat" />
         <activity
             android:name=".activity.video.info.ReplyInfoActivity"
             android:exported="false"

@@ -147,7 +147,7 @@ public class SettingMainActivity extends InstanceActivity {
         MaterialCardView test = findViewById(R.id.test);    //用于测试
         //test.setVisibility(View.GONE);
         test.setOnClickListener(view -> {
-            throw new OutOfMemoryError("测试");
+            MsgUtil.showDialog(this,"测试","this is a test");
         });
     }
 }

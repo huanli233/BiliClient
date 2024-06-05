@@ -52,28 +52,19 @@ public class MsgUtil {
                 .putExtra("content",text);
         context.startActivity(testIntent);
     }
-
-    public static void showTutorial(Context context,String title,String content,int img_resource_id){
+    
+    public static void showDialog(Context context, String title, String content){
         Intent intent = new Intent(context, DialogActivity.class);
         intent.putExtra("title",title);
         intent.putExtra("content",content);
-        intent.putExtra("img_id",img_resource_id);
-        intent.putExtra("wait",true);
-        intent.putExtra("wait_time",2);
         context.startActivity(intent);
     }
-    public static void showDialog(Context context, String title, String content, int img_resource_id){
+    
+    public static void showDialog(Context context, String title, String content, int wait_time){
         Intent intent = new Intent(context, DialogActivity.class);
         intent.putExtra("title",title);
         intent.putExtra("content",content);
-        intent.putExtra("img_id",img_resource_id);
-        context.startActivity(intent);
-    }
-    public static void showDialog(Context context, String title, String content, String img_resource_url){
-        Intent intent = new Intent(context, DialogActivity.class);
-        intent.putExtra("title",title);
-        intent.putExtra("content",content);
-        intent.putExtra("img_id",img_resource_url);
+        intent.putExtra("wait_time",wait_time);
         context.startActivity(intent);
     }
 }

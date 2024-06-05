@@ -98,16 +98,11 @@ public class SplashActivity extends Activity {
                         }
                     }
                         
-                    if(SharedPreferencesUtil.getInt(SharedPreferencesUtil.tutorial_version,0) < TutorialActivity.tutorial_version){
-                        Intent intent = new Intent(this, TutorialActivity.class);
-                        startActivity(intent);
-                    }else{
-                        Intent intent = new Intent();
-                        Class<?> activityClass = MenuActivity.activityClasses.get(firstItemId);
-                        intent.setClass(SplashActivity.this, activityClass != null ? activityClass : RecommendActivity.class);
-                        intent.putExtra("from", firstItemId);
-                        startActivity(intent);
-                    }
+                    Intent intent = new Intent();
+                    Class<?> activityClass = MenuActivity.activityClasses.get(firstItemId);
+                    intent.setClass(SplashActivity.this, activityClass != null ? activityClass : RecommendActivity.class);
+                    intent.putExtra("from", firstItemId);
+                    startActivity(intent);
 
                     CenterThreadPool.run(() -> AppInfoApi.check(SplashActivity.this));
 
