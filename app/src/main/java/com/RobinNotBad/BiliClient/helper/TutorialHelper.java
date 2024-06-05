@@ -3,10 +3,14 @@ package com.RobinNotBad.BiliClient.helper;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.XmlResourceParser;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import com.RobinNotBad.BiliClient.activity.TutorialActivity;
 import com.RobinNotBad.BiliClient.model.CustomText;
 import com.RobinNotBad.BiliClient.model.Tutorial;
@@ -106,10 +110,20 @@ public class TutorialHelper {
             if(text.type == 0){
                 str.append(text.text);
                 switch(text.style){
-                    case "bold":
+                    case "bold": //粗体
                         str.setSpan(new StyleSpan(Typeface.BOLD),str.length() - text.text.length(),str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                         break;
+                    case "italic": //斜体
+                        str.setSpan(new StyleSpan(Typeface.ITALIC),str.length() - text.text.length(),str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                        break;
+                    case "underline": //下划线
+                        str.setSpan(new UnderlineSpan(),str.length() - text.text.length(),str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                        break;
+                    case "strike": //删除线
+                        str.setSpan(new StrikethroughSpan(),str.length() - text.text.length(),str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                        break;
                 }
+                str.setSpan(new ForegroundColorSpan(Color.parseColor(text.color)),str.length() - text.text.length(),str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
             }
             else if(text.type == 1) str.append("\n");
         }

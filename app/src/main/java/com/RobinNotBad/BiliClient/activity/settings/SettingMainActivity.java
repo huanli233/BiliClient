@@ -148,7 +148,7 @@ public class SettingMainActivity extends InstanceActivity {
         MaterialCardView test = findViewById(R.id.test);    //用于测试
         //test.setVisibility(View.GONE);
         test.setOnClickListener(view -> {
-                TutorialHelper.show(R.xml.tutorial_recommend,this);
+                TutorialHelper.show(R.xml.tutorial_default,this);
         });
     }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tutorial>
+    <name>默认教程</name>
+    <description></description>
+    <type>0</type>
+    <content>
+        <item>
+            <type>0</type>
+            <text>这是一个测试教程</text>
+            <style>none</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>0</type>
+            <text>一般来讲，</text>
+            <style>none</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>0</type>
+            <text>你不应该看到它</text>
+            <style>bold</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>0</type>
+            <text>，</text>
+            <style>none</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>0</type>
+            <text>这说明可能传错教程文件了</text>
+            <style>bold</style>
+            <color>#df2243</color>
+        </item>
+    </content>
+</tutorial>

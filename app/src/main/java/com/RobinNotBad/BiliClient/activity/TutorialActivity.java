@@ -19,7 +19,7 @@ public class TutorialActivity extends BaseActivity {
         setContentView(R.layout.activity_tutorial);
         
         Intent intent = getIntent();
-        Tutorial tutorial = TutorialHelper.loadTutorial(getResources().getXml(intent.getIntExtra("xml_id",R.xml.tutorial_recommend)));
+        Tutorial tutorial = TutorialHelper.loadTutorial(getResources().getXml(intent.getIntExtra("xml_id",R.xml.tutorial_default)));
         
         ((TextView)findViewById(R.id.title)).setText(tutorial.name);
         ((TextView)findViewById(R.id.content)).setText(TutorialHelper.loadText(tutorial.content));
