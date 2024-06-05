@@ -104,8 +104,7 @@ public class VideoInfoFragment extends Fragment {
                             }
                         }
                         dynId = DynamicApi.relayVideo(text, (atUids.isEmpty() ? null : atUids), videoInfo.aid);
-                        if (!(dynId == -1)) {
-                            // 迷惑逻辑。
+                        if (dynId != -1) {
                             if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.toast("转发成功~", requireContext()));
                         } else {
                             if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.toast("转发失败", requireContext()));
@@ -246,7 +245,7 @@ public class VideoInfoFragment extends Fragment {
         title.setText(getTitleSpan());
 
         Glide.with(requireContext()).load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, requireContext()))))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, requireContext()))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(cover);
 

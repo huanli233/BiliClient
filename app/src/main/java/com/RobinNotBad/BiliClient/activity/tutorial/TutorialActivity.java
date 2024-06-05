@@ -9,7 +9,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoReplyFragment;
+import com.RobinNotBad.BiliClient.activity.reply.ReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class TutorialActivity extends BaseActivity {
     private List<Fragment> fragmentList;
-    VideoReplyFragment replyFragment;
+    ReplyFragment replyFragment;
     
     public static int tutorial_version = 1;
 

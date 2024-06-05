@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.activity.video.info;
+package com.RobinNotBad.BiliClient.activity.reply;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 //部分通用代码在VideoReplyAdapter内
 //2023-07-22
 
-public class VideoReplyFragment extends RefreshListFragment {
+public class ReplyFragment extends RefreshListFragment {
 
     private boolean dontload;
     protected long aid;
@@ -29,8 +29,8 @@ public class VideoReplyFragment extends RefreshListFragment {
     protected ReplyAdapter replyAdapter;
     public int replyType = ReplyApi.REPLY_TYPE_VIDEO;
 
-    public static VideoReplyFragment newInstance(long aid, int type) {
-        VideoReplyFragment fragment = new VideoReplyFragment();
+    public static ReplyFragment newInstance(long aid, int type) {
+        ReplyFragment fragment = new ReplyFragment();
         Bundle args = new Bundle();
         args.putLong("aid", aid);
         args.putInt("type", type);
@@ -38,8 +38,8 @@ public class VideoReplyFragment extends RefreshListFragment {
         return fragment;
     }
 
-    public static VideoReplyFragment newInstance(long aid, int type,boolean dontload) {
-        VideoReplyFragment fragment = new VideoReplyFragment();
+    public static ReplyFragment newInstance(long aid, int type, boolean dontload) {
+        ReplyFragment fragment = new ReplyFragment();
         Bundle args = new Bundle();
         args.putLong("aid", aid);
         args.putInt("type", type);

@@ -11,12 +11,10 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoReplyFragment;
+import com.RobinNotBad.BiliClient.activity.reply.ReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -28,7 +26,7 @@ public class ArticleInfoActivity extends BaseActivity {
     private static final String TAG = "ArticleInfoActivity";
     private long cvid;
 
-    private VideoReplyFragment replyFragment;
+    private ReplyFragment replyFragment;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +45,7 @@ public class ArticleInfoActivity extends BaseActivity {
                 List<Fragment> fragmentList = new ArrayList<>();
                 ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance(cvid);
                 fragmentList.add(articleInfoFragment);
-                replyFragment = VideoReplyFragment.newInstance(cvid, 12);
+                replyFragment = ReplyFragment.newInstance(cvid, 12);
                 fragmentList.add(replyFragment);
 
                 runOnUiThread(() -> {

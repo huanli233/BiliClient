@@ -17,6 +17,7 @@ import com.RobinNotBad.BiliClient.api.RecommendApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.view.ImageAutoLoadScrollListener;
 
 import java.util.ArrayList;
 
@@ -43,6 +44,7 @@ public class PopularActivity extends InstanceActivity {
         Log.e("debug","进入热门页");
 
         recyclerView = findViewById(R.id.recyclerView);
+        ImageAutoLoadScrollListener.install(recyclerView);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this::loadPopular);
 

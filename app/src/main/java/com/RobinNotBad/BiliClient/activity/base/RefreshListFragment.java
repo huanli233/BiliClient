@@ -15,6 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.listener.OnLoadMoreListener;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.view.ImageAutoLoadScrollListener;
 
 /*
 跟RefreshListActivity基本相同
@@ -65,6 +66,7 @@ public class RefreshListFragment extends Fragment {
                 }
             }
         });
+        ImageAutoLoadScrollListener.install(recyclerView);
     }
 
     public void setAdapter(RecyclerView.Adapter<?> adapter){

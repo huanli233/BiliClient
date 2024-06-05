@@ -10,7 +10,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoReplyFragment;
+import com.RobinNotBad.BiliClient.activity.reply.ReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
@@ -20,7 +20,6 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -32,7 +31,7 @@ import java.util.List;
 
 public class DynamicInfoActivity extends BaseActivity {
 
-    VideoReplyFragment rFragment;
+    ReplyFragment rFragment;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -52,7 +51,7 @@ public class DynamicInfoActivity extends BaseActivity {
                 List<Fragment> fragmentList = new ArrayList<>();
                 DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance(dynamic);
                 fragmentList.add(diFragment);
-                rFragment = VideoReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type);
+                rFragment = ReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type);
                 rFragment.replyType = ReplyApi.REPLY_TYPE_DYNAMIC;
                 fragmentList.add(rFragment);
 

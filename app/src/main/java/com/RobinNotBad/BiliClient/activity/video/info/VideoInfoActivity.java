@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,6 +12,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.reply.ReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
@@ -36,7 +36,7 @@ public class VideoInfoActivity extends BaseActivity {
     private String bvid;
 
     private List<Fragment> fragmentList;
-    VideoReplyFragment replyFragment;
+    ReplyFragment replyFragment;
 
     //private MediaViewPager2Adapter mediaViewPager2Adapter;
 
@@ -62,7 +62,7 @@ public class VideoInfoActivity extends BaseActivity {
 
         fragmentList = new ArrayList<>(2);
         fragmentList.add(BangumiInfoFragment.newInstance(aid));
-        replyFragment = VideoReplyFragment.newInstance(aid, 1,true);
+        replyFragment = ReplyFragment.newInstance(aid, 1,true);
         fragmentList.add(replyFragment);
 
         viewPager.setOffscreenPageLimit(fragmentList.size());
@@ -97,7 +97,7 @@ public class VideoInfoActivity extends BaseActivity {
 
                 fragmentList = new ArrayList<>(3);
                 fragmentList.add(VideoInfoFragment.newInstance(videoInfo));
-                fragmentList.add(VideoReplyFragment.newInstance(videoInfo.aid, 1));
+                fragmentList.add(ReplyFragment.newInstance(videoInfo.aid, 1));
                 if (SharedPreferencesUtil.getBoolean("related_enable", true)) {
                     VideoRcmdFragment vrFragment = VideoRcmdFragment.newInstance(videoInfo.aid);
                     fragmentList.add(vrFragment);
