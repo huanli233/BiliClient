@@ -46,6 +46,7 @@
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
         <item>新增了全新的教程页面</item>
+        <item>新增了爱发电捐赠列表页面</item>
         <item>新增了全新崩溃捕捉页面</item>
         <item>新增了视频清晰度的设置项</item>
         <item>新增了转发动态功能</item>
