@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.activity.settings;
 
 import android.os.Bundle;
 
+import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
@@ -24,6 +25,8 @@ public class SponsorActivity extends RefreshListActivity {
         super.onCreate(savedInstanceState);
         
         setPageName("捐赠列表");
+        
+        Toast.makeText(this,"捐赠列表内容来自爱发电，不针对显示的内容负责",Toast.LENGTH_LONG).show();
         
         CenterThreadPool.run(() -> {
             try{
