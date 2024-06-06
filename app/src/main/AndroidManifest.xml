@@ -37,6 +37,11 @@
                 android:resource="@xml/file_paths" />
         </provider>
         <activity
+            android:name=".activity.settings.SponsorActivity"
+            android:exported="true"
+            android:label="捐赠列表"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.CatchActivity"
             android:exported="false"
             android:label="崩溃捕捉"

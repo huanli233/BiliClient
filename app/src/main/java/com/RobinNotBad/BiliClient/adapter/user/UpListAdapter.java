@@ -43,7 +43,6 @@ public class UpListAdapter extends RecyclerView.Adapter<UpListAdapter.Holder> {
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-
         holder.name.setText(userList.get(position).name);
         holder.desc.setText(userList.get(position).sign);
         Glide.with(context).load(GlideUtil.url(userList.get(position).avatar))
@@ -52,13 +51,14 @@ public class UpListAdapter extends RecyclerView.Adapter<UpListAdapter.Holder> {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.avatar);
 
-        holder.itemView.setOnClickListener(view -> {
+        if(userList.get(position).mid != -1){
+            holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent()
                     .setClass(context, UserInfoActivity.class)
                     .putExtra("mid", userList.get(position).mid);
             context.startActivity(intent);
         });
-
+        }
     }
 
     @Override

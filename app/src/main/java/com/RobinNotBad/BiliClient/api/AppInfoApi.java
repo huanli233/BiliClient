@@ -8,6 +8,7 @@ import android.util.Log;
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.model.Announcement;
+import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -125,5 +126,36 @@ public class AppInfoApi {
             e.printStackTrace();
             return "上传失败";
         }
+    }
+    
+    public static ArrayList<UserInfo> getSponsors(int page) throws Exception{
+        String url = "http://api.biliterminal.cn/terminal/afdian/get_sponsor?page=" + page;
+        JSONObject result = NetWorkUtil.getJson(url,customHeaders);
+
+        if(result.getInt("code")!=200) throw new Exception("获取失败");
+        JSONArray data = result.getJSONArray("data");
+
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+
+        ArrayList<UserInfo> list = new ArrayList<>();
+        for (int i = 0; i < data.length(); i++) {
+            JSONObject sponsor = data.getJSONObject(i);
+            
+            UserInfo user = new UserInfo();
+            
+            user.name = sponsor.getString("name");
+            user.avatar = sponsor.getString("avatar");
+            user.sign = "捐赠时间：" + sdf.format(sponsor.getLong("last_time")) + " 总金额：" + String.valueOf(sponsor.getInt("sum_amount"));
+            user.mid = -1;
+            user.fans = 0;
+            user.followed = true;
+            user.level = 6;
+            user.notice = "";
+            user.official = 0;
+            user.officialDesc = "";
+            
+            list.add(user);
+        }
+        return list;
     }
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.settings.SponsorActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -92,12 +93,17 @@ public class AboutActivity extends BaseActivity {
             }
         });
 
-        findViewById(R.id.toUncle).setOnClickListener(view ->{
+        findViewById(R.id.toUncle).setOnClickListener(view -> {
             eggClick_toUncle++;
             if (eggClick_toUncle == 7) {
                 eggClick_toUncle = 0;
                 MsgUtil.showText(this,"给叔叔","\"你指尖跃动的电光，是我此生不灭的信仰。\"<extra_insert>{\"type\":\"video\",\"content\":\"BV157411v76Z\",\"title\":\"【B站入站曲】\"}");
             }
+        });
+        
+        findViewById(R.id.sponsor_list).setOnClickListener(view -> {
+            Intent intent = new Intent(this,SponsorActivity.class);
+            startActivity(intent);
         });
     }
 }
