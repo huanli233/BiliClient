@@ -31,7 +31,8 @@ public class AboutActivity extends BaseActivity {
         Log.e("debug","进入关于页面");
 
         try{
-            ((TextView)findViewById(R.id.app_version)).setText(getPackageManager().getPackageInfo(getPackageName(),0).versionName);
+            ((TextView)findViewById(R.id.app_version)).setText("版本名：" + getPackageManager().getPackageInfo(getPackageName(),0).versionName);
+            ((TextView)findViewById(R.id.app_version_code)).setText("版本号：" + String.valueOf(getPackageManager().getPackageInfo(getPackageName(),0).versionCode));
             ((TextView)findViewById(R.id.updatelog_view)).setText("\n更新日志：\n "+ ToolsUtil.getUpdateLog(this));
             ToolsUtil.setCopy(findViewById(R.id.updatelog_view),this,ToolsUtil.getUpdateLog(this));
         }catch(PackageManager.NameNotFoundException e){

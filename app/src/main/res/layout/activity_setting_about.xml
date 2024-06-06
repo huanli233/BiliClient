@@ -58,41 +58,116 @@
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
              android:orientation="vertical"
-            android:paddingHorizontal="@dimen/activity_padding_horizontal"
+             android:paddingHorizontal="@dimen/activity_padding_horizontal"
              android:paddingBottom="20dp">
+            
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                
+                <ImageView
+                    android:id="@+id/app_icon"
+                    android:layout_height="55dp"
+                    android:layout_width="55dp"
+                    android:src="@mipmap/icon"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/app_name"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_gravity="center_vertical" />
+    
+                <TextView
+                    android:id="@+id/app_name"
+                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    app:layout_constraintStart_toEndOf="@id/app_icon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/app_icon"
+                    app:layout_constraintBottom_toTopOf="@id/app_description"
+                    android:text="@string/app_name" />
+                
+                <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                    android:id="@+id/app_description"
+                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:textSize="12sp"
+                    android:alpha="0.85"
+                    android:layout_marginHorizontal="2dp"
+                    android:text="@string/about_description"
+                    android:singleLine="true"
+                    app:layout_constraintStart_toEndOf="@id/app_icon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/app_name"
+                    app:layout_constraintBottom_toBottomOf="@id/app_icon"
+                    android:gravity="center" />
+                
+                
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/version_name_card"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="2dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/version_code_card"
+                    app:layout_constraintTop_toBottomOf="@id/app_description">
+                
+                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textSize="11sp"
+                        android:alpha="0.9"
+                        android:text="版本名"
+                        android:padding="3dp"
+                        android:singleLine="true"
+                        android:id="@+id/app_version"
+                        android:layout_gravity="center" />
+                    
+                </com.google.android.material.card.MaterialCardView>
+                
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/version_code_card"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="2dp"
+                    app:layout_constraintStart_toEndOf="@id/version_name_card"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/version_name_card">
+                
+                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textSize="11sp"
+                        android:alpha="0.9"
+                        android:padding="3dp"
+                        android:text="版本号"
+                        android:singleLine="true"
+                        android:id="@+id/app_version_code"
+                        android:layout_gravity="center" />
+                    
+                </com.google.android.material.card.MaterialCardView>
+                
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
-                 android:layout_height="65dp"
-                 android:layout_width="65dp"
-                 android:src="@mipmap/icon"
-                 android:layout_marginTop="30dp"
-                 android:layout_gravity="center" />
+            <include layout="@layout/cell_divider"/>
+            
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                 android:layout_height="wrap_content"
-                 android:layout_width="wrap_content"
-                 android:textSize="15sp"
-                 android:layout_marginTop="5dp"
-                 android:layout_gravity="center"
-                 android:text="@string/app_name" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginVertical="6dp"
+                    android:gravity="center"
+                    android:text="@string/about_group"
+                    android:textSize="12sp" />
 
-            <TextView
-                 android:layout_height="wrap_content"
-                 android:layout_width="wrap_content"
-                 android:textSize="13sp"
-                android:alpha="0.85"
-                 android:text="@string/about_description"
-                 android:layout_gravity="center" />
-
-            <TextView
-                 android:layout_height="wrap_content"
-                 android:layout_width="wrap_content"
-                 android:textSize="11sp"
-                 android:layout_marginTop="-2dp"
-                android:alpha="0.7"
-                android:text="版本号"
-                 android:id="@+id/app_version"
-                 android:layout_gravity="center" />
+            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/author_words"
@@ -103,8 +178,8 @@
                 <LinearLayout
                      android:layout_height="wrap_content"
                      android:layout_width="match_parent"
-                    android:paddingVertical="6dp"
-                    android:paddingHorizontal="4dp"
+                     android:paddingVertical="6dp"
+                     android:paddingHorizontal="4dp"
                      android:orientation="vertical">
 
                     <TextView
@@ -112,7 +187,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="作者的话"
-                        android:textSize="13sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -135,25 +210,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="6dp"
                     android:gravity="center"
-                    android:text="@string/about_group"
-                    android:textSize="12sp" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="6dp"
-                    android:gravity="center"
+                    android:paddingVertical="6dp"
+                    android:paddingHorizontal="4dp"
                     android:text="@string/about_wearbili"
                     android:textSize="11sp" />
 
@@ -492,8 +551,8 @@
                     <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:textSize="13sp"
-                        android:text="版本提醒"
+                        android:textSize="14sp"
+                        android:text="版本相关"
                         android:layout_gravity="center" />
 
                     <TextView
@@ -531,7 +590,7 @@
                     <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:textSize="13sp"
+                        android:textSize="14sp"
                         android:text="开源信息"
                         android:layout_gravity="center" />
 
@@ -544,6 +603,7 @@
                         android:text="@string/about_opensource"
                         android:layout_gravity="center" />
                 </LinearLayout>
+                
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -563,8 +623,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-
-
             <com.google.android.material.card.MaterialCardView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
@@ -581,7 +639,7 @@
                     <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:textSize="13sp"
+                        android:textSize="14sp"
                         android:text="免责声明"
                         android:layout_gravity="center" />
 
@@ -597,6 +655,7 @@
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
+            
         </LinearLayout>
 
     </ScrollView>
