@@ -113,7 +113,7 @@ public class AppInfoApi {
 
             JSONObject post_data = new JSONObject();
             post_data.put("stack",stack);
-            post_data.put("client_version", context.getPackageManager().getPackageInfo(getPackageName(),0).versionCode));
+            post_data.put("client_version", context.getPackageManager().getPackageInfo(context.getPackageName(),0).versionCode);
             post_data.put("device_sdk", Build.VERSION.SDK_INT);
             post_data.put("device_product",Build.PRODUCT);
             post_data.put("device_brand",Build.BRAND);

@@ -53,10 +53,10 @@ public class CatchActivity extends BaseActivity {
                 reason_str = new SpannableString("可能的崩溃原因：\n内存爆了，在小内存设备上很正常");
             
             ((MaterialButton)findViewById(R.id.upload_btn)).setOnClickListener(view -> {
-                if(stack.contains("java.lang.OutOfMemoryError")) Toast.makeText(this,"该错误无必要上报",Toast.LENGTH_SHORT).show();
+                if(stack.contains("java.lang.OutOfMemoryError")) Toast.makeText(this,"此问题没有必要上报",Toast.LENGTH_SHORT).show();
                 else{
                     CenterThreadPool.run(() -> {
-                        String res = AppInfoApi.uploadStack(stack);
+                        String res = AppInfoApi.uploadStack(stack,this);
                         runOnUiThread(() -> Toast.makeText(this,res,Toast.LENGTH_SHORT).show());
                     });
                 }
