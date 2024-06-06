@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter;
+package com.RobinNotBad.BiliClient.adapter.favorite;
 
 import android.app.Activity;
 import android.content.Context;

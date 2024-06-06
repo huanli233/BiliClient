@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter;
+package com.RobinNotBad.BiliClient.adapter.article;
 
 import android.content.Context;
 import android.view.View;

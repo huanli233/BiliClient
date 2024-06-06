@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter;
+package com.RobinNotBad.BiliClient.adapter.dynamic;
 
 import static com.RobinNotBad.BiliClient.util.ToolsUtil.toWan;
 
@@ -27,6 +27,8 @@ import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
+import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
+import com.RobinNotBad.BiliClient.adapter.article.ArticleCardHolder;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.Dynamic;
@@ -59,8 +61,6 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
     public boolean isChild;
     BaseActivity mActivity;
     public ActivityResultLauncher<Intent> relayDynamicLauncher;
-
-    private long longClickTime = -1;
 
     public DynamicHolder(@NonNull View itemView, BaseActivity mActivity, boolean isChild) {
         super(itemView);
@@ -294,27 +294,19 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
         }
         content.setEllipsize(TextUtils.TruncateAt.END);
 
-        View.OnClickListener onRelayClick = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (relayDynamicLauncher == null) {
-                    return;
-                }
-                Intent intent = new Intent();
-                intent.setClass(mActivity, SendDynamicActivity.class);
-                intent.putExtra("dynamicId", dynamic.dynamicId);
-                intent.putExtra("forward", dynamic);
-                relayDynamicLauncher.launch(intent);
+        View.OnClickListener onRelayClick = view -> {
+            if (relayDynamicLauncher == null) {
+                return;
             }
+            Intent intent = new Intent();
+            intent.setClass(mActivity, SendDynamicActivity.class);
+            intent.putExtra("dynamicId", dynamic.dynamicId);
+            intent.putExtra("forward", dynamic);
+            relayDynamicLauncher.launch(intent);
         };
         if (item_dynamic_share != null) item_dynamic_share.setOnClickListener(onRelayClick);
 
-        View.OnClickListener onDeleteClick = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MsgUtil.toast("长按删除", context);
-            }
-        };
+        View.OnClickListener onDeleteClick = view -> MsgUtil.toast("长按删除", context);
         if (item_dynamic_delete != null) {
             item_dynamic_delete.setOnClickListener(onDeleteClick);
             item_dynamic_delete.setVisibility(View.GONE);

@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter;
+package com.RobinNotBad.BiliClient.adapter.video;
 
 import android.content.Context;
 import android.view.LayoutInflater;

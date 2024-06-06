@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter;
+package com.RobinNotBad.BiliClient.adapter.message;
 
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
@@ -19,6 +19,8 @@ import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
+import com.RobinNotBad.BiliClient.adapter.reply.ReplyCardHolder;
+import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.model.MessageCard;
 import com.RobinNotBad.BiliClient.model.Reply;
@@ -32,12 +34,12 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.text.SimpleDateFormat;
 
-public class MessageHolder extends RecyclerView.ViewHolder{
+public class NoticeHolder extends RecyclerView.ViewHolder{
     public LinearLayout avaterList;
     public TextView action,pubdate;
     public ConstraintLayout extraCard;
     public View itemView;
-    public MessageHolder(@NonNull View itemView) {
+    public NoticeHolder(@NonNull View itemView) {
         super(itemView);
         this.itemView = itemView;
         avaterList = itemView.findViewById(R.id.avatar_list);

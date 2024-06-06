@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
-import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
+import com.RobinNotBad.BiliClient.adapter.video.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.FavoriteApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;

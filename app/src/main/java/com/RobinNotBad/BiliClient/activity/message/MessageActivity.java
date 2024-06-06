@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.adapter.PrivateMsgSessionsAdapter;
+import com.RobinNotBad.BiliClient.adapter.message.PrivateMsgSessionsAdapter;
 import com.RobinNotBad.BiliClient.api.MessageApi;
 import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
 import com.RobinNotBad.BiliClient.model.PrivateMsgSession;

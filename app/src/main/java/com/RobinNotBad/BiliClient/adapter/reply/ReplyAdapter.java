@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter;
+package com.RobinNotBad.BiliClient.adapter.reply;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -114,13 +114,12 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
         }
         if(holder instanceof ReplyHolder) {
-            int tmpPosition;
+            int realPosition;
             if (isDetail) {
-                tmpPosition = position != 0 ? position - 1 : 0;
+                realPosition = position != 0 ? position - 1 : 0;
             } else {
-                tmpPosition = position - 1;
+                realPosition = position - 1;
             }
-            int realPosition = tmpPosition;
             ReplyHolder replyHolder = (ReplyHolder) holder;
 
             Glide.with(context).load(GlideUtil.url(replyList.get(realPosition).sender.avatar))
@@ -201,12 +200,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 replyHolder.imageCard.setVisibility(View.GONE);
             }
 
-            replyHolder.childReplyCard.setOnClickListener(view -> {
-                startReplyInfoActivity(replyList.get(realPosition));
-            });
-            replyHolder.childReplies.setOnItemClickListener((adapterView, view, i, l) -> {
-                startReplyInfoActivity(replyList.get(realPosition));
-            });
+            replyHolder.childReplyCard.setOnClickListener(view -> startReplyInfoActivity(replyList.get(realPosition)));
+            replyHolder.childReplies.setOnItemClickListener((adapterView, view, i, l) -> startReplyInfoActivity(replyList.get(realPosition)));
             if (!isDetail) {
                 replyHolder.itemView.setOnClickListener((view) -> startReplyInfoActivity(replyList.get(realPosition)));
                 replyHolder.message.setOnClickListener((view) -> startReplyInfoActivity(replyList.get(realPosition)));
@@ -257,9 +252,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             }));
 
-            View.OnClickListener onDeleteClick = view -> {
-                MsgUtil.toast("长按删除", context);
-            };
+            View.OnClickListener onDeleteClick = view -> MsgUtil.toast("长按删除", context);
             replyHolder.item_reply_delete.setOnClickListener(onDeleteClick);
             View.OnLongClickListener onDeleteLongClick = new View.OnLongClickListener() {
                 private int longClickPosition = -1;
@@ -274,11 +267,11 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                 if (result == 0) {
                                     replyList.remove(realPosition);
                                     ((Activity) context).runOnUiThread(() -> {
-                                        notifyItemRemoved(position);
-                                        notifyItemRangeChanged(position, replyList.size() - realPosition);
+                                        notifyItemRemoved(realPosition+1);
+                                        notifyItemRangeChanged(realPosition+1, replyList.size() - realPosition);
                                         longClickPosition = -1;
                                         MsgUtil.toast("删除成功~", context);
-                                        if (position == 0 && isDetail && context instanceof Activity) {
+                                        if (realPosition+1 == 0 && isDetail && context instanceof Activity) {
                                             ((Activity) context).finish();
                                         }
                                     });

@@ -12,8 +12,8 @@ import androidx.annotation.Nullable;
 
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
-import com.RobinNotBad.BiliClient.adapter.DynamicAdapter;
-import com.RobinNotBad.BiliClient.adapter.DynamicHolder;
+import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicAdapter;
+import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicHolder;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;

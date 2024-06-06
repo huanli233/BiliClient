@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter;
+package com.RobinNotBad.BiliClient.adapter.message;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

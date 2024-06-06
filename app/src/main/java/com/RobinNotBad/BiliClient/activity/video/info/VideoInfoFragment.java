@@ -34,7 +34,7 @@ import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.user.WatchLaterActivity;
 import com.RobinNotBad.BiliClient.activity.video.MultiPageActivity;
 import com.RobinNotBad.BiliClient.activity.video.QualityChooserActivity;
-import com.RobinNotBad.BiliClient.adapter.UpListAdapter;
+import com.RobinNotBad.BiliClient.adapter.user.UpListAdapter;
 import com.RobinNotBad.BiliClient.api.*;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.*;

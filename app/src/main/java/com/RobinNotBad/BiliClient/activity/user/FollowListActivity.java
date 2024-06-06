@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
-import com.RobinNotBad.BiliClient.adapter.FollowListAdapter;
+import com.RobinNotBad.BiliClient.adapter.user.FollowListAdapter;
 import com.RobinNotBad.BiliClient.api.FollowApi;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;

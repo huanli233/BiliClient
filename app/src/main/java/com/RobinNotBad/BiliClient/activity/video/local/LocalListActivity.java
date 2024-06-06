@@ -14,7 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.adapter.LocalVideoAdapter;
+import com.RobinNotBad.BiliClient.adapter.video.LocalVideoAdapter;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.model.LocalVideo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;

@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter;
+package com.RobinNotBad.BiliClient.adapter.dynamic;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,14 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
-import com.RobinNotBad.BiliClient.api.DynamicApi;
-import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.Dynamic;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.google.android.material.button.MaterialButton;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 //动态Adapter 显示部分在单独的DynamicHolder里

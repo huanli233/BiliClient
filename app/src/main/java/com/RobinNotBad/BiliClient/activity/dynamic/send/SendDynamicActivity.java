@@ -17,11 +17,10 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
-import com.RobinNotBad.BiliClient.adapter.ArticleCardHolder;
-import com.RobinNotBad.BiliClient.adapter.VideoCardHolder;
+import com.RobinNotBad.BiliClient.adapter.article.ArticleCardHolder;
+import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.VideoCard;
@@ -41,7 +40,6 @@ import com.google.android.material.card.MaterialCardView;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 /**

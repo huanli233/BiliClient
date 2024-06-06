@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
-import com.RobinNotBad.BiliClient.adapter.FolderChooseAdapter;
+import com.RobinNotBad.BiliClient.adapter.favorite.FolderChooseAdapter;
 import com.RobinNotBad.BiliClient.api.FavoriteApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;

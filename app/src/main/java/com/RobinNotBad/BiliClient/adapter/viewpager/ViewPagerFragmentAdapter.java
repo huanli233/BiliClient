@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter;
+package com.RobinNotBad.BiliClient.adapter.viewpager;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

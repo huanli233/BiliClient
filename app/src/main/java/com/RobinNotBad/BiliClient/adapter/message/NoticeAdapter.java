@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter;
+package com.RobinNotBad.BiliClient.adapter.message;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,30 +14,30 @@ import com.RobinNotBad.BiliClient.model.MessageCard;
 
 import java.util.ArrayList;
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageHolder> {
+public class NoticeAdapter extends RecyclerView.Adapter<NoticeHolder> {
     Context context;
     ArrayList<MessageCard> messageList;
 
-    public MessageAdapter(Context context, ArrayList<MessageCard> messageList) {
+    public NoticeAdapter(Context context, ArrayList<MessageCard> messageList) {
         this.context = context;
         this.messageList = messageList;
     }
 
     @NonNull
     @Override
-    public MessageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NoticeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(this.context).inflate(R.layout.cell_message,parent,false);
-        return new MessageHolder(view);
+        return new NoticeHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull MessageHolder holder, int position) {
+    public void onBindViewHolder(@NonNull NoticeHolder holder, int position) {
         holder.showMessage(messageList.get(position),context);
     }
 
     @Override
-    public void onViewRecycled(@NonNull MessageHolder holder) {
+    public void onViewRecycled(@NonNull NoticeHolder holder) {
         holder.extraCard.removeAllViews();
         super.onViewRecycled(holder);
     }

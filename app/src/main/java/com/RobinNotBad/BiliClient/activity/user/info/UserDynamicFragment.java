@@ -8,8 +8,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListFragment;
-import com.RobinNotBad.BiliClient.adapter.DynamicHolder;
-import com.RobinNotBad.BiliClient.adapter.UserInfoAdapter;
+import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicHolder;
+import com.RobinNotBad.BiliClient.adapter.user.UserInfoAdapter;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;

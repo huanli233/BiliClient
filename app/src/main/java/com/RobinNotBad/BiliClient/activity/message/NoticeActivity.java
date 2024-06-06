@@ -8,19 +8,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.adapter.MessageAdapter;
+import com.RobinNotBad.BiliClient.adapter.message.NoticeAdapter;
 import com.RobinNotBad.BiliClient.api.MessageApi;
 import com.RobinNotBad.BiliClient.model.MessageCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 
 public class NoticeActivity extends BaseActivity{
     private RecyclerView recyclerView;
     private ArrayList<MessageCard> messageList;
-    private MessageAdapter messageAdapter;
+    private NoticeAdapter noticeAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +49,10 @@ public class NoticeActivity extends BaseActivity{
                         break;
                 }
 
-                messageAdapter = new MessageAdapter(this, messageList);
+                noticeAdapter = new NoticeAdapter(this, messageList);
                 runOnUiThread(()-> {
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                    recyclerView.setAdapter(messageAdapter);
+                    recyclerView.setAdapter(noticeAdapter);
                 });
             } catch (Exception e) {
                 e.printStackTrace();

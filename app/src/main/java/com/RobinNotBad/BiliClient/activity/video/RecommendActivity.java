@@ -1,16 +1,14 @@
 package com.RobinNotBad.BiliClient.activity.video;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
-import com.RobinNotBad.BiliClient.adapter.VideoCardAdapter;
+import com.RobinNotBad.BiliClient.adapter.video.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.RecommendApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter;
+package com.RobinNotBad.BiliClient.adapter.user;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,12 +24,12 @@ import java.util.ArrayList;
 //关注列表
 //2023-08-29
 
-public class UpListAdapter extends RecyclerView.Adapter<UpListAdapter.Holder> {
+public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Holder> {
 
     Context context;
     ArrayList<UserInfo> userList;
 
-    public UpListAdapter(Context context, ArrayList<UserInfo> userList) {
+    public FollowListAdapter(Context context, ArrayList<UserInfo> userList) {
         this.context = context;
         this.userList = userList;
     }
@@ -37,7 +37,7 @@ public class UpListAdapter extends RecyclerView.Adapter<UpListAdapter.Holder> {
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_up_list,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_user_list,parent,false);
         return new Holder(view);
     }
 

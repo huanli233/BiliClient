@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.adapter.FollowListAdapter;
+import com.RobinNotBad.BiliClient.adapter.user.FollowListAdapter;
 import com.RobinNotBad.BiliClient.api.SearchApi;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;

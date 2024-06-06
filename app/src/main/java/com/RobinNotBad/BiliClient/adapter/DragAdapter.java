@@ -1,14 +1,12 @@
 package com.RobinNotBad.BiliClient.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
@@ -17,8 +15,8 @@ import java.util.List;
 
 public class DragAdapter extends RecyclerView.Adapter<DragAdapter.ViewHolder> {
 
-    private Context mContext;
-    private List<String> mList;
+    private final Context mContext;
+    private final List<String> mList;
     private static final int fixedPosition = -1; // 固定菜单
 
     public DragAdapter(Context context, List<String> list) {

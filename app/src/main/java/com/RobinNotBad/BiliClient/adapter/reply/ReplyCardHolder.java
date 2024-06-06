@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter;
+package com.RobinNotBad.BiliClient.adapter.reply;
 
 import android.view.View;
 import android.widget.TextView;

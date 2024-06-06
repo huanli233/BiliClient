@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter;
+package com.RobinNotBad.BiliClient.adapter.viewpager;
 
 import android.view.View;
 import android.view.ViewGroup;
