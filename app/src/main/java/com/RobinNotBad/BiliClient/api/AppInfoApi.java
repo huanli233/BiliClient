@@ -106,14 +106,15 @@ public class AppInfoApi {
         return list;
     }
 
-    public static String uploadStack(String stack){
+    public static String uploadStack(String stack,Context context){
         //上传崩溃堆栈
         try {
             String url = "http://api.biliterminal.cn/terminal/upload/stack";
 
             JSONObject post_data = new JSONObject();
             post_data.put("stack",stack);
-            post_data.put("device_sdk_version", Build.VERSION.SDK_INT);
+            post_data.put("client_version", context.getPackageManager().getPackageInfo(getPackageName(),0).versionCode));
+            post_data.put("device_sdk", Build.VERSION.SDK_INT);
             post_data.put("device_product",Build.PRODUCT);
             post_data.put("device_brand",Build.BRAND);
             

@@ -40,21 +40,27 @@ public class CatchActivity extends BaseActivity {
         stack_str.setSpan(new RelativeSizeSpan(0.85f),5,stack_str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
         stack_view.setText(stack_str);
 
-        ((MaterialButton)findViewById(R.id.upload_btn)).setOnClickListener(view -> CenterThreadPool.run(() -> {
-            String res = AppInfoApi.uploadStack(stack);
-            runOnUiThread(() -> Toast.makeText(this,res,Toast.LENGTH_SHORT).show());
-        }));
         findViewById(R.id.exit_btn).setOnClickListener(view -> System.exit(-1));
 
         SpannableString reason_str = null;
 
         if(stack!=null) {
             if (stack.contains("java.lang.IndexOutOfBoundsException"))
-                reason_str = new SpannableString("可能的崩溃原因：\n滑动速度太快或触发了列表bug");
+                reason_str = new SpannableString("可能的崩溃原因：\n滑动速度太快或触发bug");
             else if (stack.contains("org.json.JSONException"))
                 reason_str = new SpannableString("可能的崩溃原因：\n数据解析错误");
             else if (stack.contains("java.lang.OutOfMemoryError"))
-                reason_str = new SpannableString("可能的崩溃原因：\n内存溢出，这在小内存设备上很正常");
+                reason_str = new SpannableString("可能的崩溃原因：\n内存爆了，在小内存设备上很正常");
+            
+            ((MaterialButton)findViewById(R.id.upload_btn)).setOnClickListener(view -> {
+                if(stack.contains("java.lang.OutOfMemoryError")) Toast.makeText(this,"该错误无必要上报",Toast.LENGTH_SHORT).show();
+                else{
+                    CenterThreadPool.run(() -> {
+                        String res = AppInfoApi.uploadStack(stack);
+                        runOnUiThread(() -> Toast.makeText(this,res,Toast.LENGTH_SHORT).show());
+                    });
+                }
+            });
         }
 
         if(reason_str != null) {
