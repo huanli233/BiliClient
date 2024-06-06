@@ -34,6 +34,7 @@ public class ReplyApi {
     public static final int REPLY_TYPE_VIDEO = 1;
     public static final int REPLY_TYPE_ARTICLE = 12;
     public static final int REPLY_TYPE_DYNAMIC = 17;
+    public static final String TOP_TIP = " 置顶 ";
 
     //oid：评论区id，可以是视频aid
     //rpid：若要查看子评论，这个参数是父评论的id，否则填0
@@ -154,7 +155,10 @@ public class ReplyApi {
         if(replyCtrl.has("location")) timeStr += " | IP:" + replyCtrl.getString("location").substring(5);  //这字符串还是切割一下吧不然太长了，只留个地址，前缀去了
 
         if(replyCtrl.has("is_up_top")){
-            if(replyCtrl.getBoolean("is_up_top")) replyReturn.message = "[置顶]" + replyReturn.message;
+            if(replyCtrl.getBoolean("is_up_top")) {
+                replyReturn.message = TOP_TIP + replyReturn.message;
+                replyReturn.isTop = true;
+            }
         }
         //Log.e("debug-时间和IP",timeStr);
         replyReturn.pubTime = timeStr;

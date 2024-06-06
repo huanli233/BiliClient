@@ -1,11 +1,14 @@
 package com.RobinNotBad.BiliClient.adapter.reply;
 
+import static com.RobinNotBad.BiliClient.util.ToolsUtil.toWan;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +40,7 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.view.CustomListView;
+import com.RobinNotBad.BiliClient.view.RadiusBackgroundSpan;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -138,6 +142,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         SpannableString spannableString = EmoteUtil.textReplaceEmote(text, replyList.get(realPosition).emotes, 1.0f, context, replyHolder.message.getText());
                         ((Activity) context).runOnUiThread(() -> {
                             replyHolder.message.setText(spannableString);
+                            setTopSpan(realPosition, replyHolder);
                             ToolsUtil.setLink(replyHolder.message);
                             ToolsUtil.setAtLink(replyList.get(realPosition).atNameToMid, replyHolder.message);
                         });
@@ -151,6 +156,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 });
             }
 
+            setTopSpan(realPosition, replyHolder);
             ToolsUtil.setLink(replyHolder.message);
             ToolsUtil.setAtLink(replyList.get(realPosition).atNameToMid, replyHolder.message);
 
@@ -221,7 +227,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             replyList.get(realPosition).liked = true;
                             ((Activity) context).runOnUiThread(() -> {
                                 MsgUtil.toast("点赞成功",context);
-                                replyHolder.likeCount.setText(String.valueOf(replyList.get(realPosition).likeCount + 1));
+                                replyHolder.likeCount.setText(toWan(++replyList.get(realPosition).likeCount));
                                 replyHolder.likeCount.setTextColor(Color.rgb(0xfe,0x67,0x9a));
                                 replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_liked),null,null,null);
                             });
@@ -238,7 +244,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             replyList.get(realPosition).liked = false;
                             ((Activity) context).runOnUiThread(() -> {
                                 MsgUtil.toast("取消成功",context);
-                                replyHolder.likeCount.setText(String.valueOf(replyList.get(realPosition).likeCount));
+                                replyHolder.likeCount.setText(toWan(--replyList.get(realPosition).likeCount));
                                 replyHolder.likeCount.setTextColor(Color.rgb(0xff,0xff,0xff));
                                 replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_like),null,null,null);
                             });
@@ -344,6 +350,15 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 else intent.putExtra("parentSender","");
                 context.startActivity(intent);
             });
+        }
+    }
+
+    public void setTopSpan(int realPosition, ReplyHolder replyHolder) {
+        if (replyList.get(realPosition).isTop && replyList.get(realPosition).message.startsWith(ReplyApi.TOP_TIP)) {
+            RadiusBackgroundSpan badgeBG = new RadiusBackgroundSpan(0, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207,75,95));
+            SpannableString spannableString = new SpannableString(replyHolder.message.getText());
+            spannableString.setSpan(badgeBG, 0, ReplyApi.TOP_TIP.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            replyHolder.message.setText(spannableString);
         }
     }
 

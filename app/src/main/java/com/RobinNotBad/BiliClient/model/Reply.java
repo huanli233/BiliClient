@@ -27,6 +27,7 @@ public class Reply implements Serializable {
     public int childCount;
     public boolean isDynamic;
     public ArrayList<String> childMsgList;
+    public boolean isTop;
 
     public Reply(){}
 }
