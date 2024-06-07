@@ -169,7 +169,6 @@ public class MenuActivity extends BaseActivity {
     }
 
     private List<MaterialButton> getDefaultSortList() {
-<<<<<<< HEAD
         return new ArrayList<>(Arrays.asList(
             findViewById(R.id.menu_recommend),
             findViewById(R.id.menu_popular),
@@ -182,19 +181,6 @@ public class MenuActivity extends BaseActivity {
             findViewById(R.id.menu_settings),
             findViewById(R.id.menu_exit)
         ));
-=======
-        return new ArrayList<>() {{
-            add(findViewById(R.id.menu_recommend));
-            add(findViewById(R.id.menu_popular));
-            add(findViewById(R.id.menu_precious));
-            add(findViewById(R.id.menu_search));
-            add(findViewById(R.id.menu_dynamic));
-            add(findViewById(R.id.menu_myspace));
-            add(findViewById(R.id.menu_message));
-            add(findViewById(R.id.menu_local));
-            add(findViewById(R.id.menu_settings));
-        }};
->>>>>>> 75ce0be5 (优化加载显示；修改菜单Activity结构；添加异步加载布局并应用到部分显示耗时较长的Activity)
     }
 }
 

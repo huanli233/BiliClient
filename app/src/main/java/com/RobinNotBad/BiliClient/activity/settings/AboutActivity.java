@@ -12,17 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-import com.RobinNotBad.BiliClient.BiliTerminal;
-=======
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
-
->>>>>>> 75ce0be5 (优化加载显示；修改菜单Activity结构；添加异步加载布局并应用到部分显示耗时较长的Activity)
-=======
 import com.RobinNotBad.BiliClient.BuildConfig;
->>>>>>> 0d207e65 (使用BuildConfig在build.gradle中标识测试版并自动向版本名添加BETA后缀)
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SponsorActivity;
@@ -45,28 +36,10 @@ public class AboutActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cell_loading);
-
-<<<<<<< HEAD
-        try{
-            SpannableString version_str = new SpannableString("版本名\n" + getPackageManager().getPackageInfo(getPackageName(),0).versionName);
-            version_str.setSpan(new StyleSpan(Typeface.BOLD),0,3, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            ((TextView)findViewById(R.id.app_version)).setText(version_str);
-
-            SpannableString code_str = new SpannableString("版本号\n" + getPackageManager().getPackageInfo(getPackageName(),0).versionCode);
-            code_str.setSpan(new StyleSpan(Typeface.BOLD),0,3, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            ((TextView)findViewById(R.id.app_version_code)).setText(code_str);
-
-            ((TextView)findViewById(R.id.updatelog_view)).setText("\n更新日志：\n "+ ToolsUtil.getUpdateLog(this));
-            ToolsUtil.setCopy(findViewById(R.id.updatelog_view),this,ToolsUtil.getUpdateLog(this));
-        }catch(PackageManager.NameNotFoundException e){
-            e.printStackTrace();
-        }
-=======
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_about, null, (layoutView, resId, parent) -> {
             setContentView(layoutView);
             Log.e("debug","进入关于页面");
             setTopbarExit();
->>>>>>> 75ce0be5 (优化加载显示；修改菜单Activity结构；添加异步加载布局并应用到部分显示耗时较长的Activity)
 
             try{
                 ((TextView)findViewById(R.id.app_version)).setText("版本名：" + getPackageManager().getPackageInfo(getPackageName(),0).versionName);
