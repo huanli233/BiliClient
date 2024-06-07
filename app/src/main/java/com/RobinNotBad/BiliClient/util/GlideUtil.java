@@ -8,6 +8,7 @@ public class GlideUtil {
     public static String url(String url){
         if(url.endsWith("gif")) return url;
         if(url.endsWith("webp")) return url;
+        if(url.contains("afdiancdn.com")) return url;
         return url + "@" + QUALITY_LOW + "q.webp";
     }
 

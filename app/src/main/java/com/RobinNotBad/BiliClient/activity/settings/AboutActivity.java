@@ -3,7 +3,11 @@ package com.RobinNotBad.BiliClient.activity.settings;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,8 +36,14 @@ public class AboutActivity extends BaseActivity {
         Log.e("debug","进入关于页面");
 
         try{
-            ((TextView)findViewById(R.id.app_version)).setText("版本名\n" + getPackageManager().getPackageInfo(getPackageName(),0).versionName);
-            ((TextView)findViewById(R.id.app_version_code)).setText("版本号\n" + getPackageManager().getPackageInfo(getPackageName(), 0).versionCode);
+            SpannableString version_str = new SpannableString("版本名\n" + getPackageManager().getPackageInfo(getPackageName(),0).versionName);
+            version_str.setSpan(new StyleSpan(Typeface.BOLD),0,3, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            ((TextView)findViewById(R.id.app_version)).setText(version_str);
+
+            SpannableString code_str = new SpannableString("版本号\n" + getPackageManager().getPackageInfo(getPackageName(),0).versionCode);
+            code_str.setSpan(new StyleSpan(Typeface.BOLD),0,3, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            ((TextView)findViewById(R.id.app_version_code)).setText(code_str);
+
             ((TextView)findViewById(R.id.updatelog_view)).setText("\n更新日志：\n "+ ToolsUtil.getUpdateLog(this));
             ToolsUtil.setCopy(findViewById(R.id.updatelog_view),this,ToolsUtil.getUpdateLog(this));
         }catch(PackageManager.NameNotFoundException e){

@@ -33,7 +33,6 @@ public class CatchActivity extends BaseActivity {
 
         Intent intent = getIntent();
         String stack = intent.getStringExtra("stack");
-        if(stack == null) finish();
 
         SpannableString stack_str = new SpannableString("错误堆栈：\n" + stack);
         stack_str.setSpan(new StyleSpan(Typeface.BOLD),0,5, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -52,7 +51,7 @@ public class CatchActivity extends BaseActivity {
             else if (stack.contains("java.lang.OutOfMemoryError"))
                 reason_str = new SpannableString("可能的崩溃原因：\n内存爆了，在小内存设备上很正常");
             
-            ((MaterialButton)findViewById(R.id.upload_btn)).setOnClickListener(view -> {
+            findViewById(R.id.upload_btn).setOnClickListener(view -> {
                 if(stack.contains("java.lang.OutOfMemoryError")) Toast.makeText(this,"无需上报",Toast.LENGTH_SHORT).show();
                 else{
                     CenterThreadPool.run(() -> {
@@ -61,7 +60,7 @@ public class CatchActivity extends BaseActivity {
                     });
                 }
             });
-        }
+        }else finish();
 
         if(reason_str != null) {
             reason_str.setSpan(new StyleSpan(Typeface.BOLD),0,8,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);

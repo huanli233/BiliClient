@@ -102,14 +102,15 @@
                     tools:ignore="MissingConstraints">
                 
                     <TextView
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_width="wrap_content"
                         android:textSize="11sp"
                         android:alpha="0.9"
                         android:text="版本名"
                         android:padding="3dp"
                         android:id="@+id/app_version"
-                        android:layout_gravity="center" />
+                        android:layout_gravity="center"
+                        android:gravity="center" />
                     
                 </com.google.android.material.card.MaterialCardView>
                 
@@ -123,14 +124,15 @@
                     app:layout_constraintTop_toTopOf="@id/version_name_card">
                 
                     <TextView
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_width="wrap_content"
                         android:textSize="11sp"
                         android:alpha="0.9"
                         android:padding="3dp"
                         android:text="版本号"
                         android:id="@+id/app_version_code"
-                        android:layout_gravity="center" />
+                        android:layout_gravity="center"
+                        android:gravity="center" />
                     
                 </com.google.android.material.card.MaterialCardView>
                 

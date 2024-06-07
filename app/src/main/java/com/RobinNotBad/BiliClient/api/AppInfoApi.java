@@ -145,7 +145,7 @@ public class AppInfoApi {
             
             user.name = sponsor.getString("name");
             user.avatar = sponsor.getString("avatar");
-            user.sign = "总金额：" + String.valueOf(sponsor.getInt("sum_amount")) + "r | 捐赠时间：" + sdf.format(sponsor.getLong("last_time")*1000);
+            user.sign = "总金额：" + sponsor.getInt("sum_amount") + "r | 捐赠时间：" + sdf.format(sponsor.getLong("last_time")*1000);
             user.mid = -1;
             user.fans = 0;
             user.followed = true;

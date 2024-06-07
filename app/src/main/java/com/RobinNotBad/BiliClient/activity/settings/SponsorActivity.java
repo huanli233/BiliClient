@@ -35,6 +35,8 @@ public class SponsorActivity extends RefreshListActivity {
                 setOnLoadMoreListener(this::continueLoading);
                 setRefreshing(false);
                 setAdapter(adapter);
+
+                if(userList.size() < 1) setBottom(true);
             }catch(Exception e){
                 report(e);
                 setRefreshing(false);
@@ -49,6 +51,8 @@ public class SponsorActivity extends RefreshListActivity {
                 userList = AppInfoApi.getSponsors(page);
                 runOnUiThread(() -> adapter.notifyItemRangeInserted(lastSize, userList.size() - lastSize));
                 setRefreshing(false);
+                
+                if(userList.size() < 1) setBottom(true);
             } catch (Exception e){
                 report(e);
                 setRefreshing(false);
