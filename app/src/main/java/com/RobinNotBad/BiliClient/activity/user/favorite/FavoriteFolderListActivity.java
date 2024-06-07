@@ -1,8 +1,12 @@
 package com.RobinNotBad.BiliClient.activity.user.favorite;
 
 import android.annotation.SuppressLint;
+import android.media.Image;
 import android.os.Bundle;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,6 +36,7 @@ public class FavoriteFolderListActivity extends BaseActivity {
         long mid = SharedPreferencesUtil.getLong("mid",0);
 
         recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.addView(new View(this));
 
         setPageName("收藏");
 
@@ -45,5 +50,7 @@ public class FavoriteFolderListActivity extends BaseActivity {
                 });
             } catch (Exception e) {report(e);}
         });
+        View opusFolderView = LayoutInflater.from(this).inflate(R.layout.cell_favorite_folder_list,null,false);
+        
     }
 }

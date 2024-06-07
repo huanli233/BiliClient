@@ -6,6 +6,7 @@ import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
+import java.util.TimeZone;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -178,5 +179,11 @@ public class ArticleApi {
         } catch (JSONException ignored) {
             return -1;
         }
+    }
+    public static int opusId2cvid(String opusId) throws JSONException,IOException{
+        String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/opus/detail?id="+opusId+"&time_zone_offset="+TimeZone.getDefault().getRawOffset()/100000;
+        JSONObject result = NetWorkUtil.getJson(url);
+        int cvid = Integer.valueOf(result.getJSONObject("data").getJSONObject("item").getString("rid_str"));
+        return cvid;
     }
 }
