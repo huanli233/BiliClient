@@ -15,6 +15,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.reply.ReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
+import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -38,6 +39,8 @@ public class ArticleInfoActivity extends BaseActivity {
 
         TextView pageName = findViewById(R.id.pageName);
         pageName.setText("专栏详情");
+        
+        TutorialHelper.show(R.xml.tutorial_article,this,"article",1);
 
         ViewPager viewPager = findViewById(R.id.viewPager);
 

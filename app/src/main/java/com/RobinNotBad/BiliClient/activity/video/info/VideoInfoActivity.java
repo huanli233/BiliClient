@@ -17,6 +17,7 @@ import com.RobinNotBad.BiliClient.activity.reply.ReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
+import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -83,6 +84,8 @@ public class VideoInfoActivity extends BaseActivity {
         }
     }
     protected void initVideoInfoView() {
+        TutorialHelper.show(R.xml.tutorial_video,this,"video",1);
+        
         ViewPager viewPager = findViewById(R.id.viewPager);
         TextView pageName = findViewById(R.id.pageName);
         ImageView loading = findViewById(R.id.loading);

@@ -13,6 +13,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicHolder;
 import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerFragmentAdapter;
+import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 
 import java.util.ArrayList;
@@ -38,6 +39,8 @@ public class UserInfoActivity extends BaseActivity {
             long mid = intent.getLongExtra("mid",114514);
 
             setPageName("用户信息");
+                
+            TutorialHelper.show(R.xml.tutorial_space,this,"space",1);
 
             ViewPager viewPager = findViewById(R.id.viewPager);
 

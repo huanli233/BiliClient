@@ -17,6 +17,7 @@ import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
+import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -50,6 +51,8 @@ public class DynamicInfoActivity extends BaseActivity {
 
             TextView pageName = findViewById(R.id.pageName);
             pageName.setText("动态详情");
+                
+            TutorialHelper.show(R.xml.tutorial_dynamic_info,this,"dynamic_info",1);
 
             CenterThreadPool.run(()->{
                 try {

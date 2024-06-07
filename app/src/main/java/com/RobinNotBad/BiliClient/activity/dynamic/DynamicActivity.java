@@ -15,10 +15,13 @@ import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
 import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicAdapter;
 import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicHolder;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
+import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.R;
 
+import com.geetest.sdk.c;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -131,6 +134,8 @@ public class DynamicActivity extends RefreshMainActivity {
         setOnLoadMoreListener(page -> addDynamic());
 
         setPageName("动态");
+        
+        TutorialHelper.show(R.xml.tutorial_dynamic,this,"dynamic",1);
 
         refreshDynamic();
     }

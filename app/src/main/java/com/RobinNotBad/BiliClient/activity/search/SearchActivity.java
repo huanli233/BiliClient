@@ -23,6 +23,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.SearchHistoryAdapter;
+import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.util.JsonUtil;
 import com.RobinNotBad.BiliClient.util.LinkUrlUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -55,6 +56,8 @@ public class SearchActivity extends InstanceActivity {
         setContentView(R.layout.activity_search);
         setMenuClick();
         Log.e("debug", "进入搜索页");
+        
+        TutorialHelper.show(R.xml.tutorial_search,this,"search",1);
 
         handler = new Handler();
 

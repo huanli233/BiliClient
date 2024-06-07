@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tutorial>
+    <name>动态页教程</name>
+    <description>用于引导用户使用动态</description>
+    <type>0</type>
+    <img>mipmap/tutorial_dynamic</img>
+    <content>
+        <item>
+            <type>0</type>
+            <text>欢迎来到动态页面</text>
+            <style>none</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>0</type>
+            <text>点击动态的文字部分查看动态详情</text>
+            <style>bold</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>0</type>
+            <text>哔哩终端暂不支持查看直播和部分动态类型</text>
+            <style>none</style>
+            <color>#ffffff</color>
+        </item>
+    </content>
+</tutorial>
