@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
 }
 
+boolean betaVer = true
+
 android {
     namespace 'com.RobinNotBad.BiliClient'
     compileSdk 32
@@ -20,21 +22,28 @@ android {
         versionCode 20240606
         versionName "2.6.0"
 
+        if (betaVer) {
+            versionName += "-BETA"
+        }
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
+            //noinspection ChromeOsAbiSupport
             abiFilters 'armeabi-v7a','x86'
         }
     }
 
     buildTypes {
         release {
+            buildConfigField "boolean", "BETA", String.valueOf(betaVer)
             buildConfigField "boolean", "LOG_DEBUG", "true"
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
+            buildConfigField "boolean", "BETA", String.valueOf(betaVer)
             signingConfig signingConfigs.debug
         }
     }
@@ -53,12 +62,15 @@ android {
 
 dependencies {
     implementation 'com.google.zxing:core:3.5.0'
+    //noinspection GradleDependency
     implementation 'androidx.appcompat:appcompat:1.4.1'
+    //noinspection GradleDependency
     implementation 'com.google.android.material:material:1.5.0'
     //noinspection GradleDependency
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.github.bumptech.glide:glide:4.13.2'
+    //noinspection GradleDependency
     implementation 'org.jsoup:jsoup:1.10.2'
     //noinspection GradleCompatible
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'

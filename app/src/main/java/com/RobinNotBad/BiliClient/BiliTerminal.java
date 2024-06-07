@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.util.DisplayMetrics;
 
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
@@ -16,8 +15,6 @@ import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class BiliTerminal extends Application {
-
-    public static boolean IS_DEBUG_VERSION = true;
 
     @SuppressLint("StaticFieldLeak")
     public static Context context;

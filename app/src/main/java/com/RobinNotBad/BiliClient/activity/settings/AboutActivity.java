@@ -14,11 +14,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import com.RobinNotBad.BiliClient.BiliTerminal;
 =======
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 
 >>>>>>> 75ce0be5 (优化加载显示；修改菜单Activity结构；添加异步加载布局并应用到部分显示耗时较长的Activity)
+=======
+import com.RobinNotBad.BiliClient.BuildConfig;
+>>>>>>> 0d207e65 (使用BuildConfig在build.gradle中标识测试版并自动向版本名添加BETA后缀)
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SponsorActivity;
@@ -140,6 +144,6 @@ public class AboutActivity extends BaseActivity {
             });
         });
 
-        if(!BiliTerminal.IS_DEBUG_VERSION) findViewById(R.id.debug_tip).setVisibility(View.GONE);
+        if(!BuildConfig.BETA) findViewById(R.id.debug_tip).setVisibility(View.GONE);
     }
 }
