@@ -28,7 +28,10 @@ public class TutorialActivity extends BaseActivity {
         ((TextView)findViewById(R.id.content)).setText(TutorialHelper.loadText(tutorial.content));
         
         try{
-            if(tutorial.imgid != -1) ((ImageFilterView)findViewById(R.id.image_view)).setImageDrawable(getResources().getDrawable(tutorial.imgid));
+            if(tutorial.imgid != null) {
+                int indentify = getResources().getIdentifier(getPackageName() + ":" + tutorial.imgid,null,null);
+                if(indentify > 0) ((ImageFilterView)findViewById(R.id.image_view)).setImageDrawable(getResources().getDrawable(indentify));
+            }
             else findViewById(R.id.image_view).setVisibility(View.GONE);
         }catch(Exception e){
             e.printStackTrace();
@@ -41,9 +44,10 @@ public class TutorialActivity extends BaseActivity {
             @Override
             public void run() {
                 runOnUiThread(() -> {
-                    if(wait_time-- > 0){
+                    if(wait_time > 0){
                         close_btn.setText("已阅(" + wait_time + "s)");
                         close_btn.setEnabled(false);
+                        wait_time--;
                     }else{
                         close_btn.setText("已阅");
                         close_btn.setEnabled(true);

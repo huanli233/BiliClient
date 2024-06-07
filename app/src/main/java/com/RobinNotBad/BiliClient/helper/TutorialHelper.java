@@ -109,7 +109,7 @@ public class TutorialHelper {
                 else if(eventType == XmlPullParser.TEXT){
                     if(isInName) turtorial.name = xml.getText();
                     else if(isInDescrption) turtorial.description = xml.getText();
-                    else if(isInImg) turtorial.imgid = Integer.valueOf(xml.getText());
+                    else if(isInImg) turtorial.imgid = xml.getText();
                     else if(isInType) turtorial.type = Integer.valueOf(xml.getText());
                     else if(item != null){
                         if(isInContentItemType) item.type = Integer.valueOf(xml.getText());

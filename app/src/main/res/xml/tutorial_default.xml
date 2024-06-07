@@ -3,11 +3,11 @@
     <name>默认教程</name>
     <description></description>
     <type>0</type>
-    <img>2131623947</img>
+    <img>mipmap/icon</img>
     <content>
         <item>
             <type>0</type>
-            <text>这是一个测试教程</text>
+            <text>普通文本</text>
             <style>none</style>
             <color>#ffffff</color>
         </item>
@@ -16,26 +16,32 @@
         </item>
         <item>
             <type>0</type>
-            <text>一般来讲，</text>
-            <style>none</style>
-            <color>#ffffff</color>
-        </item>
-        <item>
-            <type>0</type>
-            <text>你不应该看到它</text>
+            <text>加粗</text>
             <style>bold</style>
             <color>#ffffff</color>
         </item>
         <item>
             <type>0</type>
-            <text>，</text>
-            <style>none</style>
+            <text>斜体</text>
+            <style>italic</style>
             <color>#ffffff</color>
         </item>
         <item>
             <type>0</type>
-            <text>这说明可能传错教程文件了</text>
-            <style>bold</style>
+            <text>下划线</text>
+            <style>underline</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>0</type>
+            <text>删除线</text>
+            <style>strike</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>0</type>
+            <text>颜色</text>
+            <style>none</style>
             <color>#df2243</color>
         </item>
     </content>
