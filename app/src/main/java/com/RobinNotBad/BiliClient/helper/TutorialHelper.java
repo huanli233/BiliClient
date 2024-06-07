@@ -51,7 +51,7 @@ public class TutorialHelper {
                             isInName = true;
                             break;
                         case "description":
-                            isInName = true;
+                            isInDescrption = true;
                             break;
                         case "img":
                             isInImg = true;
@@ -82,7 +82,7 @@ public class TutorialHelper {
                             isInName = false;
                             break;
                         case "description":
-                            isInName = false;
+                            isInDescrption = false;
                             break;
                         case "img":
                             isInImg = false;
@@ -142,22 +142,23 @@ public class TutorialHelper {
         SpannableStringBuilder str = new SpannableStringBuilder("");
         for(CustomText text : texts){
             if(text.type == 0){
+                int old_len = str.length();
                 str.append(text.text);
                 switch(text.style){
                     case "bold": //粗体
-                        str.setSpan(new StyleSpan(Typeface.BOLD),str.length() - text.text.length(),str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                        str.setSpan(new StyleSpan(Typeface.BOLD),old_len,str.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         break;
                     case "italic": //斜体
-                        str.setSpan(new StyleSpan(Typeface.ITALIC),str.length() - text.text.length(),str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                        str.setSpan(new StyleSpan(Typeface.ITALIC),old_len,str.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         break;
                     case "underline": //下划线
-                        str.setSpan(new UnderlineSpan(),str.length() - text.text.length(),str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                        str.setSpan(new UnderlineSpan(),old_len,str.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         break;
                     case "strike": //删除线
-                        str.setSpan(new StrikethroughSpan(),str.length() - text.text.length(),str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                        str.setSpan(new StrikethroughSpan(),old_len,str.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         break;
                 }
-                str.setSpan(new ForegroundColorSpan(Color.parseColor(text.color)),str.length() - text.text.length(),str.length(),Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                str.setSpan(new ForegroundColorSpan(Color.parseColor(text.color)),old_len,str.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             else if(text.type == 1) str.append("\n");
         }

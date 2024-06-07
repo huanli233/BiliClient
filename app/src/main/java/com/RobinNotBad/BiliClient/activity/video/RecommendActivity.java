@@ -7,8 +7,10 @@ import android.util.Log;
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.RecommendApi;
+import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.R;
 
 import java.util.ArrayList;
 
@@ -32,6 +34,8 @@ public class RecommendActivity extends RefreshMainActivity {
         setOnLoadMoreListener(page -> addRecommend());
 
         setPageName("推荐");
+        
+        TutorialHelper.show(R.xml.tutorial_recommend,this,"recommend",1);
 
         refreshRecommend();
     }
