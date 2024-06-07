@@ -9,9 +9,11 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SponsorActivity;
@@ -115,5 +117,7 @@ public class AboutActivity extends BaseActivity {
             Intent intent = new Intent(this,SponsorActivity.class);
             startActivity(intent);
         });
+
+        if(!BiliTerminal.IS_DEBUG_VERSION) findViewById(R.id.debug_tip).setVisibility(View.GONE);
     }
 }

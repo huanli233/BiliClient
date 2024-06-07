@@ -138,6 +138,25 @@
                 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/debug_tip"
+                android:layout_marginTop="4dp"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginHorizontal="1dp">
+
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:textSize="11sp"
+                    android:padding="3dp"
+                    android:alpha="0.85"
+                    android:text="当前版本为测试版\n不代表最终正式版"
+                    android:layout_gravity="center"
+                    android:gravity="center" />
+
+            </com.google.android.material.card.MaterialCardView>
+
             <include layout="@layout/cell_divider"/>
             
             <com.google.android.material.card.MaterialCardView

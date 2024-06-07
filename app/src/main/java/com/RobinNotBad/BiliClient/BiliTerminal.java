@@ -16,6 +16,9 @@ import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class BiliTerminal extends Application {
+
+    public static boolean IS_DEBUG_VERSION = true;
+
     @SuppressLint("StaticFieldLeak")
     public static Context context;
     @SuppressLint("StaticFieldLeak")
