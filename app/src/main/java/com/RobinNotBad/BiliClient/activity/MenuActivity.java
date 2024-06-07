@@ -115,7 +115,9 @@ public class MenuActivity extends BaseActivity {
             for (int i = 0; i < cardList.size(); i++) {
                 int id = cardList.get(i).getId();
                 if (id == R.id.menu_myspace || id == R.id.menu_dynamic || id == R.id.menu_message) {
-                    if (SharedPreferencesUtil.getLong("mid", 0) == 0) needRemoveIndexes.add(i);
+                    if (SharedPreferencesUtil.getLong("mid", 0) == 0) {
+                        needRemoveIndexes.add(i);
+                    }
                 } else if (id == R.id.menu_login) {
                     if (SharedPreferencesUtil.getLong("mid", 0) != 0) needRemoveIndexes.add(i);
                 } else if (id == R.id.menu_popular) {
@@ -126,8 +128,10 @@ public class MenuActivity extends BaseActivity {
                 adapter.setOnClickListener(id, view -> killAndJump(view.getId()));
             }
 
+            int shift = 0;
             for (int i : needRemoveIndexes) {
-                cardList.remove(i);
+                cardList.remove(i - shift);
+                shift++;
             }
 
             adapter.setOnClickListener(R.id.menu_login, view -> {

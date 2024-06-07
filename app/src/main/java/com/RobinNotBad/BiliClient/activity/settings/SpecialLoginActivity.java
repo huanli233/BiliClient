@@ -1,12 +1,17 @@
 package com.RobinNotBad.BiliClient.activity.settings;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
@@ -60,7 +65,9 @@ public class SpecialLoginActivity extends BaseActivity {
         }
         else{
             desc.setText("以下是你的登录信息。此功能是为低版本安卓用户无法登录的问题准备，如果你是意外进入此页面，请退出。\n同时，请勿将此页面的信息传给别人，以防盗号！");
-            confirm.setVisibility(View.GONE);
+            ((TextView) findViewById(R.id.textView)).setText("复制");
+            ((TextView) findViewById(R.id.textView)).setCompoundDrawables(null, null, null, null);
+            ((TextView) findViewById(R.id.textView)).setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("cookies",SharedPreferencesUtil.getString("cookies",""));
@@ -69,6 +76,12 @@ public class SpecialLoginActivity extends BaseActivity {
                 e.printStackTrace();
             }
             textInput.setText(jsonObject.toString());
+            findViewById(R.id.textView).setOnClickListener((view) -> {
+                ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("label", textInput.getText());
+                clipboardManager.setPrimaryClip(clipData);
+                MsgUtil.toast("已复制",this);
+            });
         }
     }
 

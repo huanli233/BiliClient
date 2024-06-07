@@ -119,7 +119,6 @@ public class QRLoginFragment extends Fragment {
 
 
     public void refreshQrCode() {
-
         CenterThreadPool.run(() ->{
             try{
                 requireActivity().runOnUiThread(() -> scanStat.setText("正在获取二维码"));
