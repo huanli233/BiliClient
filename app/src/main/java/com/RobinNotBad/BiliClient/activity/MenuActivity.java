@@ -224,7 +224,7 @@ class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.btns = btns;
     }
 
-    class MenuHolder extends RecyclerView.ViewHolder {
+    static class MenuHolder extends RecyclerView.ViewHolder {
         public MaterialButton btn;
         private final View itemView;
         public MenuHolder(@NonNull View itemView) {
