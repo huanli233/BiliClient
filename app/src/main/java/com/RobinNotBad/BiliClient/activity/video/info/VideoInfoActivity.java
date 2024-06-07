@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.video.info;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,6 +18,7 @@ import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
+import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -40,6 +42,7 @@ public class VideoInfoActivity extends BaseActivity {
 
     //private MediaViewPager2Adapter mediaViewPager2Adapter;
 
+    @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +51,16 @@ public class VideoInfoActivity extends BaseActivity {
         if(type == null) type = "video";
         this.aid = intent.getLongExtra("aid",114514);
         this.bvid = intent.getStringExtra("bvid");
-        setContentView(R.layout.activity_simple_viewpager);
+        setContentView(R.layout.cell_loading);
 
-        if(type.equals("media")) initMediaInfoView();
-        else initVideoInfoView();
+        String finalType = type;
+        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_simple_viewpager, null, (layoutView, resId, parent) -> {
+            setContentView(layoutView);
+            setTopbarExit();
+
+            if(finalType.equals("media")) initMediaInfoView();
+            else initVideoInfoView();
+        });
     }
 
 

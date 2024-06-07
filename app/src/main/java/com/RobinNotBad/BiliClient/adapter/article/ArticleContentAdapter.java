@@ -1,24 +1,29 @@
 package com.RobinNotBad.BiliClient.adapter.article;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
+import com.RobinNotBad.BiliClient.api.ArticleApi;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.ArticleLine;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -26,6 +31,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -33,11 +39,11 @@ import java.util.ArrayList;
 
 public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAdapter.ArticleLineHolder> {
 
-    Context context;
+    Activity context;
     ArrayList<ArticleLine> article;
     ArticleInfo articleInfo;
 
-    public ArticleContentAdapter(Context context,ArticleInfo articleInfo, ArrayList<ArticleLine> article) {
+    public ArticleContentAdapter(Activity context, ArticleInfo articleInfo, ArrayList<ArticleLine> article) {
         this.context = context;
         this.article = article;
         this.articleInfo = articleInfo;
@@ -133,6 +139,103 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                     intent.putExtra("mid",articleInfo.upInfo.mid);
                     context.startActivity(intent);
                 });
+                ImageButton like = holder.itemView.findViewById(R.id.btn_like);
+                ImageButton coin = holder.itemView.findViewById(R.id.btn_coin);
+                TextView likeLabel = holder.itemView.findViewById(R.id.like_label);
+                TextView coinLabel = holder.itemView.findViewById(R.id.coin_label);
+                TextView favLabel = holder.itemView.findViewById(R.id.fav_label);
+                ImageButton fav = holder.itemView.findViewById(R.id.btn_fav);
+
+                likeLabel.setText(ToolsUtil.toWan(articleInfo.stats.like));
+                coinLabel.setText(ToolsUtil.toWan(articleInfo.stats.coin));
+                favLabel.setText(ToolsUtil.toWan(articleInfo.stats.favorite));
+
+                like.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
+                    try {
+                        int result = ArticleApi.like(articleInfo.id, !articleInfo.stats.liked);
+                        if (result == 0) {
+                            articleInfo.stats.liked = !articleInfo.stats.liked;
+                            context.runOnUiThread(() -> {
+                                MsgUtil.toast((articleInfo.stats.liked ? "点赞成功" : "取消成功"), context);
+
+                                if (articleInfo.stats.liked) likeLabel.setText(ToolsUtil.toWan(++articleInfo.stats.like));
+                                else likeLabel.setText(ToolsUtil.toWan(--articleInfo.stats.like));
+                                like.setBackground(ContextCompat.getDrawable(context, (articleInfo.stats.liked ? R.drawable.icon_like_1 : R.drawable.icon_like_0)));
+                            });
+                        } else {
+                            context.runOnUiThread(() -> MsgUtil.toast("操作失败：" + result, context));
+                        }
+                    } catch (Exception e) {
+                        context.runOnUiThread(() -> MsgUtil.err(e, context));
+                    }
+                }));
+
+                coin.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
+                    if (articleInfo.stats.coined < articleInfo.stats.allow_coin) {
+                        try {
+                            int result = ArticleApi.addCoin(articleInfo.id, articleInfo.upInfo.mid, 1);
+                            if (result == 0) {
+                                articleInfo.stats.coined++;
+                                context.runOnUiThread(() -> {
+                                    MsgUtil.toast("投币成功！", context);
+                                    coinLabel.setText(ToolsUtil.toWan(++articleInfo.stats.coin));
+                                    coin.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_coin_1));
+                                });
+                            } else {
+                                String msg = "投币失败：" + result;
+                                switch (result) {
+                                    case 34002:
+                                        msg = "不能给自己投币哦！";
+                                }
+                                String finalMsg = msg;
+                                context.runOnUiThread(() -> MsgUtil.toast(finalMsg, context));
+                            }
+                        } catch (Exception e) {
+                            context.runOnUiThread(() -> MsgUtil.err(e, context));
+                        }
+                    } else {
+                        context.runOnUiThread(() -> MsgUtil.toast("投币数量到达上限", context));
+                    }
+                }));
+
+                fav.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
+                    try {
+                        if (articleInfo.stats.favoured) {
+                            ArticleApi.delFavorite(articleInfo.id);
+                            context.runOnUiThread(() -> fav.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_favourite_0)));
+                            articleInfo.stats.favorite--;
+                        } else {
+                            ArticleApi.favorite(articleInfo.id);
+                            context.runOnUiThread(() -> fav.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_favourite_1)));
+                            articleInfo.stats.favorite++;
+                        }
+                        articleInfo.stats.favoured = !articleInfo.stats.favoured;
+                        context.runOnUiThread(() -> {
+                            favLabel.setText(ToolsUtil.toWan(articleInfo.stats.favorite));
+                            MsgUtil.toast("操作成功~", context);
+                        });
+                    } catch (IOException e) {
+                        context.runOnUiThread(() -> MsgUtil.err(e, context));
+                    }
+                }));
+
+                CenterThreadPool.run(() -> {
+                    try {
+                        ArticleInfo viewInfo = ArticleApi.getArticleViewInfo(articleInfo.id);
+                        if (viewInfo != null) {
+                            articleInfo.stats = viewInfo.stats;
+                            articleInfo.stats.allow_coin = 1;
+                            context.runOnUiThread(()->{
+                                if(articleInfo.stats.coined!=0) coin.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_coin_1));
+                                if(articleInfo.stats.liked) like.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_like_1));
+                                if(articleInfo.stats.favoured) fav.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_favourite_1));
+                            });
+                        }
+                    } catch (Exception e) {
+                        context.runOnUiThread(() -> MsgUtil.err(e, context));
+                    }
+                });
+
                 title.setText(articleInfo.title);
                 break;
 

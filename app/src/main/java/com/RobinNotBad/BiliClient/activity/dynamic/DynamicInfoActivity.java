@@ -18,6 +18,7 @@ import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -39,44 +40,49 @@ public class DynamicInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simple_viewpager);
-        Intent intent = getIntent();
-        long id = intent.getLongExtra("id",0);
+        setContentView(R.layout.cell_loading);
 
-        TextView pageName = findViewById(R.id.pageName);
-        pageName.setText("动态详情");
+        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_simple_viewpager, null, (layoutView, resId, parent) -> {
+            setContentView(layoutView);
+            setTopbarExit();
+            Intent intent = getIntent();
+            long id = intent.getLongExtra("id",0);
 
-        CenterThreadPool.run(()->{
-            try {
-                Dynamic dynamic = DynamicApi.getDynamic(id);
+            TextView pageName = findViewById(R.id.pageName);
+            pageName.setText("动态详情");
 
-                List<Fragment> fragmentList = new ArrayList<>();
-                DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance(dynamic);
-                fragmentList.add(diFragment);
-                rFragment = ReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type);
-                rFragment.replyType = ReplyApi.REPLY_TYPE_DYNAMIC;
-                fragmentList.add(rFragment);
+            CenterThreadPool.run(()->{
+                try {
+                    Dynamic dynamic = DynamicApi.getDynamic(id);
 
-                ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
+                    List<Fragment> fragmentList = new ArrayList<>();
+                    DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance(dynamic);
+                    fragmentList.add(diFragment);
+                    rFragment = ReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type);
+                    rFragment.replyType = ReplyApi.REPLY_TYPE_DYNAMIC;
+                    fragmentList.add(rFragment);
 
-                runOnUiThread(()->{
-                    ViewPager viewPager = findViewById(R.id.viewPager);
-                    viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
+                    ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
 
-                    if(SharedPreferencesUtil.getBoolean("first_dynamicinfo",true)){
-                        MsgUtil.toast("下载完成",this);
-                        SharedPreferencesUtil.putBoolean("first_dynamicinfo",false);
-                    }
+                    runOnUiThread(()->{
+                        ViewPager viewPager = findViewById(R.id.viewPager);
+                        viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
 
-                    findViewById(R.id.loading).setVisibility(View.GONE);
-                });
+                        if(SharedPreferencesUtil.getBoolean("first_dynamicinfo",true)){
+                            MsgUtil.toast("下载完成",this);
+                            SharedPreferencesUtil.putBoolean("first_dynamicinfo",false);
+                        }
 
-            } catch (Exception e) {
-                runOnUiThread(() -> {
-                    MsgUtil.err(e, this);
-                    ((ImageView) findViewById(R.id.loading)).setImageResource(R.mipmap.loading_2233_error);
-                });
-            }
+                        findViewById(R.id.loading).setVisibility(View.GONE);
+                    });
+
+                } catch (Exception e) {
+                    runOnUiThread(() -> {
+                        MsgUtil.err(e, this);
+                        ((ImageView) findViewById(R.id.loading)).setImageResource(R.mipmap.loading_2233_error);
+                    });
+                }
+            });
         });
     }
 
