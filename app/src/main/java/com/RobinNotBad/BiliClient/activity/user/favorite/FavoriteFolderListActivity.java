@@ -6,7 +6,9 @@ import android.os.Bundle;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +20,11 @@ import com.RobinNotBad.BiliClient.model.FavoriteFolder;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 
 //收藏夹列表
@@ -26,18 +33,27 @@ import java.util.ArrayList;
 public class FavoriteFolderListActivity extends BaseActivity {
 
     private RecyclerView recyclerView;
+    private ImageView ArticleFavCover;
+    private TextView ArticleFavTitle;
+    private TextView ArticleFavAmount;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simple_list);
+        setContentView(R.layout.activity_fav_folders);
 
         long mid = SharedPreferencesUtil.getLong("mid",0);
 
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.addView(new View(this));
-
+        ArticleFavCover = findViewById(R.id.cover);
+        ArticleFavTitle = findViewById(R.id.title);
+        
+        ArticleFavTitle.setText("专栏收藏夹");
+        Glide.with(this).load(getDrawable(R.drawable.article_fav_cover))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,this))))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(ArticleFavCover);
         setPageName("收藏");
 
         CenterThreadPool.run(()->{
@@ -47,10 +63,9 @@ public class FavoriteFolderListActivity extends BaseActivity {
                 runOnUiThread(()->{
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
                     recyclerView.setAdapter(adapter);
-                });
+                    });
             } catch (Exception e) {report(e);}
         });
-        View opusFolderView = LayoutInflater.from(this).inflate(R.layout.cell_favorite_folder_list,null,false);
         
     }
 }
