@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
@@ -16,51 +17,56 @@ public class SettingPrefActivity extends BaseActivity {
             copy_enable, click_image_play_enable,image_no_load_onscroll,
             text_link_enable, disable_network_check;
 
-    @SuppressLint({"MissingInflatedId", "SetTextI18n"})
+    @SuppressLint({"MissingInflatedId", "SetTextI18n", "InflateParams"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting_pref);
-        Log.e("debug","进入偏好设置");
+        setContentView(R.layout.cell_loading);
 
-        back_disable = findViewById(R.id.back_disable);
-        back_disable.setChecked(SharedPreferencesUtil.getBoolean("back_disable",false));
+        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_pref, null, (layoutView, resId, parent) -> {
+            setContentView(R.layout.activity_setting_pref);
+            setTopbarExit();
+            Log.e("debug","进入偏好设置");
 
-        fav_single = findViewById(R.id.fav_single);
-        fav_single.setChecked(SharedPreferencesUtil.getBoolean("fav_single",false));
+            back_disable = findViewById(R.id.back_disable);
+            back_disable.setChecked(SharedPreferencesUtil.getBoolean("back_disable",false));
 
-        fav_notice = findViewById(R.id.fav_notice);
-        fav_notice.setChecked(SharedPreferencesUtil.getBoolean("fav_notice",false));
+            fav_single = findViewById(R.id.fav_single);
+            fav_single.setChecked(SharedPreferencesUtil.getBoolean("fav_single",false));
 
-        video_tags = findViewById(R.id.tags_enable);
-        video_tags.setChecked(SharedPreferencesUtil.getBoolean("tags_enable",true));
+            fav_notice = findViewById(R.id.fav_notice);
+            fav_notice.setChecked(SharedPreferencesUtil.getBoolean("fav_notice",false));
 
-        video_related = findViewById(R.id.related_enable);
-        video_related.setChecked(SharedPreferencesUtil.getBoolean("related_enable",true));
+            video_tags = findViewById(R.id.tags_enable);
+            video_tags.setChecked(SharedPreferencesUtil.getBoolean("tags_enable",true));
 
-        myspace_creativecenter = findViewById(R.id.creative_enable);
-        myspace_creativecenter.setChecked(SharedPreferencesUtil.getBoolean("creative_enable",true));
+            video_related = findViewById(R.id.related_enable);
+            video_related.setChecked(SharedPreferencesUtil.getBoolean("related_enable",true));
 
-        menu_popular = findViewById(R.id.menu_popular);
-        menu_popular.setChecked(SharedPreferencesUtil.getBoolean("menu_popular",true));
+            myspace_creativecenter = findViewById(R.id.creative_enable);
+            myspace_creativecenter.setChecked(SharedPreferencesUtil.getBoolean("creative_enable",true));
 
-        menu_precious = findViewById(R.id.menu_precious);
-        menu_precious.setChecked(SharedPreferencesUtil.getBoolean("menu_precious",false));
+            menu_popular = findViewById(R.id.menu_popular);
+            menu_popular.setChecked(SharedPreferencesUtil.getBoolean("menu_popular",true));
 
-        copy_enable = findViewById(R.id.copy_enable);
-        copy_enable.setChecked(SharedPreferencesUtil.getBoolean("copy_enable",true));
+            menu_precious = findViewById(R.id.menu_precious);
+            menu_precious.setChecked(SharedPreferencesUtil.getBoolean("menu_precious",false));
 
-        click_image_play_enable = findViewById(R.id.click_image_play_enable);
-        click_image_play_enable.setChecked(SharedPreferencesUtil.getBoolean("click_image_play_enable", false));
+            copy_enable = findViewById(R.id.copy_enable);
+            copy_enable.setChecked(SharedPreferencesUtil.getBoolean("copy_enable",true));
 
-        image_no_load_onscroll = findViewById(R.id.image_no_load_onscroll);
-        image_no_load_onscroll.setChecked(SharedPreferencesUtil.getBoolean("image_no_load_onscroll", false));
+            click_image_play_enable = findViewById(R.id.click_image_play_enable);
+            click_image_play_enable.setChecked(SharedPreferencesUtil.getBoolean("click_image_play_enable", false));
 
-        text_link_enable = findViewById(R.id.text_link_enable);
-        text_link_enable.setChecked(SharedPreferencesUtil.getBoolean("link_enable", true));
+            image_no_load_onscroll = findViewById(R.id.image_no_load_onscroll);
+            image_no_load_onscroll.setChecked(SharedPreferencesUtil.getBoolean("image_no_load_onscroll", false));
 
-        disable_network_check = findViewById(R.id.disable_network_check);
-        disable_network_check.setChecked(SharedPreferencesUtil.getBoolean("network_check_disable", false));
+            text_link_enable = findViewById(R.id.text_link_enable);
+            text_link_enable.setChecked(SharedPreferencesUtil.getBoolean("link_enable", true));
+
+            disable_network_check = findViewById(R.id.disable_network_check);
+            disable_network_check.setChecked(SharedPreferencesUtil.getBoolean("network_check_disable", false));
+        });
     }
 
     private void save() {

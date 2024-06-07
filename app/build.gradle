@@ -72,4 +72,5 @@ dependencies {
     //ijk
     implementation project(path: ':ijkplayer-java')
     implementation project(path: ':DanmakuFlameMaster')
+    implementation 'androidx.asynclayoutinflater:asynclayoutinflater:1.0.0'
 }

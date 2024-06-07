@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -51,6 +52,7 @@ public class ArticleInfoActivity extends BaseActivity {
                 runOnUiThread(() -> {
                     ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
                     viewPager.setAdapter(vpfAdapter);
+                    findViewById(R.id.loading).setVisibility(View.GONE);
                 });
             }catch (Exception e){
                 Log.wtf(TAG, e);

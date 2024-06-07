@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -32,49 +33,62 @@ public class SettingPlayerChooseActivity extends BaseActivity {
     private boolean just_create = true;
 
 
-    @SuppressLint({"MissingInflatedId", "SetTextI18n"})
+    @SuppressLint({"MissingInflatedId", "SetTextI18n", "InflateParams"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting_player_choose);
-        Log.e("debug","选择播放器");
+        setContentView(R.layout.cell_loading);
 
-        terminalPlayer = findViewById(R.id.terminalPlayer);
-        mtvPlayer = findViewById(R.id.mtvPlayer);
-        aliangPlayer = findViewById(R.id.aliangPlayer);
-        qn_choose = findViewById(R.id.qn_choose);
+        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_player_choose, null, (layoutView, resId, parent) -> {
+            setContentView(layoutView);
+            setTopbarExit();
+            Log.e("debug","选择播放器");
 
-        qn_choose.setOnClickListener((view) -> handleQnChoose());
+            terminalPlayer = findViewById(R.id.terminalPlayer);
+            mtvPlayer = findViewById(R.id.mtvPlayer);
+            aliangPlayer = findViewById(R.id.aliangPlayer);
+            qn_choose = findViewById(R.id.qn_choose);
 
-        cardViewList = new ArrayList<>();
-        cardViewList.add(terminalPlayer);
-        cardViewList.add(mtvPlayer);
-        cardViewList.add(aliangPlayer);
+            qn_choose.setOnClickListener((view) -> handleQnChoose());
 
-        for (int i = 1; i < playerList.length; i++) {
-            if(playerList[i].equals(playerCurr)) {
-                setChecked(i-1);
-                break;
+            cardViewList = new ArrayList<>();
+            cardViewList.add(terminalPlayer);
+            cardViewList.add(mtvPlayer);
+            cardViewList.add(aliangPlayer);
+
+            for (int i = 1; i < playerList.length; i++) {
+                if(playerList[i].equals(playerCurr)) {
+                    setChecked(i-1);
+                    break;
+                }
             }
-        }
 
-        setOnClick();
-        terminalPlayer.setOnLongClickListener(view -> {
-            Intent intent = new Intent();
-            intent.setClass(this,SettingPlayerInsideActivity.class);
-            startActivity(intent);
-            return true;
+            setOnClick();
+            terminalPlayer.setOnLongClickListener(view -> {
+                Intent intent = new Intent();
+                intent.setClass(this,SettingPlayerInsideActivity.class);
+                startActivity(intent);
+                return true;
+            });
+
+            updateQn();
         });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        int savedVal = SharedPreferencesUtil.getInt("play_qn", 16);
-        for (Map.Entry<String, Integer> entry : PlayQualitySettingActivity.qnMap.entrySet()) {
-            if (entry.getValue() == savedVal) {
-                ((TextView) findViewById(R.id.qn_tv)).setText(entry.getKey());
-                break;
+        updateQn();
+    }
+
+    private void updateQn() {
+        if (findViewById(R.id.qn_tv) != null) {
+            int savedVal = SharedPreferencesUtil.getInt("play_qn", 16);
+            for (Map.Entry<String, Integer> entry : PlayQualitySettingActivity.qnMap.entrySet()) {
+                if (entry.getValue() == savedVal) {
+                    ((TextView) findViewById(R.id.qn_tv)).setText(entry.getKey());
+                    break;
+                }
             }
         }
     }

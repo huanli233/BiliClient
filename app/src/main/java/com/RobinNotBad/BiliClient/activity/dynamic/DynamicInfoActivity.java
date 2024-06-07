@@ -3,6 +3,8 @@ package com.RobinNotBad.BiliClient.activity.dynamic;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -65,10 +67,15 @@ public class DynamicInfoActivity extends BaseActivity {
                         MsgUtil.toast("下载完成",this);
                         SharedPreferencesUtil.putBoolean("first_dynamicinfo",false);
                     }
+
+                    findViewById(R.id.loading).setVisibility(View.GONE);
                 });
 
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.err(e,this));
+                runOnUiThread(() -> {
+                    MsgUtil.err(e, this);
+                    ((ImageView) findViewById(R.id.loading)).setImageResource(R.mipmap.loading_2233_error);
+                });
             }
         });
     }

@@ -2,6 +2,8 @@ package com.RobinNotBad.BiliClient.activity.settings;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -35,6 +37,8 @@ public class LoginActivity extends BaseActivity {
         viewPager.setOffscreenPageLimit(fragmentList.size());
         ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(),fragmentList);
         viewPager.setAdapter(vpfAdapter);
+
+        findViewById(R.id.loading).setVisibility(View.GONE);
         if (fragmentList.size() > 1 && SharedPreferencesUtil.getBoolean("first_" + LoginActivity.class.getSimpleName(), true)) {
             MsgUtil.toastLong("提示：本页面可以左右滑动",this);
             SharedPreferencesUtil.putBoolean("first_" + LoginActivity.class.getSimpleName(), false);
