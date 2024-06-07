@@ -9,6 +9,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.Tutorial;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import java.util.Timer;
@@ -22,6 +23,7 @@ public class TutorialActivity extends BaseActivity {
         setContentView(R.layout.activity_tutorial);
         
         Intent intent = getIntent();
+        
         Tutorial tutorial = TutorialHelper.loadTutorial(getResources().getXml(intent.getIntExtra("xml_id",R.xml.tutorial_default)));
         
         ((TextView)findViewById(R.id.title)).setText(tutorial.name);
@@ -56,7 +58,10 @@ public class TutorialActivity extends BaseActivity {
                 });
             }
         },0,1000);
-        close_btn.setOnClickListener(view -> finish());
+        close_btn.setOnClickListener(view -> {
+            SharedPreferencesUtil.putInt("tutorial_ver_" + intent.getStringExtra("tag"),intent.getIntExtra("version",-1));
+            finish();
+        });
     }
     
     @Override

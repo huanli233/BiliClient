@@ -610,22 +610,6 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/reset_tutorial"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:layout_marginHorizontal="8dp"
-                    android:gravity="center_vertical"
-                    android:text="重置教程完成进度"
-                    android:textAlignment="textStart"
-                    android:textSize="13sp"
-                    tools:ignore="RtlCompat" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/test"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

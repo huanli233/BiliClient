@@ -135,24 +135,11 @@ public class SettingMainActivity extends InstanceActivity {
                 startActivity(intent);
             });
 
-            MaterialCardView reset_tutorial = findViewById(R.id.reset_tutorial);
-            reset_tutorial.setOnClickListener(view -> {
-                if(tutorialReset_clicked) {
-                    SharedPreferencesUtil.removeValue(SharedPreferencesUtil.tutorial_version);
-                    MsgUtil.toast("已经重置教程完成情况", this);
-                    tutorialReset_clicked = false;
-                }
-                else {
-                    tutorialReset_clicked = true;
-                    MsgUtil.toast("再点一次重置！", this);
-                }
-            });
-
 
             MaterialCardView test = findViewById(R.id.test);    //用于测试
-            //test.setVisibility(View.GONE);
+            test.setVisibility(View.GONE);
             test.setOnClickListener(view -> {
-                TutorialHelper.show(R.xml.tutorial_default,this);
+                //TutorialHelper.show(R.xml.tutorial_default,this);
             });
         });
     }

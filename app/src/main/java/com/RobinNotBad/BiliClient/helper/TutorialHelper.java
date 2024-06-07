@@ -11,9 +11,11 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
+import android.widget.Toast;
 import com.RobinNotBad.BiliClient.activity.TutorialActivity;
 import com.RobinNotBad.BiliClient.model.CustomText;
 import com.RobinNotBad.BiliClient.model.Tutorial;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import java.util.ArrayList;
 import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
@@ -162,9 +164,14 @@ public class TutorialHelper {
         return str;
     }
     
-    public static void show(int xml_res_id,Context context){
-        Intent intent = new Intent(context,TutorialActivity.class);
-        intent.putExtra("xml_id",xml_res_id);
-        context.startActivity(intent);
+    public static void show(int xml_res_id,Context context,String tutorial_tag,int tutorial_version){
+        if(SharedPreferencesUtil.getInt("tutorial_ver_" + tutorial_tag,-1) < tutorial_version){
+            if(SharedPreferencesUtil.getInt("tutorial_ver_" + tutorial_tag,-1) != -1) Toast.makeText(context.getApplicationContext(),"教程已更新", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context,TutorialActivity.class);
+            intent.putExtra("xml_id",xml_res_id);
+            intent.putExtra("tag",tutorial_tag);
+            intent.putExtra("version",tutorial_version);
+            context.startActivity(intent);
+        }
     }
 }
