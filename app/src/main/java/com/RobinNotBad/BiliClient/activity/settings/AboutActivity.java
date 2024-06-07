@@ -12,11 +12,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
+
 import com.RobinNotBad.BiliClient.BuildConfig;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.activity.settings.SponsorActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -31,19 +30,26 @@ import java.util.List;
 
 public class AboutActivity extends BaseActivity {
     int eggClick_authorWords = 0, eggClick_toUncle = 0;
-    @SuppressLint({"MissingInflatedId", "SetTextI18n"})
+    @SuppressLint({"MissingInflatedId", "SetTextI18n", "InflateParams"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cell_loading);
+
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_about, null, (layoutView, resId, parent) -> {
             setContentView(layoutView);
             Log.e("debug","进入关于页面");
             setTopbarExit();
 
             try{
-                ((TextView)findViewById(R.id.app_version)).setText("版本名：" + getPackageManager().getPackageInfo(getPackageName(),0).versionName);
-                ((TextView)findViewById(R.id.app_version_code)).setText("版本号：" + String.valueOf(getPackageManager().getPackageInfo(getPackageName(),0).versionCode));
+                SpannableString version_str = new SpannableString("版本名\n" + getPackageManager().getPackageInfo(getPackageName(),0).versionName);
+                version_str.setSpan(new StyleSpan(Typeface.BOLD),0,3, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                ((TextView)findViewById(R.id.app_version)).setText(version_str);
+
+                SpannableString code_str = new SpannableString("版本号\n" + getPackageManager().getPackageInfo(getPackageName(),0).versionCode);
+                code_str.setSpan(new StyleSpan(Typeface.BOLD),0,3, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                ((TextView)findViewById(R.id.app_version_code)).setText(code_str);
+
                 ((TextView)findViewById(R.id.updatelog_view)).setText("\n更新日志：\n "+ ToolsUtil.getUpdateLog(this));
                 ToolsUtil.setCopy(findViewById(R.id.updatelog_view),this,ToolsUtil.getUpdateLog(this));
             }catch(PackageManager.NameNotFoundException e){
