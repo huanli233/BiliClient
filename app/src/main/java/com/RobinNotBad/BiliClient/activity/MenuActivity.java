@@ -54,17 +54,17 @@ public class MenuActivity extends BaseActivity {
         R.id.menu_settings, SettingMainActivity.class
     );
 
-    public static final Map<String, Pair<String, Integer>> btnNames = Map.of(
-            "recommend", new Pair<>("推荐", R.id.menu_recommend),
-            "popular", new Pair<>("热门", R.id.menu_popular),
-            "precious", new Pair<>("入站必刷", R.id.menu_precious),
-            "search", new Pair<>("搜索", R.id.menu_search),
-            "dynamic", new Pair<>("动态", R.id.menu_dynamic),
-            "myspace", new Pair<>("我的", R.id.menu_myspace),
-            "message", new Pair<>("消息", R.id.menu_message),
-            "local", new Pair<>("缓存", R.id.menu_local),
-            "settings", new Pair<>("设置", R.id.menu_settings)
-    );
+    public static final Map<String, Pair<String, Integer>> btnNames = new LinkedHashMap<>() {{
+        put("recommend", new Pair<>("推荐", R.id.menu_recommend));
+        put("popular", new Pair<>("热门", R.id.menu_popular));
+        put("precious", new Pair<>("入站必刷", R.id.menu_precious));
+        put("search", new Pair<>("搜索", R.id.menu_search));
+        put("dynamic", new Pair<>("动态", R.id.menu_dynamic));
+        put("myspace", new Pair<>("我的", R.id.menu_myspace));
+        put("message", new Pair<>("消息", R.id.menu_message));
+        put("local", new Pair<>("缓存", R.id.menu_local));
+        put("settings", new Pair<>("设置", R.id.menu_settings));
+    }};
 
     @SuppressLint({"MissingInflatedId", "InflateParams"})
     @Override
