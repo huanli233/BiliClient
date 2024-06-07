@@ -28,7 +28,7 @@ public class CenterThreadPool {
         while(INSTANCE.get() == null){
             INSTANCE.compareAndSet(null, new ThreadPoolExecutor(
                     getBestThreadPoolSize() / 2,
-                    getBestThreadPoolSize(),
+                    getBestThreadPoolSize() * 2,
                     60,
                     TimeUnit.SECONDS,
                     new ArrayBlockingQueue<>(20)
