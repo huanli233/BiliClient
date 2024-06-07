@@ -19,7 +19,6 @@ import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.api.CookieRefreshApi;
 import com.RobinNotBad.BiliClient.api.CookiesApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.Cookies;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -28,8 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Timer;
@@ -124,9 +121,7 @@ public class SplashActivity extends Activity {
                         }
                     });
                 } catch (JSONException e) {
-                    runOnUiThread(()-> {
-                        MsgUtil.err(e,this);
-                    });
+                    runOnUiThread(()-> MsgUtil.err(e,this));
                 }
             }
             else {

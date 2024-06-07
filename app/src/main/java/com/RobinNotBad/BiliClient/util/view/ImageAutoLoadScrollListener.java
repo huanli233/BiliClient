@@ -7,6 +7,7 @@ import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_SETTLING;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.bumptech.glide.Glide;
 
 public class ImageAutoLoadScrollListener extends RecyclerView.OnScrollListener {
@@ -38,6 +39,7 @@ public class ImageAutoLoadScrollListener extends RecyclerView.OnScrollListener {
     }
 
     public static void install(@NonNull RecyclerView recyclerView) {
-        recyclerView.addOnScrollListener(new ImageAutoLoadScrollListener());
+        if(SharedPreferencesUtil.getBoolean("image_no_load_onscroll",false))
+            recyclerView.addOnScrollListener(new ImageAutoLoadScrollListener());
     }
 }

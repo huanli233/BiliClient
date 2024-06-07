@@ -81,7 +81,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="6dp"
                             android:layout_marginBottom="4dp"
-                            android:text="在某些手表上，从左向右滑会相当于按下返回键，导致在可以左右滑动的页面（如视频详情页、个人主页）内无法正常翻页。\n打开此选项可以解决这个问题，但也会导致无法滑动退出，你可以通过菜单最底部的退出按钮结束程序。\n正常用户建议不要开启此选项，在一些手表上会导致滑动卡死。"
+                            android:text="可解决某些4.4手表因滑动返回而无法左右翻页的问题，其他设备上则为按下返回键也不退出页面，你可以使用菜单最下方的退出按钮结束本软件。正常用户无需打开。"
                             android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -285,6 +285,7 @@
                             android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -298,14 +299,38 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="#00000000"
-                            android:text="详情页封面播放视频"/>
+                            android:text="点击封面播放"/>
                     <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="6dp"
                             android:layout_marginBottom="4dp"
-                            android:text="打开此选项，视频详情页点击封面行为变更为播放"
+                            android:text="打开此选项，视频详情页点击封面由查看图片变更为播放。默认根据你首次使用时点击了视频封面还是播放按钮来决定开关。"
                             android:textSize="11sp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/image_no_load_onscroll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="翻动时不加载图片"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="打开此选项，翻动列表时将不会加载图片，松手后再加载，观感可能有影响，可能增加流畅度。"
+                        android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -322,13 +347,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#00000000"
-                        android:text="识别链接和视频/专栏编号"/>
+                        android:text="识别链接"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="6dp"
                         android:layout_marginBottom="4dp"
-                        android:text="打开此选项，会识别部分文本中的链接/BV号/AV号/CV号并标记为链接，点击可打开"
+                        android:text="打开此选项，会识别部分文本中的链接/BV号/AV号/CV号并标记为链接，点击可打开。"
                         android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

@@ -3,7 +3,10 @@ package com.RobinNotBad.BiliClient.api;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.model.Bangumi;
+import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +17,35 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class BangumiApi {
+    public static int getFollowingList(int page, ArrayList<VideoCard> cardList) throws JSONException, IOException {
+        String url = "https://api.bilibili.com/x/space/bangumi/follow/list?type=1&follow_status=0&pn=" + page
+                + "&ps=15&vmid=" + SharedPreferencesUtil.getLong("mid",0);
+
+        JSONObject all = NetWorkUtil.getJson(url);
+        if(all.getInt("code")!=0) throw new JSONException(all.getString("message"));
+
+        JSONObject data = all.getJSONObject("data");
+        if(!data.has("list") || data.isNull("list")) return 1;
+
+        JSONArray list = data.getJSONArray("list");
+        if(list.length()==0) return 1;
+
+        for (int i = 0; i < list.length(); i++) {
+            JSONObject bangumi = list.getJSONObject(i);
+            VideoCard card = new VideoCard();
+            card.type = "media_bangumi";
+            card.aid = bangumi.getLong("media_id");
+            card.title = bangumi.getString("title");
+            card.cover = bangumi.getString("cover");
+            card.view = ToolsUtil.toWan(bangumi.getJSONObject("stat").getLong("view"));
+
+            cardList.add(card);
+        }
+        return 0;
+    }
+
+
+
 
     //获取番剧信息, 详情页需要有基本的cover, 信息等
     public static Bangumi getBangumi(long mediaId) throws JSONException,IOException {
@@ -59,9 +91,11 @@ public class BangumiApi {
         info.type = media.getInt("type");
         info.type_name = media.getString("type_name");
 
-        JSONObject rating = media.getJSONObject("rating");
-        info.count = rating.getInt("count");
-        info.score = (float) rating.getDouble("score");
+        JSONObject rating = media.optJSONObject("rating");
+        if(rating!=null) {
+            info.count = rating.optInt("count");
+            info.score = (float) rating.optInt("score");
+        }
 
         JSONArray areas = media.getJSONArray("areas");
         StringBuilder stringBuilder = new StringBuilder();

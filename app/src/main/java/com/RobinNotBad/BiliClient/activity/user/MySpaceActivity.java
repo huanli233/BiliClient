@@ -30,7 +30,7 @@ public class MySpaceActivity extends InstanceActivity {
 
     private ImageView userAvatar;
     private TextView userName, userFans;
-    private MaterialCardView myInfo,follow,watchLater,favorite,history,creative,logout;
+    private MaterialCardView myInfo,follow,watchLater,favorite,bangumi,history,creative,logout;
 
     private boolean confirmLogout = false;
 
@@ -50,6 +50,7 @@ public class MySpaceActivity extends InstanceActivity {
         follow = findViewById(R.id.follow);
         watchLater = findViewById(R.id.watchlater);
         favorite = findViewById(R.id.favorite);
+        bangumi = findViewById(R.id.bangumi);
         history = findViewById(R.id.history);
         creative = findViewById(R.id.creative);
         logout = findViewById(R.id.logout);
@@ -85,7 +86,7 @@ public class MySpaceActivity extends InstanceActivity {
 
                     follow.setOnClickListener(view -> {
                         Intent intent = new Intent();
-                        intent.setClass(MySpaceActivity.this, FollowListActivity.class);
+                        intent.setClass(MySpaceActivity.this, FollowingUsersActivity.class);
                         startActivity(intent);
                     });
 
@@ -98,6 +99,12 @@ public class MySpaceActivity extends InstanceActivity {
                     favorite.setOnClickListener(view -> {
                         Intent intent = new Intent();
                         intent.setClass(MySpaceActivity.this, FavoriteFolderListActivity.class);
+                        startActivity(intent);
+                    });
+
+                    bangumi.setOnClickListener(view -> {
+                        Intent intent = new Intent();
+                        intent.setClass(MySpaceActivity.this, FollowingBangumisActivity.class);
                         startActivity(intent);
                     });
 

@@ -42,8 +42,4 @@
     <style name="ListStyle">
         <item name="android:descendantFocusability">afterDescendants</item>
     </style>
-
-    <style name="Theme.BiliClient.Splash" parent="Theme.BiliClient">
-        <item name="android:windowBackground">@drawable/splash_text</item>
-    </style>
 </resources>

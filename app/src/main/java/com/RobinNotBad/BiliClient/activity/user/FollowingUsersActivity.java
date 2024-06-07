@@ -17,7 +17,7 @@ import java.util.ArrayList;
 //2023-07-22
 //2024-05-01
 
-public class FollowListActivity extends RefreshListActivity {
+public class FollowingUsersActivity extends RefreshListActivity {
 
     private long mid;
     private ArrayList<UserInfo> userList;

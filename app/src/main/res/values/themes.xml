@@ -22,6 +22,11 @@
         <item name="android:textColor">@color/textwhite</item>
         <item name="android:textSize">14sp</item>
     </style>
+
+    <style name="Theme.BiliClient.Splash" parent="Theme.BiliClient">
+        <item name="android:windowBackground">@drawable/splash_text</item>
+    </style>
+
     <style name="Theme.NoSwipe" parent="android:Theme.Black.NoTitleBar">
         <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">false</item>
         <item name="android:windowFullscreen">true</item>
@@ -29,6 +34,7 @@
         <item name="statusBarBackground">@color/pink</item>
         <item name="colorOnPrimary">@color/textwhite</item>
     </style>
+
     <style name="Theme.NoSwipe.AppCompat" parent="Theme.BiliClient">
         <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">false</item>
     </style>

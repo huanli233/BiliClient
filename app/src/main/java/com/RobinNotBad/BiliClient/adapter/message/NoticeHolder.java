@@ -19,7 +19,6 @@ import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
-import com.RobinNotBad.BiliClient.adapter.reply.ReplyCardHolder;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.model.MessageCard;

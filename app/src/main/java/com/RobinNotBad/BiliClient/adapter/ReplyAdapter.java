@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter.reply;
+package com.RobinNotBad.BiliClient.adapter;
 
 import static com.RobinNotBad.BiliClient.util.ToolsUtil.toWan;
 

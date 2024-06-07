@@ -8,7 +8,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListFragment;
-import com.RobinNotBad.BiliClient.adapter.reply.ReplyAdapter;
+import com.RobinNotBad.BiliClient.adapter.ReplyAdapter;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;

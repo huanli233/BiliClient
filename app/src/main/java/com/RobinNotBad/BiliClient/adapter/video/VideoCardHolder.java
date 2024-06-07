@@ -18,14 +18,14 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
 public class VideoCardHolder extends RecyclerView.ViewHolder{
-    TextView title,upName,playTimes;
+    TextView title,upName, viewCount;
     ImageView cover,playIcon,upIcon;
 
     public VideoCardHolder(@NonNull View itemView) {
         super(itemView);
         title = itemView.findViewById(R.id.listVideoTitle);
         upName = itemView.findViewById(R.id.listUpName);
-        playTimes = itemView.findViewById(R.id.listPlayTimes);
+        viewCount = itemView.findViewById(R.id.listPlayTimes);
         cover = itemView.findViewById(R.id.listCover);
         playIcon = itemView.findViewById(R.id.imageView3);
         upIcon = itemView.findViewById(R.id.avatarIcon);
@@ -34,18 +34,18 @@ public class VideoCardHolder extends RecyclerView.ViewHolder{
     public void showVideoCard(VideoCard videoCard, Context context){
         title.setText(ToolsUtil.htmlToString(videoCard.title));
         String upNameStr = videoCard.upName;
-        if(upNameStr.isEmpty()){
+        if(upNameStr == null || upNameStr.isEmpty()){
             upName.setVisibility(View.GONE);
             upIcon.setVisibility(View.GONE);
         }
         else upName.setText(upNameStr);
 
         String playTimesStr = videoCard.view;
-        if(playTimesStr.isEmpty()){
+        if(playTimesStr == null || playTimesStr.isEmpty()){
             playIcon.setVisibility(View.GONE);
-            playTimes.setVisibility(View.GONE);
+            viewCount.setVisibility(View.GONE);
         }
-        else playTimes.setText(playTimesStr);
+        else viewCount.setText(playTimesStr);
 
         Glide.with(context).load(GlideUtil.url(videoCard.cover))
                 .placeholder(R.mipmap.placeholder)

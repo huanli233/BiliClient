@@ -36,6 +36,12 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <activity
+            android:name=".activity.user.FollowingBangumisActivity"
+            android:exported="false"
+            android:label="追番列表"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.settings.SponsorActivity"
             android:exported="true"
@@ -49,7 +55,7 @@
         <activity
             android:name=".activity.TutorialActivity"
             android:label="教程"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/Theme.NoSwipe.AppCompat"
             android:screenOrientation="portrait" />
         <activity
@@ -64,7 +70,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.player.PlayerActivity"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/Theme.NoSwipe"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="内置播放器" />
@@ -75,7 +81,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.settings.SettingPrefActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="偏好设置"
             android:screenOrientation="portrait" />
         <activity
@@ -105,27 +111,27 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.settings.SettingLaboratoryActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="实验性功能"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.settings.SettingPlayerInsideActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="内置播放器设置"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.settings.SortSettingActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="菜单排序设置"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.settings.UIPreviewActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="界面预览"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.settings.SetupUIActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="初始设置"
             android:screenOrientation="portrait" />
         <activity
@@ -139,8 +145,8 @@
             android:label="特殊登录"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.FollowListActivity"
-            android:exported="true"
+            android:name=".activity.user.FollowingUsersActivity"
+            android:exported="false"
             android:label="关注"
             android:screenOrientation="portrait" />
         <activity
@@ -177,7 +183,7 @@
         </activity>
         <activity
             android:name=".activity.CopyTextActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="复制文本"
             android:screenOrientation="portrait" />
         <activity
@@ -187,7 +193,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.settings.SettingPlayerChooseActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="选择播放器"
             android:screenOrientation="portrait" />
         <activity
@@ -217,12 +223,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.user.HistoryActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="历史记录"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.user.WatchLaterActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="稍后再看"
             android:screenOrientation="portrait" />
         <activity
@@ -232,7 +238,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.user.favorite.FavoriteFolderListActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="收藏夹列表"
             android:screenOrientation="portrait" />
         <activity
@@ -284,7 +290,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.user.CreativeCenterActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="创作中心"
             android:screenOrientation="portrait" />
         <activity

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class SharedPreferencesUtil
 {
     public static final String LINK_ENABLE = "link_enable";
-    public static final String DISABLE_NETWORK_CHECK = "disable_network_check";
+    public static final String DISABLE_NETWORK_CHECK = "network_check_disable";
     public static final String MENU_SORT = "menu_sort";
 
     public static String cookies = "cookies";

@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.activity.settings;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
@@ -13,7 +12,9 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 public class SettingPrefActivity extends BaseActivity {
 
     private SwitchMaterial back_disable,fav_single,fav_notice, video_tags, video_related,
-            myspace_creativecenter,menu_popular,menu_precious,copy_enable, click_image_play_enable, text_link_enable, disable_network_check;
+            myspace_creativecenter,menu_popular,menu_precious,
+            copy_enable, click_image_play_enable,image_no_load_onscroll,
+            text_link_enable, disable_network_check;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -50,13 +51,16 @@ public class SettingPrefActivity extends BaseActivity {
         copy_enable.setChecked(SharedPreferencesUtil.getBoolean("copy_enable",true));
 
         click_image_play_enable = findViewById(R.id.click_image_play_enable);
-        click_image_play_enable.setChecked(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.click_image_play_enable, false));
+        click_image_play_enable.setChecked(SharedPreferencesUtil.getBoolean("click_image_play_enable", false));
+
+        image_no_load_onscroll = findViewById(R.id.image_no_load_onscroll);
+        image_no_load_onscroll.setChecked(SharedPreferencesUtil.getBoolean("image_no_load_onscroll", false));
 
         text_link_enable = findViewById(R.id.text_link_enable);
-        text_link_enable.setChecked(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.LINK_ENABLE, true));
+        text_link_enable.setChecked(SharedPreferencesUtil.getBoolean("link_enable", true));
 
         disable_network_check = findViewById(R.id.disable_network_check);
-        disable_network_check.setChecked(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.DISABLE_NETWORK_CHECK, false));
+        disable_network_check.setChecked(SharedPreferencesUtil.getBoolean("network_check_disable", false));
     }
 
     private void save() {
@@ -69,9 +73,10 @@ public class SettingPrefActivity extends BaseActivity {
         SharedPreferencesUtil.putBoolean("menu_popular", menu_popular.isChecked());
         SharedPreferencesUtil.putBoolean("menu_precious", menu_precious.isChecked());
         SharedPreferencesUtil.putBoolean("copy_enable", copy_enable.isChecked());
-        SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.click_image_play_enable, click_image_play_enable.isChecked());
-        SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.LINK_ENABLE, text_link_enable.isChecked());
-        SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.DISABLE_NETWORK_CHECK, disable_network_check.isChecked());
+        SharedPreferencesUtil.putBoolean("click_image_play_enable", click_image_play_enable.isChecked());
+        SharedPreferencesUtil.putBoolean("image_no_load_onscroll", image_no_load_onscroll.isChecked());
+        SharedPreferencesUtil.putBoolean("link_enable", text_link_enable.isChecked());
+        SharedPreferencesUtil.putBoolean("network_check_disable", disable_network_check.isChecked());
     }
 
     @Override

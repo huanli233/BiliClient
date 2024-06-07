@@ -101,7 +101,7 @@ public class SearchApi {
                     String upName = card.getString("areas");
                     long aid = card.getLong("media_id");
                     String bvid = card.getString("season_id");
-                    String playTimesStr = "敬请期待" + "观看";
+                    String playTimesStr = "-";
                     videoCardList.add(new VideoCard(title,upName,playTimesStr,cover,aid,bvid,type));
                 }
             }
