@@ -54,6 +54,11 @@ public class MenuActivity extends BaseActivity {
         R.id.menu_settings, SettingMainActivity.class
     );
 
+    /**
+     * 在排序设置和Splash中使用到的，
+     * 需要使用排序，故用了LinkedHashMap
+     * 请不要让它的顺序被打乱（
+     */
     public static final Map<String, Pair<String, Integer>> btnNames = new LinkedHashMap<>() {{
         put("recommend", new Pair<>("推荐", R.id.menu_recommend));
         put("popular", new Pair<>("热门", R.id.menu_popular));
