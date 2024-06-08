@@ -54,7 +54,7 @@ public class MessageApi {
                 likeInfo.timeStamp = object.getLong("like_time");
                 
                 if (object.getJSONObject("item").getString("type").equals("video")) {
-                    likeInfo.content = "等总共 " + userList.size() + " 人点赞了你的视频";
+                    likeInfo.content = "等总共 " + object.getLong("counts") + " 人点赞了你的视频";
                     VideoCard videoCard = new VideoCard();
                     videoCard.aid = 0;
                     videoCard.bvid = object.getJSONObject("item").getString("uri").replace("https://www.bilibili.com/video/BV", "");
@@ -64,7 +64,7 @@ public class MessageApi {
                     videoCard.view = "";
                     likeInfo.videoCard = videoCard;
                 } else if (object.getJSONObject("item").getString("type").equals("reply")) {
-                    likeInfo.content = "等总共 " + userList.size() + " 人点赞了你的评论";
+                    likeInfo.content = "等总共 " + object.getLong("counts") + " 人点赞了你的评论";
                     Reply replyInfo = new Reply();
                     replyInfo.rpid = object.getJSONObject("item").getLong("item_id");
                     replyInfo.sender = null;
@@ -80,7 +80,7 @@ public class MessageApi {
                     replyInfo.childMsgList = new ArrayList<>();
                     likeInfo.replyInfo = replyInfo;
                 } else if (object.getJSONObject("item").getString("type").equals("dynamic")) {
-                    likeInfo.content = "等总共 " + userList.size() + " 人点赞了你的动态";
+                    likeInfo.content = "等总共 " + object.getLong("counts") + " 人点赞了你的动态";
                     Reply replyInfo = new Reply();
                     replyInfo.rpid = object.getJSONObject("item").getLong("item_id");
                     replyInfo.sender = null;
@@ -96,7 +96,7 @@ public class MessageApi {
                     replyInfo.childMsgList = new ArrayList<>();
                     likeInfo.dynamicInfo = replyInfo;
                 } else if (object.getJSONObject("item").getString("type").equals("article")) {
-                    likeInfo.content = "等总共 " + userList.size() + " 人点赞了你的专栏";
+                    likeInfo.content = "等总共 " + object.getLong("counts") + " 人点赞了你的专栏";
                     // 实在是抽象 但是我没时间改那么多
                     Reply replyChildInfo = new Reply();
                     replyChildInfo.rpid = object.getJSONObject("item").getLong("target_id");
