@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
+import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.api.ArticleApi;
 import com.RobinNotBad.BiliClient.model.Opus;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -30,9 +31,10 @@ import java.util.ArrayList;
 import org.json.JSONException;
 
 public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
-
+    
     Context context;
     ArrayList<Opus> opusList;
+    Opus parsedOpus;
     long cvid = -1;
 
     public OpusAdapter(Context context, ArrayList<Opus> opusList) {
@@ -65,7 +67,8 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
             holder.itemView.setOnClickListener(v->{
                 CenterThreadPool.run(()->{
                     try {
-                    	cvid = ArticleApi.opusId2cvid(opus.opusId);
+                    	parsedOpus = ArticleApi.opusId2cvid(opus.opusId);
+                        cvid = parsedOpus.parsedId;
                     } catch(JSONException err) {
                     	err.printStackTrace();
                     } catch(IOException err){
@@ -74,9 +77,15 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
                     if(cvid == -1) ((Activity) context).runOnUiThread(() -> MsgUtil.toast("打开失败",context));
                     else {
                         CenterThreadPool.runOnUiThread(()->{
-                            Intent intent = new Intent(context,ArticleInfoActivity.class);
-                            intent.putExtra("cvid",cvid);
-                            context.startActivity(intent);
+                            if(parsedOpus.type == Opus.TYPE_ARTICLE) {
+                                Intent intent = new Intent(context,ArticleInfoActivity.class);
+                                intent.putExtra("cvid",cvid);
+                                context.startActivity(intent);
+                            }if(parsedOpus.type == Opus.TYPE_DYNAMIC) {
+                                Intent intent = new Intent(context,DynamicInfoActivity.class);
+                                intent.putExtra("id",opus.opusId);
+                                context.startActivity(intent);
+                            }
                         });
                     }
                 });

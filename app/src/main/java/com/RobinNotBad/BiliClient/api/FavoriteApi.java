@@ -103,7 +103,7 @@ public class FavoriteApi {
             }else{
                 opus.title = item.getString("content");
             }
-            opus.opusId = item.getString("opus_id");
+            opus.opusId = Long.parseLong(item.getString("opus_id"));
             opus.timeText = item.getString("time_text");
             list.add(opus);
         }

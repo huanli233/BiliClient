@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.util.Log;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
+import com.RobinNotBad.BiliClient.model.Opus;
 import com.RobinNotBad.BiliClient.model.Stats;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -181,9 +182,10 @@ public class ArticleApi {
             return -1;
         }
     }
-    public static long opusId2cvid(String opusId) throws JSONException,IOException{
+    public static Opus opusId2cvid(long opusId) throws JSONException,IOException{
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/opus/detail?id="+opusId+"&time_zone_offset="+TimeZone.getDefault().getRawOffset()/100000;
         JSONObject result = NetWorkUtil.getJson(url);
-        return Integer.parseInt(result.getJSONObject("data").getJSONObject("fallback").getString("id"));
+        if(result.getJSONObject("data").has("item")) return new Opus(Opus.TYPE_DYNAMIC,Long.parseLong(result.getJSONObject("data").getJSONObject("item").getJSONObject("basic").getString("rid_str")));
+        else return new Opus(Opus.TYPE_ARTICLE,Long.parseLong(result.getJSONObject("data").getJSONObject("fallback").getString("id")));
     }
 }

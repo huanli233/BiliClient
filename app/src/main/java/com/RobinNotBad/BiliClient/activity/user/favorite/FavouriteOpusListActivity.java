@@ -28,7 +28,7 @@ public class FavouriteOpusListActivity extends BaseActivity {
         
         recycler = findViewById(R.id.recyclerView);
         
-        setPageName("专栏收藏夹");
+        setPageName("图文收藏夹");
         CenterThreadPool.run(()->{
             try {
                 list = FavoriteApi.getFavouriteOpus(page);
