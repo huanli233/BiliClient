@@ -120,7 +120,7 @@ public class SettingMainActivity extends InstanceActivity {
                 MsgUtil.toast("正在获取...",this);
                 CenterThreadPool.run(() -> {
                     try {
-                        AppInfoApi.checkUpdate(this,true);
+                        AppInfoApi.checkUpdate(this,true,false);
                     } catch (Exception e) {
                         runOnUiThread(()->MsgUtil.err(e,this));
                     }

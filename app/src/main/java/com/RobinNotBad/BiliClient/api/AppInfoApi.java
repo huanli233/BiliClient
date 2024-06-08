@@ -40,7 +40,7 @@ public class AppInfoApi {
                 Log.e("debug", "检查更新");
                 SharedPreferencesUtil.putInt("app_version_check", curr);
 
-                checkUpdate(context,false);
+                checkUpdate(context,false,false);
             }
         }catch (Exception e){
             CenterThreadPool.runOnUiThread(()->MsgUtil.toast(e.getMessage(),context));
@@ -52,8 +52,9 @@ public class AppInfoApi {
         add(NetWorkUtil.USER_AGENT_WEB);    //防止携带b站cookies导致可能存在的开发者盗号问题（
     }};
 
-    public static void checkUpdate(Context context, boolean need_toast) throws Exception {
+    public static void checkUpdate(Context context, boolean need_toast,boolean debug_ver) throws Exception {
         String url = "http://api.biliterminal.cn/terminal/version/get_last";
+        if(debug_ver) url += "?debug";
         JSONObject result = NetWorkUtil.getJson(url,customHeaders);
 
         if(result.getInt("code")!=0) throw new Exception(result.getString("msg"));
@@ -64,8 +65,17 @@ public class AppInfoApi {
         int latest = data.getInt("version_code");
 
         int version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
-        if(latest>version) MsgUtil.showText(context,version_name,update_log);
-        else if(need_toast) CenterThreadPool.runOnUiThread(()->MsgUtil.toast("当前是最新版本！",context));
+        if(latest > version) {
+            if(debug_ver) CenterThreadPool.runOnUiThread(()->MsgUtil.toast("发现新的测试版！",context));
+            else CenterThreadPool.runOnUiThread(()->MsgUtil.toast("发现新版本！",context));
+            MsgUtil.showText(context,version_name,update_log);
+        }
+        else if(need_toast) {
+            if(debug_ver) CenterThreadPool.runOnUiThread(()->MsgUtil.toast("没有新的测试版了！",context));
+            else CenterThreadPool.runOnUiThread(()->MsgUtil.toast("当前是最新版本！",context));
+        }
+
+        if(ToolsUtil.isDebugBuild() && !debug_ver) checkUpdate(context,need_toast,true);
     }
 
     public static void checkAnnouncement(Context context) throws Exception {
