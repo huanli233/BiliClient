@@ -72,6 +72,7 @@ public class SearchApi {
                 JSONArray data = typecard.getJSONArray("data");    //把这个列表提出来，接着拆
                 for (int j = 0; j < data.length(); j++) {
                     JSONObject card = data.getJSONObject(j);    //获得视频卡片
+                    if(!card.getString("type").equals("video")) continue; //警惕虚假视频卡片（阿B为什么要把直播间放进视频结果里）
 
                     String title = card.getString("title");
                     title = title.replace("<em class=\"keyword\">","").replace("</em>","");
@@ -101,7 +102,7 @@ public class SearchApi {
                     String upName = card.getString("areas");
                     long aid = card.getLong("media_id");
                     String bvid = card.getString("season_id");
-                    String playTimesStr = "-";
+                    String playTimesStr = card.getString("index_show");
                     videoCardList.add(new VideoCard(title,upName,playTimesStr,cover,aid,bvid,type));
                 }
             }
