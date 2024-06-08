@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity.video;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardAdapter;
@@ -34,6 +35,8 @@ public class RecommendActivity extends RefreshMainActivity {
         setOnLoadMoreListener(page -> addRecommend());
 
         setPageName("推荐");
+
+        recyclerView.setHasFixedSize(true);
         
         TutorialHelper.show(R.xml.tutorial_recommend,this,"recommend",1);
 

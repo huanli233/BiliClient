@@ -27,6 +27,7 @@ public class NoticeActivity extends BaseActivity{
         setPageName("详情");
 
         recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
 
         messageList = new ArrayList<>();
 

@@ -30,6 +30,8 @@ public class FollowingUsersActivity extends RefreshListActivity {
 
         setPageName("关注");
 
+        recyclerView.setHasFixedSize(true);
+
         mid = SharedPreferencesUtil.getLong("mid",0);
         userList = new ArrayList<>();
 

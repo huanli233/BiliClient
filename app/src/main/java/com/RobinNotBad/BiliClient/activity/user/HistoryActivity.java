@@ -26,6 +26,8 @@ public class HistoryActivity extends RefreshListActivity {
 
         setPageName("历史记录");
 
+        recyclerView.setHasFixedSize(true);
+
         videoList = new ArrayList<>();
 
         CenterThreadPool.run(()->{

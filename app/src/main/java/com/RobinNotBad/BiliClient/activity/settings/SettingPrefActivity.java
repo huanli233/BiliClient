@@ -59,7 +59,7 @@ public class SettingPrefActivity extends BaseActivity {
             click_image_play_enable.setChecked(SharedPreferencesUtil.getBoolean("click_image_play_enable", false));
 
             image_no_load_onscroll = findViewById(R.id.image_no_load_onscroll);
-            image_no_load_onscroll.setChecked(SharedPreferencesUtil.getBoolean("image_no_load_onscroll", false));
+            image_no_load_onscroll.setChecked(SharedPreferencesUtil.getBoolean("image_no_load_onscroll", true));
 
             text_link_enable = findViewById(R.id.text_link_enable);
             text_link_enable.setChecked(SharedPreferencesUtil.getBoolean("link_enable", true));

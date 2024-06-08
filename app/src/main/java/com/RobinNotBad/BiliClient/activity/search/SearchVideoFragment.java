@@ -57,6 +57,7 @@ public class SearchVideoFragment extends Fragment implements SearchRefreshable {
         recyclerView = view.findViewById(R.id.recyclerView);
         videoCardList = new ArrayList<>();
         videoCardAdapter = new VideoCardAdapter(requireContext(), videoCardList);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(videoCardAdapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

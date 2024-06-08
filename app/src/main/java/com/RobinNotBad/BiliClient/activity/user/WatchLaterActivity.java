@@ -35,6 +35,7 @@ public class WatchLaterActivity extends BaseActivity {
         setPageName("稍后再看");
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
 
         CenterThreadPool.run(()->{
             try {

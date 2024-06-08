@@ -58,6 +58,8 @@ public class SearchArticleFragment extends Fragment implements SearchRefreshable
         recyclerView = view.findViewById(R.id.recyclerView);
         articleCardList = new ArrayList<>();
 
+        recyclerView.setHasFixedSize(true);
+
         CenterThreadPool.run(() -> {
             if(isAdded()) requireActivity().runOnUiThread(() -> {
                 articleCardAdapter = new ArticleCardAdapter(requireContext(), articleCardList);

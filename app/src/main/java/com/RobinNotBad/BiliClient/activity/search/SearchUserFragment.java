@@ -58,6 +58,8 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
         recyclerView = view.findViewById(R.id.recyclerView);
         userInfoList = new ArrayList<>();
 
+        recyclerView.setHasFixedSize(true);
+
         CenterThreadPool.run(() -> {
             if(isAdded()) requireActivity().runOnUiThread(() -> {
                 userInfoAdapter = new FollowListAdapter(requireContext(), userInfoList);

@@ -25,6 +25,8 @@ public class FollowingBangumisActivity extends RefreshListActivity {
 
         setPageName("追番列表");
 
+        recyclerView.setHasFixedSize(true);
+
         videoList = new ArrayList<>();
 
         CenterThreadPool.run(()->{
