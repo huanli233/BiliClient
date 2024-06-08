@@ -26,8 +26,6 @@ public class SponsorActivity extends RefreshListActivity {
         
         setPageName("捐赠列表");
         
-        Toast.makeText(this,"捐赠列表内容来自爱发电，不针对显示的内容负责",Toast.LENGTH_LONG).show();
-        
         CenterThreadPool.run(() -> {
             try{
                 userList = AppInfoApi.getSponsors(this.page);

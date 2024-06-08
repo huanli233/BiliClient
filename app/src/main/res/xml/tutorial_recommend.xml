@@ -28,14 +28,8 @@
         </item>
         <item>
             <type>0</type>
-            <text>，点击页面最上方</text>
+            <text>，点击页面最上方写着标题的时间的“标题栏”</text>
             <style>none</style>
-            <color>#ffffff</color>
-        </item>
-        <item>
-            <type>0</type>
-            <text>写着标题的时间的“标题栏”</text>
-            <style>underline</style>
             <color>#ffffff</color>
         </item>
         <item>

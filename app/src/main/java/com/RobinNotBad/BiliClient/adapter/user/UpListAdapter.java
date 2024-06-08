@@ -45,7 +45,10 @@ public class UpListAdapter extends RecyclerView.Adapter<UpListAdapter.Holder> {
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         holder.name.setText(userList.get(position).name);
         holder.desc.setText(userList.get(position).sign);
-        Glide.with(context).load(GlideUtil.url(userList.get(position).avatar))
+
+        if(userList.get(position).avatar.isEmpty()) holder.avatar.setVisibility(View.GONE);
+        else
+            Glide.with(context).load(GlideUtil.url(userList.get(position).avatar))
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

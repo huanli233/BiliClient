@@ -12,13 +12,16 @@ import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.widget.Toast;
+
 import com.RobinNotBad.BiliClient.activity.TutorialActivity;
 import com.RobinNotBad.BiliClient.model.CustomText;
 import com.RobinNotBad.BiliClient.model.Tutorial;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+
+import org.xmlpull.v1.XmlPullParser;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.xmlpull.v1.XmlPullParser;
 
 //这个Helper是给教程使用的
 //因为不通用(只适用教程)就放进Helper了
@@ -144,6 +147,7 @@ public class TutorialHelper {
             if(text.type == 0){
                 int old_len = str.length();
                 str.append(text.text);
+                str.setSpan(new ForegroundColorSpan(Color.parseColor(text.color)),old_len,str.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 switch(text.style){
                     case "bold": //粗体
                         str.setSpan(new StyleSpan(Typeface.BOLD),old_len,str.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -158,7 +162,6 @@ public class TutorialHelper {
                         str.setSpan(new StrikethroughSpan(),old_len,str.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         break;
                 }
-                str.setSpan(new ForegroundColorSpan(Color.parseColor(text.color)),old_len,str.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             else if(text.type == 1) str.append("\n");
         }

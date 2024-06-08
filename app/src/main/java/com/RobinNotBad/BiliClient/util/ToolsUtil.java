@@ -28,6 +28,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.RobinNotBad.BiliClient.BuildConfig;
 import com.RobinNotBad.BiliClient.activity.CopyTextActivity;
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
@@ -55,10 +56,12 @@ import okhttp3.ResponseBody;
 @SuppressLint("ClickableViewAccessibility")
 public class ToolsUtil {
     public static String toWan(long num){
-        if(num>=10000){
+        if(num >= 100000000)
+            return String.format(Locale.CHINA, "%.1f", (float)num/100000000) + "亿";
+        else if(num >= 10000)
             return String.format(Locale.CHINA, "%.1f", (float)num/10000) + "万";
-        }
-        else return String.valueOf(num);
+        else
+            return String.valueOf(num);
     }
 
     public static String htmlToString(String html){
@@ -333,5 +336,9 @@ public class ToolsUtil {
         String[] logItems = context.getResources().getStringArray(R.array.update_log_items);
         for(int i = 0;i < logItems.length;i++) str += (i+1) + "." + logItems[i] + "\n";
         return str;
+    }
+
+    public static boolean isDebugBuild(){
+        return BuildConfig.BETA;
     }
 }

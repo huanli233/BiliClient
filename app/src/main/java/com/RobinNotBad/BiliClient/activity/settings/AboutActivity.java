@@ -123,6 +123,6 @@ public class AboutActivity extends BaseActivity {
             });
         });
 
-        if(!BuildConfig.BETA) findViewById(R.id.debug_tip).setVisibility(View.GONE);
+        if(!ToolsUtil.isDebugBuild()) findViewById(R.id.debug_tip).setVisibility(View.GONE);
     }
 }

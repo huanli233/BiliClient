@@ -138,6 +138,10 @@ public class AppInfoApi {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
         ArrayList<UserInfo> list = new ArrayList<>();
+        if(page == 1){
+            UserInfo tip_user = new UserInfo(-1,"温馨提醒","","收到的捐款仅用于维护服务器 | 捐赠者信息来自于爱发电，不对信息内容负责",-1,6,true,"",0,"");
+            list.add(tip_user);
+        }
         for (int i = 0; i < data.length(); i++) {
             JSONObject sponsor = data.getJSONObject(i);
             
