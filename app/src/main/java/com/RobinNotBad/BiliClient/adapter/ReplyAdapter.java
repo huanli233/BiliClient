@@ -223,6 +223,10 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
 
             replyHolder.likeCount.setOnClickListener(view -> CenterThreadPool.run(() -> {
+                if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0){
+                    ((Activity) context).runOnUiThread(() -> MsgUtil.toast("还没有登录喵~",context));
+                    return;
+                }
                 if (!replyList.get(realPosition).liked) {
                     try {
                         if (ReplyApi.likeReply(oid, replyList.get(realPosition).rpid, true) == 0) {
@@ -336,7 +340,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             ((Activity) context).runOnUiThread(() -> replyHolder.item_reply_delete.setVisibility(View.VISIBLE));
                         }
                     } catch (Exception e) {
-                        ((Activity) context).runOnUiThread(() -> MsgUtil.err(e, context));
+                        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) != 0) ((Activity) context).runOnUiThread(() -> MsgUtil.err(e, context));
                     }
                 });
             }

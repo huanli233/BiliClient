@@ -298,6 +298,10 @@ public class VideoInfoFragment extends Fragment {
         });
 
         like.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
+            if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) {
+                requireActivity().runOnUiThread(() -> MsgUtil.toast("还没有登录喵~",requireContext()));
+                return;
+            }
             try {
                 int result = LikeCoinFavApi.like(videoInfo.aid, (videoInfo.stats.liked ? 2 : 1));
                 if (result == 0) {
@@ -325,6 +329,10 @@ public class VideoInfoFragment extends Fragment {
         }));
 
         coin.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
+            if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) {
+                requireActivity().runOnUiThread(() -> MsgUtil.toast("还没有登录喵~",requireContext()));
+                return;
+            }
             if (videoInfo.stats.coined < videoInfo.stats.allow_coin) {
                 try {
                     int result = LikeCoinFavApi.coin(videoInfo.aid, 1);
@@ -409,6 +417,12 @@ public class VideoInfoFragment extends Fragment {
             intent.setClass(requireContext(), SendDynamicActivity.class).putExtra("video", videoInfo);
             writeDynamicLauncher.launch(intent);
         });
+
+
+        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) {
+            addWatchlater.setVisibility(View.GONE);
+            relay.setVisibility(View.GONE);
+        }
     }
 
 

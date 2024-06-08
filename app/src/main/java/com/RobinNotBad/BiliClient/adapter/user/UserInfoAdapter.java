@@ -118,7 +118,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 context.startActivity(intent);
             });
 
-            if((userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)) || (userInfo.mid == 0)) userInfoHolder.followBtn.setVisibility(View.GONE);
+            if((userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)) || (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) || (userInfo.mid == 0)) userInfoHolder.followBtn.setVisibility(View.GONE);
             else userInfoHolder.followBtn.setChecked(userInfo.followed);
             userInfoHolder.followBtn.setOnClickListener(btn -> {
                 if(!follow_onprocess) {

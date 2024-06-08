@@ -45,6 +45,8 @@
 
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
+        <item>新增了追番列表</item>
+        <item>新增了专栏收藏夹</item>
         <item>新增了全新的教程页面</item>
         <item>新增了爱发电捐赠列表页面</item>
         <item>新增了全新崩溃捕捉页面</item>
@@ -68,6 +70,7 @@
         <item>实现了番剧视频自动跳转到番剧详情页</item>
         <item>实现了消息中心更多类型的跳转</item>
         <item>实现了403风控的对抗</item>
+        <item>修复了搜索报错的问题</item>
         <item>修复了安卓4无法使用异常捕捉的问题</item>
         <item>修复了稍后再看为空时报错的问题</item>
         <item>修复了发送评论后不实时显示的问题</item>
@@ -78,6 +81,7 @@
         <item>修复了消息页面的一处布局错误和显示错误，并改动私信输入框</item>
         <item>优化了网络请求相关代码</item>
         <item>优化了进入哔哩终端时的逻辑</item>
+        <item>优化了未登录状态下的操作</item>
         <item>优化了列表和下拉刷新代码</item>
     </string-array>
 </resources>

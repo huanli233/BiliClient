@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
 import com.RobinNotBad.BiliClient.adapter.favorite.FolderChooseAdapter;
@@ -32,6 +33,12 @@ public class AddFavoriteActivity extends RefreshListActivity {
 
         Intent intent = getIntent();
         aid = intent.getLongExtra("aid",0);
+
+        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) {
+            MsgUtil.toast("还没有登录喵~",this);
+            finish();
+            return;
+        }
 
         CenterThreadPool.run(()->{
             try {

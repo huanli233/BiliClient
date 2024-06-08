@@ -40,6 +40,9 @@ public class MsgUtil {
                 e.printStackTrace(printWriter);
                 showText(context,"数据解析错误",writer.toString());
             }
+            else if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0){
+                toastLong("解析错误，可登陆后再次尝试",context);
+            }
             else toastLong("数据解析错误：\n" + e.toString().replace("org.json.JSONException:",""),context);
         }
         else toastLong("错误：" + e , context);

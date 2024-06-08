@@ -19,6 +19,7 @@ import com.RobinNotBad.BiliClient.model.ArticleLine;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.JsonUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -67,7 +68,8 @@ public class ArticleInfoFragment extends Fragment {
                 articleInfo = ArticleApi.getArticle(cvid);
 
                 if (articleInfo == null) {
-                    requireActivity().runOnUiThread(() -> MsgUtil.toast("获取信息失败！\n可能是专栏不存在？", requireContext()));
+                    if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) requireActivity().runOnUiThread(() -> MsgUtil.toast("登录后再尝试", requireContext()));
+                    else requireActivity().runOnUiThread(() -> MsgUtil.toast("获取信息失败！\n可能是专栏不存在？", requireContext()));
                     requireActivity().finish();
                     return;
                 }
