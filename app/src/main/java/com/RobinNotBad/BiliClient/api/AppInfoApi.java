@@ -149,8 +149,7 @@ public class AppInfoApi {
 
         ArrayList<UserInfo> list = new ArrayList<>();
         if(page == 1){
-            UserInfo tip_user = new UserInfo(-1,"温馨提醒","","收到的捐款仅用于维护服务器 | 捐赠者信息来自于爱发电，不对信息内容负责",-1,6,true,"",0,"");
-            list.add(tip_user);
+            list.add(new UserInfo(-1,"温馨提醒","","捐赠为纯自愿行为，收到的捐款仅用于维护服务器，未成年人请征求父母意见\n无论是否捐赠，你所提出的意见和建议都会被同等考虑，但难以实现或没有必要的功能我们有权拒绝\n捐赠者信息来自于爱发电，我们不对列表内的信息内容负责",-1,6,true,"",0,""));
         }
         for (int i = 0; i < data.length(); i++) {
             JSONObject sponsor = data.getJSONObject(i);

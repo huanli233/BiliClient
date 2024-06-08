@@ -45,6 +45,7 @@ public class UpListAdapter extends RecyclerView.Adapter<UpListAdapter.Holder> {
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         holder.name.setText(userList.get(position).name);
         holder.desc.setText(userList.get(position).sign);
+        if(userList.get(position).sign.contains("\n")) holder.desc.setSingleLine(false);
 
         if(userList.get(position).avatar.isEmpty()) holder.avatar.setVisibility(View.GONE);
         else
