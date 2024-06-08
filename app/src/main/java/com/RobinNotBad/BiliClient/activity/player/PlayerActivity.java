@@ -128,6 +128,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     private boolean landscape = false;
 
+    private boolean preview_mode = false;
+
     @Override
     public void onBackPressed() {
         if (!SharedPreferencesUtil.getBoolean("back_disable", false)) super.onBackPressed();
@@ -185,6 +187,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             else danmaku_btn.setVisibility(View.GONE);
             if (SharedPreferencesUtil.getBoolean("player_ui_showLoopBtn", true)) loop_btn.setVisibility(View.VISIBLE);
             else loop_btn.setVisibility(View.GONE);
+            preview_mode = true;
             return;
         }
 
@@ -992,6 +995,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     @SuppressLint("SetTextI18n")
     public void changeVolume(Boolean add_or_cut) {
+        if(preview_mode) return;
         autoHideTimer.cancel();
         int volumeNow = audioManager.getStreamVolume(STREAM_MUSIC);
         int volumeMax = audioManager.getStreamMaxVolume(STREAM_MUSIC);
