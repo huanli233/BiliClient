@@ -95,10 +95,9 @@ public class FavoriteApi {
             JSONObject item = items.getJSONObject(i);
             Opus opus = new Opus();
             opus.content = item.getString("content");
-            opus.cover = "";
             if(item.has("cover")) {
             	opus.cover = item.getString("cover");
-            }
+            }else opus.cover = "";
             if(item.has("title")){
                 opus.title = item.getString("title");
             }else{

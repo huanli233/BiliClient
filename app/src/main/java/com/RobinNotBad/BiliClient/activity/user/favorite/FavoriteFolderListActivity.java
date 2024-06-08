@@ -53,9 +53,10 @@ public class FavoriteFolderListActivity extends BaseActivity {
         ArticleFavCover = findViewById(R.id.cover);
         ArticleFavTitle = findViewById(R.id.title);
         ArticleFavFolder = findViewById(R.id.opus_folder);
+        ((TextView)findViewById(R.id.itemCount)).setText("");
         
         ArticleFavTitle.setText("专栏收藏夹");
-        Glide.with(this).load(getDrawable(R.drawable.article_fav_cover))
+        Glide.with(this).asDrawable().load(getResources().getDrawable(R.drawable.article_fav_cover))
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,this))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(ArticleFavCover);

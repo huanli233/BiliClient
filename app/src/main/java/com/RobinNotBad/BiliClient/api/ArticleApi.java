@@ -184,8 +184,6 @@ public class ArticleApi {
     public static long opusId2cvid(String opusId) throws JSONException,IOException{
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/opus/detail?id="+opusId+"&time_zone_offset="+TimeZone.getDefault().getRawOffset()/100000;
         JSONObject result = NetWorkUtil.getJson(url);
-        Log.e("opus2art",result.toString());
-        long cvid = Integer.valueOf(result.getJSONObject("data").getJSONObject("fallback").getString("id"));
-        return cvid;
+        return Integer.parseInt(result.getJSONObject("data").getJSONObject("fallback").getString("id"));
     }
 }

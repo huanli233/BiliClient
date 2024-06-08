@@ -1,7 +1,9 @@
 package com.RobinNotBad.BiliClient.adapter.article;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +33,7 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
 
     Context context;
     ArrayList<Opus> opusList;
-    long cvid = 114514;
+    long cvid = -1;
 
     public OpusAdapter(Context context, ArrayList<Opus> opusList) {
         this.context = context;
@@ -62,7 +64,6 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
         }else{
             holder.itemView.setOnClickListener(v->{
                 CenterThreadPool.run(()->{
-                    
                     try {
                     	cvid = ArticleApi.opusId2cvid(opus.opusId);
                     } catch(JSONException err) {
@@ -70,11 +71,14 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
                     } catch(IOException err){
                         err.printStackTrace();
                     }
-                    CenterThreadPool.runOnUiThread(()->{
-                        Intent intent = new Intent(context,ArticleInfoActivity.class);
-                        intent.putExtra("cvid",cvid);
-                        context.startActivity(intent);
-                    });
+                    if(cvid == -1) ((Activity) context).runOnUiThread(() -> MsgUtil.toast("打开失败",context));
+                    else {
+                        CenterThreadPool.runOnUiThread(()->{
+                            Intent intent = new Intent(context,ArticleInfoActivity.class);
+                            intent.putExtra("cvid",cvid);
+                            context.startActivity(intent);
+                        });
+                    }
                 });
             });
         }
