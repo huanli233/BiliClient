@@ -84,7 +84,11 @@ public class DynamicActivity extends RefreshMainActivity {
         }
     });
 
-
+    /**
+     * 该方法务必在Activity的onStart生命周期之前调用,否则系统底层会抛异常!!!
+     * @param activity
+     * @return
+     */
     public static ActivityResultLauncher<Intent> getRelayDynamicLauncher(BaseActivity activity) {
         return activity.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
             int code = result.getResultCode();
