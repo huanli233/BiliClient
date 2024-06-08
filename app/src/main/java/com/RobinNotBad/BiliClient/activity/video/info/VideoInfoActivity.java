@@ -82,6 +82,7 @@ public class VideoInfoActivity extends BaseActivity {
             MsgUtil.toastLong("提示：本页面可以左右滑动",this);
             SharedPreferencesUtil.putBoolean("first_videoinfo", false);
         }
+        findViewById(R.id.loading).setVisibility(View.GONE);
     }
     protected void initVideoInfoView() {
         TutorialHelper.show(R.xml.tutorial_video,this,"video",1);
