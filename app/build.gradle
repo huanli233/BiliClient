@@ -5,6 +5,28 @@ plugins {
 boolean betaVer = true
 
 android {
+    signingConfigs {
+        release {
+            if (project.rootProject.file("local.properties").exists()) {
+                Properties pro = new Properties()
+                InputStream input = project.rootProject.file("local.properties").newDataInputStream()
+                pro.load(input)
+
+                def keyPath = pro.getProperty("KEY_PATH")
+                def keyPassword = pro.getProperty("KEY_PASSWORD")
+                def aliasName = pro.getProperty("ALIAS_NAME")
+                def aliasPassword = pro.getProperty("ALIAS_PASSWORD")
+
+                if (keyPath && keyPassword && aliasName && aliasPassword) {
+                    storeFile file(keyPath)
+                    storePassword keyPassword
+                    keyAlias aliasName
+                    keyPassword aliasPassword
+                }
+            }
+        }
+    }
+
     namespace 'com.RobinNotBad.BiliClient'
     compileSdk 32
 
@@ -47,6 +69,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_9
         targetCompatibility JavaVersion.VERSION_1_9
