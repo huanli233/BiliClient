@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.activity.dynamic.send;
 
 import static com.RobinNotBad.BiliClient.util.ToolsUtil.toWan;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -25,6 +26,7 @@ import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
+import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
@@ -49,43 +51,49 @@ import java.util.concurrent.ExecutionException;
  */
 public class SendDynamicActivity extends BaseActivity {
 
+    @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_send_dynamic);
+        setContentView(R.layout.cell_loading);
 
-        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)==0){
-            MsgUtil.toast("还没有登录喵~",this);
-            setResult(RESULT_CANCELED);
-            finish();
-        }
+        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_send_dynamic, null, (layoutView, resId, parent) -> {
+            setContentView(layoutView);
+            setTopbarExit();
 
-        EditText editText = findViewById(R.id.editText);
-        MaterialCardView send = findViewById(R.id.send);
-
-        ConstraintLayout extraCard = findViewById(R.id.extraCard);
-        Dynamic forward = (Dynamic) getIntent().getSerializableExtra("forward");
-        VideoInfo video = (VideoInfo) getIntent().getSerializableExtra("video");
-        if (forward != null) {
-            View childCard = View.inflate(this, R.layout.cell_dynamic_child, extraCard);
-            showChildDyn(childCard, forward);
-        } else if (video != null) {
-            View view = LayoutInflater.from(this).inflate(R.layout.cell_video_list, extraCard);
-            showVideo(view, video);
-        }
-
-        send.setOnClickListener(view -> {
-            // 不了解遂直接保留cookie刷新判断了
-            if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cookie_refresh,true)){
-                String text = editText.getText().toString();
-                Intent result = new Intent();
-                // 原神级的传数据
-                Bundle bundle = SendDynamicActivity.this.getIntent().getExtras();
-                if (bundle != null) result.putExtras(bundle);
-                result.putExtra("text", text);
-                setResult(RESULT_OK, result);
+            if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)==0){
+                MsgUtil.toast("还没有登录喵~",this);
+                setResult(RESULT_CANCELED);
                 finish();
-            } else MsgUtil.showDialog(this,"无法发送","上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作",-1);
+            }
+
+            EditText editText = findViewById(R.id.editText);
+            MaterialCardView send = findViewById(R.id.send);
+
+            ConstraintLayout extraCard = findViewById(R.id.extraCard);
+            Dynamic forward = (Dynamic) getIntent().getSerializableExtra("forward");
+            VideoInfo video = (VideoInfo) getIntent().getSerializableExtra("video");
+            if (forward != null) {
+                View childCard = View.inflate(this, R.layout.cell_dynamic_child, extraCard);
+                showChildDyn(childCard, forward);
+            } else if (video != null) {
+                View view = LayoutInflater.from(this).inflate(R.layout.cell_video_list, extraCard);
+                showVideo(view, video);
+            }
+
+            send.setOnClickListener(view -> {
+                // 不了解遂直接保留cookie刷新判断了
+                if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cookie_refresh,true)){
+                    String text = editText.getText().toString();
+                    Intent result = new Intent();
+                    // 原神级的传数据
+                    Bundle bundle = SendDynamicActivity.this.getIntent().getExtras();
+                    if (bundle != null) result.putExtras(bundle);
+                    result.putExtra("text", text);
+                    setResult(RESULT_OK, result);
+                    finish();
+                } else MsgUtil.showDialog(this,"无法发送","上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作",-1);
+            });
         });
     }
 

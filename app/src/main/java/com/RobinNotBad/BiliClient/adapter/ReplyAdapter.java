@@ -25,7 +25,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.ReplyInfoActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.WriteReplyActivity;
+import com.RobinNotBad.BiliClient.activity.reply.WriteReplyActivity;
 import com.RobinNotBad.BiliClient.api.ArticleApi;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.api.ReplyApi;

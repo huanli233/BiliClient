@@ -203,7 +203,7 @@
             android:label="跳转播放"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.video.info.WriteReplyActivity"
+            android:name=".activity.reply.WriteReplyActivity"
             android:exported="false"
             android:label="写评论"
             android:screenOrientation="portrait" />

@@ -1,5 +1,6 @@
-package com.RobinNotBad.BiliClient.activity.video.info;
+package com.RobinNotBad.BiliClient.activity.reply;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +38,7 @@ public class WriteReplyActivity extends BaseActivity {
 
     boolean sent = false;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,11 @@ public class WriteReplyActivity extends BaseActivity {
 
         Log.e("debug-发送评论",String.valueOf(rpid));
 
+        if(!parentSender.isEmpty()) {
+            editText.setText("回复 @" + parentSender + " :");
+            editText.setSelection(editText.getText().length());
+        }
+
         send.setOnClickListener(view -> {
             if(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cookie_refresh,true)){
                 if(!sent) {
@@ -66,8 +73,6 @@ public class WriteReplyActivity extends BaseActivity {
                         String text = editText.getText().toString();
                         if(!text.isEmpty()) {
                             try {
-                                if(!parentSender.isEmpty()) text = "回复 @" + parentSender + " :" + text;
-
                                 Log.e("debug-评论内容",text);
 
                                 Pair<Integer, Reply> result = ReplyApi.sendReply(oid, rpid, parent, text, replyType);

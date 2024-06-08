@@ -39,7 +39,7 @@ public class ImageAutoLoadScrollListener extends RecyclerView.OnScrollListener {
     }
 
     public static void install(@NonNull RecyclerView recyclerView) {
-        if(SharedPreferencesUtil.getBoolean("image_no_load_onscroll",true))
+        if (SharedPreferencesUtil.getBoolean("image_no_load_onscroll",true))
             recyclerView.addOnScrollListener(new ImageAutoLoadScrollListener());
     }
 }
