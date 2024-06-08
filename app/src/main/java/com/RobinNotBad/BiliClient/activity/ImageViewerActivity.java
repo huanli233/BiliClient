@@ -41,13 +41,12 @@ public class ImageViewerActivity extends BaseActivity {
         for (int i = 0; i < imageList.size(); i++) {
             PhotoView photoView = new PhotoView(this);
             try {
-                Glide.with(this).load(GlideUtil.url(imageList.get(i)))  //让b站自己压缩一下以加速获取
+                Glide.with(this).asDrawable().load(GlideUtil.url(imageList.get(i)))  //让b站自己压缩一下以加速获取
                         .override(Target.SIZE_ORIGINAL)//override这一项一定要加，这样才会显示原图，不然一放大就糊成使
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(photoView);
             }catch (OutOfMemoryError e){
-                e.printStackTrace();
-                MsgUtil.toast("内存溢出哩（悲",this);
+                MsgUtil.toast("超出内存，加载失败",this);
             }
 
             int id = i;

@@ -29,6 +29,7 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.card.MaterialCardView;
@@ -128,6 +129,7 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                     holder.textContentCard.setVisibility(View.GONE);
                     holder.videoCard.setVisibility(View.GONE);
                     Glide.with(context)
+                            .asDrawable()
                             .load(GlideUtil.url(msg.content.getString("url")))
                             .override(Target.SIZE_ORIGINAL)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -159,7 +161,9 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                     holder.textContentCard.setVisibility(View.GONE);
                     holder.tipTv.setVisibility(View.GONE);
                     Glide.with(context)
+                            .asDrawable()
                             .load(GlideUtil.url(msg.content.getString("thumb")))
+                            .format(DecodeFormat.PREFER_RGB_565)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(holder.videoCover);
                     holder.upNameTv.setText(msg.content.getString("author"));

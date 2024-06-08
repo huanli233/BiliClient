@@ -105,7 +105,7 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
         public void showLocalVideo(LocalVideo videoCard, Context context){
             title.setText(ToolsUtil.htmlToString(videoCard.title));
 
-            Glide.with(context).load(videoCard.cover)
+            Glide.with(context).asDrawable().load(videoCard.cover)
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(cover);

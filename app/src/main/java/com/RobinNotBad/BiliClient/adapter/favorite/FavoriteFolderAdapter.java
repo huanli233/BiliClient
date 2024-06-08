@@ -18,6 +18,7 @@ import com.RobinNotBad.BiliClient.model.FavoriteFolder;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
@@ -50,8 +51,9 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
     public void onBindViewHolder(@NonNull FavoriteHolder holder, int position) {
         holder.name.setText(ToolsUtil.htmlToString(folderList.get(position).name));
         holder.count.setText(folderList.get(position).videoCount + "/" + folderList.get(position).maxCount);
-        Glide.with(this.context).load(GlideUtil.url(folderList.get(position).cover))
+        Glide.with(this.context).asDrawable().load(GlideUtil.url(folderList.get(position).cover))
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
+                .format(DecodeFormat.PREFER_RGB_565)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.cover);
         holder.itemView.setOnClickListener(view -> {

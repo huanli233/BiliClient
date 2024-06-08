@@ -48,7 +48,7 @@ public class UpListAdapter extends RecyclerView.Adapter<UpListAdapter.Holder> {
 
         if(userList.get(position).avatar.isEmpty()) holder.avatar.setVisibility(View.GONE);
         else
-            Glide.with(context).load(GlideUtil.url(userList.get(position).avatar))
+            Glide.with(context).asDrawable().load(GlideUtil.url(userList.get(position).avatar))
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

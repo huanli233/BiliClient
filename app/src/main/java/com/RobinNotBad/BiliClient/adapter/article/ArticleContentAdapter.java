@@ -26,6 +26,7 @@ import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
@@ -98,7 +99,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
 
 
                 String url = article.get(realPosition).content;
-                    Glide.with(context).load(GlideUtil.url(url)).placeholder(R.mipmap.placeholder)
+                    Glide.with(context).asDrawable().load(GlideUtil.url(url)).placeholder(R.mipmap.placeholder)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(imageView);
 
@@ -124,12 +125,13 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 upName.setText(articleInfo.upInfo.name);
                 if(articleInfo.banner.isEmpty()) cover.setVisibility(View.GONE);
                 else{
-                    Glide.with(context).load(GlideUtil.url(articleInfo.banner)).placeholder(R.mipmap.placeholder)
+                    Glide.with(context).asDrawable().load(GlideUtil.url(articleInfo.banner)).placeholder(R.mipmap.placeholder)
                             .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4,context))))
+                            .format(DecodeFormat.PREFER_RGB_565)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(cover);
                 }
-                Glide.with(context).load(GlideUtil.url(articleInfo.upInfo.avatar)).placeholder(R.mipmap.akari)
+                Glide.with(context).asDrawable().load(GlideUtil.url(articleInfo.upInfo.avatar)).placeholder(R.mipmap.akari)
                         .apply(RequestOptions.circleCropTransform())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(upIcon);

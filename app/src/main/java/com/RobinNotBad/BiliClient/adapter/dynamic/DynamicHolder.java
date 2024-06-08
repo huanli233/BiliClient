@@ -39,6 +39,7 @@ import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
@@ -213,7 +214,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
             ToolsUtil.setLink(content);
             ToolsUtil.setAtLink(dynamic.ats, content);
         } else content.setVisibility(View.GONE);
-        Glide.with(context).load(GlideUtil.url(dynamic.userInfo.avatar))
+        Glide.with(context).asDrawable().load(GlideUtil.url(dynamic.userInfo.avatar))
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -257,8 +258,9 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 ArrayList<String> pictureList = (ArrayList<String>) dynamic.major_object;
                 View imageCard = View.inflate(context,R.layout.cell_dynamic_image,extraCard);
                 ImageView imageView = imageCard.findViewById(R.id.imageView);
-                Glide.with(context).load(GlideUtil.url(pictureList.get(0)))
+                Glide.with(context).asDrawable().load(GlideUtil.url(pictureList.get(0)))
                         .placeholder(R.mipmap.placeholder)
+                        .format(DecodeFormat.PREFER_RGB_565)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(imageView);
                 TextView textView = imageCard.findViewById(R.id.imageCount);

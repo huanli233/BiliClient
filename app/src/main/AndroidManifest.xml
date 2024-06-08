@@ -25,6 +25,7 @@
         android:theme="@style/Theme.BiliClient"
         android:usesCleartextTraffic="true"
         tools:ignore="LockedOrientationActivity"
+        android:largeHeap="true"
         tools:targetApi="m">
 
         <provider

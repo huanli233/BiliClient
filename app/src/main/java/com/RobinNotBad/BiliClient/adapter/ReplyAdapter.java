@@ -42,6 +42,7 @@ import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.view.CustomListView;
 import com.RobinNotBad.BiliClient.view.RadiusBackgroundSpan;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
@@ -126,7 +127,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
             ReplyHolder replyHolder = (ReplyHolder) holder;
 
-            Glide.with(context).load(GlideUtil.url(replyList.get(realPosition).sender.avatar))
+            Glide.with(context).asDrawable().load(GlideUtil.url(replyList.get(realPosition).sender.avatar))
                     .placeholder(R.mipmap.akari)
                     .apply(RequestOptions.circleCropTransform())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -189,8 +190,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (replyList.get(realPosition).pictureList != null && !replyList.get(realPosition).pictureList.isEmpty()) {  //图片显示相关
                 replyHolder.imageCard.setVisibility(View.VISIBLE);
                 replyHolder.imageCount.setVisibility(View.VISIBLE);
-                Glide.with(context).load(GlideUtil.url(replyList.get(realPosition).pictureList.get(0)))
+                Glide.with(context).asDrawable().load(GlideUtil.url(replyList.get(realPosition).pictureList.get(0)))
                         .placeholder(R.mipmap.placeholder)
+                        .format(DecodeFormat.PREFER_RGB_565)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(replyHolder.imageCard);
 

@@ -13,6 +13,7 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
@@ -47,8 +48,9 @@ public class VideoCardHolder extends RecyclerView.ViewHolder{
         }
         else viewCount.setText(playTimesStr);
 
-        Glide.with(context).load(GlideUtil.url(videoCard.cover))
+        Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
                 .placeholder(R.mipmap.placeholder)
+                .format(DecodeFormat.PREFER_RGB_565)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(cover);

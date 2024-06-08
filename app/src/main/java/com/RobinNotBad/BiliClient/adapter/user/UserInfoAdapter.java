@@ -103,7 +103,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 userInfoHolder.userOfficial.setVisibility(View.GONE);
             }
 
-            Glide.with(this.context).load(GlideUtil.url(userInfo.avatar))
+            Glide.with(this.context).asDrawable().load(GlideUtil.url(userInfo.avatar))
                     .placeholder(R.mipmap.akari)
                     .apply(RequestOptions.circleCropTransform())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
