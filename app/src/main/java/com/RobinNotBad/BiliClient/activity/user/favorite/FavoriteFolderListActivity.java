@@ -1,6 +1,7 @@
 package com.RobinNotBad.BiliClient.activity.user.favorite;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.user.favorite.FavouriteOpusListActivity;
 import com.RobinNotBad.BiliClient.adapter.favorite.FavoriteFolderAdapter;
 import com.RobinNotBad.BiliClient.api.FavoriteApi;
 import com.RobinNotBad.BiliClient.model.FavoriteFolder;
@@ -25,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.card.MaterialCardView;
 import java.util.ArrayList;
 
 //收藏夹列表
@@ -36,6 +39,7 @@ public class FavoriteFolderListActivity extends BaseActivity {
     private ImageView ArticleFavCover;
     private TextView ArticleFavTitle;
     private TextView ArticleFavAmount;
+    private MaterialCardView ArticleFavFolder;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -48,12 +52,18 @@ public class FavoriteFolderListActivity extends BaseActivity {
         recyclerView = findViewById(R.id.recyclerView);
         ArticleFavCover = findViewById(R.id.cover);
         ArticleFavTitle = findViewById(R.id.title);
+        ArticleFavFolder = findViewById(R.id.opus_folder);
         
         ArticleFavTitle.setText("专栏收藏夹");
         Glide.with(this).load(getDrawable(R.drawable.article_fav_cover))
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,this))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(ArticleFavCover);
+        ArticleFavFolder.setOnClickListener(v->{
+            Intent intent = new Intent(this,FavouriteOpusListActivity.class);
+            startActivity(intent);
+        });
+        
         setPageName("收藏");
 
         CenterThreadPool.run(()->{
@@ -63,7 +73,7 @@ public class FavoriteFolderListActivity extends BaseActivity {
                 runOnUiThread(()->{
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
                     recyclerView.setAdapter(adapter);
-                    });
+                });
             } catch (Exception e) {report(e);}
         });
         

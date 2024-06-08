@@ -1,6 +1,7 @@
-package com.RobinNotBad.BiliClient.adapter.video;
+package com.RobinNotBad.BiliClient.adapter.article;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +12,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
+import com.RobinNotBad.BiliClient.api.ArticleApi;
 import com.RobinNotBad.BiliClient.model.Opus;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import org.json.JSONException;
 
 public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
 
     Context context;
     ArrayList<Opus> opusList;
+    long cvid = 114514;
 
     public OpusAdapter(Context context, ArrayList<Opus> opusList) {
         this.context = context;
@@ -47,6 +55,29 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.coverView);
+        if(opus.content.equals("内容失效")) {
+        	holder.itemView.setOnClickListener(v->{
+                MsgUtil.toast("内容失效，无法打开",context);
+            });
+        }else{
+            holder.itemView.setOnClickListener(v->{
+                CenterThreadPool.run(()->{
+                    
+                    try {
+                    	cvid = ArticleApi.opusId2cvid(opus.opusId);
+                    } catch(JSONException err) {
+                    	err.printStackTrace();
+                    } catch(IOException err){
+                        err.printStackTrace();
+                    }
+                    CenterThreadPool.runOnUiThread(()->{
+                        Intent intent = new Intent(context,ArticleInfoActivity.class);
+                        intent.putExtra("cvid",cvid);
+                        context.startActivity(intent);
+                    });
+                });
+            });
+        }
         
         
     }
@@ -68,5 +99,10 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
             titleText = itemView.findViewById(R.id.listOpusTitle);
         }
 
+    }
+    public void insertItem(ArrayList<Opus> list){
+        int oldSize = opusList.size();
+        opusList.addAll(list);
+        this.notifyItemRangeInserted(oldSize,list.size()-1);
     }
 }

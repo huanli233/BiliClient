@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -14,7 +15,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
 
     <application
         android:name=".BiliTerminal"
@@ -162,22 +162,22 @@
             android:name=".activity.ShowTextActivity"
             android:exported="true"
             android:label="文本显示"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-                <data android:mimeType="video/*"/>
+                <data android:mimeType="video/*" />
 
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.APP_BROWSER"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.APP_BROWSER" />
             </intent-filter>
             <intent-filter tools:ignore="AppLinkUrlError">
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="video/*"/>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="video/*" />
             </intent-filter>
 
         </activity>
@@ -333,6 +333,11 @@
             android:name=".activity.message.PrivateMsgActivity"
             android:exported="true"
             android:label="私信"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.favorite.FavouriteOpusListActivity"
+            android:exported="true"
+            android:label="图文收藏夹"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SplashActivity"
