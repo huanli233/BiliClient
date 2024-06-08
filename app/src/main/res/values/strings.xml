@@ -2,6 +2,7 @@
     <string name="app_name">哔哩终端</string>
     <string name="about_description">轻量第三方B站客户端</string>
     <string name="about_say">软件名来自原神中的“虚空终端”\n最低兼容安卓4.2\n愿你在这一方小小的屏幕中，找到属于自己的小小的快乐\n提示，长按设置中“关于”按钮有彩蛋哦！</string>
+    <string name="about_group_tip">哔哩终端开发团队不会对个别用户出现的个别问题进行针对性修复，不会对特殊情况下触发的问题进行修复，不会保证实现不必要或难以实现的功能。\n如果你有能力修复问题，欢迎fork终端仓库提交pr</string>
     <string name="about_group">官网域名：biliterminal.cn\n短链接：bil.asia\n交流群：482091687\n备用群：656364457\n测试组：745414928</string>
     <string name="about_wearbili">注意：本软件仅使用了WearBili的旧版页面布局，与WearBili不存在任何关系！\n另：如果你使用的是手表且性能足够，欢迎前往使用Re:WearBili以获得更好的体验！</string>
     <string name="about_opensource">本程序完全开源，代码部分遵循GNU GPL-V3.0协议，界面布局（UI）部分遵循CC BY-NC-SA协议。\n你可以从 https://gitee.com/RobinNotBad/BiliClient 获取源代码</string>
@@ -47,38 +48,39 @@
     <string-array name="update_log_items">
         <item>新增了追番列表</item>
         <item>新增了专栏收藏夹</item>
-        <item>新增了全新的教程页面</item>
-        <item>新增了爱发电捐赠列表页面</item>
-        <item>新增了全新崩溃捕捉页面</item>
+        <item>新增了新的教程页面</item>
+        <item>新增了捐赠列表</item>
+        <item>新增了新版崩溃捕捉页面</item>
         <item>新增了视频清晰度的设置项</item>
         <item>新增了转发动态功能</item>
         <item>新增了发布动态功能</item>
         <item>新增了视频争议信息的显示</item>
-        <item>新增了三连数量显示</item>
         <item>新增了搜索历史记录</item>
-        <item>新增了文字超出长度时的跑马灯</item>
-        <item>新增了复制文本页面的选择复制范围</item>
-        <item>新增了自己发布的评论的删除按钮</item>
+        <item>新增了文字超出长度时的跑马灯效果</item>
+        <item>新增了复制文本页面的选择复制范围功能</item>
+        <item>新增了评论的删除按钮</item>
         <item>新增了专栏的三连功能</item>
         <item>新增了菜单排序功能</item>
+        <item>（仅测试版）新增了检查测试版更新的功能</item>
+        <item>实现了三连数量的显示</item>
         <item>实现了视频的转发功能</item>
         <item>实现了动态点赞功能</item>
-        <item>实现了@的高亮</item>
-        <item>实现了视频评论区BV号、CV号和链接的点击跳转</item>
+        <item>实现了视频评论区艾特、BV号、CV号和链接的高亮和点击跳转</item>
         <item>实现了评论区的切换排序和下拉刷新</item>
         <item>实现了联合投稿UP主们展示</item>
         <item>实现了番剧视频自动跳转到番剧详情页</item>
         <item>实现了消息中心更多类型的跳转</item>
         <item>实现了403风控的对抗</item>
         <item>修复了搜索报错的问题</item>
+        <item>修复了点赞消息数量显示错误的问题</item>
         <item>修复了安卓4无法使用异常捕捉的问题</item>
         <item>修复了稍后再看为空时报错的问题</item>
-        <item>修复了发送评论后不实时显示的问题</item>
         <item>修复了动态、专栏评论区的发送问题</item>
         <item>修复了部分列表划到底部后无法继续加载的问题</item>
         <item>修复了部分手表打开终端后立即崩溃的问题</item>
         <item>修复了私信报错问题</item>
-        <item>修复了消息页面的一处布局错误和显示错误，并改动私信输入框</item>
+        <item>修复了消息页面的错误</item>
+        <item>修复了滑动过快时崩溃的问题</item>
         <item>优化了网络请求相关代码</item>
         <item>优化了进入哔哩终端时的逻辑</item>
         <item>优化了未登录状态下的操作</item>

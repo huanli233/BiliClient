@@ -34,7 +34,7 @@ public class ReplyApi {
     public static final int REPLY_TYPE_VIDEO = 1;
     public static final int REPLY_TYPE_ARTICLE = 12;
     public static final int REPLY_TYPE_DYNAMIC = 17;
-    public static final String TOP_TIP = " 置顶 ";
+    public static final String TOP_TIP = "[置顶]";
 
     //oid：评论区id，可以是视频aid
     //rpid：若要查看子评论，这个参数是父评论的id，否则填0

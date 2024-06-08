@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.adapter;
 
+import android.text.style.ForegroundColorSpan;
 import static com.RobinNotBad.BiliClient.util.ToolsUtil.toWan;
 
 import android.annotation.SuppressLint;
@@ -361,9 +362,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public void setTopSpan(int realPosition, ReplyHolder replyHolder) {
         if (replyList.get(realPosition).isTop && replyList.get(realPosition).message.startsWith(ReplyApi.TOP_TIP)) {
-            RadiusBackgroundSpan badgeBG = new RadiusBackgroundSpan(0, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207,75,95));
             SpannableString spannableString = new SpannableString(replyHolder.message.getText());
-            spannableString.setSpan(badgeBG, 0, ReplyApi.TOP_TIP.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(new ForegroundColorSpan(Color.rgb(207,75,95)), 0, ReplyApi.TOP_TIP.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
             replyHolder.message.setText(spannableString);
         }
     }
