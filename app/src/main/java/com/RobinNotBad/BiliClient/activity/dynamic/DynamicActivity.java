@@ -21,7 +21,9 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,24 @@ public class DynamicActivity extends RefreshMainActivity {
     private DynamicAdapter dynamicAdapter;
     private long offset = 0;
     private boolean firstRefresh = true;
+    private String type = "all";
+    private static final Map<String, String> typeNameMap = Map.of(
+            "全部", "all",
+            "视频投稿", "video",
+            "追番", "pgc",
+            "专栏", "article"
+    );
+    public final ActivityResultLauncher<Intent> selectTypeLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
+        int code = result.getResultCode();
+        Intent data = result.getData();
+        if (code == RESULT_OK && data != null && data.getStringExtra("item") != null) {
+            String type = typeNameMap.get(data.getStringExtra("item"));
+            if (type != null) {
+                this.type = type;
+                refreshDynamic();
+            }
+        }
+    });
 
     public ActivityResultLauncher<Intent> writeDynamicLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
         int code = result.getResultCode();
@@ -135,7 +155,7 @@ public class DynamicActivity extends RefreshMainActivity {
         Log.e("debug","进入动态页");
 
         setOnRefreshListener(this::refreshDynamic);
-        setOnLoadMoreListener(page -> addDynamic());
+        setOnLoadMoreListener(page -> addDynamic(type));
 
         setPageName("动态");
         
@@ -156,15 +176,15 @@ public class DynamicActivity extends RefreshMainActivity {
             dynamicAdapter.notifyDataSetChanged();
         }
 
-        addDynamic();
+        addDynamic(type);
     }
 
-    private void addDynamic() {
+    private void addDynamic(String type) {
         Log.e("debug", "加载下一页");
         CenterThreadPool.run(()->{
             try {
                 List<Dynamic> list = new ArrayList<>();
-                offset = DynamicApi.getDynamicList(list,offset,0);
+                offset = DynamicApi.getDynamicList(list,offset,0, type);
                 bottom = (offset==-1);
                 setRefreshing(false);
 
@@ -172,7 +192,7 @@ public class DynamicActivity extends RefreshMainActivity {
                     dynamicList.addAll(list);
                     if (firstRefresh) {
                         firstRefresh = false;
-                        dynamicAdapter = new DynamicAdapter(this, dynamicList);
+                        dynamicAdapter = new DynamicAdapter(this, dynamicList, recyclerView);
                         setAdapter(dynamicAdapter);
                     } else {
                         dynamicAdapter.notifyItemRangeInserted(dynamicList.size() - list.size(), list.size());

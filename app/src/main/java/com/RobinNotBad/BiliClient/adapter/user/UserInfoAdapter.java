@@ -26,6 +26,7 @@ import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.PreInflateHelper;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
@@ -44,11 +45,13 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     UserInfo userInfo;
     boolean desc_expand, notice_expand;
     boolean follow_onprocess;
+    PreInflateHelper preInflateHelper;
 
     public UserInfoAdapter(Context context, ArrayList<Dynamic> dynamicList, UserInfo userInfo) {
         this.context = context;
         this.dynamicList = dynamicList;
         this.userInfo = userInfo;
+        this.preInflateHelper = new PreInflateHelper(context);
     }
 
     @NonNull
@@ -60,7 +63,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         else {
             View view = LayoutInflater.from(context).inflate(R.layout.cell_dynamic, parent, false);
-            return new DynamicHolder(view, (BaseActivity) context, false);
+            return new DynamicHolder(view, (BaseActivity) context, preInflateHelper, false);
         }
     }
 
@@ -75,7 +78,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             if(dynamicList.get(realPosition).dynamic_forward != null){
                 View childCard = View.inflate(context,R.layout.cell_dynamic_child,dynamicHolder.extraCard);
-                DynamicHolder childHolder = new DynamicHolder(childCard, (BaseActivity) context, true);
+                DynamicHolder childHolder = new DynamicHolder(childCard, (BaseActivity) context, preInflateHelper, true);
                 childHolder.showDynamic(dynamicList.get(realPosition).dynamic_forward, context, true);
             }
 

@@ -70,6 +70,11 @@
             android:label="公告列表"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.ListChooseActivity"
+            android:exported="false"
+            android:label="选择"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.player.PlayerActivity"
             android:exported="true"
             android:theme="@style/Theme.NoSwipe"

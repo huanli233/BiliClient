@@ -24,6 +24,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.SearchHistoryAdapter;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
+import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.JsonUtil;
 import com.RobinNotBad.BiliClient.util.LinkUrlUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -48,45 +49,47 @@ public class SearchActivity extends InstanceActivity {
     Handler handler;
     ArrayList<String> searchHistory;
 
-    @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged"})
+    @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged", "InflateParams"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_loading);
 
-        setContentView(R.layout.activity_search);
-        setMenuClick();
-        Log.e("debug", "进入搜索页");
-        
-        TutorialHelper.show(R.xml.tutorial_search,this,"search",1);
+        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_search, null, (layoutView, id, parent) -> {
+            setContentView(layoutView);
+            setMenuClick();
+            Log.e("debug", "进入搜索页");
 
-        handler = new Handler();
+            TutorialHelper.show(R.xml.tutorial_search,this,"search",1);
 
-        ViewPager2 viewPager = findViewById(R.id.viewPager);
+            handler = new Handler();
 
-        View searchBtn = findViewById(R.id.search);
-        keywordInput = findViewById(R.id.keywordInput);
-        searchBar = findViewById(R.id.searchbar);
-        historyRecyclerview = findViewById(R.id.history_recyclerview);
-        viewPager.setOffscreenPageLimit(3);
-        keywordInput.setOnFocusChangeListener((view, b) -> historyRecyclerview.setVisibility(b ? View.VISIBLE : View.GONE));
-        historyRecyclerview.setVisibility(View.VISIBLE);
-        FragmentStateAdapter vpfAdapter = new FragmentStateAdapter(this) {
+            ViewPager2 viewPager = findViewById(R.id.viewPager);
 
-            @Override
-            public int getItemCount() {
-                return 3;
-            }
+            View searchBtn = findViewById(R.id.search);
+            keywordInput = findViewById(R.id.keywordInput);
+            searchBar = findViewById(R.id.searchbar);
+            historyRecyclerview = findViewById(R.id.history_recyclerview);
+            viewPager.setOffscreenPageLimit(3);
+            keywordInput.setOnFocusChangeListener((view, b) -> historyRecyclerview.setVisibility(b ? View.VISIBLE : View.GONE));
+            historyRecyclerview.setVisibility(View.VISIBLE);
+            FragmentStateAdapter vpfAdapter = new FragmentStateAdapter(this) {
 
-            @NonNull
-            @Override
-            public Fragment createFragment(int position) {
-                if (position == 0) return SearchVideoFragment.newInstance();
-                if (position == 1) return SearchArticleFragment.newInstance();
-                if (position == 2) return SearchUserFragment.newInstance();
-                throw new IllegalArgumentException("return value of getItemCount() method maybe not associate with argument position");
-            }
-        };
-        viewPager.setAdapter(vpfAdapter);
+                @Override
+                public int getItemCount() {
+                    return 3;
+                }
+
+                @NonNull
+                @Override
+                public Fragment createFragment(int position) {
+                    if (position == 0) return SearchVideoFragment.newInstance();
+                    if (position == 1) return SearchArticleFragment.newInstance();
+                    if (position == 2) return SearchUserFragment.newInstance();
+                    throw new IllegalArgumentException("return value of getItemCount() method maybe not associate with argument position");
+                }
+            };
+            viewPager.setAdapter(vpfAdapter);
         /*
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -96,32 +99,33 @@ public class SearchActivity extends InstanceActivity {
             }
         });
          */
-        searchBtn.setOnClickListener(view -> searchKeyword(keywordInput.getText().toString()));
-        searchBtn.setOnLongClickListener(this::jumpToTargetId);
-        keywordInput.setOnEditorActionListener((textView, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEND || actionId == EditorInfo.IME_ACTION_DONE || event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction()) {
-                searchKeyword(keywordInput.getText().toString());
-            }
-            return false;
-        });
+            searchBtn.setOnClickListener(view -> searchKeyword(keywordInput.getText().toString()));
+            searchBtn.setOnLongClickListener(this::jumpToTargetId);
+            keywordInput.setOnEditorActionListener((textView, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_SEND || actionId == EditorInfo.IME_ACTION_DONE || event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction()) {
+                    searchKeyword(keywordInput.getText().toString());
+                }
+                return false;
+            });
 
-        try {
-            searchHistory = JsonUtil.jsonToArrayList(new JSONArray(SharedPreferencesUtil.getString(SharedPreferencesUtil.search_history,"[]")),false);
-        } catch (JSONException e) {
-            runOnUiThread(() -> MsgUtil.err(e, this));
-            searchHistory = new ArrayList<>();
-        }
-        searchHistoryAdapter = new SearchHistoryAdapter(this, searchHistory);
-        searchHistoryAdapter.setOnClickListener(position -> keywordInput.setText(searchHistory.get(position)));
-        searchHistoryAdapter.setOnLongClickListener(position -> {
-            MsgUtil.toast("删除成功",this);
-            searchHistory.remove(position);
-            searchHistoryAdapter.notifyItemRemoved(position);
-            searchHistoryAdapter.notifyItemRangeChanged(position,searchHistory.size() - position);
-            SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history,new JSONArray(searchHistory).toString());
+            try {
+                searchHistory = JsonUtil.jsonToArrayList(new JSONArray(SharedPreferencesUtil.getString(SharedPreferencesUtil.search_history,"[]")),false);
+            } catch (JSONException e) {
+                runOnUiThread(() -> MsgUtil.err(e, this));
+                searchHistory = new ArrayList<>();
+            }
+            searchHistoryAdapter = new SearchHistoryAdapter(this, searchHistory);
+            searchHistoryAdapter.setOnClickListener(position -> keywordInput.setText(searchHistory.get(position)));
+            searchHistoryAdapter.setOnLongClickListener(position -> {
+                MsgUtil.toast("删除成功",this);
+                searchHistory.remove(position);
+                searchHistoryAdapter.notifyItemRemoved(position);
+                searchHistoryAdapter.notifyItemRangeChanged(position,searchHistory.size() - position);
+                SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history,new JSONArray(searchHistory).toString());
+            });
+            historyRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+            historyRecyclerview.setAdapter(searchHistoryAdapter);
         });
-        historyRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        historyRecyclerview.setAdapter(searchHistoryAdapter);
     }
 
     public boolean jumpToTargetId(View view) {

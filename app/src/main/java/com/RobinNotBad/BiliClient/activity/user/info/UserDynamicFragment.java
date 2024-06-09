@@ -63,7 +63,7 @@ public class UserDynamicFragment extends RefreshListFragment {
                 Log.e("debug","获取到用户信息");
 
                 try {
-                    offset = DynamicApi.getDynamicList(dynamicList, offset, mid);
+                    offset = DynamicApi.getDynamicList(dynamicList, offset, mid, null);
                     bottom = (offset == -1);
                     Log.e("debug", "获取到用户动态");
                 }catch (Exception e){loadFail(e);}
@@ -82,7 +82,7 @@ public class UserDynamicFragment extends RefreshListFragment {
         CenterThreadPool.run(()->{
             try {
                 List<Dynamic> list = new ArrayList<>();
-                offset = DynamicApi.getDynamicList(list,offset,mid);
+                offset = DynamicApi.getDynamicList(list,offset,mid, null);
                 runOnUiThread(()-> {
                     dynamicList.addAll(list);
                     adapter.notifyItemRangeInserted(dynamicList.size() - list.size(), list.size());

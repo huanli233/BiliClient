@@ -76,7 +76,7 @@ public class DynamicInfoActivity extends BaseActivity {
                             SharedPreferencesUtil.putBoolean("first_dynamicinfo",false);
                         }
 
-                        findViewById(R.id.loading).setVisibility(View.GONE);
+                        diFragment.setOnFinishLoad(() -> findViewById(R.id.loading).setVisibility(View.GONE));
                     });
 
                 } catch (Exception e) {

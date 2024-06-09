@@ -275,10 +275,10 @@ public class DynamicApi {
         return -1;
     }
 
-    public static long getDynamicList(List<Dynamic> dynamicList, long offset, long mid) throws IOException, JSONException {
+    public static long getDynamicList(List<Dynamic> dynamicList, long offset, long mid, String type) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/"
-                + (mid==0 ? "all" : "space?host_mid=" + mid)
-                + (offset==0 ? "" : (mid == 0 ? "?offset=" + offset : "&offset=" + offset));
+                + (mid==0 ? "all?type=" + type : "space?host_mid=" + mid)
+                + (offset==0 ? "" : "&offset=" + offset);
 
         JSONObject all = NetWorkUtil.getJson(url);
         if(all.getInt("code")!=0) throw new JSONException(all.getString("message"));
