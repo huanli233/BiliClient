@@ -80,14 +80,6 @@ public class MySpaceActivity extends InstanceActivity {
                             startActivity(intent);
                         });
 
-                        myInfo.setOnLongClickListener(view -> {
-                            Intent intent = new Intent();
-                            intent.setClass(MySpaceActivity.this, SpecialLoginActivity.class);
-                            intent.putExtra("login",false);
-                            startActivity(intent);
-                            return true;
-                        });
-
                         follow.setOnClickListener(view -> {
                             Intent intent = new Intent();
                             intent.setClass(MySpaceActivity.this, FollowingUsersActivity.class);

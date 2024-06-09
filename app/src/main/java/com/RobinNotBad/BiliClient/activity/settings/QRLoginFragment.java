@@ -62,23 +62,14 @@ public class QRLoginFragment extends Fragment {
             if (timer != null) timer.cancel();
             if (isAdded())  requireActivity().finish();
         });
-
-        scanStat.setOnClickListener(v -> {
-            clickCount++;
-            Log.e("debug-登录", "点");
-        });
-
-        scanStat.setOnLongClickListener(v -> {
-            Log.e("debug-登录", "长按");
-            if (clickCount == 7) {
-                Intent intent = new Intent();
-                intent.setClass(requireContext(), SpecialLoginActivity.class);
-                intent.putExtra("login", true);
-                startActivity(intent);
-                if (timer != null) timer.cancel();
-                if (isAdded()) requireActivity().finish();
-            } else clickCount = 0;
-            return true;
+        
+        MaterialCardView special = view.findViewById(R.id.special);
+        special.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setClass(requireContext(), SpecialLoginActivity.class);
+            startActivity(intent);
+            if (timer != null) timer.cancel();
+            if (isAdded()) requireActivity().finish();
         });
 
         qrImageView.setOnClickListener(v -> {
