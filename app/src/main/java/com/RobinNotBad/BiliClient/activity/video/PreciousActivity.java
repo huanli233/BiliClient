@@ -20,6 +20,7 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.view.ImageAutoLoadScrollListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //入站必刷
 //2024-01-14
@@ -75,11 +76,12 @@ public class PreciousActivity extends InstanceActivity {
     private void addPrecious() {
         Log.e("debug", "加载下一页");
         runOnUiThread(()->swipeRefreshLayout.setRefreshing(true));
-        int lastSize = videoCardList.size();
         try {
-            RecommendApi.getPrecious(videoCardList,page);
+            List<VideoCard> list = new ArrayList<>();
+            RecommendApi.getPrecious(list, page);
             page++;
             runOnUiThread(() -> {
+                videoCardList.addAll(list);
                 swipeRefreshLayout.setRefreshing(false);
                 refreshing = false;
                 if (firstRefresh) {
@@ -106,8 +108,7 @@ public class PreciousActivity extends InstanceActivity {
                         }
                     });
                 }else {
-                    Log.e("debug","last="+lastSize+"&now="+videoCardList.size());
-                    videoCardAdapter.notifyItemRangeInserted(lastSize,videoCardList.size()-lastSize);
+                    videoCardAdapter.notifyItemRangeInserted(videoCardList.size() - list.size(),  list.size());
                 }
             });
         } catch (Exception e){runOnUiThread(()-> MsgUtil.err(e,this));}

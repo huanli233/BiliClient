@@ -14,6 +14,7 @@ import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //用户专栏
 //2023-09-30
@@ -66,11 +67,14 @@ public class UserArticleFragment extends RefreshListFragment {
     private void continueLoading(int page) {
         CenterThreadPool.run(()->{
             try {
-                int lastSize = articleList.size();
-                int result = UserInfoApi.getUserArticles(mid,page,articleList);
+                List<ArticleCard> list = new ArrayList<>();
+                int result = UserInfoApi.getUserArticles(mid,page,list);
                 if(result != -1){
                     Log.e("debug","下一页");
-                    if(isAdded()) requireActivity().runOnUiThread(()-> adapter.notifyItemRangeInserted(lastSize, articleList.size() - lastSize));
+                    if(isAdded()) requireActivity().runOnUiThread(()-> {
+                        articleList.addAll(list);
+                        adapter.notifyItemRangeInserted(articleList.size() - list.size(), list.size());
+                    });
                     if(result == 1) {
                         Log.e("debug","到底了");
                         bottom = true;

@@ -23,6 +23,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //评论详细信息
 //2023-07-22
@@ -112,12 +113,13 @@ public class ReplyInfoActivity extends BaseActivity {
         runOnUiThread(()->refreshLayout.setRefreshing(true));
         page++;
         try {
-            int lastSize = replyList.size();
-            int result = ReplyApi.getReplies(oid,rpid,page,type,sort,replyList);
+            List<Reply> list = new ArrayList<>();
+            int result = ReplyApi.getReplies(oid,rpid,page,type,sort,list);
             if(result != -1){
                 Log.e("debug","下一页");
+                replyList.addAll(list);
                 runOnUiThread(()-> {
-                    replyAdapter.notifyItemRangeInserted(lastSize + 1,replyList.size() + 1 - lastSize);
+                    replyAdapter.notifyItemRangeInserted(replyList.size() - list.size(),list.size());
                     refreshLayout.setRefreshing(false);
                 });
                 if(result == 1) {

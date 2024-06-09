@@ -14,13 +14,15 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.R;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 //推荐页面
 //2023-07-13
 
 public class RecommendActivity extends RefreshMainActivity {
 
-    private ArrayList<VideoCard> videoCardList;
+    private List<VideoCard> videoCardList;
     private VideoCardAdapter videoCardAdapter;
     private boolean firstRefresh = true;
 
@@ -60,19 +62,19 @@ public class RecommendActivity extends RefreshMainActivity {
     private void addRecommend() {
         Log.e("debug", "加载下一页");
         CenterThreadPool.run(()->{
-            int lastSize = videoCardList.size();
             try {
-                RecommendApi.getRecommend(videoCardList);
+                List<VideoCard> list = new ArrayList<>();
+                RecommendApi.getRecommend(list);
                 setRefreshing(false);
 
                 runOnUiThread(() -> {
+                    videoCardList.addAll(list);
                     if (firstRefresh) {
                         firstRefresh = false;
                         videoCardAdapter = new VideoCardAdapter(this, videoCardList);
                         setAdapter(videoCardAdapter);
-                    }else {
-                        Log.e("debug","last="+lastSize+"&now="+videoCardList.size());
-                        videoCardAdapter.notifyItemRangeInserted(lastSize,videoCardList.size()-lastSize);
+                    } else {
+                        videoCardAdapter.notifyItemRangeInserted(videoCardList.size() - list.size(), list.size());
                     }
                 });
             } catch (Exception e) {

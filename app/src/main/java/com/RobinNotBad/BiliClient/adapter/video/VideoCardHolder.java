@@ -51,7 +51,7 @@ public class VideoCardHolder extends RecyclerView.ViewHolder{
         Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
                 .placeholder(R.mipmap.placeholder)
                 .format(DecodeFormat.PREFER_RGB_565)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(cover);
     }

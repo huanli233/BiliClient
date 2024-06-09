@@ -10,6 +10,7 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //追番列表
 //2024-06-07
@@ -54,11 +55,14 @@ public class FollowingBangumisActivity extends RefreshListActivity {
     private void continueLoading(int page) {
         CenterThreadPool.run(()->{
             try {
-                int lastSize = videoList.size();
-                int result = BangumiApi.getFollowingList(page,videoList);
+                List<VideoCard> list = new ArrayList<>();
+                int result = BangumiApi.getFollowingList(page,list);
                 if(result != -1){
                     Log.e("debug","下一页");
-                    runOnUiThread(()-> videoCardAdapter.notifyItemRangeInserted(lastSize,videoList.size()-lastSize));
+                    runOnUiThread(()-> {
+                        videoList.addAll(list);
+                        videoCardAdapter.notifyItemRangeInserted(videoList.size() - list.size(),list.size());
+                    });
                     if(result == 1) {
                         Log.e("debug","到底了");
                         setBottom(true);

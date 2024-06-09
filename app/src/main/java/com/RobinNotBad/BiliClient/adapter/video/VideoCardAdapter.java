@@ -15,6 +15,7 @@ import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //视频卡片Adapter 适用于各种场景（迫真
 //日期不记得了
@@ -24,10 +25,10 @@ import java.util.ArrayList;
 public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
 
     Context context;
-    ArrayList<VideoCard> videoCardList;
+    List<VideoCard> videoCardList;
     OnItemLongClickListener longClickListener;
 
-    public VideoCardAdapter(Context context, ArrayList<VideoCard> videoCardList) {
+    public VideoCardAdapter(Context context, List<VideoCard> videoCardList) {
         this.context = context;
         this.videoCardList = videoCardList;
     }
@@ -68,7 +69,7 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
         holder.itemView.setOnLongClickListener(view -> {
             if(longClickListener != null) {
                 longClickListener.onItemLongClick(position);
-                return true;    //必须要true哦，不然上面的点按也会触发
+                return true;    //必须要true表示事件已处理 不再继续传递，不然上面的点按也会触发
             }
             else return false;
         });

@@ -10,6 +10,7 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //历史记录
 //2023-08-18
@@ -55,11 +56,14 @@ public class HistoryActivity extends RefreshListActivity {
     private void continueLoading(int page) {
         CenterThreadPool.run(()->{
             try {
-                int lastSize = videoList.size();
-                int result = HistoryApi.getHistory(page,videoList);
+                List<VideoCard> list = new ArrayList<>();
+                int result = HistoryApi.getHistory(page,list);
                 if(result != -1){
                     Log.e("debug","下一页");
-                    runOnUiThread(()-> videoCardAdapter.notifyItemRangeInserted(lastSize,videoList.size()-lastSize));
+                    runOnUiThread(()-> {
+                        videoList.addAll(list);
+                        videoCardAdapter.notifyItemRangeInserted(videoList.size() - list.size(),list.size());
+                    });
                     if(result == 1) {
                         Log.e("debug","到底了");
                         setBottom(true);

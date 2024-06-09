@@ -14,6 +14,7 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //用户视频
 //2023-09-30
@@ -68,11 +69,14 @@ public class UserVideoFragment extends RefreshListFragment {
     private void continueLoading(int page) {
         CenterThreadPool.run(()->{
             try {
-                int lastSize = videoList.size();
-                int result = UserInfoApi.getUserVideos(mid,page,"",videoList);
+                List<VideoCard> list = new ArrayList<>();
+                int result = UserInfoApi.getUserVideos(mid,page,"",list);
                 if(result != -1){
                     Log.e("debug","下一页");
-                    runOnUiThread(()-> adapter.notifyItemRangeInserted(lastSize, videoList.size() - lastSize));
+                    runOnUiThread(()-> {
+                        videoList.addAll(list);
+                        adapter.notifyItemRangeInserted(videoList.size() - list.size(), list.size());
+                    });
                     if(result == 1) {
                         Log.e("debug","到底了");
                         bottom = true;

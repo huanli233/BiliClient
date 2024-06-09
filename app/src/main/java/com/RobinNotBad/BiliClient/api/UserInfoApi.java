@@ -14,7 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 //用户信息API
@@ -88,7 +88,7 @@ public class UserInfoApi {
     }
 
 
-    public static int getUserVideos(long mid, int page, String searchKeyword,ArrayList<VideoCard> videoList) throws IOException, JSONException {
+    public static int getUserVideos(long mid, int page, String searchKeyword, List<VideoCard> videoList) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/space/wbi/arc/search?";
         String args = "keyword=" + searchKeyword + "&mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
                 + "&ps=30&tid=0";
@@ -118,7 +118,7 @@ public class UserInfoApi {
     }
 
 
-    public static int getUserArticles(long mid, int page,ArrayList<ArticleCard> articleList) throws IOException, JSONException {
+    public static int getUserArticles(long mid, int page, List<ArticleCard> articleList) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/space/wbi/article?";
         String args = "mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
                 + "&ps=30&tid=0";

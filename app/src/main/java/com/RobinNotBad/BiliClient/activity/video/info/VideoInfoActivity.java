@@ -52,7 +52,7 @@ public class VideoInfoActivity extends BaseActivity {
         if(type == null) type = "video";
         this.aid = intent.getLongExtra("aid",114514);
         this.bvid = intent.getStringExtra("bvid");
-        setContentView(R.layout.cell_loading);
+        setContentView(R.layout.activity_loading);
 
         String finalType = type;
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_simple_viewpager, null, (layoutView, resId, parent) -> {

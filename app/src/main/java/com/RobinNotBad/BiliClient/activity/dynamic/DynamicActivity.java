@@ -23,6 +23,7 @@ import com.RobinNotBad.BiliClient.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -161,19 +162,20 @@ public class DynamicActivity extends RefreshMainActivity {
     private void addDynamic() {
         Log.e("debug", "加载下一页");
         CenterThreadPool.run(()->{
-            int lastSize = dynamicList.size();
             try {
-                offset = DynamicApi.getDynamicList(dynamicList,offset,0);
+                List<Dynamic> list = new ArrayList<>();
+                offset = DynamicApi.getDynamicList(list,offset,0);
                 bottom = (offset==-1);
                 setRefreshing(false);
 
                 runOnUiThread(() -> {
+                    dynamicList.addAll(list);
                     if (firstRefresh) {
                         firstRefresh = false;
                         dynamicAdapter = new DynamicAdapter(this, dynamicList);
                         setAdapter(dynamicAdapter);
                     } else {
-                        dynamicAdapter.notifyItemRangeInserted(lastSize, dynamicList.size() - lastSize);
+                        dynamicAdapter.notifyItemRangeInserted(dynamicList.size() - list.size(), list.size());
                     }
                 });
 

@@ -1,8 +1,6 @@
 package com.RobinNotBad.BiliClient.api;
 
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.util.ArraySet;
 import android.util.Log;
 import android.util.Pair;
 
@@ -18,7 +16,6 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.StringUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +23,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -279,7 +275,7 @@ public class DynamicApi {
         return -1;
     }
 
-    public static long getDynamicList(ArrayList<Dynamic> dynamicList, long offset, long mid) throws IOException, JSONException {
+    public static long getDynamicList(List<Dynamic> dynamicList, long offset, long mid) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/"
                 + (mid==0 ? "all" : "space?host_mid=" + mid)
                 + (offset==0 ? "" : (mid == 0 ? "?offset=" + offset : "&offset=" + offset));

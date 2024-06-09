@@ -71,7 +71,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if (dynamicList.get(position).dynamic_forward != null){
                 Log.e("debug","有子动态！");
-                View childCard = View.inflate(context,R.layout.cell_dynamic_child,dynamicHolder.extraCard);
+                View childCard = View.inflate(context,R.layout.cell_dynamic_child, dynamicHolder.extraCard);
                 DynamicHolder childHolder = new DynamicHolder(childCard, dynamicActivity, true);
                 childHolder.showDynamic(dynamicList.get(position).dynamic_forward, context, true);
             }

@@ -30,6 +30,7 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
     private FollowListAdapter userInfoAdapter;
 
     private String keyword;
+    private boolean isFirstLoad = true;
     private boolean refreshing = false;
     private boolean bottom = false;
     private int page = 0;
@@ -105,8 +106,9 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
             }
             else {
                 bottom = true;
-                if(isAdded()) requireActivity().runOnUiThread(() ->  MsgUtil.toast("已经到底啦OwO",requireContext()));
+                if(isAdded() && !isFirstLoad) requireActivity().runOnUiThread(() ->  MsgUtil.toast("已经到底啦OwO",requireContext()));
             }
+            isFirstLoad = false;
         } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,requireContext()));}
         refreshing = false;
     }

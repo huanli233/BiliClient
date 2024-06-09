@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -39,7 +40,7 @@ public class ReplyApi {
     //oid：评论区id，可以是视频aid
     //rpid：若要查看子评论，这个参数是父评论的id，否则填0
     //sort：评论区排序方式，0=时间；1=点赞数量；2=回复数量
-    public static int getReplies(long oid, long rpid, int pn, int type, int sort, ArrayList<Reply> replyArrayList) throws JSONException, IOException {
+    public static int getReplies(long oid, long rpid, int pn, int type, int sort, List<Reply> replyArrayList) throws JSONException, IOException {
 
         String url = "https://api.bilibili.com/x/v2/reply" + (rpid == 0 ? "" : "/reply") + "?pn=" + pn
                 + "&type=" + type + "&oid=" + oid + "&sort=" + sort + (rpid == 0 ? "" : ("&root=" + rpid));
@@ -65,7 +66,7 @@ public class ReplyApi {
         } else return -1;
     }  //-1错误,0正常，1到底了
 
-    public static void analyzeReplyArray(boolean isRoot, JSONArray replies, ArrayList<Reply> replyArrayList) throws JSONException {
+    public static void analyzeReplyArray(boolean isRoot, JSONArray replies, List<Reply> replyArrayList) throws JSONException {
         long timeCurr = System.currentTimeMillis();
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 

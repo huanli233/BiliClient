@@ -14,10 +14,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class BangumiApi {
-    public static int getFollowingList(int page, ArrayList<VideoCard> cardList) throws JSONException, IOException {
+    public static int getFollowingList(int page, List<VideoCard> cardList) throws JSONException, IOException {
         String url = "https://api.bilibili.com/x/space/bangumi/follow/list?type=1&follow_status=0&pn=" + page
                 + "&ps=15&vmid=" + SharedPreferencesUtil.getLong("mid",0);
 
