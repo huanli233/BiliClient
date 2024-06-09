@@ -72,7 +72,7 @@
                 android:shadowDx="3"
                 android:shadowDy="3"
                 android:shadowRadius="5"
-                android:text="00:00"
+                tools:text="00:00"
                 android:textColor="#fff"
                 android:textSize="13sp"
                 android:textStyle="bold"
@@ -356,7 +356,6 @@
                 app:layout_constraintStart_toEndOf="@+id/addWatchlater"
                 app:layout_constraintTop_toBottomOf="@+id/like_coin_fav" />
 
-            <!-- 我不会写。 -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/relay"
                 android:layout_width="match_parent"
@@ -365,6 +364,31 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/download" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/collection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/relay">
+
+                <TextView
+                    android:id="@+id/collectionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
+                    android:text="合集 · maimaiDX|CHUNITHM"
+                    android:textAlignment="center"
+                    android:layout_marginHorizontal="8dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    app:drawableEndCompat="@drawable/arrow_forward"
+                    android:gravity="center_vertical"
+                    android:textSize="13sp"
+                    android:visibility="visible"
+                    tools:ignore="RtlCompat" />
+            </com.google.android.material.card.MaterialCardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

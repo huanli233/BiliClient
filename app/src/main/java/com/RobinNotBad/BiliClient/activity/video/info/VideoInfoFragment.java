@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
+import com.RobinNotBad.BiliClient.activity.collection.CollectionInfoActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.user.WatchLaterActivity;
@@ -38,6 +39,7 @@ import com.RobinNotBad.BiliClient.adapter.user.UpListAdapter;
 import com.RobinNotBad.BiliClient.api.*;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.*;
+import com.RobinNotBad.BiliClient.view.MarqueeTextView;
 import com.RobinNotBad.BiliClient.view.RadiusBackgroundSpan;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -69,7 +71,7 @@ public class VideoInfoFragment extends Fragment {
     int RESULT_DELETED = -1;
 
     private boolean desc_expand = false, tags_expand = false;
-    ActivityResultLauncher<Intent> favLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+    ActivityResultLauncher<Intent> favLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
         @Override
         public void onActivityResult(ActivityResult o) {
             int code = o.getResultCode();
@@ -83,7 +85,7 @@ public class VideoInfoFragment extends Fragment {
     });
 
     // 其实我不会用，也是抄的上面的😡
-    ActivityResultLauncher<Intent> writeDynamicLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+    ActivityResultLauncher<Intent> writeDynamicLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
         @Override
         public void onActivityResult(ActivityResult result) {
             int code = result.getResultCode();
@@ -105,12 +107,15 @@ public class VideoInfoFragment extends Fragment {
                         }
                         dynId = DynamicApi.relayVideo(text, (atUids.isEmpty() ? null : atUids), videoInfo.aid);
                         if (dynId != -1) {
-                            if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.toast("转发成功~", requireContext()));
+                            if (isAdded())
+                                requireActivity().runOnUiThread(() -> MsgUtil.toast("转发成功~", requireContext()));
                         } else {
-                            if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.toast("转发失败", requireContext()));
+                            if (isAdded())
+                                requireActivity().runOnUiThread(() -> MsgUtil.toast("转发失败", requireContext()));
                         }
                     } catch (Exception e) {
-                        if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                        if (isAdded())
+                            requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
                     }
                 });
             }
@@ -168,6 +173,8 @@ public class VideoInfoFragment extends Fragment {
         TextView likeLabel = view.findViewById(R.id.like_label);
         TextView coinLabel = view.findViewById(R.id.coin_label);
         TextView favLabel = view.findViewById(R.id.fav_label);
+        MaterialCardView collectionCard = view.findViewById(R.id.collection);
+        TextView collectionTitle = view.findViewById(R.id.collectionText);
         fav = view.findViewById(R.id.btn_fav);
 
         if (videoInfo.epid != -1) { //不是空的的话就应该跳转到番剧页面了
@@ -419,11 +426,20 @@ public class VideoInfoFragment extends Fragment {
             writeDynamicLauncher.launch(intent);
         });
 
-
         if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) {
             addWatchlater.setVisibility(View.GONE);
             relay.setVisibility(View.GONE);
         }
+
+        if (videoInfo.collection != null) {
+            collectionTitle.setText(String.format("合集 · %s", videoInfo.collection.title));
+            collectionCard.setOnClickListener((view1) -> {
+                startActivity(new Intent(requireContext(), CollectionInfoActivity.class).putExtra("collection", videoInfo.collection));
+            });
+        } else {
+            collectionCard.setVisibility(View.GONE);
+        }
+
     }
 
 

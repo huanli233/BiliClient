@@ -55,7 +55,7 @@ public class VideoCard implements Parcelable, Serializable {
         cid = in.readLong();
     }
 
-    public static final Creator<VideoCard> CREATOR = new Creator<VideoCard>() {
+    public static final Creator<VideoCard> CREATOR = new Creator<>() {
         @Override
         public VideoCard createFromParcel(Parcel in) {
             return new VideoCard(in);

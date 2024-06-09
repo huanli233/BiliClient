@@ -39,6 +39,11 @@
         </provider>
 
         <activity
+            android:name=".activity.collection.CollectionInfoActivity"
+            android:exported="false"
+            android:label="合集详情"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.user.FollowingBangumisActivity"
             android:exported="false"
             android:label="追番列表"

@@ -31,7 +31,5 @@ public class VideoInfo implements Serializable {    //自定义类需要加这�
 
     public long epid; //如果是番剧则不为空，应自动跳转
     public int copyright; // 是否转载
-
-
-    public VideoInfo(){}
+    public Collection collection;
 }

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.RobinNotBad.BiliClient.model.At;
+import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.Stats;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
@@ -18,6 +19,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 
 //视频信息API 自己写的
@@ -57,6 +59,50 @@ public class VideoInfoApi {
         }
         return tags.toString();
     }
+
+    public static Collection analyzeUgcSeason(JSONObject json) throws JSONException {
+        Collection collection = new Collection();
+        collection.id = json.optInt("id", -1);
+        collection.title = json.optString("title");
+        collection.intro = json.optString("intro");
+        collection.cover = json.optString("cover");
+        collection.mid = json.optLong("mid");
+        JSONArray sections = json.optJSONArray("sections");
+        if (sections != null) {
+            List<Collection.Section> sectionList = new ArrayList<>();
+            for (int i = 0; i < sections.length(); i++) {
+                JSONObject sectionJson = sections.getJSONObject(i);
+                Collection.Section section = new Collection.Section();
+                section.season_id = sectionJson.optInt("season_id", -1);
+                section.id = sectionJson.optInt("id", -1);
+                section.title = sectionJson.optString("title");
+                JSONArray episodes = sectionJson.optJSONArray("episodes");
+                if (episodes != null) {
+                    List<Collection.Episode> episodeList = new ArrayList<>();
+                    for (int j = 0; j < episodes.length(); j++) {
+                        JSONObject episodeJson = episodes.getJSONObject(j);
+                        Collection.Episode episode = new Collection.Episode();
+                        episode.season_id = episodeJson.optInt("season_id", -1);
+                        episode.section_id = episodeJson.optInt("section_id", -1);
+                        episode.id = episodeJson.optInt("id", -1);
+                        episode.aid = episodeJson.optLong("aid", -1);
+                        episode.cid = episodeJson.optLong("cid", -1);
+                        episode.title = episodeJson.optString("title");
+                        JSONObject arc = episodeJson.optJSONObject("arc");
+                        if (arc != null) {
+                            episode.arc = getInfoByJson(arc);
+                        }
+                        episode.bvid = episodeJson.optString("bvid");
+                        episodeList.add(episode);
+                    }
+                    section.episodes = episodeList;
+                }
+                sectionList.add(section);
+            }
+            collection.sections = sectionList;
+        }
+        return collection;
+    }
     
     public static VideoInfo getInfoByJson(JSONObject data) throws JSONException {  //项目实在太多qwq 拆就完事了
         VideoInfo videoInfo = new VideoInfo();
@@ -89,7 +135,7 @@ public class VideoInfoApi {
         }
         Log.e("简介",videoInfo.description);
 
-        videoInfo.bvid = data.getString("bvid");
+        videoInfo.bvid = data.optString("bvid");
         videoInfo.aid = data.getLong("aid");
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -109,30 +155,34 @@ public class VideoInfoApi {
         stats.coin = stat.getInt("coin");
         stats.reply = stat.getInt("reply");
         stats.danmaku = stat.getInt("danmaku");
-        stats.favorite = stat.getInt("favorite");
+        stats.favorite = stat.optInt("favorite", -1);
         videoInfo.stats = stats;
 
-        JSONArray pages = data.getJSONArray("pages");
-        ArrayList<String> pagenames = new ArrayList<>();
-        ArrayList<Long> cids = new ArrayList<>();
-        for (int i = 0; i < pages.length(); i++) {
-            JSONObject page = pages.getJSONObject(i);
-            String pagename = page.getString("part");
-            pagenames.add(pagename);
-            Log.e("第" + i + "个视频的标题",pagename);
-            long cid = page.getLong("cid");
-            cids.add(cid);
-            Log.e("第" + i + "个视频的cid",String.valueOf(cid));
+        JSONArray pages = data.optJSONArray("pages");
+        if (pages != null) {
+            ArrayList<String> pagenames = new ArrayList<>();
+            ArrayList<Long> cids = new ArrayList<>();
+            for (int i = 0; i < pages.length(); i++) {
+                JSONObject page = pages.getJSONObject(i);
+                String pagename = page.getString("part");
+                pagenames.add(pagename);
+                Log.e("第" + i + "个视频的标题",pagename);
+                long cid = page.getLong("cid");
+                cids.add(cid);
+                Log.e("第" + i + "个视频的cid",String.valueOf(cid));
+            }
+            videoInfo.pagenames = pagenames;
+            videoInfo.cids = cids;
         }
-        videoInfo.pagenames = pagenames;
-        videoInfo.cids = cids;
 
-        videoInfo.upowerExclusive = data.getBoolean("is_upower_exclusive");
+        videoInfo.upowerExclusive = data.optBoolean("is_upower_exclusive", true);
 
-        JSONObject rights = data.getJSONObject("rights");
-        videoInfo.isCooperation = (rights.getInt("is_cooperation") == 1);
-        videoInfo.isSteinGate = (rights.getInt("is_stein_gate") == 1);
-        videoInfo.is360 = (rights.getInt("is_360") == 1);
+        JSONObject rights = data.optJSONObject("rights");
+        if (rights != null) {
+            videoInfo.isCooperation = (rights.optInt("is_cooperation", 0) == 1);
+            videoInfo.isSteinGate = (rights.optInt("is_stein_gate", 0) == 1);
+            videoInfo.is360 = (rights.optInt("is_360", 0) == 1);
+        }
 
         ArrayList<UserInfo> staff_list = new ArrayList<>();
         if(videoInfo.isCooperation) { //如果是联合投稿就存储联合UP列表
@@ -155,17 +205,21 @@ public class VideoInfoApi {
                 staff_list.add(staff_member);
             }
         } else {
-            JSONObject owner = data.getJSONObject("owner");
-            UserInfo userInfo = new UserInfo();
-            userInfo.name = owner.getString("name");
-            userInfo.avatar = owner.getString("face");
-            userInfo.mid = owner.getLong("mid");
-            userInfo.sign = "UP主";
-            staff_list.add(userInfo);
+            if (data.optJSONObject("owner") != null) {
+                JSONObject owner = data.getJSONObject("owner");
+                UserInfo userInfo = new UserInfo();
+                userInfo.name = owner.getString("name");
+                userInfo.avatar = owner.getString("face");
+                userInfo.mid = owner.getLong("mid");
+                userInfo.sign = "UP主";
+                staff_list.add(userInfo);
+            }
         }
         videoInfo.staff = staff_list;
 
-        videoInfo.argueMsg = data.getJSONObject("argue_info").getString("argue_msg");
+        if (data.optJSONObject("argue_info") != null) {
+            videoInfo.argueMsg = data.getJSONObject("argue_info").getString("argue_msg");
+        }
 
         try {
             if (data.has("redirect_url") && (!data.getString("redirect_url").isEmpty()) && (data.getString("redirect_url").contains("bangumi"))) videoInfo.epid = Long.parseLong(data.getString("redirect_url").replace("https://www.bilibili.com/bangumi/play/ep",""));
@@ -176,6 +230,11 @@ public class VideoInfoApi {
         }
 
         if (data.has("copyright") && !data.isNull("copyright")) videoInfo.copyright = data.getInt("copyright");
+
+        JSONObject ugc_season = data.optJSONObject("ugc_season");
+        if (ugc_season != null) {
+            videoInfo.collection = analyzeUgcSeason(ugc_season);
+        }
 
         return videoInfo;
     }
