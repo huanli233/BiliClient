@@ -1,8 +1,10 @@
 package com.RobinNotBad.BiliClient.api;
 
 import android.util.Log;
+import android.util.Pair;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
+import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.Opus;
 import com.RobinNotBad.BiliClient.model.FavoriteFolder;
 import com.RobinNotBad.BiliClient.model.VideoCard;
@@ -17,6 +19,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 //收藏API
@@ -54,6 +57,43 @@ public class FavoriteApi {
             }
         }
         return folderList;
+    }
+
+    /**
+     * 获取收藏的合集
+     * @param mid 目标用户
+     * @param page 页数
+     * @param collectionList collection对象List
+     * @return 返回码与has_more
+     */
+    public static Pair<Integer, Boolean> getFavoritedCollections(long mid, int page, List<Collection> collectionList) throws JSONException, IOException {
+        String url = "https://api.bilibili.com/x/v3/fav/folder/collected/list" + new NetWorkUtil.FormData()
+                .setUrlParam(true)
+                .put("platform", "web")
+                .put("up_mid", mid)
+                .put("pn", page)
+                .put("ps", 10);
+        JSONObject result = NetWorkUtil.getJson(url);
+        JSONObject data = result.optJSONObject("data");
+        boolean has_more = false;
+        if (data != null) {
+            has_more = data.optBoolean("has_more", false);
+            JSONArray list = data.optJSONArray("list");
+            if (list != null) {
+                for (int i = 0; i < list.length(); i++) {
+                    JSONObject item = list.getJSONObject(i);
+                    Collection collection = new Collection();
+                    collection.id = item.optInt("id", -1);
+                    collection.mid = item.optLong("mid", -1);
+                    collection.title = item.optString("title");
+                    collection.cover = item.optString("cover");
+                    collection.intro = item.optString("intro");
+                    collection.view = ToolsUtil.toWan(item.optInt("view_count", -1));
+                    collectionList.add(collection);
+                }
+            }
+        }
+        return new Pair<>(result.optInt("code", -1), has_more);
     }
 
     public static int getFolderVideos(long mid, long fid, int page, ArrayList<VideoCard> videoList) throws IOException, JSONException {
