@@ -12,6 +12,7 @@ import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.StringUtil;
 
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,6 +68,7 @@ public class VideoInfoApi {
         collection.intro = json.optString("intro");
         collection.cover = json.optString("cover");
         collection.mid = json.optLong("mid");
+        collection.view = ToolsUtil.toWan(json.getJSONObject("stat").optLong("view"));
         JSONArray sections = json.optJSONArray("sections");
         if (sections != null) {
             List<Collection.Section> sectionList = new ArrayList<>();

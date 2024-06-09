@@ -10,6 +10,8 @@ public class Collection implements Serializable {
     public String intro;
     public long mid;
     public List<Section> sections;
+    
+    public String view;
 
     public static class Section implements Serializable {
         public int season_id;

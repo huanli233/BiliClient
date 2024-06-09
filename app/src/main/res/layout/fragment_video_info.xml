@@ -100,6 +100,31 @@
                 app:layout_constraintTop_toBottomOf="@id/exclusiveTip"
                 tools:itemCount="3"
                 tools:listitem="@layout/cell_up_list" />
+            
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/collection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/up_recyclerView">
+
+                <TextView
+                    android:id="@+id/collectionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
+                    android:text="合集 · maimaiDX|CHUNITHM"
+                    android:textAlignment="center"
+                    android:layout_marginHorizontal="8dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    app:drawableEndCompat="@drawable/arrow_forward"
+                    android:gravity="center_vertical"
+                    android:textSize="13sp"
+                    android:visibility="visible"
+                    tools:ignore="RtlCompat" />
+            </com.google.android.material.card.MaterialCardView>
 
             <ImageView
                 android:id="@+id/viewsIcon"
@@ -123,7 +148,7 @@
                 android:textColor="#fff"
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@+id/viewsIcon"
-                app:layout_constraintTop_toBottomOf="@+id/up_recyclerView" />
+                app:layout_constraintTop_toBottomOf="@+id/collection" />
 
             <ImageView
                  android:layout_height="0dp"
@@ -230,7 +255,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tags" />
-
+            
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/play"
                 android:layout_width="match_parent"
@@ -364,31 +389,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/download" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/collection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/relay">
-
-                <TextView
-                    android:id="@+id/collectionText"
-                    android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:text="合集 · maimaiDX|CHUNITHM"
-                    android:textAlignment="center"
-                    android:layout_marginHorizontal="8dp"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    app:drawableEndCompat="@drawable/arrow_forward"
-                    android:gravity="center_vertical"
-                    android:textSize="13sp"
-                    android:visibility="visible"
-                    tools:ignore="RtlCompat" />
-            </com.google.android.material.card.MaterialCardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

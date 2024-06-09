@@ -14,7 +14,6 @@ import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 
-import java.util.ArrayList;
 import java.util.List;
 
 //视频卡片Adapter 适用于各种场景（迫真

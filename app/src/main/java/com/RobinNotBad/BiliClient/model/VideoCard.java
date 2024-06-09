@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.RobinNotBad.BiliClient.model.Collection;
 import java.io.Serializable;
 
 public class VideoCard implements Parcelable, Serializable {
@@ -14,6 +15,8 @@ public class VideoCard implements Parcelable, Serializable {
     public long aid;
     public String bvid;
     public long cid = 0;
+    
+    public Collection collection;
 
     public VideoCard(String title, String upName, String view, String cover, long aid, String bvid,String type) {
         this.title = title;
@@ -40,6 +43,15 @@ public class VideoCard implements Parcelable, Serializable {
         this.cover = cover;
         this.aid = aid;
         this.bvid = bvid;
+    }
+    public VideoCard(String title, String upName, String view, String cover, long aid, String bvid, Collection collection) {
+        this.title = title;
+        this.upName = upName;
+        this.view = view;
+        this.cover = cover;
+        this.aid = aid;
+        this.bvid = bvid;
+        this.collection = collection;
     }
 
     public VideoCard(){}

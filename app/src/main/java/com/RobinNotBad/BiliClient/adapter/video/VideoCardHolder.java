@@ -1,6 +1,10 @@
 package com.RobinNotBad.BiliClient.adapter.video;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -33,7 +38,6 @@ public class VideoCardHolder extends RecyclerView.ViewHolder{
     }
 
     public void showVideoCard(VideoCard videoCard, Context context){
-        title.setText(ToolsUtil.htmlToString(videoCard.title));
         String upNameStr = videoCard.upName;
         if(upNameStr == null || upNameStr.isEmpty()){
             upName.setVisibility(View.GONE);
@@ -41,18 +45,38 @@ public class VideoCardHolder extends RecyclerView.ViewHolder{
         }
         else upName.setText(upNameStr);
 
-        String playTimesStr = videoCard.view;
-        if(playTimesStr == null || playTimesStr.isEmpty()){
-            playIcon.setVisibility(View.GONE);
-            viewCount.setVisibility(View.GONE);
-        }
-        else viewCount.setText(playTimesStr);
-
-        Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
+        
+        if(videoCard.collection == null){
+            title.setText(ToolsUtil.htmlToString(videoCard.title));
+            String playTimesStr = videoCard.view;
+            if(playTimesStr == null || playTimesStr.isEmpty()){
+                playIcon.setVisibility(View.GONE);
+                viewCount.setVisibility(View.GONE);
+            }
+            else viewCount.setText(playTimesStr);
+            Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
                 .placeholder(R.mipmap.placeholder)
                 .format(DecodeFormat.PREFER_RGB_565)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(cover);
+        }else{
+            Collection collection = videoCard.collection;
+            SpannableString spannableString = new SpannableString("[合集]" + ToolsUtil.htmlToString(collection.title));
+            spannableString.setSpan(new ForegroundColorSpan(Color.rgb(207,75,95)), 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            title.setText(spannableString);
+            String playTimesStr = collection.view;
+            if(playTimesStr == null || playTimesStr.isEmpty()){
+                playIcon.setVisibility(View.GONE);
+                viewCount.setVisibility(View.GONE);
+            }
+            else viewCount.setText("共" + playTimesStr);
+            Glide.with(context).asDrawable().load(GlideUtil.url(collection.cover))
+                .placeholder(R.mipmap.placeholder)
+                .format(DecodeFormat.PREFER_RGB_565)
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(cover);
+        }
     }
 }

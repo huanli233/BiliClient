@@ -142,11 +142,8 @@ public class SettingMainActivity extends InstanceActivity {
             });
 
             MaterialCardView test = findViewById(R.id.test);    //用于测试
-            //test.setVisibility(View.GONE);
+            test.setVisibility(View.GONE);
             test.setOnClickListener(view -> {
-                Intent intent = new Intent();
-                intent.setClass(this, LoginActivity.class);
-                startActivity(intent);
             });
         });
     }

@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.api;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.model.ArticleCard;
+import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -108,7 +109,18 @@ public class UserInfoApi {
                     String bvid = card.getString("bvid");
                     String upName = card.getString("author");
                     String title = card.getString("title");
-                    videoList.add(new VideoCard(title,upName,playStr,cover,aid,bvid));
+                    
+                    Collection collection = null;
+                    if(!card.isNull("meta")) {
+                        collection = new Collection();
+                        JSONObject meta = card.getJSONObject("meta");
+                        collection.id = meta.getInt("id");
+                        collection.title = meta.getString("title");
+                        collection.cover = meta.getString("cover");
+                        collection.view = ToolsUtil.toWan(meta.getJSONObject("stat").getLong("view"));
+                    }
+                    
+                    videoList.add(new VideoCard(title,upName,playStr,cover,aid,bvid,collection));
                 }
                 return 0;
             }

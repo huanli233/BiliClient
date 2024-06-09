@@ -39,7 +39,6 @@ import com.RobinNotBad.BiliClient.adapter.user.UpListAdapter;
 import com.RobinNotBad.BiliClient.api.*;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.*;
-import com.RobinNotBad.BiliClient.view.MarqueeTextView;
 import com.RobinNotBad.BiliClient.view.RadiusBackgroundSpan;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;

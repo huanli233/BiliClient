@@ -153,6 +153,7 @@ public class CollectionInfoActivity extends BaseActivity {
                 CollectionInfoHolder collectionInfoHolder = (CollectionInfoHolder) holder;
                 collectionInfoHolder.name.setText(collection.title);
                 collectionInfoHolder.desc.setText(TextUtils.isEmpty(collection.intro) ? "这里没有简介哦" : collection.intro);
+                collectionInfoHolder.playTimes.setText("共" + collection.view);
                 Glide.with(context).asDrawable().load(GlideUtil.url(collection.cover))
                         .placeholder(R.mipmap.placeholder)
                         .format(DecodeFormat.PREFER_RGB_565)
@@ -180,17 +181,20 @@ public class CollectionInfoActivity extends BaseActivity {
             public SectionHolder(@NonNull TextView itemView) {
                 super(itemView);
                 this.item = itemView;
+                this.item.setPadding(2,2,2,2);
+                this.item.setLeft(5);
             }
         }
 
         static class CollectionInfoHolder extends RecyclerView.ViewHolder {
-            TextView name, desc;
+            TextView name, desc, playTimes;
             ImageView cover;
             public CollectionInfoHolder(@NonNull View itemView) {
                 super(itemView);
                 this.name = itemView.findViewById(R.id.name);
                 this.desc = itemView.findViewById(R.id.desc);
                 this.cover = itemView.findViewById(R.id.cover);
+                this.playTimes = itemView.findViewById(R.id.playTimes);
             }
         }
     }
