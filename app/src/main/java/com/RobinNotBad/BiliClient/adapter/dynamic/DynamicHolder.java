@@ -234,15 +234,20 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
             context.startActivity(intent);
         });
 
+        boolean isPgc = false;
         if(dynamic.major_type != null) switch (dynamic.major_type){
+            case "MAJOR_TYPE_PGC":
+                isPgc = true;
             case "MAJOR_TYPE_ARCHIVE":
             case "MAJOR_TYPE_UGC_SEASON":
                 VideoCard childVideoCard = (VideoCard) dynamic.major_object;
                 VideoCardHolder video_holder = new VideoCardHolder(preInflateHelper.getView(extraCard, R.layout.cell_dynamic_video, true));
                 video_holder.showVideoCard(childVideoCard,context);
+                boolean finalIsPgc = isPgc;
                 video_holder.itemView.findViewById(R.id.cardView).setOnClickListener(view -> {
                     Intent intent = new Intent();
                     intent.setClass(context, VideoInfoActivity.class);
+                    if (finalIsPgc) intent.putExtra("type", "media");
                     intent.putExtra("bvid", "");
                     intent.putExtra("aid", childVideoCard.aid);
                     context.startActivity(intent);

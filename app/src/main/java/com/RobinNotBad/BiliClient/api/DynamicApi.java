@@ -16,6 +16,7 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.StringUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -396,7 +397,16 @@ public class DynamicApi {
                     case "MAJOR_TYPE_UGC_SEASON":
                         dynamic.major_object = analyzeVideoCard(major.getJSONObject("ugc_season"));
                         break;
-
+                    case "MAJOR_TYPE_PGC":
+                        JSONObject bangumi = major.getJSONObject("pgc");
+                        VideoCard card = new VideoCard();
+                        card.type = "media_bangumi";
+                        card.aid = BangumiApi.getMdidFromEpid(bangumi.getLong("epid"));
+                        card.title = bangumi.getString("title");
+                        card.cover = bangumi.getString("cover");
+                        card.view = bangumi.getJSONObject("stat").getString("play");
+                        dynamic.major_object = card;
+                        break;
                     case "MAJOR_TYPE_ARTICLE":
                         JSONObject article = major.getJSONObject("article");
                         dynamic.major_object = new ArticleCard(

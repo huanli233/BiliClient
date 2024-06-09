@@ -22,6 +22,7 @@ import java.util.Objects;
 //收藏API
 
 public class FavoriteApi {
+    // TODO 合集收藏
 
     public static ArrayList<FavoriteFolder> getFavoriteFolders(long mid) throws IOException, JSONException {
         String url = "https://space.bilibili.com/ajax/fav/getBoxList?mid=" + mid;
