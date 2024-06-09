@@ -9,7 +9,11 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +35,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.collection.CollectionInfoActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
+import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.user.WatchLaterActivity;
 import com.RobinNotBad.BiliClient.activity.video.MultiPageActivity;
@@ -206,10 +211,36 @@ public class VideoInfoFragment extends Fragment {
                         tags = VideoInfoApi.getTagsByAid(videoInfo.aid);
                     else tags = VideoInfoApi.getTagsByBvid(videoInfo.bvid);
                     if (isAdded()) requireActivity().runOnUiThread(() -> {
+                        SpannableStringBuilder tag_str = new SpannableStringBuilder("标签：");
+                        for(String str : tags.split("/")){
+                            int old_len = tag_str.length();
+                            tag_str.append(str + "/");
+                            tag_str.setSpan(new ClickableSpan(){
+                                @Override
+                                public void onClick(View arg0) {
+                                    Intent intent = new Intent(requireContext(),SearchActivity.class);
+                                    intent.putExtra("keyword",str);
+                                    requireContext().startActivity(intent);
+                                }
+                                            
+                                @Override
+                                public void updateDrawState(TextPaint ds) {
+                                    super.updateDrawState(ds);
+                                    ds.setUnderlineText(false);
+                                    ds.setColor(Color.parseColor("#03a9f4"));
+                                }
+                            },old_len,tag_str.length() - 1,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                        }
+                        tagsText.setMovementMethod(LinkMovementMethod.getInstance());
                         tagsText.setText("标签：" + tags);
                         tagsText.setOnClickListener(view1 -> {
-                            if (tags_expand) tagsText.setMaxLines(1);
-                            else tagsText.setMaxLines(233);
+                            if (tags_expand) {
+                                tagsText.setMaxLines(1);
+                                tagsText.setText("标签：" + tags);
+                            } else {
+                                tagsText.setMaxLines(233);
+                                tagsText.setText(tag_str);
+                            }
                             tags_expand = !tags_expand;
                         });
                     });

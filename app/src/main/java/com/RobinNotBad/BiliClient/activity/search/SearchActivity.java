@@ -125,6 +125,13 @@ public class SearchActivity extends InstanceActivity {
             });
             historyRecyclerview.setLayoutManager(new LinearLayoutManager(this));
             historyRecyclerview.setAdapter(searchHistoryAdapter);
+                
+                
+            if(getIntent().getStringExtra("keyword") != null){
+                findViewById(R.id.top).setOnClickListener(view1->finish());
+                keywordInput.setText(getIntent().getStringExtra("keyword"));
+                MsgUtil.toast("可点击标题栏返回详情页",this);
+            }
         });
     }
 
