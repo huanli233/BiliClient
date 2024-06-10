@@ -14,6 +14,7 @@ import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //视频下评论页面，评论详情见ReplyInfoActivity
 //部分通用代码在VideoReplyAdapter内
@@ -99,13 +100,15 @@ public class ReplyFragment extends RefreshListFragment {
     private void continueLoading(int page) {
         CenterThreadPool.run(()->{
             try {
-                int lastSize = replyList.size();
-                int result = ReplyApi.getReplies(aid,0,page,type,sort,replyList);
+                List<Reply> list = new ArrayList<>();
+                int result = ReplyApi.getReplies(aid,0,page,type,sort,list);
                 setRefreshing(false);
                 if(result != -1){
                     Log.e("debug","下一页");
-                    runOnUiThread(()->
-                            replyAdapter.notifyItemRangeInserted(lastSize + 1, replyList.size() + 1 - lastSize));
+                    runOnUiThread(()-> {
+                        replyList.addAll(list);
+                        replyAdapter.notifyItemRangeInserted(replyList.size() - list.size(), list.size());
+                    });
                     if(result == 1) {
                         Log.e("debug", "到底了");
                         bottom = true;

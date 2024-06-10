@@ -12,6 +12,7 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //关注列表
 //2023-07-22
@@ -57,10 +58,13 @@ public class FollowingUsersActivity extends RefreshListActivity {
     private void continueLoading(int page) {
         CenterThreadPool.run(()->{
             try {
-                int lastSize = userList.size();
-                int result = FollowApi.getFollowList(mid, page, userList);
+                List<UserInfo> list = new ArrayList<>();
+                int result = FollowApi.getFollowList(mid, page, list);
                 Log.e("debug", "下一页");
-                runOnUiThread(() -> adapter.notifyItemRangeInserted(lastSize, userList.size() - lastSize));
+                runOnUiThread(() -> {
+                    userList.addAll(list);
+                    adapter.notifyItemRangeInserted(userList.size() - list.size(), list.size());
+                });
                 if (result == 1) {
                     Log.e("debug", "到底了");
                     setBottom(true);

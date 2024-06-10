@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.SwitchCompat;
-
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
@@ -37,7 +35,7 @@ public class SettingPlayerChooseActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.cell_loading);
+        setContentView(R.layout.activity_loading);
 
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_player_choose, null, (layoutView, resId, parent) -> {
             setContentView(layoutView);

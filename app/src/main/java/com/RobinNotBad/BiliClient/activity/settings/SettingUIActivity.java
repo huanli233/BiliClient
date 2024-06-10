@@ -21,7 +21,7 @@ public class SettingUIActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.cell_loading);
+        setContentView(R.layout.activity_loading);
 
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_ui, null, (layoutView, resId, parent) -> {
             setContentView(R.layout.activity_setting_ui);

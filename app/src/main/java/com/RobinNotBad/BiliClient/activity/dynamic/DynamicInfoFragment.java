@@ -15,6 +15,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicHolder;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.PreInflateHelper;
 
 //真正的视频详情页
 //2023-07-17
@@ -22,6 +23,8 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 public class DynamicInfoFragment extends Fragment {
 
     Dynamic dynamic;
+    Runnable onFinishLoad;
+    PreInflateHelper preInflateHelper;
 
 
     public DynamicInfoFragment() {
@@ -53,11 +56,12 @@ public class DynamicInfoFragment extends Fragment {
         super.onViewCreated(view,savedInstanceState);
 
         ScrollView scrollView = view.findViewById(R.id.scrollView);
+        if (preInflateHelper == null) preInflateHelper = new PreInflateHelper(requireContext());
 
         CenterThreadPool.run(()->{
             if(isAdded()) requireActivity().runOnUiThread(() -> {
                 View dynamicView = View.inflate(requireContext(),R.layout.cell_dynamic, scrollView);
-                DynamicHolder holder = new DynamicHolder(dynamicView, (BaseActivity) getActivity(), false);
+                DynamicHolder holder = new DynamicHolder(dynamicView, (BaseActivity) getActivity(), preInflateHelper, false);
                 holder.showDynamic(dynamic,requireContext(),false);
                 View.OnLongClickListener onDeleteLongClick = DynamicHolder.getDeleteListener(requireActivity(), dynamic);
                 holder.item_dynamic_delete.setOnLongClickListener(onDeleteLongClick);
@@ -66,11 +70,17 @@ public class DynamicInfoFragment extends Fragment {
                 if(dynamic.dynamic_forward != null){
                     Log.e("debug","有子动态！");
                     View childCard = View.inflate(requireContext(),R.layout.cell_dynamic_child,holder.extraCard);
-                    DynamicHolder childHolder = new DynamicHolder(childCard, (BaseActivity) getActivity(), true);
+                    DynamicHolder childHolder = new DynamicHolder(childCard, (BaseActivity) getActivity(), preInflateHelper, true);
                     childHolder.showDynamic(dynamic.dynamic_forward,requireContext(),true);
                 }
+
+                onFinishLoad.run();
             });
         });
 
+    }
+
+    public void setOnFinishLoad(Runnable runnable) {
+        this.onFinishLoad = runnable;
     }
 }

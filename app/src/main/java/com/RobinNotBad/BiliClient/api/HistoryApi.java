@@ -10,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryApi {
     public static void reportHistory(long aid, long cid,long mid, long progress) throws IOException {
@@ -19,7 +19,7 @@ public class HistoryApi {
         NetWorkUtil.post(url,per, NetWorkUtil.webHeaders);
     }
 
-    public static int getHistory(int page, ArrayList<VideoCard> videoList) throws IOException, JSONException {
+    public static int getHistory(int page, List<VideoCard> videoList) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/v2/history?pn=" + page + "&ps=30";
         JSONObject result = NetWorkUtil.getJson(url);
         if(!result.isNull("data")){

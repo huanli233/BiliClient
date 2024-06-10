@@ -26,6 +26,7 @@ public class RefreshMainActivity extends InstanceActivity{
     public boolean bottom = false;
     public int page = 1;
     public long lastLoadTimestamp;
+    boolean isRefreshing;
 
     //帮你findView和设置滚动监测器，自动显示转圈动画
     @Override
@@ -54,7 +55,7 @@ public class RefreshMainActivity extends InstanceActivity{
                     assert manager != null;
                     int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();  //获取最后一个完全显示的itemPosition
                     int itemCount = manager.getItemCount();
-                    if (lastItemPosition >= (itemCount - 3) && dy > 0 && !swipeRefreshLayout.isRefreshing() && !bottom) {// 滑动到倒数第三个就可以刷新了
+                    if (lastItemPosition >= (itemCount - 3) && dy > 0 && !swipeRefreshLayout.isRefreshing() && !isRefreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                         goOnLoad();
                     }
                 }
@@ -72,18 +73,23 @@ public class RefreshMainActivity extends InstanceActivity{
         swipeRefreshLayout.setEnabled(true);
     }
 
-    public void setRefreshing(boolean bool){runOnUiThread(()->swipeRefreshLayout.setRefreshing(bool));}
+    public void setRefreshing(boolean bool){
+        runOnUiThread(()->swipeRefreshLayout.setRefreshing(bool));
+        isRefreshing = bool;
+    }
 
     public void setOnLoadMoreListener(OnLoadMoreListener loadMore){listener = loadMore;}
 
     //自动
     private void goOnLoad(){
-        long timeCurrent = System.currentTimeMillis();
-        if(timeCurrent - lastLoadTimestamp > 100) {
-            swipeRefreshLayout.setRefreshing(true);
-            page++;
-            listener.onLoad(page);
-            lastLoadTimestamp = timeCurrent;
+        synchronized (this) {
+            long timeCurrent = System.currentTimeMillis();
+            if(timeCurrent - lastLoadTimestamp > 100) {
+                swipeRefreshLayout.setRefreshing(true);
+                page++;
+                listener.onLoad(page);
+                lastLoadTimestamp = timeCurrent;
+            }
         }
     }
 

@@ -21,7 +21,6 @@
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:theme="@style/Theme.BiliClient"
         android:usesCleartextTraffic="true"
         tools:ignore="LockedOrientationActivity"
@@ -38,6 +37,11 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <activity
+            android:name=".activity.collection.CollectionInfoActivity"
+            android:exported="false"
+            android:label="合集详情"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.user.FollowingBangumisActivity"
             android:exported="false"
@@ -68,6 +72,11 @@
             android:name=".activity.settings.AnnouncementsActivity"
             android:exported="false"
             android:label="公告列表"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ListChooseActivity"
+            android:exported="false"
+            android:label="选择"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.player.PlayerActivity"
@@ -107,7 +116,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.dynamic.DynamicActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="动态"
             android:screenOrientation="portrait" />
         <activity
@@ -152,7 +161,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.message.MessageActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="消息"
             android:screenOrientation="portrait" />
         <activity
@@ -260,7 +269,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NoSwipe.AppCompat" />
         <activity
-            android:name=".activity.video.info.ReplyInfoActivity"
+            android:name=".activity.reply.ReplyInfoActivity"
             android:exported="false"
             android:label="评论详情"
             android:screenOrientation="portrait" />
@@ -271,7 +280,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.user.MySpaceActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="我的"
             android:screenOrientation="portrait" />
         <activity
@@ -332,12 +341,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.message.PrivateMsgActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="私信"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.user.favorite.FavouriteOpusListActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="图文收藏夹"
             android:screenOrientation="portrait" />
         <activity

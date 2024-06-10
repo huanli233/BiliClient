@@ -52,7 +52,7 @@ public class VideoInfoActivity extends BaseActivity {
         if(type == null) type = "video";
         this.aid = intent.getLongExtra("aid",114514);
         this.bvid = intent.getStringExtra("bvid");
-        setContentView(R.layout.cell_loading);
+        setContentView(R.layout.activity_loading);
 
         String finalType = type;
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_simple_viewpager, null, (layoutView, resId, parent) -> {
@@ -85,7 +85,7 @@ public class VideoInfoActivity extends BaseActivity {
         findViewById(R.id.loading).setVisibility(View.GONE);
     }
     protected void initVideoInfoView() {
-        TutorialHelper.show(R.xml.tutorial_video,this,"video",1);
+        TutorialHelper.show(R.xml.tutorial_video,this,"video",2);
         
         ViewPager viewPager = findViewById(R.id.viewPager);
         TextView pageName = findViewById(R.id.pageName);

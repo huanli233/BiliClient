@@ -17,6 +17,7 @@ import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //用户动态
 //2023-09-30
@@ -62,7 +63,7 @@ public class UserDynamicFragment extends RefreshListFragment {
                 Log.e("debug","获取到用户信息");
 
                 try {
-                    offset = DynamicApi.getDynamicList(dynamicList, offset, mid);
+                    offset = DynamicApi.getDynamicList(dynamicList, offset, mid, null);
                     bottom = (offset == -1);
                     Log.e("debug", "获取到用户动态");
                 }catch (Exception e){loadFail(e);}
@@ -80,9 +81,12 @@ public class UserDynamicFragment extends RefreshListFragment {
     private void continueLoading() {
         CenterThreadPool.run(()->{
             try {
-                int lastSize = dynamicList.size();
-                offset = DynamicApi.getDynamicList(dynamicList,offset,mid);
-                runOnUiThread(()-> adapter.notifyItemRangeInserted(lastSize + 1, dynamicList.size() + 1 - lastSize));
+                List<Dynamic> list = new ArrayList<>();
+                offset = DynamicApi.getDynamicList(list,offset,mid, null);
+                runOnUiThread(()-> {
+                    dynamicList.addAll(list);
+                    adapter.notifyItemRangeInserted(dynamicList.size() - list.size(), list.size());
+                });
                 bottom = (offset==-1);
                 setRefreshing(false);
             } catch (Exception e){loadFail(e);}

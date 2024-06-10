@@ -9,7 +9,11 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +33,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
+import com.RobinNotBad.BiliClient.activity.collection.CollectionInfoActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
+import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.user.WatchLaterActivity;
 import com.RobinNotBad.BiliClient.activity.video.MultiPageActivity;
@@ -69,7 +75,7 @@ public class VideoInfoFragment extends Fragment {
     int RESULT_DELETED = -1;
 
     private boolean desc_expand = false, tags_expand = false;
-    ActivityResultLauncher<Intent> favLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+    ActivityResultLauncher<Intent> favLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
         @Override
         public void onActivityResult(ActivityResult o) {
             int code = o.getResultCode();
@@ -83,7 +89,7 @@ public class VideoInfoFragment extends Fragment {
     });
 
     // 其实我不会用，也是抄的上面的😡
-    ActivityResultLauncher<Intent> writeDynamicLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+    ActivityResultLauncher<Intent> writeDynamicLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
         @Override
         public void onActivityResult(ActivityResult result) {
             int code = result.getResultCode();
@@ -105,12 +111,15 @@ public class VideoInfoFragment extends Fragment {
                         }
                         dynId = DynamicApi.relayVideo(text, (atUids.isEmpty() ? null : atUids), videoInfo.aid);
                         if (dynId != -1) {
-                            if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.toast("转发成功~", requireContext()));
+                            if (isAdded())
+                                requireActivity().runOnUiThread(() -> MsgUtil.toast("转发成功~", requireContext()));
                         } else {
-                            if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.toast("转发失败", requireContext()));
+                            if (isAdded())
+                                requireActivity().runOnUiThread(() -> MsgUtil.toast("转发失败", requireContext()));
                         }
                     } catch (Exception e) {
-                        if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                        if (isAdded())
+                            requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
                     }
                 });
             }
@@ -168,6 +177,8 @@ public class VideoInfoFragment extends Fragment {
         TextView likeLabel = view.findViewById(R.id.like_label);
         TextView coinLabel = view.findViewById(R.id.coin_label);
         TextView favLabel = view.findViewById(R.id.fav_label);
+        MaterialCardView collectionCard = view.findViewById(R.id.collection);
+        TextView collectionTitle = view.findViewById(R.id.collectionText);
         fav = view.findViewById(R.id.btn_fav);
 
         if (videoInfo.epid != -1) { //不是空的的话就应该跳转到番剧页面了
@@ -200,10 +211,36 @@ public class VideoInfoFragment extends Fragment {
                         tags = VideoInfoApi.getTagsByAid(videoInfo.aid);
                     else tags = VideoInfoApi.getTagsByBvid(videoInfo.bvid);
                     if (isAdded()) requireActivity().runOnUiThread(() -> {
+                        SpannableStringBuilder tag_str = new SpannableStringBuilder("标签：");
+                        for(String str : tags.split("/")){
+                            int old_len = tag_str.length();
+                            tag_str.append(str + "/");
+                            tag_str.setSpan(new ClickableSpan(){
+                                @Override
+                                public void onClick(View arg0) {
+                                    Intent intent = new Intent(requireContext(),SearchActivity.class);
+                                    intent.putExtra("keyword",str);
+                                    requireContext().startActivity(intent);
+                                }
+                                            
+                                @Override
+                                public void updateDrawState(TextPaint ds) {
+                                    super.updateDrawState(ds);
+                                    ds.setUnderlineText(false);
+                                    ds.setColor(Color.parseColor("#03a9f4"));
+                                }
+                            },old_len,tag_str.length() - 1,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                        }
+                        tagsText.setMovementMethod(LinkMovementMethod.getInstance());
                         tagsText.setText("标签：" + tags);
                         tagsText.setOnClickListener(view1 -> {
-                            if (tags_expand) tagsText.setMaxLines(1);
-                            else tagsText.setMaxLines(233);
+                            if (tags_expand) {
+                                tagsText.setMaxLines(1);
+                                tagsText.setText("标签：" + tags);
+                            } else {
+                                tagsText.setMaxLines(233);
+                                tagsText.setText(tag_str);
+                            }
                             tags_expand = !tags_expand;
                         });
                     });
@@ -419,11 +456,20 @@ public class VideoInfoFragment extends Fragment {
             writeDynamicLauncher.launch(intent);
         });
 
-
         if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) {
             addWatchlater.setVisibility(View.GONE);
             relay.setVisibility(View.GONE);
         }
+
+        if (videoInfo.collection != null) {
+            collectionTitle.setText(String.format("合集 · %s", videoInfo.collection.title));
+            collectionCard.setOnClickListener((view1) -> {
+                startActivity(new Intent(requireContext(), CollectionInfoActivity.class).putExtra("collection", videoInfo.collection));
+            });
+        } else {
+            collectionCard.setVisibility(View.GONE);
+        }
+
     }
 
 

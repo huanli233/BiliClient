@@ -10,7 +10,6 @@ import android.view.View;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
-import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -26,22 +25,31 @@ public class SettingMainActivity extends InstanceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.cell_loading);
+        setContentView(R.layout.activity_loading);
 
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_main, null, (layoutView, layoutId, parent) -> {
             setContentView(R.layout.activity_setting_main);
             setMenuClick();
             Log.e("debug","进入设置页");
-
+ 
+            //查看登录信息
+            MaterialCardView login_cookie = findViewById(R.id.login_cookie);
+            login_cookie.setOnClickListener(view -> {
+                Intent intent = new Intent();
+                intent.setClass(this, SpecialLoginActivity.class);
+                intent.putExtra("login",false);
+                startActivity(intent);
+            });
+                
             //登录
             MaterialCardView login = findViewById(R.id.login);
             if(SharedPreferencesUtil.getLong("mid",0)==0) {
+                login_cookie.setVisibility(View.GONE);
                 login.setVisibility(View.VISIBLE);
                 login.setOnClickListener(view -> {
                     Intent intent = new Intent();
-                    if(Build.VERSION.SDK_INT>=19) {
+                    if(Build.VERSION.SDK_INT>=19)
                         intent.setClass(this, LoginActivity.class);   //去扫码登录页面
-                    }
                     else{
                         intent.setClass(this, SpecialLoginActivity.class);   //4.4以下系统去特殊登录页面
                         intent.putExtra("login",true);
@@ -50,7 +58,7 @@ public class SettingMainActivity extends InstanceActivity {
                 });
             }
 
-            //播放器设选择
+            //播放器选择
             MaterialCardView playerSetting = findViewById(R.id.playerSetting);
             playerSetting.setOnClickListener(view -> {
                 Intent intent = new Intent();
@@ -88,18 +96,16 @@ public class SettingMainActivity extends InstanceActivity {
             });
 
             //实验性设置
-        /*
-        MaterialCardView laboratorySetting = findViewById(R.id.laboratory);
-        laboratorySetting.setOnClickListener(view -> {
-            Intent intent = new Intent();
-            intent.setClass(this, SettingLaboratoryActivity.class);
-            startActivity(intent);
-        });
-         */
+            MaterialCardView laboratorySetting = findViewById(R.id.laboratory);
+            laboratorySetting.setVisibility(View.GONE);
+            laboratorySetting.setOnClickListener(view -> {
+                Intent intent = new Intent();
+                intent.setClass(this, SettingLaboratoryActivity.class);
+                startActivity(intent);
+            });
 
             //关于
             MaterialCardView about = findViewById(R.id.about);
-            //about.setOnClickListener(view -> MsgUtil.showText(this,"关于",getString(R.string.about)));
             about.setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(this, AboutActivity.class);
@@ -127,7 +133,7 @@ public class SettingMainActivity extends InstanceActivity {
                 });
             });
 
-            //查看公告
+            //公告列表
             MaterialCardView announcement = findViewById(R.id.announcement);
             announcement.setOnClickListener(view -> {
                 Intent intent = new Intent();
@@ -135,11 +141,9 @@ public class SettingMainActivity extends InstanceActivity {
                 startActivity(intent);
             });
 
-
             MaterialCardView test = findViewById(R.id.test);    //用于测试
             test.setVisibility(View.GONE);
             test.setOnClickListener(view -> {
-                //TutorialHelper.show(R.xml.tutorial_default,this);
             });
         });
     }

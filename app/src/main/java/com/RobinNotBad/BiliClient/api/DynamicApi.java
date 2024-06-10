@@ -1,8 +1,6 @@
 package com.RobinNotBad.BiliClient.api;
 
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.util.ArraySet;
 import android.util.Log;
 import android.util.Pair;
 
@@ -26,7 +24,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -279,10 +276,10 @@ public class DynamicApi {
         return -1;
     }
 
-    public static long getDynamicList(ArrayList<Dynamic> dynamicList, long offset, long mid) throws IOException, JSONException {
+    public static long getDynamicList(List<Dynamic> dynamicList, long offset, long mid, String type) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/"
-                + (mid==0 ? "all" : "space?host_mid=" + mid)
-                + (offset==0 ? "" : (mid == 0 ? "?offset=" + offset : "&offset=" + offset));
+                + (mid==0 ? "all?type=" + type : "space?host_mid=" + mid)
+                + (offset==0 ? "" : "&offset=" + offset);
 
         JSONObject all = NetWorkUtil.getJson(url);
         if(all.getInt("code")!=0) throw new JSONException(all.getString("message"));
@@ -400,7 +397,16 @@ public class DynamicApi {
                     case "MAJOR_TYPE_UGC_SEASON":
                         dynamic.major_object = analyzeVideoCard(major.getJSONObject("ugc_season"));
                         break;
-
+                    case "MAJOR_TYPE_PGC":
+                        JSONObject bangumi = major.getJSONObject("pgc");
+                        VideoCard card = new VideoCard();
+                        card.type = "media_bangumi";
+                        card.aid = BangumiApi.getMdidFromEpid(bangumi.getLong("epid"));
+                        card.title = bangumi.getString("title");
+                        card.cover = bangumi.getString("cover");
+                        card.view = bangumi.getJSONObject("stat").getString("play");
+                        dynamic.major_object = card;
+                        break;
                     case "MAJOR_TYPE_ARTICLE":
                         JSONObject article = major.getJSONObject("article");
                         dynamic.major_object = new ArticleCard(

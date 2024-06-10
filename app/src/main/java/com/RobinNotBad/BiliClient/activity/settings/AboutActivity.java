@@ -33,7 +33,7 @@ public class AboutActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.cell_loading);
+        setContentView(R.layout.activity_loading);
 
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_about, null, (layoutView, resId, parent) -> {
             setContentView(layoutView);

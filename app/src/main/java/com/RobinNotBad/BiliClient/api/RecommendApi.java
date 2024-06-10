@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 //推荐API 自己写的
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 //2023-12-09
 
 public class RecommendApi {
-    public static void getRecommend(ArrayList<VideoCard> videoCardList) throws IOException, JSONException {
+    public static void getRecommend(List<VideoCard> videoCardList) throws IOException, JSONException {
         String url = (SharedPreferencesUtil.getLong("mid",0) == 0 ? "https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd" : "https://api.bilibili.com/x/web-interface/index/top/rcmd");
 
         JSONObject result = NetWorkUtil.getJson(url);  //得到一整个json
@@ -63,7 +64,7 @@ public class RecommendApi {
         return videoList;
     }
 
-    public static void getPopular(ArrayList<VideoCard> videoCardList,int page) throws JSONException, IOException {
+    public static void getPopular(List<VideoCard> videoCardList, int page) throws JSONException, IOException {
         //热门接口在携带Cookie时返回的数据的排行是个性化的
 
         String url = "https://api.bilibili.com/x/web-interface/popular?pn=" + page + "&ps=10";
@@ -86,7 +87,7 @@ public class RecommendApi {
             }
         }
     }
-    public static void getPrecious(ArrayList<VideoCard> videoCardList,int page) throws JSONException, IOException {
+    public static void getPrecious(List<VideoCard> videoCardList, int page) throws JSONException, IOException {
         //热门接口在携带Cookie时返回的数据的排行是个性化的
 
         String url = "https://api.bilibili.com/x/web-interface/popular/precious?page=" + page + "&page_size=10";

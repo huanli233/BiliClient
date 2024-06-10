@@ -39,7 +39,7 @@ public class MySpaceActivity extends InstanceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.cell_loading);
+        setContentView(R.layout.activity_loading);
 
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_myspace, null, (layoutView, resId, parent) -> {
             setContentView(layoutView);
@@ -78,14 +78,6 @@ public class MySpaceActivity extends InstanceActivity {
                             intent.setClass(MySpaceActivity.this, UserInfoActivity.class);
                             intent.putExtra("mid",userInfo.mid);
                             startActivity(intent);
-                        });
-
-                        myInfo.setOnLongClickListener(view -> {
-                            Intent intent = new Intent();
-                            intent.setClass(MySpaceActivity.this, SpecialLoginActivity.class);
-                            intent.putExtra("login",false);
-                            startActivity(intent);
-                            return true;
                         });
 
                         follow.setOnClickListener(view -> {

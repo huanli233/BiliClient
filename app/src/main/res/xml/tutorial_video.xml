@@ -43,6 +43,24 @@
         </item>
         <item>
             <type>0</type>
+            <text>点击视频标签可以展开，展开后可点击标签</text>
+            <style>none</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>0</type>
+            <text>直接跳转到搜索页</text>
+            <style>bold</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>0</type>
             <text>注意：若在未选择默认播放器时点击了封面，则往后默认点击封面操作为播放视频（可在设置中开启关闭）</text>
             <style>italic</style>
             <color>#ffffff</color>

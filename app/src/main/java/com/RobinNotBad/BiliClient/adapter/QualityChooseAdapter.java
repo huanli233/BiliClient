@@ -77,7 +77,7 @@ public class QualityChooseAdapter extends RecyclerView.Adapter<QualityChooseAdap
     }
 
     public static class Holder extends RecyclerView.ViewHolder{
-        TextView folder_name;
+        public TextView folder_name;
 
         public Holder(@NonNull View itemView) {
             super(itemView);

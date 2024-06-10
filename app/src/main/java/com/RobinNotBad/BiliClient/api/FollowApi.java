@@ -11,11 +11,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 
 public class FollowApi {
-    public static int getFollowList(long mid, int page, ArrayList<UserInfo> userList) throws IOException, JSONException {
+    public static int getFollowList(long mid, int page, List<UserInfo> userList) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/relation/followings?vmid=" + mid + "&pn=" + page + "&ps=20&order=desc&order_type=attention";
         JSONObject callback = NetWorkUtil.getJson(url);
         JSONObject data = callback.getJSONObject("data");
