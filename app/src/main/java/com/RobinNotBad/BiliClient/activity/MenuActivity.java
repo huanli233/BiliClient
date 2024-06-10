@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
@@ -100,13 +101,25 @@ public class MenuActivity extends BaseActivity {
         } else {
             btnList = getDefaultSortList();
         }
+        
+        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) btnList.add(0,"login");
 
         LinearLayout layout = findViewById(R.id.menu_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         for (String btn:btnList) {
             MaterialButton materialButton = new MaterialButton(this);
-            materialButton.setText(Objects.requireNonNull(btnNames.get(btn)).first);
+            switch(btn){
+                case "exit":
+                    materialButton.setText("退出");
+                    break;
+                case "login":
+                    materialButton.setText("登录"); 
+                    break;
+                default:
+                    materialButton.setText(Objects.requireNonNull(btnNames.get(btn)).first);
+                    break;
+            }
             materialButton.setOnClickListener(view->{killAndJump(btn);});
             layout.addView(materialButton,params);
         }
@@ -189,6 +202,18 @@ public class MenuActivity extends BaseActivity {
             intent.setClass(MenuActivity.this, Objects.requireNonNull(btnNames.get(name)).second);
             intent.putExtra("from", name);
             startActivity(intent);
+        }else{
+            switch(name){
+                case "exit": //退出按钮
+                    InstanceActivity instance = BiliTerminal.instance;
+                    if (instance != null && !instance.isDestroyed()) instance.finish();
+                    break;
+                case "login": //登录按钮
+                    Intent intent = new Intent();
+                    intent.setClass(MenuActivity.this,LoginActivity.class);
+                    startActivity(intent);
+                    break;
+            }
         }
         finish();
     }
@@ -204,6 +229,7 @@ public class MenuActivity extends BaseActivity {
             add("message");
             add("local");
             add("settings");
+            add("exit");
         }};
     }
 }
