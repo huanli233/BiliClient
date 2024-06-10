@@ -120,10 +120,14 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 context.startActivity(intent);
             });
             String[] sorts = {"时间排序","点赞排序","回复排序"};
-            writeReply.sort.setText(sorts[sort]);
-            writeReply.sort.setOnClickListener(view -> {
-                if(this.listener!=null) listener.onItemClick(0);
-            });
+            if (isDetail) {
+                writeReply.sort.setVisibility(View.GONE);
+            } else {
+                writeReply.sort.setText(sorts[sort]);
+                writeReply.sort.setOnClickListener(view -> {
+                    if(this.listener!=null) listener.onItemClick(0);
+                });
+            }
         }
         if(holder instanceof ReplyHolder) {
             int realPosition;
