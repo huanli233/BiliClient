@@ -996,7 +996,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     @SuppressLint("SetTextI18n")
     public void changeVolume(Boolean add_or_cut) {
         if(preview_mode) return;
-        autoHideTimer.cancel();
+        if(autoHideTimer!=null) autoHideTimer.cancel();
         int volumeNow = audioManager.getStreamVolume(STREAM_MUSIC);
         int volumeMax = audioManager.getStreamMaxVolume(STREAM_MUSIC);
         int volumeNew = volumeNow + (add_or_cut ? 1 : -1);
