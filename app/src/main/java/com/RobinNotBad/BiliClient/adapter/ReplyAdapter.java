@@ -53,6 +53,7 @@ import com.google.android.material.button.MaterialButton;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -381,6 +382,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         intent.putExtra("oid", oid);
         intent.putExtra("type",type);
         intent.putExtra("origReply", reply);
+        if (source != null && source instanceof Serializable) intent.putExtra("source", (Serializable) source);
         context.startActivity(intent);
     }
     @Override

@@ -69,7 +69,7 @@ public class ReplyInfoActivity extends BaseActivity {
                 int result = ReplyApi.getReplies(oid,rpid,page,type,sort,replyList);
                 if(result != -1) {
                     replyList.add(0, origReply);
-                    replyAdapter = new ReplyAdapter(this, replyList,oid,rpid,type,sort);
+                    replyAdapter = new ReplyAdapter(this, replyList,oid,rpid,type,sort,getIntent().getSerializableExtra("source"));
                     replyAdapter.isDetail = true;
                     setOnSortSwitch();
                     runOnUiThread(()->{
