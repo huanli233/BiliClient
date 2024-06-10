@@ -110,17 +110,7 @@ public class UserInfoApi {
                     String upName = card.getString("author");
                     String title = card.getString("title");
                     
-                    Collection collection = null;
-                    if(!card.isNull("meta")) {
-                        collection = new Collection();
-                        JSONObject meta = card.getJSONObject("meta");
-                        collection.id = meta.getInt("id");
-                        collection.title = meta.getString("title");
-                        collection.cover = meta.getString("cover");
-                        collection.view = ToolsUtil.toWan(meta.getJSONObject("stat").getLong("view"));
-                    }
-                    
-                    videoList.add(new VideoCard(title,upName,playStr,cover,aid,bvid,collection));
+                    videoList.add(new VideoCard(title,upName,playStr,cover,aid,bvid));
                 }
                 return 0;
             }
