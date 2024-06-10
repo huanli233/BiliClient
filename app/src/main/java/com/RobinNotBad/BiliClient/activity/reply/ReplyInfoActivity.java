@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.activity.video.info;
+package com.RobinNotBad.BiliClient.activity.reply;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;

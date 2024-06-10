@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.ReplyInfoActivity;
+import com.RobinNotBad.BiliClient.activity.reply.ReplyInfoActivity;
 import com.RobinNotBad.BiliClient.activity.reply.WriteReplyActivity;
 import com.RobinNotBad.BiliClient.api.ArticleApi;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
@@ -41,7 +41,6 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.view.CustomListView;
-import com.RobinNotBad.BiliClient.view.RadiusBackgroundSpan;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -280,11 +279,11 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                 if (result == 0) {
                                     replyList.remove(realPosition);
                                     ((Activity) context).runOnUiThread(() -> {
-                                        notifyItemRemoved(realPosition+1);
-                                        notifyItemRangeChanged(realPosition+1, replyList.size() - realPosition);
+                                        notifyItemRemoved(realPosition);
+                                        notifyItemRangeChanged(realPosition, replyList.size() - realPosition);
                                         longClickPosition = -1;
                                         MsgUtil.toast("删除成功~", context);
-                                        if (realPosition+1 == 0 && isDetail && context instanceof Activity) {
+                                        if (realPosition == 0 && isDetail && context instanceof Activity) {
                                             ((Activity) context).finish();
                                         }
                                     });
