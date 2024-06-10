@@ -45,87 +45,22 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingHorizontal="@dimen/activity_padding_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top" />
+        app:layout_constraintTop_toBottomOf="@+id/top">
 
-    <LinearLayout
-        android:id="@+id/menu_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top"
-        android:paddingHorizontal="@dimen/activity_padding_horizontal"
-        android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/menu_login"
-            android:layout_width="match_parent"
+        <LinearLayout
             android:layout_height="wrap_content"
-            android:text="登录" />
+            android:layout_width="match_parent"
+            android:id="@+id/menu_layout"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/activity_padding_horizontal"/>
+    </ScrollView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/menu_recommend"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="推荐"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/menu_popular"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="热门"/>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/menu_precious"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="入站必刷"/>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/menu_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="搜索"/>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/menu_dynamic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="动态"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/menu_myspace"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="我的"/>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/menu_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="消息"/>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/menu_local"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="缓存"/>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/menu_settings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="设置"/>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/menu_exit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="退出"/>
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

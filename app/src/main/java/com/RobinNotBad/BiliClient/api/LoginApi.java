@@ -31,11 +31,11 @@ public class LoginApi
     {
         sid = String.valueOf(Math.round(Math.random() * 100000000));
         CookiesApi.checkCookies();
+        NetWorkUtil.refreshHeaders();
 
         headers = new ArrayList<>() {{
             /* 我抓到的登录generate请求似乎不需要sid？ */
 //            NetWorkUtil.putCookie("sid", sid);
-            NetWorkUtil.refreshHeaders();
             addAll(NetWorkUtil.webHeaders);
             add("Sec-Ch-Ua");
             add("\"Chromium\";v=\"109\", \"Not_A Brand\";v=\"99\"");

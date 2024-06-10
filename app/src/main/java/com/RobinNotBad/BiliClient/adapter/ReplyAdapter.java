@@ -319,6 +319,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     try {
                         Reply reply = replyList.get(realPosition);
                         boolean isManager = false;
+                                /*
                         switch (replyType) {
                             case ReplyApi.REPLY_TYPE_VIDEO:
                                 ArrayList<UserInfo> staffs = VideoInfoApi.getInfoByJson(Objects.requireNonNull(VideoInfoApi.getJsonByAid(reply.oid))).staff;
@@ -335,7 +336,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             case ReplyApi.REPLY_TYPE_ARTICLE:
                                 isManager = Objects.requireNonNull(ArticleApi.getArticle(reply.oid)).upInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
                                 break;
+
                         }
+                                 */
                         if (isManager) {
                             ((Activity) context).runOnUiThread(() -> replyHolder.item_reply_delete.setVisibility(View.VISIBLE));
                         }

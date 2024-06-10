@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SetupUIActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
@@ -71,33 +72,33 @@ public class SplashActivity extends Activity {
 
                     CookiesApi.checkCookies();
 
-                    int firstItemId = -1;
-
+                    String firstActivity = null;
                     String sortConf = SharedPreferencesUtil.getString(SharedPreferencesUtil.MENU_SORT, "");
                     if (!TextUtils.isEmpty(sortConf)) {
                         String[] splitName = sortConf.split(";");
                         for (String name : splitName) {
                             if (!MenuActivity.btnNames.containsKey(name)) {
-                                for (Map.Entry<String, Pair<String, Integer>> entry : MenuActivity.btnNames.entrySet()) {
-                                    firstItemId = entry.getValue().second;
+                                for (Map.Entry<String, Pair<String, Class<? extends InstanceActivity>>> entry : MenuActivity.btnNames.entrySet()) {
+                                    firstActivity = entry.getKey();
                                     break;
                                 }
                             } else {
-                                firstItemId = Objects.requireNonNull(MenuActivity.btnNames.get(name)).second;
+                                firstActivity = name;
                             }
                             break;
                         }
                     } else {
-                        for (Map.Entry<String, Pair<String, Integer>> entry : MenuActivity.btnNames.entrySet()) {
-                            firstItemId = entry.getValue().second;
+                        for (Map.Entry<String, Pair<String, Class<? extends InstanceActivity>>> entry : MenuActivity.btnNames.entrySet()) {
+                            firstActivity = entry.getKey();
                             break;
                         }
                     }
-                        
+
+                    Class<? extends InstanceActivity> activityClass = Objects.requireNonNull(MenuActivity.btnNames.get(firstActivity)).second;
+
                     Intent intent = new Intent();
-                    Class<?> activityClass = MenuActivity.activityClasses.get(firstItemId);
-                    intent.setClass(SplashActivity.this, activityClass != null ? activityClass : RecommendActivity.class);
-                    intent.putExtra("from", firstItemId);
+                    intent.setClass(SplashActivity.this, (activityClass != null ? activityClass : RecommendActivity.class));
+                    intent.putExtra("from", firstActivity);
                     startActivity(intent);
 
                     CenterThreadPool.run(() -> AppInfoApi.check(SplashActivity.this));

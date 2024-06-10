@@ -41,213 +41,170 @@ import java.util.*;
 
 public class MenuActivity extends BaseActivity {
 
-    private int from;
-    public static final Map<Integer, Class<? extends InstanceActivity>> activityClasses = Map.of(
-        R.id.menu_recommend, RecommendActivity.class,
-        R.id.menu_popular, PopularActivity.class,
-        R.id.menu_precious, PreciousActivity.class,
-        R.id.menu_search, SearchActivity.class,
-        R.id.menu_dynamic, DynamicActivity.class,
-        R.id.menu_myspace, MySpaceActivity.class,
-        R.id.menu_message, MessageActivity.class,
-        R.id.menu_local, LocalListActivity.class,
-        R.id.menu_settings, SettingMainActivity.class
-    );
+    private String from;
 
     /**
      * 在排序设置和Splash中使用到的，
      * 需要使用排序，故用了LinkedHashMap
      * 请不要让它的顺序被打乱（
      */
-    public static final Map<String, Pair<String, Integer>> btnNames = new LinkedHashMap<>() {{
-        put("recommend", new Pair<>("推荐", R.id.menu_recommend));
-        put("popular", new Pair<>("热门", R.id.menu_popular));
-        put("precious", new Pair<>("入站必刷", R.id.menu_precious));
-        put("search", new Pair<>("搜索", R.id.menu_search));
-        put("dynamic", new Pair<>("动态", R.id.menu_dynamic));
-        put("myspace", new Pair<>("我的", R.id.menu_myspace));
-        put("message", new Pair<>("消息", R.id.menu_message));
-        put("local", new Pair<>("缓存", R.id.menu_local));
-        put("settings", new Pair<>("设置", R.id.menu_settings));
+    public static final Map<String, Pair<String,Class<? extends InstanceActivity>>> btnNames = new HashMap<>() {{
+        put("recommend", new Pair<>("推荐"   , RecommendActivity.class));
+        put("popular",   new Pair<>("热门"   , PopularActivity.class));
+        put("precious",  new Pair<>("入站必刷", PreciousActivity.class));
+        put("search",    new Pair<>("搜索"   , SearchActivity.class));
+        put("dynamic",   new Pair<>("动态"   , DynamicActivity.class));
+        put("myspace",   new Pair<>("我的"   , MySpaceActivity.class));
+        put("message",   new Pair<>("消息"   , MessageActivity.class));
+        put("local",     new Pair<>("缓存"   , LocalListActivity.class));
+        put("settings",  new Pair<>("设置"   , SettingMainActivity.class));
     }};
+
+    long time;
 
     @SuppressLint({"MissingInflatedId", "InflateParams"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
+        setContentView(R.layout.activity_menu);
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_menu, null, (layoutView, resId, parent) -> {
-            setContentView(layoutView);
-            long time = System.currentTimeMillis();
-            Log.e("debug","MenuActivity onCreate: " + time);
 
-            Intent intent = getIntent();
-            from = intent.getIntExtra("from",0);
+        time = System.currentTimeMillis();
+        Log.e("debug", "MenuActivity onCreate: " + time);
 
-            findViewById(R.id.top).setOnClickListener(view -> finish());
-            
-            MenuAdapter adapter = new MenuAdapter();
+        Intent intent = getIntent();
+        from = intent.getStringExtra("from");
 
-            List<MaterialButton> cardList;
+        findViewById(R.id.top).setOnClickListener(view -> finish());
 
-            String sortConf = SharedPreferencesUtil.getString(SharedPreferencesUtil.MENU_SORT, "");
-            if (!TextUtils.isEmpty(sortConf)) {
-                cardList = new ArrayList<>();
-                String[] splitName = sortConf.split(";");
-                if (splitName.length != btnNames.size()) {
-                    cardList = getDefaultSortList();
-                } else {
-                    for (String name : splitName) {
-                        if (!btnNames.containsKey(name)) {
-                            cardList = getDefaultSortList();
-                            break;
-                        } else {
-                            int id = Objects.requireNonNull(btnNames.get(name)).second;
-                            cardList.add(findViewById(id));
-                        }
-                    }
-                }
+        List<String> btnList;
+
+        String sortConf = SharedPreferencesUtil.getString(SharedPreferencesUtil.MENU_SORT, "");
+        Log.e("debug_sort", sortConf);
+
+        if (!TextUtils.isEmpty(sortConf)) {
+            String[] splitName = sortConf.split(";");
+            if (splitName.length != btnNames.size()) {
+                btnList = getDefaultSortList();
             } else {
-                cardList = getDefaultSortList();
-            }
-
-            LinearLayout layout = findViewById(R.id.menu_layout);
-            cardList.add(0, findViewById(R.id.menu_login));
-            cardList.add(findViewById(R.id.menu_exit));
-            layout.removeAllViews();
-            List<Integer> needRemoveIndexes = new ArrayList<>();
-            for (int i = 0; i < cardList.size(); i++) {
-                int id = cardList.get(i).getId();
-                if (id == R.id.menu_myspace || id == R.id.menu_dynamic || id == R.id.menu_message) {
-                    if (SharedPreferencesUtil.getLong("mid", 0) == 0) {
-                        needRemoveIndexes.add(i);
+                btnList = new ArrayList<>();
+                for (String name : splitName) {
+                    if (!btnNames.containsKey(name)) {
+                        btnList = getDefaultSortList();
+                        break;
+                    } else {
+                        btnList.add(name);
                     }
-                } else if (id == R.id.menu_login) {
-                    if (SharedPreferencesUtil.getLong("mid", 0) != 0) needRemoveIndexes.add(i);
-                } else if (id == R.id.menu_popular) {
-                    if (!SharedPreferencesUtil.getBoolean("menu_popular",true)) needRemoveIndexes.add(i);
-                } else if (id == R.id.menu_precious) {
-                    if (!SharedPreferencesUtil.getBoolean("menu_precious",false)) needRemoveIndexes.add(i);
                 }
-                adapter.setOnClickListener(id, view -> killAndJump(view.getId()));
             }
+        } else {
+            btnList = getDefaultSortList();
+        }
 
-            int shift = 0;
-            for (int i : needRemoveIndexes) {
-                cardList.remove(i - shift);
-                shift++;
-            }
+        LinearLayout layout = findViewById(R.id.menu_layout);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-            adapter.setOnClickListener(R.id.menu_login, view -> {
-                Intent intent1 = new Intent();
-                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT) intent1.setClass(this, LoginActivity.class);
-                else{
-                    intent1.setClass(this, SpecialLoginActivity.class);
-                    intent1.putExtra("login",true);
+        for (String btn:btnList) {
+            MaterialButton materialButton = new MaterialButton(this);
+            materialButton.setText(Objects.requireNonNull(btnNames.get(btn)).first);
+            materialButton.setOnClickListener(view->{killAndJump(btn);});
+            layout.addView(materialButton,params);
+        }
+
+
+        /*
+        btnList.add(0, findViewById(R.id.menu_login));
+        btnList.add(findViewById(R.id.menu_exit));
+        layout.removeAllViews();
+        List<Integer> needRemoveIndexes = new ArrayList<>();
+        for (int i = 0; i < btnList.size(); i++) {
+            int id = btnList.get(i).getId();
+            if (id == R.id.menu_myspace || id == R.id.menu_dynamic || id == R.id.menu_message) {
+                if (SharedPreferencesUtil.getLong("mid", 0) == 0) {
+                    needRemoveIndexes.add(i);
                 }
-                startActivity(intent1);
-            });
+            } else if (id == R.id.menu_login) {
+                if (SharedPreferencesUtil.getLong("mid", 0) != 0) needRemoveIndexes.add(i);
+            } else if (id == R.id.menu_popular) {
+                if (!SharedPreferencesUtil.getBoolean("menu_popular", true))
+                    needRemoveIndexes.add(i);
+            } else if (id == R.id.menu_precious) {
+                if (!SharedPreferencesUtil.getBoolean("menu_precious", false))
+                    needRemoveIndexes.add(i);
+            }
+            adapter.setOnClickListener(id, view -> killAndJump(view.getId()));
+        }
 
-            //我求求你了退出按钮能用吧....
-            adapter.setOnClickListener(R.id.menu_exit, view -> {
-                InstanceActivity instance = BiliTerminal.instance;
-                if(instance != null && !instance.isDestroyed()) instance.finish();
-                finish();
-            });
+        int shift = 0;
+        for (int i : needRemoveIndexes) {
+            btnList.remove(i - shift);
+            shift++;
+        }
 
-            adapter.setBtns(cardList);
-            ((RecyclerView) findViewById(R.id.recyclerView)).setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-            ((RecyclerView) findViewById(R.id.recyclerView)).setAdapter(adapter);
-
-            Log.e("debug", "MenuActivity onCreate used time: " + (System.currentTimeMillis() - time));
+        adapter.setOnClickListener(R.id.menu_login, view -> {
+            Intent intent1 = new Intent();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                intent1.setClass(this, LoginActivity.class);
+            else {
+                intent1.setClass(this, SpecialLoginActivity.class);
+                intent1.putExtra("login", true);
+            }
+            startActivity(intent1);
         });
+
+        //我求求你了退出按钮能用吧....
+        adapter.setOnClickListener(R.id.menu_exit, view -> {
+            InstanceActivity instance = BiliTerminal.instance;
+            if (instance != null && !instance.isDestroyed()) instance.finish();
+            finish();
+        });
+
+        adapter.setBtns(btnList);
+        ((RecyclerView) findViewById(R.id.recyclerView)).setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        ((RecyclerView) findViewById(R.id.recyclerView)).setAdapter(adapter);
+
+
+         */
+        Log.e("debug", "MenuActivity onCreate in: " + (System.currentTimeMillis() - time));
     }
 
-    private void killAndJump(int i){
-        if (activityClasses.containsKey(i) && i != from) {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e("debug", "MenuActivity onStart in: " + (System.currentTimeMillis() - time));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("debug", "MenuActivity onResume in: " + (System.currentTimeMillis() - time));
+    }
+
+    private void killAndJump(String name){
+        if (btnNames.containsKey(name) && !Objects.equals(name, from)) {
             InstanceActivity instance = BiliTerminal.instance;
             if(instance != null && !instance.isDestroyed()) instance.finish();
 
             Intent intent = new Intent();
-            intent.setClass(MenuActivity.this, activityClasses.get(i));
-            intent.putExtra("from", i);
+            intent.setClass(MenuActivity.this, Objects.requireNonNull(btnNames.get(name)).second);
+            intent.putExtra("from", name);
             startActivity(intent);
         }
         finish();
     }
 
-    private List<MaterialButton> getDefaultSortList() {
-        return new ArrayList<>(Arrays.asList(
-            findViewById(R.id.menu_recommend),
-            findViewById(R.id.menu_popular),
-            findViewById(R.id.menu_precious),
-            findViewById(R.id.menu_search),
-            findViewById(R.id.menu_dynamic),
-            findViewById(R.id.menu_myspace),
-            findViewById(R.id.menu_message),
-            findViewById(R.id.menu_local),
-            findViewById(R.id.menu_settings),
-            findViewById(R.id.menu_exit)
-        ));
+    private List<String> getDefaultSortList() {
+        return new ArrayList<>() {{
+            add("recommend");
+            add("popular");
+            add("precious");
+            add("search");
+            add("dynamic");
+            add("myspace");
+            add("message");
+            add("local");
+            add("settings");
+        }};
     }
 }
 
-class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    private List<MaterialButton> btns = new ArrayList<>();
-    private final Map<Integer, View.OnClickListener> listeners = new HashMap<>();
-
-    @NonNull
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LinearLayout linearLayout = new LinearLayout(parent.getContext());
-        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-        return new MenuHolder(linearLayout);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((MenuHolder) holder).setBtn(btns.get(position));
-        btns.get(position).setOnClickListener((view) -> {
-            View.OnClickListener onClickListener;
-            if ((onClickListener = listeners.get(btns.get(position).getId())) != null) {
-                onClickListener.onClick(view);
-            }
-        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return btns.size();
-    }
-
-    public void setOnClickListener(int id, @NonNull View.OnClickListener onClickListener) {
-        listeners.put(id, onClickListener);
-    }
-
-    public void setBtns(List<MaterialButton> btns) {
-        this.btns = btns;
-    }
-
-    static class MenuHolder extends RecyclerView.ViewHolder {
-        public MaterialButton btn;
-        private final View itemView;
-        public MenuHolder(@NonNull View itemView) {
-            super(itemView);
-            this.itemView = itemView;
-        }
-
-        public void setBtn(MaterialButton btn) {
-            this.btn = btn;
-            if (btn.getParent() != null) {
-                ((ViewGroup) btn.getParent()).removeView(btn);
-            }
-            ((LinearLayout) itemView).removeAllViews();
-            ((LinearLayout) itemView).addView(btn, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        }
-    }
-}

@@ -60,7 +60,7 @@ public class SortSettingActivity extends BaseActivity {
                 if (!MenuActivity.btnNames.containsKey(name)) {
                     data.clear();
                     displayKeyMap.clear();
-                    for (Map.Entry<String, Pair<String, Integer>> entry : MenuActivity.btnNames.entrySet()) {
+                    for (Map.Entry<String, Pair<String,Class<? extends InstanceActivity>>> entry : MenuActivity.btnNames.entrySet()) {
                         String displayText = entry.getValue().first;
                         data.add(displayText);
                         displayKeyMap.put(displayText, entry.getKey());
@@ -73,7 +73,7 @@ public class SortSettingActivity extends BaseActivity {
                 }
             }
         } else {
-            for (Map.Entry<String, Pair<String, Integer>> entry : MenuActivity.btnNames.entrySet()) {
+            for (Map.Entry<String, Pair<String,Class<? extends InstanceActivity>>> entry : MenuActivity.btnNames.entrySet()) {
                 String key = entry.getKey();
                 String displayText = entry.getValue().first;
                 data.add(displayText);
@@ -82,7 +82,7 @@ public class SortSettingActivity extends BaseActivity {
         }
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         DragAdapter dragAdapter = new DragAdapter(this, data);
         recyclerView.setAdapter(dragAdapter);
 

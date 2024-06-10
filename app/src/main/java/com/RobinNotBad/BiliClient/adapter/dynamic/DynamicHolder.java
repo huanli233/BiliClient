@@ -9,11 +9,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -30,13 +27,12 @@ import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
-import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.adapter.article.ArticleCardHolder;
+import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
@@ -209,12 +205,8 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                             ToolsUtil.setLink(content);
                             ToolsUtil.setAtLink(dynamic.ats, content);
                         });
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        MsgUtil.err(e,context);
                     }
                 });
             }
