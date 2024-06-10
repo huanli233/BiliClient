@@ -29,6 +29,7 @@ public class ReplyFragment extends RefreshListFragment {
     protected ArrayList<Reply> replyList;
     protected ReplyAdapter replyAdapter;
     public int replyType = ReplyApi.REPLY_TYPE_VIDEO;
+    private Object source;
 
     public static ReplyFragment newInstance(long aid, int type) {
         ReplyFragment fragment = new ReplyFragment();
@@ -92,8 +93,13 @@ public class ReplyFragment extends RefreshListFragment {
         }
     }
 
+    public void setSource(Object source) {
+        this.source = source;
+        if (replyAdapter != null) replyAdapter.source = source;
+    }
+
     private ReplyAdapter getReplyAdapter() {
-        return new ReplyAdapter(requireContext(), replyList, aid, 0, type, sort, replyType);
+        return new ReplyAdapter(requireContext(), replyList, aid, 0, type, sort, source);
     }
 
     @SuppressLint("NotifyDataSetChanged")

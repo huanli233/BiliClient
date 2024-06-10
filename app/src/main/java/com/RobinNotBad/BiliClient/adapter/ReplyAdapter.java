@@ -32,8 +32,11 @@ import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.listener.OnItemClickListener;
+import com.RobinNotBad.BiliClient.model.ArticleInfo;
+import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.UserInfo;
+import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
@@ -51,6 +54,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -66,8 +70,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     int type, sort;
     public int replyType;
     OnItemClickListener listener;
+    public Object source;
 
-    public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort, int replyType) {
+    public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort, Object source) {
         this.context = context;
         this.replyList = replyList;
         this.oid = oid;
@@ -75,10 +80,11 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.type = type;
         this.sort = sort;
         this.replyType = type;
+        this.source = source;
     }
 
     public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort) {
-        this(context, replyList, oid, root, type, sort, ReplyApi.REPLY_TYPE_VIDEO);
+        this(context, replyList, oid, root, type, sort, null);
     }
 
     public void setOnSortSwitchListener(OnItemClickListener listener){
@@ -319,26 +325,21 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     try {
                         Reply reply = replyList.get(realPosition);
                         boolean isManager = false;
-                                /*
-                        switch (replyType) {
-                            case ReplyApi.REPLY_TYPE_VIDEO:
-                                ArrayList<UserInfo> staffs = VideoInfoApi.getInfoByJson(Objects.requireNonNull(VideoInfoApi.getJsonByAid(reply.oid))).staff;
+                        if (source != null) {
+                            if (source instanceof VideoInfo) {
+                                List<UserInfo> staffs = ((VideoInfo) source).staff;
                                 for (UserInfo userInfo : staffs) {
                                     if (userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)) {
                                         isManager = true;
                                         break;
                                     }
                                 }
-                                break;
-                            case ReplyApi.REPLY_TYPE_DYNAMIC:
-                                isManager = DynamicApi.getDynamic(reply.oid).userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
-                                break;
-                            case ReplyApi.REPLY_TYPE_ARTICLE:
-                                isManager = Objects.requireNonNull(ArticleApi.getArticle(reply.oid)).upInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
-                                break;
-
+                            } else if (source instanceof Dynamic) {
+                                isManager = ((Dynamic) source).userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
+                            } else if (source instanceof ArticleInfo) {
+                                isManager = ((ArticleInfo) source).upInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
+                            }
                         }
-                                 */
                         if (isManager) {
                             ((Activity) context).runOnUiThread(() -> replyHolder.item_reply_delete.setVisibility(View.VISIBLE));
                         }

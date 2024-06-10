@@ -42,11 +42,20 @@ public class ArticleInfoFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    public static ArticleInfoFragment newInstance(ArticleInfo articleInfo) {
+        ArticleInfoFragment fragment = new ArticleInfoFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("article", articleInfo);
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             cvid = getArguments().getLong("cvid");
+            articleInfo = (ArticleInfo) getArguments().getSerializable("article");
         }
     }
     @Override
@@ -65,7 +74,7 @@ public class ArticleInfoFragment extends Fragment {
 
         CenterThreadPool.run(()-> {
             try {
-                articleInfo = ArticleApi.getArticle(cvid);
+                if (articleInfo == null) articleInfo = ArticleApi.getArticle(cvid);
 
                 if (articleInfo == null) {
                     if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) requireActivity().runOnUiThread(() -> MsgUtil.toast("登录后再尝试", requireContext()));
