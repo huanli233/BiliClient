@@ -49,7 +49,7 @@ public class MenuActivity extends BaseActivity {
      * 需要使用排序，故用了LinkedHashMap
      * 请不要让它的顺序被打乱（
      */
-    public static final Map<String, Pair<String,Class<? extends InstanceActivity>>> btnNames = new HashMap<>() {{
+    public static final Map<String, Pair<String,Class<? extends InstanceActivity>>> btnNames = new LinkedHashMap<>() {{
         put("recommend", new Pair<>("推荐"   , RecommendActivity.class));
         put("popular",   new Pair<>("热门"   , PopularActivity.class));
         put("precious",  new Pair<>("入站必刷", PreciousActivity.class));
@@ -102,7 +102,17 @@ public class MenuActivity extends BaseActivity {
             btnList = getDefaultSortList();
         }
         
-        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) btnList.add(0,"login");
+        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) {
+            btnList.add(0,"login");
+            btnList.remove("dynamic");
+            btnList.remove("message");
+            btnList.remove("myspace");
+        }
+        
+        if(!SharedPreferencesUtil.getBoolean("menu_popular",true)) btnList.remove("popular");
+        if(!SharedPreferencesUtil.getBoolean("menu_precious",false)) btnList.remove("precious");
+        
+        btnList.add("exit"); //如果你希望用户手动把退出按钮排到第一个（
 
         LinearLayout layout = findViewById(R.id.menu_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -229,7 +239,6 @@ public class MenuActivity extends BaseActivity {
             add("message");
             add("local");
             add("settings");
-            add("exit");
         }};
     }
 }
