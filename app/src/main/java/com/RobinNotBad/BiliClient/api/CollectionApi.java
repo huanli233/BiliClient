@@ -67,4 +67,38 @@ public class CollectionApi {
         }
         return new Pair<>(collection, pageInfo);
     }
+    
+    public static Collection getSeasonByJson(JSONObject data) throws JSONException{
+        Collection season = new Collection();
+        JSONObject meta = data.getJSONObject("meta");
+        
+        if(meta.has("season_id")) season.id = meta.getInt("season_id");
+        else season.id = meta.getInt("series_id");
+        season.title = meta.getString("name");
+        season.cover = meta.getString("cover");
+        season.mid = meta.getLong("mid");
+        season.intro = meta.getString("description");
+        season.sections = new ArrayList<>();
+                        
+        season.cards = new ArrayList<>();
+        
+        long view = 0;
+        JSONArray archives = data.getJSONArray("archives");
+        for(int i = 0;i < archives.length();i++) {
+            JSONObject card = archives.getJSONObject(i);
+            String cover = card.getString("pic");
+            long play = card.getJSONObject("stat").getLong("view");
+            view += play;
+            String playStr = ToolsUtil.toWan(play) + "观看";
+            long aid = card.getLong("aid");
+            String bvid = card.getString("bvid");
+            String title = card.getString("title");
+                            
+            season.cards.add(new VideoCard(title,"",playStr,cover,aid,bvid));
+        }
+        
+        season.view = ToolsUtil.toWan(view);
+        
+        return season;
+    }
 }
