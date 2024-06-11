@@ -3,14 +3,13 @@ package com.RobinNotBad.BiliClient.activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.viewpager.widget.ViewPager;
-
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerImageAdapter;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.view.PhotoViewpager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
@@ -34,7 +33,7 @@ public class ImageViewerActivity extends BaseActivity {
         Intent intent = getIntent();
         ArrayList<String> imageList = intent.getStringArrayListExtra("imageList");
 
-        ViewPager viewPager = findViewById(R.id.viewPager);
+        PhotoViewpager viewPager = findViewById(R.id.viewPager);
 
         List<PhotoView> photoViewList = new ArrayList<>();
 

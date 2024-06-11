@@ -46,7 +46,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.viewpager.widget.ViewPager
+    <com.RobinNotBad.BiliClient.view.PhotoViewpager
         android:id="@+id/viewPager"
         android:layout_width="0dp"
         android:layout_height="0dp"
