@@ -244,13 +244,13 @@
                     android:id="@+id/qn_tv"
                     android:layout_width="match_parent"
                     android:layout_height="35sp"
-                    app:drawableEndCompat="@drawable/arrow_forward"
                     android:layout_marginHorizontal="8dp"
-                    android:gravity="center_vertical"
+                    android:gravity="end|center_vertical"
+                    android:text="360P"
                     android:textAlignment="textEnd"
                     android:textSize="13sp"
                     android:visibility="visible"
-                    tools:ignore="RtlCompat" />
+                    app:drawableEndCompat="@drawable/arrow_forward" />
             </com.google.android.material.card.MaterialCardView>
 
             <TextView

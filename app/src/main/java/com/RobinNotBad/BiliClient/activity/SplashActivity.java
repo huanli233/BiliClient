@@ -201,5 +201,6 @@ public class SplashActivity extends Activity {
 
     private void interruptSplash(){
         if(splashTimer!=null) splashTimer.cancel();
+        runOnUiThread(()->splashTextView.setText(splashText));
     }
 }
