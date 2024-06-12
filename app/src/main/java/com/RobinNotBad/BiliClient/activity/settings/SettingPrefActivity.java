@@ -13,7 +13,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 public class SettingPrefActivity extends BaseActivity {
 
     private SwitchMaterial back_disable,fav_single,fav_notice, video_tags, video_related,
-            myspace_creativecenter,menu_popular,menu_precious,
+            myspace_creativecenter,
             copy_enable, click_image_play_enable,image_no_load_onscroll,
             text_link_enable, disable_network_check;
 
@@ -46,12 +46,6 @@ public class SettingPrefActivity extends BaseActivity {
             myspace_creativecenter = findViewById(R.id.creative_enable);
             myspace_creativecenter.setChecked(SharedPreferencesUtil.getBoolean("creative_enable",true));
 
-            menu_popular = findViewById(R.id.menu_popular);
-            menu_popular.setChecked(SharedPreferencesUtil.getBoolean("menu_popular",true));
-
-            menu_precious = findViewById(R.id.menu_precious);
-            menu_precious.setChecked(SharedPreferencesUtil.getBoolean("menu_precious",false));
-
             copy_enable = findViewById(R.id.copy_enable);
             copy_enable.setChecked(SharedPreferencesUtil.getBoolean("copy_enable",true));
 
@@ -76,8 +70,6 @@ public class SettingPrefActivity extends BaseActivity {
         SharedPreferencesUtil.putBoolean("tags_enable", video_tags.isChecked());
         SharedPreferencesUtil.putBoolean("related_enable", video_related.isChecked());
         SharedPreferencesUtil.putBoolean("creative_enable", myspace_creativecenter.isChecked());
-        SharedPreferencesUtil.putBoolean("menu_popular", menu_popular.isChecked());
-        SharedPreferencesUtil.putBoolean("menu_precious", menu_precious.isChecked());
         SharedPreferencesUtil.putBoolean("copy_enable", copy_enable.isChecked());
         SharedPreferencesUtil.putBoolean("click_image_play_enable", click_image_play_enable.isChecked());
         SharedPreferencesUtil.putBoolean("image_no_load_onscroll", image_no_load_onscroll.isChecked());

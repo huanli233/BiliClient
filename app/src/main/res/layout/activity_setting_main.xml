@@ -181,7 +181,7 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/icon_play"
+                        android:src="@drawable/icon_danmaku"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"
@@ -322,7 +322,7 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/icon_tv"
+                        android:src="@drawable/icon_menu"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"
@@ -337,7 +337,7 @@
                         android:layout_marginTop="10dp"
                         android:ellipsize="end"
                         android:lines="1"
-                        android:text="菜单排序"
+                        android:text="菜单设置"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:autoSizeTextType="uniform"
@@ -353,7 +353,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
                         android:singleLine="true"
-                        android:text="用于调整菜单中按钮的位置"
+                        android:text="隐藏菜单内按钮、跳转菜单排序"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -393,7 +393,7 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/icon_info"
+                        android:src="@drawable/icon_maker"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"
@@ -598,19 +598,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/cookie_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="8dp"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/icon_info"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHeight_percent="0.4"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5" />
-
                     <TextView
                         android:id="@+id/cookie_title"
                         android:layout_width="0dp"
@@ -625,7 +612,7 @@
                         app:autoSizeTextType="uniform"
                         app:layout_constraintBottom_toTopOf="@+id/cookie_desription"
                         app:layout_constraintEnd_toStartOf="@+id/cookie_go"
-                        app:layout_constraintStart_toEndOf="@+id/cookie_icon"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.RobinNotBad.BiliClient.view.MarqueeTextView
@@ -640,7 +627,7 @@
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/cookie_go"
-                        app:layout_constraintStart_toEndOf="@+id/cookie_icon"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/cookie_title" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

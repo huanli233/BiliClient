@@ -85,7 +85,7 @@ public class SettingMainActivity extends InstanceActivity {
 
             // 菜单设置
             MaterialCardView menuSetting = findViewById(R.id.menuSetting);
-            menuSetting.setOnClickListener(view -> startActivity(new Intent(this, SortSettingActivity.class)));
+            menuSetting.setOnClickListener(view -> startActivity(new Intent(this, SettingMenuActivity.class)));
 
             //偏好设置
             MaterialCardView prefSetting = findViewById(R.id.prefSetting);

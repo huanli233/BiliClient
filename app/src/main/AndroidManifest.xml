@@ -95,6 +95,11 @@
             android:label="偏好设置"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.settings.SettingMenuActivity"
+            android:exported="false"
+            android:label="菜单设置"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.video.local.LocalPageChooseActivity"
             android:exported="false"
             android:label="缓存分页"
