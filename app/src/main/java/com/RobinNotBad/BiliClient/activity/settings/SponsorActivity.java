@@ -36,6 +36,7 @@ public class SponsorActivity extends RefreshListActivity {
 
                 if(userList.size() < 1) setBottom(true);
             }catch(Exception e){
+                if(e.getMessage().contains("<!DOCTYPE")) runOnUiThread(() -> MsgUtil.toast("哔哩终端域名疑似失效或被屏蔽",this));
                 report(e);
                 setRefreshing(false);
             }
@@ -52,6 +53,7 @@ public class SponsorActivity extends RefreshListActivity {
                 
                 if(userList.size() < 1) setBottom(true);
             } catch (Exception e){
+                if(e.getMessage().contains("<!DOCTYPE")) runOnUiThread(() -> MsgUtil.toast("哔哩终端域名疑似失效或被屏蔽",this));
                 report(e);
                 setRefreshing(false);
                 this.page--;

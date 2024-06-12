@@ -43,7 +43,8 @@ public class AppInfoApi {
                 checkUpdate(context,false,false);
             }
         }catch (Exception e){
-            CenterThreadPool.runOnUiThread(()->MsgUtil.toast(e.getMessage(),context));
+            if(e.getMessage().contains("<!DOCTYPE")) CenterThreadPool.runOnUiThread(()->MsgUtil.toast("哔哩终端接口疑似失效或被屏蔽",context));
+            else CenterThreadPool.runOnUiThread(()->MsgUtil.toast(e.getMessage(),context));
         }
     }
 

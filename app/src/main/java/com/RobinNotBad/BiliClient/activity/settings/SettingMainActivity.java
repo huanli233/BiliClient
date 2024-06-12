@@ -128,7 +128,8 @@ public class SettingMainActivity extends InstanceActivity {
                     try {
                         AppInfoApi.checkUpdate(this,true,false);
                     } catch (Exception e) {
-                        runOnUiThread(()->MsgUtil.err(e,this));
+                        if(e.getMessage().contains("<!DOCTYPE")) runOnUiThread(() -> MsgUtil.toast("哔哩终端域名疑似失效或被屏蔽",this));
+                        else runOnUiThread(()->MsgUtil.err(e,this));
                     }
                 });
             });

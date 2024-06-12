@@ -8,6 +8,7 @@ import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.model.Announcement;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import java.util.ArrayList;
 
 //公告列表
@@ -31,6 +32,7 @@ public class AnnouncementsActivity extends RefreshListActivity {
                 setAdapter(adapter);
 
             } catch (Exception e) {
+                if(e.getMessage().contains("<!DOCTYPE")) runOnUiThread(() -> MsgUtil.toast("哔哩终端域名疑似失效或被屏蔽",this));
                 report(e);
             }
         });
