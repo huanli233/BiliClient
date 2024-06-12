@@ -39,7 +39,10 @@ import java.util.TimerTask;
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends Activity {
 
-    private TextView splashText;
+    private TextView splashTextView;
+    private int splashFrame;
+    private Timer splashTimer;
+    private final String splashText = "欢迎使用\n哔哩终端";
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -53,7 +56,17 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         Log.e("debug","进入应用");
 
-        splashText = findViewById(R.id.splashText);
+        splashTextView = findViewById(R.id.splashText);
+
+        splashTimer = new Timer();
+        splashTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(()->showSplashText(splashFrame));
+                splashFrame++;
+                if(splashFrame>splashText.length()) this.cancel();
+            }
+        },100,100);
 
         CenterThreadPool.run(()->{
 
@@ -103,11 +116,12 @@ public class SplashActivity extends Activity {
 
                     CenterThreadPool.run(() -> AppInfoApi.check(SplashActivity.this));
 
+                    interruptSplash();
                     finish();
                 } catch (IOException e) {
                     runOnUiThread(()-> {
                         MsgUtil.err(e,this);
-                        splashText.setText("网络错误");
+                        splashTextView.setText("网络错误");
                         if(SharedPreferencesUtil.getBoolean("setup",false)){
                             Timer timer = new Timer();
                             timer.schedule(new TimerTask() {
@@ -116,6 +130,7 @@ public class SplashActivity extends Activity {
                                     Intent intent = new Intent();
                                     intent.setClass(SplashActivity.this, LocalListActivity.class);
                                     startActivity(intent);
+                                    interruptSplash();
                                     finish();
                                 }
                             },200);
@@ -123,12 +138,18 @@ public class SplashActivity extends Activity {
                     });
                 } catch (JSONException e) {
                     runOnUiThread(()-> MsgUtil.err(e,this));
+                    Intent intent = new Intent();
+                    intent.setClass(SplashActivity.this, LocalListActivity.class);
+                    startActivity(intent);
+                    interruptSplash();
+                    finish();
                 }
             }
             else {
                 Intent intent = new Intent();
                 intent.setClass(SplashActivity.this, SetupUIActivity.class);   //没登录，去初次设置
                 startActivity(intent);
+                interruptSplash();
                 finish();
             }
 
@@ -170,5 +191,15 @@ public class SplashActivity extends Activity {
         SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, "");
         SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token, "");
         NetWorkUtil.refreshHeaders();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void showSplashText(int i){
+        if(i> splashText.length()) splashTextView.setText(splashText);
+        else splashTextView.setText(splashText.substring(0,i) + "_");
+    }
+
+    private void interruptSplash(){
+        if(splashTimer!=null) splashTimer.cancel();
     }
 }

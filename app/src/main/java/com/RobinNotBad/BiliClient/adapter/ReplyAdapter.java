@@ -1,6 +1,5 @@
 package com.RobinNotBad.BiliClient.adapter;
 
-import android.text.style.ForegroundColorSpan;
 import static com.RobinNotBad.BiliClient.util.ToolsUtil.toWan;
 
 import android.annotation.SuppressLint;
@@ -10,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +24,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
-import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.reply.ReplyInfoActivity;
 import com.RobinNotBad.BiliClient.activity.reply.WriteReplyActivity;
-import com.RobinNotBad.BiliClient.api.ArticleApi;
-import com.RobinNotBad.BiliClient.api.DynamicApi;
+import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
-import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.listener.OnItemClickListener;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.Dynamic;
@@ -56,7 +53,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 //评论Adapter
@@ -328,7 +324,6 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 replyHolder.item_reply_delete.setVisibility(View.GONE);
                 CenterThreadPool.run(() -> {
                     try {
-                        Reply reply = replyList.get(realPosition);
                         boolean isManager = false;
                         if (source != null) {
                             if (source instanceof VideoInfo) {

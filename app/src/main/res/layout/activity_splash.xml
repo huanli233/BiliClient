@@ -7,9 +7,10 @@
 
     <TextView
         android:id="@+id/splashText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="正在更新登录信息..."
-        android:layout_centerInParent="true"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="正在连接..." />
 
 </RelativeLayout>
