@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +20,10 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
-import com.RobinNotBad.BiliClient.adapter.QualityChooseAdapter;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
-import com.RobinNotBad.BiliClient.listener.OnItemClickListener;
-import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
-import com.RobinNotBad.BiliClient.util.Cookies;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.PreInflateHelper;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -39,7 +34,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -61,15 +55,99 @@ public class CollectionInfoActivity extends BaseActivity {
         if (collection == null/* && (season_id == -1 || mid == -1)*/) {
             Toast.makeText(this, "合集不存在", Toast.LENGTH_SHORT).show();
             finish();
+            return;
         }
 
-        Adapter adapter = new Adapter(this, Objects.requireNonNull(collection), recyclerView);
+        RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
+        if (collection.sections == null && collection.cards != null) {
+            adapter = new CardAdapter(this, collection, recyclerView);
+        } else if (collection.sections != null) {
+            adapter = new SectionAdapter(this, collection, recyclerView);
+        } else {
+            finish();
+            return;
+        }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
 
-    static class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    static class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        Collection collection;
+        Context context;
+        List<VideoCard> data;
+        PreInflateHelper preInflateHelper;
+
+        public CardAdapter(Context context, Collection collection, RecyclerView recyclerView){
+            this.context = context;
+            this.data = collection.cards;
+            this.collection = collection;
+            this.preInflateHelper = new PreInflateHelper(context);
+            this.preInflateHelper.preload(recyclerView, R.layout.cell_video_list);
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position == 0 ? -1 : 0;
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            if (viewType == -1) {
+                View view = LayoutInflater.from(this.context).inflate(R.layout.cell_collection_info, parent, false);
+                return new CollectionInfoHolder(view);
+            } else {
+                View view = preInflateHelper.getView(parent, R.layout.cell_video_list);
+                return new VideoCardHolder(view);
+            }
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof VideoCardHolder) {
+                position--;
+                VideoCardHolder videoCardHolder = (VideoCardHolder) holder;
+                VideoCard videoCard = data.get(position);
+                videoCardHolder.itemView.setOnClickListener((view) -> context.startActivity(new Intent(context, VideoInfoActivity.class).putExtra("aid", videoCard.aid).putExtra("bvid", videoCard.bvid)));
+                videoCardHolder.showVideoCard(videoCard, context);
+            } else if (holder instanceof CollectionInfoHolder) {
+                CollectionInfoHolder collectionInfoHolder = (CollectionInfoHolder) holder;
+                collectionInfoHolder.name.setText(collection.title);
+                collectionInfoHolder.desc.setText(TextUtils.isEmpty(collection.intro) ? "这里没有简介哦" : collection.intro);
+                collectionInfoHolder.playTimes.setText("共" + collection.view);
+                Glide.with(context).asDrawable().load(GlideUtil.url(collection.cover))
+                        .placeholder(R.mipmap.placeholder)
+                        .format(DecodeFormat.PREFER_RGB_565)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .into(collectionInfoHolder.cover);
+                collectionInfoHolder.cover.setOnClickListener(view -> context.startActivity(new Intent(context, ImageViewerActivity.class).putExtra("imageList", new ArrayList<>(Collections.singletonList(collection.cover)))));
+                ToolsUtil.setCopy(context, collectionInfoHolder.name, collectionInfoHolder.desc);
+                ToolsUtil.setLink(collectionInfoHolder.desc);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return data.size();
+        }
+
+        static class CollectionInfoHolder extends RecyclerView.ViewHolder {
+            TextView name, desc, playTimes;
+            ImageView cover;
+            public CollectionInfoHolder(@NonNull View itemView) {
+                super(itemView);
+                this.name = itemView.findViewById(R.id.name);
+                this.desc = itemView.findViewById(R.id.desc);
+                this.cover = itemView.findViewById(R.id.cover);
+                this.playTimes = itemView.findViewById(R.id.playTimes);
+            }
+        }
+    }
+
+    static class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         Collection collection;
         Context context;
@@ -77,7 +155,7 @@ public class CollectionInfoActivity extends BaseActivity {
         List<Integer> types = new ArrayList<>();
         PreInflateHelper preInflateHelper;
 
-        public Adapter(Context context, Collection collection, RecyclerView recyclerView){
+        public SectionAdapter(Context context, Collection collection, RecyclerView recyclerView){
             this.context = context;
             this.data = collection.sections;
             this.collection = collection;

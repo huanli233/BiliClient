@@ -78,7 +78,6 @@ public class CollectionApi {
         season.cover = meta.getString("cover");
         season.mid = meta.getLong("mid");
         season.intro = meta.getString("description");
-        season.sections = new ArrayList<>();
                         
         season.cards = new ArrayList<>();
         
