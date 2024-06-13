@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.adapter.message;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.message.PrivateMsgActivity;
+import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.model.PrivateMsgSession;
 import com.RobinNotBad.BiliClient.model.UserInfo;
@@ -75,6 +77,7 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
                 default:
                     holder.contentText.setText("");
             }
+            holder.contentText.setEllipsize(TextUtils.TruncateAt.END);
             holder.nameText.setText(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).name);
             Glide.with(context).asDrawable().load(GlideUtil.url(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).avatar))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -85,6 +88,12 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
                 Intent intent = new Intent(context,PrivateMsgActivity.class);
                 intent.putExtra("uid",msgContent.talkerUid);
                 context.startActivity(intent);
+            });
+            holder.itemView.setOnLongClickListener(view->{
+                Intent intent = new Intent(context,UserInfoActivity.class);
+                intent.putExtra("mid",msgContent.talkerUid);
+                context.startActivity(intent);
+                return true;
             });
         } catch (JSONException err) {
             Log.e("PrivateMsgUserAdapter",err.toString());

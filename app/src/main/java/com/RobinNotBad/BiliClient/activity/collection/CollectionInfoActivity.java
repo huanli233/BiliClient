@@ -255,7 +255,6 @@ public class CollectionInfoActivity extends RefreshListActivity {
             public SectionHolder(@NonNull TextView itemView) {
                 super(itemView);
                 this.item = itemView;
-                this.item.setPadding(2,2,2,2);
                 this.item.setLeft(5);
             }
         }

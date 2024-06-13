@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tutorial>
+    <name>消息页面教程</name>
+    <description>用于引导用户使用消息页面</description>
+    <type>0</type>
+    <content>
+        <item>
+            <type>0</type>
+            <text>欢迎来到消息页面</text>
+            <style>none</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>0</type>
+            <text>这里只有一个要介绍的</text>
+            <style>none</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>0</type>
+            <text>长按私信列表中的卡片可以跳转到用户详情页</text>
+            <style>bold</style>
+            <color>#ffffff</color>
+        </item>
+    </content>
+</tutorial>

@@ -51,7 +51,7 @@ public class UserVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if(position==0){
             TextView textView = holder.itemView.findViewById(R.id.text);
-            textView.setText("投稿合集列表");
+            textView.setText("合集列表");
             holder.itemView.setOnClickListener(view->{
                 Intent intent = new Intent(context, UserCollectionActivity.class);
                 intent.putExtra("mid",mid);

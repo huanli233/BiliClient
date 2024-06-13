@@ -13,6 +13,7 @@ import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.message.PrivateMsgSessionsAdapter;
 import com.RobinNotBad.BiliClient.api.MessageApi;
 import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
+import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.PrivateMsgSession;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
@@ -98,6 +99,8 @@ public class MessageActivity extends InstanceActivity {
                     });
                 } catch (Exception e) {runOnUiThread(()->MsgUtil.err(e,this));}
             });
+                
+            TutorialHelper.show(R.xml.tutorial_message,this,"message",1);
         });
     }
 }

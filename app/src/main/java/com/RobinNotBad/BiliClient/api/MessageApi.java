@@ -276,18 +276,21 @@ public class MessageApi {
         String url = "https://message.bilibili.com/x/sys-msg/query_user_notify?csrf=" + NetWorkUtil.getInfoFromCookie("bili_jct", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""))  + "&page_size=35&build=0&mobi_app=web";
         JSONObject all = NetWorkUtil.getJson(url);
         if(all.has("data") && !all.isNull("data")) {
+            JSONObject data = all.getJSONObject("data");
             ArrayList<MessageCard> totalArray = new ArrayList<>();
-            for(int i = 0;i < all.getJSONObject("data").getJSONArray("system_notify_list").length();i++) {
-                JSONObject object = ((JSONObject) all.getJSONObject("data").getJSONArray("system_notify_list").get(i));
-                MessageCard replyInfo = new MessageCard();
-
-                replyInfo.user = new ArrayList<>();
-
-                replyInfo.id = object.getLong("id");
-                replyInfo.timeDesc = object.getString("time_at");
-                replyInfo.content = object.getString("title") + "\n" + object.getString("content");
-
-                totalArray.add(replyInfo);
+            if(data.has("system_notify_list") && !data.isNull("system_notify_list")){
+                for(int i = 0;i < data.getJSONArray("system_notify_list").length();i++) {
+                    JSONObject object = data.getJSONArray("system_notify_list").getJSONObject(i);
+                    MessageCard replyInfo = new MessageCard();
+    
+                    replyInfo.user = new ArrayList<>();
+    
+                    replyInfo.id = object.getLong("id");
+                    replyInfo.timeDesc = object.getString("time_at");
+                    replyInfo.content = object.getString("title") + "\n" + object.getString("content");
+    
+                    totalArray.add(replyInfo);
+                }
             }
 
             return totalArray;

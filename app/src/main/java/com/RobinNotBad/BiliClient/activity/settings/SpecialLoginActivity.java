@@ -75,6 +75,7 @@ public class SpecialLoginActivity extends BaseActivity {
                 e.printStackTrace();
             }
             textInput.setText(jsonObject.toString());
+            textInput.clearFocus();
             confirm.setOnClickListener((view) -> {
                 ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clipData = ClipData.newPlainText("label", textInput.getText());
