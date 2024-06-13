@@ -71,7 +71,7 @@ public class SettingPrefActivity extends BaseActivity {
         SharedPreferencesUtil.putBoolean("related_enable", video_related.isChecked());
         SharedPreferencesUtil.putBoolean("creative_enable", myspace_creativecenter.isChecked());
         SharedPreferencesUtil.putBoolean("copy_enable", copy_enable.isChecked());
-        SharedPreferencesUtil.putBoolean("click_image_play_enable", cover_play_enable.isChecked());
+        SharedPreferencesUtil.putBoolean("cover_play_enable", cover_play_enable.isChecked());
         SharedPreferencesUtil.putBoolean("image_no_load_onscroll", image_no_load_onscroll.isChecked());
         SharedPreferencesUtil.putBoolean("link_enable", text_link_enable.isChecked());
         SharedPreferencesUtil.putBoolean("network_check_disable", disable_network_check.isChecked());

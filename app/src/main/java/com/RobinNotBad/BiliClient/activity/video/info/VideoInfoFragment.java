@@ -214,7 +214,7 @@ public class VideoInfoFragment extends Fragment {
                         SpannableStringBuilder tag_str = new SpannableStringBuilder("标签：");
                         for(String str : tags.split("/")){
                             int old_len = tag_str.length();
-                            tag_str.append(str + "/");
+                            tag_str.append(str).append("/");
                             tag_str.setSpan(new ClickableSpan(){
                                 @Override
                                 public void onClick(View arg0) {
@@ -462,9 +462,8 @@ public class VideoInfoFragment extends Fragment {
 
         if (videoInfo.collection != null) {
             collectionTitle.setText(String.format("合集 · %s", videoInfo.collection.title));
-            collectionCard.setOnClickListener((view1) -> {
-                startActivity(new Intent(requireContext(), CollectionInfoActivity.class).putExtra("collection", videoInfo.collection));
-            });
+            collectionCard.setOnClickListener((view1) ->
+                    startActivity(new Intent(requireContext(), CollectionInfoActivity.class).putExtra("collection", videoInfo.collection)));
         } else {
             collectionCard.setVisibility(View.GONE);
         }
