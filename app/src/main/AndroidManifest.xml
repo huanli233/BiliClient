@@ -71,8 +71,21 @@
         <activity
             android:name=".activity.GetIntentActivity"
             android:exported="true"
-            android:label="外部传入"
-            android:screenOrientation="portrait" />
+            android:label="终端传入"
+            android:screenOrientation="portrait">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:scheme="bilibili" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".activity.settings.AnnouncementsActivity"
             android:exported="false"
@@ -182,25 +195,7 @@
             android:name=".activity.ShowTextActivity"
             android:exported="true"
             android:label="文本显示"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:mimeType="video/*" />
-
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.APP_BROWSER" />
-            </intent-filter>
-            <intent-filter tools:ignore="AppLinkUrlError">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="video/*" />
-            </intent-filter>
-
-        </activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.CopyTextActivity"
             android:exported="false"
@@ -237,7 +232,7 @@
             android:label="选择清晰度"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.settings.PlayQualitySettingActivity"
+            android:name=".activity.settings.SettingQualityActivity"
             android:exported="false"
             android:label="清晰度设置"
             android:screenOrientation="portrait" />

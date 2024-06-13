@@ -284,7 +284,6 @@ public class VideoInfoFragment extends Fragment {
         Glide.with(requireContext()).asDrawable().load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, requireContext()))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .override(256, 144)
                 .into(cover);
 
         cover.setOnClickListener(view1 -> {

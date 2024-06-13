@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.settings;
 
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,15 +12,12 @@ import com.RobinNotBad.BiliClient.adapter.QualityChooseAdapter;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
-public class PlayQualitySettingActivity extends BaseActivity {
+public class SettingQualityActivity extends BaseActivity {
     QualityChooseAdapter adapter;
 
-    static Map<String, Integer> qnMap = new HashMap<>() {{
+    static LinkedHashMap<String, Integer> qnMap = new LinkedHashMap<>() {{
         put("360P", 16);
         put("720P", 64);
         put("1080P", 80);
@@ -38,7 +34,7 @@ public class PlayQualitySettingActivity extends BaseActivity {
             finish();
         });
 
-        ((TextView) findViewById(R.id.pageName)).setText("请选择清晰度");
+        setPageName("请选择清晰度");
 
         adapter = new QualityChooseAdapter(this);
         adapter.setNameList(new ArrayList<>(qnMap.keySet()));

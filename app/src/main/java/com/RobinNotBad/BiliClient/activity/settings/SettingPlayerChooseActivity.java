@@ -82,7 +82,7 @@ public class SettingPlayerChooseActivity extends BaseActivity {
     private void updateQn() {
         if (findViewById(R.id.qn_tv) != null) {
             int savedVal = SharedPreferencesUtil.getInt("play_qn", 16);
-            for (Map.Entry<String, Integer> entry : PlayQualitySettingActivity.qnMap.entrySet()) {
+            for (Map.Entry<String, Integer> entry : SettingQualityActivity.qnMap.entrySet()) {
                 if (entry.getValue() == savedVal) {
                     ((TextView) findViewById(R.id.qn_tv)).setText(entry.getKey());
                     break;
@@ -92,7 +92,7 @@ public class SettingPlayerChooseActivity extends BaseActivity {
     }
 
     private void handleQnChoose() {
-        startActivity(new Intent(this, PlayQualitySettingActivity.class));
+        startActivity(new Intent(this, SettingQualityActivity.class));
     }
 
     @SuppressLint("SuspiciousIndentation")
