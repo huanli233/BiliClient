@@ -70,11 +70,11 @@
                 android:id="@+id/loginInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="4dp"
                 android:background="@drawable/background_edittext"
-                android:hint="请输入登录信息"
-                android:padding="8dp"
+                android:hint="在这里输入登录信息"
                 android:minHeight="40dp"
+                android:padding="8dp"
                 android:text=""
                 android:textSize="13sp"
                 tools:ignore="HardcodedText,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
@@ -82,19 +82,20 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/confirm"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="4dp">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/confirm_text"
                     android:layout_width="match_parent"
                     android:layout_height="35sp"
-                    app:drawableEndCompat="@drawable/arrow_forward"
+                    android:layout_marginHorizontal="8dp"
                     android:gravity="center_vertical"
                     android:text="登录"
                     android:textAlignment="textEnd"
                     android:textSize="13sp"
                     android:visibility="visible"
+                    app:drawableEndCompat="@drawable/arrow_forward"
                     tools:ignore="RtlCompat" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

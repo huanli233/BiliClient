@@ -69,11 +69,10 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/jump"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="6dp"
-                app:layout_constraintEnd_toStartOf="@id/special"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/list_margin_vertical"
+                android:layout_marginHorizontal="@dimen/activity_padding_horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/scanStat">
 
@@ -82,33 +81,34 @@
                     android:layout_height="35sp"
                     android:layout_marginHorizontal="@dimen/activity_padding_horizontal"
                     android:gravity="center_vertical"
-                    android:text="跳过"
+                    android:text="但是我拒绝"
                     android:textAlignment="textStart"
                     android:textSize="13sp"
                     app:drawableEndCompat="@drawable/arrow_forward"
                     tools:ignore="RtlCompat" />
             </com.google.android.material.card.MaterialCardView>
-            
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/special"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="6dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/list_margin_vertical"
+                android:layout_marginHorizontal="@dimen/activity_padding_horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/jump"
-                app:layout_constraintTop_toTopOf="@id/jump">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/jump">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="35sp"
                     android:layout_marginHorizontal="@dimen/activity_padding_horizontal"
                     android:gravity="center_vertical"
-                    android:text="特殊"
+                    android:text="其他设备导入"
                     android:textAlignment="textStart"
                     android:textSize="13sp"
                     app:drawableEndCompat="@drawable/arrow_forward"
                     tools:ignore="RtlCompat" />
-                
+
             </com.google.android.material.card.MaterialCardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
