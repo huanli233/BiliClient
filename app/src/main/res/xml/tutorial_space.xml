@@ -28,7 +28,7 @@
         </item>
         <item>
             <type>0</type>
-            <text>共四页</text>
+            <text>共三页</text>
             <style>underline</style>
             <color>#4a8eca</color>
         </item>
@@ -61,7 +61,7 @@
         </item>
         <item>
             <type>0</type>
-            <text>第二页为投稿视频列表，第三页为投稿专栏列表（一片空白则可能说明该用户未投稿过），第四页为合集列表</text>
+            <text>第二页为投稿视频列表，第三页为投稿专栏列表（一片空白则可能说明该用户未投稿过）</text>
             <style>none</style>
             <color>#ffffff</color>
         </item>

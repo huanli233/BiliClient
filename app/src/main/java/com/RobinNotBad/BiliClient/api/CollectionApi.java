@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.api;
 
+import android.util.Log;
 import android.util.Pair;
 
 import com.RobinNotBad.BiliClient.model.Collection;
@@ -75,14 +76,15 @@ public class CollectionApi {
         if(meta.has("season_id")) season.id = meta.getInt("season_id");
         else season.id = meta.getInt("series_id");
         season.title = meta.getString("name");
-        season.cover = meta.getString("cover");
+        season.cover = meta.optString("cover","");
         season.mid = meta.getLong("mid");
         season.intro = meta.getString("description");
-                        
-        season.cards = new ArrayList<>();
+
+        ArrayList<VideoCard> cards = new ArrayList<>();
         
         long view = 0;
         JSONArray archives = data.getJSONArray("archives");
+        Log.e("debug-collection","--------");
         for(int i = 0;i < archives.length();i++) {
             JSONObject card = archives.getJSONObject(i);
             String cover = card.getString("pic");
@@ -92,9 +94,12 @@ public class CollectionApi {
             long aid = card.getLong("aid");
             String bvid = card.getString("bvid");
             String title = card.getString("title");
-                            
-            season.cards.add(new VideoCard(title,"",playStr,cover,aid,bvid));
+
+            Log.e("debug-collection",title);
+            cards.add(new VideoCard(title,"",playStr,cover,aid,bvid));
         }
+        Log.e("debug-collection","--------");
+        season.cards = cards;
         
         season.view = ToolsUtil.toWan(view);
         

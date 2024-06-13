@@ -29,7 +29,7 @@ public class SharedPreferencesUtil
     public static String padding_vertical = "padding_vertical";
     public static String cookie_refresh = "cookie_refresh";
     public static String search_history = "search_history";
-    public static String click_image_play_enable = "click_image_play_enable";
+    public static String cover_play_enable = "cover_play_enable";
     public static String tutorial_version = "tutorial_version";
 
 

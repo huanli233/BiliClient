@@ -11,9 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.model.Announcement;
 import com.RobinNotBad.BiliClient.model.SettingSection;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;

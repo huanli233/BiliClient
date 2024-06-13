@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.adapter.user;
+package com.RobinNotBad.BiliClient.adapter.dynamic;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -38,7 +38,7 @@ import java.util.ArrayList;
 
 //用户信息页专用Adapter 独立出来也是为了做首项不同
 
-public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
     ArrayList<Dynamic> dynamicList;
@@ -47,7 +47,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     boolean follow_onprocess;
     PreInflateHelper preInflateHelper;
 
-    public UserInfoAdapter(Context context, ArrayList<Dynamic> dynamicList, UserInfo userInfo) {
+    public UserDynamicAdapter(Context context, ArrayList<Dynamic> dynamicList, UserInfo userInfo) {
         this.context = context;
         this.dynamicList = dynamicList;
         this.userInfo = userInfo;

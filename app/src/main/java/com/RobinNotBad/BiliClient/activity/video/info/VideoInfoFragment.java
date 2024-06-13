@@ -69,7 +69,7 @@ public class VideoInfoFragment extends Fragment {
     private TextView tagsText;
     private ImageButton fav;
 
-    private Boolean clickCoverPlayEnable = SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.click_image_play_enable, false);
+    private Boolean clickCoverPlayEnable = SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cover_play_enable, false);
 
     int RESULT_ADDED = 1;
     int RESULT_DELETED = -1;
@@ -289,7 +289,7 @@ public class VideoInfoFragment extends Fragment {
 
         cover.setOnClickListener(view1 -> {
             if(SharedPreferencesUtil.getString("player", null) == null){
-                SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.click_image_play_enable, true);
+                SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cover_play_enable, true);
                 Toast.makeText(requireContext(),"将播放视频, 如需变更点击行为请至设置->偏好设置喵", Toast.LENGTH_SHORT).show();
                 clickCoverPlayEnable = true;
             }

@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.RobinNotBad.BiliClient.model.Collection;
 import java.io.Serializable;
 
 public class VideoCard implements Parcelable, Serializable {

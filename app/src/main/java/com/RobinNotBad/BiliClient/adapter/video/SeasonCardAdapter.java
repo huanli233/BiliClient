@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.LayoutInflater;
 import android.content.Intent;
 import androidx.recyclerview.widget.RecyclerView;
-import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.R;

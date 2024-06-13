@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.adapter.user.FollowListAdapter;
+import com.RobinNotBad.BiliClient.adapter.user.UserListAdapter;
 import com.RobinNotBad.BiliClient.api.SearchApi;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -27,7 +27,7 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
     RecyclerView recyclerView;
     private ArrayList<UserInfo> userInfoList;
 
-    private FollowListAdapter userInfoAdapter;
+    private UserListAdapter userInfoAdapter;
 
     private String keyword;
     private boolean isFirstLoad = true;
@@ -63,7 +63,7 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
 
         CenterThreadPool.run(() -> {
             if(isAdded()) requireActivity().runOnUiThread(() -> {
-                userInfoAdapter = new FollowListAdapter(requireContext(), userInfoList);
+                userInfoAdapter = new UserListAdapter(requireContext(), userInfoList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 recyclerView.setAdapter(userInfoAdapter);
 
@@ -119,7 +119,7 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
         this.page = 0;
         this.keyword = keyword;
         if(this.userInfoList==null) this.userInfoList = new ArrayList<>();
-        if(this.userInfoAdapter==null) this.userInfoAdapter = new FollowListAdapter(this.requireContext(),this.userInfoList);
+        if(this.userInfoAdapter==null) this.userInfoAdapter = new UserListAdapter(this.requireContext(),this.userInfoList);
         int size_old = this.userInfoList.size();
         this.userInfoList.clear();
         CenterThreadPool.runOnUiThread(()->{

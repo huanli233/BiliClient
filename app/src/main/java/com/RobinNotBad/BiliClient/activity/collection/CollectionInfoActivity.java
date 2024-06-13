@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.collection;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,22 +10,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.PreInflateHelper;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
@@ -36,24 +36,20 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
-public class CollectionInfoActivity extends BaseActivity {
+public class CollectionInfoActivity extends RefreshListActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_simple_list);
         setPageName("合集详情");
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        findViewById(R.id.top).setOnClickListener(view -> finish());
 
         Collection collection = (Collection) getIntent().getSerializableExtra("collection");
         int season_id = getIntent().getIntExtra("season_id", -1);
         long mid = getIntent().getLongExtra("mid", -1);
         if (collection == null/* && (season_id == -1 || mid == -1)*/) {
-            Toast.makeText(this, "合集不存在", Toast.LENGTH_SHORT).show();
+            MsgUtil.toast( "合集不存在", this);
             finish();
             return;
         }
@@ -68,8 +64,8 @@ public class CollectionInfoActivity extends BaseActivity {
             return;
         }
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        setAdapter(adapter);
+        setRefreshing(false);
     }
 
     static class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -104,6 +100,7 @@ public class CollectionInfoActivity extends BaseActivity {
             }
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof VideoCardHolder) {
@@ -131,7 +128,7 @@ public class CollectionInfoActivity extends BaseActivity {
 
         @Override
         public int getItemCount() {
-            return data.size();
+            return data.size()+1;
         }
 
         static class CollectionInfoHolder extends RecyclerView.ViewHolder {
@@ -215,6 +212,7 @@ public class CollectionInfoActivity extends BaseActivity {
             }
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof SectionHolder) {
@@ -238,9 +236,7 @@ public class CollectionInfoActivity extends BaseActivity {
                         .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(collectionInfoHolder.cover);
-                collectionInfoHolder.cover.setOnClickListener(view -> {
-                       context.startActivity(new Intent(context, ImageViewerActivity.class).putExtra("imageList", new ArrayList<>(Collections.singletonList(collection.cover))));
-                   });
+                collectionInfoHolder.cover.setOnClickListener(view -> context.startActivity(new Intent(context, ImageViewerActivity.class).putExtra("imageList", new ArrayList<>(Collections.singletonList(collection.cover)))));
             }
         }
 

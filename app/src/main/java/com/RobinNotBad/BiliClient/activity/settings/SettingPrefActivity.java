@@ -14,7 +14,7 @@ public class SettingPrefActivity extends BaseActivity {
 
     private SwitchMaterial back_disable,fav_single,fav_notice, video_tags, video_related,
             myspace_creativecenter,
-            copy_enable, click_image_play_enable,image_no_load_onscroll,
+            copy_enable, cover_play_enable,image_no_load_onscroll,
             text_link_enable, disable_network_check;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n", "InflateParams"})
@@ -49,8 +49,8 @@ public class SettingPrefActivity extends BaseActivity {
             copy_enable = findViewById(R.id.copy_enable);
             copy_enable.setChecked(SharedPreferencesUtil.getBoolean("copy_enable",true));
 
-            click_image_play_enable = findViewById(R.id.click_image_play_enable);
-            click_image_play_enable.setChecked(SharedPreferencesUtil.getBoolean("click_image_play_enable", false));
+            cover_play_enable = findViewById(R.id.cover_play_enable);
+            cover_play_enable.setChecked(SharedPreferencesUtil.getBoolean("cover_play_enable", false));
 
             image_no_load_onscroll = findViewById(R.id.image_no_load_onscroll);
             image_no_load_onscroll.setChecked(SharedPreferencesUtil.getBoolean("image_no_load_onscroll", true));
@@ -71,7 +71,7 @@ public class SettingPrefActivity extends BaseActivity {
         SharedPreferencesUtil.putBoolean("related_enable", video_related.isChecked());
         SharedPreferencesUtil.putBoolean("creative_enable", myspace_creativecenter.isChecked());
         SharedPreferencesUtil.putBoolean("copy_enable", copy_enable.isChecked());
-        SharedPreferencesUtil.putBoolean("click_image_play_enable", click_image_play_enable.isChecked());
+        SharedPreferencesUtil.putBoolean("click_image_play_enable", cover_play_enable.isChecked());
         SharedPreferencesUtil.putBoolean("image_no_load_onscroll", image_no_load_onscroll.isChecked());
         SharedPreferencesUtil.putBoolean("link_enable", text_link_enable.isChecked());
         SharedPreferencesUtil.putBoolean("network_check_disable", disable_network_check.isChecked());

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
-import com.RobinNotBad.BiliClient.adapter.user.FollowListAdapter;
+import com.RobinNotBad.BiliClient.adapter.user.UserListAdapter;
 import com.RobinNotBad.BiliClient.api.FollowApi;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -22,7 +22,7 @@ public class FollowingUsersActivity extends RefreshListActivity {
 
     private long mid;
     private ArrayList<UserInfo> userList;
-    private FollowListAdapter adapter;
+    private UserListAdapter adapter;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -39,7 +39,7 @@ public class FollowingUsersActivity extends RefreshListActivity {
         CenterThreadPool.run(()->{
             try {
                 int result = FollowApi.getFollowList(mid, page, userList);
-                adapter = new FollowListAdapter(this,userList);
+                adapter = new UserListAdapter(this,userList);
                 setOnLoadMoreListener(this::continueLoading);
                 setRefreshing(false);
                 setAdapter(adapter);

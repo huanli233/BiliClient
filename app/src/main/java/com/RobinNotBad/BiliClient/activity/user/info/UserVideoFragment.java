@@ -8,6 +8,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListFragment;
+import com.RobinNotBad.BiliClient.adapter.video.UserVideoAdapter;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
@@ -24,7 +25,7 @@ public class UserVideoFragment extends RefreshListFragment {
 
     private long mid;
     private ArrayList<VideoCard> videoList;
-    private VideoCardAdapter adapter;
+    private UserVideoAdapter adapter;
 
     public UserVideoFragment() {
 
@@ -58,7 +59,7 @@ public class UserVideoFragment extends RefreshListFragment {
                 bottom = (UserInfoApi.getUserVideos(mid,page,"",videoList) == 1);
                 if(isAdded()) {
                     setRefreshing(false);
-                    adapter = new VideoCardAdapter(requireContext(), videoList);
+                    adapter = new UserVideoAdapter(requireContext(),mid, videoList);
                     setAdapter(adapter);
                 }
             } catch (Exception e){loadFail(e);}

@@ -13,9 +13,8 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
-import okhttp3.Response;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -150,7 +149,7 @@ public class AppInfoApi {
 
         ArrayList<UserInfo> list = new ArrayList<>();
         if(page == 1){
-            list.add(new UserInfo(-1,"温馨提醒","","捐赠为纯自愿行为，收到的捐款仅用于维护服务器，未成年人请征求父母意见\n无论是否捐赠，你所提出的意见和建议都会被同等考虑，但难以实现或没有必要的功能我们有权拒绝\n捐赠者信息来自于爱发电，我们不对列表内的信息内容负责",-1,6,true,"",0,""));
+            list.add(new UserInfo(-1,"温馨提醒","","若有捐赠意向请访问https://afdian.net/a/bili_terminal\n捐赠为纯自愿行为，收到的捐款仅用于维护服务器，未成年人请征求父母意见\n你可以尽管放心终端不会设置任何付费功能，并且无论是否捐赠，你所提出的意见和建议都会被同等考虑（难以实现或没有必要的功能我们也有权拒绝）\n捐赠者信息来自于爱发电，我们不对列表内的信息内容负责",-1,6,true,"",0,""));
         }
         for (int i = 0; i < data.length(); i++) {
             JSONObject sponsor = data.getJSONObject(i);

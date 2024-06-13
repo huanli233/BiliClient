@@ -11,7 +11,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.activity.user.info.UserSeasonFragment;
 import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicHolder;
 import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
@@ -52,8 +51,8 @@ public class UserInfoActivity extends BaseActivity {
             fragmentList.add(uvFragment);
             UserArticleFragment acFragment = UserArticleFragment.newInstance(mid);
             fragmentList.add(acFragment);
-            UserSeasonFragment ssFragment = UserSeasonFragment.newInstance(mid);
-            fragmentList.add(ssFragment);
+            //UserSeasonFragment ssFragment = UserSeasonFragment.newInstance(mid);
+            //fragmentList.add(ssFragment);
             viewPager.setOffscreenPageLimit(fragmentList.size());
 
             ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);

@@ -244,7 +244,7 @@
                         android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/click_image_play_enable"
+                            android:id="@+id/cover_play_enable"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="#00000000"

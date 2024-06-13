@@ -1,63 +1,47 @@
 package com.RobinNotBad.BiliClient.activity.user.info;
 
-import android.annotation.SuppressLint;
-import androidx.annotation.NonNull;
-import com.RobinNotBad.BiliClient.activity.base.RefreshListFragment;
+import android.os.Bundle;
+import android.util.Log;
+
+import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
 import com.RobinNotBad.BiliClient.adapter.video.SeasonCardAdapter;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.Collection;
-import java.util.ArrayList;
-import android.os.Bundle;
-import android.view.View;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import java.util.List;
-import android.util.Log;
 
-public class UserSeasonFragment extends RefreshListFragment {
+import java.util.ArrayList;
+import java.util.List;
+
+//用户合集列表
+//2024-06-13
+
+public class UserCollectionActivity extends RefreshListActivity {
+
     private long mid;
     private ArrayList<Collection> seasonList;
     private SeasonCardAdapter adapter;
 
-    public UserSeasonFragment() {
-
-    }
-
-    public static UserSeasonFragment newInstance(long mid) {
-        UserSeasonFragment fragment = new UserSeasonFragment();
-        Bundle args = new Bundle();
-        args.putLong("mid", mid);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mid = getArguments().getLong("mid");
-        }
-    }
 
-    @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        setPageName("投稿合集列表");
 
         seasonList = new ArrayList<>();
+        mid = getIntent().getLongExtra("mid",0);
+
         setOnLoadMoreListener(this::continueLoading);
 
         CenterThreadPool.run(()->{
             try {
-                bottom = (UserInfoApi.getUserSeasons(mid,page,seasonList) == 1);
-                if(isAdded()) {
-                    setRefreshing(false);
-                    adapter = new SeasonCardAdapter(requireContext(), seasonList);
-                    setAdapter(adapter);
-                }
+                bottom = (UserInfoApi.getUserSeasons(mid, page, seasonList) == 1);
+                setRefreshing(false);
+                adapter = new SeasonCardAdapter(this, seasonList);
+                setAdapter(adapter);
             } catch (Exception e){loadFail(e);}
         });
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private void continueLoading(int page) {
         CenterThreadPool.run(()->{
             try {

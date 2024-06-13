@@ -38,6 +38,11 @@
         </provider>
 
         <activity
+            android:name=".activity.user.info.UserCollectionActivity"
+            android:exported="false"
+            android:label="投稿合集列表"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.collection.CollectionInfoActivity"
             android:exported="false"
             android:label="合集详情"

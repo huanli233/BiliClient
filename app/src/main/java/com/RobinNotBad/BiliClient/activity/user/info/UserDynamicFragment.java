@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListFragment;
 import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicHolder;
-import com.RobinNotBad.BiliClient.adapter.user.UserInfoAdapter;
+import com.RobinNotBad.BiliClient.adapter.dynamic.UserDynamicAdapter;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
@@ -27,7 +27,7 @@ public class UserDynamicFragment extends RefreshListFragment {
 
     private long mid;
     private ArrayList<Dynamic> dynamicList;
-    private UserInfoAdapter adapter;
+    private UserDynamicAdapter adapter;
     private long offset = 0;
 
     public UserDynamicFragment() {
@@ -69,7 +69,7 @@ public class UserDynamicFragment extends RefreshListFragment {
                 }catch (Exception e){loadFail(e);}
 
                 if(isAdded()){
-                    adapter = new UserInfoAdapter(requireContext(), dynamicList, userInfo);
+                    adapter = new UserDynamicAdapter(requireContext(), dynamicList, userInfo);
                     setAdapter(adapter);
                     setRefreshing(false);
                 }

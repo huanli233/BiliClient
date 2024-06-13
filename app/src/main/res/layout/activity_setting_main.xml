@@ -65,7 +65,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/login"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:visibility="gone">
 
                 <TextView
@@ -77,15 +77,14 @@
                     android:textAlignment="textStart"
                     android:textSize="13sp"
                     android:visibility="visible"
-                    tools:ignore="RtlCompat" 
-                    app:drawableEndCompat="@drawable/arrow_forward"/>
+                    app:drawableEndCompat="@drawable/arrow_forward"
+                    tools:ignore="RtlCompat" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/playerSetting"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:foreground="?selectableItemBackground"
+                android:layout_height="wrap_content"
                 android:visibility="visible">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -151,12 +150,11 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
-            
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/clientPlayerSetting"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:foreground="?selectableItemBackground"
+                android:layout_height="wrap_content"
                 android:visibility="visible">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -222,12 +220,11 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
-            
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/uiSetting"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:foreground="?selectableItemBackground">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -297,8 +294,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/menuSetting"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:foreground="?selectableItemBackground">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -367,8 +363,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/prefSetting"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:foreground="?selectableItemBackground"
+                android:layout_height="wrap_content"
                 android:visibility="visible">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -439,8 +434,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/laboratory"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:foreground="?selectableItemBackground">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -509,8 +503,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/about"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:foreground="?selectableItemBackground">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -579,8 +572,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/login_cookie"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:foreground="?selectableItemBackground">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -636,7 +628,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/announcement"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -653,7 +645,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/checkupdate"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -670,7 +662,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/test"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="match_parent"

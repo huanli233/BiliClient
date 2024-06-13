@@ -24,12 +24,12 @@ import java.util.ArrayList;
 //关注列表
 //2023-08-29
 
-public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Holder> {
+public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.Holder> {
 
     Context context;
     ArrayList<UserInfo> userList;
 
-    public FollowListAdapter(Context context, ArrayList<UserInfo> userList) {
+    public UserListAdapter(Context context, ArrayList<UserInfo> userList) {
         this.context = context;
         this.userList = userList;
     }
@@ -43,22 +43,27 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Ho
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-
         holder.name.setText(userList.get(position).name);
         holder.desc.setText(userList.get(position).sign);
-        Glide.with(context).asDrawable().load(GlideUtil.url(userList.get(position).avatar))
+
+        if(userList.get(position).avatar.isEmpty()) {
+            holder.avatar.setVisibility(View.GONE);
+            holder.desc.setSingleLine(false);
+        }
+        else Glide.with(context).asDrawable().load(GlideUtil.url(userList.get(position).avatar))
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.avatar);
 
-        holder.itemView.setOnClickListener(view -> {
-            Intent intent = new Intent()
-                    .setClass(context, UserInfoActivity.class)
-                    .putExtra("mid", userList.get(position).mid);
-            context.startActivity(intent);
-        });
-
+        if(userList.get(position).mid != -1) {
+            holder.itemView.setOnClickListener(view -> {
+                Intent intent = new Intent()
+                        .setClass(context, UserInfoActivity.class)
+                        .putExtra("mid", userList.get(position).mid);
+                context.startActivity(intent);
+            });
+        }
     }
 
     @Override
