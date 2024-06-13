@@ -81,7 +81,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="6dp"
                             android:layout_marginBottom="4dp"
-                            android:text="可解决某些4.4手表因滑动返回而无法左右翻页的问题，其他设备上则为按下返回键也不退出页面，你可以使用菜单最下方的退出按钮结束本软件。正常用户无需打开。"
+                            android:text="@string/desc_back_disable"
                             android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -106,7 +106,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="6dp"
                             android:layout_marginBottom="4dp"
-                            android:text="打开此选项，添加收藏后即退出收藏页面，取消收藏不自动退出。"
+                            android:text="@string/desc_fav_single"
                             android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -131,7 +131,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="6dp"
                             android:layout_marginBottom="4dp"
-                            android:text="打开此选项，退出收藏页面会提示收藏成功。\n但其实在你框选了收藏夹的时候就已经收藏了，这个选项只是为了看上去放心（"
+                            android:text="@string/desc_fav_notice"
                             android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -155,7 +155,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="6dp"
                             android:layout_marginBottom="4dp"
-                            android:text="打开此选项，视频详情页会显示形如“原神UP主激励计划/原神/纳西妲/手机游戏”的视频标签"
+                            android:text="@string/desc_tags_enable"
                             android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -180,7 +180,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="6dp"
                             android:layout_marginBottom="4dp"
-                            android:text="打开此选项，视频评论区右侧会有相关视频推荐"
+                            android:text="@string/desc_related_enable"
                             android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -205,7 +205,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="6dp"
                             android:layout_marginBottom="4dp"
-                            android:text="打开此选项，在“我的”页面会显示创作中心（可查看投稿视频的数据变化情况）"
+                            android:text="@string/desc_creative_enable"
                             android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -230,7 +230,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="6dp"
                             android:layout_marginBottom="4dp"
-                            android:text="打开此选项，长按一些文字（如视频描述或评论）可以打开复制界面以复制这些文本"
+                            android:text="@string/desc_copy_enable"
                             android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -254,7 +254,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="6dp"
                             android:layout_marginBottom="4dp"
-                            android:text="打开此选项，视频详情页点击封面由查看图片变更为播放。默认根据你首次使用时点击了视频封面还是播放按钮来决定开关。"
+                            android:text="@string/desc_cover_play_enable"
                             android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -278,7 +278,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="6dp"
                         android:layout_marginBottom="4dp"
-                        android:text="打开此选项，翻动列表时将不会加载图片，松手后再加载，观感可能有影响，可能增加流畅度。"
+                        android:text="@string/desc_img_no_load_onscroll"
                         android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -302,7 +302,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="6dp"
                         android:layout_marginBottom="4dp"
-                        android:text="打开此选项，会识别部分文本中的链接/BV号/AV号/CV号并标记为链接，点击可打开。"
+                        android:text="@string/desc_link_enable"
                         android:textSize="11sp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

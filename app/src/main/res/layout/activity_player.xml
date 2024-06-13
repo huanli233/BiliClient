@@ -63,17 +63,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
+            <com.RobinNotBad.BiliClient.view.MarqueeTextView
                 android:id="@+id/text_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="4dp"
-                android:ellipsize="marquee"
-                android:singleLine="true"
                 android:text="原小电视播放器"
                 android:textSize="12sp"
                 android:drawableStart="@drawable/arrow_back"
-                android:focusableInTouchMode="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/cl_1"
                 app:layout_constraintStart_toStartOf="parent"

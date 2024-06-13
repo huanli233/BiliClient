@@ -46,6 +46,16 @@
     <string name="player_mtv_package">com.xinxiangshicheng.wearbiliplayer.cn</string>
 
     <string name="update_tip">本次更新感谢huanli233的贡献\n当前版本为测试版</string>
+    <string name="desc_back_disable">可解决某些4.4手表因滑动返回而无法左右翻页的问题，其他设备上则为按下返回键也不退出页面，你可以使用菜单最下方的退出按钮结束本软件。正常用户无需打开。</string>
+    <string name="desc_fav_single">打开此选项，添加收藏后即退出收藏页面，取消收藏不自动退出。</string>
+    <string name="desc_fav_notice">打开此选项，退出收藏页面会提示收藏成功。\n但其实在你框选了收藏夹的时候就已经收藏了，这个选项只是为了看上去放心（</string>
+    <string name="desc_tags_enable">打开此选项，视频详情页会显示形如“原神UP主激励计划/原神/纳西妲/手机游戏”的视频标签</string>
+    <string name="desc_related_enable">打开此选项，视频评论区右侧会有相关视频推荐</string>
+    <string name="desc_creative_enable">打开此选项，在“我的”页面会显示创作中心（可查看投稿视频的数据变化情况）</string>
+    <string name="desc_copy_enable">打开此选项，长按一些文字（如视频描述或评论）可以打开复制界面以复制这些文本</string>
+    <string name="desc_cover_play_enable">打开此选项，视频详情页点击封面由查看图片变更为播放。默认根据你首次使用时点击了视频封面还是播放按钮来决定开关。</string>
+    <string name="desc_img_no_load_onscroll">打开此选项，翻动列表时将不会加载图片，松手后再加载，观感可能有影响，可能增加流畅度。</string>
+    <string name="desc_link_enable">打开此选项，会识别部分文本中的链接/BV号/AV号/CV号并标记为链接，点击可打开。</string>
 
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">

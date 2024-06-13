@@ -12,13 +12,14 @@
         android:orientation="vertical">
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/SWscale"
+            android:id="@+id/setting_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#00000000"
             android:text="开关类设置项" />
 
         <TextView
+            android:id="@+id/setting_switch_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="6dp"
