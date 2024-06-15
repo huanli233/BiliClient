@@ -2,7 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cardView"
+    android:id="@+id/childCardView"
     android:padding="2dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -51,7 +51,7 @@
             app:layout_constraintTop_toBottomOf="@id/child_avatar"
             tools:ignore="TouchTargetSizeCheck" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/child_extraCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -59,10 +59,30 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="6dp"
             android:layout_marginBottom="4dp"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/child_content" />
+            app:layout_constraintTop_toBottomOf="@id/child_content" >
+            <include
+                layout="@layout/cell_dynamic_video"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/dynamic_video_child"
+                android:visibility="gone" />
+            <include
+                layout="@layout/cell_dynamic_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/dynamic_image_child"
+                android:visibility="gone" />
+            <include
+                layout="@layout/cell_dynamic_article"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/dynamic_article_child"
+                android:visibility="gone" />
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

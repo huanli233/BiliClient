@@ -1,6 +1,8 @@
 package com.RobinNotBad.BiliClient.adapter.article;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,7 +49,7 @@ public class ArticleCardHolder extends RecyclerView.ViewHolder{
         }
         else readTimes.setText(articleCard.view);
 
-        Glide.with(context).asDrawable().load(GlideUtil.url(articleCard.cover))
+        Glide.with(context).asDrawable().load(!TextUtils.isEmpty(articleCard.cover) ? GlideUtil.url(articleCard.cover) : R.mipmap.article_placeholder)
                 .placeholder(R.mipmap.placeholder)
                 .format(DecodeFormat.PREFER_RGB_565)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))

@@ -61,7 +61,7 @@ public class DynamicInfoFragment extends Fragment {
         CenterThreadPool.run(()->{
             if(isAdded()) requireActivity().runOnUiThread(() -> {
                 View dynamicView = View.inflate(requireContext(),R.layout.cell_dynamic, scrollView);
-                DynamicHolder holder = new DynamicHolder(dynamicView, (BaseActivity) getActivity(), preInflateHelper, false);
+                DynamicHolder holder = new DynamicHolder(dynamicView, (BaseActivity) getActivity(), false);
                 holder.showDynamic(dynamic,requireContext(),false);
                 View.OnLongClickListener onDeleteLongClick = DynamicHolder.getDeleteListener(requireActivity(), dynamic);
                 holder.item_dynamic_delete.setOnLongClickListener(onDeleteLongClick);
@@ -69,9 +69,10 @@ public class DynamicInfoFragment extends Fragment {
 
                 if(dynamic.dynamic_forward != null){
                     Log.e("debug","有子动态！");
-                    View childCard = View.inflate(requireContext(),R.layout.cell_dynamic_child,holder.extraCard);
-                    DynamicHolder childHolder = new DynamicHolder(childCard, (BaseActivity) getActivity(), preInflateHelper, true);
+                    View childCard = holder.cell_dynamic_child;
+                    DynamicHolder childHolder = new DynamicHolder(childCard, (BaseActivity) getActivity(), true);
                     childHolder.showDynamic(dynamic.dynamic_forward,requireContext(),true);
+                    childCard.setVisibility(View.VISIBLE);
                 }
 
                 onFinishLoad.run();
