@@ -71,7 +71,7 @@ public class VideoInfoFragment extends Fragment {
     private TextView tagsText;
     private ImageButton fav;
     private Pair<Long,Integer> progressPair;
-    private boolean played = false;
+    private boolean play_clicked = false;
 
     private Boolean clickCoverPlayEnable = SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cover_play_enable, false);
 
@@ -201,7 +201,11 @@ public class VideoInfoFragment extends Fragment {
         CenterThreadPool.run(() -> {
             try {
                 progressPair = VideoInfoApi.getWatchProgress(videoInfo.aid);
+                if(!videoInfo.cids.contains(progressPair.first))
+                    progressPair = new Pair<>(videoInfo.cids.get(0), 0);
+
                 HistoryApi.reportHistory(videoInfo.aid, progressPair.first, videoInfo.staff.get(0).mid, progressPair.second);
+                //历史记录接口，如果没有记录过该视频，会返回历史记录的最后一项，神奇吧
             } catch (Exception e) {
                 if (isAdded())
                     requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
@@ -506,9 +510,9 @@ public class VideoInfoFragment extends Fragment {
             //这里也会传过去，如果后面选择当页就不再获取直接传，选择其他页就传-1剩下的交给解析页
             startActivity(intent);
         } else {
-            PlayerApi.startGettingUrl(requireContext(), videoInfo, 0,(played ? -1 : progressPair.second));
+            PlayerApi.startGettingUrl(requireContext(), videoInfo, 0,(play_clicked ? -1 : progressPair.second));
             //避免重复获取的同时保证播放进度是新的，如果是-1会在解析页里再获取一次
         }
-        played = true;
+        play_clicked = true;
     }
 }
