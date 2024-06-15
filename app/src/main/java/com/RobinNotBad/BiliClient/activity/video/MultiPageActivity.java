@@ -53,11 +53,11 @@ public class MultiPageActivity extends BaseActivity {
                 }
             });
         } else {        //普通播放模式
-            Pair<Long,Integer> progressPair = (Pair<Long, Integer>) intent.getSerializableExtra("progress");
-            int progress = progressPair.second;
+            int progress = intent.getIntExtra("progress",-1);
+            long progress_cid = intent.getLongExtra("progress_cid",0);
             adapter.setOnItemClickListener(position ->{
                 long cid = videoInfo.cids.get(position);
-                PlayerApi.startGettingUrl(this, videoInfo, position, progressPair.first==cid ? progress : -1);
+                PlayerApi.startGettingUrl(this, videoInfo, position, progress_cid==cid ? progress : -1);
             });
         }
 

@@ -506,7 +506,8 @@ public class VideoInfoFragment extends Fragment {
             Intent intent = new Intent()
                     .setClass(requireContext(), MultiPageActivity.class)
                     .putExtra("videoInfo", videoInfo)
-                    .putExtra("progress",(Serializable) progressPair);
+                    .putExtra("progress_cid",progressPair.first)
+                    .putExtra("progress",progressPair.second);
             //这里也会传过去，如果后面选择当页就不再获取直接传，选择其他页就传-1剩下的交给解析页
             startActivity(intent);
         } else {
