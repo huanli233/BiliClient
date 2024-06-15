@@ -56,14 +56,40 @@
         app:layout_constraintTop_toBottomOf="@id/avatar"
         tools:ignore="TouchTargetSizeCheck" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/extraCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/content" />
+        app:layout_constraintTop_toBottomOf="@id/content"
+        android:orientation="vertical">
+        <include
+            layout="@layout/cell_dynamic_child"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/dynamic_child"
+            android:visibility="gone" />
+        <include
+            layout="@layout/cell_dynamic_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/dynamic_video_extra"
+            android:visibility="gone" />
+        <include
+            layout="@layout/cell_dynamic_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/dynamic_image_extra"
+            android:visibility="gone" />
+        <include
+            layout="@layout/cell_dynamic_article"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/dynamic_article_extra"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dynamic_control"

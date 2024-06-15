@@ -18,7 +18,7 @@ public class InstanceActivity extends BaseActivity {
         findViewById(R.id.top).setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setClass(this, MenuActivity.class);
-            if (getIntent().hasExtra("from")) intent.putExtra("from", getIntent().getIntExtra("from", 0));
+            if (getIntent().hasExtra("from")) intent.putExtra("from", getIntent().getStringExtra("from"));
             startActivity(intent);
             overridePendingTransition(R.anim.anim_activity_in_down, 0);
         });

@@ -19,7 +19,6 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.message.PrivateMsgActivity;
-import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicHolder;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.UserInfo;
@@ -63,7 +62,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
         else {
             View view = LayoutInflater.from(context).inflate(R.layout.cell_dynamic, parent, false);
-            return new DynamicHolder(view, (BaseActivity) context, preInflateHelper, false);
+            return new DynamicHolder(view, (BaseActivity) context, false);
         }
     }
 
@@ -77,9 +76,12 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             dynamicHolder.showDynamic(dynamicList.get(realPosition), context, true);
 
             if(dynamicList.get(realPosition).dynamic_forward != null){
-                View childCard = View.inflate(context,R.layout.cell_dynamic_child,dynamicHolder.extraCard);
-                DynamicHolder childHolder = new DynamicHolder(childCard, (BaseActivity) context, preInflateHelper, true);
+                View childCard = dynamicHolder.cell_dynamic_child;
+                DynamicHolder childHolder = new DynamicHolder(childCard, (BaseActivity) context, true);
                 childHolder.showDynamic(dynamicList.get(realPosition).dynamic_forward, context, true);
+                dynamicHolder.cell_dynamic_child.setVisibility(View.VISIBLE);
+            } else {
+                dynamicHolder.cell_dynamic_child.setVisibility(View.GONE);
             }
 
             View.OnLongClickListener onDeleteLongClick = DynamicHolder.getDeleteListener((Activity) context, dynamicList, realPosition, this);
@@ -171,7 +173,6 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-        if(holder instanceof DynamicHolder) ((DynamicHolder)holder).extraCard.removeAllViews();
         super.onViewRecycled(holder);
     }
 

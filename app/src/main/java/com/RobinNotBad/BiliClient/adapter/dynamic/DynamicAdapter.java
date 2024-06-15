@@ -43,10 +43,6 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         getInflateHelper().preload(recyclerView, R.layout.cell_dynamic);
     }
 
-    public DynamicAdapter(Context context, List<Dynamic> dynamicList) {
-        this(context, dynamicList, null);
-    }
-
     @Override
     public int getItemViewType(int position) {
         return (position == 0 ? 0 : 1);
@@ -59,7 +55,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             View view = LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic_action, parent,false);
             return new WriteDynamic(view);
         } else {
-            return new DynamicHolder(getInflateHelper().getView(parent, R.layout.cell_dynamic), dynamicActivity, preInflateHelper, false);
+            return new DynamicHolder(getInflateHelper().getView(parent, R.layout.cell_dynamic), dynamicActivity, false);
         }
     }
 
@@ -82,9 +78,12 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             dynamicHolder.showDynamic(dynamicList.get(position), context, true);      //该函数在DynamicHolder里
 
             if (dynamicList.get(position).dynamic_forward != null){
-                View childCard = preInflateHelper.getView(dynamicHolder.extraCard, R.layout.cell_dynamic_child, true);
-                DynamicHolder childHolder = new DynamicHolder(childCard, dynamicActivity, preInflateHelper, true);
+                View childCard = dynamicHolder.cell_dynamic_child;
+                DynamicHolder childHolder = new DynamicHolder(childCard, dynamicActivity, true);
                 childHolder.showDynamic(dynamicList.get(position).dynamic_forward, context, true);
+                childCard.setVisibility(View.VISIBLE);
+            } else {
+                dynamicHolder.cell_dynamic_child.setVisibility(View.GONE);
             }
 
             int finalPosition = position;
@@ -97,9 +96,6 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-        if (holder instanceof DynamicHolder) {
-            ((DynamicHolder) holder).extraCard.removeAllViews();
-        }
         super.onViewRecycled(holder);
     }
 
