@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.activity.video;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Pair;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,19 +13,18 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.video.PageChooseAdapter;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
-import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import java.io.File;
-import java.util.Objects;
 
 //分页视频选集
 //2023-07-17
 
 public class MultiPageActivity extends BaseActivity {
 
+    boolean play_clicked;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +55,8 @@ public class MultiPageActivity extends BaseActivity {
             long progress_cid = intent.getLongExtra("progress_cid",0);
             adapter.setOnItemClickListener(position ->{
                 long cid = videoInfo.cids.get(position);
-                PlayerApi.startGettingUrl(this, videoInfo, position, progress_cid==cid ? progress : -1);
+                PlayerApi.startGettingUrl(this, videoInfo, position, (progress_cid==cid && !play_clicked) ? progress : -1);
+                play_clicked = true;
             });
         }
 
