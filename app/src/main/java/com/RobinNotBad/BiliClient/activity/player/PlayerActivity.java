@@ -38,6 +38,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -97,7 +98,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private float screen_width, screen_height;
     private int video_width, video_height;
     private boolean ischanging, isdanmakushowing = false;
-    private TextView text_progress, text_volume, text_title, loading_text0, loading_text1, text_speed, text_newspeed;
+    private TextView text_progress, online_text, text_volume, text_title, loading_text0, loading_text1, text_speed, text_newspeed;
     private String progress_all_str;
     private AudioManager audioManager;
     private ImageView circle;
@@ -129,6 +130,11 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private boolean landscape = false;
 
     private boolean preview_mode = false;
+
+    private String online_number = "0";
+
+    private long aid,cid; //为实时人数服务
+    private String bvid; //为实时人数服务
 
     @Override
     public void onBackPressed() {
@@ -177,6 +183,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             constraintSet.applyTo(control_layout);
             //一种很新的使用ConstraintLayout的方法（
         }
+
+        if(!SharedPreferencesUtil.getBoolean("show_online",true)) online_text.setVisibility(View.GONE);
 
         if (mode == -1) {
             loading_text0.setText("预览中");
@@ -237,7 +245,11 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 if (cgsecond < 10) cgsecStr = "0" + cgsecond;
                 else cgsecStr = String.valueOf(cgsecond);
 
-                runOnUiThread(() -> text_progress.setText(cgminStr + ":" + cgsecStr + "/" + progress_all_str));
+                runOnUiThread(() -> {
+                    text_progress.setText(cgminStr + ":" + cgsecStr + "/" + progress_all_str);
+                    if(!online_number.isEmpty()) online_text.setText("实时" + online_number + "人");
+                    else online_text.setText("");
+                });
             }
 
             @Override
@@ -318,6 +330,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         circle = findViewById(R.id.circle);
         text_progress = findViewById(R.id.text_progress);
+        online_text = findViewById(R.id.online_text);
         danmaku_btn = findViewById(R.id.danmaku_btn);
         loop_btn = findViewById(R.id.loop_btn);
         rotate_btn = findViewById(R.id.rotate_btn);
@@ -377,6 +390,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if (title != null) Log.e("标题", title);
         Log.e("mode", String.valueOf(mode));
         if (title != null) text_title.setText(title);
+
+        bvid = intent.getStringExtra("bvid");
+        aid = intent.getLongExtra("aid",0);
+        cid = intent.getLongExtra("cid",0);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -866,6 +883,16 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         lastProgress = videonow;
                         runOnUiThread(() -> progressBar.setProgress(videonow));
                         //progressBar上有一个onProgressChange的监听器，文字更改在那里
+                    }
+                    try {
+                        if((aid == 0 && bvid == null) || cid == 0) online_number = "";
+                        else {
+                            if(bvid == null) online_number = VideoInfoApi.getWatching(aid,cid);
+                            else online_number = VideoInfoApi.getWatching(bvid,cid);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        online_number = "";
                     }
                 }
             }

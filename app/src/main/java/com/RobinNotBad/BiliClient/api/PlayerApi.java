@@ -91,7 +91,7 @@ public class PlayerApi {
         return new Pair<>(videourl, body);
     }
 
-    public static void jumpToPlayer(Context context, String videourl, String danmakuurl, String title, boolean local){
+    public static void jumpToPlayer(Context context, String videourl, String danmakuurl, String title, boolean local, long aid, String bvid, long cid){
         Log.e("debug-准备跳转","--------");
         Log.e("debug-视频标题",title);
         Log.e("debug-视频地址",videourl);
@@ -106,6 +106,9 @@ public class PlayerApi {
                 intent.putExtra("url", videourl);
                 intent.putExtra("danmaku", danmakuurl);
                 intent.putExtra("title", title);
+                intent.putExtra("aid", aid);
+                intent.putExtra("bvid", bvid);
+                intent.putExtra("cid", cid);
                 break;
 
             case "mtvPlayer":

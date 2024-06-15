@@ -47,7 +47,7 @@ public class LocalPageChooseActivity extends BaseActivity {
         ArrayList<String> danmakuFileList = intent.getStringArrayListExtra("danmakuFileList");
 
         PageChooseAdapter adapter = new PageChooseAdapter(this,pageList);
-        adapter.setOnItemClickListener(position -> PlayerApi.jumpToPlayer(LocalPageChooseActivity.this, videoFileList.get(position), danmakuFileList.get(position), pageList.get(position), true));
+        adapter.setOnItemClickListener(position -> PlayerApi.jumpToPlayer(LocalPageChooseActivity.this, videoFileList.get(position), danmakuFileList.get(position), pageList.get(position), true, 0, "", 0));
         adapter.setOnItemLongClickListener(position -> {
             if(longClickPosition == position){
                 File workPath = ConfInfoApi.getDownloadPath(this);

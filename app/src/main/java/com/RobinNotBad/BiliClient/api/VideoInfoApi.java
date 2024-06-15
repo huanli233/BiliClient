@@ -241,4 +241,22 @@ public class VideoInfoApi {
         return videoInfo;
     }
 
+    public static String getWatching(String bvid,long cid) throws IOException, JSONException{
+        String url = "https://api.bilibili.com/x/player/online/total?bvid=" + bvid + "&cid=" + cid;
+        JSONObject result = NetWorkUtil.getJson(url);
+        if(result.has("data") && !result.isNull("data")){
+            JSONObject data = result.getJSONObject("data");
+            if(data.has("total") && !data.isNull("total")) return ToolsUtil.toWan(data.getLong("total"));
+        }
+        return "";
+    }
+    public static String getWatching(long aid,long cid) throws IOException, JSONException{
+        String url = "https://api.bilibili.com/x/player/online/total?aid=" + aid + "&cid=" + cid;
+        JSONObject result = NetWorkUtil.getJson(url);
+        if(result.has("data") && !result.isNull("data")){
+            JSONObject data = result.getJSONObject("data");
+            if(data.has("total") && !data.isNull("total")) return ToolsUtil.toWan(data.getLong("total"));
+        }
+        return "";
+    }
 }
