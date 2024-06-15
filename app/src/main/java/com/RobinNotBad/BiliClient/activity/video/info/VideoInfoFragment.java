@@ -195,8 +195,7 @@ public class VideoInfoFragment extends Fragment {
 
         CenterThreadPool.run(() -> {
             try {
-                if(!VideoInfoApi.hasProgress(videoInfo.aid)) HistoryApi.reportHistory(videoInfo.aid, videoInfo.cids.get(0), videoInfo.staff.get(0).mid, 0);
-                else HistoryApi.reportHistory(videoInfo.aid, videoInfo.cids.get(0), videoInfo.staff.get(0).mid, VideoInfoApi.getWatchProgress(videoInfo.aid));
+                HistoryApi.reportHistory(videoInfo.aid, videoInfo.cids.get(0), videoInfo.staff.get(0).mid, VideoInfoApi.getWatchProgress(videoInfo.aid));
             } catch (Exception e) {
                 if (isAdded())
                     requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
