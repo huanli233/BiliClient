@@ -80,7 +80,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPreparedListener {
     private IDanmakuView mDanmakuView;
     private DanmakuContext mContext;
-    private Timer progressTimer, autoHideTimer, volumeTimer, speedTimer, loadingShowTimer;
+    private Timer progressTimer, autoHideTimer, volumeTimer, speedTimer, loadingShowTimer, onlineTimer;
     private String video_url, danmaku_url;
     private int mode;
     private int videoall,videonow;
@@ -804,6 +804,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         speed_layout.setOnClickListener(view -> speed_layout.setVisibility(View.GONE));
 
         progressChange();
+        onlineChange();
 
         mediaPlayer.start();
 
@@ -884,9 +885,22 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         runOnUiThread(() -> progressBar.setProgress(videonow));
                         //progressBar上有一个onProgressChange的监听器，文字更改在那里
                     }
+                }
+            }
+        };
+        progressTimer.schedule(task, 0, 500);
+    }
+
+    private void onlineChange() {
+        onlineTimer = new Timer();
+        TimerTask task = new TimerTask() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void run() {
+                if (ijkPlayer != null && !ischanging) {
                     try {
                         if((aid == 0 && bvid == null) || cid == 0) online_number = "";
-                        else {
+                        else if(SharedPreferencesUtil.getBoolean("show_online",true)){
                             if(bvid == null) online_number = VideoInfoApi.getWatching(aid,cid);
                             else online_number = VideoInfoApi.getWatching(bvid,cid);
                         }
@@ -897,7 +911,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 }
             }
         };
-        progressTimer.schedule(task, 0, 500);
+        onlineTimer.schedule(task, 0, 5000);
     }
 
     private void downdanmu() {
@@ -1150,6 +1164,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if (autoHideTimer != null) autoHideTimer.cancel();
         if (volumeTimer != null) volumeTimer.cancel();
         if (progressTimer != null) progressTimer.cancel();
+        if (onlineTimer != null) onlineTimer.cancel();
         if (ijkPlayer != null) ijkPlayer.release();
         if (mDanmakuView != null) mDanmakuView.release();
         if (loadingShowTimer != null) loadingShowTimer.cancel();

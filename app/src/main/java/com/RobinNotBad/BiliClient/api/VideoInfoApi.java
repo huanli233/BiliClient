@@ -255,7 +255,10 @@ public class VideoInfoApi {
         JSONObject result = NetWorkUtil.getJson(url);
         if(result.has("data") && !result.isNull("data")){
             JSONObject data = result.getJSONObject("data");
-            if(data.has("total") && !data.isNull("total")) return ToolsUtil.toWan(data.getLong("total"));
+            if(data.has("total") && !data.isNull("total")) {
+                if(data.get("total") instanceof String) return data.getString("total");
+                else return ToolsUtil.toWan(data.getLong("total"));
+            }
         }
         return "";
     }

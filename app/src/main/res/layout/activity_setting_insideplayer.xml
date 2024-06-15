@@ -118,7 +118,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="6dp"
                         android:layout_marginBottom="4dp"
-                        android:text="开启选项后，播放视频时如果获取成功，右下角将会显示当前视频的实时观看人数\n\n该功能为内置播放器专属"
+                        android:text="开启选项后，播放视频时如果获取成功，右下角将会显示当前视频的实时观看人数\n如果观看视频中途崩溃可以尝试关闭此开关\n\n该功能为内置播放器专属"
                         android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
