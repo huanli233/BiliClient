@@ -78,6 +78,15 @@
             <type>1</type>
         </item>
         <item>
+            <type>0</type>
+            <text>注意：内置播放器退出播放时会上传视频播放进度</text>
+            <style>italic</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
             <type>1</type>
         </item>
         <item>

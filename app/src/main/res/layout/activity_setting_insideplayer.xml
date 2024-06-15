@@ -107,6 +107,32 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/fromLast"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="从历史位置播放" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="开启选项后，播放视频时如果有超过5秒的播放历史，将会自动从历史位置播放"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="2dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/online_total"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -12,7 +12,6 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.DownloadActivity;
 import com.RobinNotBad.BiliClient.activity.player.PlayerActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
@@ -39,7 +38,8 @@ public class PlayerApi {
                 .putExtra("title", (videoInfo.pagenames.size()==1 ? videoInfo.title : videoInfo.pagenames.get(page)))
                 .putExtra("bvid", videoInfo.bvid)
                 .putExtra("aid", videoInfo.aid)
-                .putExtra("cid", videoInfo.cids.get(page));
+                .putExtra("cid", videoInfo.cids.get(page))
+                .putExtra("mid", videoInfo.staff.get(0).mid);
         context.startActivity(intent);
     }
 
@@ -57,6 +57,7 @@ public class PlayerApi {
                 .putExtra("cover", videoInfo.cover)
                 .putExtra("parent_title", videoInfo.title)
                 .putExtra("qn", qn)
+                .putExtra("mid", videoInfo.staff.get(0).mid)
                 .setClass(context, JumpToPlayerActivity.class);
         context.startActivity(intent);
     }
@@ -91,7 +92,7 @@ public class PlayerApi {
         return new Pair<>(videourl, body);
     }
 
-    public static void jumpToPlayer(Context context, String videourl, String danmakuurl, String title, boolean local, long aid, String bvid, long cid){
+    public static void jumpToPlayer(Context context, String videourl, String danmakuurl, String title, boolean local, long aid, String bvid, long cid, long mid){
         Log.e("debug-准备跳转","--------");
         Log.e("debug-视频标题",title);
         Log.e("debug-视频地址",videourl);
@@ -109,6 +110,7 @@ public class PlayerApi {
                 intent.putExtra("aid", aid);
                 intent.putExtra("bvid", bvid);
                 intent.putExtra("cid", cid);
+                intent.putExtra("mid", mid);
                 break;
 
             case "mtvPlayer":

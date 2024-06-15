@@ -19,7 +19,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 public class SettingPlayerInsideActivity extends BaseActivity {
     private MaterialRadioButton SWtexture,SWsurface,SWhard,SWsoft,SWopensles,SWaudiotrack;
     private EditText DMmaxline,danmakusize,danmakuspeed,danmaku_transparency;
-    private SwitchMaterial online_total,SWLClick,SWloop,ui_round,SWbackground, SWautolandscape,SWscale,SWdoublemove,danmaku_allowoverlap,danmaku_mergeduplicate,ui_showRotateBtn,ui_showDanmakuBtn,ui_showLoopBtn;
+    private SwitchMaterial fromLast, online_total,SWLClick,SWloop,ui_round,SWbackground, SWautolandscape,SWscale,SWdoublemove,danmaku_allowoverlap,danmaku_mergeduplicate,ui_showRotateBtn,ui_showDanmakuBtn,ui_showLoopBtn;
     @SuppressLint({"SetTextI18n", "InflateParams"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,7 @@ public class SettingPlayerInsideActivity extends BaseActivity {
             SWscale = findViewById(R.id.SWscale);
             SWdoublemove = findViewById(R.id.SWdoublemove);
             online_total = findViewById(R.id.online_total);
+            fromLast = findViewById(R.id.fromLast);
 
             SWtexture = findViewById(R.id.SWtexture);
             SWsurface = findViewById(R.id.SWsurface);
@@ -56,6 +57,7 @@ public class SettingPlayerInsideActivity extends BaseActivity {
             ui_showRotateBtn = findViewById(R.id.ui_showRotateBtn);
             ui_showDanmakuBtn = findViewById(R.id.ui_showDanmakuBtn);
             ui_showLoopBtn = findViewById(R.id.ui_showLoopBtn);
+            fromLast = findViewById(R.id.fromLast);
 
             SWaudiotrack.setChecked(!SharedPreferencesUtil.getBoolean("player_audio",false));
             SWLClick.setChecked(SharedPreferencesUtil.getBoolean("player_longclick",true));
@@ -66,6 +68,7 @@ public class SettingPlayerInsideActivity extends BaseActivity {
             SWscale.setChecked(SharedPreferencesUtil.getBoolean("player_scale",true));
             SWdoublemove.setChecked(SharedPreferencesUtil.getBoolean("player_doublemove",false));
             online_total.setChecked(SharedPreferencesUtil.getBoolean("show_online",true));
+            fromLast.setChecked(SharedPreferencesUtil.getBoolean("player_from_last",true));
 
             SWtexture.setChecked(SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT<=19));
             SWsurface.setChecked(!SharedPreferencesUtil.getBoolean("player_display",Build.VERSION.SDK_INT<=19));
@@ -106,6 +109,7 @@ public class SettingPlayerInsideActivity extends BaseActivity {
         SharedPreferencesUtil.putBoolean("player_scale",SWscale.isChecked());
         SharedPreferencesUtil.putBoolean("player_doublemove",SWdoublemove.isChecked());
         SharedPreferencesUtil.putBoolean("show_online",online_total.isChecked());
+        SharedPreferencesUtil.putBoolean("player_from_last",fromLast.isChecked());
         
         String newline = DMmaxline.getText().toString();
         String newtextsize = danmakusize.getText().toString();

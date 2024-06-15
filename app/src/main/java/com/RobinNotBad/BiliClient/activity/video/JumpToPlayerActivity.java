@@ -52,6 +52,7 @@ public class JumpToPlayerActivity extends BaseActivity {
         String bvid = intent.getStringExtra("bvid");
         long aid = intent.getLongExtra("aid", 0);
         long cid = intent.getLongExtra("cid", 0);
+        long mid = intent.getLongExtra("mid", 0);
 
         title = intent.getStringExtra("title");
         download = intent.getIntExtra("download",0);
@@ -64,15 +65,15 @@ public class JumpToPlayerActivity extends BaseActivity {
         danmakuurl = "https://comment.bilibili.com/" + cid + ".xml";
         if (aid == 0) {
             Log.e("debug-哔哩终端-跳转页", "bid=" + bvid);
-            requestVideo(0, bvid, cid);
+            requestVideo(0, bvid, cid, mid);
         } else {
             Log.e("debug-哔哩终端-跳转页", "aid=" + aid);
-            requestVideo(aid, null, cid);
+            requestVideo(aid, null, cid, mid);
         }
     }
 
     @SuppressLint("SetTextI18n")
-    private void requestVideo(long aid, String bvid, long cid, int qn) {
+    private void requestVideo(long aid, String bvid, long cid, int qn, long mid) {
         CenterThreadPool.run(()->{
             try {
                 Pair<String, String> video = PlayerApi.getVideo(aid, bvid, cid, html5, qn);
@@ -90,7 +91,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                             intent.putExtra("parent_title", getIntent().getStringExtra("parent_title"));
                         startActivity(intent);
                     } else {
-                        PlayerApi.jumpToPlayer(JumpToPlayerActivity.this, videourl, danmakuurl, title, false, aid, bvid, cid);
+                        PlayerApi.jumpToPlayer(JumpToPlayerActivity.this, videourl, danmakuurl, title, false, aid, bvid, cid, mid);
                     }
                     finish();
                 }
@@ -107,8 +108,8 @@ public class JumpToPlayerActivity extends BaseActivity {
         });
     }
 
-    private void requestVideo(long aid, String bvid, long cid) {
-        requestVideo(aid, bvid, cid, (qn != -1 ? qn : SharedPreferencesUtil.getInt("play_qn",16)));
+    private void requestVideo(long aid, String bvid, long cid, long mid) {
+        requestVideo(aid, bvid, cid, (qn != -1 ? qn : SharedPreferencesUtil.getInt("play_qn",16)), mid);
     }
 
     @Override

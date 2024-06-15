@@ -85,7 +85,7 @@ public class VideoInfoActivity extends BaseActivity {
         findViewById(R.id.loading).setVisibility(View.GONE);
     }
     protected void initVideoInfoView() {
-        TutorialHelper.show(R.xml.tutorial_video,this,"video",2);
+        TutorialHelper.show(R.xml.tutorial_video,this,"video",3);
         
         ViewPager viewPager = findViewById(R.id.viewPager);
         TextView pageName = findViewById(R.id.pageName);

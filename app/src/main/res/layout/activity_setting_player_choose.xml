@@ -100,14 +100,14 @@
                         app:layout_constraintStart_toEndOf="@+id/clientPlayer_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
                         android:id="@+id/clientPlayer_desc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
                         android:layout_marginBottom="10dp"
-                        android:lines="1"
-                        android:text="长按这里进入设置"
+                        android:singleLine="true"
+                        android:text="支持记录视频播放进度 | 长按这里进入设置"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

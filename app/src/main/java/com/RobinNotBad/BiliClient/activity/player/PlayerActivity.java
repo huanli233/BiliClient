@@ -38,6 +38,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -133,8 +134,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     private String online_number = "0";
 
-    private long aid,cid; //为实时人数服务
-    private String bvid; //为实时人数服务
+    private long aid,cid,mid;
+    private String bvid;
 
     @Override
     public void onBackPressed() {
@@ -394,6 +395,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         bvid = intent.getStringExtra("bvid");
         aid = intent.getLongExtra("aid",0);
         cid = intent.getLongExtra("cid",0);
+        mid = intent.getLongExtra("mid",0);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -794,6 +796,19 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         else totalSecSTR = String.valueOf(seconds);
         progress_all_str = totalMinSTR + ":" + totalSecSTR;
 
+        if(SharedPreferencesUtil.getBoolean("player_from_last",true)){
+            CenterThreadPool.run(() -> {
+                try {
+                    long progress = VideoInfoApi.getWatchProgress(aid);
+                    if(progress > 5) { //阈值
+                        mediaPlayer.seekTo(progress * 1000);
+                        runOnUiThread(() -> MsgUtil.toast("已从上次的位置播放",this));
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            });
+        }
 
         loading_info.setVisibility(View.GONE);
         playing = true;
@@ -1171,10 +1186,16 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         if (danmakuFile != null && danmakuFile.exists()) danmakuFile.delete();
 
-        Intent data = new Intent();
-        data.putExtra("time", videonow);
-        data.putExtra("isfin", finishWatching);
-        setResult(0, data);
+        CenterThreadPool.run(() -> {
+            try {
+                if(mid != 0 && aid != 0) {
+                    if(finishWatching) HistoryApi.reportHistory(aid,cid,mid,videoall/1000);
+                    else HistoryApi.reportHistory(aid,cid,mid,videonow/1000);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        });
         super.onDestroy();
     }
 }
