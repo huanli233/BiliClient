@@ -5,13 +5,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
 import com.RobinNotBad.BiliClient.adapter.SettingsAdapter;
 import com.RobinNotBad.BiliClient.model.SettingSection;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 import java.util.List;

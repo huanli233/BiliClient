@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.api;
 
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -32,14 +31,15 @@ import java.util.Objects;
 import okhttp3.Response;
 
 public class PlayerApi {
-    public static void startGettingUrl(Context context, VideoInfo videoInfo, int page){
+    public static void startGettingUrl(Context context, VideoInfo videoInfo, int page, int progress){
         Intent intent = new Intent()
                 .setClass(context, JumpToPlayerActivity.class)
                 .putExtra("title", (videoInfo.pagenames.size()==1 ? videoInfo.title : videoInfo.pagenames.get(page)))
                 .putExtra("bvid", videoInfo.bvid)
                 .putExtra("aid", videoInfo.aid)
                 .putExtra("cid", videoInfo.cids.get(page))
-                .putExtra("mid", videoInfo.staff.get(0).mid);
+                .putExtra("mid", videoInfo.staff.get(0).mid)
+                .putExtra("progress", progress);
         context.startActivity(intent);
     }
 
@@ -92,7 +92,7 @@ public class PlayerApi {
         return new Pair<>(videourl, body);
     }
 
-    public static void jumpToPlayer(Context context, String videourl, String danmakuurl, String title, boolean local, long aid, String bvid, long cid, long mid){
+    public static void jumpToPlayer(Context context, String videourl, String danmakuurl, String title, boolean local, long aid, String bvid, long cid, long mid, int progress){
         Log.e("debug-准备跳转","--------");
         Log.e("debug-视频标题",title);
         Log.e("debug-视频地址",videourl);
@@ -111,6 +111,7 @@ public class PlayerApi {
                 intent.putExtra("bvid", bvid);
                 intent.putExtra("cid", cid);
                 intent.putExtra("mid", mid);
+                intent.putExtra("progress",progress);
                 break;
 
             case "mtvPlayer":
@@ -138,6 +139,7 @@ public class PlayerApi {
                     headers.put("Referer","https://www.bilibili.com/");
                     intent.putExtra("cookie",(Serializable) headers);
                     intent.putExtra("agent", NetWorkUtil.USER_AGENT_WEB);
+                    intent.putExtra("progress",progress * 1000L);
                 }
                 Log.e("uri",intent.getData().toString());
                 intent.setAction(Intent.ACTION_VIEW);

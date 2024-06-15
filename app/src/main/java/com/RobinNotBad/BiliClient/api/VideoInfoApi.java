@@ -8,7 +8,6 @@ import com.RobinNotBad.BiliClient.model.At;
 import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.Stats;
 import com.RobinNotBad.BiliClient.model.UserInfo;
-import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.StringUtil;
@@ -264,14 +263,16 @@ public class VideoInfoApi {
         return "";
     }
 
-    public static long getWatchProgress(long aid) throws IOException, JSONException{
+    public static Pair<Long, Integer> getWatchProgress(long aid) throws IOException, JSONException{
         String url = "https://api.bilibili.com/x/v2/history?max=" + aid + "&ps=1&business=archive";
         JSONObject result = NetWorkUtil.getJson(url);
         if(!result.isNull("data")){
             JSONArray data = result.getJSONArray("data");
-            if(data.length() > 0)
-                return data.getJSONObject(0).getLong("progress");
+            if(data.length() > 0){
+                JSONObject video = data.getJSONObject(0);
+                return new Pair<>(video.getJSONObject("page").getLong("cid"), video.getInt("progress"));
+            }
         }
-        return 0;
+        return new Pair<>(0L,0);
     }
 }

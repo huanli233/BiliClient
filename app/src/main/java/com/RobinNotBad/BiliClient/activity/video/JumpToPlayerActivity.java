@@ -13,6 +13,7 @@ import com.RobinNotBad.BiliClient.activity.DownloadActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
+import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -40,6 +41,8 @@ public class JumpToPlayerActivity extends BaseActivity {
 
     boolean html5;
 
+    int progress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,7 @@ public class JumpToPlayerActivity extends BaseActivity {
         long aid = intent.getLongExtra("aid", 0);
         long cid = intent.getLongExtra("cid", 0);
         long mid = intent.getLongExtra("mid", 0);
+        progress = intent.getIntExtra("progress",-1);
 
         title = intent.getStringExtra("title");
         download = intent.getIntExtra("download",0);
@@ -76,6 +80,10 @@ public class JumpToPlayerActivity extends BaseActivity {
     private void requestVideo(long aid, String bvid, long cid, int qn, long mid) {
         CenterThreadPool.run(()->{
             try {
+                if(download == 0 && progress == -1) {
+                    Pair<Long,Integer> progressPair = VideoInfoApi.getWatchProgress(aid);
+                    progress = progressPair.first == cid ? progressPair.second : 0;
+                }
                 Pair<String, String> video = PlayerApi.getVideo(aid, bvid, cid, html5, qn);
                 videourl = video.first;
                 if (!destroyed) {
@@ -91,7 +99,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                             intent.putExtra("parent_title", getIntent().getStringExtra("parent_title"));
                         startActivity(intent);
                     } else {
-                        PlayerApi.jumpToPlayer(JumpToPlayerActivity.this, videourl, danmakuurl, title, false, aid, bvid, cid, mid);
+                        PlayerApi.jumpToPlayer(JumpToPlayerActivity.this, videourl, danmakuurl, title, false, aid, bvid, cid, mid, progress);
                     }
                     finish();
                 }

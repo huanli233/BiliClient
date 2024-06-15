@@ -14,6 +14,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,6 +70,8 @@ public class VideoInfoFragment extends Fragment {
     private TextView description;
     private TextView tagsText;
     private ImageButton fav;
+    private Pair<Long,Integer> progressPair;
+    private boolean played = false;
 
     private Boolean clickCoverPlayEnable = SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cover_play_enable, false);
 
@@ -193,16 +197,18 @@ public class VideoInfoFragment extends Fragment {
             });
         }
 
+        //历史上报
         CenterThreadPool.run(() -> {
             try {
-                HistoryApi.reportHistory(videoInfo.aid, videoInfo.cids.get(0), videoInfo.staff.get(0).mid, VideoInfoApi.getWatchProgress(videoInfo.aid));
+                progressPair = VideoInfoApi.getWatchProgress(videoInfo.aid);
+                HistoryApi.reportHistory(videoInfo.aid, progressPair.first, videoInfo.staff.get(0).mid, progressPair.second);
             } catch (Exception e) {
                 if (isAdded())
                     requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
             }
         });
 
-
+        //标签
         if (SharedPreferencesUtil.getBoolean("tags_enable", true)) {
             CenterThreadPool.run(() -> {
                 try {
@@ -495,10 +501,14 @@ public class VideoInfoFragment extends Fragment {
         if (videoInfo.pagenames.size() > 1) {
             Intent intent = new Intent()
                     .setClass(requireContext(), MultiPageActivity.class)
-                    .putExtra("videoInfo", videoInfo);
+                    .putExtra("videoInfo", videoInfo)
+                    .putExtra("progress",(Serializable) progressPair);
+            //这里也会传过去，如果后面选择当页就不再获取直接传，选择其他页就传-1剩下的交给解析页
             startActivity(intent);
         } else {
-            PlayerApi.startGettingUrl(requireContext(), videoInfo, 0);
+            PlayerApi.startGettingUrl(requireContext(), videoInfo, 0,(played ? -1 : progressPair.second));
+            //避免重复获取的同时保证播放进度是新的，如果是-1会在解析页里再获取一次
         }
+        played = true;
     }
 }

@@ -84,7 +84,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private Timer progressTimer, autoHideTimer, volumeTimer, speedTimer, loadingShowTimer, onlineTimer;
     private String video_url, danmaku_url;
     private int mode;
-    private int videoall,videonow;
+    private int videoall,videonow,videonow_last;
+    private long lastProgress;
 
     private ConstraintLayout control_layout, top_control, bottom_control, speed_layout;
     private RelativeLayout videoArea;
@@ -112,7 +113,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private final float[] speeds = {0.5F, 0.75F, 1.0F, 1.25F, 1.5F, 1.75F, 2.0F, 3.0F};
     private final String[] speedTexts = {"x 0.5", "x 0.75", "x 1.0", "x 1.25", "x 1.5", "x 1.75", "x 2.0", "x 3.0"};
 
-    private int lastProgress;
     private boolean prepared = false;
     private boolean firstSurfaceHolder = true;
     private boolean finishWatching = false;
@@ -396,6 +396,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         aid = intent.getLongExtra("aid",0);
         cid = intent.getLongExtra("cid",0);
         mid = intent.getLongExtra("mid",0);
+
+        lastProgress = intent.getIntExtra("progress",0);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -797,17 +799,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         progress_all_str = totalMinSTR + ":" + totalSecSTR;
 
         if(SharedPreferencesUtil.getBoolean("player_from_last",true)){
-            CenterThreadPool.run(() -> {
-                try {
-                    long progress = VideoInfoApi.getWatchProgress(aid);
-                    if(progress > 5) { //阈值
-                        mediaPlayer.seekTo(progress * 1000);
-                        runOnUiThread(() -> MsgUtil.toast("已从上次的位置播放",this));
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            });
+            if(lastProgress > 5) { //阈值
+                mediaPlayer.seekTo(lastProgress * 1000);
+                runOnUiThread(() -> MsgUtil.toast("已从上次的位置播放",this));
+            }
         }
 
         loading_info.setVisibility(View.GONE);
@@ -895,8 +890,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             public void run() {
                 if (ijkPlayer != null && !ischanging) {
                     videonow = (int) ijkPlayer.getCurrentPosition();
-                    if (lastProgress != videonow) {               //检测进度是否在变动
-                        lastProgress = videonow;
+                    if (videonow_last != videonow) {               //检测进度是否在变动
+                        videonow_last = videonow;
                         runOnUiThread(() -> progressBar.setProgress(videonow));
                         //progressBar上有一个onProgressChange的监听器，文字更改在那里
                     }
@@ -920,7 +915,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                             else online_number = VideoInfoApi.getWatching(bvid,cid);
                         }
                     }catch (Exception e){
-                        e.printStackTrace();
+                        runOnUiThread(()->MsgUtil.err(e,PlayerActivity.this));
                         online_number = "";
                     }
                 }
@@ -1189,11 +1184,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         CenterThreadPool.run(() -> {
             try {
                 if(mid != 0 && aid != 0) {
-                    if(finishWatching) HistoryApi.reportHistory(aid,cid,mid,videoall/1000);
-                    else HistoryApi.reportHistory(aid,cid,mid,videonow/1000);
+                    HistoryApi.reportHistory(aid,cid,mid,videonow/1000);
                 }
             }catch (Exception e){
-                e.printStackTrace();
+                runOnUiThread(()->MsgUtil.err(e,this));
             }
         });
         super.onDestroy();

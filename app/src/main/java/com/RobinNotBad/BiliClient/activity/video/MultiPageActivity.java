@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity.video;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,11 +14,13 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.video.PageChooseAdapter;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
+import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import java.io.File;
+import java.util.Objects;
 
 //分页视频选集
 //2023-07-17
@@ -50,7 +53,12 @@ public class MultiPageActivity extends BaseActivity {
                 }
             });
         } else {        //普通播放模式
-            adapter.setOnItemClickListener(position -> PlayerApi.startGettingUrl(this,videoInfo,position));
+            Pair<Long,Integer> progressPair = (Pair<Long, Integer>) intent.getSerializableExtra("progress");
+            int progress = progressPair.second;
+            adapter.setOnItemClickListener(position ->{
+                long cid = videoInfo.cids.get(position);
+                PlayerApi.startGettingUrl(this, videoInfo, position, progressPair.first==cid ? progress : -1);
+            });
         }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

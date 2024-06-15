@@ -23,6 +23,7 @@ public class MarqueeTextView extends androidx.appcompat.widget.AppCompatTextView
     }
 
     public void setMarquee(){
+        if(!isInEditMode())
         if(SharedPreferencesUtil.getBoolean("marquee_enable",true)) {
             setSelected(true);
             setEllipsize(TextUtils.TruncateAt.MARQUEE);
