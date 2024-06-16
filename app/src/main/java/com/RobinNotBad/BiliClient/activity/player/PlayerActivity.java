@@ -172,7 +172,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if(SharedPreferencesUtil.getBoolean("player_ui_round",false)){
             int padding = ToolsUtil.dp2px(6,this);
 
-            top_control.setPaddingRelative(0,padding,0,0);
+            top_control.setPaddingRelative(padding,padding,padding,0);
 
             bottom_control.setPaddingRelative(padding,0,0, padding);
 

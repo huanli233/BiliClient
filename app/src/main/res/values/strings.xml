@@ -103,6 +103,7 @@
         <item>修复了私信报错问题</item>
         <item>修复了消息页面的错误</item>
         <item>修复了滑动过快时崩溃的问题</item>
+        <item>优化了动态</item>
         <item>优化了网络请求相关代码</item>
         <item>优化了进入哔哩终端时的逻辑</item>
         <item>优化了未登录状态下的操作</item>

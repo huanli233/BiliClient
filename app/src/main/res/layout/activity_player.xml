@@ -86,6 +86,7 @@
                 android:layout_marginVertical="4dp"
                 android:text="原小电视播放器"
                 android:textSize="12sp"
+                android:textColor="@color/textwhite"
                 android:drawableStart="@drawable/arrow_back"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/cl_1"
