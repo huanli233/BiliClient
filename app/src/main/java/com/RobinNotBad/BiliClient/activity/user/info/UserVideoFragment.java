@@ -61,6 +61,7 @@ public class UserVideoFragment extends RefreshListFragment {
                     setRefreshing(false);
                     adapter = new UserVideoAdapter(requireContext(),mid, videoList);
                     setAdapter(adapter);
+                    if (bottom && videoList.isEmpty()) showEmptyView();
                 }
             } catch (Exception e){loadFail(e);}
         });

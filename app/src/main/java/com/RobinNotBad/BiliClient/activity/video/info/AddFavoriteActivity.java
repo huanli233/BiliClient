@@ -56,18 +56,21 @@ public class AddFavoriteActivity extends RefreshListActivity {
     }
 
     @Override
+    public void finish() {
+        if (adapter.added) {
+            setResult(RESULT_ADDED);
+        } else if (adapter.isAllDeleted()) {
+            setResult(RESULT_DELETED);
+        }
+        super.finish();
+    }
+
+    @Override
     protected void onDestroy() {
-        if(adapter!=null) {
+        if (adapter!=null) {
             if (SharedPreferencesUtil.getBoolean("fav_notice", false)) {
                 if (adapter.added) MsgUtil.toast("添加成功", this);
                 else if (adapter.changed) MsgUtil.toast("更改成功", this);
-            }
-            Intent intent = new Intent();
-            if(adapter.added) {
-                setResult(RESULT_ADDED, intent);
-            }
-            else if(adapter.isAllDeleted()){
-                setResult(RESULT_DELETED,intent);
             }
         }
         

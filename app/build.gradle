@@ -37,15 +37,13 @@ android {
 
     signingConfigs {
         release {
-            if (project.rootProject.file("local.properties").exists()) {
-                Properties pro = new Properties()
-                InputStream input = project.rootProject.file("local.properties").newDataInputStream()
-                pro.load(input)
-                storeFile file(pro.getProperty("KEY_PATH"))
-                storePassword pro.getProperty("KEY_PASSWORD")
-                keyAlias pro.getProperty("ALIAS_NAME")
-                keyPassword pro.getProperty("ALIAS_PASSWORD")
-            }
+            Properties pro = new Properties()
+            InputStream input = project.rootProject.file("local.properties").newDataInputStream()
+            pro.load(input)
+            storeFile file(pro.getProperty("KEY_PATH"))
+            storePassword pro.getProperty("KEY_PASSWORD")
+            keyAlias pro.getProperty("ALIAS_NAME")
+            keyPassword pro.getProperty("ALIAS_PASSWORD")
         }
     }
 
@@ -56,13 +54,11 @@ android {
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            if (project.rootProject.file("local.properties").exists()) {
-                Properties pro = new Properties()
-                InputStream input = project.rootProject.file("local.properties").newDataInputStream()
-                pro.load(input)
-                if (pro.hasProperty("KEY_PATH")) {
-                    signingConfig signingConfigs.release
-                }
+            def localProps = project.rootProject.file("local.properties")
+            if (localProps.exists() && new Properties() {{
+                load(localProps.newDataInputStream())
+            }}.hasProperty("KEY_PATH")) {
+                signingConfig signingConfigs.release
             }
         }
         debug {

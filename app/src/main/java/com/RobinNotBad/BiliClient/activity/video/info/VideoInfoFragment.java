@@ -97,8 +97,7 @@ public class VideoInfoFragment extends Fragment {
             int code = o.getResultCode();
             if (code == RESULT_ADDED) {
                 fav.setBackgroundResource(R.drawable.icon_favourite_1);
-            }
-            if (code == RESULT_DELETED) {
+            } else if (code == RESULT_DELETED) {
                 fav.setBackgroundResource(R.drawable.icon_favourite_0);
             }
         }

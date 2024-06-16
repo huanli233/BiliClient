@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -25,6 +26,7 @@ import com.RobinNotBad.BiliClient.util.view.ImageAutoLoadScrollListener;
 public class RefreshListFragment extends Fragment {
     public SwipeRefreshLayout swipeRefreshLayout;
     public RecyclerView recyclerView;
+    public TextView emptyView;
     public OnLoadMoreListener listener;
     public boolean bottom = false;
     public int page = 1;
@@ -38,6 +40,7 @@ public class RefreshListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        emptyView = view.findViewById(R.id.emptyTip);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setEnabled(false);
         swipeRefreshLayout.setRefreshing(true);
@@ -96,6 +99,15 @@ public class RefreshListFragment extends Fragment {
 
     public void runOnUiThread(Runnable runnable){
         if(isAdded()) requireActivity().runOnUiThread(runnable);
+    }
+
+    public void showEmptyView() {
+        if (emptyView != null) {
+            runOnUiThread(() -> {
+                recyclerView.setVisibility(View.GONE);
+                emptyView.setVisibility(View.VISIBLE);
+            });
+        }
     }
 
     public boolean isRefreshing(){

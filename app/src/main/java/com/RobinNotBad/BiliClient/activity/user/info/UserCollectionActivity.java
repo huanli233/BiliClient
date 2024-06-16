@@ -38,6 +38,7 @@ public class UserCollectionActivity extends RefreshListActivity {
                 setRefreshing(false);
                 adapter = new SeasonCardAdapter(this, seasonList);
                 setAdapter(adapter);
+                if (bottom && seasonList.isEmpty()) showEmptyView();
             } catch (Exception e){loadFail(e);}
         });
     }
