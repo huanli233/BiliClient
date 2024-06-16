@@ -40,7 +40,7 @@ android {
             Properties pro = new Properties()
             InputStream input = project.rootProject.file("local.properties").newDataInputStream()
             pro.load(input)
-            storeFile file(pro.getProperty("KEY_PATH"))
+            storeFile file(pro.getProperty("KEY_PATH") != null ? pro.getProperty("KEY_PATH") : "key.jks")
             storePassword pro.getProperty("KEY_PASSWORD")
             keyAlias pro.getProperty("ALIAS_NAME")
             keyPassword pro.getProperty("ALIAS_PASSWORD")
