@@ -237,17 +237,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             @SuppressLint("SetTextI18n")
             @Override
             public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
-                int cgminute = position / 60000;
-                int cgsecond = position % 60000 / 1000;
-                String cgminStr;
-                String cgsecStr;
-                if (cgminute < 10) cgminStr = "0" + cgminute;
-                else cgminStr = String.valueOf(cgminute);
-                if (cgsecond < 10) cgsecStr = "0" + cgsecond;
-                else cgsecStr = String.valueOf(cgsecond);
-
                 runOnUiThread(() -> {
-                    text_progress.setText(cgminStr + ":" + cgsecStr + "/" + progress_all_str);
+                    text_progress.setText(ToolsUtil.toTime(position / 1000) + "/" + progress_all_str);
                     if(!online_number.isEmpty()) online_text.setText("实时" + online_number + "人");
                     else online_text.setText("");
                 });

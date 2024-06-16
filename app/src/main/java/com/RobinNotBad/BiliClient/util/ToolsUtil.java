@@ -64,6 +64,27 @@ public class ToolsUtil {
             return String.valueOf(num);
     }
 
+    public static String toTime(int progress){
+        int cghour = progress / 3600;
+        int cgminute = (progress % 3600) / 60;
+        int cgsecond = progress % 60;
+        String cghourStr;
+        String cgminStr;
+        String cgsecStr;
+
+        if (cghour < 10) cghourStr = "0" + cghour;
+        else cghourStr = String.valueOf(cghour);
+
+        if (cgminute < 10) cgminStr = "0" + cgminute;
+        else cgminStr = String.valueOf(cgminute);
+
+        if (cgsecond < 10) cgsecStr = "0" + cgsecond;
+        else cgsecStr = String.valueOf(cgsecond);
+
+        if(cghour > 0) return cghourStr + ":" + cgminStr + ":" + cgsecStr;
+        else return cgminStr + ":" + cgsecStr;
+    }
+
     public static String htmlToString(String html){
         return html.replace("&lt;","<")
                 .replace("&gt;",">")
