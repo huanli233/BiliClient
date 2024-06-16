@@ -61,6 +61,7 @@ public class AboutActivity extends BaseActivity {
                 add(findViewById(R.id.dadaAvatar));
                 add(findViewById(R.id.moyeAvatar));
                 add(findViewById(R.id.silentAvatar));
+                add(findViewById(R.id.huanliAvatar));
             }};
             List<Integer> developerAvaters = new ArrayList<>() {{
                 add(R.mipmap.avatar_robin);
@@ -68,6 +69,7 @@ public class AboutActivity extends BaseActivity {
                 add(-1);
                 add(R.mipmap.avatar_moye);
                 add(R.mipmap.avatar_silent);
+                add(R.mipmap.avatar_huanli);
             }};
             List<MaterialCardView> developerCardList = new ArrayList<>() {{
                 add(findViewById(R.id.robin_card));
@@ -75,6 +77,7 @@ public class AboutActivity extends BaseActivity {
                 add(findViewById(R.id.dada_card));
                 add(findViewById(R.id.moye_card));
                 add(findViewById(R.id.silent_card));
+                add(findViewById(R.id.huanli_card));
             }};
             List<Long> developerUidList = new ArrayList<>() {{
                 add((long) 646521226);
@@ -82,6 +85,7 @@ public class AboutActivity extends BaseActivity {
                 add((long) 432128342);
                 add((long) 394675616);
                 add((long) 40140732);
+                add((long) 673815151);
             }};
 
             for(int i = 0;i < developerAvaterViews.size();i++){
@@ -120,8 +124,9 @@ public class AboutActivity extends BaseActivity {
                 Intent intent = new Intent(this,SponsorActivity.class);
                 startActivity(intent);
             });
+
+            if(!ToolsUtil.isDebugBuild()) findViewById(R.id.debug_tip).setVisibility(View.GONE);
         });
 
-        if(!ToolsUtil.isDebugBuild()) findViewById(R.id.debug_tip).setVisibility(View.GONE);
     }
 }

@@ -329,7 +329,7 @@
                                 app:layout_constraintStart_toEndOf="@id/robinAvatar"
                                 app:layout_constraintTop_toTopOf="@id/robinAvatar" />
 
-                            <TextView
+                            <com.RobinNotBad.BiliClient.view.MarqueeTextView
                                 android:id="@+id/robinDesc"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -337,7 +337,6 @@
                                 android:layout_marginTop="1dp"
                                 android:layout_marginBottom="2dp"
                                 android:alpha="0.7"
-                                android:ellipsize="end"
                                 android:singleLine="true"
                                 android:text="和他的纳西妲酱"
                                 android:textSize="11sp"
@@ -394,7 +393,7 @@
                                 app:layout_constraintStart_toEndOf="@id/moyeAvatar"
                                 app:layout_constraintTop_toTopOf="@id/moyeAvatar" />
 
-                            <TextView
+                            <com.RobinNotBad.BiliClient.view.MarqueeTextView
                                 android:id="@+id/moyeDesc"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -402,9 +401,8 @@
                                 android:layout_marginTop="1dp"
                                 android:layout_marginBottom="2dp"
                                 android:alpha="0.7"
-                                android:ellipsize="end"
                                 android:singleLine="true"
-                                android:text="尽写没用的"
+                                android:text="你就说能不能用吧"
                                 android:textSize="11sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/moyeAvatar"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -451,7 +449,7 @@
                                 app:layout_constraintStart_toEndOf="@id/silentAvatar"
                                 app:layout_constraintTop_toTopOf="@id/silentAvatar" />
 
-                            <TextView
+                            <com.RobinNotBad.BiliClient.view.MarqueeTextView
                                 android:id="@+id/silentDesc"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -459,7 +457,6 @@
                                 android:layout_marginTop="1dp"
                                 android:layout_marginBottom="2dp"
                                 android:alpha="0.7"
-                                android:ellipsize="end"
                                 android:singleLine="true"
                                 android:text="我是镜流小姐的狗"
                                 android:textSize="11sp"
@@ -508,7 +505,7 @@
                                 app:layout_constraintStart_toEndOf="@id/duduAvatar"
                                 app:layout_constraintTop_toTopOf="@id/duduAvatar" />
 
-                            <TextView
+                            <com.RobinNotBad.BiliClient.view.MarqueeTextView
                                 android:id="@+id/duduDesc"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -516,7 +513,6 @@
                                 android:layout_marginTop="1dp"
                                 android:layout_marginBottom="2dp"
                                 android:alpha="0.7"
-                                android:ellipsize="end"
                                 android:singleLine="true"
                                 android:text="一个摆烂的开发者"
                                 android:textSize="11sp"
@@ -524,6 +520,62 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/duduAvatar"
                                 app:layout_constraintTop_toBottomOf="@id/duduName" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/huanli_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/huanliAvatar"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_marginStart="8dp"
+                                android:adjustViewBounds="true"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintDimensionRatio="1:1"
+                                app:layout_constraintHeight_percent="0.7"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/huanliName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginBottom="1dp"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                android:text="huanli233"
+                                app:layout_constraintBottom_toTopOf="@+id/huanliDesc"
+                                app:layout_constraintStart_toEndOf="@id/huanliAvatar"
+                                app:layout_constraintTop_toTopOf="@id/huanliAvatar" />
+
+                            <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                                android:id="@+id/huanliDesc"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:layout_marginTop="1dp"
+                                android:layout_marginBottom="2dp"
+                                android:alpha="0.7"
+                                android:singleLine="true"
+                                android:text=""
+                                android:textSize="11sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/huanliAvatar"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/huanliAvatar"
+                                app:layout_constraintTop_toBottomOf="@id/huanliName" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -551,14 +603,13 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <TextView
+                            <com.RobinNotBad.BiliClient.view.MarqueeTextView
                                 android:id="@+id/dadaName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="6dp"
                                 android:layout_marginTop="2dp"
                                 android:layout_marginBottom="1dp"
-                                android:ellipsize="end"
                                 android:singleLine="true"
                                 android:text="达达"
                                 app:layout_constraintBottom_toTopOf="@+id/dadaDesc"
