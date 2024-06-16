@@ -779,15 +779,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
 
         progressBar.setMax(videoall);
-        int minutes = videoall / 60000;
-        int seconds = videoall % 60000 / 1000;
-        String totalMinSTR;
-        if (minutes < 10) totalMinSTR = "0" + minutes;
-        else totalMinSTR = String.valueOf(minutes);
-        String totalSecSTR;
-        if (seconds < 10) totalSecSTR = "0" + seconds;
-        else totalSecSTR = String.valueOf(seconds);
-        progress_all_str = totalMinSTR + ":" + totalSecSTR;
+        progress_all_str = ToolsUtil.toTime(videoall / 1000);
 
         if(SharedPreferencesUtil.getBoolean("player_from_last",true)){
             if(lastProgress > 5) { //阈值
