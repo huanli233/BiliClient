@@ -45,7 +45,7 @@
     <string name="player_aliang_package">com.aliangmaker.media</string>
     <string name="player_mtv_package">com.xinxiangshicheng.wearbiliplayer.cn</string>
 
-    <string name="update_tip">本次更新感谢huanli233的贡献\n当前版本为测试版</string>
+    <string name="update_tip">欢迎来到历史性的2.6.0版本，这个版本更新了很多功能，也修复了很多问题，并且带来了新的联合开发者——huanli233。现在，快去体验2.6.0吧</string>
     <string name="desc_back_disable">可解决某些4.4手表因滑动返回而无法左右翻页的问题，其他设备上则为按下返回键也不退出页面，你可以使用菜单最下方的退出按钮结束本软件。正常用户无需打开。</string>
     <string name="desc_fav_single">打开此选项，添加收藏后即退出收藏页面，取消收藏不自动退出。</string>
     <string name="desc_fav_notice">打开此选项，退出收藏页面会提示收藏成功。\n但其实在你框选了收藏夹的时候就已经收藏了，这个选项只是为了看上去放心（</string>
