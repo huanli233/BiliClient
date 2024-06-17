@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.util;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.Inflater;
 
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -64,6 +66,7 @@ public class NetWorkUtil
 
                         return response;
                     })
+                    .addInterceptor(new CookieSaveInterceptor())
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(15, TimeUnit.SECONDS).build());
         }
@@ -71,15 +74,17 @@ public class NetWorkUtil
     }
 
     public static JSONObject getJson(String url) throws IOException, JSONException{
-        ResponseBody body = get(url).body();
-        if(body!=null) return new JSONObject(body.string());
-        else throw new JSONException("在访问" + url + "时返回数据为空");
+        try (ResponseBody body = get(url).body()) {
+            if (body != null) return new JSONObject(body.string());
+            else throw new JSONException("在访问" + url + "时返回数据为空");
+        }
     }
 
     public static JSONObject getJson(String url, ArrayList<String> headers) throws IOException, JSONException{
-        ResponseBody body = get(url,headers).body();
-        if(body!=null) return new JSONObject(body.string());
-        else throw new JSONException("在访问" + url + "时返回数据为空");
+        try (ResponseBody body = get(url, headers).body()) {
+            if (body != null) return new JSONObject(body.string());
+            else throw new JSONException("在访问" + url + "时返回数据为空");
+        }
     }
 
     public static Response get(String url) throws IOException
@@ -101,9 +106,7 @@ public class NetWorkUtil
             requestBuilder = requestBuilder.addHeader(headers.get(i), headers.get(i+1));
         if (redirectHandler != null) requestBuilder.tag(RedirectHandler.class, redirectHandler);
         Request request = requestBuilder.build();
-        Response response =  client.newCall(request).execute();
-        saveCookiesFromResponse(response);
-        return response;
+        return client.newCall(request).execute();
     }
 
     public static Response post(String url, String data, List<String> headers, String contentType) throws IOException
@@ -122,9 +125,7 @@ public class NetWorkUtil
             requestBuilder = requestBuilder.addHeader(key, val);
         }
         Request request = requestBuilder.build();
-        Response response =  client.newCall(request).execute();
-        saveCookiesFromResponse(response);
-        return response;
+        return client.newCall(request).execute();
     }
 
     public static Response post(String url, String data, List<String> headers) throws IOException {
@@ -336,6 +337,15 @@ public class NetWorkUtil
 
     public interface RedirectHandler {
         void handleRedirect(String location);
+    }
+
+    private static class CookieSaveInterceptor implements Interceptor {
+         @Nullable
+         public Response intercept(@NonNull Chain chain) throws IOException {
+            Response response = chain.proceed(chain.request());
+            saveCookiesFromResponse(response);
+            return response;
+        }
     }
 
 }
