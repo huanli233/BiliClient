@@ -270,7 +270,9 @@ public class VideoInfoApi {
             JSONArray data = result.getJSONArray("data");
             if(data.length() > 0){
                 JSONObject video = data.getJSONObject(0);
-                return new Pair<>(video.getJSONObject("page").getLong("cid"), video.getInt("progress"));
+                if(video.has("page"))
+                    return new Pair<>(video.getJSONObject("page").getLong("cid"), video.getInt("progress"));
+                else return new Pair<>(0L,0);
             }
         }
         return new Pair<>(0L,0);
