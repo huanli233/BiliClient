@@ -97,8 +97,7 @@ public class VideoInfoFragment extends Fragment {
             int code = o.getResultCode();
             if (code == RESULT_ADDED) {
                 fav.setBackgroundResource(R.drawable.icon_favourite_1);
-            }
-            if (code == RESULT_DELETED) {
+            } else if (code == RESULT_DELETED) {
                 fav.setBackgroundResource(R.drawable.icon_favourite_0);
             }
         }
@@ -213,7 +212,7 @@ public class VideoInfoFragment extends Fragment {
         CenterThreadPool.run(() -> {
             try {
                 progressPair = VideoInfoApi.getWatchProgress(videoInfo.aid);
-                if(!videoInfo.cids.contains(progressPair.first))
+                if(progressPair.first == null || !videoInfo.cids.contains(progressPair.first))
                     progressPair = new Pair<>(videoInfo.cids.get(0), 0);
 
                 HistoryApi.reportHistory(videoInfo.aid, progressPair.first, videoInfo.staff.get(0).mid, progressPair.second);

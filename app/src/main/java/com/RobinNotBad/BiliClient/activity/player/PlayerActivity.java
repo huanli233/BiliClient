@@ -172,7 +172,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if(SharedPreferencesUtil.getBoolean("player_ui_round",false)){
             int padding = ToolsUtil.dp2px(6,this);
 
-            top_control.setPaddingRelative(0,padding,0,0);
+            top_control.setPaddingRelative(padding,padding,padding,0);
 
             bottom_control.setPaddingRelative(padding,0,0, padding);
 
@@ -237,17 +237,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             @SuppressLint("SetTextI18n")
             @Override
             public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
-                int cgminute = position / 60000;
-                int cgsecond = position % 60000 / 1000;
-                String cgminStr;
-                String cgsecStr;
-                if (cgminute < 10) cgminStr = "0" + cgminute;
-                else cgminStr = String.valueOf(cgminute);
-                if (cgsecond < 10) cgsecStr = "0" + cgsecond;
-                else cgsecStr = String.valueOf(cgsecond);
-
                 runOnUiThread(() -> {
-                    text_progress.setText(cgminStr + ":" + cgsecStr + "/" + progress_all_str);
+                    text_progress.setText(ToolsUtil.toTime(position / 1000) + "/" + progress_all_str);
                     if(!online_number.isEmpty()) online_text.setText("实时" + online_number + "人");
                     else online_text.setText("");
                 });
@@ -788,15 +779,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
 
         progressBar.setMax(videoall);
-        int minutes = videoall / 60000;
-        int seconds = videoall % 60000 / 1000;
-        String totalMinSTR;
-        if (minutes < 10) totalMinSTR = "0" + minutes;
-        else totalMinSTR = String.valueOf(minutes);
-        String totalSecSTR;
-        if (seconds < 10) totalSecSTR = "0" + seconds;
-        else totalSecSTR = String.valueOf(seconds);
-        progress_all_str = totalMinSTR + ":" + totalSecSTR;
+        progress_all_str = ToolsUtil.toTime(videoall / 1000);
 
         if(SharedPreferencesUtil.getBoolean("player_from_last",true)){
             if(lastProgress > 5) { //阈值

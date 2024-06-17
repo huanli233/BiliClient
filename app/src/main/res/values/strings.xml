@@ -45,7 +45,7 @@
     <string name="player_aliang_package">com.aliangmaker.media</string>
     <string name="player_mtv_package">com.xinxiangshicheng.wearbiliplayer.cn</string>
 
-    <string name="update_tip">本次更新感谢huanli233的贡献\n当前版本为测试版</string>
+    <string name="update_tip">欢迎来到历史性的2.6.0版本，这个版本更新了很多功能，也修复了很多问题，并且带来了新的联合开发者——huanli233。现在，快去体验2.6.0吧</string>
     <string name="desc_back_disable">可解决某些4.4手表因滑动返回而无法左右翻页的问题，其他设备上则为按下返回键也不退出页面，你可以使用菜单最下方的退出按钮结束本软件。正常用户无需打开。</string>
     <string name="desc_fav_single">打开此选项，添加收藏后即退出收藏页面，取消收藏不自动退出。</string>
     <string name="desc_fav_notice">打开此选项，退出收藏页面会提示收藏成功。\n但其实在你框选了收藏夹的时候就已经收藏了，这个选项只是为了看上去放心（</string>
@@ -75,6 +75,7 @@
         <item>新增了专栏的三连功能</item>
         <item>新增了菜单排序功能</item>
         <item>新增了合集功能</item>
+        <item>新增了动态筛选功能</item>
         <item>新增了从浏览器跳转到终端的功能</item>
         <item>新增了视频实时观看人数</item>
         <item>（仅测试版）新增了检查新测试版的功能</item>
@@ -92,7 +93,6 @@
         <item>解决了403（点赞投币）风控问题</item>
         <item>修改了特殊登录的进入方式</item>
         <item>修复了搜索报错的问题</item>
-        <item>修复了部分用户系统通知报错防问题</item>
         <item>修复了缩放图片时可能的崩溃问题</item>
         <item>修复了点赞消息数量显示错误的问题</item>
         <item>修复了安卓4无法使用异常捕捉的问题</item>
@@ -103,6 +103,7 @@
         <item>修复了私信报错问题</item>
         <item>修复了消息页面的错误</item>
         <item>修复了滑动过快时崩溃的问题</item>
+        <item>优化了动态</item>
         <item>优化了网络请求相关代码</item>
         <item>优化了进入哔哩终端时的逻辑</item>
         <item>优化了未登录状态下的操作</item>

@@ -43,6 +43,7 @@ public class MsgUtil {
             else if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0){
                 toastLong("解析错误，可登陆后再次尝试",context);
             }
+            else if(e.toString().replace("org.json.JSONException:","").contains("-352")) toastLong("账号疑似被风控",context);
             else toastLong("数据解析错误：\n" + e.toString().replace("org.json.JSONException:",""),context);
         }
         else toastLong("错误：" + e , context);

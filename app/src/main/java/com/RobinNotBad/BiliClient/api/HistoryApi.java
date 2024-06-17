@@ -31,8 +31,10 @@ public class HistoryApi {
                 String title = videoCard.getString("title");
                 String cover = videoCard.getString("pic");
                 String upName = videoCard.getJSONObject("owner").getString("name");
-                long view = videoCard.getJSONObject("stat").getLong("view");
-                String viewStr = ToolsUtil.toWan(view) + "观看";
+                int progress = videoCard.getInt("progress");
+                String viewStr;
+                if(progress == 0) viewStr = "还没看过";
+                else viewStr = "看到" + ToolsUtil.toTime(videoCard.getInt("progress"));
                 videoList.add(new VideoCard(title,upName,viewStr,cover,aid,bvid));
             }
             return 0;

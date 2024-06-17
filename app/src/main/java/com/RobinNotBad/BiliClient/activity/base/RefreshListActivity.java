@@ -1,6 +1,8 @@
 package com.RobinNotBad.BiliClient.activity.base;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +23,7 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 public class RefreshListActivity extends BaseActivity{
     public SwipeRefreshLayout swipeRefreshLayout;
     public RecyclerView recyclerView;
+    public TextView emptyView;
     public OnLoadMoreListener listener;
     public boolean bottom = false;
     public int page = 1;
@@ -31,6 +34,7 @@ public class RefreshListActivity extends BaseActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_refresh);
+        emptyView = findViewById(R.id.emptyTip);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setEnabled(false);
         swipeRefreshLayout.setRefreshing(true);
@@ -68,6 +72,15 @@ public class RefreshListActivity extends BaseActivity{
     public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener){
         swipeRefreshLayout.setOnRefreshListener(listener);
         swipeRefreshLayout.setEnabled(true);
+    }
+
+    public void showEmptyView() {
+        if (emptyView != null) {
+            runOnUiThread(() -> {
+                recyclerView.setVisibility(View.GONE);
+                emptyView.setVisibility(View.VISIBLE);
+            });
+        }
     }
 
     public void setRefreshing(boolean bool){runOnUiThread(()->swipeRefreshLayout.setRefreshing(bool));}

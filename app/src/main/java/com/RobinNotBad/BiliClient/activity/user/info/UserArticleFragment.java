@@ -58,6 +58,7 @@ public class UserArticleFragment extends RefreshListFragment {
                     adapter = new ArticleCardAdapter(requireContext(), articleList);
                     setAdapter(adapter);
                     setRefreshing(false);
+                    if (bottom && articleList.isEmpty()) showEmptyView();
                 }
             } catch (Exception e){loadFail(e);}
         });

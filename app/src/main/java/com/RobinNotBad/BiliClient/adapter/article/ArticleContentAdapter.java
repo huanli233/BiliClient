@@ -24,6 +24,7 @@ import com.RobinNotBad.BiliClient.model.ArticleLine;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
@@ -154,6 +155,10 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
 
                 like.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     try {
+                        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0){
+                            context.runOnUiThread(() -> MsgUtil.toast("还没有登录喵~",context));
+                            return;
+                        }
                         int result = ArticleApi.like(articleInfo.id, !articleInfo.stats.liked);
                         if (result == 0) {
                             articleInfo.stats.liked = !articleInfo.stats.liked;
@@ -175,6 +180,10 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 coin.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     if (articleInfo.stats.coined < articleInfo.stats.allow_coin) {
                         try {
+                            if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0){
+                                context.runOnUiThread(() -> MsgUtil.toast("还没有登录喵~",context));
+                                return;
+                            }
                             int result = ArticleApi.addCoin(articleInfo.id, articleInfo.upInfo.mid, 1);
                             if (result == 0) {
                                 articleInfo.stats.coined++;
