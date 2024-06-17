@@ -13,6 +13,7 @@ import com.RobinNotBad.BiliClient.model.Emote;
 import com.RobinNotBad.BiliClient.model.Stats;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.DmImgParamUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.StringUtil;
@@ -278,10 +279,10 @@ public class DynamicApi {
 
     public static long getDynamicList(List<Dynamic> dynamicList, long offset, long mid, String type) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/"
-                + (mid==0 ? "all?type=" + type : "space?host_mid=" + mid)
+                + (mid==0 ? "all?type=" + type : "space?web_location=333.999&host_mid=" + mid)
                 + (offset==0 ? "" : "&offset=" + offset);
 
-        JSONObject all = NetWorkUtil.getJson(url);
+        JSONObject all = NetWorkUtil.getJson(DmImgParamUtil.getDmImgParamsUrl(url));
         if(all.getInt("code")!=0) throw new JSONException(all.getString("message"));
 
         JSONObject data = all.getJSONObject("data");

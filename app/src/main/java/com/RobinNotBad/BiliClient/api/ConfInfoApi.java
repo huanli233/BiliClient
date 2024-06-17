@@ -20,7 +20,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
+
+import okhttp3.HttpUrl;
 
 /**
  * 被 luern0313 创建于 2019/8/25.
@@ -80,13 +83,15 @@ public class ConfInfoApi
 
         String w_rid = md5(calc_str);
 
-        return url_query + "&w_rid=" + w_rid + "&wts=" + wts;
+        return Objects.requireNonNull(HttpUrl.parse(url_query)).newBuilder().addQueryParameter("w_rid", w_rid).addQueryParameter("wts", wts).build().toString();
     }
 
     public static String sortUrlParams(String url) {
+        String encodedParam = Objects.requireNonNull(HttpUrl.parse(url)).encodedQuery();
+        if (encodedParam == null) encodedParam = "";
         // 解析URL参数
         Map<String, String> paramMap = new HashMap<>();
-        String[] params = url.split("&");
+        String[] params = encodedParam.split("&");
         for (String param : params) {
             String[] keyValue = param.split("=");
             if (keyValue.length == 2) {

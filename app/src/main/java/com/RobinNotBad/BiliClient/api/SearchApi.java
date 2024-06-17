@@ -31,10 +31,10 @@ public class SearchApi {
         }
 
         String url = "https://api.bilibili.com/x/web-interface/wbi/search/all/v2?";
-        String args = "page=" + page +
+        url += "page=" + page +
         "&keyword=" + URLEncoder.encode(search_keyword, "UTF-8") + "&seid=" + seid;
 
-        JSONObject all = NetWorkUtil.getJson(url + ConfInfoApi.signWBI(args));  //得到一整个json
+        JSONObject all = NetWorkUtil.getJson(ConfInfoApi.signWBI(url));  //得到一整个json
 
         JSONObject data = all.getJSONObject("data");  //搜索列表中的data项又是一个json，把它提出来
 
@@ -51,10 +51,10 @@ public class SearchApi {
         }
 
         String url = "https://api.bilibili.com/x/web-interface/wbi/search/type?";
-        String args = "page=" + page +
+        url += "page=" + page +
         "&keyword=" + URLEncoder.encode(search_keyword, "UTF-8") + "&search_type=" + type + "&seid=" + seid;
 
-        JSONObject all = NetWorkUtil.getJson(url + ConfInfoApi.signWBI(args));  //得到一整个json
+        JSONObject all = NetWorkUtil.getJson(ConfInfoApi.signWBI(url));  //得到一整个json
 
         JSONObject data = all.getJSONObject("data");  //搜索列表中的data项又是一个json，把它提出来
 
