@@ -13,6 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -75,7 +76,7 @@ public class EmoteActivity extends BaseActivity {
                             tab.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED);
                         }
                     });
-                    tabLayout.setTabTextColors(Color.WHITE, Color.WHITE);
+                    tabLayout.setTabIconTint(null);
                     int count = tabLayout.getTabCount();
                     for (int i = 0; i < count; i++) {
                         int finalI = i;
@@ -148,9 +149,44 @@ public class EmoteActivity extends BaseActivity {
                 requireActivity().setResult(RESULT_OK, new Intent().putExtra("text", emote.name));
                 requireActivity().finish();
             });
+            recyclerView.addItemDecoration(new GridSpacingItemDecoration(emotePackage.type == 4 ? 2 : 6, getResources().getDimensionPixelSize(R.dimen.grid_spacing), true));
             recyclerView.setAdapter(adapter);
         }
 
+    }
+
+    static class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+        private final int spanCount;
+        private final int spacing;
+        private final boolean includeEdge;
+
+        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+            this.spanCount = spanCount;
+            this.spacing = spacing;
+            this.includeEdge = includeEdge;
+        }
+
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+            int position = parent.getChildAdapterPosition(view); // item position
+            int column = position % spanCount; // item column
+
+            if (includeEdge) {
+                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
+                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
+
+                if (position < spanCount) { // top edge
+                    outRect.top = spacing;
+                }
+                outRect.bottom = spacing; // item bottom
+            } else {
+                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
+                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                if (position >= spanCount) {
+                    outRect.top = spacing; // item top
+                }
+            }
+        }
     }
 
     static class EmoteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

@@ -25,9 +25,6 @@
         android:usesCleartextTraffic="true"
         tools:ignore="LockedOrientationActivity"
         tools:targetApi="m">
-        <activity
-            android:name=".activity.EmoteActivity"
-            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -44,6 +41,11 @@
             android:exported="false"
             android:label="投稿合集列表"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.EmoteActivity"
+            android:exported="false"
+            android:label="表情包选择"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.collection.CollectionInfoActivity"
             android:exported="false"
