@@ -89,7 +89,7 @@ public class NoticeHolder extends RecyclerView.ViewHolder{
             VideoCard childVideoCard = message.videoCard;
             VideoCardHolder holder = new VideoCardHolder(View.inflate(context,R.layout.cell_dynamic_video,extraCard));
             holder.showVideoCard(childVideoCard,context);
-            holder.itemView.findViewById(R.id.cardView).setOnClickListener(view -> {
+            holder.itemView.findViewById(R.id.videoCardView).setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(context, VideoInfoActivity.class);
                 intent.putExtra("bvid", childVideoCard.bvid);
@@ -110,14 +110,17 @@ public class NoticeHolder extends RecyclerView.ViewHolder{
                                 intent.setClass(context, VideoInfoActivity.class);
                                 intent.putExtra("bvid", childReply.ofBvid);
                                 intent.putExtra("aid", 0);
+                                intent.putExtra("seekReply", message.rootId == 0 ? message.sourceId : message.rootId);
                                 break;
                             case ReplyApi.REPLY_TYPE_DYNAMIC:
                                 intent.setClass(context, DynamicInfoActivity.class);
                                 intent.putExtra("id", message.subjectId);
+                                intent.putExtra("seekReply", message.rootId == 0 ? message.sourceId : message.rootId);
                                 break;
                             case ReplyApi.REPLY_TYPE_ARTICLE:
                                 intent.setClass(context, ArticleInfoActivity.class);
                                 intent.putExtra("cvid", message.subjectId);
+                                intent.putExtra("seekReply", message.rootId == 0 ? message.sourceId : message.rootId);
                                 break;
                         }
                         break;
@@ -143,14 +146,17 @@ public class NoticeHolder extends RecyclerView.ViewHolder{
                                         intent.setClass(context, VideoInfoActivity.class);
                                         intent.putExtra("bvid", childReply.ofBvid);
                                         intent.putExtra("aid", 0);
+                                        intent.putExtra("seekReply", message.rootId == 0 ? message.sourceId : message.rootId);
                                         break;
                                     case ReplyApi.REPLY_TYPE_DYNAMIC:
                                         intent.setClass(context, DynamicInfoActivity.class);
                                         intent.putExtra("id", message.subjectId);
+                                        intent.putExtra("seekReply", message.rootId == 0 ? message.sourceId : message.rootId);
                                         break;
                                     case ReplyApi.REPLY_TYPE_ARTICLE:
                                         intent.setClass(context, ArticleInfoActivity.class);
                                         intent.putExtra("cvid", message.subjectId);
+                                        intent.putExtra("seekReply", message.rootId == 0 ? message.sourceId : message.rootId);
                                         break;
                                 }
                                 break;

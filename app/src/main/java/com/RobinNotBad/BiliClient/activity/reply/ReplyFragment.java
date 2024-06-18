@@ -30,6 +30,7 @@ public class ReplyFragment extends RefreshListFragment {
     protected ReplyAdapter replyAdapter;
     public int replyType = ReplyApi.REPLY_TYPE_VIDEO;
     private Object source;
+    private long seek;
 
     public static ReplyFragment newInstance(long aid, int type) {
         ReplyFragment fragment = new ReplyFragment();
@@ -50,6 +51,27 @@ public class ReplyFragment extends RefreshListFragment {
         return fragment;
     }
 
+    public static ReplyFragment newInstance(long aid, int type, long seek_rpid) {
+        ReplyFragment fragment = new ReplyFragment();
+        Bundle args = new Bundle();
+        args.putLong("aid", aid);
+        args.putInt("type", type);
+        args.putLong("seek", seek_rpid);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static ReplyFragment newInstance(long aid, int type, boolean dontload, long seek_rpid) {
+        ReplyFragment fragment = new ReplyFragment();
+        Bundle args = new Bundle();
+        args.putLong("aid", aid);
+        args.putInt("type", type);
+        args.putBoolean("dontload",dontload);
+        args.putLong("seek", seek_rpid);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +80,7 @@ public class ReplyFragment extends RefreshListFragment {
             type = getArguments().getInt("type");
             replyType = type;
             dontload = getArguments().getBoolean("dontload",false);
+            seek = getArguments().getLong("seek", -1);
         }
     }
 
@@ -74,7 +97,7 @@ public class ReplyFragment extends RefreshListFragment {
         if(!dontload) {
             CenterThreadPool.run(()->{
                 try {
-                    int result = ReplyApi.getReplies(aid,0,page,type,sort,replyList);
+                    int result = seek == -1 ? ReplyApi.getReplies(aid,0,page,type,sort,replyList) : ReplyApi.getRepliesLazy(aid,seek,page,type,3,replyList);
                     setRefreshing(false);
                     if(result != -1 && isAdded()) {
                         replyAdapter = getReplyAdapter();

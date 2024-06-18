@@ -66,6 +66,32 @@ public class ReplyApi {
         } else return -1;
     }  //-1错误,0正常，1到底了
 
+    public static int getRepliesLazy(long oid, long rpid, int pn, int type, int sort, List<Reply> replyArrayList) throws JSONException, IOException {
+
+        String url = "https://api.bilibili.com/x/v2/reply/wbi/main" + "?next=" + --pn
+                + "&type=" + type + "&oid=" + oid + "&plat=1&web_location=1315875&mode=" + sort + (rpid == 0 ? "" : ("&seek_rpid=" + rpid));
+
+        //Log.e("debug-评论区链接", url);
+
+        JSONObject all = NetWorkUtil.getJson(ConfInfoApi.signWBI(url));
+
+        //Log.e("debug-评论区",all.toString());
+
+        int size = replyArrayList.size();
+        if (all.getInt("code") == 0 && !all.isNull("data")) {
+            JSONObject data = all.getJSONObject("data");
+            JSONObject cursor = data.getJSONObject("cursor");
+            if (!data.isNull("replies") && data.getJSONArray("replies").length() > 0) {
+                if (rpid == 0 && data.has("top_replies") && cursor.getBoolean("is_begin"))
+                    analyzeReplyArray(true, data.getJSONArray("top_replies"), replyArrayList);
+                JSONArray replies = data.getJSONArray("replies");
+                analyzeReplyArray(true, replies, replyArrayList);
+                if(replyArrayList.size() == size)return 1;
+                else return 0;
+            } else return 1;
+        } else return -1;
+    }  //-1错误,0正常，1到底了
+
     public static void analyzeReplyArray(boolean isRoot, JSONArray replies, List<Reply> replyArrayList) throws JSONException {
         long timeCurr = System.currentTimeMillis();
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");

@@ -19,6 +19,18 @@ public class MessageCard {
     public int businessId;
     public String itemType;
     public int getType;
-    
-    public MessageCard(){}
+    public long sourceId;
+    public long rootId;
+
+    public static class Cursor {
+        public boolean is_end;
+        public long id;
+        public long time;
+
+        public Cursor(boolean is_end, long id, long time) {
+            this.is_end = is_end;
+            this.id = id;
+            this.time = time;
+        }
+    }
 }

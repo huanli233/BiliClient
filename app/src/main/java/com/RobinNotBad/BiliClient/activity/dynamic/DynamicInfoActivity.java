@@ -36,12 +36,14 @@ import java.util.List;
 public class DynamicInfoActivity extends BaseActivity {
 
     ReplyFragment rFragment;
+    private long seek_reply;
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "InflateParams"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+        this.seek_reply = getIntent().getLongExtra("seekReply", -1);
 
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_simple_viewpager, null, (layoutView, resId, parent) -> {
             setContentView(layoutView);
@@ -61,7 +63,7 @@ public class DynamicInfoActivity extends BaseActivity {
                     List<Fragment> fragmentList = new ArrayList<>();
                     DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance(dynamic);
                     fragmentList.add(diFragment);
-                    rFragment = ReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type);
+                    rFragment = ReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type, seek_reply);
                     rFragment.replyType = ReplyApi.REPLY_TYPE_DYNAMIC;
                     rFragment.setSource(dynamic);
                     fragmentList.add(rFragment);
@@ -71,6 +73,7 @@ public class DynamicInfoActivity extends BaseActivity {
                     runOnUiThread(()->{
                         ViewPager viewPager = findViewById(R.id.viewPager);
                         viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
+                        if (seek_reply != -1) viewPager.setCurrentItem(1);
 
                         if(SharedPreferencesUtil.getBoolean("first_dynamicinfo",true)){
                             MsgUtil.toast("下载完成",this);

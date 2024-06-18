@@ -13,12 +13,13 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.model.MessageCard;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NoticeAdapter extends RecyclerView.Adapter<NoticeHolder> {
     Context context;
-    ArrayList<MessageCard> messageList;
+    List<MessageCard> messageList;
 
-    public NoticeAdapter(Context context, ArrayList<MessageCard> messageList) {
+    public NoticeAdapter(Context context, List<MessageCard> messageList) {
         this.context = context;
         this.messageList = messageList;
     }
