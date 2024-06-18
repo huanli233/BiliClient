@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Guideline;
 import androidx.fragment.app.Fragment;
 
@@ -38,7 +40,6 @@ import okhttp3.Response;
 public class QRLoginFragment extends Fragment {
     private ImageView qrImageView;
     private TextView scanStat;
-    private int clickCount = 0;
     Bitmap QRImage;
     Timer timer;
     boolean need_refresh = false;
@@ -51,6 +52,11 @@ public class QRLoginFragment extends Fragment {
         qrImageView = view.findViewById(R.id.qrImage);
         scanStat = view.findViewById(R.id.scanStat);
 
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         MaterialCardView jump = view.findViewById(R.id.jump);
         jump.setOnClickListener(v -> {
             if (!SharedPreferencesUtil.getBoolean("setup", false)) {
@@ -62,7 +68,7 @@ public class QRLoginFragment extends Fragment {
             if (timer != null) timer.cancel();
             if (isAdded())  requireActivity().finish();
         });
-        
+
         MaterialCardView special = view.findViewById(R.id.special);
         special.setOnClickListener(v -> {
             Intent intent = new Intent();
@@ -103,11 +109,8 @@ public class QRLoginFragment extends Fragment {
             }
         });
 
-        refreshQrCode();
-
-        return view;
+        if (isAdded()) refreshQrCode();
     }
-
 
     public void refreshQrCode() {
         CenterThreadPool.run(() ->{

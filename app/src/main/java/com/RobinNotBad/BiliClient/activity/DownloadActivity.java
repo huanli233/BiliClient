@@ -227,8 +227,8 @@ public class DownloadActivity extends BaseActivity {
     protected void onDestroy() {
         timer.cancel();
         if(!finish) {
-            if (type != 0) FileUtil.deleteFolder(downPath);
-            else downFile.delete();
+            if (type != 0 && downPath != null) FileUtil.deleteFolder(downPath);
+            else if (downFile != null) downFile.delete();
         }
         super.onDestroy();
     }

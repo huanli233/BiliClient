@@ -57,10 +57,12 @@ public class AddFavoriteActivity extends RefreshListActivity {
 
     @Override
     public void finish() {
-        if (adapter.added) {
-            setResult(RESULT_ADDED);
-        } else if (adapter.isAllDeleted()) {
-            setResult(RESULT_DELETED);
+        if (adapter != null) {
+            if (adapter.added) {
+                setResult(RESULT_ADDED);
+            } else if (adapter.isAllDeleted()) {
+                setResult(RESULT_DELETED);
+            }
         }
         super.finish();
     }

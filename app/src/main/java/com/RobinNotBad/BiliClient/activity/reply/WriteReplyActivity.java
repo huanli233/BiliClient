@@ -89,9 +89,10 @@ public class WriteReplyActivity extends BaseActivity {
                                 } else {
                                     String toast_msg = "评论发送失败：\n" + (msgMap.containsKey(resultCode) ? msgMap.get(resultCode) : resultCode);
                                     runOnUiThread(() -> MsgUtil.toast(toast_msg,this));
+                                    sent = false;
                                 }
                             } catch (Exception e) {
-                                MsgUtil.err(e,this);
+                                runOnUiThread(() -> MsgUtil.err(e,this));
                             }
                         }
                         else runOnUiThread(()-> MsgUtil.toast("还没输入内容呢~",this));

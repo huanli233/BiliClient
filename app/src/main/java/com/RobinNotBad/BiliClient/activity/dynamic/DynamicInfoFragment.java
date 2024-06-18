@@ -75,7 +75,7 @@ public class DynamicInfoFragment extends Fragment {
                     childCard.setVisibility(View.VISIBLE);
                 }
 
-                onFinishLoad.run();
+                if (onFinishLoad != null) onFinishLoad.run();
             });
         });
 
