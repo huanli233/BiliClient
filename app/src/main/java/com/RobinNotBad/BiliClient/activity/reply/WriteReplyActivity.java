@@ -7,7 +7,11 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.EditText;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.EmoteActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
@@ -36,6 +40,15 @@ public class WriteReplyActivity extends BaseActivity {
         put(12051, "重复评论，请勿刷屏！");
     }};
 
+    EditText editText;
+    private ActivityResultLauncher<Intent> emoteLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
+        int code = result.getResultCode();
+        Intent data = result.getData();
+        if (code == RESULT_OK && data != null && data.hasExtra("text")) {
+            editText.append(data.getStringExtra("text"));
+        }
+    });
+
     boolean sent = false;
 
     @SuppressLint("SetTextI18n")
@@ -56,7 +69,7 @@ public class WriteReplyActivity extends BaseActivity {
         int replyType = intent.getIntExtra("replyType", ReplyApi.REPLY_TYPE_VIDEO);
         String parentSender = intent.getStringExtra("parentSender");
 
-        EditText editText = findViewById(R.id.editText);
+        editText = findViewById(R.id.editText);
         MaterialCardView send = findViewById(R.id.send);
 
         Log.e("debug-发送评论",String.valueOf(rpid));
@@ -101,5 +114,7 @@ public class WriteReplyActivity extends BaseActivity {
                 else MsgUtil.toast("正在发送中",this);
             } else MsgUtil.showDialog(this,"无法发送","上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作",-1);
         });
+
+        findViewById(R.id.emote).setOnClickListener(view -> emoteLauncher.launch(new Intent(this, EmoteActivity.class)));
     }
 }

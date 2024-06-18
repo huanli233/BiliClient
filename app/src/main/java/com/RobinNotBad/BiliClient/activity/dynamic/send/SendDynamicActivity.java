@@ -15,9 +15,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.EmoteActivity;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
@@ -57,6 +60,16 @@ import java.util.concurrent.ExecutionException;
  */
 public class SendDynamicActivity extends BaseActivity {
 
+    EditText editText;
+
+    private ActivityResultLauncher<Intent> emoteLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
+        int code = result.getResultCode();
+        Intent data = result.getData();
+        if (code == RESULT_OK && data != null && data.hasExtra("text")) {
+            editText.append(data.getStringExtra("text"));
+        }
+    });
+
     @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +86,7 @@ public class SendDynamicActivity extends BaseActivity {
                 finish();
             }
 
-            EditText editText = findViewById(R.id.editText);
+            editText = findViewById(R.id.editText);
             MaterialCardView send = findViewById(R.id.send);
 
             ConstraintLayout extraCard = findViewById(R.id.extraCard);
@@ -100,6 +113,8 @@ public class SendDynamicActivity extends BaseActivity {
                     finish();
                 } else MsgUtil.showDialog(this,"无法发送","上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作",-1);
             });
+
+            findViewById(R.id.emote).setOnClickListener(view -> emoteLauncher.launch(new Intent(this, EmoteActivity.class)));
         });
     }
 

@@ -17,7 +17,7 @@ public class EmoteApi {
     public static final String BUSINESS_DYNAMIC = "dynamic";
 
     // TODO 表情面板
-    public List<EmotePackage> getEmotes(String business) throws JSONException, IOException {
+    public static List<EmotePackage> getEmotes(String business) throws JSONException, IOException {
         List<EmotePackage> result = new ArrayList<>();
         String url = "https://api.bilibili.com/x/emote/user/panel/web?business=" + business;
         JSONObject emotePackages = NetWorkUtil.getJson(url, NetWorkUtil.webHeaders);

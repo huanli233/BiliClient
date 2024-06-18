@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-sdk tools:overrideLibrary="com.geetest.sdk" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <uses-sdk tools:overrideLibrary="com.geetest.sdk" />
-    <!-- Geetest -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- Geetest -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -20,13 +18,16 @@
         android:name=".BiliTerminal"
         android:allowBackup="true"
         android:icon="@mipmap/icon"
-        android:supportsRtl="true"
         android:label="@string/app_name"
+        android:largeHeap="true"
+        android:supportsRtl="true"
         android:theme="@style/Theme.BiliClient"
         android:usesCleartextTraffic="true"
         tools:ignore="LockedOrientationActivity"
-        android:largeHeap="true"
         tools:targetApi="m">
+        <activity
+            android:name=".activity.EmoteActivity"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -65,18 +66,18 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.TutorialActivity"
-            android:label="教程"
             android:exported="false"
-            android:theme="@style/Theme.NoSwipe.AppCompat"
-            android:screenOrientation="portrait" />
+            android:label="教程"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.NoSwipe.AppCompat" />
         <activity
             android:name=".activity.GetIntentActivity"
             android:exported="true"
             android:label="终端传入"
             android:screenOrientation="portrait">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="http" />
@@ -85,7 +86,6 @@
 
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".activity.settings.AnnouncementsActivity"
@@ -99,10 +99,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.player.PlayerActivity"
-            android:exported="true"
-            android:theme="@style/Theme.NoSwipe"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="内置播放器" />
+            android:exported="true"
+            android:label="内置播放器"
+            android:theme="@style/Theme.NoSwipe" />
         <activity
             android:name=".activity.article.ArticleInfoActivity"
             android:exported="false"
@@ -196,7 +196,7 @@
             android:name=".activity.ShowTextActivity"
             android:exported="true"
             android:label="文本显示"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CopyTextActivity"
             android:exported="false"
@@ -357,12 +357,13 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SplashActivity"
-            android:theme="@style/Theme.BiliClient.Splash"
             android:exported="true"
             android:label="哔哩终端"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BiliClient.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
