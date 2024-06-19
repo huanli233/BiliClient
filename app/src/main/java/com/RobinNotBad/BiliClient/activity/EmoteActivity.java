@@ -1,26 +1,25 @@
 package com.RobinNotBad.BiliClient.activity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
@@ -30,17 +29,9 @@ import com.RobinNotBad.BiliClient.model.EmotePackage;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.tabs.TabLayout;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -52,14 +43,25 @@ public class EmoteActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emote);
 
+        ImageView loading = findViewById(R.id.loading);
         TabLayout tabLayout = findViewById(R.id.tl_tab);
         ViewPager viewPager = findViewById(R.id.viewPager);
         tabLayout.setBackgroundColor(getResources().getColor(R.color.bgblack));
+        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        };
         CenterThreadPool.run(() -> {
             try {
                 List<EmotePackage> packages = EmoteApi.getEmotes(EmoteApi.BUSINESS_DYNAMIC);
                 runOnUiThread(() -> {
-                    viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(), packages));
+                    loading.setVisibility(View.GONE);
+                    viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(), packages, origin -> {
+                        origin.setOnListScroll(onScrollListener);
+                        return origin;
+                    }));
                     tabLayout.setupWithViewPager(viewPager);
                     tabLayout.setInlineLabel(true);
                     tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -80,14 +82,12 @@ public class EmoteActivity extends BaseActivity {
                     int count = tabLayout.getTabCount();
                     for (int i = 0; i < count; i++) {
                         int finalI = i;
+                        Objects.requireNonNull(tabLayout.getTabAt(finalI)).setText(packages.get(finalI).text);
+                        if (finalI != 0) Objects.requireNonNull(tabLayout.getTabAt(finalI)).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED);
                         CenterThreadPool.run(() -> {
                             try {
                                 Drawable drawable = Glide.with(this).asDrawable().load(packages.get(finalI).url).placeholder(R.mipmap.placeholder).submit().get();
-                                runOnUiThread(() -> {
-                                    Objects.requireNonNull(tabLayout.getTabAt(finalI)).setIcon(drawable);
-                                    Objects.requireNonNull(tabLayout.getTabAt(finalI)).setText(packages.get(finalI).text);
-                                    if (finalI != 0) Objects.requireNonNull(tabLayout.getTabAt(finalI)).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED);
-                                });
+                                runOnUiThread(() -> Objects.requireNonNull(tabLayout.getTabAt(finalI)).setIcon(drawable));
                             } catch (ExecutionException e) {
                                 throw new RuntimeException(e);
                             } catch (InterruptedException e) {
@@ -105,29 +105,51 @@ public class EmoteActivity extends BaseActivity {
     static class PagerAdapter extends FragmentPagerAdapter {
 
         List<EmotePackage> emotes;
+        FragmentHandler handler;
 
-        public PagerAdapter(@NonNull FragmentManager fm, List<EmotePackage> emotes) {
+        public PagerAdapter(@NonNull FragmentManager fm, List<EmotePackage> emotes, FragmentHandler handler) {
             super(fm);
             this.emotes = emotes;
+            this.handler = handler;
         }
 
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return new EmoteFragment(emotes.get(position));
+            return handler.handleCreateFragment(EmoteFragment.newInstance(emotes.get(position)));
         }
 
         @Override
         public int getCount() {
             return emotes.size();
         }
+
+        interface FragmentHandler {
+            Fragment handleCreateFragment(EmoteFragment origin);
+        }
     }
 
     public static class EmoteFragment extends Fragment {
-        private final EmotePackage emotePackage;
+        private EmotePackage emotePackage;
+        private RecyclerView recyclerView;
+        private boolean hasListener;
+        private RecyclerView.OnScrollListener onListScroll;
 
-        public EmoteFragment(EmotePackage emotePackage) {
-            this.emotePackage = emotePackage;
+        public static EmoteFragment newInstance(EmotePackage emotePackage) {
+            EmoteFragment emoteFragment = new EmoteFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("emotePackage", emotePackage);
+            emoteFragment.setArguments(bundle);
+            return emoteFragment;
+        }
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            Bundle bundle = getArguments();
+            if (bundle != null) {
+                this.emotePackage = (EmotePackage) bundle.getSerializable("emotePackage");
+            }
         }
 
         @Nullable
@@ -140,19 +162,38 @@ public class EmoteActivity extends BaseActivity {
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
 
-            RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-            GridLayoutManager layoutManager = new GridLayoutManager(getContext(), emotePackage.type == 4 ? 2 : 6, RecyclerView.VERTICAL, false);
+            this.recyclerView = view.findViewById(R.id.recyclerView);
+            GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false);
+            layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    return emotePackage.type == 4 ? 2 : emotePackage.emotes.get(position).size;
+                }
+            });
             recyclerView.setLayoutManager(layoutManager);
+            if (onListScroll != null) {
+                hasListener = true;
+                recyclerView.addOnScrollListener(onListScroll);
+            }
 
             EmoteAdapter adapter = new EmoteAdapter(emotePackage, getContext());
             adapter.setOnClickEmote((emote) -> {
                 requireActivity().setResult(RESULT_OK, new Intent().putExtra("text", emote.name));
                 requireActivity().finish();
             });
-            recyclerView.addItemDecoration(new GridSpacingItemDecoration(emotePackage.type == 4 ? 2 : 6, getResources().getDimensionPixelSize(R.dimen.grid_spacing), true));
+            recyclerView.addItemDecoration(new GridSpacingItemDecoration(4, getResources().getDimensionPixelSize(R.dimen.grid_spacing), true));
             recyclerView.setAdapter(adapter);
         }
 
+        public void setOnListScroll(RecyclerView.OnScrollListener onScrollListener) {
+            if (this.onListScroll == null) this.onListScroll = onScrollListener;
+        }
+
+        @Override
+        public void onDestroyView() {
+            super.onDestroyView();
+            if (this.onListScroll != null && hasListener) recyclerView.removeOnScrollListener(onListScroll);
+        }
     }
 
     static class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
@@ -217,6 +258,8 @@ public class EmoteActivity extends BaseActivity {
                     }
                 });
             } else {
+                ((TextHolder) holder).itemView.setSingleLine();
+                ((TextHolder) holder).itemView.setEllipsize(TextUtils.TruncateAt.END);
                 ((TextHolder) holder).itemView.setText(emotePackage.emotes.get(position).name);
                 ((TextHolder) holder).itemView.setOnClickListener((view) -> {
                     if (listener != null) {

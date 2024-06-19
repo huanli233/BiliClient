@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/loading_layout"
+    android:id="@+id/loading"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        android:src="@mipmap/loading_2233"
-        android:contentDescription="加载中"
-        tools:ignore="HardcodedText" />
-
-</LinearLayout>
+    android:layout_height="match_parent"
+    android:visibility="visible"
+    android:src="@mipmap/loading_2233"
+    android:contentDescription="加载中"
+    tools:ignore="HardcodedText" />

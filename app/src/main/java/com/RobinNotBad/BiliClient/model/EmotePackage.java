@@ -1,8 +1,9 @@
 package com.RobinNotBad.BiliClient.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class EmotePackage {
+public class EmotePackage implements Serializable {
     public int id;
     public String text;
     public String url;
