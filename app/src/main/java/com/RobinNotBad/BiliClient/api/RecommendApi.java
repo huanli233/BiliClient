@@ -1,5 +1,8 @@
 package com.RobinNotBad.BiliClient.api;
 
+import android.text.TextUtils;
+import android.util.Log;
+
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -12,6 +15,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 //推荐API 自己写的
@@ -20,10 +24,19 @@ import java.util.List;
 //2023-12-09
 
 public class RecommendApi {
+    private static final long UNIQ_ID = (long) (new Random().nextDouble() * (1500000000000L - 1300000000000L));
     public static void getRecommend(List<VideoCard> videoCardList) throws IOException, JSONException {
-        String url = (SharedPreferencesUtil.getLong("mid",0) == 0 ? "https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd" : "https://api.bilibili.com/x/web-interface/index/top/rcmd");
+        String url = (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, -1) == -1 && !SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.RCMD_API_NEW_PARAM, false) ? "https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd" : "https://api.bilibili.com/x/web-interface/index/top/feed/rcmd");
+        if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.RCMD_API_NEW_PARAM, false)) {
+            url += new NetWorkUtil.FormData().setUrlParam(true)
+                    .put("web_location", 1430650)
+                    .put("feed_version", "V8")
+                    .put("homepage_ver", 1)
+                    .put("uniq_id", UNIQ_ID)
+                    .put("screen", "1100-2056");
+        }
 
-        JSONObject result = NetWorkUtil.getJson(url);  //得到一整个json
+        JSONObject result = NetWorkUtil.getJson(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.RCMD_API_NEW_PARAM, false) ? ConfInfoApi.signWBI(url) : url);  //得到一整个json
 
         JSONObject data = result.getJSONObject("data");  //推荐列表中的data项又是一个json，把它提出来
 
@@ -32,6 +45,10 @@ public class RecommendApi {
         for (int i = 0; i < item.length(); i++) {    //遍历所有的视频卡片
             JSONObject card = item.getJSONObject(i);
             String bvid = card.getString("bvid");    //bv号
+            if (TextUtils.isEmpty(bvid)) {
+                Log.d("BiliClient", "RecommendApi getRecommend: isAd");
+                continue;
+            }
             String cover = card.getString("pic");    //封面图片
             String title = card.getString("title");    //标题
             String upName = card.getJSONObject("owner").getString("name");  //up主名字
