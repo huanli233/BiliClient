@@ -12,4 +12,5 @@ public class EmotePackage implements Serializable {
     public int size;
     public int item_id;
     public List<Emote> emotes;
+    public boolean permanent;
 }

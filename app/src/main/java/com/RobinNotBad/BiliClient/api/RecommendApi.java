@@ -26,15 +26,13 @@ import java.util.Random;
 public class RecommendApi {
     private static final long UNIQ_ID = (long) (new Random().nextDouble() * (1500000000000L - 1300000000000L));
     public static void getRecommend(List<VideoCard> videoCardList) throws IOException, JSONException {
-        String url = (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, -1) == -1 && !SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.RCMD_API_NEW_PARAM, false) ? "https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd" : "https://api.bilibili.com/x/web-interface/index/top/feed/rcmd");
-        if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.RCMD_API_NEW_PARAM, false)) {
-            url += new NetWorkUtil.FormData().setUrlParam(true)
-                    .put("web_location", 1430650)
-                    .put("feed_version", "V8")
-                    .put("homepage_ver", 1)
-                    .put("uniq_id", UNIQ_ID)
-                    .put("screen", "1100-2056");
-        }
+        String url = ("https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd");
+        url += new NetWorkUtil.FormData().setUrlParam(true)
+                .put("web_location", 1430650)
+                .put("feed_version", SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.RCMD_API_NEW_PARAM, false) ? "V8" : "V3")
+                .put("homepage_ver", 1)
+                .put("uniq_id", UNIQ_ID)
+                .put("screen", "1100-2056");
 
         JSONObject result = NetWorkUtil.getJson(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.RCMD_API_NEW_PARAM, false) ? ConfInfoApi.signWBI(url) : url);  //得到一整个json
 

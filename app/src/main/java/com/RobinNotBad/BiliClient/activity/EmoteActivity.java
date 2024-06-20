@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -249,24 +250,26 @@ public class EmoteActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            Emote emote = emotePackage.emotes.get(position);
             if (holder instanceof Holder) {
-                Glide.with(context).asDrawable().load(GlideUtil.url(emotePackage.emotes.get(position).url))
+                Glide.with(context).asDrawable().load(GlideUtil.url(emote.url))
                         .into(((Holder) holder).itemView);
                 ((Holder) holder).itemView.setOnClickListener((view) -> {
                     if (listener != null) {
-                        listener.onClickEmote(emotePackage.emotes.get(position));
+                        listener.onClickEmote(emote);
                     }
                 });
             } else {
                 ((TextHolder) holder).itemView.setSingleLine();
                 ((TextHolder) holder).itemView.setEllipsize(TextUtils.TruncateAt.END);
-                ((TextHolder) holder).itemView.setText(emotePackage.emotes.get(position).name);
+                ((TextHolder) holder).itemView.setText(emote.name);
                 ((TextHolder) holder).itemView.setOnClickListener((view) -> {
                     if (listener != null) {
-                        listener.onClickEmote(emotePackage.emotes.get(position));
+                        listener.onClickEmote(emote);
                     }
                 });
             }
+            TooltipCompat.setTooltipText(holder.itemView, emote.alias != null ? emote.alias : emote.name);
         }
 
         @Override
