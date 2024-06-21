@@ -202,7 +202,7 @@ public class LiveApi {
     }
 
     public static List<LiveRoom> analyzeLiveRooms(JSONArray list) throws JSONException {
-        List<LiveRoom> liveRooms = new ArrayList<LiveRoom>();
+        List<LiveRoom> liveRooms = new ArrayList<>();
         for (int i = 0; i < list.length(); i++) {
             JSONObject jsonObject = list.getJSONObject(i);
             LiveRoom liveRoom = new LiveRoom();

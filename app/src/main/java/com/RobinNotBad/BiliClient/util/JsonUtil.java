@@ -65,7 +65,7 @@ public class JsonUtil {
     }
 
     public static ArrayList jsonToArrayList(JSONArray jsonArray,boolean reverse) throws JSONException {
-        ArrayList<Object> arrayList = new ArrayList<Object>();
+        ArrayList<Object> arrayList = new ArrayList<>();
         if(reverse) {
             for (int i = jsonArray.length()-1; i >= 0; i--) {
                 arrayList.add(jsonArray.get(i));

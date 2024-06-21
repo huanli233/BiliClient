@@ -183,14 +183,15 @@ public class ReplyInfoActivity extends BaseActivity {
     public void onEvent(ReplyEvent event){
         LinearLayoutManager layoutManager = (LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager());
         int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
-        pos = pos == 0 ? 1 : pos;
         pos--;
+        pos = pos <= 0 ? 1 : pos;
         replyList.add(pos, event.getMessage());
         int finalPos = pos;
         runOnUiThread(() -> {
             if (replyAdapter != null) {
                 replyAdapter.notifyItemInserted(finalPos);
                 replyAdapter.notifyItemRangeChanged(finalPos, replyList.size() - finalPos);
+                layoutManager.scrollToPositionWithOffset(finalPos + 1, 0);
             }
         });
     }

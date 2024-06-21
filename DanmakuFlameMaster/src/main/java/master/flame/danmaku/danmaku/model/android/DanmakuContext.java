@@ -58,7 +58,7 @@ public class DanmakuContext {
 
     public boolean SecialDanmakuVisibility = true;
     
-    final List<Integer> mFilterTypes = new ArrayList<Integer>();
+    final List<Integer> mFilterTypes = new ArrayList<>();
 
     /**
      * 同屏弹幕数量 -1 按绘制效率自动调整 0 无限制 n 同屏最大显示n个弹幕
@@ -87,11 +87,11 @@ public class DanmakuContext {
 
     public int shadowRadius = 3;
 
-    final List<Integer> mColorValueWhiteList = new ArrayList<Integer>();
+    final List<Integer> mColorValueWhiteList = new ArrayList<>();
     
-    final List<Integer> mUserIdBlackList = new ArrayList<Integer>();
+    final List<Integer> mUserIdBlackList = new ArrayList<>();
     
-    final List<String> mUserHashBlackList = new ArrayList<String>();
+    final List<String> mUserHashBlackList = new ArrayList<>();
 
     private List<WeakReference<ConfigChangedCallback>> mCallbackList;
 
@@ -598,14 +598,14 @@ public class DanmakuContext {
 
     public void registerConfigChangedCallback(ConfigChangedCallback listener) {
         if (listener == null || mCallbackList == null) {
-            mCallbackList = Collections.synchronizedList(new ArrayList<WeakReference<ConfigChangedCallback>>());
+            mCallbackList = Collections.synchronizedList(new ArrayList<>());
         }
         for (WeakReference<ConfigChangedCallback> configReferer : mCallbackList) {
             if (listener.equals(configReferer.get())) {
                 return;
             }
         }
-        mCallbackList.add(new WeakReference<ConfigChangedCallback>(listener));
+        mCallbackList.add(new WeakReference<>(listener));
     }
 
     public void unregisterConfigChangedCallback(ConfigChangedCallback listener) {

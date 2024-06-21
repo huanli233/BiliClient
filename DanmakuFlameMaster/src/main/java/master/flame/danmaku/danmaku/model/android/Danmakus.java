@@ -81,11 +81,11 @@ public class Danmakus implements IDanmakus {
             comparator = new YPosDescComparator(duplicateMergingEnabled);
         }
         if(sortType == ST_BY_LIST) {
-            items = new ArrayList<BaseDanmaku>();
+            items = new ArrayList<>();
         } else {
             mDuplicateMergingEnabled = duplicateMergingEnabled;
             comparator.setDuplicateMergingEnabled(duplicateMergingEnabled);
-            items = new TreeSet<BaseDanmaku>(comparator);
+            items = new TreeSet<>(comparator);
             mComparator = comparator;
         }
         mSortType = sortType;
@@ -181,7 +181,7 @@ public class Danmakus implements IDanmakus {
         if (subset == null || subset.isEmpty()) {
             return null;
         }
-        ArrayList<BaseDanmaku> newSet = new ArrayList<BaseDanmaku>(subset);
+        ArrayList<BaseDanmaku> newSet = new ArrayList<>(subset);
         return new Danmakus(newSet);
     }
 

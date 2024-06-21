@@ -21,18 +21,18 @@ public class Pools {
     }
 
     public static <T extends Poolable<T>> Pool<T> simplePool(PoolableManager<T> manager) {
-        return new FinitePool<T>(manager);
+        return new FinitePool<>(manager);
     }
 
     public static <T extends Poolable<T>> Pool<T> finitePool(PoolableManager<T> manager, int limit) {
-        return new FinitePool<T>(manager, limit);
+        return new FinitePool<>(manager, limit);
     }
 
     public static <T extends Poolable<T>> Pool<T> synchronizedPool(Pool<T> pool) {
-        return new SynchronizedPool<T>(pool);
+        return new SynchronizedPool<>(pool);
     }
 
     public static <T extends Poolable<T>> Pool<T> synchronizedPool(Pool<T> pool, Object lock) {
-        return new SynchronizedPool<T>(pool, lock);
+        return new SynchronizedPool<>(pool, lock);
     }
 }

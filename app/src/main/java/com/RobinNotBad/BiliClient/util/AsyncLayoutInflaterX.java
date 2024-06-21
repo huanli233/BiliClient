@@ -106,7 +106,7 @@ public class AsyncLayoutInflaterX {
 
         //LinkedBlockingQueue 默认构造器，队列容量是Integer.MAX_VALUE
         private static final BlockingQueue<Runnable> sPoolWorkQueue =
-                new LinkedBlockingQueue<Runnable>();
+                new LinkedBlockingQueue<>();
 
         /**
          * An {@link Executor} that can be used to execute tasks in parallel.

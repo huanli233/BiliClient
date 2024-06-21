@@ -136,7 +136,7 @@ public class IjkMediaMeta {
     public long mStartUS;
     public long mBitrate;
 
-    public final ArrayList<IjkStreamMeta> mStreams = new ArrayList<IjkStreamMeta>();
+    public final ArrayList<IjkStreamMeta> mStreams = new ArrayList<>();
     public IjkStreamMeta mVideoStream;
     public IjkStreamMeta mAudioStream;
 

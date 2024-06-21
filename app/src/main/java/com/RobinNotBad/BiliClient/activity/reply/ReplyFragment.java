@@ -155,10 +155,13 @@ public class ReplyFragment extends RefreshListFragment {
         if (reply.root != 0) return;
         LinearLayoutManager layoutManager = (LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager());
         int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
+        pos = Math.max(pos, 0);
         replyList.add(pos, reply);
+        int finalPos = pos;
         runOnUiThread(() -> {
-            replyAdapter.notifyItemInserted(pos);
-            replyAdapter.notifyItemRangeChanged(pos, replyList.size() - pos);
+            replyAdapter.notifyItemInserted(finalPos);
+            replyAdapter.notifyItemRangeChanged(finalPos, replyList.size() - finalPos);
+            layoutManager.scrollToPositionWithOffset(finalPos + 1, 0);
         });
     }
 

@@ -64,7 +64,7 @@ public class DanmakuFilters {
      */
     public static class TypeDanmakuFilter extends BaseDanmakuFilter<List<Integer>> {
 
-        final List<Integer> mFilterTypes = Collections.synchronizedList(new ArrayList<Integer>());
+        final List<Integer> mFilterTypes = Collections.synchronizedList(new ArrayList<>());
 
         public void enableType(Integer type) {
             if (!mFilterTypes.contains(type))
@@ -221,7 +221,7 @@ public class DanmakuFilters {
      */
     public static class TextColorFilter extends BaseDanmakuFilter<List<Integer>> {
 
-        public final List<Integer> mWhiteList = new ArrayList<Integer>();
+        public final List<Integer> mWhiteList = new ArrayList<>();
 
         private void addToWhiteList(Integer color) {
             if (!mWhiteList.contains(color)) {
@@ -263,7 +263,7 @@ public class DanmakuFilters {
      */
     public static abstract class UserFilter<T> extends BaseDanmakuFilter<List<T>> {
 
-        public final List<T> mBlackList = new ArrayList<T>();
+        public final List<T> mBlackList = new ArrayList<>();
 
         private void addToBlackList(T id) {
             if (!mBlackList.contains(id)) {
@@ -364,7 +364,7 @@ public class DanmakuFilters {
     public static class DuplicateMergingFilter extends BaseDanmakuFilter<Void> {
 
         protected final IDanmakus blockedDanmakus = new Danmakus(Danmakus.ST_BY_LIST);
-        protected final LinkedHashMap<String, BaseDanmaku> currentDanmakus = new LinkedHashMap<String, BaseDanmaku>();
+        protected final LinkedHashMap<String, BaseDanmaku> currentDanmakus = new LinkedHashMap<>();
         private final IDanmakus passedDanmakus = new Danmakus(Danmakus.ST_BY_LIST);
 
         private void removeTimeoutDanmakus(final IDanmakus danmakus, long limitTime) {
@@ -568,9 +568,9 @@ public class DanmakuFilters {
     }
 
     private final Map<String, IDanmakuFilter<?>> filters = Collections
-            .synchronizedSortedMap(new TreeMap<String, IDanmakuFilter<?>>());
+            .synchronizedSortedMap(new TreeMap<>());
     private final Map<String, IDanmakuFilter<?>> filtersSecondary = Collections
-            .synchronizedSortedMap(new TreeMap<String, IDanmakuFilter<?>>());
+            .synchronizedSortedMap(new TreeMap<>());
     IDanmakuFilter<?>[] mFilterArray = new IDanmakuFilter[0];
     IDanmakuFilter<?>[] mFilterArraySecondary = new IDanmakuFilter[0];
 

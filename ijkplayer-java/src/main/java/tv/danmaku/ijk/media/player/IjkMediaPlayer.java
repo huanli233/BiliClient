@@ -239,7 +239,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
          * Native setup requires a weak reference to our object. It's easier to
          * create it here than in C++.
          */
-        native_setup(new WeakReference<IjkMediaPlayer>(this));
+        native_setup(new WeakReference<>(this));
     }
 
     private native void _setFrameAtTime(String imgCachePath, long startTime, long endTime, int num, int imgDefinition)
@@ -599,7 +599,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
         if (mediaMeta == null || mediaMeta.mStreams == null)
             return null;
 
-        ArrayList<IjkTrackInfo> trackInfos = new ArrayList<IjkTrackInfo>();
+        ArrayList<IjkTrackInfo> trackInfos = new ArrayList<>();
         for (IjkMediaMeta.IjkStreamMeta streamMeta: mediaMeta.mStreams) {
             IjkTrackInfo trackInfo = new IjkTrackInfo(streamMeta);
             if (streamMeta.mType.equalsIgnoreCase(IjkMediaMeta.IJKM_VAL_TYPE__VIDEO)) {
@@ -958,7 +958,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
 
         public EventHandler(IjkMediaPlayer mp, Looper looper) {
             super(looper);
-            mWeakPlayer = new WeakReference<IjkMediaPlayer>(mp);
+            mWeakPlayer = new WeakReference<>(mp);
         }
 
         @Override
@@ -1224,7 +1224,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
                 return null;
 
             Log.i(TAG, String.format(Locale.US, "onSelectCodec: mime=%s, profile=%d, level=%d", mimeType, profile, level));
-            ArrayList<IjkMediaCodecInfo> candidateCodecList = new ArrayList<IjkMediaCodecInfo>();
+            ArrayList<IjkMediaCodecInfo> candidateCodecList = new ArrayList<>();
             int numCodecs = MediaCodecList.getCodecCount();
             for (int i = 0; i < numCodecs; i++) {
                 MediaCodecInfo codecInfo = MediaCodecList.getCodecInfoAt(i);
