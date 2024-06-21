@@ -15,6 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LiveApi {
+
+    /**
+     * 获取推荐直播间列表
+     * @param page 页数
+     * @return 直播间列表
+     */
     public static List<LiveRoom> getRecommend(int page) throws JSONException, IOException {
         String url = "https://api.live.bilibili.com/xlive/web-interface/v1/second/getUserRecommend" + new NetWorkUtil.FormData().setUrlParam(true)
                 .put("page", page)
@@ -33,6 +39,11 @@ public class LiveApi {
         return null;
     }
 
+    /**
+     * 获取关注的直播间列表
+     * @param page 页数
+     * @return 关注的直播间列表
+     */
     public static List<LiveRoom> getFollowed(int page) throws JSONException, IOException {
         String url = "https://api.live.bilibili.com/xlive/web-ucenter/v1/xfetter/GetWebList" + new NetWorkUtil.FormData().setUrlParam(true)
                 .put("page", page)
@@ -50,6 +61,12 @@ public class LiveApi {
         return null;
     }
 
+    /**
+     * 获取直播间PlayInfo
+     * @param roomId 直播间id
+     * @param qn 清晰度
+     * @return 直播间PlayInfo
+     */
     public static LivePlayInfo getRoomPlayInfo(long roomId, int qn) throws JSONException, IOException {
         String url = "https://api.live.bilibili.com/xlive/web-ucenter/v1/xfetter/GetWebList" + new NetWorkUtil.FormData().setUrlParam(true)
                 .put("room_id", roomId)
