@@ -50,12 +50,7 @@ public class PreInflateHelper {
     }
 
     private void preAsyncInflateView(@NonNull ViewGroup parent, int layoutId) {
-        mLayoutInflater.asyncInflateView(parent, layoutId, new InflateCallback() {
-            @Override
-            public void onInflateFinished(int layoutId, View view) {
-                mViewCache.putView(layoutId, view);
-            }
-        });
+        mLayoutInflater.asyncInflateView(parent, layoutId, (layoutId1, view) -> mViewCache.putView(layoutId1, view));
     }
 
     public View getView(@NonNull ViewGroup parent, int layoutId, boolean attachToRoot) {

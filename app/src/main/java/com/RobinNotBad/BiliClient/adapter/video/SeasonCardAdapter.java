@@ -14,8 +14,8 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.R;
 
 public class SeasonCardAdapter extends RecyclerView.Adapter<VideoCardHolder>{
-    Context context;
-    List<Collection> seasonList;
+    final Context context;
+    final List<Collection> seasonList;
 
     public SeasonCardAdapter(Context context, List<Collection> seasonList) {
         this.context = context;

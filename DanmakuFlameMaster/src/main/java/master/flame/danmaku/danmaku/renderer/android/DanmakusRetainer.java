@@ -106,7 +106,7 @@ public class DanmakusRetainer {
 
     private static class RLDanmakusRetainer implements IDanmakusRetainer {
 
-        protected Danmakus mVisibleDanmakus = new Danmakus(Danmakus.ST_BY_YPOS);
+        protected final Danmakus mVisibleDanmakus = new Danmakus(Danmakus.ST_BY_YPOS);
         protected boolean mCancelFixingFlag = false;
 
         @Override
@@ -247,7 +247,7 @@ public class DanmakusRetainer {
 
     private static class FBDanmakusRetainer extends FTDanmakusRetainer {
 
-        protected Danmakus mVisibleDanmakus = new Danmakus(Danmakus.ST_BY_YPOS_DESC);
+        protected final Danmakus mVisibleDanmakus = new Danmakus(Danmakus.ST_BY_YPOS_DESC);
 
         @Override
         public void fix(BaseDanmaku drawItem, IDisplayer disp, Verifier verifier) {

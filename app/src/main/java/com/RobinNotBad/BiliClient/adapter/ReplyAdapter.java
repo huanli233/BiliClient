@@ -61,11 +61,13 @@ import java.util.concurrent.ExecutionException;
 public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public boolean isDetail = false;
-    Context context;
-    ArrayList<Reply> replyList;
-    long oid, root;
-    int type, sort;
-    public int replyType;
+    final Context context;
+    final ArrayList<Reply> replyList;
+    final long oid;
+    final long root;
+    final int type;
+    final int sort;
+    public final int replyType;
     OnItemClickListener listener;
     public Object source;
 
@@ -154,8 +156,6 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             ToolsUtil.setLink(replyHolder.message);
                             ToolsUtil.setAtLink(replyList.get(realPosition).atNameToMid, replyHolder.message);
                         });
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
@@ -290,7 +290,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                         notifyItemRangeChanged(realPosition, replyList.size() - realPosition);
                                         longClickPosition = -1;
                                         MsgUtil.toast("删除成功~", context);
-                                        if (realPosition == 0 && isDetail && context instanceof Activity) {
+                                        if (realPosition == 0 && isDetail) {
                                             ((Activity) context).finish();
                                         }
                                     });
@@ -320,7 +320,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             };
             replyHolder.item_reply_delete.setOnLongClickListener(onDeleteLongClick);
-            if (!(replyList.get(realPosition).sender.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)) || replyList.get(realPosition).sender.mid == 0 || replyList.get(realPosition).forceDelete) {
+            if (!(replyList.get(realPosition).sender.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) || replyList.get(realPosition).sender.mid == 0 || replyList.get(realPosition).forceDelete)) {
                 replyHolder.item_reply_delete.setVisibility(View.GONE);
                 CenterThreadPool.run(() -> {
                     try {
@@ -347,6 +347,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) != 0) ((Activity) context).runOnUiThread(() -> MsgUtil.err(e, context));
                     }
                 });
+            } else {
+                replyHolder.item_reply_delete.setVisibility(View.VISIBLE);
             }
 
             replyHolder.replyBtn.setOnClickListener(view -> {
@@ -400,11 +402,20 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public static class ReplyHolder extends RecyclerView.ViewHolder{
-        ImageView replyAvatar, dislikeBtn;
-        CustomListView childReplies;
-        TextView message,userName,pubDate,childCount,likeCount,replyBtn,upLiked,imageCount, item_reply_delete;
-        LinearLayout childReplyCard;
-        ImageView imageCard;
+        final ImageView replyAvatar;
+        final ImageView dislikeBtn;
+        final CustomListView childReplies;
+        final TextView message;
+        final TextView userName;
+        final TextView pubDate;
+        final TextView childCount;
+        final TextView likeCount;
+        final TextView replyBtn;
+        final TextView upLiked;
+        final TextView imageCount;
+        final TextView item_reply_delete;
+        final LinearLayout childReplyCard;
+        final ImageView imageCard;
 
 
         public ReplyHolder(@NonNull View itemView) {
@@ -428,7 +439,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public static class WriteReply extends RecyclerView.ViewHolder{
-        MaterialButton write_reply, sort;
+        final MaterialButton write_reply;
+        final MaterialButton sort;
 
         public WriteReply(@NonNull View itemView) {
             super(itemView);

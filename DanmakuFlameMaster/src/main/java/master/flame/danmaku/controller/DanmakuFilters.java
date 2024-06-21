@@ -172,7 +172,7 @@ public class DanmakuFilters {
      */
     public static class ElapsedTimeFilter extends BaseDanmakuFilter<Object> {
 
-        long mMaxTime = 20; // 绘制超过20ms就跳过 ，默认保持接近50fps
+        final long mMaxTime = 20; // 绘制超过20ms就跳过 ，默认保持接近50fps
 
         private synchronized boolean needFilter(BaseDanmaku danmaku, int orderInScreen,
                                    int totalsizeInScreen, DanmakuTimer timer, boolean fromCachingTask) {
@@ -221,7 +221,7 @@ public class DanmakuFilters {
      */
     public static class TextColorFilter extends BaseDanmakuFilter<List<Integer>> {
 
-        public List<Integer> mWhiteList = new ArrayList<Integer>();
+        public final List<Integer> mWhiteList = new ArrayList<Integer>();
 
         private void addToWhiteList(Integer color) {
             if (!mWhiteList.contains(color)) {
@@ -263,7 +263,7 @@ public class DanmakuFilters {
      */
     public static abstract class UserFilter<T> extends BaseDanmakuFilter<List<T>> {
 
-        public List<T> mBlackList = new ArrayList<T>();
+        public final List<T> mBlackList = new ArrayList<T>();
 
         private void addToBlackList(T id) {
             if (!mBlackList.contains(id)) {
@@ -367,7 +367,7 @@ public class DanmakuFilters {
         protected final LinkedHashMap<String, BaseDanmaku> currentDanmakus = new LinkedHashMap<String, BaseDanmaku>();
         private final IDanmakus passedDanmakus = new Danmakus(Danmakus.ST_BY_LIST);
 
-        private final void removeTimeoutDanmakus(final IDanmakus danmakus, long limitTime) {
+        private void removeTimeoutDanmakus(final IDanmakus danmakus, long limitTime) {
             IDanmakuIterator it = danmakus.iterator();
             long startTime = SystemClock.uptimeMillis();
             while (it.hasNext()) {

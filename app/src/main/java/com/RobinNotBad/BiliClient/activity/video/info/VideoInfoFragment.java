@@ -87,11 +87,11 @@ public class VideoInfoFragment extends Fragment {
 
     private Boolean clickCoverPlayEnable = SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cover_play_enable, false);
 
-    int RESULT_ADDED = 1;
-    int RESULT_DELETED = -1;
+    final int RESULT_ADDED = 1;
+    final int RESULT_DELETED = -1;
 
     private boolean desc_expand = false, tags_expand = false;
-    ActivityResultLauncher<Intent> favLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
+    final ActivityResultLauncher<Intent> favLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
         @Override
         public void onActivityResult(ActivityResult o) {
             int code = o.getResultCode();
@@ -104,7 +104,7 @@ public class VideoInfoFragment extends Fragment {
     });
 
     // 其实我不会用，也是抄的上面的😡
-    ActivityResultLauncher<Intent> writeDynamicLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
+    final ActivityResultLauncher<Intent> writeDynamicLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
         @Override
         public void onActivityResult(ActivityResult result) {
             int code = result.getResultCode();

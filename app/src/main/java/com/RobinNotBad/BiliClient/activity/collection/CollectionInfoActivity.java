@@ -70,10 +70,10 @@ public class CollectionInfoActivity extends RefreshListActivity {
 
     static class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-        Collection collection;
-        Context context;
-        List<VideoCard> data;
-        PreInflateHelper preInflateHelper;
+        final Collection collection;
+        final Context context;
+        final List<VideoCard> data;
+        final PreInflateHelper preInflateHelper;
 
         public CardAdapter(Context context, Collection collection, RecyclerView recyclerView){
             this.context = context;
@@ -132,8 +132,10 @@ public class CollectionInfoActivity extends RefreshListActivity {
         }
 
         static class CollectionInfoHolder extends RecyclerView.ViewHolder {
-            TextView name, desc, playTimes;
-            ImageView cover;
+            final TextView name;
+            final TextView desc;
+            final TextView playTimes;
+            final ImageView cover;
             public CollectionInfoHolder(@NonNull View itemView) {
                 super(itemView);
                 this.name = itemView.findViewById(R.id.name);
@@ -146,11 +148,11 @@ public class CollectionInfoActivity extends RefreshListActivity {
 
     static class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-        Collection collection;
-        Context context;
-        List<Collection.Section> data;
-        List<Integer> types = new ArrayList<>();
-        PreInflateHelper preInflateHelper;
+        final Collection collection;
+        final Context context;
+        final List<Collection.Section> data;
+        final List<Integer> types = new ArrayList<>();
+        final PreInflateHelper preInflateHelper;
 
         public SectionAdapter(Context context, Collection collection, RecyclerView recyclerView){
             this.context = context;
@@ -260,8 +262,10 @@ public class CollectionInfoActivity extends RefreshListActivity {
         }
 
         static class CollectionInfoHolder extends RecyclerView.ViewHolder {
-            TextView name, desc, playTimes;
-            ImageView cover;
+            final TextView name;
+            final TextView desc;
+            final TextView playTimes;
+            final ImageView cover;
             public CollectionInfoHolder(@NonNull View itemView) {
                 super(itemView);
                 this.name = itemView.findViewById(R.id.name);

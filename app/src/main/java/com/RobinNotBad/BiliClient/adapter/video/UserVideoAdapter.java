@@ -23,9 +23,9 @@ import java.util.List;
 
 public class UserVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    Context context;
-    long mid;
-    List<VideoCard> videoCardList;
+    final Context context;
+    final long mid;
+    final List<VideoCard> videoCardList;
 
     public UserVideoAdapter(Context context, long mid, List<VideoCard> videoCardList) {
         this.context = context;

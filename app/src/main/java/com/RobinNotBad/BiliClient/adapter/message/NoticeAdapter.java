@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.model.MessageCard;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class NoticeAdapter extends RecyclerView.Adapter<NoticeHolder> {

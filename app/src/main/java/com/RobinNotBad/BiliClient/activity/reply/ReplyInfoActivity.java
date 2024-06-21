@@ -24,6 +24,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 //评论详细信息
 //2023-07-22
@@ -180,11 +181,16 @@ public class ReplyInfoActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.ASYNC, sticky = true, priority = 1)
     public void onEvent(ReplyEvent event){
-        replyList.add(1, event.getMessage());
+        LinearLayoutManager layoutManager = (LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager());
+        int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
+        pos = pos == 0 ? 1 : pos;
+        pos--;
+        replyList.add(pos, event.getMessage());
+        int finalPos = pos;
         runOnUiThread(() -> {
             if (replyAdapter != null) {
-                replyAdapter.notifyItemInserted(0);
-                replyAdapter.notifyItemRangeChanged(0, replyList.size());
+                replyAdapter.notifyItemInserted(finalPos);
+                replyAdapter.notifyItemRangeChanged(finalPos, replyList.size() - finalPos);
             }
         });
     }

@@ -93,7 +93,7 @@ public class CenterThreadPool {
         getInstance().execute(() -> {
             try {
                 T res = future.get();
-                CenterThreadPool.runOnUiThread(() -> { consumer.accept(res); });
+                CenterThreadPool.runOnUiThread(() -> consumer.accept(res));
             }catch(Exception ignored){
             }
         });
@@ -104,7 +104,7 @@ public class CenterThreadPool {
         getInstance().execute(() -> {
             try {
                 T res = future.get();
-                CenterThreadPool.runOnUiThread(() -> { consumer.accept(res); });
+                CenterThreadPool.runOnUiThread(() -> consumer.accept(res));
             }catch(Exception e){
                 onFailure.accept(e);
             }

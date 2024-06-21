@@ -58,7 +58,7 @@ public class DanmakuContext {
 
     public boolean SecialDanmakuVisibility = true;
     
-    List<Integer> mFilterTypes = new ArrayList<Integer>();
+    final List<Integer> mFilterTypes = new ArrayList<Integer>();
 
     /**
      * 同屏弹幕数量 -1 按绘制效率自动调整 0 无限制 n 同屏最大显示n个弹幕
@@ -87,11 +87,11 @@ public class DanmakuContext {
 
     public int shadowRadius = 3;
 
-    List<Integer> mColorValueWhiteList = new ArrayList<Integer>();
+    final List<Integer> mColorValueWhiteList = new ArrayList<Integer>();
     
-    List<Integer> mUserIdBlackList = new ArrayList<Integer>(); 
+    final List<Integer> mUserIdBlackList = new ArrayList<Integer>();
     
-    List<String> mUserHashBlackList = new ArrayList<String>();
+    final List<String> mUserHashBlackList = new ArrayList<String>();
 
     private List<WeakReference<ConfigChangedCallback>> mCallbackList;
 

@@ -105,8 +105,8 @@ public class EmoteActivity extends BaseActivity {
 
     static class PagerAdapter extends FragmentPagerAdapter {
 
-        List<EmotePackage> emotes;
-        FragmentHandler handler;
+        final List<EmotePackage> emotes;
+        final FragmentHandler handler;
 
         public PagerAdapter(@NonNull FragmentManager fm, List<EmotePackage> emotes, FragmentHandler handler) {
             super(fm);

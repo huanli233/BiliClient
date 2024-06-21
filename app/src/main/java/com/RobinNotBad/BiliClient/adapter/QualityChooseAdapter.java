@@ -19,7 +19,7 @@ import java.util.List;
 
 public class QualityChooseAdapter extends RecyclerView.Adapter<QualityChooseAdapter.Holder> {
 
-    Context context;
+    final Context context;
 
     List<String> nameList = new ArrayList<>();
 
@@ -77,7 +77,7 @@ public class QualityChooseAdapter extends RecyclerView.Adapter<QualityChooseAdap
     }
 
     public static class Holder extends RecyclerView.ViewHolder{
-        public TextView folder_name;
+        public final TextView folder_name;
 
         public Holder(@NonNull View itemView) {
             super(itemView);

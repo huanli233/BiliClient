@@ -1,11 +1,8 @@
 package com.RobinNotBad.BiliClient.adapter.viewpager;
 
-import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.util.List;
@@ -15,7 +12,7 @@ import java.util.List;
 public class ViewPagerFragmentAdapter extends FragmentStatePagerAdapter {
 
     private final List<Fragment> fragmentList;
-    FragmentManager fm;
+    final FragmentManager fm;
 
     public ViewPagerFragmentAdapter(@NonNull FragmentManager fm, List<Fragment> fragmentList) {
         super(fm);

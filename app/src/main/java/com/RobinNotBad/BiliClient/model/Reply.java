@@ -1,10 +1,7 @@
 package com.RobinNotBad.BiliClient.model;
 
-import com.RobinNotBad.BiliClient.api.ReplyApi;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class Reply implements Serializable {

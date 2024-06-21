@@ -42,7 +42,7 @@ public class QRLoginFragment extends Fragment {
     private TextView scanStat;
     Bitmap QRImage;
     Timer timer;
-    boolean need_refresh = false;
+    final boolean need_refresh = false;
     int qrScale = 0;
 
     @Override

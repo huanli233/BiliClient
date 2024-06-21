@@ -26,8 +26,8 @@ import java.util.ArrayList;
 
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.Holder> {
 
-    Context context;
-    ArrayList<UserInfo> userList;
+    final Context context;
+    final ArrayList<UserInfo> userList;
 
     public UserListAdapter(Context context, ArrayList<UserInfo> userList) {
         this.context = context;
@@ -72,8 +72,9 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.Holder
     }
 
     public static class Holder extends RecyclerView.ViewHolder{
-        TextView name,desc;
-        ImageView avatar;
+        final TextView name;
+        final TextView desc;
+        final ImageView avatar;
 
         public Holder(@NonNull View itemView) {
             super(itemView);

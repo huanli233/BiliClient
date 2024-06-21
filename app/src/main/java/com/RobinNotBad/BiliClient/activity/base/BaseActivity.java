@@ -29,7 +29,7 @@ import org.greenrobot.eventbus.EventBus;
 public class BaseActivity extends AppCompatActivity {
     public int window_width, window_height;
     public Context old_context;
-    public ActivityResultLauncher<Intent> relayDynamicLauncher = getRelayDynamicLauncher(this);
+    public final ActivityResultLauncher<Intent> relayDynamicLauncher = getRelayDynamicLauncher(this);
 
     //调整应用内dpi的代码，其他Activity要继承于BaseActivity才能调大小
     @Override

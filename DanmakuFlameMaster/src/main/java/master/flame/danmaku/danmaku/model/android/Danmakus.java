@@ -317,7 +317,7 @@ public class Danmakus implements IDanmakus {
 
     }
 
-    private class BaseComparator implements Comparator<BaseDanmaku> {
+    private static class BaseComparator implements Comparator<BaseDanmaku> {
 
         protected boolean mDuplicateMergingEnable;
 

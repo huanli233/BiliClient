@@ -117,7 +117,7 @@ public class TutorialHelper {
                     else if(isInImg) turtorial.imgid = xml.getText();
                     else if(isInType) turtorial.type = Integer.valueOf(xml.getText());
                     else if(item != null){
-                        if(isInContentItemType) item.type = Integer.valueOf(xml.getText());
+                        if(isInContentItemType) item.type = Integer.parseInt(xml.getText());
                         else if(isInContentItemText) item.text = xml.getText();
                         else if(isInContentItemStyle) item.style = xml.getText();
                         else if(isInContentItemColor) item.color = xml.getText();

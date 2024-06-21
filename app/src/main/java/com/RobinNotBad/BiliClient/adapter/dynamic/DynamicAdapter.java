@@ -28,11 +28,11 @@ import java.util.List;
 
 public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    Context context;
-    List<Dynamic> dynamicList;
-    RecyclerView recyclerView;
-    DynamicActivity dynamicActivity;
-    ActivityResultLauncher<Intent> writeDynamicLauncher;
+    final Context context;
+    final List<Dynamic> dynamicList;
+    final RecyclerView recyclerView;
+    final DynamicActivity dynamicActivity;
+    final ActivityResultLauncher<Intent> writeDynamicLauncher;
 
     public DynamicAdapter(Context context, List<Dynamic> dynamicList, RecyclerView recyclerView) {
         this.context = context;
@@ -69,9 +69,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 intent.setClass(context, SendDynamicActivity.class);
                 writeDynamicLauncher.launch(intent);
             });
-            writeDynamic.type.setOnClickListener((view) -> {
-                dynamicActivity.selectTypeLauncher.launch(new Intent().setClass(context, ListChooseActivity.class).putExtra("title", "选择类型").putExtra("items", new ArrayList<>(Arrays.asList("全部", "视频投稿", "追番", "专栏"))));
-            });
+            writeDynamic.type.setOnClickListener((view) -> dynamicActivity.selectTypeLauncher.launch(new Intent().setClass(context, ListChooseActivity.class).putExtra("title", "选择类型").putExtra("items", new ArrayList<>(Arrays.asList("全部", "视频投稿", "追番", "专栏")))));
         } else if (holder instanceof DynamicHolder) {
             position--;
             DynamicHolder dynamicHolder = (DynamicHolder) holder;
@@ -107,8 +105,8 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
     public static class WriteDynamic extends RecyclerView.ViewHolder {
-        MaterialButton write_dynamic;
-        MaterialButton type;
+        final MaterialButton write_dynamic;
+        final MaterialButton type;
 
         public WriteDynamic(@NonNull View itemView) {
             super(itemView);

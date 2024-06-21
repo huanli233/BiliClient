@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.activity.video;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardAdapter;
@@ -15,7 +14,6 @@ import com.RobinNotBad.BiliClient.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 //推荐页面
 //2023-07-13

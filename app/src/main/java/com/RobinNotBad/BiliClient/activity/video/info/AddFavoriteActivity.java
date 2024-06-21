@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
 import com.RobinNotBad.BiliClient.adapter.favorite.FolderChooseAdapter;

@@ -51,8 +51,8 @@ public class DownloadActivity extends BaseActivity {
 
     boolean finish = false;
 
-    Timer timer = new Timer();
-    TimerTask showText = new TimerTask() {
+    final Timer timer = new Timer();
+    final TimerTask showText = new TimerTask() {
         @SuppressLint("SetTextI18n")
         @Override
         public void run() {

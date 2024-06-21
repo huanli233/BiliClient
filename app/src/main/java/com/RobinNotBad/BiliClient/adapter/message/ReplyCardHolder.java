@@ -11,7 +11,8 @@ import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 public class ReplyCardHolder extends RecyclerView.ViewHolder{
-    TextView content,tiptext;
+    final TextView content;
+    final TextView tiptext;
     public ReplyCardHolder(@NonNull View itemView) {
         super(itemView);
         content = itemView.findViewById(R.id.content);

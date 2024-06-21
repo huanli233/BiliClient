@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 
-import java.util.ArrayList;
-
 /**
  * 被 luern0313 创建于 2020/5/4.
  * #以下代码部分来源于腕上哔哩的开源项目，有修改。感谢开源者做出的贡献！

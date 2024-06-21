@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.activity.dynamic.send;
 import static com.RobinNotBad.BiliClient.util.ToolsUtil.toWan;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -24,7 +23,6 @@ import com.RobinNotBad.BiliClient.activity.EmoteActivity;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.article.ArticleCardHolder;
@@ -46,8 +44,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -143,8 +139,6 @@ public class SendDynamicActivity extends BaseActivity {
                             ToolsUtil.setLink(content);
                             ToolsUtil.setAtLink(dynamic.ats, content);
                         });
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {

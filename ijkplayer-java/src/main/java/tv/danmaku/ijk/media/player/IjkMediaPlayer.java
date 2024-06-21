@@ -78,7 +78,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
     private static final int MEDIA_ERROR = 100;
     private static final int MEDIA_INFO = 200;
 
-    protected static final int MEDIA_SET_VIDEO_SAR = 10001;
+    private static final int MEDIA_SET_VIDEO_SAR = 10001;
 
     //----------------------------------------
     // options
@@ -173,12 +173,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
      * Default library loader
      * Load them by yourself, if your libraries are not installed at default place.
      */
-    private static final IjkLibLoader sLocalLibLoader = new IjkLibLoader() {
-        @Override
-        public void loadLibrary(String libName) throws UnsatisfiedLinkError, SecurityException {
-            System.loadLibrary(libName);
-        }
-    };
+    private static final IjkLibLoader sLocalLibLoader = libName -> System.loadLibrary(libName);
 
     private static volatile boolean mIsLibLoaded = false;
     public static void loadLibrariesOnce(IjkLibLoader libLoader) {
@@ -617,7 +612,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
             trackInfos.add(trackInfo);
         }
 
-        return trackInfos.toArray(new IjkTrackInfo[trackInfos.size()]);
+        return trackInfos.toArray(new IjkTrackInfo[0]);
     }
 
     // TODO: @Override
@@ -860,7 +855,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
 
         String videoCodecInfo = _getVideoCodecInfo();
         if (!TextUtils.isEmpty(videoCodecInfo)) {
-            String nodes[] = videoCodecInfo.split(",");
+            String[] nodes = videoCodecInfo.split(",");
             if (nodes.length >= 2) {
                 mediaInfo.mVideoDecoder = nodes[0];
                 mediaInfo.mVideoDecoderImpl = nodes[1];
@@ -872,7 +867,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
 
         String audioCodecInfo = _getAudioCodecInfo();
         if (!TextUtils.isEmpty(audioCodecInfo)) {
-            String nodes[] = audioCodecInfo.split(",");
+            String[] nodes = audioCodecInfo.split(",");
             if (nodes.length >= 2) {
                 mediaInfo.mAudioDecoder = nodes[0];
                 mediaInfo.mAudioDecoderImpl = nodes[1];
@@ -955,7 +950,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
     }
 
     public void setCacheShare(int share) {
-        _setPropertyLong(FFP_PROP_INT64_SHARE_CACHE_DATA, (long)share);
+        _setPropertyLong(FFP_PROP_INT64_SHARE_CACHE_DATA, share);
     }
 
     private static class EventHandler extends Handler {

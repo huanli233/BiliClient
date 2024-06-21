@@ -34,10 +34,11 @@ import com.bumptech.glide.request.RequestOptions;
 import java.text.SimpleDateFormat;
 
 public class NoticeHolder extends RecyclerView.ViewHolder{
-    public LinearLayout avaterList;
-    public TextView action,pubdate;
-    public ConstraintLayout extraCard;
-    public View itemView;
+    public final LinearLayout avaterList;
+    public final TextView action;
+    public final TextView pubdate;
+    public final ConstraintLayout extraCard;
+    public final View itemView;
     public NoticeHolder(@NonNull View itemView) {
         super(itemView);
         this.itemView = itemView;

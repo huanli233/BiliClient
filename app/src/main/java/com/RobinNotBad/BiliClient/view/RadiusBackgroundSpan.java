@@ -10,10 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class RadiusBackgroundSpan extends ReplacementSpan {
-    private int margin;
-    private int radius;
-    private int textColor;
-    private int bgColor;
+    private final int margin;
+    private final int radius;
+    private final int textColor;
+    private final int bgColor;
 
     public RadiusBackgroundSpan(int margin, int radius, int textColor, int bgColor) {
         this.margin = margin;

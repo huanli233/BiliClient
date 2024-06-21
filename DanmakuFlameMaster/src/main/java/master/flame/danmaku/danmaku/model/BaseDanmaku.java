@@ -82,7 +82,7 @@ public abstract class BaseDanmaku {
     /**
      * 下划线颜色,0表示无下划线
      */
-    public int underlineColor = 0;
+    public final int underlineColor = 0;
 
     /**
      * 字体大小
@@ -92,7 +92,7 @@ public abstract class BaseDanmaku {
     /**
      * 框的颜色,0表示无框
      */
-    public int borderColor = 0;
+    public final int borderColor = 0;
 
     /**
      * 内边距(像素)
@@ -157,7 +157,7 @@ public abstract class BaseDanmaku {
     /**
      * 弹幕发布者id, 0表示游客
      */
-    public int userId = 0;
+    public final int userId = 0;
 
     /**
      * 弹幕发布者id

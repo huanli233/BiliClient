@@ -23,7 +23,6 @@ import com.google.android.material.card.MaterialCardView;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +40,7 @@ public class WriteReplyActivity extends BaseActivity {
     }};
 
     EditText editText;
-    private ActivityResultLauncher<Intent> emoteLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
+    private final ActivityResultLauncher<Intent> emoteLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
         int code = result.getResultCode();
         Intent data = result.getData();
         if (code == RESULT_OK && data != null && data.hasExtra("text")) {

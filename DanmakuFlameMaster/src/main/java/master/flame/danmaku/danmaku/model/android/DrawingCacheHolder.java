@@ -134,9 +134,9 @@ public class DrawingCacheHolder {
 
     private void eraseBitmapArray() {
         if (bitmapArray != null) {
-            for (int i = 0; i < bitmapArray.length; i++) {
-                for (int j = 0; j < bitmapArray[i].length; j++) {
-                    eraseBitmap(bitmapArray[i][j]);
+            for (Bitmap[] bitmaps : bitmapArray) {
+                for (int j = 0; j < bitmaps.length; j++) {
+                    eraseBitmap(bitmaps[j]);
                 }
             }
         }

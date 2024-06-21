@@ -24,8 +24,12 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
 public class VideoCardHolder extends RecyclerView.ViewHolder{
-    TextView title,upName, viewCount;
-    ImageView cover,playIcon,upIcon;
+    final TextView title;
+    final TextView upName;
+    final TextView viewCount;
+    final ImageView cover;
+    final ImageView playIcon;
+    final ImageView upIcon;
 
     public VideoCardHolder(@NonNull View itemView) {
         super(itemView);

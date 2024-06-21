@@ -31,8 +31,8 @@ import java.util.ArrayList;
 
 public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.LocalVideoHolder> {
 
-    Context context;
-    ArrayList<LocalVideo> localVideoList;
+    final Context context;
+    final ArrayList<LocalVideo> localVideoList;
     OnItemLongClickListener longClickListener;
 
     public LocalVideoAdapter(Context context, ArrayList<LocalVideo> localVideoList) {
@@ -93,8 +93,8 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
 
 
     public static class LocalVideoHolder extends RecyclerView.ViewHolder{
-        TextView title;
-        ImageView cover;
+        final TextView title;
+        final ImageView cover;
 
         public LocalVideoHolder(@NonNull View itemView) {
             super(itemView);

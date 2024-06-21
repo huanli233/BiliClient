@@ -39,12 +39,12 @@ import java.util.ArrayList;
 
 public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    Context context;
-    ArrayList<Dynamic> dynamicList;
-    UserInfo userInfo;
+    final Context context;
+    final ArrayList<Dynamic> dynamicList;
+    final UserInfo userInfo;
     boolean desc_expand, notice_expand;
     boolean follow_onprocess;
-    PreInflateHelper preInflateHelper;
+    final PreInflateHelper preInflateHelper;
 
     public UserDynamicAdapter(Context context, ArrayList<Dynamic> dynamicList, UserInfo userInfo) {
         this.context = context;
@@ -187,10 +187,16 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public static class UserInfoHolder extends RecyclerView.ViewHolder{
-        TextView userName,userFans,userDesc,userNotice,userOfficial;
-        ImageView userAvatar,officialIcon;
+        final TextView userName;
+        final TextView userFans;
+        final TextView userDesc;
+        final TextView userNotice;
+        final TextView userOfficial;
+        final ImageView userAvatar;
+        final ImageView officialIcon;
 
-        MaterialButton followBtn,msgBtn;
+        final MaterialButton followBtn;
+        final MaterialButton msgBtn;
 
         public UserInfoHolder(@NonNull View itemView) {
             super(itemView);

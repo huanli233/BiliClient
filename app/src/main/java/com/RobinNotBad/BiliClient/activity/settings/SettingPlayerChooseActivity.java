@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class SettingPlayerChooseActivity extends BaseActivity {
 
-    String playerCurr = SharedPreferencesUtil.getString("player","null");
+    final String playerCurr = SharedPreferencesUtil.getString("player","null");
     MaterialCardView terminalPlayer,mtvPlayer,aliangPlayer, qn_choose;
     ArrayList<MaterialCardView> cardViewList;
     int checkPosition = -1;

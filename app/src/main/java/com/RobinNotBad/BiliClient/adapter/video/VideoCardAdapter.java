@@ -23,8 +23,8 @@ import java.util.List;
 
 public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
 
-    Context context;
-    List<VideoCard> videoCardList;
+    final Context context;
+    final List<VideoCard> videoCardList;
     OnItemLongClickListener longClickListener;
 
     public VideoCardAdapter(Context context, List<VideoCard> videoCardList) {

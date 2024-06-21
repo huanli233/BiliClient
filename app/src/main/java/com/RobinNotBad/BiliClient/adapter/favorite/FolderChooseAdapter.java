@@ -28,11 +28,11 @@ import java.util.ArrayList;
 
 public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapter.FolderHolder> {
 
-    Context context;
-    ArrayList<String> folderList;
-    ArrayList<Boolean> chooseState;
-    ArrayList<Long> fidList;
-    long aid;
+    final Context context;
+    final ArrayList<String> folderList;
+    final ArrayList<Boolean> chooseState;
+    final ArrayList<Long> fidList;
+    final long aid;
     boolean adding;
     public boolean added;
     public boolean changed;
@@ -121,7 +121,7 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
     }
 
     public static class FolderHolder extends RecyclerView.ViewHolder{
-        TextView folder_name;
+        final TextView folder_name;
 
         public FolderHolder(@NonNull View itemView) {
             super(itemView);

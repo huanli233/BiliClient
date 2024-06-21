@@ -37,7 +37,7 @@ public class EmoteUtil {
         return result;
     }
 
-    public static SpannableString textReplaceEmote(String text, ArrayList<Emote> emotes, float scale, Context context, CharSequence source) throws JSONException, ExecutionException, InterruptedException {
+    public static SpannableString textReplaceEmote(String text, ArrayList<Emote> emotes, float scale, Context context, CharSequence source) throws ExecutionException, InterruptedException {
         SpannableString result = source == null ? new SpannableString(text) : new SpannableString(source);
         if(emotes!=null && emotes.size()>0) {
             for (int i = 0; i < emotes.size(); i++) {    //遍历每一个表情包

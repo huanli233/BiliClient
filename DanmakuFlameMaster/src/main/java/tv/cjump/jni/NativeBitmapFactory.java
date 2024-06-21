@@ -118,7 +118,7 @@ public class NativeBitmapFactory {
             }
             return result;
         } catch (Exception e) {
-            Log.e("NativeBitmapFactory", "exception:" + e.toString());
+            Log.e("NativeBitmapFactory", "exception:" + e);
             return false;
         } catch (Error e) {
             return false;

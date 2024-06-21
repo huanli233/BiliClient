@@ -51,15 +51,20 @@ import java.util.List;
 
 public class DynamicHolder extends RecyclerView.ViewHolder{
     public static final int GO_TO_INFO_REQUEST = 71;
-    public TextView username,content,pubdate;
-    public ImageView avatar;
-    public LinearLayout extraCard;
-    public View itemView;
+    public final TextView username;
+    public final TextView content;
+    public TextView pubdate;
+    public final ImageView avatar;
+    public final LinearLayout extraCard;
+    public final View itemView;
     public TextView item_dynamic_share, item_dynamic_delete;
     public TextView likeCount;
-    public MaterialCardView cell_dynamic_child, cell_dynamic_video, cell_dynamic_image, cell_dynamic_article;
-    public boolean isChild;
-    BaseActivity mActivity;
+    public MaterialCardView cell_dynamic_child;
+    public final MaterialCardView cell_dynamic_video;
+    public final MaterialCardView cell_dynamic_image;
+    public final MaterialCardView cell_dynamic_article;
+    public final boolean isChild;
+    final BaseActivity mActivity;
     public ActivityResultLauncher<Intent> relayDynamicLauncher;
 
     public DynamicHolder(@NonNull View itemView, BaseActivity mActivity, boolean isChild) {

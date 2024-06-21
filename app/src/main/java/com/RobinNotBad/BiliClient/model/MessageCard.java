@@ -23,9 +23,9 @@ public class MessageCard {
     public long rootId;
 
     public static class Cursor {
-        public boolean is_end;
-        public long id;
-        public long time;
+        public final boolean is_end;
+        public final long id;
+        public final long time;
 
         public Cursor(boolean is_end, long id, long time) {
             this.is_end = is_end;

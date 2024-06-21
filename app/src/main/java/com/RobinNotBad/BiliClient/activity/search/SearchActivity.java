@@ -183,9 +183,7 @@ public class SearchActivity extends InstanceActivity {
                     try {
                         searchHistory.add(0, str);
                         SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history, new JSONArray(searchHistory).toString());
-                        runOnUiThread(() -> {
-                            searchHistoryAdapter.notifyItemInserted(0);
-                        });
+                        runOnUiThread(() -> searchHistoryAdapter.notifyItemInserted(0));
                     } catch (Exception e) {
                         runOnUiThread(() -> MsgUtil.err(e, this));
                     }

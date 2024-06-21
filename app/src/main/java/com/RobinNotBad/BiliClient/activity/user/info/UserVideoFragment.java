@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListFragment;
 import com.RobinNotBad.BiliClient.adapter.video.UserVideoAdapter;
-import com.RobinNotBad.BiliClient.adapter.video.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;

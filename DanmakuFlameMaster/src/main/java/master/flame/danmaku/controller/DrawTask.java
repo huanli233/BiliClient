@@ -67,14 +67,9 @@ public class DrawTask implements IDrawTask {
 
     private BaseDanmaku mLastDanmaku;
 
-    private Danmakus mLiveDanmakus = new Danmakus(Danmakus.ST_BY_LIST);
+    private final Danmakus mLiveDanmakus = new Danmakus(Danmakus.ST_BY_LIST);
 
-    private ConfigChangedCallback mConfigChangedCallback = new ConfigChangedCallback() {
-        @Override
-        public boolean onDanmakuConfigChanged(DanmakuContext config, DanmakuConfigTag tag, Object... values) {
-            return DrawTask.this.onDanmakuConfigChanged(config, tag, values);
-        }
-    };
+    private final ConfigChangedCallback mConfigChangedCallback = (config, tag, values) -> DrawTask.this.onDanmakuConfigChanged(config, tag, values);
 
     public DrawTask(DanmakuTimer timer, DanmakuContext context,
             TaskListener taskListener) {
@@ -85,13 +80,9 @@ public class DrawTask implements IDrawTask {
         mDisp = context.getDisplayer();
         mTaskListener = taskListener;
         mRenderer = new DanmakuRenderer(context);
-        mRenderer.setOnDanmakuShownListener(new IRenderer.OnDanmakuShownListener() {
-
-            @Override
-            public void onDanmakuShown(BaseDanmaku danmaku) {
-                if (mTaskListener != null) {
-                    mTaskListener.onDanmakuShown(danmaku);
-                }
+        mRenderer.setOnDanmakuShownListener(danmaku -> {
+            if (mTaskListener != null) {
+                mTaskListener.onDanmakuShown(danmaku);
             }
         });
         mRenderer.setVerifierEnabled(mContext.isPreventOverlappingEnabled() || mContext.isMaxLinesLimited());

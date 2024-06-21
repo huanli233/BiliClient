@@ -181,12 +181,7 @@ public class MediaPlayerProxy implements IMediaPlayer {
     public void setOnPreparedListener(OnPreparedListener listener) {
         if (listener != null) {
             final OnPreparedListener finalListener = listener;
-            mBackEndMediaPlayer.setOnPreparedListener(new OnPreparedListener() {
-                @Override
-                public void onPrepared(IMediaPlayer mp) {
-                    finalListener.onPrepared(MediaPlayerProxy.this);
-                }
-            });
+            mBackEndMediaPlayer.setOnPreparedListener(mp -> finalListener.onPrepared(MediaPlayerProxy.this));
         } else {
             mBackEndMediaPlayer.setOnPreparedListener(null);
         }
@@ -196,12 +191,7 @@ public class MediaPlayerProxy implements IMediaPlayer {
     public void setOnCompletionListener(OnCompletionListener listener) {
         if (listener != null) {
             final OnCompletionListener finalListener = listener;
-            mBackEndMediaPlayer.setOnCompletionListener(new OnCompletionListener() {
-                @Override
-                public void onCompletion(IMediaPlayer mp) {
-                    finalListener.onCompletion(MediaPlayerProxy.this);
-                }
-            });
+            mBackEndMediaPlayer.setOnCompletionListener(mp -> finalListener.onCompletion(MediaPlayerProxy.this));
         } else {
             mBackEndMediaPlayer.setOnCompletionListener(null);
         }
@@ -211,12 +201,7 @@ public class MediaPlayerProxy implements IMediaPlayer {
     public void setOnBufferingUpdateListener(OnBufferingUpdateListener listener) {
         if (listener != null) {
             final OnBufferingUpdateListener finalListener = listener;
-            mBackEndMediaPlayer.setOnBufferingUpdateListener(new OnBufferingUpdateListener() {
-                @Override
-                public void onBufferingUpdate(IMediaPlayer mp, int percent) {
-                    finalListener.onBufferingUpdate(MediaPlayerProxy.this, percent);
-                }
-            });
+            mBackEndMediaPlayer.setOnBufferingUpdateListener((mp, percent) -> finalListener.onBufferingUpdate(MediaPlayerProxy.this, percent));
         } else {
             mBackEndMediaPlayer.setOnBufferingUpdateListener(null);
         }
@@ -226,12 +211,7 @@ public class MediaPlayerProxy implements IMediaPlayer {
     public void setOnSeekCompleteListener(OnSeekCompleteListener listener) {
         if (listener != null) {
             final OnSeekCompleteListener finalListener = listener;
-            mBackEndMediaPlayer.setOnSeekCompleteListener(new OnSeekCompleteListener() {
-                @Override
-                public void onSeekComplete(IMediaPlayer mp) {
-                    finalListener.onSeekComplete(MediaPlayerProxy.this);
-                }
-            });
+            mBackEndMediaPlayer.setOnSeekCompleteListener(mp -> finalListener.onSeekComplete(MediaPlayerProxy.this));
         } else {
             mBackEndMediaPlayer.setOnSeekCompleteListener(null);
         }
@@ -241,12 +221,7 @@ public class MediaPlayerProxy implements IMediaPlayer {
     public void setOnVideoSizeChangedListener(OnVideoSizeChangedListener listener) {
         if (listener != null) {
             final OnVideoSizeChangedListener finalListener = listener;
-            mBackEndMediaPlayer.setOnVideoSizeChangedListener(new OnVideoSizeChangedListener() {
-                @Override
-                public void onVideoSizeChanged(IMediaPlayer mp, int width, int height, int sar_num, int sar_den) {
-                    finalListener.onVideoSizeChanged(MediaPlayerProxy.this, width, height, sar_num, sar_den);
-                }
-            });
+            mBackEndMediaPlayer.setOnVideoSizeChangedListener((mp, width, height, sar_num, sar_den) -> finalListener.onVideoSizeChanged(MediaPlayerProxy.this, width, height, sar_num, sar_den));
         } else {
             mBackEndMediaPlayer.setOnVideoSizeChangedListener(null);
         }
@@ -256,12 +231,7 @@ public class MediaPlayerProxy implements IMediaPlayer {
     public void setOnErrorListener(OnErrorListener listener) {
         if (listener != null) {
             final OnErrorListener finalListener = listener;
-            mBackEndMediaPlayer.setOnErrorListener(new OnErrorListener() {
-                @Override
-                public boolean onError(IMediaPlayer mp, int what, int extra) {
-                    return finalListener.onError(MediaPlayerProxy.this, what, extra);
-                }
-            });
+            mBackEndMediaPlayer.setOnErrorListener((mp, what, extra) -> finalListener.onError(MediaPlayerProxy.this, what, extra));
         } else {
             mBackEndMediaPlayer.setOnErrorListener(null);
         }
@@ -271,12 +241,7 @@ public class MediaPlayerProxy implements IMediaPlayer {
     public void setOnInfoListener(OnInfoListener listener) {
         if (listener != null) {
             final OnInfoListener finalListener = listener;
-            mBackEndMediaPlayer.setOnInfoListener(new OnInfoListener() {
-                @Override
-                public boolean onInfo(IMediaPlayer mp, int what, int extra) {
-                    return finalListener.onInfo(MediaPlayerProxy.this, what, extra);
-                }
-            });
+            mBackEndMediaPlayer.setOnInfoListener((mp, what, extra) -> finalListener.onInfo(MediaPlayerProxy.this, what, extra));
         } else {
             mBackEndMediaPlayer.setOnInfoListener(null);
         }
@@ -286,12 +251,7 @@ public class MediaPlayerProxy implements IMediaPlayer {
     public void setOnTimedTextListener(OnTimedTextListener listener) {
         if (listener != null) {
             final OnTimedTextListener finalListener = listener;
-            mBackEndMediaPlayer.setOnTimedTextListener(new OnTimedTextListener() {
-                @Override
-                public void onTimedText(IMediaPlayer mp, IjkTimedText text) {
-                    finalListener.onTimedText(MediaPlayerProxy.this, text);
-                }
-            });
+            mBackEndMediaPlayer.setOnTimedTextListener((mp, text) -> finalListener.onTimedText(MediaPlayerProxy.this, text));
         } else {
             mBackEndMediaPlayer.setOnTimedTextListener(null);
         }

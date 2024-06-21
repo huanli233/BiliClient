@@ -20,8 +20,8 @@ import java.util.ArrayList;
 
 public class PageChooseAdapter extends RecyclerView.Adapter<PageChooseAdapter.Holder> {
 
-    Context context;
-    ArrayList<String> nameList;
+    final Context context;
+    final ArrayList<String> nameList;
 
     OnItemClickListener onItemClickListener;
     OnItemLongClickListener onItemLongClickListener;
@@ -72,7 +72,7 @@ public class PageChooseAdapter extends RecyclerView.Adapter<PageChooseAdapter.Ho
     }
 
     public static class Holder extends RecyclerView.ViewHolder{
-        TextView folder_name;
+        final TextView folder_name;
 
         public Holder(@NonNull View itemView) {
             super(itemView);

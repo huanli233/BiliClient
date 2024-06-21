@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListFragment;
 import com.RobinNotBad.BiliClient.adapter.ReplyAdapter;
@@ -15,6 +16,7 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 //视频下评论页面，评论详情见ReplyInfoActivity
 //部分通用代码在VideoReplyAdapter内
@@ -151,10 +153,12 @@ public class ReplyFragment extends RefreshListFragment {
 
     public void notifyReplyInserted(Reply reply) {
         if (reply.root != 0) return;
-        replyList.add(0, reply);
+        LinearLayoutManager layoutManager = (LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager());
+        int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
+        replyList.add(pos, reply);
         runOnUiThread(() -> {
-            replyAdapter.notifyItemInserted(0);
-            replyAdapter.notifyItemRangeChanged(0, replyList.size());
+            replyAdapter.notifyItemInserted(pos);
+            replyAdapter.notifyItemRangeChanged(pos, replyList.size() - pos);
         });
     }
 

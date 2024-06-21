@@ -66,7 +66,7 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
 
     protected int mDrawingThreadType = THREAD_TYPE_NORMAL_PRIORITY;
 
-    private Object mDrawMonitor = new Object();
+    private final Object mDrawMonitor = new Object();
 
     private boolean mDrawFinished = false;
 
@@ -351,7 +351,7 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
 
     private int mResumeTryCount = 0;
 
-    private Runnable mResumeRunnable = new Runnable() {
+    private final Runnable mResumeRunnable = new Runnable() {
         @Override
         public void run() {
             if (handler == null) {

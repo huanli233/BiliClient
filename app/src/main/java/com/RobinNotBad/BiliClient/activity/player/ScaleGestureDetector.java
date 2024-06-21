@@ -65,8 +65,8 @@ public class ScaleGestureDetector {
     public long mCurrTime;
     public long mPrevTime;
     public boolean mInProgress;
-    public int mSpanSlop;
-    public int mMinSpan;
+    public final int mSpanSlop;
+    public final int mMinSpan;
 
     private final Handler mHandler;
 

@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.adapter.article;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
