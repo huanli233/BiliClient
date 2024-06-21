@@ -50,6 +50,7 @@ public class LivePlayInfo implements Serializable {
     public static class Format implements Serializable {
         public String format_name;
         public List<Codec> codec;
+        public String master_url;
     }
 
     public static class Codec implements Serializable {
@@ -61,7 +62,6 @@ public class LivePlayInfo implements Serializable {
         public int hdr_qn;
         public int dolby_type;
         public String attr_name;
-        public String master_url;
     }
 
     public static class UrlInfo implements Serializable {

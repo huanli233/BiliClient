@@ -102,9 +102,58 @@ public class LiveApi {
                     if (streams != null) {
                         List<LivePlayInfo.ProtocolInfo> protocolInfos = new ArrayList<>();
                         for (int i = 0; i < streams.length(); i++) {
-                            JSONObject jsonObject = streams.getJSONObject(i);
+                            JSONObject protocol = streams.getJSONObject(i);
                             LivePlayInfo.ProtocolInfo protocolInfo = new LivePlayInfo.ProtocolInfo();
-                            // TODO protocalInfo analyze
+                            protocolInfo.protocol_name = protocol.getString("protocal_name");
+                            JSONArray formats = protocol.optJSONArray("format");
+                            if (formats != null) {
+                                List<LivePlayInfo.Format> formatList = new ArrayList<>();
+                                for (int j = 0; j < formats.length(); j++) {
+                                    JSONObject format = formats.getJSONObject(j);
+                                    LivePlayInfo.Format formatInfo = new LivePlayInfo.Format();
+                                    formatInfo.format_name = format.getString("format_name");
+                                    JSONArray codecs = format.optJSONArray("codec");
+                                    if (codecs != null) {
+                                        List<LivePlayInfo.Codec> codecList = new ArrayList<>();
+                                        for (int k = 0; k < codecs.length(); k++) {
+                                            JSONObject codec = codecs.getJSONObject(k);
+                                            LivePlayInfo.Codec codecInfo = new LivePlayInfo.Codec();
+                                            codecInfo.codec_name = codec.getString("codec_name");
+                                            codecInfo.current_qn = codec.optInt("current_qn", -1);
+                                            JSONArray accept_qns = codec.optJSONArray("accept_qn");
+                                            if (accept_qns != null) {
+                                                List<Integer> acceptQnList = new ArrayList<>();
+                                                for (int l = 0; l < accept_qns.length(); l++) {
+                                                    acceptQnList.add(accept_qns.getInt(l));
+                                                }
+                                                codecInfo.accept_qn = acceptQnList;
+                                            }
+                                            codecInfo.base_url = codec.getString("base_url");
+                                            JSONArray url_infos = codec.optJSONArray("url_info");
+                                            if (url_infos != null) {
+                                                List<LivePlayInfo.UrlInfo> urlInfos = new ArrayList<>();
+                                                for (int l = 0; l < url_infos.length(); l++) {
+                                                    JSONObject url_info = url_infos.getJSONObject(l);
+                                                    LivePlayInfo.UrlInfo urlInfo = new LivePlayInfo.UrlInfo();
+                                                    urlInfo.host = url_info.getString("host");
+                                                    urlInfo.extra = url_info.optString("extra");
+                                                    urlInfo.stream_ttl = url_info.optInt("stream_ttl");
+                                                    urlInfos.add(urlInfo);
+                                                }
+                                                codecInfo.url_info = urlInfos;
+                                            }
+                                            codecInfo.hdr_qn = codec.optInt("hdr_qn", -1);
+                                            codecInfo.dolby_type = codec.optInt("dolby_type", -1);
+                                            codecInfo.attr_name = codec.optString("attr_name");
+                                            codecList.add(codecInfo);
+                                        }
+                                        formatInfo.codec = codecList;
+                                        formatInfo.master_url = format.optString("master_url");
+                                    }
+                                    formatList.add(formatInfo);
+                                }
+                                protocolInfo.format = formatList;
+                            }
                             protocolInfos.add(protocolInfo);
                         }
                         playUrl.stream = protocolInfos;
