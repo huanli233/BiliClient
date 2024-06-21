@@ -279,15 +279,15 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 @Override
                 public boolean onLongClick(View view) {
                     long currentTime = System.currentTimeMillis();
-                    if (longClickPosition == realPosition && currentTime - longClickTime < 10000) {
+                    if (longClickPosition == realPosition && currentTime - longClickTime < 6000) {
                         CenterThreadPool.run(() -> {
                             try {
                                 int result = ReplyApi.deleteReply(oid, replyList.get(realPosition).rpid, replyType);
                                 if (result == 0) {
                                     replyList.remove(realPosition);
                                     ((Activity) context).runOnUiThread(() -> {
-                                        notifyItemRemoved(realPosition);
-                                        notifyItemRangeChanged(realPosition, replyList.size() - realPosition);
+                                        notifyItemRemoved(position);
+                                        notifyItemRangeChanged(position, replyList.size() - position);
                                         longClickPosition = -1;
                                         MsgUtil.toast("删除成功~", context);
                                         if (realPosition == 0 && isDetail) {
