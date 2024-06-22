@@ -50,7 +50,7 @@ public class PreInflateHelper {
     }
 
     private void preAsyncInflateView(@NonNull ViewGroup parent, int layoutId) {
-        mLayoutInflater.asyncInflateView(parent, layoutId, (layoutId1, view) -> mViewCache.putView(layoutId1, view));
+        mLayoutInflater.asyncInflateView(parent, layoutId, mViewCache::putView);
     }
 
     public View getView(@NonNull ViewGroup parent, int layoutId, boolean attachToRoot) {
@@ -58,8 +58,8 @@ public class PreInflateHelper {
     }
     public View getView(@NonNull ViewGroup parent, int layoutId, int maxCount, boolean attachToRoot) {
         View view = mViewCache.getView(layoutId);
+        preloadOnce(parent, layoutId, maxCount);
         if (view != null) {
-            preloadOnce(parent, layoutId, maxCount);
             return view;
         }
         return mLayoutInflater.inflateView(parent, layoutId, attachToRoot);
@@ -72,8 +72,8 @@ public class PreInflateHelper {
 
     public View getView(@NonNull ViewGroup parent, int layoutId, int maxCount) {
         View view = mViewCache.getView(layoutId);
+        preloadOnce(parent, layoutId, maxCount);
         if (view != null) {
-            preloadOnce(parent, layoutId, maxCount);
             return view;
         }
         return mLayoutInflater.inflateView(parent, layoutId, false);

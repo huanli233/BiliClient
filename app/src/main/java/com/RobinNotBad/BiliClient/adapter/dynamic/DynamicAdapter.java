@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.adapter.dynamic;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.recyclerView = recyclerView;
         dynamicActivity = (DynamicActivity) context;
         this.writeDynamicLauncher = dynamicActivity.writeDynamicLauncher;
-        getInflateHelper().preload(recyclerView, R.layout.cell_dynamic);
+        getInflateHelper().preload(recyclerView, R.layout.cell_dynamic, 5, 0);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             View view = LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic_action, parent,false);
             return new WriteDynamic(view);
         } else {
-            return new DynamicHolder(getInflateHelper().getView(parent, R.layout.cell_dynamic), dynamicActivity, false);
+            return new DynamicHolder(getInflateHelper().getView(parent, R.layout.cell_dynamic, 3, false), dynamicActivity, false);
         }
     }
 
@@ -71,6 +72,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
             writeDynamic.type.setOnClickListener((view) -> dynamicActivity.selectTypeLauncher.launch(new Intent().setClass(context, ListChooseActivity.class).putExtra("title", "选择类型").putExtra("items", new ArrayList<>(Arrays.asList("全部", "视频投稿", "追番", "专栏")))));
         } else if (holder instanceof DynamicHolder) {
+            long time = System.currentTimeMillis();
             position--;
             DynamicHolder dynamicHolder = (DynamicHolder) holder;
             dynamicHolder.showDynamic(dynamicList.get(position), context, true);      //该函数在DynamicHolder里
@@ -88,6 +90,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             View.OnLongClickListener onDeleteLongClick = DynamicHolder.getDeleteListener(dynamicActivity, dynamicList, finalPosition, this);
             dynamicHolder.item_dynamic_delete.setOnLongClickListener(onDeleteLongClick);
             if (dynamicList.get(position).canDelete) dynamicHolder.item_dynamic_delete.setVisibility(View.VISIBLE);
+            Log.d("BiliClient", "DynamicAdapter onBindViewHolder finish: " + (System.currentTimeMillis() - time));
         }
     }
 

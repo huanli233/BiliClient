@@ -39,7 +39,9 @@ import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.EncodeStrategy;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
@@ -223,7 +225,27 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
         Glide.with(context).asDrawable().load(GlideUtil.url(dynamic.userInfo.avatar))
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .diskCacheStrategy(new DiskCacheStrategy() {
+                    @Override
+                    public boolean isDataCacheable(DataSource dataSource) {
+                        return dataSource != DataSource.DATA_DISK_CACHE && dataSource != DataSource.MEMORY_CACHE;
+                    }
+
+                    @Override
+                    public boolean isResourceCacheable(boolean isFromAlternateCacheKey, DataSource dataSource, EncodeStrategy encodeStrategy) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean decodeCachedResource() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean decodeCachedData() {
+                        return false;
+                    }
+                })
                 .into(avatar);
 
         avatar.setOnClickListener(view -> {
@@ -278,7 +300,9 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 ImageView imageView = imageCard.findViewById(R.id.imageView);
                 Glide.with(context).asDrawable().load(GlideUtil.url(pictureList.get(0)))
                         .placeholder(R.mipmap.placeholder)
+                        .centerCrop()
                         .format(DecodeFormat.PREFER_RGB_565)
+                        .sizeMultiplier(0.85f)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(imageView);
                 TextView textView = imageCard.findViewById(R.id.imageCount);

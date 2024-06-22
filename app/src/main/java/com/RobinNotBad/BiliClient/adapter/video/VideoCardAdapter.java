@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.adapter.video;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,6 +12,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.PreInflateHelper;
 
 import java.util.List;
 
@@ -26,10 +26,12 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
     final Context context;
     final List<VideoCard> videoCardList;
     OnItemLongClickListener longClickListener;
+    final PreInflateHelper preInflateHelper;
 
     public VideoCardAdapter(Context context, List<VideoCard> videoCardList) {
         this.context = context;
         this.videoCardList = videoCardList;
+        this.preInflateHelper = new PreInflateHelper(context);
     }
 
     public void setOnLongClickListener(OnItemLongClickListener listener){
@@ -39,7 +41,7 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
     @NonNull
     @Override
     public VideoCardHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_video_list,parent,false);
+        View view = preInflateHelper.getView(parent, R.layout.cell_video_list, false);
         return new VideoCardHolder(view);
     }
 

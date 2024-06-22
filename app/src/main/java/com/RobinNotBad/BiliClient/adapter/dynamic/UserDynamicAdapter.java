@@ -61,7 +61,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             return new UserInfoHolder(view);
         }
         else {
-            View view = LayoutInflater.from(context).inflate(R.layout.cell_dynamic, parent, false);
+            View view = preInflateHelper.getView(parent, R.layout.cell_dynamic, 3, false);
             return new DynamicHolder(view, (BaseActivity) context, false);
         }
     }
