@@ -44,7 +44,7 @@ public class SearchApi {
         else return null;
     }
 
-    public static JSONArray searchType(String keyword,int page,String type) throws IOException , JSONException {
+    public static Object searchType(String keyword,int page,String type) throws IOException , JSONException {
         if(!search_keyword.equals(keyword)) {
             search_keyword = keyword;
             seid = "";
@@ -60,7 +60,7 @@ public class SearchApi {
 
         seid = data.getString("seid");
 
-        if(data.has("result") && !data.isNull("result")) return data.getJSONArray("result");  //其实这还不是我们要的结果，下面的函数对它进行再次拆解  这里做了判空
+        if(data.has("result") && !data.isNull("result")) return data.get("result");  //其实这还不是我们要的结果，下面的函数对它进行再次拆解  这里做了判空
         else return null;
     }
 

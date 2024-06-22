@@ -49,7 +49,8 @@ public class LiveCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
 
         VideoCard videoCard = new VideoCard();
         videoCard.title = room.title;
-        videoCard.cover = room.cover;
+        if(!room.user_cover.startsWith("http")) videoCard.cover = "http:" + room.user_cover;
+        else videoCard.cover = room.user_cover;
         videoCard.upName = room.uname;
         videoCard.view = ToolsUtil.toWan(room.online) + "人观看";
         videoCard.type = "live";

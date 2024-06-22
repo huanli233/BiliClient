@@ -99,7 +99,7 @@ public class SearchArticleFragment extends Fragment implements SearchRefreshable
         Log.e("debug","加载下一页");
         int lastSize = articleCardList.size();
         try {
-            JSONArray result = SearchApi.searchType(keyword,page,"article");
+            JSONArray result = (JSONArray) SearchApi.searchType(keyword,page,"article");
             if(result!=null) {
                 SearchApi.getArticlesFromSearchResult(result, articleCardList);
                 CenterThreadPool.runOnUiThread(() -> articleCardAdapter.notifyItemRangeInserted(lastSize + 1, articleCardList.size()-lastSize));
