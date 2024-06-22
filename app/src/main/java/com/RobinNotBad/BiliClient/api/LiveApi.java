@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.api;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
 import com.RobinNotBad.BiliClient.model.LivePlayInfo;
@@ -11,10 +12,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class LiveApi {
+
+    public static final LinkedHashMap<Integer, Integer> PlayerQnMap = new LinkedHashMap<>() {{
+        //用于将播放器的清晰度转换成直播的清晰度代码
+        put(16, 80);
+        put(64, 150);
+        put(80, 250);
+    }};
 
     /**
      * 获取推荐直播间列表
@@ -86,7 +96,7 @@ public class LiveApi {
      * @return 直播间PlayInfo
      */
     public static LivePlayInfo getRoomPlayInfo(long roomId, int qn) throws JSONException, IOException {
-        String url = "https://api.live.bilibili.com/xlive/web-ucenter/v1/xfetter/GetWebList" + new NetWorkUtil.FormData().setUrlParam(true)
+        String url = "https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo" + new NetWorkUtil.FormData().setUrlParam(true)
                 .put("room_id", roomId)
                 .put("qn", qn)
                 .put("protocol", "0,1")
@@ -115,7 +125,7 @@ public class LiveApi {
             JSONObject playurl_info = data.optJSONObject("playurl_info");
             if (playurl_info != null) {
                 livePlayInfo.conf_json = playurl_info.optString("conf_json");
-                JSONObject play_url = playurl_info.optJSONObject("play_url");
+                JSONObject play_url = playurl_info.optJSONObject("playurl");
                 if (play_url != null) {
                     LivePlayInfo.PlayUrl playUrl = new LivePlayInfo.PlayUrl();
                     playUrl.cid = play_url.optLong("cid", -1);
@@ -139,7 +149,7 @@ public class LiveApi {
                         for (int i = 0; i < streams.length(); i++) {
                             JSONObject protocol = streams.getJSONObject(i);
                             LivePlayInfo.ProtocolInfo protocolInfo = new LivePlayInfo.ProtocolInfo();
-                            protocolInfo.protocol_name = protocol.getString("protocal_name");
+                            protocolInfo.protocol_name = protocol.getString("protocol_name");
                             JSONArray formats = protocol.optJSONArray("format");
                             if (formats != null) {
                                 List<LivePlayInfo.Format> formatList = new ArrayList<>();
@@ -215,6 +225,7 @@ public class LiveApi {
             livePlayInfo.official_type = data.optInt("official_type", -1);
             livePlayInfo.official_room_id = data.optInt("official_room_id", -1);
             livePlayInfo.risk_with_delay = data.optInt("risk_with_delay", -1);
+            return livePlayInfo;
         }
         return null;
     }
@@ -272,7 +283,10 @@ public class LiveApi {
                 watched.icon_web = watched_show.optString("icon_web");
                 liveRoom.watched_show = watched;
             }
-            liveRoom.liveTime = jsonObject.optString("live_time");
+            long live_time = jsonObject.optLong("live_time",-1);
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            if(live_time != -1) liveRoom.liveTime = sdf.format(live_time * 1000);
+            else liveRoom.liveTime = jsonObject.optString("live_time");
             liveRooms.add(liveRoom);
         }
         return liveRooms;

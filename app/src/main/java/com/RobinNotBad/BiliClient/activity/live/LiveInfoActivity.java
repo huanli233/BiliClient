@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity.live;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,15 +13,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.adapter.user.UpListAdapter;
 import com.RobinNotBad.BiliClient.api.LiveApi;
+import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
+import com.RobinNotBad.BiliClient.model.LivePlayInfo;
 import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -28,9 +33,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 public class LiveInfoActivity extends BaseActivity {
     private long room_id;
@@ -42,8 +45,7 @@ public class LiveInfoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        Intent intent = getIntent();
-        room_id = intent.getLongExtra("room_id",0);
+        room_id = getIntent().getLongExtra("room_id",0);
         if(room_id == 0) {
             finish();
             return;
@@ -86,7 +88,7 @@ public class LiveInfoActivity extends BaseActivity {
                         timeText.setText("直播开始于" + room.liveTime);
 
                         idText.setText(String.valueOf(room_id));
-                        tags.setText(room.tags);
+                        tags.setText("标签：" + room.tags);
                         ToolsUtil.setCopy(this,idText,tags,title);
 
                         description.setText(ToolsUtil.htmlToString(room.description));
@@ -94,6 +96,29 @@ public class LiveInfoActivity extends BaseActivity {
                             if (desc_expand) description.setMaxLines(3);
                             else description.setMaxLines(512);
                             desc_expand = !desc_expand;
+                        });
+
+                        play.setOnClickListener(view -> {
+                            CenterThreadPool.run(() -> {
+                                try {
+                                    LivePlayInfo playInfo = LiveApi.getRoomPlayInfo(room_id,LiveApi.PlayerQnMap.get(SharedPreferencesUtil.getInt("play_qn", 16)));
+                                    LivePlayInfo.Codec codec;
+                                    if (playInfo != null) {
+                                        codec = playInfo.playUrl.stream.get(0).format.get(0).codec.get(0);
+                                        LivePlayInfo.UrlInfo urlInfo = codec.url_info.get(0);
+                                        String play_url = urlInfo.host + codec.base_url + urlInfo.extra;
+                                        runOnUiThread(() -> PlayerApi.jumpToPlayer(this,play_url,"","直播·" + room.title,false,0,"",0,userInfo.mid,0,true));
+                                    }
+                                }catch (Exception e){
+                                    runOnUiThread(() -> MsgUtil.err(e,this));
+                                }
+                            });
+                        });
+                        play.setOnLongClickListener(view -> {
+                            Intent intent = new Intent();
+                            intent.setClass(this, SettingPlayerChooseActivity.class);
+                            startActivity(intent);
+                            return true;
                         });
                     });
                 }catch (Exception e){

@@ -61,6 +61,8 @@
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
         <item>新增了表情面板</item>
+        <item>新增了直播详情页的查看</item>
+        <item>实现了基本的直播播放</item>
         <item>实现了直接跳转到对应评论</item>
         <item>优化了发布评论后的评论显示</item>
         <item>修复了通知中心崩溃的问题</item>

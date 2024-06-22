@@ -99,7 +99,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private SeekBar progressBar, speed_seekbar;
     private float screen_width, screen_height;
     private int video_width, video_height;
-    private boolean ischanging, isdanmakushowing = false;
+    private boolean ischanging, isdanmakushowing = false, live_mode = false;
     private TextView text_progress, online_text, text_volume, text_title, loading_text0, loading_text1, text_speed, text_newspeed;
     private String progress_all_str;
     private AudioManager audioManager;
@@ -185,7 +185,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             //一种很新的使用ConstraintLayout的方法（
         }
 
-        if(!SharedPreferencesUtil.getBoolean("show_online",true)) online_text.setVisibility(View.GONE);
+        if((!SharedPreferencesUtil.getBoolean("show_online",true)) || live_mode) online_text.setVisibility(View.GONE);
 
         if (mode == -1) {
             loading_text0.setText("预览中");
@@ -309,6 +309,11 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             }
         }),30);
 
+        if(live_mode){
+            text_progress.setVisibility(View.GONE);
+            progressBar.setEnabled(false);
+            text_speed.setVisibility(View.GONE);
+        }
     }
 
 
@@ -389,6 +394,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         mid = intent.getLongExtra("mid",0);
 
         lastProgress = intent.getIntExtra("progress",0);
+
+        live_mode = intent.getBooleanExtra("live_mode",false);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -513,7 +520,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         });
         //这个管长按开始
         control_layout.setOnLongClickListener(view -> {
-            if (SharedPreferencesUtil.getBoolean("player_longclick", true) && ijkPlayer != null && (playing)) {
+            if (SharedPreferencesUtil.getBoolean("player_longclick", true) && ijkPlayer != null && (playing) && (!live_mode)) {
                 if (!onLongClick && !gesture_moved && !gesture_scaled) {
                     hidecon();
                     ijkPlayer.setSpeed(3.0F);
@@ -572,7 +579,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         right_control.setVisibility(View.VISIBLE);
         top_control.setVisibility(View.VISIBLE);
         bottom_control.setVisibility(View.VISIBLE);
-        if (prepared) text_speed.setVisibility(View.VISIBLE);
+        if (prepared && !live_mode) text_speed.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             batteryView.setPower(manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
         }
@@ -766,7 +773,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         //原作者居然把旋转按钮命名为danmaku_btn，也是没谁了...我改过来了  ----RobinNotBad
         //他大抵是觉得能用就行
 
-        if (SharedPreferencesUtil.getBoolean("player_ui_showLoopBtn", true)) {
+        if (SharedPreferencesUtil.getBoolean("player_ui_showLoopBtn", true) && !live_mode) {
             if (loop) loop_btn.setImageResource(R.mipmap.loopon);
             else loop_btn.setImageResource(R.mipmap.loopoff);
             loop_btn.setOnClickListener(view -> {
@@ -781,7 +788,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         progressBar.setMax(videoall);
         progress_all_str = ToolsUtil.toTime(videoall / 1000);
 
-        if(SharedPreferencesUtil.getBoolean("player_from_last",true)){
+        if(SharedPreferencesUtil.getBoolean("player_from_last",true) && !live_mode){
             if(lastProgress > 5) { //阈值
                 mediaPlayer.seekTo(lastProgress * 1000);
                 runOnUiThread(() -> MsgUtil.toast("已从上次的位置播放",this));
@@ -890,6 +897,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             @SuppressLint("SetTextI18n")
             @Override
             public void run() {
+                if(live_mode) onlineTimer.cancel();
                 if (ijkPlayer != null && !ischanging) {
                     try {
                         if((aid == 0 && bvid == null) || cid == 0) online_number = "";
@@ -908,6 +916,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     }
 
     private void downdanmu() {
+        if(danmaku_url.isEmpty()) return;
         try {
             Response response = NetWorkUtil.get(danmaku_url, NetWorkUtil.webHeaders);
             BufferedSink bufferedSink = null;
@@ -927,7 +936,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             }
             streamdanmaku(danmakuFile.toString());
         }catch (Exception e){
-            MsgUtil.err(e,this);
+            runOnUiThread(() -> MsgUtil.err(e,this));
         }
     }
 
@@ -1013,7 +1022,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             if (autoHideTimer != null) autoHideTimer.cancel();
         } else {
             playing = true;
-            if (mDanmakuView != null && mode!=1) {
+            if (mDanmakuView != null && mode!=1 && (!live_mode)) {
                 if (videonow >= videoall - 250) {     //别问为啥有个>=，问就是这TM都能有误差，视频停止时并不是播放到最后一帧,可以多或者少出来几十甚至上百个毫秒...  ----RobinNotBad
                     ijkPlayer.seekTo(0);
                     mDanmakuView.seekTo(0L);

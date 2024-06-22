@@ -92,7 +92,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                             intent.putExtra("parent_title", getIntent().getStringExtra("parent_title"));
                         startActivity(intent);
                     } else {
-                        PlayerApi.jumpToPlayer(JumpToPlayerActivity.this, videourl, danmakuurl, title, false, aid, bvid, cid, mid, progress);
+                        PlayerApi.jumpToPlayer(JumpToPlayerActivity.this, videourl, danmakuurl, title, false, aid, bvid, cid, mid, progress,false);
                     }
                     finish();
                 }
