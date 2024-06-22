@@ -56,8 +56,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/activity_padding_horizontal"
-                android:orientation="vertical">
+            android:layout_marginHorizontal="@dimen/activity_padding_horizontal"
+            android:orientation="vertical"
+            android:focusable="true"  
+            android:focusableInTouchMode="true">
 
             <TextView
                 android:id="@+id/desc"
@@ -77,8 +79,6 @@
                 android:padding="8dp"
                 android:text=""
                 android:textSize="13sp"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
                 tools:ignore="HardcodedText,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <com.google.android.material.card.MaterialCardView

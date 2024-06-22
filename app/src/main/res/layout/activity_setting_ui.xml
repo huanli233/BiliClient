@@ -95,7 +95,9 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:focusable="true"  
+                        android:focusableInTouchMode="true">
 
                         <EditText
                             android:id="@+id/ui_scale_input"
@@ -104,8 +106,6 @@
                             android:inputType="numberDecimal"
                             android:minWidth="50dp"
                             android:textSize="12sp"
-                            android:focusableInTouchMode="false"
-                            android:focusable="false"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/textView1"
                             app:layout_constraintStart_toStartOf="parent"
@@ -153,7 +153,9 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="2dp"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="4dp">
+                        android:paddingHorizontal="4dp"
+                        android:focusable="true"  
+                        android:focusableInTouchMode="true">
 
                         <TextView
                             android:id="@+id/desc1"
@@ -172,8 +174,6 @@
                             android:inputType="number"
                             android:minHeight="40dp"
                             android:textSize="13sp"
-                            android:focusableInTouchMode="false"
-                            android:focusable="false"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/desc2"
                             app:layout_constraintStart_toEndOf="@+id/desc1"
@@ -197,7 +197,9 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="2dp"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="4dp">
+                        android:paddingHorizontal="4dp"
+                        android:focusable="true"  
+                        android:focusableInTouchMode="true">
 
                         <TextView
                             android:id="@+id/desc3"
@@ -220,8 +222,6 @@
                             android:textColorHint="#80ffffff"
                             android:textCursorDrawable="@drawable/cursor_drawable"
                             android:textSize="13sp"
-                            android:focusableInTouchMode="false"
-                            android:focusable="false"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/desc4"
                             app:layout_constraintStart_toEndOf="@+id/desc3"
@@ -270,7 +270,9 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:focusable="true"  
+                        android:focusableInTouchMode="true">
 
                         <EditText
                             android:id="@+id/density_input"
@@ -278,8 +280,6 @@
                             android:layout_height="wrap_content"
                             android:minWidth="50dp"
                             android:textSize="12sp"
-                            android:focusableInTouchMode="false"
-                            android:focusable="false"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
