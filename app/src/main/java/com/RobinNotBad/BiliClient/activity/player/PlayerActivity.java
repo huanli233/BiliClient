@@ -238,7 +238,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             @Override
             public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
                 runOnUiThread(() -> {
-                    text_progress.setText(ToolsUtil.toTime(position / 1000) + "/" + progress_all_str);
+                    if(!live_mode) text_progress.setText(ToolsUtil.toTime(position / 1000) + "/" + progress_all_str);
                     if(!online_number.isEmpty()) online_text.setText("实时" + online_number + "人");
                     else online_text.setText("");
                 });
@@ -310,9 +310,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }),30);
 
         if(live_mode){
-            text_progress.setVisibility(View.GONE);
             progressBar.setEnabled(false);
-            text_speed.setVisibility(View.GONE);
         }
     }
 
@@ -686,10 +684,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private void MPPrepare(String nowurl){
         ijkPlayer.setOnPreparedListener(this);
 
-        runOnUiThread(() -> loading_text0.setText("载入视频中"));
+        if(live_mode) runOnUiThread(() -> loading_text0.setText("载入直播中"));
+        else runOnUiThread(() -> loading_text0.setText("载入视频中"));
         try {
             if(mode==0) {
-                Log.e("debug","播放B站在线视频！");
                 Map<String,String> headers = new HashMap<>();
                 headers.put("Referer","https://www.bilibili.com/");
                 headers.put("Cookie",SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
@@ -705,7 +703,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             if(loop){
                 ijkPlayer.seekTo(0);
                 ijkPlayer.start();
-                Log.e("debug","循环播放");
             }
             else {
                 playing = false;
@@ -800,6 +797,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         control_btn.setImageResource(R.drawable.btn_player_pause);
 
         text_speed.setVisibility(top_control.getVisibility());
+        if(live_mode) text_speed.setVisibility(View.GONE);
         text_speed.setOnClickListener(view -> speed_layout.setVisibility(View.VISIBLE));
         speed_layout.setOnClickListener(view -> speed_layout.setVisibility(View.GONE));
 
@@ -882,7 +880,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     videonow = (int) ijkPlayer.getCurrentPosition();
                     if (videonow_last != videonow) {               //检测进度是否在变动
                         videonow_last = videonow;
-                        runOnUiThread(() -> progressBar.setProgress(videonow));
+                        runOnUiThread(() -> {
+                            if(live_mode) text_progress.setText(ToolsUtil.toTime(videonow / 1000));
+                            else progressBar.setProgress(videonow);
+                        });
                         //progressBar上有一个onProgressChange的监听器，文字更改在那里
                     }
                 }
