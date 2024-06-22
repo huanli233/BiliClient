@@ -19,6 +19,7 @@ import com.RobinNotBad.BiliClient.BuildConfig;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.video.MediaEpisodeAdapter;
+import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -58,6 +59,8 @@ public class UpdateDownloadResultActivity extends BaseActivity {
             finish();
             return;
         }
+
+        TutorialHelper.show(R.xml.tutorial_update_install, this, "update_install", 0);
 
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_update_download_result, null, ((view, resid, parent) -> {
             setContentView(view);
