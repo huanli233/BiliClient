@@ -1,11 +1,7 @@
 package com.RobinNotBad.BiliClient.activity.live;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.user.UpListAdapter;
 import com.RobinNotBad.BiliClient.adapter.video.MediaEpisodeAdapter;
 import com.RobinNotBad.BiliClient.api.LiveApi;
@@ -39,7 +34,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class LiveInfoActivity extends BaseActivity {
     private long room_id;
@@ -48,6 +42,8 @@ public class LiveInfoActivity extends BaseActivity {
 
     private RecyclerView protocol_list,host_list;
     private int selectedProtocol = 0,selectedHost = 0;
+    private MediaEpisodeAdapter hostAdapter;
+    private LivePlayInfo playInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +64,7 @@ public class LiveInfoActivity extends BaseActivity {
                 try {
                     room = LiveApi.getRoomInfo(room_id);
                     UserInfo userInfo = UserInfoApi.getUserInfo(room.uid);
-                    LivePlayInfo playInfo = LiveApi.getRoomPlayInfo(room_id,LiveApi.PlayerQnMap.get(SharedPreferencesUtil.getInt("play_qn", 16)));
+                    playInfo = LiveApi.getRoomPlayInfo(room_id,LiveApi.PlayerQnMap.get(SharedPreferencesUtil.getInt("play_qn", 16)));
                     runOnUiThread(() -> {
                         ImageView cover = findViewById(R.id.cover);
                         TextView title = findViewById(R.id.title);
@@ -139,7 +135,10 @@ public class LiveInfoActivity extends BaseActivity {
 
                         //协议选择
                         MediaEpisodeAdapter protocolAdapter = new MediaEpisodeAdapter();
-                        protocolAdapter.setOnItemClickListener(index -> selectedProtocol = index);
+                        protocolAdapter.setOnItemClickListener(index -> {
+                            selectedProtocol = index;
+                            refresh_host_list();
+                        });
                         ArrayList<Bangumi.Episode> protocolList = new ArrayList<>();
                         for (int i = 0;i < playInfo.playUrl.stream.size();i++){
                             Bangumi.Episode episode = new Bangumi.Episode();
@@ -152,23 +151,28 @@ public class LiveInfoActivity extends BaseActivity {
                         runOnUiThread(() -> protocol_list.setAdapter(protocolAdapter));
 
                         //路线选择
-                        MediaEpisodeAdapter hostAdapter = new MediaEpisodeAdapter();
+                        hostAdapter = new MediaEpisodeAdapter();
                         hostAdapter.setOnItemClickListener(index -> selectedHost = index);
-                        ArrayList<Bangumi.Episode> hostList = new ArrayList<>();
-                        for (int i = 0;i < playInfo.playUrl.stream.size();i++){
-                            Bangumi.Episode episode = new Bangumi.Episode();
-                            episode.id = i;
-                            episode.title = "源" + i;
-                            hostList.add(episode);
-                        }
-                        hostAdapter.setData(hostList);
+                        hostAdapter.setData(new ArrayList<>());
                         host_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                         runOnUiThread(() -> host_list.setAdapter(hostAdapter));
+                        refresh_host_list();
                     });
                 }catch (Exception e){
                     runOnUiThread(() -> MsgUtil.err(e,this));
                 }
             });
         });
+    }
+
+    private void refresh_host_list(){
+        ArrayList<Bangumi.Episode> hostList = new ArrayList<>();
+        for (int i = 0;i < playInfo.playUrl.stream.get(selectedProtocol).format.get(0).codec.get(0).url_info.size();i++){
+            Bangumi.Episode episode = new Bangumi.Episode();
+            episode.id = i;
+            episode.title = "源" + i;
+            hostList.add(episode);
+        }
+        hostAdapter.setData(hostList);
     }
 }
