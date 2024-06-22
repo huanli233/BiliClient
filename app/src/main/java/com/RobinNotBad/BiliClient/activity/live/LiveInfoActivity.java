@@ -1,9 +1,11 @@
 package com.RobinNotBad.BiliClient.activity.live;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,10 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
+import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.user.UpListAdapter;
+import com.RobinNotBad.BiliClient.adapter.video.MediaEpisodeAdapter;
 import com.RobinNotBad.BiliClient.api.LiveApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
+import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.model.LivePlayInfo;
 import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.model.UserInfo;
@@ -34,11 +39,15 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LiveInfoActivity extends BaseActivity {
     private long room_id;
     private LiveRoom room;
     private boolean desc_expand = false,tags_expand = false;
+
+    private RecyclerView protocol_list,host_list;
+    private int selectedProtocol = 0,selectedHost = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +68,7 @@ public class LiveInfoActivity extends BaseActivity {
                 try {
                     room = LiveApi.getRoomInfo(room_id);
                     UserInfo userInfo = UserInfoApi.getUserInfo(room.uid);
+                    LivePlayInfo playInfo = LiveApi.getRoomPlayInfo(room_id,LiveApi.PlayerQnMap.get(SharedPreferencesUtil.getInt("play_qn", 16)));
                     runOnUiThread(() -> {
                         ImageView cover = findViewById(R.id.cover);
                         TextView title = findViewById(R.id.title);
@@ -69,6 +79,8 @@ public class LiveInfoActivity extends BaseActivity {
                         TextView idText = findViewById(R.id.idText);
                         TextView tags = findViewById(R.id.tags);
                         TextView description = findViewById(R.id.description);
+                        protocol_list = findViewById(R.id.protocol_list);
+                        host_list = findViewById(R.id.host_list);
 
                         Glide.with(this).asDrawable().load(GlideUtil.url(room.user_cover)).placeholder(R.mipmap.placeholder)
                                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, this))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
@@ -106,11 +118,10 @@ public class LiveInfoActivity extends BaseActivity {
                         play.setOnClickListener(view -> {
                             CenterThreadPool.run(() -> {
                                 try {
-                                    LivePlayInfo playInfo = LiveApi.getRoomPlayInfo(room_id,LiveApi.PlayerQnMap.get(SharedPreferencesUtil.getInt("play_qn", 16)));
                                     LivePlayInfo.Codec codec;
                                     if (playInfo != null) {
-                                        codec = playInfo.playUrl.stream.get(0).format.get(0).codec.get(0);
-                                        LivePlayInfo.UrlInfo urlInfo = codec.url_info.get(0);
+                                        codec = playInfo.playUrl.stream.get(selectedProtocol).format.get(0).codec.get(0);
+                                        LivePlayInfo.UrlInfo urlInfo = codec.url_info.get(selectedHost);
                                         String play_url = urlInfo.host + codec.base_url + urlInfo.extra;
                                         runOnUiThread(() -> PlayerApi.jumpToPlayer(this,play_url,"","直播·" + room.title,false,0,"",0,userInfo.mid,0,true));
                                     }
@@ -125,6 +136,34 @@ public class LiveInfoActivity extends BaseActivity {
                             startActivity(intent);
                             return true;
                         });
+
+                        //协议选择
+                        MediaEpisodeAdapter protocolAdapter = new MediaEpisodeAdapter();
+                        protocolAdapter.setOnItemClickListener(index -> selectedProtocol = index);
+                        ArrayList<Bangumi.Episode> protocolList = new ArrayList<>();
+                        for (int i = 0;i < playInfo.playUrl.stream.size();i++){
+                            Bangumi.Episode episode = new Bangumi.Episode();
+                            episode.id = i;
+                            episode.title = playInfo.playUrl.stream.get(i).protocol_name;
+                            protocolList.add(episode);
+                        }
+                        protocolAdapter.setData(protocolList);
+                        protocol_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                        runOnUiThread(() -> protocol_list.setAdapter(protocolAdapter));
+
+                        //路线选择
+                        MediaEpisodeAdapter hostAdapter = new MediaEpisodeAdapter();
+                        hostAdapter.setOnItemClickListener(index -> selectedHost = index);
+                        ArrayList<Bangumi.Episode> hostList = new ArrayList<>();
+                        for (int i = 0;i < playInfo.playUrl.stream.size();i++){
+                            Bangumi.Episode episode = new Bangumi.Episode();
+                            episode.id = i;
+                            episode.title = "源" + i;
+                            hostList.add(episode);
+                        }
+                        hostAdapter.setData(hostList);
+                        host_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                        runOnUiThread(() -> host_list.setAdapter(hostAdapter));
                     });
                 }catch (Exception e){
                     runOnUiThread(() -> MsgUtil.err(e,this));
