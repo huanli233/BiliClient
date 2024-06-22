@@ -41,7 +41,7 @@ public class NetWorkUtil
 {
     private static final AtomicReference<OkHttpClient> INSTANCE = new AtomicReference<>();
 
-    private static OkHttpClient getOkHttpInstance() {
+    public static OkHttpClient getOkHttpInstance() {
         while (INSTANCE.get() == null) {
             INSTANCE.compareAndSet(null, new OkHttpClient.Builder()
                     .followRedirects(false)

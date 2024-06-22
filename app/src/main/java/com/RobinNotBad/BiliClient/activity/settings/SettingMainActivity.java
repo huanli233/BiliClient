@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.RobinNotBad.BiliClient.BuildConfig;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.activity.live.FollowLiveActivity;
-import com.RobinNotBad.BiliClient.activity.live.RecommendLiveActivity;
+import com.RobinNotBad.BiliClient.activity.update.UpdateInfoActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -143,10 +143,15 @@ public class SettingMainActivity extends InstanceActivity {
             });
 
             MaterialCardView test = findViewById(R.id.test);    //用于测试
-//            test.setVisibility(View.GONE);
+            test.setVisibility(BuildConfig.BETA ? View.VISIBLE : View.GONE);
             test.setOnClickListener(view -> {
-                Intent intent = new Intent(this, RecommendLiveActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(this, UpdateInfoActivity.class)
+                        .putExtra("versionName", "2.6.0")
+                        .putExtra("versionCode", 20240616)
+                        .putExtra("updateLog", "测试")
+                        .putExtra("ctime", System.currentTimeMillis())
+                        .putExtra("isRelease", 1)
+                        .putExtra("canDownload", 1));
             });
         });
     }

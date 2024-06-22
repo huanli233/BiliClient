@@ -15,13 +15,20 @@ import com.RobinNotBad.BiliClient.listener.OnItemClickListener;
 import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.google.android.material.button.MaterialButton;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MediaEpisodeAdapter extends RecyclerView.Adapter<MediaEpisodeAdapter.EposidesHolder> {
-    private ArrayList<Bangumi.Episode> episodeList;
+    private List<Bangumi.Episode> episodeList;
 
     public OnItemClickListener listener;
     public int selectedItemIndex = 0;
+    private boolean useVerticalLayout;
+
+    public MediaEpisodeAdapter() {}
+
+    public MediaEpisodeAdapter(boolean useVerticalLayout) {
+        this.useVerticalLayout = useVerticalLayout;
+    }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
@@ -36,7 +43,7 @@ public class MediaEpisodeAdapter extends RecyclerView.Adapter<MediaEpisodeAdapte
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(ArrayList<Bangumi.Episode> episodeList) {
+    public void setData(List<Bangumi.Episode> episodeList) {
         this.episodeList = episodeList;
         selectedItemIndex = 0;
         notifyDataSetChanged();
@@ -45,7 +52,7 @@ public class MediaEpisodeAdapter extends RecyclerView.Adapter<MediaEpisodeAdapte
     @NonNull
     @Override
     public EposidesHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_episode, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(useVerticalLayout ? R.layout.cell_item_vertical : R.layout.cell_episode, parent, false);
         return new EposidesHolder(view);
     }
 
