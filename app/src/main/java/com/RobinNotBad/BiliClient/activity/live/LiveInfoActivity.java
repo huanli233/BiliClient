@@ -38,7 +38,7 @@ import java.util.ArrayList;
 public class LiveInfoActivity extends BaseActivity {
     private long room_id;
     private LiveRoom room;
-    private boolean desc_expand;
+    private boolean desc_expand = false,tags_expand = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,6 +89,11 @@ public class LiveInfoActivity extends BaseActivity {
 
                         idText.setText(String.valueOf(room_id));
                         tags.setText("标签：" + room.tags);
+                        tags.setOnClickListener(view1 -> {
+                            if (tags_expand) tags.setMaxLines(1);
+                            else tags.setMaxLines(233);
+                            tags_expand = !tags_expand;
+                        });
                         ToolsUtil.setCopy(this,idText,tags,title);
 
                         description.setText(ToolsUtil.htmlToString(room.description));
