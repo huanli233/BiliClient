@@ -174,5 +174,6 @@ public class LiveInfoActivity extends BaseActivity {
             hostList.add(episode);
         }
         hostAdapter.setData(hostList);
+        selectedHost = 0;
     }
 }
