@@ -29,9 +29,9 @@ import java.util.ArrayList;
 
 public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAdapter.FavoriteHolder> {
 
-    Context context;
-    ArrayList<FavoriteFolder> folderList;
-    long mid;
+    final Context context;
+    final ArrayList<FavoriteFolder> folderList;
+    final long mid;
 
     public FavoriteFolderAdapter(Context context, ArrayList<FavoriteFolder> folderList, long mid) {
         this.context = context;
@@ -72,8 +72,9 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
     }
 
     public static class FavoriteHolder extends RecyclerView.ViewHolder {
-        TextView name,count;
-        ImageView cover;
+        final TextView name;
+        final TextView count;
+        final ImageView cover;
 
         public FavoriteHolder(@NonNull View itemView) {
             super(itemView);

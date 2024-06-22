@@ -36,25 +36,26 @@ import master.flame.danmaku.danmaku.renderer.IRenderer;
 
 public class AndroidDisplayer extends AbsDisplayer<Canvas, Typeface> {
 
-    private Camera camera = new Camera();
+    private final Camera camera = new Camera();
 
-    private Matrix matrix = new Matrix();
+    private final Matrix matrix = new Matrix();
 
     private float sLastScaleTextSize;
     private final Map<Float, Float> sCachedScaleSize = new HashMap<>(10);
 
-    public TextPaint PAINT, PAINT_DUPLICATE;
+    public final TextPaint PAINT;
+    public final TextPaint PAINT_DUPLICATE;
 
-    private Paint ALPHA_PAINT;
+    private final Paint ALPHA_PAINT;
 
-    private Paint UNDERLINE_PAINT;
+    private final Paint UNDERLINE_PAINT;
 
-    private Paint BORDER_PAINT;
+    private final Paint BORDER_PAINT;
 
     /**
      * 下划线高度
      */
-    public int UNDERLINE_HEIGHT = 4;
+    public final int UNDERLINE_HEIGHT = 4;
 
     /**
      * 边框厚度
@@ -82,25 +83,25 @@ public class AndroidDisplayer extends AbsDisplayer<Canvas, Typeface> {
      * 开启阴影，可动态改变
      */
     public boolean CONFIG_HAS_SHADOW = false;
-    private boolean HAS_SHADOW = CONFIG_HAS_SHADOW;
+    private boolean HAS_SHADOW = false;
 
     /**
      * 开启描边，可动态改变
      */
     public boolean CONFIG_HAS_STROKE = true;
-    private boolean HAS_STROKE = CONFIG_HAS_STROKE;
+    private boolean HAS_STROKE = true;
 
     /**
      * 开启投影，可动态改变
      */
     public boolean CONFIG_HAS_PROJECTION = false;
-    private boolean HAS_PROJECTION = CONFIG_HAS_PROJECTION;
+    private boolean HAS_PROJECTION = false;
 
     /**
      * 开启抗锯齿，可动态改变
      */
-    public boolean CONFIG_ANTI_ALIAS = true;
-    private boolean ANTI_ALIAS = CONFIG_ANTI_ALIAS;
+    public final boolean CONFIG_ANTI_ALIAS = true;
+    private boolean ANTI_ALIAS = true;
 
     private BaseCacheStuffer sStuffer = new SimpleTextCacheStuffer();
     private boolean isTranslucent;
@@ -122,7 +123,7 @@ public class AndroidDisplayer extends AbsDisplayer<Canvas, Typeface> {
     }
 
     @SuppressLint("NewApi")
-    private static final int getMaximumBitmapWidth(Canvas c) {
+    private static int getMaximumBitmapWidth(Canvas c) {
         if (Build.VERSION.SDK_INT >= 14) {
             return c.getMaximumBitmapWidth();
         } else {
@@ -131,7 +132,7 @@ public class AndroidDisplayer extends AbsDisplayer<Canvas, Typeface> {
     }
 
     @SuppressLint("NewApi")
-    private static final int getMaximumBitmapHeight(Canvas c) {
+    private static int getMaximumBitmapHeight(Canvas c) {
         if (Build.VERSION.SDK_INT >= 14) {
             return c.getMaximumBitmapHeight();
         } else {

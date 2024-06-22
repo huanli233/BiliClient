@@ -66,7 +66,7 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
 
     protected int mDrawingThreadType = THREAD_TYPE_NORMAL_PRIORITY;
 
-    private Object mDrawMonitor = new Object();
+    private final Object mDrawMonitor = new Object();
 
     private boolean mDrawFinished = false;
 
@@ -311,7 +311,7 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
                 RenderingState rs = handler.draw(canvas);
                 if (mShowFps) {
                     if (mDrawTimes == null)
-                        mDrawTimes = new LinkedList<Long>();
+                        mDrawTimes = new LinkedList<>();
                     String fps = String.format(Locale.getDefault(),
                             "fps %.2f,time:%d s,cache:%d,miss:%d", fps(), getCurrentTime() / 1000,
                             rs.cacheHitCount, rs.cacheMissCount);
@@ -351,7 +351,7 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
 
     private int mResumeTryCount = 0;
 
-    private Runnable mResumeRunnable = new Runnable() {
+    private final Runnable mResumeRunnable = new Runnable() {
         @Override
         public void run() {
             if (handler == null) {

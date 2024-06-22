@@ -11,21 +11,14 @@ import android.widget.TextView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.DownloadActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Objects;
-
-import okhttp3.Response;
 
 public class JumpToPlayerActivity extends BaseActivity {
     private String videourl;
@@ -99,7 +92,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                             intent.putExtra("parent_title", getIntent().getStringExtra("parent_title"));
                         startActivity(intent);
                     } else {
-                        PlayerApi.jumpToPlayer(JumpToPlayerActivity.this, videourl, danmakuurl, title, false, aid, bvid, cid, mid, progress);
+                        PlayerApi.jumpToPlayer(JumpToPlayerActivity.this, videourl, danmakuurl, title, false, aid, bvid, cid, mid, progress,false);
                     }
                     finish();
                 }

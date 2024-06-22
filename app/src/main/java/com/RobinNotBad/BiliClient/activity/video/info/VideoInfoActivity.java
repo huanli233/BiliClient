@@ -40,6 +40,7 @@ public class VideoInfoActivity extends BaseActivity {
 
     private List<Fragment> fragmentList;
     ReplyFragment replyFragment;
+    private long seek_reply;
 
     //private MediaViewPager2Adapter mediaViewPager2Adapter;
 
@@ -52,6 +53,7 @@ public class VideoInfoActivity extends BaseActivity {
         if(type == null) type = "video";
         this.aid = intent.getLongExtra("aid",114514);
         this.bvid = intent.getStringExtra("bvid");
+        this.seek_reply = intent.getLongExtra("seekReply", -1);
         setContentView(R.layout.activity_loading);
 
         String finalType = type;
@@ -72,12 +74,13 @@ public class VideoInfoActivity extends BaseActivity {
 
         fragmentList = new ArrayList<>(2);
         fragmentList.add(BangumiInfoFragment.newInstance(aid));
-        replyFragment = ReplyFragment.newInstance(aid, 1,true);
+        replyFragment = ReplyFragment.newInstance(aid, 1, seek_reply == -1, seek_reply);
         fragmentList.add(replyFragment);
 
         viewPager.setOffscreenPageLimit(fragmentList.size());
         ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(),fragmentList);
         viewPager.setAdapter(vpfAdapter);
+        if (seek_reply != -1) viewPager.setCurrentItem(1);
         if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
             MsgUtil.toastLong("提示：本页面可以左右滑动",this);
             SharedPreferencesUtil.putBoolean("first_videoinfo", false);
@@ -110,7 +113,7 @@ public class VideoInfoActivity extends BaseActivity {
 
                 fragmentList = new ArrayList<>(3);
                 fragmentList.add(VideoInfoFragment.newInstance(videoInfo));
-                replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1);
+                replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1, seek_reply);
                 replyFragment.setSource(videoInfo);
                 fragmentList.add(replyFragment);
                 if (SharedPreferencesUtil.getBoolean("related_enable", true)) {
@@ -122,6 +125,7 @@ public class VideoInfoActivity extends BaseActivity {
                 runOnUiThread(() -> {
                     loading.setVisibility(View.GONE);
                     viewPager.setAdapter(vpfAdapter);
+                    if (seek_reply != -1) viewPager.setCurrentItem(1);
                     if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
                         MsgUtil.toastLong("提示：本页面可以左右滑动",this);
                         SharedPreferencesUtil.putBoolean("first_videoinfo", false);

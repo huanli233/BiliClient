@@ -60,7 +60,7 @@ public class SearchActivity extends InstanceActivity {
             setMenuClick();
             Log.e("debug", "进入搜索页");
 
-            TutorialHelper.show(R.xml.tutorial_search,this,"search",1);
+            TutorialHelper.show(R.xml.tutorial_search,this,"search",2);
 
             handler = new Handler();
 
@@ -70,14 +70,14 @@ public class SearchActivity extends InstanceActivity {
             keywordInput = findViewById(R.id.keywordInput);
             searchBar = findViewById(R.id.searchbar);
             historyRecyclerview = findViewById(R.id.history_recyclerview);
-            viewPager.setOffscreenPageLimit(3);
+            viewPager.setOffscreenPageLimit(4);
             keywordInput.setOnFocusChangeListener((view, b) -> historyRecyclerview.setVisibility(b ? View.VISIBLE : View.GONE));
             historyRecyclerview.setVisibility(View.VISIBLE);
             FragmentStateAdapter vpfAdapter = new FragmentStateAdapter(this) {
 
                 @Override
                 public int getItemCount() {
-                    return 3;
+                    return 4;
                 }
 
                 @NonNull
@@ -86,6 +86,7 @@ public class SearchActivity extends InstanceActivity {
                     if (position == 0) return SearchVideoFragment.newInstance();
                     if (position == 1) return SearchArticleFragment.newInstance();
                     if (position == 2) return SearchUserFragment.newInstance();
+                    if (position == 3) return SearchLiveFragment.newInstance();
                     throw new IllegalArgumentException("return value of getItemCount() method maybe not associate with argument position");
                 }
             };
@@ -183,16 +184,14 @@ public class SearchActivity extends InstanceActivity {
                     try {
                         searchHistory.add(0, str);
                         SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history, new JSONArray(searchHistory).toString());
-                        runOnUiThread(() -> {
-                            searchHistoryAdapter.notifyItemInserted(0);
-                        });
+                        runOnUiThread(() -> searchHistoryAdapter.notifyItemInserted(0));
                     } catch (Exception e) {
                         runOnUiThread(() -> MsgUtil.err(e, this));
                     }
                 }
 
                 try {
-                    for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < 4; i++) {
                         //从viewpager中拿真正added的fragment的方法: tag = "f{position}", 得到的fragment将会是真实存在的
                         Fragment fragmentById = getSupportFragmentManager().findFragmentByTag("f" + i);
                         if (fragmentById != null) {

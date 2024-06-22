@@ -31,8 +31,8 @@ import java.util.ArrayList;
 
 public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.LocalVideoHolder> {
 
-    Context context;
-    ArrayList<LocalVideo> localVideoList;
+    final Context context;
+    final ArrayList<LocalVideo> localVideoList;
     OnItemLongClickListener longClickListener;
 
     public LocalVideoAdapter(Context context, ArrayList<LocalVideo> localVideoList) {
@@ -59,7 +59,7 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
             LocalVideo localVideo = localVideoList.get(position);
             if(localVideo.videoFileList.size() == 1){
                 try {
-                    PlayerApi.jumpToPlayer(context, localVideo.videoFileList.get(0), localVideo.danmakuFileList.get(0), localVideo.title,true, 0, "", 0, 0,0);
+                    PlayerApi.jumpToPlayer(context, localVideo.videoFileList.get(0), localVideo.danmakuFileList.get(0), localVideo.title,true, 0, "", 0, 0,0,false);
                 }catch (ActivityNotFoundException e){
                     MsgUtil.toast("跳转失败",context);
                     e.printStackTrace();
@@ -93,8 +93,8 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
 
 
     public static class LocalVideoHolder extends RecyclerView.ViewHolder{
-        TextView title;
-        ImageView cover;
+        final TextView title;
+        final ImageView cover;
 
         public LocalVideoHolder(@NonNull View itemView) {
             super(itemView);

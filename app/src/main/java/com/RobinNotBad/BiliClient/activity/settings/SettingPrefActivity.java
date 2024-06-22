@@ -8,6 +8,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
 import com.RobinNotBad.BiliClient.adapter.SettingsAdapter;
 import com.RobinNotBad.BiliClient.model.SettingSection;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class SettingPrefActivity extends RefreshListActivity {
             add(new SettingSection("switch","收藏夹单选","fav_single",getString(R.string.desc_fav_single),"false"));
             add(new SettingSection("switch","收藏成功提示","fav_notice",getString(R.string.desc_fav_notice),"false"));
             add(new SettingSection("switch","显示视频标签","tags_enable",getString(R.string.desc_tags_enable),"true"));
+            add(new SettingSection("switch","使用新版推荐API", SharedPreferencesUtil.RCMD_API_NEW_PARAM,getString(R.string.desc_new_rcmd_param_enable),"false"));
             add(new SettingSection("switch","视频相关推荐","related_enable",getString(R.string.desc_related_enable),"true"));
             add(new SettingSection("switch","创作中心","creative_enable",getString(R.string.desc_creative_enable),"true"));
             add(new SettingSection("switch","长按复制","copy_enable",getString(R.string.desc_copy_enable),"true"));

@@ -29,7 +29,7 @@ import java.util.HashMap;
 
 public class MessageActivity extends InstanceActivity {
     private RecyclerView sessionsView;
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "InflateParams"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

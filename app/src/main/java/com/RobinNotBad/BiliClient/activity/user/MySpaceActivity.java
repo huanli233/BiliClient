@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.activity.settings.LoginActivity;
-import com.RobinNotBad.BiliClient.activity.settings.SpecialLoginActivity;
 import com.RobinNotBad.BiliClient.activity.user.favorite.FavoriteFolderListActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;

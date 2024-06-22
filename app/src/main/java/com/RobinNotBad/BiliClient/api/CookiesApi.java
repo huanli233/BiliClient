@@ -294,7 +294,7 @@ public class CookiesApi {
                     k2 ^= (long) byteBuffer.get(9) << 8;
                 }
                 if (bytesRead >= 9) {
-                    k2 ^= (long) byteBuffer.get(8);
+                    k2 ^= byteBuffer.get(8);
                     h2 = h2.xor(rotateLeft(BigInteger.valueOf(k2).multiply(C2).mod(MOD), R3).multiply(C1).mod(MOD));
                 }
                 if (bytesRead >= 8) {
@@ -319,7 +319,7 @@ public class CookiesApi {
                     k1 ^= (long) byteBuffer.get(1) << 8;
                 }
                 if (bytesRead >= 1) {
-                    k1 ^= (long) byteBuffer.get(0);
+                    k1 ^= byteBuffer.get(0);
                     h1 = h1.xor(rotateLeft(BigInteger.valueOf(k1).multiply(C1).mod(MOD), R2));
                 }
             }

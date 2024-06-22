@@ -25,6 +25,7 @@ import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
+import com.RobinNotBad.BiliClient.activity.live.LiveInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.article.ArticleCardHolder;
@@ -32,6 +33,7 @@ import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
@@ -39,7 +41,9 @@ import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.EncodeStrategy;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
@@ -51,15 +55,20 @@ import java.util.List;
 
 public class DynamicHolder extends RecyclerView.ViewHolder{
     public static final int GO_TO_INFO_REQUEST = 71;
-    public TextView username,content,pubdate;
-    public ImageView avatar;
-    public LinearLayout extraCard;
-    public View itemView;
+    public final TextView username;
+    public final TextView content;
+    public TextView pubdate;
+    public final ImageView avatar;
+    public final LinearLayout extraCard;
+    public final View itemView;
     public TextView item_dynamic_share, item_dynamic_delete;
     public TextView likeCount;
-    public MaterialCardView cell_dynamic_child, cell_dynamic_video, cell_dynamic_image, cell_dynamic_article;
-    public boolean isChild;
-    BaseActivity mActivity;
+    public MaterialCardView cell_dynamic_child;
+    public final MaterialCardView cell_dynamic_video;
+    public final MaterialCardView cell_dynamic_image;
+    public final MaterialCardView cell_dynamic_article;
+    public final boolean isChild;
+    final BaseActivity mActivity;
     public ActivityResultLauncher<Intent> relayDynamicLauncher;
 
     public DynamicHolder(@NonNull View itemView, BaseActivity mActivity, boolean isChild) {
@@ -218,7 +227,27 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
         Glide.with(context).asDrawable().load(GlideUtil.url(dynamic.userInfo.avatar))
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .diskCacheStrategy(new DiskCacheStrategy() {
+                    @Override
+                    public boolean isDataCacheable(DataSource dataSource) {
+                        return dataSource != DataSource.DATA_DISK_CACHE && dataSource != DataSource.MEMORY_CACHE;
+                    }
+
+                    @Override
+                    public boolean isResourceCacheable(boolean isFromAlternateCacheKey, DataSource dataSource, EncodeStrategy encodeStrategy) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean decodeCachedResource() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean decodeCachedData() {
+                        return false;
+                    }
+                })
                 .into(avatar);
 
         avatar.setOnClickListener(view -> {
@@ -254,6 +283,26 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 cell_dynamic_video.setVisibility(View.VISIBLE);
                 break;
 
+            case "MAJOR_TYPE_LIVE":
+            case "MAJOR_TYPE_LIVE_RCMD":
+                LiveRoom liveRoom = (LiveRoom) dynamic.major_object;
+                VideoCard childLiveCard = new VideoCard();
+                childLiveCard.title = liveRoom.title;
+                childLiveCard.cover = liveRoom.cover;
+                childLiveCard.upName = liveRoom.uname;
+                childLiveCard.view = "";
+                childLiveCard.type = "live";
+
+                VideoCardHolder card_holder = new VideoCardHolder(cell_dynamic_video);
+                card_holder.showVideoCard(childLiveCard,context);
+                cell_dynamic_video.setOnClickListener(view -> {
+                    Intent intent = new Intent(context, LiveInfoActivity.class);
+                    intent.putExtra("room_id",liveRoom.roomid);
+                    context.startActivity(intent);
+                });
+                cell_dynamic_video.setVisibility(View.VISIBLE);
+                break;
+
             case "MAJOR_TYPE_ARTICLE":
                 ArticleCard articleCard = (ArticleCard) dynamic.major_object;
                 ArticleCardHolder article_holder = new ArticleCardHolder(cell_dynamic_article);
@@ -273,7 +322,9 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 ImageView imageView = imageCard.findViewById(R.id.imageView);
                 Glide.with(context).asDrawable().load(GlideUtil.url(pictureList.get(0)))
                         .placeholder(R.mipmap.placeholder)
+                        .centerCrop()
                         .format(DecodeFormat.PREFER_RGB_565)
+                        .sizeMultiplier(0.85f)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(imageView);
                 TextView textView = imageCard.findViewById(R.id.imageCount);

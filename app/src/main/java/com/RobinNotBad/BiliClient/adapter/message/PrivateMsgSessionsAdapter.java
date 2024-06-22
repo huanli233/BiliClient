@@ -32,9 +32,9 @@ import java.util.Objects;
 
 public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSessionsAdapter.PrivateMsgSessionsHolder> {
 
-    Context context;
-    ArrayList<PrivateMsgSession> sessionsList;
-    HashMap<Long,UserInfo> userMap;
+    final Context context;
+    final ArrayList<PrivateMsgSession> sessionsList;
+    final HashMap<Long,UserInfo> userMap;
 
     public PrivateMsgSessionsAdapter(Context context, ArrayList<PrivateMsgSession> sessionsList,HashMap<Long,UserInfo> userMap) {
         this.context = context;
@@ -107,9 +107,9 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
 
 
     public static class PrivateMsgSessionsHolder extends RecyclerView.ViewHolder{
-        ImageView avatarView;
-        TextView nameText;
-        TextView contentText;
+        final ImageView avatarView;
+        final TextView nameText;
+        final TextView contentText;
         public PrivateMsgSessionsHolder(View itemView) {
             super(itemView);
             avatarView = itemView.findViewById(R.id.userAvatar);

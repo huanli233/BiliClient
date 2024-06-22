@@ -6,6 +6,7 @@ import android.os.Build;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
+import com.RobinNotBad.BiliClient.BuildConfig;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.model.Announcement;
 import com.RobinNotBad.BiliClient.model.UserInfo;
@@ -16,10 +17,12 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class AppInfoApi {
     public static void check(Context context){
@@ -36,6 +39,7 @@ public class AppInfoApi {
                     if(last_ver < 20240615) MsgUtil.showDialog(context,"提醒","当前版本开始，内置播放器退出播放时会上传视频播放进度");
                 }
                 MsgUtil.showText(context, "更新公告", context.getResources().getString(R.string.update_tip) + "\n\n更新日志：\n" + ToolsUtil.getUpdateLog(context));
+                if(ToolsUtil.isDebugBuild()) MsgUtil.showDialog(context,"警告","这个版本是测试版，仅在测试群中发布，禁止外传到其他平台（如：奇妙应用等应用商店）");
                 SharedPreferencesUtil.putInt("app_version_last", version);
             }
 
@@ -50,9 +54,36 @@ public class AppInfoApi {
         }
     }
 
-    private static final ArrayList<String> customHeaders = new ArrayList<String>(){{
+    private static final ArrayList<String> customHeaders = new ArrayList<>() {{
         add("User-Agent");
         add(NetWorkUtil.USER_AGENT_WEB);    //防止携带b站cookies导致可能存在的开发者盗号问题（
+        add("App-Info");
+        try {
+            add(new JSONObject()
+                    .put("versionName", BuildConfig.VERSION_NAME)
+                    .put("versionCode", BuildConfig.VERSION_CODE)
+                    .put("isBeta", BuildConfig.BETA)
+                    .put("applicationId", BuildConfig.APPLICATION_ID)
+                    .put("buildType", BuildConfig.BUILD_TYPE)
+                    .put("debugEnabled", BuildConfig.DEBUG)
+                    .toString());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        add("Device-Info");
+        try {
+            add(new JSONObject()
+                    .put("sdk", Build.VERSION.SDK_INT)
+                    .put("release", Build.VERSION.RELEASE)
+                    .put("product", Build.PRODUCT)
+                    .put("brand", Build.BRAND)
+                    .put("device", Build.DEVICE)
+                    .put("type", Build.TYPE)
+                    .put("id", Build.ID)
+                    .toString());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }};
 
     public static void checkUpdate(Context context, boolean need_toast,boolean debug_ver) throws Exception {
@@ -132,7 +163,7 @@ public class AppInfoApi {
             post_data.put("device_product",Build.PRODUCT);
             post_data.put("device_brand",Build.BRAND);
             
-            JSONObject res = new JSONObject(NetWorkUtil.postJson(url,post_data.toString(),customHeaders).body().string());
+            JSONObject res = new JSONObject(Objects.requireNonNull(NetWorkUtil.postJson(url, post_data.toString(), customHeaders).body()).string());
             if(res.getInt("code") == 200) return "上传成功";
             else return res.getString("msg");
         }catch (Throwable e){

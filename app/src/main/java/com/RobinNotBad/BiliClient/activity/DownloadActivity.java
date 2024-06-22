@@ -51,8 +51,8 @@ public class DownloadActivity extends BaseActivity {
 
     boolean finish = false;
 
-    Timer timer = new Timer();
-    TimerTask showText = new TimerTask() {
+    final Timer timer = new Timer();
+    final TimerTask showText = new TimerTask() {
         @SuppressLint("SetTextI18n")
         @Override
         public void run() {
@@ -227,8 +227,8 @@ public class DownloadActivity extends BaseActivity {
     protected void onDestroy() {
         timer.cancel();
         if(!finish) {
-            if (type != 0) FileUtil.deleteFolder(downPath);
-            else downFile.delete();
+            if (type != 0 && downPath != null) FileUtil.deleteFolder(downPath);
+            else if (downFile != null) downFile.delete();
         }
         super.onDestroy();
     }

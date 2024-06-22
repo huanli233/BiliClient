@@ -3,12 +3,10 @@ package com.RobinNotBad.BiliClient;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 
 import androidx.annotation.NonNull;
 
 import com.RobinNotBad.BiliClient.activity.CatchActivity;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

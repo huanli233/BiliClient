@@ -14,6 +14,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
+import com.RobinNotBad.BiliClient.activity.live.RecommendLiveActivity;
 import com.RobinNotBad.BiliClient.activity.message.MessageActivity;
 import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
 import com.RobinNotBad.BiliClient.activity.settings.LoginActivity;
@@ -48,6 +49,7 @@ public class MenuActivity extends BaseActivity {
         put("recommend", new Pair<>("推荐"   , RecommendActivity.class));
         put("popular",   new Pair<>("热门"   , PopularActivity.class));
         put("precious",  new Pair<>("入站必刷", PreciousActivity.class));
+        put("live",  new Pair<>("直播", RecommendLiveActivity.class));
         put("search",    new Pair<>("搜索"   , SearchActivity.class));
         put("dynamic",   new Pair<>("动态"   , DynamicActivity.class));
         put("myspace",   new Pair<>("我的"   , MySpaceActivity.class));
@@ -174,6 +176,7 @@ public class MenuActivity extends BaseActivity {
             add("recommend");
             add("popular");
             add("precious");
+            add("live");
             add("search");
             add("dynamic");
             add("myspace");

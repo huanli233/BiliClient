@@ -25,8 +25,8 @@ import java.util.Map;
 
 public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    Context context;
-    List<SettingSection> list;
+    final Context context;
+    final List<SettingSection> list;
     final Map<String,Integer> typeMap = new HashMap<>(){{
         put("switch",0);
         put("choose",1);
@@ -81,8 +81,8 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public static class SwitchHolder extends RecyclerView.ViewHolder{
-        TextView desc;
-        SwitchMaterial switchMaterial;
+        final TextView desc;
+        final SwitchMaterial switchMaterial;
 
         public SwitchHolder(@NonNull View itemView) {
             super(itemView);
@@ -100,8 +100,10 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public static class ChooseHolder extends RecyclerView.ViewHolder{
-        RadioButton chocola,vanilla;    //我在思考这样的命名方式是否合理（玩艹猫玩的
-        TextView name,desc;
+        final RadioButton chocola;
+        final RadioButton vanilla;    //我在思考这样的命名方式是否合理（玩艹猫玩的
+        final TextView name;
+        final TextView desc;
 
         public ChooseHolder(@NonNull View itemView) {
             super(itemView);

@@ -46,7 +46,7 @@ public class UserInfo implements Serializable, Parcelable {
         officialDesc = in.readString();
     }
 
-    public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {
+    public static final Creator<UserInfo> CREATOR = new Creator<>() {
         @Override
         public UserInfo createFromParcel(Parcel in) {
 

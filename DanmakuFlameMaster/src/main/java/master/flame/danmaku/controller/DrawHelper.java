@@ -25,9 +25,10 @@ import android.graphics.RectF;
 
 public class DrawHelper {
 
-    public static Paint PAINT, PAINT_FPS;
+    public static final Paint PAINT;
+    public static Paint PAINT_FPS;
 
-    public static RectF RECT;
+    public static final RectF RECT;
     
     private static boolean USE_DRAWCOLOR_TO_CLEAR_CANVAS = true;
     

@@ -34,7 +34,7 @@ public class IjkMediaCodecInfo {
         if (sKnownCodecList != null)
             return sKnownCodecList;
 
-        sKnownCodecList = new TreeMap<String, Integer>(
+        sKnownCodecList = new TreeMap<>(
                 String.CASE_INSENSITIVE_ORDER);
 
         // ----- Nvidia -----

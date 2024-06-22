@@ -1,5 +1,7 @@
 package com.RobinNotBad.BiliClient.api;
 
+import android.util.Pair;
+
 import com.RobinNotBad.BiliClient.model.MessageCard;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.UserInfo;
@@ -33,8 +35,9 @@ public class MessageApi {
         }
         return jsonObject;
     }
-    public static ArrayList<MessageCard> getLikeMsg() throws IOException, JSONException {
+    public static Pair<MessageCard.Cursor, List<MessageCard>> getLikeMsg(long id, long time) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/msgfeed/like?platform=web&build=0&mobi_app=web";
+        if (id > 0 && time > 0) url += String.format("&id=%s&reply_time=%s", id, time);
         JSONObject all = NetWorkUtil.getJson(url);
         if(all.has("data") && !all.isNull("data")) {
             //所有消息
@@ -107,19 +110,25 @@ public class MessageApi {
                 JSONObject item = object.getJSONObject("item");
                 likeInfo.businessId = item.getInt("business_id");
                 likeInfo.subjectId = item.getLong("item_id");
+                likeInfo.sourceId = item.optLong("source_id", -1);
+                likeInfo.rootId = item.optLong("root_id", -1);
                 likeInfo.itemType = item.getString("type");
 
                 likeInfo.getType = MessageCard.GET_TYPE_LIKE;
                 totalArray.add(likeInfo);
             }
 
-            return totalArray;
-        }else return new ArrayList<>();
+            JSONObject cursor = all.getJSONObject("data").optJSONObject("cursor");
+            return new Pair<>(cursor == null ? null : new MessageCard.Cursor(cursor.optBoolean("is_end", true), cursor.optLong("id", -1), cursor.optLong("time", -1)), totalArray);
+        } else {
+            return new Pair<>(null, new ArrayList<>());
+        }
     }
     
     
-    public static ArrayList<MessageCard> getReplyMsg() throws IOException, JSONException {
+    public static Pair<MessageCard.Cursor, List<MessageCard>> getReplyMsg(long id, long time) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/msgfeed/reply?platform=web&build=0&mobi_app=web";
+        if (id > 0 && time > 0) url += String.format("&id=%s&reply_time=%s", id, time);
         JSONObject all = NetWorkUtil.getJson(url);
         if(all.has("data") && !all.isNull("data")) {
             ArrayList<MessageCard> totalArray = new ArrayList<>();
@@ -185,19 +194,24 @@ public class MessageApi {
                 JSONObject item = object.getJSONObject("item");
                 replyInfo.businessId = item.getInt("business_id");
                 replyInfo.subjectId = item.getLong("subject_id");
+                replyInfo.sourceId = item.optLong("source_id", -1);
+                replyInfo.rootId = item.optLong("root_id", -1);
                 replyInfo.itemType = item.getString("type");
                 replyInfo.getType = MessageCard.GET_TYPE_REPLY;
 
                 totalArray.add(replyInfo);
             }
-
-            return totalArray;
-        }else return new ArrayList<>();
+            JSONObject cursor = all.getJSONObject("data").optJSONObject("cursor");
+            return new Pair<>(cursor == null ? null : new MessageCard.Cursor(cursor.optBoolean("is_end", true), cursor.optLong("id", -1), cursor.optLong("time", -1)), totalArray);
+        } else {
+            return new Pair<>(null, new ArrayList<>());
+        }
     }
 
 
-    public static ArrayList<MessageCard> getAtMsg() throws IOException, JSONException {
+    public static Pair<MessageCard.Cursor, List<MessageCard>> getAtMsg(long id, long time) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/msgfeed/at?platform=web&build=0&mobi_app=web";
+        if (id > 0 && time > 0) url += String.format("&id=%s&at_time=%s", id, time);
         JSONObject all = NetWorkUtil.getJson(url);
         if(all.has("data") && !all.isNull("data")) {
             ArrayList<MessageCard> totalArray = new ArrayList<>();
@@ -262,14 +276,19 @@ public class MessageApi {
                 JSONObject item = object.getJSONObject("item");
                 replyInfo.businessId = item.getInt("business_id");
                 replyInfo.subjectId = item.getLong("subject_id");
+                replyInfo.sourceId = item.optLong("source_id", -1);
+                replyInfo.rootId = item.optLong("root_id", -1);
                 replyInfo.itemType = item.getString("type");
                 replyInfo.getType = MessageCard.GET_TYPE_AT;
 
                 totalArray.add(replyInfo);
             }
 
-            return totalArray;
-        }else return new ArrayList<>();
+            JSONObject cursor = all.getJSONObject("data").optJSONObject("cursor");
+            return new Pair<>(cursor == null ? null : new MessageCard.Cursor(cursor.optBoolean("is_end", true), cursor.optLong("id", -1), cursor.optLong("time", -1)), totalArray);
+        } else {
+            return new Pair<>(null, new ArrayList<>());
+        }
     }
 
     public static ArrayList<MessageCard> getSystemMsg() throws IOException, JSONException {

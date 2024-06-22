@@ -48,24 +48,31 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
     private final Context context;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView nameTv,textContentTv,tipTv,playTimesTv,upNameTv,videoTitleTv;
-        MaterialCardView textContentCard,videoCard;
-        ImageView picMsg,videoCover;
-        LinearLayout root;
+        final TextView nameTv;
+        final TextView textContentTv;
+        final TextView tipTv;
+        final TextView playTimesTv;
+        final TextView upNameTv;
+        final TextView videoTitleTv;
+        final MaterialCardView textContentCard;
+        final MaterialCardView videoCard;
+        final ImageView picMsg;
+        final ImageView videoCover;
+        final LinearLayout root;
         
         public ViewHolder(View view){
             super(view);
-            root = (LinearLayout)view.findViewById(R.id.msg_layout);
-            nameTv = (TextView)view.findViewById(R.id.msg_name);
-            textContentTv = (TextView)view.findViewById(R.id.msg_text_content);
-            tipTv = (TextView)view.findViewById(R.id.msg_type_tip_text);
-            playTimesTv = (TextView)view.findViewById(R.id.listPlayTimes);
-            upNameTv = (TextView)view.findViewById(R.id.listUpName);
-            videoTitleTv = (TextView)view.findViewById(R.id.listVideoTitle);
-            textContentCard = (MaterialCardView)view.findViewById(R.id.msg_type_text_card);
-            videoCard = (MaterialCardView)view.findViewById(R.id.cardView);
-            picMsg = (ImageView)view.findViewById(R.id.msg_type_pic);
-            videoCover = (ImageView)view.findViewById(R.id.listCover);
+            root = view.findViewById(R.id.msg_layout);
+            nameTv = view.findViewById(R.id.msg_name);
+            textContentTv = view.findViewById(R.id.msg_text_content);
+            tipTv = view.findViewById(R.id.msg_type_tip_text);
+            playTimesTv = view.findViewById(R.id.listPlayTimes);
+            upNameTv = view.findViewById(R.id.listUpName);
+            videoTitleTv = view.findViewById(R.id.listVideoTitle);
+            textContentCard = view.findViewById(R.id.msg_type_text_card);
+            videoCard = view.findViewById(R.id.cardView);
+            picMsg = view.findViewById(R.id.msg_type_pic);
+            videoCover = view.findViewById(R.id.listCover);
         }
     }
     public PrivateMsgAdapter(List<PrivateMessage> msgList,JSONArray emoteArray,Context context){

@@ -22,8 +22,8 @@ import java.util.ArrayList;
 
 public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapter.Holder> {
 
-    Context context;
-    ArrayList<Announcement> list;
+    final Context context;
+    final ArrayList<Announcement> list;
 
     public AnnouncementAdapter(Context context, ArrayList<Announcement> list) {
         this.context = context;
@@ -57,8 +57,10 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
     }
 
     public static class Holder extends RecyclerView.ViewHolder{
-        TextView name,content,info;
-        MaterialCardView cardView;
+        final TextView name;
+        final TextView content;
+        final TextView info;
+        final MaterialCardView cardView;
 
         public Holder(@NonNull View itemView) {
             super(itemView);

@@ -51,7 +51,7 @@ public class DanmakuFactory {
     
     public Duration MAX_Duration_Special_Danmaku;
     
-    public IDanmakus sSpecialDanmakus = new Danmakus();
+    public final IDanmakus sSpecialDanmakus = new Danmakus();
 
     public IDisplayer sLastDisp;
     private DanmakuContext sLastConfig;

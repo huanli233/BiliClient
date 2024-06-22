@@ -64,7 +64,7 @@ public class DanmakuFilters {
      */
     public static class TypeDanmakuFilter extends BaseDanmakuFilter<List<Integer>> {
 
-        final List<Integer> mFilterTypes = Collections.synchronizedList(new ArrayList<Integer>());
+        final List<Integer> mFilterTypes = Collections.synchronizedList(new ArrayList<>());
 
         public void enableType(Integer type) {
             if (!mFilterTypes.contains(type))
@@ -172,7 +172,7 @@ public class DanmakuFilters {
      */
     public static class ElapsedTimeFilter extends BaseDanmakuFilter<Object> {
 
-        long mMaxTime = 20; // 绘制超过20ms就跳过 ，默认保持接近50fps
+        final long mMaxTime = 20; // 绘制超过20ms就跳过 ，默认保持接近50fps
 
         private synchronized boolean needFilter(BaseDanmaku danmaku, int orderInScreen,
                                    int totalsizeInScreen, DanmakuTimer timer, boolean fromCachingTask) {
@@ -221,7 +221,7 @@ public class DanmakuFilters {
      */
     public static class TextColorFilter extends BaseDanmakuFilter<List<Integer>> {
 
-        public List<Integer> mWhiteList = new ArrayList<Integer>();
+        public final List<Integer> mWhiteList = new ArrayList<>();
 
         private void addToWhiteList(Integer color) {
             if (!mWhiteList.contains(color)) {
@@ -263,7 +263,7 @@ public class DanmakuFilters {
      */
     public static abstract class UserFilter<T> extends BaseDanmakuFilter<List<T>> {
 
-        public List<T> mBlackList = new ArrayList<T>();
+        public final List<T> mBlackList = new ArrayList<>();
 
         private void addToBlackList(T id) {
             if (!mBlackList.contains(id)) {
@@ -364,10 +364,10 @@ public class DanmakuFilters {
     public static class DuplicateMergingFilter extends BaseDanmakuFilter<Void> {
 
         protected final IDanmakus blockedDanmakus = new Danmakus(Danmakus.ST_BY_LIST);
-        protected final LinkedHashMap<String, BaseDanmaku> currentDanmakus = new LinkedHashMap<String, BaseDanmaku>();
+        protected final LinkedHashMap<String, BaseDanmaku> currentDanmakus = new LinkedHashMap<>();
         private final IDanmakus passedDanmakus = new Danmakus(Danmakus.ST_BY_LIST);
 
-        private final void removeTimeoutDanmakus(final IDanmakus danmakus, long limitTime) {
+        private void removeTimeoutDanmakus(final IDanmakus danmakus, long limitTime) {
             IDanmakuIterator it = danmakus.iterator();
             long startTime = SystemClock.uptimeMillis();
             while (it.hasNext()) {
@@ -568,9 +568,9 @@ public class DanmakuFilters {
     }
 
     private final Map<String, IDanmakuFilter<?>> filters = Collections
-            .synchronizedSortedMap(new TreeMap<String, IDanmakuFilter<?>>());
+            .synchronizedSortedMap(new TreeMap<>());
     private final Map<String, IDanmakuFilter<?>> filtersSecondary = Collections
-            .synchronizedSortedMap(new TreeMap<String, IDanmakuFilter<?>>());
+            .synchronizedSortedMap(new TreeMap<>());
     IDanmakuFilter<?>[] mFilterArray = new IDanmakuFilter[0];
     IDanmakuFilter<?>[] mFilterArraySecondary = new IDanmakuFilter[0];
 

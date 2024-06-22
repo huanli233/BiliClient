@@ -41,9 +41,9 @@ import java.util.ArrayList;
 
 public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAdapter.ArticleLineHolder> {
 
-    Activity context;
-    ArrayList<ArticleLine> article;
-    ArticleInfo articleInfo;
+    final Activity context;
+    final ArrayList<ArticleLine> article;
+    final ArticleInfo articleInfo;
 
     public ArticleContentAdapter(Activity context, ArticleInfo articleInfo, ArrayList<ArticleLine> article) {
         this.context = context;

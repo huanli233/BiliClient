@@ -60,7 +60,7 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView mItemTextView;
+        final TextView mItemTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);

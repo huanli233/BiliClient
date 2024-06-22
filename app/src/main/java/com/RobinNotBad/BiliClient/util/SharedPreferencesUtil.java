@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 
-import java.util.ArrayList;
-
 /**
  * 被 luern0313 创建于 2020/5/4.
  * #以下代码部分来源于腕上哔哩的开源项目，有修改。感谢开源者做出的贡献！
@@ -14,7 +12,7 @@ import java.util.ArrayList;
 public class SharedPreferencesUtil
 {
     public static final String LINK_ENABLE = "link_enable";
-    public static final String DISABLE_NETWORK_CHECK = "network_check_disable";
+    public static final String RCMD_API_NEW_PARAM = "rcmd_api_new_param";
     public static final String MENU_SORT = "menu_sort";
 
     public static String cookies = "cookies";

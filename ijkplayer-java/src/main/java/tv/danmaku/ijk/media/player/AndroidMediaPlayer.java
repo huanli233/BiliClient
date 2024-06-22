@@ -357,7 +357,7 @@ public class AndroidMediaPlayer extends AbstractMediaPlayer {
         public final WeakReference<AndroidMediaPlayer> mWeakMediaPlayer;
 
         public AndroidMediaPlayerListenerHolder(AndroidMediaPlayer mp) {
-            mWeakMediaPlayer = new WeakReference<AndroidMediaPlayer>(mp);
+            mWeakMediaPlayer = new WeakReference<>(mp);
         }
 
         @Override

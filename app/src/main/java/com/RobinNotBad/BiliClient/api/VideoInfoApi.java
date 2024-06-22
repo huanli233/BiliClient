@@ -144,10 +144,7 @@ public class VideoInfoApi {
         videoInfo.timeDesc = sdf.format(data.getLong("pubdate") * 1000);
         Log.e("发布时间",String.valueOf(videoInfo.timeDesc));
 
-        int duration = data.getInt("duration");
-        int min = duration / 60;
-        int sec = duration % 60;
-        videoInfo.duration = (min<10 ? "0" : "") + min + ":" + (sec<10 ? "0" : "") + sec;
+        videoInfo.duration = ToolsUtil.toTime(data.getInt("duration"));
         Log.e("视频时长",videoInfo.duration);
 
         JSONObject stat = data.getJSONObject("stat");

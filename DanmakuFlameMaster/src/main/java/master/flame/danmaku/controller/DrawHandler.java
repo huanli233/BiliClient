@@ -90,7 +90,7 @@ public class DrawHandler extends Handler {
 
     private Callback mCallback;
 
-    private DanmakuTimer timer = new DanmakuTimer();
+    private final DanmakuTimer timer = new DanmakuTimer();
 
     private BaseDanmakuParser mParser;
 
@@ -106,7 +106,7 @@ public class DrawHandler extends Handler {
 
     private static final int MAX_RECORD_SIZE = 500;
 
-    private LinkedList<Long> mDrawTimes = new LinkedList<>();
+    private final LinkedList<Long> mDrawTimes = new LinkedList<>();
 
     private UpdateThread mThread;
 
@@ -133,7 +133,7 @@ public class DrawHandler extends Handler {
 
     private boolean mInWaitingState;
 
-    private boolean mIdleSleep;
+    private final boolean mIdleSleep;
 
     public DrawHandler(Looper looper, IDanmakuViewController view, boolean danmakuVisibile) {
         super(looper);
@@ -181,14 +181,11 @@ public class DrawHandler extends Handler {
                 if (mParser == null || !mDanmakuView.isViewReady()) {
                     sendEmptyMessageDelayed(PREPARE, 100);
                 } else {
-                    prepare(new Runnable() {
-                        @Override
-                        public void run() {
-                            pausedPosition = 0;
-                            mReady = true;
-                            if (mCallback != null) {
-                                mCallback.prepared();
-                            }
+                    prepare(() -> {
+                        pausedPosition = 0;
+                        mReady = true;
+                        if (mCallback != null) {
+                            mCallback.prepared();
                         }
                     });
                 }
@@ -423,7 +420,7 @@ public class DrawHandler extends Handler {
     public static void setSpeed(float speed) {
         mSpeed = speed;
     }
-    private final long syncTimer(long startMS) {
+    private long syncTimer(long startMS) {
         if (mInSeekingAction || mInSyncAction) {
             return 0;
         }

@@ -17,7 +17,7 @@ import java.util.LinkedHashMap;
 public class SettingQualityActivity extends BaseActivity {
     QualityChooseAdapter adapter;
 
-    static LinkedHashMap<String, Integer> qnMap = new LinkedHashMap<>() {{
+    static final LinkedHashMap<String, Integer> qnMap = new LinkedHashMap<>() {{
         put("360P", 16);
         put("720P", 64);
         put("1080P", 80);

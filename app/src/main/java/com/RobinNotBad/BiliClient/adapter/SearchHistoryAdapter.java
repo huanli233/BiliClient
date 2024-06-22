@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdapter.BtnListHolder> {
 
-    Context context;
-    ArrayList<String> historyList;
+    final Context context;
+    final ArrayList<String> historyList;
     OnItemLongClickListener longClickListener;
     OnItemClickListener clickListener;
 
@@ -69,7 +69,7 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdap
     }
 
     public static class BtnListHolder extends RecyclerView.ViewHolder{
-        TextView text_view;
+        final TextView text_view;
 
         public BtnListHolder(@NonNull View itemView) {
             super(itemView);

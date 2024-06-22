@@ -7,15 +7,25 @@
     android:layout_marginVertical="@dimen/list_margin_vertical">
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/live"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="直播列表"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/write_dynamic"/>
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/write_dynamic"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="2dp"
         android:text="发动态"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/type"
+        app:layout_constraintEnd_toStartOf="@id/type"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/live" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/type"
@@ -23,9 +33,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:text="类型"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/write_dynamic"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/live" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

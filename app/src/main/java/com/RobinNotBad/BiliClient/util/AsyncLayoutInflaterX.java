@@ -31,9 +31,9 @@ public class AsyncLayoutInflaterX {
 
     private final Pools.SynchronizedPool<InflateRequest> mRequestPool = new Pools.SynchronizedPool<>(10);
 
-    LayoutInflater mInflater;
-    Handler mHandler;
-    Dispather mDispatcher;
+    final LayoutInflater mInflater;
+    final Handler mHandler;
+    final Dispather mDispatcher;
 
 
     public AsyncLayoutInflaterX(@NonNull Context context) {
@@ -106,7 +106,7 @@ public class AsyncLayoutInflaterX {
 
         //LinkedBlockingQueue 默认构造器，队列容量是Integer.MAX_VALUE
         private static final BlockingQueue<Runnable> sPoolWorkQueue =
-                new LinkedBlockingQueue<Runnable>();
+                new LinkedBlockingQueue<>();
 
         /**
          * An {@link Executor} that can be used to execute tasks in parallel.
@@ -172,7 +172,7 @@ public class AsyncLayoutInflaterX {
 
 
     private static class InflateRunnable implements Runnable {
-        private InflateRequest request;
+        private final InflateRequest request;
         private boolean isRunning;
 
         public InflateRunnable(InflateRequest request) {

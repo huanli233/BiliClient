@@ -16,8 +16,6 @@
 
 package master.flame.danmaku.danmaku.model;
 
-import android.util.Log;
-
 public class DanmakuTimer {
     public long currMillisecond;
     private static long current = System.currentTimeMillis();

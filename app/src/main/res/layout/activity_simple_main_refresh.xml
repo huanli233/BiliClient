@@ -45,21 +45,29 @@ tools:context=".activity.video.RecommendActivity">
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    android:id="@+id/swipeRefreshLayout"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/top"
-    app:layout_constraintBottom_toBottomOf="parent">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <TextView
+        android:id="@+id/emptyTip"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" />
-
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        android:text="啥都木有~"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

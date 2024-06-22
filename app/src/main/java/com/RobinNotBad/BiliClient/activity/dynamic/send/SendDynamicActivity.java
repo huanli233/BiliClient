@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.activity.dynamic.send;
 import static com.RobinNotBad.BiliClient.util.ToolsUtil.toWan;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -15,13 +14,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.EmoteActivity;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.article.ArticleCardHolder;
@@ -44,8 +45,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
 
-import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
@@ -56,6 +55,16 @@ import java.util.concurrent.ExecutionException;
  * （我并不怎么会写）
  */
 public class SendDynamicActivity extends BaseActivity {
+
+    EditText editText;
+
+    private ActivityResultLauncher<Intent> emoteLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
+        int code = result.getResultCode();
+        Intent data = result.getData();
+        if (code == RESULT_OK && data != null && data.hasExtra("text")) {
+            editText.append(data.getStringExtra("text"));
+        }
+    });
 
     @SuppressLint("InflateParams")
     @Override
@@ -73,7 +82,7 @@ public class SendDynamicActivity extends BaseActivity {
                 finish();
             }
 
-            EditText editText = findViewById(R.id.editText);
+            editText = findViewById(R.id.editText);
             MaterialCardView send = findViewById(R.id.send);
 
             ConstraintLayout extraCard = findViewById(R.id.extraCard);
@@ -100,6 +109,8 @@ public class SendDynamicActivity extends BaseActivity {
                     finish();
                 } else MsgUtil.showDialog(this,"无法发送","上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作",-1);
             });
+
+            findViewById(R.id.emote).setOnClickListener(view -> emoteLauncher.launch(new Intent(this, EmoteActivity.class)));
         });
     }
 
@@ -128,8 +139,6 @@ public class SendDynamicActivity extends BaseActivity {
                             ToolsUtil.setLink(content);
                             ToolsUtil.setAtLink(dynamic.ats, content);
                         });
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {

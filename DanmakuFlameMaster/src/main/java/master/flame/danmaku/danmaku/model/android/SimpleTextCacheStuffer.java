@@ -14,7 +14,7 @@ import master.flame.danmaku.danmaku.model.BaseDanmaku;
  */
 public class SimpleTextCacheStuffer extends BaseCacheStuffer {
 
-    private final static Map<Float, Float> sTextHeightCache = new HashMap<Float, Float>();
+    private final static Map<Float, Float> sTextHeightCache = new HashMap<>();
 
     protected Float getCacheHeight(BaseDanmaku danmaku, Paint paint) {
         Float textSize = paint.getTextSize();

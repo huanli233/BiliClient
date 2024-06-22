@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.activity.article;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +15,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.reply.ReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.ArticleApi;
+import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
@@ -33,6 +33,7 @@ public class ArticleInfoActivity extends BaseActivity {
     private long cvid;
 
     private ReplyFragment replyFragment;
+    private long seek_reply;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class ArticleInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_simple_viewpager);
         Intent intent = getIntent();
         cvid = intent.getLongExtra("cvid", 114514);
+        this.seek_reply = getIntent().getLongExtra("seekReply", -1);
 
         TextView pageName = findViewById(R.id.pageName);
         pageName.setText("专栏详情");
@@ -54,13 +56,14 @@ public class ArticleInfoActivity extends BaseActivity {
                 List<Fragment> fragmentList = new ArrayList<>();
                 ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance(articleInfo = ArticleApi.getArticle(cvid));
                 fragmentList.add(articleInfoFragment);
-                replyFragment = ReplyFragment.newInstance(cvid, 12);
+                replyFragment = ReplyFragment.newInstance(cvid, ReplyApi.REPLY_TYPE_ARTICLE, seek_reply);
                 replyFragment.setSource(articleInfo);
                 fragmentList.add(replyFragment);
 
                 runOnUiThread(() -> {
                     ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
                     viewPager.setAdapter(vpfAdapter);
+                    if (seek_reply != -1) viewPager.setCurrentItem(1);
                     findViewById(R.id.loading).setVisibility(View.GONE);
                 });
             }catch (Exception e){

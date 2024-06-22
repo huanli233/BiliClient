@@ -17,7 +17,6 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.google.android.material.button.MaterialButton;
 
 public class CatchActivity extends BaseActivity {
     private boolean openStack = false;

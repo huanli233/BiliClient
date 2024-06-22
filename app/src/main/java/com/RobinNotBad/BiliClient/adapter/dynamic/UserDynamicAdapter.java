@@ -39,12 +39,12 @@ import java.util.ArrayList;
 
 public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    Context context;
-    ArrayList<Dynamic> dynamicList;
-    UserInfo userInfo;
+    final Context context;
+    final ArrayList<Dynamic> dynamicList;
+    final UserInfo userInfo;
     boolean desc_expand, notice_expand;
     boolean follow_onprocess;
-    PreInflateHelper preInflateHelper;
+    final PreInflateHelper preInflateHelper;
 
     public UserDynamicAdapter(Context context, ArrayList<Dynamic> dynamicList, UserInfo userInfo) {
         this.context = context;
@@ -61,7 +61,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             return new UserInfoHolder(view);
         }
         else {
-            View view = LayoutInflater.from(context).inflate(R.layout.cell_dynamic, parent, false);
+            View view = preInflateHelper.getView(parent, R.layout.cell_dynamic, 3, false);
             return new DynamicHolder(view, (BaseActivity) context, false);
         }
     }
@@ -101,7 +101,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 userInfoHolder.officialIcon.setVisibility(View.VISIBLE);
                 userInfoHolder.userOfficial.setVisibility(View.VISIBLE);
                 String[] official_signs = {"哔哩哔哩不知名UP主","哔哩哔哩知名UP主","哔哩哔哩大V达人","哔哩哔哩企业认证",
-                        "哔哩哔哩组织认证","哔哩哔哩媒体认证","哔哩哔哩政府认证","哔哩哔哩高能主播","社会知名人士"};
+                        "哔哩哔哩组织认证","哔哩哔哩媒体认证","哔哩哔哩政府认证","哔哩哔哩高能主播","社会不知名人士", "社会知名人士"};
                 userInfoHolder.userOfficial.setText(official_signs[userInfo.official] + (userInfo.officialDesc.isEmpty() ? "" : ("\n" + userInfo.officialDesc)));
             } else {
                 userInfoHolder.officialIcon.setVisibility(View.GONE);
@@ -187,10 +187,16 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public static class UserInfoHolder extends RecyclerView.ViewHolder{
-        TextView userName,userFans,userDesc,userNotice,userOfficial;
-        ImageView userAvatar,officialIcon;
+        final TextView userName;
+        final TextView userFans;
+        final TextView userDesc;
+        final TextView userNotice;
+        final TextView userOfficial;
+        final ImageView userAvatar;
+        final ImageView officialIcon;
 
-        MaterialButton followBtn,msgBtn;
+        final MaterialButton followBtn;
+        final MaterialButton msgBtn;
 
         public UserInfoHolder(@NonNull View itemView) {
             super(itemView);

@@ -10,19 +10,15 @@ import static com.RobinNotBad.BiliClient.util.LinkUrlUtil.TYPE_USER;
 import static com.RobinNotBad.BiliClient.util.LinkUrlUtil.TYPE_WEB_URL;
 
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.text.Layout;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
-import android.util.Log;
-import android.util.Pair;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,19 +33,11 @@ import com.RobinNotBad.BiliClient.model.At;
 
 import com.RobinNotBad.BiliClient.R;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 //2023-07-25
 

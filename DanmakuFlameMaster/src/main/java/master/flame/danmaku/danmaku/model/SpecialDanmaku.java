@@ -18,8 +18,9 @@ package master.flame.danmaku.danmaku.model;
 
 public class SpecialDanmaku extends BaseDanmaku {
     
-    private class Point {
-        float x, y;
+    private static class Point {
+        final float x;
+        final float y;
 
         public Point(float x, float y) {
             this.x = x;
@@ -85,7 +86,7 @@ public class SpecialDanmaku extends BaseDanmaku {
 
     public float pivotX, pivotY;
 
-    private float[] currStateValues = new float[4];
+    private final float[] currStateValues = new float[4];
 
     public LinePath[] linePaths;
 

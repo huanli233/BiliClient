@@ -2,19 +2,15 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.util.Log;
 
-import com.RobinNotBad.BiliClient.BiliTerminal;
-import com.RobinNotBad.BiliClient.api.CollectionApi;
-import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.DmImgParamUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
-import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -96,9 +92,9 @@ public class UserInfoApi {
 
     public static int getUserVideos(long mid, int page, String searchKeyword, List<VideoCard> videoList) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/space/wbi/arc/search?";
-        String args = "keyword=" + searchKeyword + "&mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
-                + "&ps=30&tid=0";
-        JSONObject all = NetWorkUtil.getJson(url + ConfInfoApi.signWBI(args));
+        url += "keyword=" + searchKeyword + "&mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
+                + "&ps=30&tid=0&web_location=333.999";
+        JSONObject all = NetWorkUtil.getJson(ConfInfoApi.signWBI(DmImgParamUtil.getDmImgParamsUrl(url)));
         if(all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
             JSONObject list = data.getJSONObject("list");
@@ -127,10 +123,10 @@ public class UserInfoApi {
 
     public static int getUserArticles(long mid, int page, List<ArticleCard> articleList) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/space/wbi/article?";
-        String args = "mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
+        url += "mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
                 + "&ps=30&tid=0";
         Log.e("debug",url);
-        JSONObject all = NetWorkUtil.getJson(url + ConfInfoApi.signWBI(args), NetWorkUtil.webHeaders);
+        JSONObject all = NetWorkUtil.getJson(ConfInfoApi.signWBI(url), NetWorkUtil.webHeaders);
         if(all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
             if(data.has("articles")){
@@ -157,9 +153,9 @@ public class UserInfoApi {
     
     public static int getUserSeasons(long mid, int page, List<Collection> seasonList) throws IOException, JSONException{
         String url = "https://api.bilibili.com/x/polymer/web-space/seasons_series_list?";
-        String args = "mid=" + mid + "&page_num=" + page + "&page_size=20";
+        url += "mid=" + mid + "&page_num=" + page + "&page_size=20";
         Log.e("debug",url);
-        JSONObject all = NetWorkUtil.getJson(url + ConfInfoApi.signWBI(args), NetWorkUtil.webHeaders);
+        JSONObject all = NetWorkUtil.getJson(ConfInfoApi.signWBI(url), NetWorkUtil.webHeaders);
         if(all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
             if(data.has("items_lists") && !data.isNull("items_lists")){

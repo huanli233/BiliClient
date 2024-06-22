@@ -1,6 +1,5 @@
 package com.RobinNotBad.BiliClient.api;
 
-import android.util.Log;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.Opus;
 import com.RobinNotBad.BiliClient.model.Stats;
@@ -24,8 +23,8 @@ API是自己扒的
 public class ArticleApi {
     public static ArticleInfo getArticle(long id) throws JSONException, IOException {
         String url = "https://api.bilibili.com/x/article/view?";
-        String args = "id=" + id + "&gaia_source=main_web&web_location=333.976";
-        JSONObject result = NetWorkUtil.getJson(url + ConfInfoApi.signWBI(args));
+        url += "id=" + id + "&gaia_source=main_web&web_location=333.976";
+        JSONObject result = NetWorkUtil.getJson(ConfInfoApi.signWBI(url));
         if (!result.has("data")) return null;
         JSONObject data = result.getJSONObject("data");
 
@@ -66,12 +65,11 @@ public class ArticleApi {
     /**
      * 另一个获取专栏相关信息api
      * @param id cvid
-     * @return
      */
     public static ArticleInfo getArticleViewInfo(long id) throws JSONException, IOException {
         String url = "https://api.bilibili.com/x/article/viewinfo?";
-        String args = "id=" + id + "&gaia_source=main_web&web_location=333.976&mobi_app=pc&from=web";
-        JSONObject result = NetWorkUtil.getJson(url + ConfInfoApi.signWBI(args));
+        url += "id=" + id + "&gaia_source=main_web&web_location=333.976&mobi_app=pc&from=web";
+        JSONObject result = NetWorkUtil.getJson(ConfInfoApi.signWBI(url));
         if (!result.has("data")) return null;
         JSONObject data = result.getJSONObject("data");
 

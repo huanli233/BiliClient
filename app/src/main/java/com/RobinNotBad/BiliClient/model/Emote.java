@@ -6,6 +6,7 @@ public class Emote implements Serializable {
     public int id;
     public int packageId;
     public String name;
+    public String alias;
     public String url;
     public int size;
 

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListFragment;
 import com.RobinNotBad.BiliClient.adapter.ReplyAdapter;
@@ -15,6 +16,7 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 //视频下评论页面，评论详情见ReplyInfoActivity
 //部分通用代码在VideoReplyAdapter内
@@ -30,6 +32,7 @@ public class ReplyFragment extends RefreshListFragment {
     protected ReplyAdapter replyAdapter;
     public int replyType = ReplyApi.REPLY_TYPE_VIDEO;
     private Object source;
+    private long seek;
 
     public static ReplyFragment newInstance(long aid, int type) {
         ReplyFragment fragment = new ReplyFragment();
@@ -50,6 +53,27 @@ public class ReplyFragment extends RefreshListFragment {
         return fragment;
     }
 
+    public static ReplyFragment newInstance(long aid, int type, long seek_rpid) {
+        ReplyFragment fragment = new ReplyFragment();
+        Bundle args = new Bundle();
+        args.putLong("aid", aid);
+        args.putInt("type", type);
+        args.putLong("seek", seek_rpid);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static ReplyFragment newInstance(long aid, int type, boolean dontload, long seek_rpid) {
+        ReplyFragment fragment = new ReplyFragment();
+        Bundle args = new Bundle();
+        args.putLong("aid", aid);
+        args.putInt("type", type);
+        args.putBoolean("dontload",dontload);
+        args.putLong("seek", seek_rpid);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +82,7 @@ public class ReplyFragment extends RefreshListFragment {
             type = getArguments().getInt("type");
             replyType = type;
             dontload = getArguments().getBoolean("dontload",false);
+            seek = getArguments().getLong("seek", -1);
         }
     }
 
@@ -74,7 +99,7 @@ public class ReplyFragment extends RefreshListFragment {
         if(!dontload) {
             CenterThreadPool.run(()->{
                 try {
-                    int result = ReplyApi.getReplies(aid,0,page,type,sort,replyList);
+                    int result = seek == -1 ? ReplyApi.getReplies(aid,0,page,type,sort,replyList) : ReplyApi.getRepliesLazy(aid,seek,page,type,3,replyList);
                     setRefreshing(false);
                     if(result != -1 && isAdded()) {
                         replyAdapter = getReplyAdapter();
@@ -113,7 +138,7 @@ public class ReplyFragment extends RefreshListFragment {
                     Log.e("debug","下一页");
                     runOnUiThread(()-> {
                         replyList.addAll(list);
-                        replyAdapter.notifyItemRangeInserted(replyList.size() - list.size(), list.size());
+                        if (replyAdapter != null ) replyAdapter.notifyItemRangeInserted(replyList.size() - list.size() + 1, list.size());
                     });
                     if(result == 1) {
                         Log.e("debug", "到底了");
@@ -128,10 +153,15 @@ public class ReplyFragment extends RefreshListFragment {
 
     public void notifyReplyInserted(Reply reply) {
         if (reply.root != 0) return;
-        replyList.add(0, reply);
+        LinearLayoutManager layoutManager = (LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager());
+        int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
+        pos = Math.max(pos, 0);
+        replyList.add(pos, reply);
+        int finalPos = pos;
         runOnUiThread(() -> {
-            replyAdapter.notifyItemInserted(0);
-            replyAdapter.notifyItemRangeChanged(0, replyList.size());
+            replyAdapter.notifyItemInserted(finalPos);
+            replyAdapter.notifyItemRangeChanged(finalPos, replyList.size() - finalPos);
+            layoutManager.scrollToPositionWithOffset(finalPos + 1, 0);
         });
     }
 

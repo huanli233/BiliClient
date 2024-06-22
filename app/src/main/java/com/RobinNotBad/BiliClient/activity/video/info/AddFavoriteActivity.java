@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
 import com.RobinNotBad.BiliClient.adapter.favorite.FolderChooseAdapter;
@@ -57,10 +56,12 @@ public class AddFavoriteActivity extends RefreshListActivity {
 
     @Override
     public void finish() {
-        if (adapter.added) {
-            setResult(RESULT_ADDED);
-        } else if (adapter.isAllDeleted()) {
-            setResult(RESULT_DELETED);
+        if (adapter != null) {
+            if (adapter.added) {
+                setResult(RESULT_ADDED);
+            } else if (adapter.isAllDeleted()) {
+                setResult(RESULT_DELETED);
+            }
         }
         super.finish();
     }

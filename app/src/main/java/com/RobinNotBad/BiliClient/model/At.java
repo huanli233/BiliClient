@@ -3,7 +3,7 @@ package com.RobinNotBad.BiliClient.model;
 import java.io.Serializable;
 
 public class At implements Serializable {
-    public long rid;
+    public final long rid;
     public int textStartIndex;
     public int textEndIndex;
     public String name;

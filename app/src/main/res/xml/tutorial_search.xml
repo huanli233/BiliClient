@@ -19,7 +19,7 @@
         </item>
         <item>
             <type>0</type>
-            <text>共三页</text>
+            <text>共四页</text>
             <style>underline</style>
             <color>#4a8eca</color>
         </item>
@@ -31,7 +31,7 @@
         </item>
         <item>
             <type>0</type>
-            <text>搜索结果第一页为视频列表，第二页为专栏列表，第三页为用户列表</text>
+            <text>搜索结果第一页为视频列表，第二页为专栏列表，第三页为用户列表，第四页为直播列表</text>
             <style>bold</style>
             <color>#ffffff</color>
         </item>

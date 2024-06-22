@@ -99,7 +99,7 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
         Log.e("debug","加载下一页");
         int lastSize = userInfoList.size();
         try {
-            JSONArray result = SearchApi.searchType(keyword,page,"bili_user");
+            JSONArray result = (JSONArray) SearchApi.searchType(keyword,page,"bili_user");
             if(result!=null) {
                 SearchApi.getUsersFromSearchResult(result, userInfoList);
                 CenterThreadPool.runOnUiThread(() -> userInfoAdapter.notifyItemRangeInserted(lastSize + 1,userInfoList.size()-lastSize));

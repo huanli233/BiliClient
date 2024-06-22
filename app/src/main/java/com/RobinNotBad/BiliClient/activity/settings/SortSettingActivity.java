@@ -30,8 +30,8 @@ import java.util.Objects;
 
 public class SortSettingActivity extends BaseActivity {
 
-    List<String> data = new ArrayList<>();
-    Map<String, String> displayKeyMap = new HashMap<>();
+    final List<String> data = new ArrayList<>();
+    final Map<String, String> displayKeyMap = new HashMap<>();
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -124,8 +124,8 @@ public class SortSettingActivity extends BaseActivity {
 
     static class DragCallBack extends ItemTouchHelper.Callback {
 
-        DragAdapter mAdapter;
-        List<String> mData;
+        final DragAdapter mAdapter;
+        final List<String> mData;
 
         public DragCallBack(DragAdapter adapter, List<String> data) {
             this.mAdapter = adapter;

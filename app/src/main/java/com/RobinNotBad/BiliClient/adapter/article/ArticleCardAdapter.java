@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 public class ArticleCardAdapter extends RecyclerView.Adapter<ArticleCardHolder> {
 
-    Context context;
-    ArrayList<ArticleCard> articleCardList;
+    final Context context;
+    final ArrayList<ArticleCard> articleCardList;
     OnItemLongClickListener longClickListener;
 
     public ArticleCardAdapter(Context context, ArrayList<ArticleCard> articleCardList) {
