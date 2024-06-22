@@ -10,6 +10,7 @@ import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.At;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.Emote;
+import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.model.Stats;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
@@ -433,7 +434,24 @@ public class DynamicApi {
                         break;
 
                     case "MAJOR_TYPE_LIVE_RCMD":
-                        dynamic.content = (TextUtils.isEmpty(dynamic.content) ? "" : dynamic.content + "\n") + "[无法显示直播类动态的附加内容]";
+                        JSONObject live_rcmd = new JSONObject(major.getJSONObject("live_rcmd").getString("content")).getJSONObject("live_play_info");
+                        LiveRoom room = new LiveRoom();
+                        room.roomid = live_rcmd.getLong("room_id");
+                        room.title = live_rcmd.getString("title");
+                        room.cover = live_rcmd.getString("cover");
+                        room.online = live_rcmd.getInt("online");
+                        dynamic.major_object = room;
+                        dynamic.content = (TextUtils.isEmpty(dynamic.content) ? "" : dynamic.content + "\n");
+                        break;
+
+                    case "MAJOR_TYPE_LIVE":
+                        JSONObject live = major.getJSONObject("live");
+                        LiveRoom room_card = new LiveRoom();
+                        room_card.roomid = live.getLong("id");
+                        room_card.title = live.getString("title");
+                        room_card.cover = live.getString("cover");
+                        dynamic.major_object = room_card;
+                        dynamic.content = (TextUtils.isEmpty(dynamic.content) ? "" : dynamic.content + "\n");
                         break;
 
                     default:

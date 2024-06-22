@@ -25,6 +25,7 @@ import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
+import com.RobinNotBad.BiliClient.activity.live.LiveInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.article.ArticleCardHolder;
@@ -32,6 +33,7 @@ import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
@@ -276,6 +278,26 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                     if (finalIsPgc) intent.putExtra("type", "media");
                     intent.putExtra("bvid", "");
                     intent.putExtra("aid", childVideoCard.aid);
+                    context.startActivity(intent);
+                });
+                cell_dynamic_video.setVisibility(View.VISIBLE);
+                break;
+
+            case "MAJOR_TYPE_LIVE":
+            case "MAJOR_TYPE_LIVE_RCMD":
+                LiveRoom liveRoom = (LiveRoom) dynamic.major_object;
+                VideoCard childLiveCard = new VideoCard();
+                childLiveCard.title = liveRoom.title;
+                childLiveCard.cover = liveRoom.cover;
+                childLiveCard.upName = liveRoom.uname;
+                childLiveCard.view = "";
+                childLiveCard.type = "live";
+
+                VideoCardHolder card_holder = new VideoCardHolder(cell_dynamic_video);
+                card_holder.showVideoCard(childLiveCard,context);
+                cell_dynamic_video.setOnClickListener(view -> {
+                    Intent intent = new Intent(context, LiveInfoActivity.class);
+                    intent.putExtra("room_id",liveRoom.roomid);
                     context.startActivity(intent);
                 });
                 cell_dynamic_video.setVisibility(View.VISIBLE);
