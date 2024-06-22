@@ -77,6 +77,8 @@
                 android:padding="8dp"
                 android:text=""
                 android:textSize="13sp"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 tools:ignore="HardcodedText,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <com.google.android.material.card.MaterialCardView

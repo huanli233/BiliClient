@@ -62,8 +62,12 @@
     <string-array name="update_log_items">
         <item>新增了表情面板</item>
         <item>实现了直接跳转到对应评论</item>
+        <item>优化了发布评论后的评论显示</item>
         <item>修复了通知中心崩溃的问题</item>
         <item>修复了缓存时可能的崩溃问题</item>
         <item>修复了部分用户主页崩溃的问题</item>
+        <item>修复了删除评论按钮的显示问题</item>
+        <item>修复了视频详情页在部分情况下消失的问题</item>
+        <item>修复了文本框获取焦点导致进入页面后不在页面顶部的问题</item>
     </string-array>
 </resources>

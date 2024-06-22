@@ -386,6 +386,8 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
                         android:textSize="12sp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:id="@+id/DMmaxline"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -411,6 +413,8 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
                         android:textSize="12sp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:id="@+id/danmakusize"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -434,6 +438,8 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
                         android:textSize="12sp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:id="@+id/danmakuspeed"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -463,6 +469,8 @@
                             android:minWidth="50dp"
                             android:inputType="phone"
                             android:textSize="12sp"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
                             android:id="@+id/danmaku_transparency"/>
                         <TextView
                             android:layout_width="wrap_content"
