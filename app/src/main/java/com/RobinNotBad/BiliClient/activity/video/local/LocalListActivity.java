@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
@@ -33,6 +34,7 @@ public class LocalListActivity extends InstanceActivity {
     private RecyclerView recyclerView;
     private final ArrayList<LocalVideo> videoList = new ArrayList<>(10);
     private LocalVideoAdapter adapter;
+    private TextView emptyTip;
 
     private int longClickPosition=-1;
 
@@ -47,6 +49,8 @@ public class LocalListActivity extends InstanceActivity {
 
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
+
+        emptyTip = findViewById(R.id.emptyTip);
 
         TextView pageName = findViewById(R.id.pageName);
         pageName.setText("缓存");
@@ -69,6 +73,7 @@ public class LocalListActivity extends InstanceActivity {
                     adapter.notifyItemRemoved(position);
                     adapter.notifyItemRangeChanged(position,videoList.size() - position);
                     longClickPosition = -1;
+                    checkEmpty();
                 }
                 else{
                     longClickPosition = position;
@@ -120,10 +125,24 @@ public class LocalListActivity extends InstanceActivity {
                             videoList.add(localVideo);
                         }
                     }
-
                 }
             }
         }
+        checkEmpty();
+    }
+
+    private void checkEmpty() {
+        runOnUiThread(() -> {
+            if (videoList.isEmpty() && emptyTip != null) {
+                recyclerView.setVisibility(View.GONE);
+                emptyTip.setVisibility(View.VISIBLE);
+            } else {
+                if (emptyTip != null) {
+                    emptyTip.setVisibility(View.GONE);
+                }
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     public void refresh(){

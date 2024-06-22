@@ -138,7 +138,7 @@ public class ReplyFragment extends RefreshListFragment {
                     Log.e("debug","下一页");
                     runOnUiThread(()-> {
                         replyList.addAll(list);
-                        if (replyAdapter != null ) replyAdapter.notifyItemRangeInserted(replyList.size() - list.size(), list.size());
+                        if (replyAdapter != null ) replyAdapter.notifyItemRangeInserted(replyList.size() - list.size() + 1, list.size());
                     });
                     if(result == 1) {
                         Log.e("debug", "到底了");

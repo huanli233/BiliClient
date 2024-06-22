@@ -85,7 +85,7 @@ public class UserDynamicFragment extends RefreshListFragment {
                 offset = DynamicApi.getDynamicList(list,offset,mid, null);
                 runOnUiThread(()-> {
                     dynamicList.addAll(list);
-                    adapter.notifyItemRangeInserted(dynamicList.size() - list.size(), list.size());
+                    adapter.notifyItemRangeInserted(dynamicList.size() - list.size() + 1, list.size());
                 });
                 bottom = (offset==-1);
                 setRefreshing(false);
