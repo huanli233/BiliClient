@@ -62,6 +62,24 @@ public class LiveApi {
     }
 
     /**
+     * 获取直播间详情
+     * @param room_id 直播间ID
+     * @return 直播间信息
+     */
+    public static LiveRoom getRoomInfo(long room_id) throws JSONException, IOException {
+        String url = "https://api.live.bilibili.com/room/v1/Room/get_info" + new NetWorkUtil.FormData().setUrlParam(true)
+                .put("room_id", room_id);
+        JSONObject result = NetWorkUtil.getJson(url);
+        if (result.getInt("code") != 0) throw new JSONException(result.getString("message"));
+
+        JSONObject data = result.optJSONObject("data");
+        if (data != null) {
+            return analyzeLiveRooms(new JSONArray().put(data)).get(0); //我认为没问题（
+        }
+        return null;
+    }
+
+    /**
      * 获取直播间PlayInfo
      * @param roomId 直播间id
      * @param qn 清晰度
@@ -212,7 +230,9 @@ public class LiveApi {
             }
             liveRoom.uid = jsonObject.getLong("uid");
             liveRoom.title = jsonObject.getString("title");
-            liveRoom.uname = jsonObject.getString("uname");
+            liveRoom.uname = jsonObject.optString("uname");
+            liveRoom.tags = jsonObject.optString("tags");
+            liveRoom.description = jsonObject.optString("description");
             liveRoom.online = jsonObject.optInt("online", -1);
             liveRoom.user_cover = jsonObject.optString("user_cover");
             liveRoom.user_cover_flag = jsonObject.optInt("user_cover_flag", -1);
@@ -221,6 +241,7 @@ public class LiveApi {
             if (TextUtils.isEmpty(liveRoom.cover)) {
                 liveRoom.cover = jsonObject.optString("cover_from_user");
             }
+            liveRoom.keyframe = jsonObject.optString("keyframe");
             liveRoom.show_cover = jsonObject.optString("show_cover");
             liveRoom.face = jsonObject.optString("face");
             liveRoom.area_parent_id = jsonObject.optInt("area_v2_parent_id", -1);
@@ -251,7 +272,7 @@ public class LiveApi {
                 watched.icon_web = watched_show.optString("icon_web");
                 liveRoom.watched_show = watched;
             }
-            liveRoom.liveTime = jsonObject.optLong("liveTime", -1);
+            liveRoom.liveTime = jsonObject.optString("live_time");
             liveRooms.add(liveRoom);
         }
         return liveRooms;

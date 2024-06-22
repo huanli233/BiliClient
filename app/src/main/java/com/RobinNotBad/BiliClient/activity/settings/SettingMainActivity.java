@@ -9,6 +9,8 @@ import android.view.View;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
+import com.RobinNotBad.BiliClient.activity.live.FollowLiveActivity;
+import com.RobinNotBad.BiliClient.activity.live.RecommendLiveActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -19,7 +21,6 @@ import com.google.android.material.card.MaterialCardView;
 public class SettingMainActivity extends InstanceActivity {
 
     private int eggClick = 0;
-    private boolean tutorialReset_clicked = false;
 
     @SuppressLint({"MissingInflatedId", "InflateParams"})
     @Override
@@ -142,8 +143,10 @@ public class SettingMainActivity extends InstanceActivity {
             });
 
             MaterialCardView test = findViewById(R.id.test);    //用于测试
-            test.setVisibility(View.GONE);
+//            test.setVisibility(View.GONE);
             test.setOnClickListener(view -> {
+                Intent intent = new Intent(this, RecommendLiveActivity.class);
+                startActivity(intent);
             });
         });
     }

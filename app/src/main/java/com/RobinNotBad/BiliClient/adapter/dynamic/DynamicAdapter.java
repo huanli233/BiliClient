@@ -16,6 +16,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ListChooseActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
+import com.RobinNotBad.BiliClient.activity.live.FollowLiveActivity;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.PreInflateHelper;
 import com.google.android.material.button.MaterialButton;
@@ -71,6 +72,10 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 writeDynamicLauncher.launch(intent);
             });
             writeDynamic.type.setOnClickListener((view) -> dynamicActivity.selectTypeLauncher.launch(new Intent().setClass(context, ListChooseActivity.class).putExtra("title", "选择类型").putExtra("items", new ArrayList<>(Arrays.asList("全部", "视频投稿", "追番", "专栏")))));
+            writeDynamic.live.setOnClickListener(view -> {
+                Intent intent = new Intent(context, FollowLiveActivity.class);
+                context.startActivity(intent);
+            });
         } else if (holder instanceof DynamicHolder) {
             long time = System.currentTimeMillis();
             position--;
@@ -108,13 +113,13 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
     public static class WriteDynamic extends RecyclerView.ViewHolder {
-        final MaterialButton write_dynamic;
-        final MaterialButton type;
+        final MaterialButton write_dynamic,type,live;
 
         public WriteDynamic(@NonNull View itemView) {
             super(itemView);
             write_dynamic = itemView.findViewById(R.id.write_dynamic);
             type = itemView.findViewById(R.id.type);
+            live = itemView.findViewById(R.id.live);
         }
     }
 

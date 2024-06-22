@@ -52,6 +52,21 @@
             android:label="合集详情"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.live.LiveInfoActivity"
+            android:exported="false"
+            android:label="直播详情页"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.live.FollowLiveActivity"
+            android:exported="false"
+            android:label="我关注的直播"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.live.RecommendLiveActivity"
+            android:exported="false"
+            android:label="推荐直播"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.user.FollowingBangumisActivity"
             android:exported="false"
             android:label="追番列表"

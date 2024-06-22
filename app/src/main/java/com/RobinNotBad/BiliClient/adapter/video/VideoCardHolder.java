@@ -23,6 +23,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.Objects;
+
 public class VideoCardHolder extends RecyclerView.ViewHolder{
     final TextView title;
     final TextView upName;
@@ -50,21 +52,7 @@ public class VideoCardHolder extends RecyclerView.ViewHolder{
         else upName.setText(upNameStr);
 
         
-        if(videoCard.collection == null){
-            title.setText(ToolsUtil.htmlToString(videoCard.title));
-            String playTimesStr = videoCard.view;
-            if(playTimesStr == null || playTimesStr.isEmpty()){
-                playIcon.setVisibility(View.GONE);
-                viewCount.setVisibility(View.GONE);
-            }
-            else viewCount.setText(playTimesStr);
-            Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
-                .placeholder(R.mipmap.placeholder)
-                .format(DecodeFormat.PREFER_RGB_565)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(cover);
-        }else{
+        if(videoCard.collection != null){
             Collection collection = videoCard.collection;
             SpannableString spannableString = new SpannableString("[合集]" + ToolsUtil.htmlToString(collection.title));
             spannableString.setSpan(new ForegroundColorSpan(Color.rgb(207,75,95)), 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -76,11 +64,31 @@ public class VideoCardHolder extends RecyclerView.ViewHolder{
             }
             else viewCount.setText("共" + playTimesStr);
             Glide.with(context).asDrawable().load(GlideUtil.url(collection.cover))
-                .placeholder(R.mipmap.placeholder)
-                .format(DecodeFormat.PREFER_RGB_565)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(cover);
+                    .placeholder(R.mipmap.placeholder)
+                    .format(DecodeFormat.PREFER_RGB_565)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(cover);
+        } else {
+            String playTimesStr = videoCard.view;
+            if(playTimesStr == null || playTimesStr.isEmpty()){
+                playIcon.setVisibility(View.GONE);
+                viewCount.setVisibility(View.GONE);
+            }
+            else viewCount.setText(playTimesStr);
+            Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
+                    .placeholder(R.mipmap.placeholder)
+                    .format(DecodeFormat.PREFER_RGB_565)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(cover);
+            if(videoCard.type.equals("live")){
+                SpannableString spannableString = new SpannableString("[直播]" + ToolsUtil.htmlToString(videoCard.title));
+                spannableString.setSpan(new ForegroundColorSpan(Color.rgb(207,75,95)), 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                title.setText(spannableString);
+            } else {
+                title.setText(ToolsUtil.htmlToString(videoCard.title));
+            }
         }
     }
 }

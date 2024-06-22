@@ -296,6 +296,7 @@ public class VideoInfoFragment extends Fragment {
 
         if (isAdded()) requireActivity().runOnUiThread(() -> {
             UpListAdapter adapter = new UpListAdapter(requireContext(), videoInfo.staff);
+            up_recyclerView.setHasFixedSize(true);
             up_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             up_recyclerView.setAdapter(adapter);
         }); //加载UP主

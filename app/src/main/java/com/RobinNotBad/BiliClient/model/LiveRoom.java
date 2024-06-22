@@ -7,11 +7,14 @@ public class LiveRoom implements Serializable {
     public long uid;
     public String title;
     public String uname;
+    public String tags;
+    public String description;
     public int online;
     public String user_cover;
     public int user_cover_flag;
     public String system_cover;
     public String cover;
+    public String keyframe;
     public String show_cover;
     public String face;
     public int area_parent_id;
@@ -22,7 +25,7 @@ public class LiveRoom implements Serializable {
     public long group_id;
     public String show_callback;
     public String click_callback;
-    public long liveTime;
+    public String liveTime;
     public Verify verify;
     public Watched watched_show;
 
