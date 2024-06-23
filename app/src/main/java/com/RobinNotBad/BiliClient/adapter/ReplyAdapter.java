@@ -352,13 +352,15 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
 
             replyHolder.replyBtn.setOnClickListener(view -> {
+                boolean noParent = isDetail && realPosition == 0;
                 Intent intent = new Intent();
                 intent.setClass(context, WriteReplyActivity.class);
                 intent.putExtra("oid",oid);
-                intent.putExtra("rpid",replyList.get(realPosition).rpid);
-                intent.putExtra("parent",replyList.get(realPosition).rpid);
+                intent.putExtra("rpid", noParent ? root : replyList.get(realPosition).rpid);
+                intent.putExtra("parent", noParent ? root : replyList.get(realPosition).rpid);
                 intent.putExtra("replyType", replyType);
-                if(root!=0) intent.putExtra("parentSender",replyList.get(realPosition).sender.name);
+                intent.putExtra("pos", realPosition);
+                if(root!=0 && !noParent) intent.putExtra("parentSender",replyList.get(realPosition).sender.name);
                 else intent.putExtra("parentSender","");
                 context.startActivity(intent);
             });

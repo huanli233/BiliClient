@@ -67,6 +67,7 @@ public class WriteReplyActivity extends BaseActivity {
         long parent = intent.getLongExtra("parent",0);
         int replyType = intent.getIntExtra("replyType", ReplyApi.REPLY_TYPE_VIDEO);
         String parentSender = intent.getStringExtra("parentSender");
+        int pos = intent.getIntExtra("pos", -1);
 
         editText = findViewById(R.id.editText);
         MaterialCardView send = findViewById(R.id.send);
@@ -97,7 +98,7 @@ public class WriteReplyActivity extends BaseActivity {
                                     runOnUiThread(() -> MsgUtil.toast("发送成功>w<",this));
                                     resultReply.forceDelete = true;
                                     resultReply.pubTime = "刚刚";
-                                    EventBus.getDefault().post(new ReplyEvent(1, resultReply));
+                                    EventBus.getDefault().post(new ReplyEvent(1, resultReply, pos));
                                     finish();
                                 } else {
                                     String toast_msg = "评论发送失败：\n" + (msgMap.containsKey(resultCode) ? msgMap.get(resultCode) : resultCode);

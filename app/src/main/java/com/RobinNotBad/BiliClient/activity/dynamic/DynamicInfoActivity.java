@@ -100,7 +100,7 @@ public class DynamicInfoActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.ASYNC, sticky = true, priority = 1)
     public void onEvent(ReplyEvent event){
-        rFragment.notifyReplyInserted(event.getMessage());
+        rFragment.notifyReplyInserted(event);
     }
 
 }

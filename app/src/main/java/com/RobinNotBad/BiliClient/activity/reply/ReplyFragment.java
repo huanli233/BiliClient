@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.RobinNotBad.BiliClient.activity.base.RefreshListFragment;
 import com.RobinNotBad.BiliClient.adapter.ReplyAdapter;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
+import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 
@@ -151,18 +152,24 @@ public class ReplyFragment extends RefreshListFragment {
         });
     }
 
-    public void notifyReplyInserted(Reply reply) {
-        if (reply.root != 0) return;
-        LinearLayoutManager layoutManager = (LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager());
-        int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
-        pos = Math.max(pos, 0);
-        replyList.add(pos, reply);
-        int finalPos = pos;
-        runOnUiThread(() -> {
-            replyAdapter.notifyItemInserted(finalPos);
-            replyAdapter.notifyItemRangeChanged(finalPos, replyList.size() - finalPos);
-            layoutManager.scrollToPositionWithOffset(finalPos + 1, 0);
-        });
+    public void notifyReplyInserted(ReplyEvent replyEvent) {
+        Reply reply = replyEvent.getMessage();
+        if (reply.root == 0) {
+            LinearLayoutManager layoutManager = (LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager());
+            int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
+            pos = Math.max(pos, 0);
+            replyList.add(pos, reply);
+            int finalPos = pos;
+            runOnUiThread(() -> {
+                replyAdapter.notifyItemInserted(finalPos);
+                replyAdapter.notifyItemRangeChanged(finalPos, replyList.size() - finalPos);
+                layoutManager.scrollToPositionWithOffset(finalPos + 1, 0);
+            });
+        } else if (replyEvent.getPos() >= 0) {
+            replyList.get(replyEvent.getPos()).childMsgList.add(String.format("%s：%s", reply.sender.name, reply.message));
+            replyList.get(replyEvent.getPos()).childCount++;
+            runOnUiThread(() -> replyAdapter.notifyItemChanged(replyEvent.getPos() + 1));
+        }
     }
 
     public void refresh(long aid){

@@ -82,6 +82,6 @@ public class ArticleInfoActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.ASYNC, sticky = true, priority = 1)
     public void onEvent(ReplyEvent event){
-        replyFragment.notifyReplyInserted(event.getMessage());
+        replyFragment.notifyReplyInserted(event);
     }
 }
