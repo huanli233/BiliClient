@@ -485,7 +485,9 @@ public class VideoInfoFragment extends Fragment {
         if (videoInfo.collection != null) {
             collectionTitle.setText(String.format("合集 · %s", videoInfo.collection.title));
             collectionCard.setOnClickListener((view1) ->
-                    startActivity(new Intent(requireContext(), CollectionInfoActivity.class).putExtra("collection", videoInfo.collection)));
+                    startActivity(new Intent(requireContext(), CollectionInfoActivity.class)
+                            .putExtra("collection", videoInfo.collection)
+                            .putExtra("fromVideo", videoInfo.aid)));
         } else {
             collectionCard.setVisibility(View.GONE);
         }

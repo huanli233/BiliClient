@@ -36,6 +36,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class CollectionInfoActivity extends RefreshListActivity {
 
@@ -53,12 +54,27 @@ public class CollectionInfoActivity extends RefreshListActivity {
             finish();
             return;
         }
+        long from_aid = getIntent().getLongExtra("fromVideo", -1);
 
         RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
         if (collection.sections == null && collection.cards != null) {
             adapter = new CardAdapter(this, collection, recyclerView);
         } else if (collection.sections != null) {
             adapter = new SectionAdapter(this, collection, recyclerView);
+            List<Collection.Section> sections = collection.sections;
+            int pos = 1;
+            for (int i = 0; i < sections.size(); i++) {
+                pos++;
+                Collection.Section section = sections.get(i);
+                List<Collection.Episode> episodes = section.episodes;
+                for (int j = 0; j < episodes.size(); j++) {
+                    pos++;
+                    Collection.Episode episode = episodes.get(j);
+                    if (episode.aid == from_aid) {
+                        Objects.requireNonNull(recyclerView.getLayoutManager()).scrollToPosition(--pos);
+                    }
+                }
+            }
         } else {
             finish();
             return;
@@ -149,6 +165,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
     static class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         final Collection collection;
+        final RecyclerView recyclerView;
         final Context context;
         final List<Collection.Section> data;
         final List<Integer> types = new ArrayList<>();
@@ -159,6 +176,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
             this.data = collection.sections;
             this.collection = collection;
             this.preInflateHelper = new PreInflateHelper(context);
+            this.recyclerView = recyclerView;
             this.preInflateHelper.preload(recyclerView, R.layout.cell_video_list);
         }
 
