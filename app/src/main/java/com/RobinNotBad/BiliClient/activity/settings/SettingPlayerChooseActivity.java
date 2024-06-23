@@ -136,8 +136,7 @@ public class SettingPlayerChooseActivity extends BaseActivity {
                 }
                 break;
             case "mtvPlayer":
-                if(Build.VERSION.SDK_INT <= 19) MsgUtil.showDialog(this,"提醒","您的安卓版本过低，建议使用内置播放器（改版小电视不再推荐）",-1);
-                else MsgUtil.showDialog(this,"提醒","不再推荐使用小电视播放器，欢迎尝试内置播放器",-1);
+                MsgUtil.showDialog(this,"提醒","不再推荐使用小电视播放器，许多功能已不再支持，推荐使用内置播放器",-1);
                 break;
             
             case "aliangPlayer":

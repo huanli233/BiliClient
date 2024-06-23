@@ -523,7 +523,7 @@ public class VideoInfoFragment extends Fragment {
             //这里也会传过去，如果后面选择当页就不再获取直接传，选择其他页就传-1剩下的交给解析页
             startActivity(intent);
         } else {
-            PlayerApi.startGettingUrl(requireContext(), videoInfo, 0,(play_clicked ? -1 : progressPair.second));
+            PlayerApi.startGettingUrl(requireContext(), videoInfo, 0,(progressPair == null ? 0 :play_clicked ? -1 : progressPair.second));
             //避免重复获取的同时保证播放进度是新的，如果是-1会在解析页里再获取一次
         }
         play_clicked = true;

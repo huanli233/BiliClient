@@ -2,12 +2,14 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.BuildConfig;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.update.UpdateInfoActivity;
 import com.RobinNotBad.BiliClient.model.Announcement;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -50,6 +52,7 @@ public class AppInfoApi {
                 checkUpdate(context,false,false);
             }
         }catch (Exception e){
+            Log.e("BiliClient", e.toString());
             CenterThreadPool.runOnUiThread(()->MsgUtil.toast("连接到哔哩终端接口时发生错误",context));
         }
     }
@@ -87,6 +90,7 @@ public class AppInfoApi {
     }};
 
     public static void checkUpdate(Context context, boolean need_toast,boolean debug_ver) throws Exception {
+        debug_ver = ToolsUtil.isDebugBuild();
         String url = "http://api.biliterminal.cn/terminal/version/get_last";
         if(debug_ver) url += "?debug";
         JSONObject result = NetWorkUtil.getJson(url,customHeaders);
@@ -97,19 +101,35 @@ public class AppInfoApi {
         String version_name = data.getString("version_name");
         String update_log = data.getString("update_log");
         int latest = data.getInt("version_code");
+        long ctime = data.optLong("ctime", -1);
+        int can_download = data.optInt("can_download", 0);
+        int is_release = data.optInt("is_release", 0);
 
         int version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
-        if(latest > version) {
-            if(debug_ver) CenterThreadPool.runOnUiThread(()->MsgUtil.toast("发现新的测试版！",context));
+        if (latest > version) {
+            if (debug_ver) CenterThreadPool.runOnUiThread(()->MsgUtil.toast("发现新的测试版！",context));
             else CenterThreadPool.runOnUiThread(()->MsgUtil.toast("发现新版本！",context));
-            MsgUtil.showText(context,version_name,update_log);
-        }
-        else if(need_toast) {
-            if(debug_ver) CenterThreadPool.runOnUiThread(()->MsgUtil.toast("没有新的测试版了！",context));
+            context.startActivity(new Intent(context, UpdateInfoActivity.class)
+                    .putExtra("versionName", version_name)
+                    .putExtra("versionCode", latest)
+                    .putExtra("updateLog", update_log)
+                    .putExtra("ctime", ctime)
+                    .putExtra("isRelease", is_release)
+                    .putExtra("canDownload", can_download));
+        } else if (need_toast) {
+            if (debug_ver) CenterThreadPool.runOnUiThread(()->MsgUtil.toast("没有新的测试版了！",context));
             else CenterThreadPool.runOnUiThread(()->MsgUtil.toast("当前是最新版本！",context));
         }
+    }
 
-        if(ToolsUtil.isDebugBuild() && !debug_ver) checkUpdate(context,need_toast,true);
+    public static String getDownloadUrl(int versionCode) throws Exception {
+        String url = "https://api.biliterminal.cn/terminal/version/get_download_url" + new NetWorkUtil.FormData().setUrlParam(true)
+                .put("version_code", versionCode);
+        JSONObject result = NetWorkUtil.getJson(url,customHeaders);
+
+        if(result.getInt("code") != 0) throw new Exception("错误：" + result.getString("msg"));
+
+        return result.optString("data");
     }
 
     public static void checkAnnouncement(Context context) throws Exception {

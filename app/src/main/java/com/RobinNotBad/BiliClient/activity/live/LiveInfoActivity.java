@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.activity.live;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -63,6 +64,11 @@ public class LiveInfoActivity extends BaseActivity {
             CenterThreadPool.run(() -> {
                 try {
                     room = LiveApi.getRoomInfo(room_id);
+                    if(room == null){
+                        MsgUtil.toast("直播不存在",this);
+                        finish();
+                        return;
+                    }
                     UserInfo userInfo = UserInfoApi.getUserInfo(room.uid);
                     playInfo = LiveApi.getRoomPlayInfo(room_id,LiveApi.PlayerQnMap.get(SharedPreferencesUtil.getInt("play_qn", 16)));
                     runOnUiThread(() -> {
@@ -133,30 +139,36 @@ public class LiveInfoActivity extends BaseActivity {
                             return true;
                         });
 
-                        //协议选择
-                        MediaEpisodeAdapter protocolAdapter = new MediaEpisodeAdapter();
-                        protocolAdapter.setOnItemClickListener(index -> {
-                            selectedProtocol = index;
-                            refresh_host_list();
-                        });
-                        ArrayList<Bangumi.Episode> protocolList = new ArrayList<>();
-                        for (int i = 0;i < playInfo.playUrl.stream.size();i++){
-                            Bangumi.Episode episode = new Bangumi.Episode();
-                            episode.id = i;
-                            episode.title = playInfo.playUrl.stream.get(i).protocol_name;
-                            protocolList.add(episode);
+                        if(playInfo.playUrl == null) {
+                            MsgUtil.toast("直播已结束",this);
+                            play.setVisibility(View.GONE);
                         }
-                        protocolAdapter.setData(protocolList);
-                        protocol_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-                        runOnUiThread(() -> protocol_list.setAdapter(protocolAdapter));
-
-                        //路线选择
-                        hostAdapter = new MediaEpisodeAdapter();
-                        hostAdapter.setOnItemClickListener(index -> selectedHost = index);
-                        hostAdapter.setData(new ArrayList<>());
-                        host_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-                        runOnUiThread(() -> host_list.setAdapter(hostAdapter));
-                        refresh_host_list();
+                        else{
+                            //协议选择
+                            MediaEpisodeAdapter protocolAdapter = new MediaEpisodeAdapter();
+                            protocolAdapter.setOnItemClickListener(index -> {
+                                selectedProtocol = index;
+                                refresh_host_list();
+                            });
+                            ArrayList<Bangumi.Episode> protocolList = new ArrayList<>();
+                            for (int i = 0;i < playInfo.playUrl.stream.size();i++){
+                                Bangumi.Episode episode = new Bangumi.Episode();
+                                episode.id = i;
+                                episode.title = playInfo.playUrl.stream.get(i).protocol_name;
+                                protocolList.add(episode);
+                            }
+                            protocolAdapter.setData(protocolList);
+                            protocol_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                            runOnUiThread(() -> protocol_list.setAdapter(protocolAdapter));
+    
+                            //路线选择
+                            hostAdapter = new MediaEpisodeAdapter();
+                            hostAdapter.setOnItemClickListener(index -> selectedHost = index);
+                            hostAdapter.setData(new ArrayList<>());
+                            host_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                            runOnUiThread(() -> host_list.setAdapter(hostAdapter));
+                            refresh_host_list();
+                        }
                     });
                 }catch (Exception e){
                     runOnUiThread(() -> MsgUtil.err(e,this));

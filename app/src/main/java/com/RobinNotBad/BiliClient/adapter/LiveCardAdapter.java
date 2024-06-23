@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -10,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.live.LiveInfoActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.LiveRoom;
@@ -51,6 +51,7 @@ public class LiveCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
         videoCard.title = room.title;
         if(!room.user_cover.startsWith("http")) videoCard.cover = "http:" + room.user_cover;
         else videoCard.cover = room.user_cover;
+        if (TextUtils.isEmpty(videoCard.cover) || videoCard.cover.equals("http:")) videoCard.cover = room.cover;
         videoCard.upName = room.uname;
         videoCard.view = ToolsUtil.toWan(room.online) + "人观看";
         videoCard.type = "live";

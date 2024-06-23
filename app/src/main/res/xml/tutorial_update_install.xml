@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tutorial>
+    <name>安装更新页面教程</name>
+    <description>安装更新页面教程</description>
+    <type>0</type>
+    <content>
+        <item>
+            <type>0</type>
+            <text>欢迎来到安装更新页面</text>
+            <style>none</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>0</type>
+            <text>你可以在此处选择安装方案后安装下载的更新安装包，也可以查看路径后使用其他方式安装</text>
+            <style>none</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>0</type>
+            <text>提示：长按安装包路径部分文字可以复制安装包路径</text>
+            <style>bold</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>0</type>
+            <text>注意：此功能可能有一些未知问题，若无法使用请自行按以前的流程下载并安装新版本</text>
+            <style>bold</style>
+            <color>#ffffff</color>
+        </item>
+    </content>
+</tutorial>

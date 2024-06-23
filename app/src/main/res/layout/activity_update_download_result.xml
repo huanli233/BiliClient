@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".activity.update.UpdateDownloadResultActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top"
@@ -20,7 +21,7 @@
             android:layout_marginVertical="3dp"
             android:layout_marginStart="8dp"
             android:gravity="center"
-            android:text="更新详情"
+            android:text="下载更新"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +68,7 @@
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginTop="4dp"
-                android:text="发现新版本"
+                android:text="下载完成"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -93,83 +94,73 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/versionName"
+                        android:id="@+id/path"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
+                        android:layout_gravity="start"
                         android:alpha="0.9"
-                        android:gravity="center"
-                        tools:text="版本名: 9.9.9" />
+                        tools:text="下载的APK保存在: \n/dev/zero\n\n你可以另外使用自己的安装方法安装，或在下方选择一个安装方案进行安装" />
 
-                    <TextView
-                        android:id="@+id/versionCode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:alpha="0.9"
-                        android:gravity="center"
-                        tools:text="版本号: 99999" />
-
-                    <TextView
-                        android:id="@+id/isRelease"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:alpha="0.9"
-                        android:gravity="center"
-                        tools:text="是否为正式版: 是" />
-
-                    <TextView
-                        android:id="@+id/pubTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:alpha="0.9"
-                        android:gravity="center"
-                        tools:text="发布时间: 2024-02-30" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/download"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/installChoose"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="6dp"
                 android:layout_marginEnd="6dp"
-                android:text="下载"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView"
-                tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+                tools:ignore="TouchTargetSizeCheck" >
 
-            <com.google.android.material.card.MaterialCardView
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp"
+                        android:layout_marginTop="4dp"
+                        android:paddingHorizontal="3dp"
+                        android:text="选择安装方式"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/install_way_list"
+                        app:layout_constraintTop_toBottomOf="@+id/title"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp"
+                        android:orientation="vertical"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/cell_item_vertical" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/install"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="6dp"
                 android:layout_marginEnd="6dp"
+                android:text="安装"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/download"
-                tools:ignore="TouchTargetSizeCheck">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingVertical="6dp"
-                    android:paddingHorizontal="4dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/updateLog"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        tools:text="1.内置原神\n2.内置崩坏3\n3.内置崩坏：星穹铁道\n4.内置崩坏学园2\n5.内置Blue Archive\n6.内置明日方舟\n7.内置尘白禁区" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                app:layout_constraintTop_toBottomOf="@+id/installChoose"
+                tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
