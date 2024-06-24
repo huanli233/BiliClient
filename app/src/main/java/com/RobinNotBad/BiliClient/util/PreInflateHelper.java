@@ -58,7 +58,7 @@ public class PreInflateHelper {
     }
     public View getView(@NonNull ViewGroup parent, int layoutId, int maxCount, boolean attachToRoot) {
         View view = mViewCache.getView(layoutId);
-        preloadOnce(parent, layoutId, maxCount);
+//        preloadOnce(parent, layoutId, maxCount);
         if (view != null) {
             return view;
         }
@@ -72,7 +72,7 @@ public class PreInflateHelper {
 
     public View getView(@NonNull ViewGroup parent, int layoutId, int maxCount) {
         View view = mViewCache.getView(layoutId);
-        preloadOnce(parent, layoutId, maxCount);
+//        preloadOnce(parent, layoutId, maxCount);
         if (view != null) {
             return view;
         }

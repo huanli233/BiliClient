@@ -74,7 +74,7 @@ public class WriteReplyActivity extends BaseActivity {
 
         Log.e("debug-发送评论",String.valueOf(rpid));
 
-        if(!parentSender.isEmpty()) {
+        if(parentSender != null && !parentSender.isEmpty()) {
             editText.setText("回复 @" + parentSender + " :");
             editText.setSelection(editText.getText().length());
         }

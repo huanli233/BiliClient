@@ -42,7 +42,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.recyclerView = recyclerView;
         dynamicActivity = (DynamicActivity) context;
         this.writeDynamicLauncher = dynamicActivity.writeDynamicLauncher;
-        getInflateHelper().preload(recyclerView, R.layout.cell_dynamic, 5, 0);
+//        getInflateHelper().preload(recyclerView, R.layout.cell_dynamic, 5, 0);
     }
 
     @Override

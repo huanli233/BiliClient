@@ -185,8 +185,10 @@ public class UpdateInfoActivity extends BaseActivity {
                                 }
                             });
                         }
+                    } catch (IOException e) {
+                        runOnUiThread(() -> MsgUtil.toast("网络异常", this));
                     } catch (Throwable th) {
-                        MsgUtil.toast("错误: " + th.getMessage(), this);
+                        runOnUiThread(() -> MsgUtil.toast("错误: " + th.getMessage(), this));
                     }
                 });
             });

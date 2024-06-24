@@ -96,7 +96,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
             this.data = collection.cards;
             this.collection = collection;
             this.preInflateHelper = new PreInflateHelper(context);
-            this.preInflateHelper.preload(recyclerView, R.layout.cell_video_list);
+//            this.preInflateHelper.preload(recyclerView, R.layout.cell_video_list);
         }
 
         @Override
@@ -177,7 +177,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
             this.collection = collection;
             this.preInflateHelper = new PreInflateHelper(context);
             this.recyclerView = recyclerView;
-            this.preInflateHelper.preload(recyclerView, R.layout.cell_video_list);
+//            this.preInflateHelper.preload(recyclerView, R.layout.cell_video_list);
         }
 
         @Override
