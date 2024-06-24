@@ -57,11 +57,11 @@ public class PreInflateHelper {
         return getView(parent, layoutId, DEFAULT_PRELOAD_COUNT, attachToRoot);
     }
     public View getView(@NonNull ViewGroup parent, int layoutId, int maxCount, boolean attachToRoot) {
-        View view = mViewCache.getView(layoutId);
+//        View view = mViewCache.getView(layoutId);
 //        preloadOnce(parent, layoutId, maxCount);
-        if (view != null) {
-            return view;
-        }
+//        if (view != null) {
+//            return view;
+//        }
         return mLayoutInflater.inflateView(parent, layoutId, attachToRoot);
     }
 
@@ -71,11 +71,11 @@ public class PreInflateHelper {
     }
 
     public View getView(@NonNull ViewGroup parent, int layoutId, int maxCount) {
-        View view = mViewCache.getView(layoutId);
+//        View view = mViewCache.getView(layoutId);
 //        preloadOnce(parent, layoutId, maxCount);
-        if (view != null) {
-            return view;
-        }
+//        if (view != null) {
+//            return view;
+//        }
         return mLayoutInflater.inflateView(parent, layoutId, false);
     }
 
