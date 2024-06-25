@@ -181,6 +181,7 @@ public class ReplyInfoActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.ASYNC, sticky = true, priority = 1)
     public void onEvent(ReplyEvent event){
+        if (event.getOid() != oid) return;
         LinearLayoutManager layoutManager = (LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager());
         int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
         pos--;

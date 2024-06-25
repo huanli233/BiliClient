@@ -98,7 +98,7 @@ public class WriteReplyActivity extends BaseActivity {
                                     runOnUiThread(() -> MsgUtil.toast("发送成功>w<",this));
                                     resultReply.forceDelete = true;
                                     resultReply.pubTime = "刚刚";
-                                    EventBus.getDefault().post(new ReplyEvent(1, resultReply, pos));
+                                    EventBus.getDefault().post(new ReplyEvent(1, resultReply, pos, oid));
                                     finish();
                                 } else {
                                     String toast_msg = "评论发送失败：\n" + (msgMap.containsKey(resultCode) ? msgMap.get(resultCode) : resultCode);

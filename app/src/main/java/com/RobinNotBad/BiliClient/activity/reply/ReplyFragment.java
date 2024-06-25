@@ -153,6 +153,7 @@ public class ReplyFragment extends RefreshListFragment {
     }
 
     public void notifyReplyInserted(ReplyEvent replyEvent) {
+        if (replyEvent.getOid() != aid) return;
         Reply reply = replyEvent.getMessage();
         if (reply.root == 0) {
             LinearLayoutManager layoutManager = (LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager());

@@ -6,16 +6,19 @@ public class ReplyEvent {
     private int type;
     private Reply message;
     private int pos;
+    private long oid;
 
-    public ReplyEvent(int type, Reply message) {
+    public ReplyEvent(int type, Reply message, long oid) {
         this.type = type;
         this.message = message;
+        this.oid = oid;
     }
 
-    public ReplyEvent(int type, Reply message, int pos) {
+    public ReplyEvent(int type, Reply message, int pos, long oid) {
         this.type = type;
         this.message = message;
         this.pos = pos;
+        this.oid = oid;
     }
     public int getType() {
         return type;
@@ -36,5 +39,13 @@ public class ReplyEvent {
 
     public void setPos(int pos) {
         this.pos = pos;
+    }
+
+    public long getOid() {
+        return oid;
+    }
+
+    public void setOid(long oid) {
+        this.oid = oid;
     }
 }
