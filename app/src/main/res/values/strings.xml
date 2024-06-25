@@ -57,6 +57,7 @@
     <string name="desc_cover_play_enable">打开此选项，视频详情页点击封面由查看图片变更为播放。默认根据你首次使用时点击了视频封面还是播放按钮来决定开关。</string>
     <string name="desc_img_no_load_onscroll">打开此选项，翻动列表时将不会加载图片，松手后再加载，观感可能有影响，可能增加流畅度。</string>
     <string name="desc_link_enable">打开此选项，会识别部分文本中的链接/BV号/AV号/CV号并标记为链接，点击可打开。</string>
+    <string name="async_inflate_enable">打开此选项，会对部分页面进行异步加载（显示一个加载中动画，加载完成后显示页面）\n* 请注意，异步加载的开启可能会触发一些崩溃问题，但关闭会导致一些页面在打开期间会阻塞UI无法操作，体验不佳。请自行判断！</string>
 
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">

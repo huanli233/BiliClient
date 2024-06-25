@@ -7,6 +7,7 @@ boolean betaVer = true
 android {
 
     namespace 'com.RobinNotBad.BiliClient'
+    //noinspection GradleDependency
     compileSdk 33
 
     sourceSets {

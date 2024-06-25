@@ -27,7 +27,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     final Context context;
     final List<SettingSection> list;
-    final Map<String,Integer> typeMap = new HashMap<>(){{
+    private static final Map<String,Integer> typeMap = new HashMap<>(){{
         put("switch",0);
         put("choose",1);
         //put("input_int",2);
@@ -93,9 +93,9 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void bind(SettingSection settingSection){
             desc.setText(settingSection.desc);
             switchMaterial.setText(settingSection.name);
-            switchMaterial.setChecked(SharedPreferencesUtil.getBoolean(settingSection.id, Boolean.parseBoolean(settingSection.defaultValue)));
             switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) ->
                     SharedPreferencesUtil.putBoolean(settingSection.id,isChecked));
+            switchMaterial.setChecked(SharedPreferencesUtil.getBoolean(settingSection.id, Boolean.parseBoolean(settingSection.defaultValue)));
         }
     }
 
@@ -116,11 +116,11 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void bind(SettingSection settingSection){
             desc.setText(settingSection.desc);
             name.setText(settingSection.name);
+            chocola.setOnCheckedChangeListener((buttonView, isChecked) ->
+                    SharedPreferencesUtil.putBoolean(settingSection.id,isChecked));
             boolean value = SharedPreferencesUtil.getBoolean(settingSection.id, Boolean.parseBoolean(settingSection.defaultValue));
             chocola.setChecked(value);
             vanilla.setChecked(!value);
-            chocola.setOnCheckedChangeListener((buttonView, isChecked) ->
-                    SharedPreferencesUtil.putBoolean(settingSection.id,isChecked));
         }
     }
 }

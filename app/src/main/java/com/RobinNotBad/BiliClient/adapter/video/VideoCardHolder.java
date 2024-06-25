@@ -23,15 +23,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.util.Objects;
-
 public class VideoCardHolder extends RecyclerView.ViewHolder{
-    final TextView title;
-    final TextView upName;
-    final TextView viewCount;
-    final ImageView cover;
-    final ImageView playIcon;
-    final ImageView upIcon;
+    TextView title,upName, viewCount;
+    ImageView cover,playIcon,upIcon;
 
     public VideoCardHolder(@NonNull View itemView) {
         super(itemView);
@@ -51,7 +45,6 @@ public class VideoCardHolder extends RecyclerView.ViewHolder{
         }
         else upName.setText(upNameStr);
 
-        
         if(videoCard.collection != null){
             Collection collection = videoCard.collection;
             SpannableString spannableString = new SpannableString("[合集]" + ToolsUtil.htmlToString(collection.title));

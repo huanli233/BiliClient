@@ -1,6 +1,7 @@
 package com.RobinNotBad.BiliClient.activity.settings;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -34,6 +35,7 @@ public class SettingPrefActivity extends RefreshListActivity {
             add(new SettingSection("switch","点击封面播放","cover_play_enable",getString(R.string.desc_cover_play_enable),"false"));
             add(new SettingSection("switch","翻动时不加载图片","image_no_load_onscroll",getString(R.string.desc_img_no_load_onscroll),"true"));
             add(new SettingSection("switch","识别链接","link_enable",getString(R.string.desc_link_enable),"true"));
+            add(new SettingSection("switch","异步加载布局",SharedPreferencesUtil.ASYNC_INFLATE_ENABLE,getString(R.string.async_inflate_enable),String.valueOf(Build.VERSION.SDK_INT >= 21)));
         }};
 
         recyclerView.setHasFixedSize(true);

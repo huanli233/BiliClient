@@ -20,6 +20,7 @@ import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -102,7 +103,8 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
         try {
             JSONObject result = (JSONObject) SearchApi.searchType(keyword,page,"live");
             if(result!=null) {
-                roomList.addAll(LiveApi.analyzeLiveRooms(result.getJSONArray("live_room")));
+                JSONArray jsonArray = result.optJSONArray("live_room");
+                if (jsonArray != null) roomList.addAll(LiveApi.analyzeLiveRooms(jsonArray));
                 CenterThreadPool.runOnUiThread(() -> liveCardAdapter.notifyItemRangeInserted(lastSize + 1, roomList.size()-lastSize));
             }
             else {
@@ -112,6 +114,7 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
             isFirstLoad = false;
         } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,requireContext()));}
         refreshing = false;
+//        if (bottom && roomList.isEmpty())
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.RobinNotBad.BiliClient.util;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -45,12 +46,22 @@ public class AsyncLayoutInflaterX {
     @UiThread
     public void inflate(@LayoutRes int resid, @Nullable ViewGroup parent,
                         @NonNull OnInflateFinishedListener callback) {
-        InflateRequest request = obtainRequest();
-        request.inflater = this;
-        request.resid = resid;
-        request.parent = parent;
-        request.callback = callback;
-        mDispatcher.enqueue(request);
+        if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.ASYNC_INFLATE_ENABLE, Build.VERSION.SDK_INT >= 21)) {
+            InflateRequest request = obtainRequest();
+            request.inflater = this;
+            request.resid = resid;
+            request.parent = parent;
+            request.callback = callback;
+            mDispatcher.enqueue(request);
+        } else {
+            InflateRequest request = new InflateRequest();
+            request.inflater = this;
+            request.resid = resid;
+            request.parent = parent;
+            request.callback = callback;
+            Message.obtain(mHandler, 0, request)
+                    .sendToTarget();
+        }
     }
 
     private Handler.Callback mHandlerCallback = new Handler.Callback() {
@@ -185,7 +196,7 @@ public class AsyncLayoutInflaterX {
             try {
                 request.view = request.inflater.mInflater.inflate(
                         request.resid, request.parent, false);
-            } catch (RuntimeException ex) {
+            } catch (Throwable ex) {
                 // Probably a Looper failure, retry on the UI thread
                 Log.w(TAG, "Failed to inflate resource in the background! Retrying on the UI"
                         + " thread", ex);
