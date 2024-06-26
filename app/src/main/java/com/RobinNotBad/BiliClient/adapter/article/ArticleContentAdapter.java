@@ -101,6 +101,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
 
                 String url = article.get(realPosition).content;
                     Glide.with(context).asDrawable().load(GlideUtil.url(url)).placeholder(R.mipmap.placeholder)
+                            .transition(GlideUtil.getTransitionOptions())
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(imageView);
 
@@ -127,12 +128,14 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 if(articleInfo.banner.isEmpty()) cover.setVisibility(View.GONE);
                 else{
                     Glide.with(context).asDrawable().load(GlideUtil.url(articleInfo.banner)).placeholder(R.mipmap.placeholder)
+                            .transition(GlideUtil.getTransitionOptions())
                             .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4,context))))
                             .format(DecodeFormat.PREFER_RGB_565)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(cover);
                 }
                 Glide.with(context).asDrawable().load(GlideUtil.url(articleInfo.upInfo.avatar)).placeholder(R.mipmap.akari)
+                        .transition(GlideUtil.getTransitionOptions())
                         .apply(RequestOptions.circleCropTransform())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(upIcon);

@@ -150,6 +150,7 @@ public class SendDynamicActivity extends BaseActivity {
         ToolsUtil.setLink(content);
         ToolsUtil.setAtLink(dynamic.ats, content);
         Glide.with(this).load(GlideUtil.url(dynamic.userInfo.avatar))
+                .transition(GlideUtil.getTransitionOptions())
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -205,6 +206,7 @@ public class SendDynamicActivity extends BaseActivity {
                 ArrayList<String> pictureList = (ArrayList<String>) dynamic.major_object;
                 ImageView imageView = cell_dynamic_image.findViewById(R.id.imageView);
                 Glide.with(this).asDrawable().load(GlideUtil.url(pictureList.get(0)))
+                        .transition(GlideUtil.getTransitionOptions())
                         .placeholder(R.mipmap.placeholder)
                         .format(DecodeFormat.PREFER_RGB_565)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -251,6 +253,7 @@ public class SendDynamicActivity extends BaseActivity {
         else playTimes.setText(playTimesStr);
 
         Glide.with(this).load(GlideUtil.url(videoInfo.cover))
+                .transition(GlideUtil.getTransitionOptions())
                 .placeholder(R.mipmap.placeholder)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, this))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

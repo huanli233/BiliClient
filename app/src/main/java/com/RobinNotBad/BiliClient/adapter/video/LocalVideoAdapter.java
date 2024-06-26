@@ -17,6 +17,7 @@ import com.RobinNotBad.BiliClient.activity.video.local.LocalPageChooseActivity;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.LocalVideo;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
@@ -106,6 +107,7 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
             title.setText(ToolsUtil.htmlToString(videoCard.title));
 
             Glide.with(context).asDrawable().load(videoCard.cover)
+                    .transition(GlideUtil.getTransitionOptions())
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(cover);

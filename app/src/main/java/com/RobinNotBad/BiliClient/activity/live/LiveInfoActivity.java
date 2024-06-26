@@ -85,6 +85,7 @@ public class LiveInfoActivity extends BaseActivity {
                         host_list = findViewById(R.id.host_list);
 
                         Glide.with(this).asDrawable().load(GlideUtil.url(room.user_cover)).placeholder(R.mipmap.placeholder)
+                                .transition(GlideUtil.getTransitionOptions())
                                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, this))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .into(cover);

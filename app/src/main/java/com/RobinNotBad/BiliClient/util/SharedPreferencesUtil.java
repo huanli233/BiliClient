@@ -15,6 +15,7 @@ public class SharedPreferencesUtil
     public static final String RCMD_API_NEW_PARAM = "rcmd_api_new_param";
     public static final String MENU_SORT = "menu_sort";
     public static final String ASYNC_INFLATE_ENABLE = "async_inflate_enable";
+    public static final String IMAGE_LOAD_TRANSITION = "image_load_transition";
 
     public static String cookies = "cookies";
     public static String mid = "mid";

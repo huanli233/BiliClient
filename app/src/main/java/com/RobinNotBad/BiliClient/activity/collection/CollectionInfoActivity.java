@@ -131,6 +131,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 collectionInfoHolder.desc.setText(TextUtils.isEmpty(collection.intro) ? "这里没有简介哦" : collection.intro);
                 collectionInfoHolder.playTimes.setText("共" + collection.view);
                 Glide.with(context).asDrawable().load(GlideUtil.url(collection.cover))
+                        .transition(GlideUtil.getTransitionOptions())
                         .placeholder(R.mipmap.placeholder)
                         .format(DecodeFormat.PREFER_RGB_565)
                         .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())
@@ -251,6 +252,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 collectionInfoHolder.desc.setText(TextUtils.isEmpty(collection.intro) ? "这里没有简介哦" : collection.intro);
                 collectionInfoHolder.playTimes.setText("共" + collection.view);
                 Glide.with(context).asDrawable().load(GlideUtil.url(collection.cover))
+                        .transition(GlideUtil.getTransitionOptions())
                         .placeholder(R.mipmap.placeholder)
                         .format(DecodeFormat.PREFER_RGB_565)
                         .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())

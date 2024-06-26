@@ -52,6 +52,7 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
         holder.name.setText(ToolsUtil.htmlToString(folderList.get(position).name));
         holder.count.setText(folderList.get(position).videoCount + "/" + folderList.get(position).maxCount);
         Glide.with(this.context).asDrawable().load(GlideUtil.url(folderList.get(position).cover))
+                .transition(GlideUtil.getTransitionOptions())
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
                 .format(DecodeFormat.PREFER_RGB_565)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

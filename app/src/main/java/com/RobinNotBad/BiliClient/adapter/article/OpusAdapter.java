@@ -18,6 +18,7 @@ import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.api.ArticleApi;
 import com.RobinNotBad.BiliClient.model.Opus;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
@@ -25,9 +26,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import org.json.JSONException;
 
 public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
     
@@ -54,6 +56,7 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
         holder.favTimeText.setText(opus.timeText);
         holder.titleText.setText(opus.title);
         Glide.with(context).load(opus.cover)
+                .transition(GlideUtil.getTransitionOptions())
                 .placeholder(R.mipmap.placeholder)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

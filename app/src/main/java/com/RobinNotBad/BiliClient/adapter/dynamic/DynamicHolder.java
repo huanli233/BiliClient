@@ -225,6 +225,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
             ToolsUtil.setAtLink(dynamic.ats, content);
         } else content.setVisibility(View.GONE);
         Glide.with(context).asDrawable().load(GlideUtil.url(dynamic.userInfo.avatar))
+                .transition(GlideUtil.getTransitionOptions())
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(new DiskCacheStrategy() {
@@ -321,6 +322,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder{
                 View imageCard = cell_dynamic_image;
                 ImageView imageView = imageCard.findViewById(R.id.imageView);
                 Glide.with(context).asDrawable().load(GlideUtil.url(pictureList.get(0)))
+                        .transition(GlideUtil.getTransitionOptions())
                         .placeholder(R.mipmap.placeholder)
                         .centerCrop()
                         .format(DecodeFormat.PREFER_RGB_565)

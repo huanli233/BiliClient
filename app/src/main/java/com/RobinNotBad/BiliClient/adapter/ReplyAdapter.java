@@ -137,6 +137,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ReplyHolder replyHolder = (ReplyHolder) holder;
 
             Glide.with(context).asDrawable().load(GlideUtil.url(replyList.get(realPosition).sender.avatar))
+                    .transition(GlideUtil.getTransitionOptions())
                     .placeholder(R.mipmap.akari)
                     .apply(RequestOptions.circleCropTransform())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -198,6 +199,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 replyHolder.imageCard.setVisibility(View.VISIBLE);
                 replyHolder.imageCount.setVisibility(View.VISIBLE);
                 Glide.with(context).asDrawable().load(GlideUtil.url(replyList.get(realPosition).pictureList.get(0)))
+                        .transition(GlideUtil.getTransitionOptions())
                         .placeholder(R.mipmap.placeholder)
                         .format(DecodeFormat.PREFER_RGB_565)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)

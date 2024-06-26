@@ -89,6 +89,7 @@ public class BangumiInfoFragment extends Fragment {
 
         Glide.with(this)
                 .load(GlideUtil.url(bangumi.info.cover_horizontal) )
+                .transition(GlideUtil.getTransitionOptions())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .placeholder(R.mipmap.loading_2233)
                 .into(imageMediaCover);

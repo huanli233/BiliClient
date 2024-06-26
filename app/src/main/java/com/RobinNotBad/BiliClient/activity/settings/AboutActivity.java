@@ -17,6 +17,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
@@ -91,6 +92,7 @@ public class AboutActivity extends BaseActivity {
             for(int i = 0;i < developerAvaterViews.size();i++){
                 int finalI = i;
                 if(developerAvaters.get(i) != -1) Glide.with(this).load(developerAvaters.get(i))
+                        .transition(GlideUtil.getTransitionOptions())
                         .placeholder(R.mipmap.akari)
                         .apply(RequestOptions.circleCropTransform())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)

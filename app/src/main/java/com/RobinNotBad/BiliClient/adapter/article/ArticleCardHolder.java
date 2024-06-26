@@ -50,6 +50,7 @@ public class ArticleCardHolder extends RecyclerView.ViewHolder{
 
         Glide.with(context).asDrawable().load(!TextUtils.isEmpty(articleCard.cover) ? GlideUtil.url(articleCard.cover) : R.mipmap.article_placeholder)
                 .placeholder(R.mipmap.placeholder)
+                .transition(GlideUtil.getTransitionOptions())
                 .format(DecodeFormat.PREFER_RGB_565)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

@@ -57,9 +57,10 @@ public class VideoCardHolder extends RecyclerView.ViewHolder{
             }
             else viewCount.setText("共" + playTimesStr);
             Glide.with(context).asDrawable().load(GlideUtil.url(collection.cover))
+                    .transition(GlideUtil.getTransitionOptions())
                     .placeholder(R.mipmap.placeholder)
                     .format(DecodeFormat.PREFER_RGB_565)
-                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(cover);
         } else {
@@ -70,10 +71,11 @@ public class VideoCardHolder extends RecyclerView.ViewHolder{
             }
             else viewCount.setText(playTimesStr);
             Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
+                    .transition(GlideUtil.getTransitionOptions())
                     .placeholder(R.mipmap.placeholder)
                     .format(DecodeFormat.PREFER_RGB_565)
-                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f))
                     .into(cover);
             if(videoCard.type.equals("live")){
                 SpannableString spannableString = new SpannableString("[直播]" + ToolsUtil.htmlToString(videoCard.title));

@@ -57,6 +57,7 @@ public class NoticeHolder extends RecyclerView.ViewHolder{
             Glide.with(context)
                     .asDrawable()
                     .load(GlideUtil.url(message.user.get(i).avatar))
+                    .transition(GlideUtil.getTransitionOptions())
                     .placeholder(R.mipmap.akari)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .apply(RequestOptions.circleCropTransform())

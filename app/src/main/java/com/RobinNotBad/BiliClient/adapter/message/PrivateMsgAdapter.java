@@ -138,6 +138,7 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                     Glide.with(context)
                             .asDrawable()
                             .load(GlideUtil.url(msg.content.getString("url")))
+                            .transition(GlideUtil.getTransitionOptions())
                             .override(Target.SIZE_ORIGINAL)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(holder.picMsg);
@@ -170,6 +171,7 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                     Glide.with(context)
                             .asDrawable()
                             .load(GlideUtil.url(msg.content.getString("thumb")))
+                            .transition(GlideUtil.getTransitionOptions())
                             .format(DecodeFormat.PREFER_RGB_565)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(holder.videoCover);

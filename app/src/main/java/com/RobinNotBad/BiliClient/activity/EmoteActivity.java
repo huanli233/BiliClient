@@ -83,11 +83,13 @@ public class EmoteActivity extends BaseActivity {
                     int count = tabLayout.getTabCount();
                     for (int i = 0; i < count; i++) {
                         int finalI = i;
+                        Objects.requireNonNull(packages);
                         Objects.requireNonNull(tabLayout.getTabAt(finalI)).setText(packages.get(finalI).text);
                         if (finalI != 0) Objects.requireNonNull(tabLayout.getTabAt(finalI)).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED);
                         CenterThreadPool.run(() -> {
                             try {
-                                Drawable drawable = Glide.with(this).asDrawable().load(packages.get(finalI).url).placeholder(R.mipmap.placeholder).submit().get();
+                                Drawable drawable = Glide.with(this).asDrawable()
+                                        .transition(GlideUtil.getTransitionOptions()).load(packages.get(finalI).url).placeholder(R.mipmap.placeholder).submit().get();
                                 runOnUiThread(() -> Objects.requireNonNull(tabLayout.getTabAt(finalI)).setIcon(drawable));
                             } catch (ExecutionException e) {
                                 throw new RuntimeException(e);
@@ -252,7 +254,9 @@ public class EmoteActivity extends BaseActivity {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             Emote emote = emotePackage.emotes.get(position);
             if (holder instanceof Holder) {
-                Glide.with(context).asDrawable().load(GlideUtil.url(emote.url))
+                Glide.with(context).asDrawable()
+                        .transition(GlideUtil.getTransitionOptions())
+                        .load(GlideUtil.url(emote.url))
                         .into(((Holder) holder).itemView);
                 ((Holder) holder).itemView.setOnClickListener((view) -> {
                     if (listener != null) {
