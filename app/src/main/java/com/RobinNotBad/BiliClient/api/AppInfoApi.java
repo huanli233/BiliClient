@@ -138,18 +138,20 @@ public class AppInfoApi {
     }
 
     public static void checkAnnouncement(Context context) throws Exception {
-        String url = "http://api.biliterminal.cn/terminal/announcement/get_last";
+        String url = "http://api.biliterminal.cn/terminal/announcement/get_list?from=" + SharedPreferencesUtil.getInt("app_announcement_last", -1);
         JSONObject result = NetWorkUtil.getJson(url, customHeaders);
 
         if (result.getInt("code") != 0) throw new Exception("错误：" + result.getString("msg"));
-        JSONObject data = result.getJSONObject("data");
+        JSONArray data = result.getJSONArray("data");
+        for (int i = 0; i < data.length(); i++) {
+            JSONObject item = data.getJSONObject(i);
 
-        int id = data.getInt("id");
+            int id = item.getInt("id");
 
-        if (SharedPreferencesUtil.getInt("app_announcement_last", 0) < id) {
-            SharedPreferencesUtil.putInt("app_announcement_last", id);
-            String title = data.getString("title");
-            String content = data.getString("content");
+            if (SharedPreferencesUtil.getInt("app_announcement_last", 0) < id)
+                SharedPreferencesUtil.putInt("app_announcement_last", id);
+            String title = item.getString("title");
+            String content = item.getString("content");
             MsgUtil.showText(context, title, content);
         }
     }
