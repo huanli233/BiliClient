@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.adapter.video;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -41,7 +42,7 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
     @NonNull
     @Override
     public VideoCardHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = preInflateHelper.getView(parent, R.layout.cell_video_list, false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_video_list,parent,false);
         return new VideoCardHolder(view);
     }
 
