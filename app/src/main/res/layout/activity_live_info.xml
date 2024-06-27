@@ -26,7 +26,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:drawableStartCompat="@drawable/arrow_back"/>
+            app:drawableStartCompat="@drawable/arrow_back" />
 
         <TextClock
             android:layout_width="wrap_content"
@@ -45,19 +45,19 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
-         android:layout_height="0dp"
-         android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top"
-         android:id="@+id/scrollView">
+        android:id="@+id/scrollView">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-             android:layout_height="wrap_content"
-             android:layout_width="match_parent"
-             android:paddingHorizontal="@dimen/activity_padding_horizontal"
-             android:paddingBottom="4dp">
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingHorizontal="@dimen/activity_padding_horizontal"
+            android:paddingBottom="4dp">
 
             <ImageView
                 android:id="@+id/cover"
@@ -113,7 +113,7 @@
                 android:layout_marginTop="4dp"
                 app:layout_constraintTop_toBottomOf="@id/up_recyclerView"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -154,7 +154,7 @@
                 android:layout_marginTop="4dp"
                 app:layout_constraintTop_toBottomOf="@id/protocols"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -212,15 +212,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/play" />
 
             <ImageView
-                 android:layout_height="0dp"
-                 android:layout_width="wrap_content"
-                 android:adjustViewBounds="true"
-                 android:src="@drawable/icon_time"
-                 android:alpha="0.5"
-                 app:layout_constraintTop_toTopOf="@+id/timeText"
-                 app:layout_constraintStart_toStartOf="@+id/viewsIcon"
-                 app:layout_constraintBottom_toBottomOf="@+id/timeText"
-                 android:id="@+id/timeIcon" />
+                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/icon_time"
+                android:alpha="0.5"
+                app:layout_constraintTop_toTopOf="@+id/timeText"
+                app:layout_constraintStart_toStartOf="@+id/viewsIcon"
+                app:layout_constraintBottom_toBottomOf="@+id/timeText"
+                android:id="@+id/timeIcon" />
 
             <TextView
                 android:id="@+id/timeText"
@@ -240,15 +240,15 @@
                 app:layout_constraintTop_toBottomOf="@id/viewsCount" />
 
             <ImageView
-                 android:layout_height="0dp"
-                 android:layout_width="wrap_content"
-                 android:adjustViewBounds="true"
-                 android:src="@drawable/icon_bv"
-                 android:alpha="0.5"
-                 app:layout_constraintTop_toTopOf="@+id/idText"
-                 app:layout_constraintStart_toStartOf="@+id/viewsIcon"
-                 app:layout_constraintBottom_toBottomOf="@+id/idText"
-                 android:id="@+id/bvidIcon" />
+                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/icon_bv"
+                android:alpha="0.5"
+                app:layout_constraintTop_toTopOf="@+id/idText"
+                app:layout_constraintStart_toStartOf="@+id/viewsIcon"
+                app:layout_constraintBottom_toBottomOf="@+id/idText"
+                android:id="@+id/bvidIcon" />
 
             <TextView
                 android:id="@+id/idText"

@@ -26,11 +26,11 @@ public class QualityChooseAdapter extends RecyclerView.Adapter<QualityChooseAdap
     OnItemClickListener onItemClickListener;
     OnItemLongClickListener onItemLongClickListener;
 
-    public QualityChooseAdapter(Context context){
+    public QualityChooseAdapter(Context context) {
         this.context = context;
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener){
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.onItemClickListener = listener;
     }
 
@@ -48,7 +48,7 @@ public class QualityChooseAdapter extends RecyclerView.Adapter<QualityChooseAdap
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_choose, parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_choose, parent, false);
         return new Holder(view);
     }
 
@@ -58,15 +58,14 @@ public class QualityChooseAdapter extends RecyclerView.Adapter<QualityChooseAdap
         holder.folder_name.setText(nameList.get(position));
 
         holder.itemView.setOnClickListener(view -> {
-            if(onItemClickListener != null) onItemClickListener.onItemClick(position);
+            if (onItemClickListener != null) onItemClickListener.onItemClick(position);
         });
 
         holder.itemView.setOnLongClickListener(view -> {
-            if(onItemLongClickListener != null) {
+            if (onItemLongClickListener != null) {
                 onItemLongClickListener.onItemLongClick(position);
                 return true;
-            }
-            else return false;
+            } else return false;
         });
 
     }
@@ -76,7 +75,7 @@ public class QualityChooseAdapter extends RecyclerView.Adapter<QualityChooseAdap
         return nameList.size();
     }
 
-    public static class Holder extends RecyclerView.ViewHolder{
+    public static class Holder extends RecyclerView.ViewHolder {
         public final TextView folder_name;
 
         public Holder(@NonNull View itemView) {

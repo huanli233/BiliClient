@@ -33,7 +33,9 @@ public class ArticleInfoFragment extends Fragment {
     long cvid;
     RecyclerView recyclerView;
     ArrayList<ArticleLine> lineList;
-    public ArticleInfoFragment(){}
+
+    public ArticleInfoFragment() {
+    }
 
     public static ArticleInfoFragment newInstance(long cvid) {
         ArticleInfoFragment fragment = new ArticleInfoFragment();
@@ -50,6 +52,7 @@ public class ArticleInfoFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,10 +61,12 @@ public class ArticleInfoFragment extends Fragment {
             articleInfo = (ArticleInfo) getArguments().getSerializable("article");
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_simple_list, container, false);
     }
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -72,19 +77,21 @@ public class ArticleInfoFragment extends Fragment {
         //开始解析内容
         lineList = new ArrayList<>();
 
-        CenterThreadPool.run(()-> {
+        CenterThreadPool.run(() -> {
             try {
                 if (articleInfo == null) articleInfo = ArticleApi.getArticle(cvid);
 
                 if (articleInfo == null) {
-                    if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) requireActivity().runOnUiThread(() -> MsgUtil.toast("登录后再尝试", requireContext()));
-                    else requireActivity().runOnUiThread(() -> MsgUtil.toast("获取信息失败！\n可能是专栏不存在？", requireContext()));
+                    if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0)
+                        requireActivity().runOnUiThread(() -> MsgUtil.toast("登录后再尝试", requireContext()));
+                    else
+                        requireActivity().runOnUiThread(() -> MsgUtil.toast("获取信息失败！\n可能是专栏不存在？", requireContext()));
                     requireActivity().finish();
                     return;
                 }
 
                 //专栏分为html和json两种格式
-                if(articleInfo.content.startsWith("{")) {
+                if (articleInfo.content.startsWith("{")) {
                     JSONObject jsonObject = new JSONObject(articleInfo.content);
                     for (int i = 0; i < jsonObject.getJSONArray("ops").length(); i++) { //遍历Array
                         JSONObject element = jsonObject.getJSONArray("ops").getJSONObject(i);
@@ -101,29 +108,28 @@ public class ArticleInfoFragment extends Fragment {
                     loadContentHtml(document.select("body").get(0));
                 }
                 if (isAdded()) requireActivity().runOnUiThread(() -> {
-                    ArticleContentAdapter adapter = new ArticleContentAdapter(requireActivity(),articleInfo,lineList);
+                    ArticleContentAdapter adapter = new ArticleContentAdapter(requireActivity(), articleInfo, lineList);
                     recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
                     recyclerView.setAdapter(adapter);
                 });
-            }  catch (Exception e) {if(isAdded()) requireActivity().runOnUiThread(()->MsgUtil.err(e,requireContext()));}
+            } catch (Exception e) {
+                if (isAdded())
+                    requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+            }
         });
     }
 
-    private void loadContentHtml(Element element){
-        for(Element e : element.children()){
-            if (e.is("p")){
-                lineList.add(new ArticleLine(0,e.text(),""));
-            }
-            else if (e.is("strong")){
-                lineList.add(new ArticleLine(0,e.text(),"strong"));
-            }
-            else if (e.is("br")){
-                lineList.add(new ArticleLine(0,"","br"));
-            }
-            else if (e.is("img")){
-                lineList.add(new ArticleLine(1,"http:" + e.attr("src"),""));
-            }
-            else loadContentHtml(e);
+    private void loadContentHtml(Element element) {
+        for (Element e : element.children()) {
+            if (e.is("p")) {
+                lineList.add(new ArticleLine(0, e.text(), ""));
+            } else if (e.is("strong")) {
+                lineList.add(new ArticleLine(0, e.text(), "strong"));
+            } else if (e.is("br")) {
+                lineList.add(new ArticleLine(0, "", "br"));
+            } else if (e.is("img")) {
+                lineList.add(new ArticleLine(1, "http:" + e.attr("src"), ""));
+            } else loadContentHtml(e);
         }
     }
 }

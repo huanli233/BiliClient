@@ -60,10 +60,10 @@ public class VideoRcmdFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerView);
 
-        Log.e("debug-av号",String.valueOf(aid));
+        Log.e("debug-av号", String.valueOf(aid));
 
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
 
                 ArrayList<VideoCard> videoList = RecommendApi.getRelated(aid);
@@ -73,7 +73,9 @@ public class VideoRcmdFragment extends Fragment {
                     recyclerView.setAdapter(adapter);
                 });
 
-            } catch (Exception e) {if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,getContext()));}
+            } catch (Exception e) {
+                if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, getContext()));
+            }
         });
     }
 

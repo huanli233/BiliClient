@@ -70,6 +70,7 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.ViewHolder> {
 
     public interface OnItemClickListener {
         void onItemClick(int position);
+
         void onItemLongClick(ViewHolder holder);
     }
 

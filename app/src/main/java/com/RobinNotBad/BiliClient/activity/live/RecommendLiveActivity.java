@@ -1,14 +1,9 @@
 package com.RobinNotBad.BiliClient.activity.live;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.MenuActivity;
-import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
 import com.RobinNotBad.BiliClient.adapter.LiveCardAdapter;
 import com.RobinNotBad.BiliClient.api.LiveApi;
@@ -35,14 +30,14 @@ public class RecommendLiveActivity extends RefreshMainActivity {
 
         setMenuClick();
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 roomList = LiveApi.getRecommend(page);
-                adapter = new LiveCardAdapter(this,roomList);
+                adapter = new LiveCardAdapter(this, roomList);
                 setOnLoadMoreListener(this::continueLoading);
                 setRefreshing(false);
                 setAdapter(adapter);
-            } catch (Exception e){
+            } catch (Exception e) {
                 report(e);
                 setRefreshing(false);
             }
@@ -50,13 +45,13 @@ public class RecommendLiveActivity extends RefreshMainActivity {
     }
 
     private void continueLoading(int page) {
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 List<LiveRoom> list;
                 list = LiveApi.getRecommend(page);
                 Log.e("debug", "下一页");
                 runOnUiThread(() -> {
-                    if(list != null){
+                    if (list != null) {
                         roomList.addAll(list);
                         adapter.notifyItemRangeInserted(roomList.size() - list.size(), list.size());
                     }
@@ -66,7 +61,7 @@ public class RecommendLiveActivity extends RefreshMainActivity {
                     setBottom(true);
                 }
                 setRefreshing(false);
-            } catch (Exception e){
+            } catch (Exception e) {
                 report(e);
                 setRefreshing(false);
                 this.page--;

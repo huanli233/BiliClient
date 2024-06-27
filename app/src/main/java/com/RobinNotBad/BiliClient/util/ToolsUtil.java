@@ -25,13 +25,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.RobinNotBad.BiliClient.BuildConfig;
+import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.CopyTextActivity;
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.model.At;
-
-import com.RobinNotBad.BiliClient.R;
 
 import java.util.List;
 import java.util.Locale;
@@ -43,16 +42,16 @@ import java.util.regex.Pattern;
 
 @SuppressLint("ClickableViewAccessibility")
 public class ToolsUtil {
-    public static String toWan(long num){
-        if(num >= 100000000)
-            return String.format(Locale.CHINA, "%.1f", (float)num/100000000) + "亿";
-        else if(num >= 10000)
-            return String.format(Locale.CHINA, "%.1f", (float)num/10000) + "万";
+    public static String toWan(long num) {
+        if (num >= 100000000)
+            return String.format(Locale.CHINA, "%.1f", (float) num / 100000000) + "亿";
+        else if (num >= 10000)
+            return String.format(Locale.CHINA, "%.1f", (float) num / 10000) + "万";
         else
             return String.valueOf(num);
     }
 
-    public static String toTime(int progress){
+    public static String toTime(int progress) {
         int cghour = progress / 3600;
         int cgminute = (progress % 3600) / 60;
         int cgsecond = progress % 60;
@@ -69,15 +68,15 @@ public class ToolsUtil {
         if (cgsecond < 10) cgsecStr = "0" + cgsecond;
         else cgsecStr = String.valueOf(cgsecond);
 
-        if(cghour > 0) return cghourStr + ":" + cgminStr + ":" + cgsecStr;
+        if (cghour > 0) return cghourStr + ":" + cgminStr + ":" + cgsecStr;
         else return cgminStr + ":" + cgsecStr;
     }
 
-    public static String htmlToString(String html){
-        return html.replace("&lt;","<")
-                .replace("&gt;",">")
-                .replace("&quot;","\"")
-                .replace("&amp;","&")
+    public static String htmlToString(String html) {
+        return html.replace("&lt;", "<")
+                .replace("&gt;", ">")
+                .replace("&quot;", "\"")
+                .replace("&amp;", "&")
                 .replace("&#39;", "'")
                 .replace("&#34;", "\"")
                 .replace("&#38;", "&")
@@ -85,15 +84,15 @@ public class ToolsUtil {
                 .replace("&#62;", ">");
     }
 
-    public static String htmlReString(String html){
-        return html.replace("<p>","")
-                .replace("</p>","\n")
-                .replace("<br>","\n")
-                .replace("<em class=\"keyword\">","")
-                .replace("</em>","");
+    public static String htmlReString(String html) {
+        return html.replace("<p>", "")
+                .replace("</p>", "\n")
+                .replace("<br>", "\n")
+                .replace("<em class=\"keyword\">", "")
+                .replace("</em>", "");
     }
 
-    public static String stringToFile(String str){
+    public static String stringToFile(String str) {
         return str.replace("|", "｜")
                 .replace(":", "：")
                 .replace("*", "﹡")
@@ -105,43 +104,41 @@ public class ToolsUtil {
                 .replace("\\", "＼");    //文件名里不能包含非法字符
     }
 
-    public static String unEscape(String str){
-        return str.replaceAll("\\\\(.)","$1");
+    public static String unEscape(String str) {
+        return str.replaceAll("\\\\(.)", "$1");
     }
 
-    public static int dp2px(float dpValue, Context context)
-    {
+    public static int dp2px(float dpValue, Context context) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 
-    public static int sp2px(float spValue,Context context)
-    {
+    public static int sp2px(float spValue, Context context) {
         final float fontScale = context.getResources()
                 .getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
 
-    public static String getFileNameFromLink(String link){
+    public static String getFileNameFromLink(String link) {
         int length = link.length();
         for (int i = length - 1; i > 0; i--) {
-            if(link.charAt(i)=='/'){
-                return link.substring(i+1);
+            if (link.charAt(i) == '/') {
+                return link.substring(i + 1);
             }
         }
         return "fail";
     }
 
-    public static String getFileFirstName(String file){
+    public static String getFileFirstName(String file) {
         for (int i = 0; i < file.length(); i++) {
-            if(file.charAt(i)=='.'){
-                return file.substring(0,i);
+            if (file.charAt(i) == '.') {
+                return file.substring(0, i);
             }
         }
         return "fail";
     }
 
-    public static void setCopy(TextView textView, Context context, String customText){
+    public static void setCopy(TextView textView, Context context, String customText) {
         if (SharedPreferencesUtil.getBoolean("copy_enable", true)) {
             textView.setOnLongClickListener(view1 -> {
                 Intent intent = new Intent(context, CopyTextActivity.class);
@@ -152,11 +149,11 @@ public class ToolsUtil {
         }
     }
 
-    public static void setCopy(TextView textView, Context context){
+    public static void setCopy(TextView textView, Context context) {
         setCopy(textView, context, null); //直接传getText()会导致文本变化后点击不了
     }
 
-    public static void setCopy(Context context, TextView... textViews){
+    public static void setCopy(Context context, TextView... textViews) {
         for (TextView textView : textViews) setCopy(textView, context);
     }
 
@@ -340,14 +337,14 @@ public class ToolsUtil {
         }
     }
 
-    public static String getUpdateLog(Context context){
+    public static String getUpdateLog(Context context) {
         String str = "";
         String[] logItems = context.getResources().getStringArray(R.array.update_log_items);
-        for(int i = 0;i < logItems.length;i++) str += (i+1) + "." + logItems[i] + "\n";
+        for (int i = 0; i < logItems.length; i++) str += (i + 1) + "." + logItems[i] + "\n";
         return str;
     }
 
-    public static boolean isDebugBuild(){
+    public static boolean isDebugBuild() {
         return BuildConfig.BETA;
     }
 }

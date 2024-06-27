@@ -57,45 +57,52 @@ public class UserDynamicFragment extends RefreshListFragment {
         dynamicList = new ArrayList<>();
         setOnLoadMoreListener(page -> continueLoading());
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 UserInfo userInfo = UserInfoApi.getUserInfo(mid);
-                Log.e("debug","获取到用户信息");
+                Log.e("debug", "获取到用户信息");
 
                 try {
                     offset = DynamicApi.getDynamicList(dynamicList, offset, mid, null);
                     bottom = (offset == -1);
                     Log.e("debug", "获取到用户动态");
-                }catch (Exception e){loadFail(e);}
+                } catch (Exception e) {
+                    loadFail(e);
+                }
 
-                if(isAdded()){
+                if (isAdded()) {
                     adapter = new UserDynamicAdapter(requireContext(), dynamicList, userInfo);
                     setAdapter(adapter);
                     setRefreshing(false);
                 }
-            } catch (Exception e){loadFail(e);}
+            } catch (Exception e) {
+                loadFail(e);
+            }
         });
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void continueLoading() {
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 List<Dynamic> list = new ArrayList<>();
-                offset = DynamicApi.getDynamicList(list,offset,mid, null);
-                runOnUiThread(()-> {
+                offset = DynamicApi.getDynamicList(list, offset, mid, null);
+                runOnUiThread(() -> {
                     dynamicList.addAll(list);
                     adapter.notifyItemRangeInserted(dynamicList.size() - list.size() + 1, list.size());
                 });
-                bottom = (offset==-1);
+                bottom = (offset == -1);
                 setRefreshing(false);
-            } catch (Exception e){loadFail(e);}
+            } catch (Exception e) {
+                loadFail(e);
+            }
         });
     }
 
     public void onDynamicRemove(int position) {
         try {
             DynamicHolder.removeDynamicFromList(dynamicList, position, adapter);
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
     }
 }

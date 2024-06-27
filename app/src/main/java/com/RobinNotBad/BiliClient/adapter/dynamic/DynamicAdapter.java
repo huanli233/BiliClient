@@ -54,7 +54,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == 0) {
-            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic_action, parent,false);
+            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic_action, parent, false);
             return new WriteDynamic(view);
         } else {
             return new DynamicHolder(getInflateHelper().getView(parent, R.layout.cell_dynamic, 3, false), dynamicActivity, false);
@@ -82,7 +82,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             DynamicHolder dynamicHolder = (DynamicHolder) holder;
             dynamicHolder.showDynamic(dynamicList.get(position), context, true);      //该函数在DynamicHolder里
 
-            if (dynamicList.get(position).dynamic_forward != null){
+            if (dynamicList.get(position).dynamic_forward != null) {
                 View childCard = dynamicHolder.cell_dynamic_child;
                 DynamicHolder childHolder = new DynamicHolder(childCard, dynamicActivity, true);
                 childHolder.showDynamic(dynamicList.get(position).dynamic_forward, context, true);
@@ -94,7 +94,8 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             int finalPosition = position;
             View.OnLongClickListener onDeleteLongClick = DynamicHolder.getDeleteListener(dynamicActivity, dynamicList, finalPosition, this);
             dynamicHolder.item_dynamic_delete.setOnLongClickListener(onDeleteLongClick);
-            if (dynamicList.get(position).canDelete) dynamicHolder.item_dynamic_delete.setVisibility(View.VISIBLE);
+            if (dynamicList.get(position).canDelete)
+                dynamicHolder.item_dynamic_delete.setVisibility(View.VISIBLE);
             Log.d("BiliClient", "DynamicAdapter onBindViewHolder finish: " + (System.currentTimeMillis() - time));
         }
     }
@@ -111,9 +112,8 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
 
-
     public static class WriteDynamic extends RecyclerView.ViewHolder {
-        final MaterialButton write_dynamic,type,live;
+        final MaterialButton write_dynamic, type, live;
 
         public WriteDynamic(@NonNull View itemView) {
             super(itemView);
@@ -124,6 +124,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     PreInflateHelper preInflateHelper;
+
     public PreInflateHelper getInflateHelper() {
         if (preInflateHelper == null) {
             preInflateHelper = new PreInflateHelper(context);

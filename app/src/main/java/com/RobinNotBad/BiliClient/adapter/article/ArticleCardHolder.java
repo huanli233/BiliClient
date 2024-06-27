@@ -19,9 +19,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
-public class ArticleCardHolder extends RecyclerView.ViewHolder{
-    TextView title,upName,readTimes;
-    ImageView cover,readIcon,upIcon;
+public class ArticleCardHolder extends RecyclerView.ViewHolder {
+    TextView title, upName, readTimes;
+    ImageView cover, readIcon, upIcon;
 
     public ArticleCardHolder(@NonNull View itemView) {
         super(itemView);
@@ -33,26 +33,24 @@ public class ArticleCardHolder extends RecyclerView.ViewHolder{
         upIcon = itemView.findViewById(R.id.avatarIcon);
     }
 
-    public void showArticleCard(ArticleCard articleCard, Context context){
+    public void showArticleCard(ArticleCard articleCard, Context context) {
         title.setText(ToolsUtil.htmlToString(articleCard.title));
         String upNameStr = articleCard.upName;
-        if(upNameStr.isEmpty()){
+        if (upNameStr.isEmpty()) {
             upName.setVisibility(View.GONE);
             upIcon.setVisibility(View.GONE);
-        }
-        else upName.setText(upNameStr);
+        } else upName.setText(upNameStr);
 
-        if(articleCard.view.isEmpty()){
+        if (articleCard.view.isEmpty()) {
             readIcon.setVisibility(View.GONE);
             readTimes.setVisibility(View.GONE);
-        }
-        else readTimes.setText(articleCard.view);
+        } else readTimes.setText(articleCard.view);
 
         Glide.with(context).asDrawable().load(!TextUtils.isEmpty(articleCard.cover) ? GlideUtil.url(articleCard.cover) : R.mipmap.article_placeholder)
                 .placeholder(R.mipmap.placeholder)
                 .transition(GlideUtil.getTransitionOptions())
                 .format(DecodeFormat.PREFER_RGB_565)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(cover);
     }

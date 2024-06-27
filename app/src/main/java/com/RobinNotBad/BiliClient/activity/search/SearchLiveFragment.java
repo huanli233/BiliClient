@@ -37,7 +37,8 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
     private boolean bottom = false;
     private int page = 0;
 
-    public SearchLiveFragment(){}
+    public SearchLiveFragment() {
+    }
 
     public static SearchLiveFragment newInstance() {
         return new SearchLiveFragment();
@@ -64,7 +65,7 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
         recyclerView.setHasFixedSize(true);
 
         CenterThreadPool.run(() -> {
-            if(isAdded()) requireActivity().runOnUiThread(() -> {
+            if (isAdded()) requireActivity().runOnUiThread(() -> {
                 liveCardAdapter = new LiveCardAdapter(requireContext(), roomList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 recyclerView.setAdapter(liveCardAdapter);
@@ -74,6 +75,7 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
                     public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                         super.onScrollStateChanged(recyclerView, newState);
                     }
+
                     @Override
                     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                         super.onScrolled(recyclerView, dx, dy);
@@ -81,12 +83,12 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
                         assert manager != null;
                         int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();  //获取最后一个完全显示的itemPosition
                         int itemCount = manager.getItemCount();
-                        if (lastItemPosition >= (itemCount - 3) && dy>0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
+                        if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                             refreshing = true;
-                            CenterThreadPool.run(()->continueLoading()); //加载第二页
+                            CenterThreadPool.run(() -> continueLoading()); //加载第二页
                         }
 
-                        if(requireActivity() instanceof SearchActivity) {
+                        if (requireActivity() instanceof SearchActivity) {
                             SearchActivity activity = (SearchActivity) requireActivity();
                             activity.onScrolled(dy);
                         }
@@ -96,38 +98,41 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
         });
     }
 
-    private void continueLoading(){
+    private void continueLoading() {
         page++;
-        Log.e("debug","加载下一页");
+        Log.e("debug", "加载下一页");
         int lastSize = roomList.size();
         try {
-            JSONObject result = (JSONObject) SearchApi.searchType(keyword,page,"live");
-            if(result!=null) {
+            JSONObject result = (JSONObject) SearchApi.searchType(keyword, page, "live");
+            if (result != null) {
                 JSONArray jsonArray = result.optJSONArray("live_room");
                 if (jsonArray != null) roomList.addAll(LiveApi.analyzeLiveRooms(jsonArray));
-                CenterThreadPool.runOnUiThread(() -> liveCardAdapter.notifyItemRangeInserted(lastSize + 1, roomList.size()-lastSize));
-            }
-            else {
+                CenterThreadPool.runOnUiThread(() -> liveCardAdapter.notifyItemRangeInserted(lastSize + 1, roomList.size() - lastSize));
+            } else {
                 bottom = true;
-                if(isAdded() && !isFirstLoad) requireActivity().runOnUiThread(() ->  MsgUtil.toast("已经到底啦OwO",requireContext()));
+                if (isAdded() && !isFirstLoad)
+                    requireActivity().runOnUiThread(() -> MsgUtil.toast("已经到底啦OwO", requireContext()));
             }
             isFirstLoad = false;
-        } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,requireContext()));}
+        } catch (Exception e) {
+            if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+        }
         refreshing = false;
 //        if (bottom && roomList.isEmpty())
     }
 
     @Override
-    public void refresh(String keyword){
+    public void refresh(String keyword) {
         this.refreshing = true;
         this.page = 0;
         this.keyword = keyword;
-        if(this.roomList==null)this.roomList = new ArrayList<>();
-        if(this.liveCardAdapter==null)this.liveCardAdapter = new LiveCardAdapter(this.requireContext(),this.roomList);
+        if (this.roomList == null) this.roomList = new ArrayList<>();
+        if (this.liveCardAdapter == null)
+            this.liveCardAdapter = new LiveCardAdapter(this.requireContext(), this.roomList);
         int size_old = this.roomList.size();
         this.roomList.clear();
-        CenterThreadPool.runOnUiThread(()->{
-            if(size_old!=0) this.liveCardAdapter.notifyItemRangeRemoved(0,size_old);
+        CenterThreadPool.runOnUiThread(() -> {
+            if (size_old != 0) this.liveCardAdapter.notifyItemRangeRemoved(0, size_old);
             CenterThreadPool.run(this::continueLoading);
         });
     }

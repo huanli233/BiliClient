@@ -52,26 +52,26 @@ public class DynamicInfoFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
-        super.onViewCreated(view,savedInstanceState);
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         ScrollView scrollView = view.findViewById(R.id.scrollView);
         if (preInflateHelper == null) preInflateHelper = new PreInflateHelper(requireContext());
 
-        CenterThreadPool.run(()->{
-            if(isAdded()) requireActivity().runOnUiThread(() -> {
-                View dynamicView = View.inflate(requireContext(),R.layout.cell_dynamic, scrollView);
+        CenterThreadPool.run(() -> {
+            if (isAdded()) requireActivity().runOnUiThread(() -> {
+                View dynamicView = View.inflate(requireContext(), R.layout.cell_dynamic, scrollView);
                 DynamicHolder holder = new DynamicHolder(dynamicView, (BaseActivity) getActivity(), false);
-                holder.showDynamic(dynamic,requireContext(),false);
+                holder.showDynamic(dynamic, requireContext(), false);
                 View.OnLongClickListener onDeleteLongClick = DynamicHolder.getDeleteListener(requireActivity(), dynamic);
                 holder.item_dynamic_delete.setOnLongClickListener(onDeleteLongClick);
                 if (dynamic.canDelete) holder.item_dynamic_delete.setVisibility(View.VISIBLE);
 
-                if(dynamic.dynamic_forward != null){
-                    Log.e("debug","有子动态！");
+                if (dynamic.dynamic_forward != null) {
+                    Log.e("debug", "有子动态！");
                     View childCard = holder.cell_dynamic_child;
                     DynamicHolder childHolder = new DynamicHolder(childCard, (BaseActivity) getActivity(), true);
-                    childHolder.showDynamic(dynamic.dynamic_forward,requireContext(),true);
+                    childHolder.showDynamic(dynamic.dynamic_forward, requireContext(), true);
                     childCard.setVisibility(View.VISIBLE);
                 }
 

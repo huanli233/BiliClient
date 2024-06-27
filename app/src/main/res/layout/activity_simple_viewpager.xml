@@ -24,7 +24,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:drawableStartCompat="@drawable/arrow_back"/>
+            app:drawableStartCompat="@drawable/arrow_back" />
 
         <TextClock
             android:id="@+id/timeText"

@@ -53,38 +53,42 @@ public class UserVideoFragment extends RefreshListFragment {
         videoList = new ArrayList<>();
         setOnLoadMoreListener(this::continueLoading);
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
-                bottom = (UserInfoApi.getUserVideos(mid,page,"",videoList) == 1);
-                if(isAdded()) {
+                bottom = (UserInfoApi.getUserVideos(mid, page, "", videoList) == 1);
+                if (isAdded()) {
                     setRefreshing(false);
-                    adapter = new UserVideoAdapter(requireContext(),mid, videoList);
+                    adapter = new UserVideoAdapter(requireContext(), mid, videoList);
                     setAdapter(adapter);
                     if (bottom && videoList.isEmpty()) showEmptyView();
                 }
-            } catch (Exception e){loadFail(e);}
+            } catch (Exception e) {
+                loadFail(e);
+            }
         });
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void continueLoading(int page) {
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 List<VideoCard> list = new ArrayList<>();
-                int result = UserInfoApi.getUserVideos(mid,page,"",list);
-                if(result != -1){
-                    Log.e("debug","下一页");
-                    runOnUiThread(()-> {
+                int result = UserInfoApi.getUserVideos(mid, page, "", list);
+                if (result != -1) {
+                    Log.e("debug", "下一页");
+                    runOnUiThread(() -> {
                         videoList.addAll(list);
                         adapter.notifyItemRangeInserted(videoList.size() - list.size(), list.size());
                     });
-                    if(result == 1) {
-                        Log.e("debug","到底了");
+                    if (result == 1) {
+                        Log.e("debug", "到底了");
                         bottom = true;
                     }
                 }
                 setRefreshing(false);
-            } catch (Exception e){loadFail(e);}
+            } catch (Exception e) {
+                loadFail(e);
+            }
         });
     }
 }

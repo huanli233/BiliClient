@@ -37,7 +37,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.Holder
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_user_list,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_user_list, parent, false);
         return new Holder(view);
     }
 
@@ -46,18 +46,17 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.Holder
         holder.name.setText(userList.get(position).name);
         holder.desc.setText(userList.get(position).sign);
 
-        if(userList.get(position).avatar.isEmpty()) {
+        if (userList.get(position).avatar.isEmpty()) {
             holder.avatar.setVisibility(View.GONE);
             holder.desc.setSingleLine(false);
-        }
-        else Glide.with(context).asDrawable().load(GlideUtil.url(userList.get(position).avatar))
+        } else Glide.with(context).asDrawable().load(GlideUtil.url(userList.get(position).avatar))
                 .transition(GlideUtil.getTransitionOptions())
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.avatar);
 
-        if(userList.get(position).mid != -1) {
+        if (userList.get(position).mid != -1) {
             holder.itemView.setOnClickListener(view -> {
                 Intent intent = new Intent()
                         .setClass(context, UserInfoActivity.class)
@@ -72,7 +71,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.Holder
         return userList.size();
     }
 
-    public static class Holder extends RecyclerView.ViewHolder{
+    public static class Holder extends RecyclerView.ViewHolder {
         final TextView name;
         final TextView desc;
         final ImageView avatar;

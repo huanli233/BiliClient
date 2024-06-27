@@ -1,5 +1,5 @@
 package com.RobinNotBad.BiliClient.model;
-import com.RobinNotBad.BiliClient.model.CustomText;
+
 import java.util.List;
 
 public class Tutorial {

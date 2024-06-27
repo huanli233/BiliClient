@@ -20,15 +20,19 @@ public class ReplyEvent {
         this.pos = pos;
         this.oid = oid;
     }
+
     public int getType() {
         return type;
     }
+
     public void setType(int type) {
         this.type = type;
     }
+
     public Reply getMessage() {
         return message;
     }
+
     public void setMessage(Reply message) {
         this.message = message;
     }

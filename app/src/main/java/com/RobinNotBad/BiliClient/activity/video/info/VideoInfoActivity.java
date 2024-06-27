@@ -50,8 +50,8 @@ public class VideoInfoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
-        if(type == null) type = "video";
-        this.aid = intent.getLongExtra("aid",114514);
+        if (type == null) type = "video";
+        this.aid = intent.getLongExtra("aid", 114514);
         this.bvid = intent.getStringExtra("bvid");
         this.seek_reply = intent.getLongExtra("seekReply", -1);
         setContentView(R.layout.activity_loading);
@@ -61,7 +61,7 @@ public class VideoInfoActivity extends BaseActivity {
             setContentView(layoutView);
             setTopbarExit();
 
-            if(finalType.equals("media")) initMediaInfoView();
+            if (finalType.equals("media")) initMediaInfoView();
             else initVideoInfoView();
         });
     }
@@ -78,18 +78,19 @@ public class VideoInfoActivity extends BaseActivity {
         fragmentList.add(replyFragment);
 
         viewPager.setOffscreenPageLimit(fragmentList.size());
-        ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(),fragmentList);
+        ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(vpfAdapter);
         if (seek_reply != -1) viewPager.setCurrentItem(1);
         if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
-            MsgUtil.toastLong("提示：本页面可以左右滑动",this);
+            MsgUtil.toastLong("提示：本页面可以左右滑动", this);
             SharedPreferencesUtil.putBoolean("first_videoinfo", false);
         }
         findViewById(R.id.loading).setVisibility(View.GONE);
     }
+
     protected void initVideoInfoView() {
-        TutorialHelper.show(R.xml.tutorial_video,this,"video",3);
-        
+        TutorialHelper.show(R.xml.tutorial_video, this, "video", 3);
+
         ViewPager viewPager = findViewById(R.id.viewPager);
         TextView pageName = findViewById(R.id.pageName);
         ImageView loading = findViewById(R.id.loading);
@@ -127,7 +128,7 @@ public class VideoInfoActivity extends BaseActivity {
                     viewPager.setAdapter(vpfAdapter);
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
                     if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
-                        MsgUtil.toastLong("提示：本页面可以左右滑动",this);
+                        MsgUtil.toastLong("提示：本页面可以左右滑动", this);
                         SharedPreferencesUtil.putBoolean("first_videoinfo", false);
                     }
                 });
@@ -143,7 +144,7 @@ public class VideoInfoActivity extends BaseActivity {
     }
 
     public void setCurrentAid(long aid) {
-        if(replyFragment!=null) runOnUiThread(()->replyFragment.refresh(aid));
+        if (replyFragment != null) runOnUiThread(() -> replyFragment.refresh(aid));
     }
 
     @Override
@@ -152,7 +153,7 @@ public class VideoInfoActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.ASYNC, sticky = true, priority = 1)
-    public void onEvent(ReplyEvent event){
+    public void onEvent(ReplyEvent event) {
         replyFragment.notifyReplyInserted(event);
     }
 

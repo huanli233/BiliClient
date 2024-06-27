@@ -26,7 +26,7 @@ public class GeetestUtil {
      * @param activity 上下文
      * @param button   按钮
      * @param type     类型
-     * @param handler handler
+     * @param handler  handler
      */
     public void customVerity(Activity activity, GT3GeetestButton button, int type, GeetestHandler handler) {
         // 请在oncreate方法里初始化以获取足够手势数据来保证第一轮验证成功率
@@ -123,7 +123,7 @@ public class GeetestUtil {
         if (type == 1) {
             // 开启验证
             mGt3GeetestUtils.startCustomFlow();
-        } else  {
+        } else {
             button.setGeetestUtils(mGt3GeetestUtils);
         }
     }
@@ -152,6 +152,7 @@ public class GeetestUtil {
 
     public interface GeetestHandler {
         void onRequestCaptcha(GT3ConfigBean configBean);
+
         void onDialogResult(GT3GeetestUtils utils, String result);
     }
 }

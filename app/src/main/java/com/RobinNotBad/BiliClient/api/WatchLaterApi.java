@@ -27,7 +27,7 @@ public class WatchLaterApi {
 
 
         ArrayList<VideoCard> videoCardList = new ArrayList<>();
-        if(!data.isNull("list")){
+        if (!data.isNull("list")) {
             JSONArray list = data.getJSONArray("list");
             for (int i = 0; i < list.length(); i++) {
                 JSONObject videoCard = list.getJSONObject(i);
@@ -38,7 +38,7 @@ public class WatchLaterApi {
                 String upName = videoCard.getJSONObject("owner").getString("name");
                 long view = videoCard.getJSONObject("stat").getLong("view");
                 String viewStr = ToolsUtil.toWan(view) + "观看";
-                videoCardList.add(new VideoCard(title,upName,viewStr,cover,aid,bvid));
+                videoCardList.add(new VideoCard(title, upName, viewStr, cover, aid, bvid));
             }
         }
         return videoCardList;
@@ -46,9 +46,9 @@ public class WatchLaterApi {
 
     public static int delete(long aid) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/v2/history/toview/del";
-        String per = "aid=" + aid + "&csrf=" + SharedPreferencesUtil.getString("csrf","");
+        String per = "aid=" + aid + "&csrf=" + SharedPreferencesUtil.getString("csrf", "");
 
-        Response response = NetWorkUtil.post(url,per, NetWorkUtil.webHeaders);
+        Response response = NetWorkUtil.post(url, per, NetWorkUtil.webHeaders);
 
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
 
@@ -57,9 +57,9 @@ public class WatchLaterApi {
 
     public static int add(long aid) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/v2/history/toview/add";
-        String per = "aid=" + aid + "&csrf=" + SharedPreferencesUtil.getString("csrf","");
+        String per = "aid=" + aid + "&csrf=" + SharedPreferencesUtil.getString("csrf", "");
 
-        Response response = NetWorkUtil.post(url,per, NetWorkUtil.webHeaders);
+        Response response = NetWorkUtil.post(url, per, NetWorkUtil.webHeaders);
 
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
 

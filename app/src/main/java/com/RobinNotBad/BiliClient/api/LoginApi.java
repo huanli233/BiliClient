@@ -21,14 +21,12 @@ import okhttp3.Response;
  * #以下代码修改自腕上哔哩的开源项目，感谢开源者做出的贡献！
  */
 
-public class LoginApi
-{
+public class LoginApi {
     private static String oauthKey;
     private static String sid;
     private static ArrayList<String> headers = new ArrayList<>();
 
-    public static Bitmap getLoginQR() throws JSONException,IOException
-    {
+    public static Bitmap getLoginQR() throws JSONException, IOException {
         sid = String.valueOf(Math.round(Math.random() * 100000000));
         CookiesApi.checkCookies();
         NetWorkUtil.refreshHeaders();
@@ -52,7 +50,7 @@ public class LoginApi
         }};
 
         String url = "https://passport.bilibili.com/x/passport-login/web/qrcode/generate?source=main-fe-header";
-        JSONObject loginUrlJson = NetWorkUtil.getJson(url,headers).getJSONObject("data");
+        JSONObject loginUrlJson = NetWorkUtil.getJson(url, headers).getJSONObject("data");
         oauthKey = (String) loginUrlJson.get("qrcode_key");
         return QRCodeUtil.createQRCodeBitmap((String) loginUrlJson.get("url"), 320, 320);
     }

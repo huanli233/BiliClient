@@ -19,13 +19,15 @@ public class EmoteApi {
 
     /**
      * 获取表情包面板内容
+     *
      * @param business business
      * @return 获取到的面板内容（表情包）
      */
     public static List<EmotePackage> getEmotes(String business) throws JSONException, IOException {
         String url = "https://api.bilibili.com/x/emote/user/panel/web?business=" + business;
         JSONObject emotePackages = NetWorkUtil.getJson(url, NetWorkUtil.webHeaders);
-        if (emotePackages.getInt("code") != 0) throw new JSONException(emotePackages.getString("message"));
+        if (emotePackages.getInt("code") != 0)
+            throw new JSONException(emotePackages.getString("message"));
 
         JSONObject data = emotePackages.optJSONObject("data");
         if (data != null) {
@@ -38,6 +40,7 @@ public class EmoteApi {
 
     /**
      * 获取“使用中”的表情包
+     *
      * @param business business
      * @return 获取到的表情包
      */
@@ -46,7 +49,8 @@ public class EmoteApi {
                 .put("business", business)
                 .put("csrf", SharedPreferencesUtil.getString(SharedPreferencesUtil.csrf, ""));
         JSONObject emotePackages = NetWorkUtil.getJson(url, NetWorkUtil.webHeaders);
-        if (emotePackages.getInt("code") != 0) throw new JSONException(emotePackages.getString("message"));
+        if (emotePackages.getInt("code") != 0)
+            throw new JSONException(emotePackages.getString("message"));
 
         JSONObject data = emotePackages.optJSONObject("data");
         if (data != null) {
@@ -55,20 +59,29 @@ public class EmoteApi {
         return null;
     }
 
-    /** 全部表情 */
+    /**
+     * 全部表情
+     */
     public static final int PACKAGES_TYPE_ALL = 0;
-    /** 装扮商城 */
+    /**
+     * 装扮商城
+     */
     public static final int PACKAGES_TYPE_SHOP = 1;
-    /** 会员专属 */
+    /**
+     * 会员专属
+     */
     public static final int PACKAGES_TYPE_VIP = 2;
-    /** 包月充电 */
+    /**
+     * 包月充电
+     */
     public static final int PACKAGES_TYPE_MONTH_CHARGE = 3;
 
     /**
      * 获取“待使用”的表情包
+     *
      * @param business business
-     * @param type 见PACKAGES_TYPE常量
-     * @param pn page页数
+     * @param type     见PACKAGES_TYPE常量
+     * @param pn       page页数
      * @return 获取到的表情包
      */
     public static List<EmotePackage> getMyPackages(String business, int type, int pn) throws JSONException, IOException {
@@ -79,7 +92,8 @@ public class EmoteApi {
                 .put("ps", 12)
                 .put("type", type);
         JSONObject emotePackages = NetWorkUtil.getJson(url, NetWorkUtil.webHeaders);
-        if (emotePackages.getInt("code") != 0) throw new JSONException(emotePackages.getString("message"));
+        if (emotePackages.getInt("code") != 0)
+            throw new JSONException(emotePackages.getString("message"));
 
         JSONObject data = emotePackages.optJSONObject("data");
         if (data != null) {
@@ -90,9 +104,10 @@ public class EmoteApi {
 
     /**
      * 获取”更多表情“中的内容，或许不会用到，因为其中的内容都是需要前往购买/获取说明页的。
+     *
      * @param business business
-     * @param pn page页数
-     * @param search 搜索关键词
+     * @param pn       page页数
+     * @param search   搜索关键词
      * @return 获取到的表情包
      */
     public static List<EmotePackage> getAllPackages(String business, int pn, String search) throws JSONException, IOException {
@@ -103,7 +118,8 @@ public class EmoteApi {
                 .put("ps", 12)
                 .put("search", search);
         JSONObject emotePackages = NetWorkUtil.getJson(url, NetWorkUtil.webHeaders);
-        if (emotePackages.getInt("code") != 0) throw new JSONException(emotePackages.getString("message"));
+        if (emotePackages.getInt("code") != 0)
+            throw new JSONException(emotePackages.getString("message"));
 
         JSONObject data = emotePackages.optJSONObject("data");
         if (data != null) {
@@ -114,9 +130,10 @@ public class EmoteApi {
 
     /**
      * 添加/移除表情包
+     *
      * @param business business
-     * @param isAdd 是否为添加，否则为移除
-     * @param ids 要添加/移除的表情包id（们）
+     * @param isAdd    是否为添加，否则为移除
+     * @param ids      要添加/移除的表情包id（们）
      * @return 返回值
      */
     public static int setPackage(String business, boolean isAdd, int... ids) throws JSONException, IOException {

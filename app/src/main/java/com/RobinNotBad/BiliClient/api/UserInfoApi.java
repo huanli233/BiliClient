@@ -26,10 +26,11 @@ public class UserInfoApi {
     public static UserInfo getUserInfo(long mid) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/web-interface/card?mid=" + mid;
         JSONObject all = NetWorkUtil.getJson(url);
-        if(all.has("data") && !all.isNull("data")) {
+        if (all.has("data") && !all.isNull("data")) {
             JSONObject notice_all = NetWorkUtil.getJson("https://api.bilibili.com/x/space/notice?mid=" + mid);
             String notice;
-            if(notice_all.has("data") && !notice_all.isNull("data")) notice = notice_all.getString("data");
+            if (notice_all.has("data") && !notice_all.isNull("data"))
+                notice = notice_all.getString("data");
             else notice = "";
             JSONObject data = all.getJSONObject("data");
             boolean followed = data.getBoolean("following");
@@ -45,16 +46,15 @@ public class UserInfoApi {
             JSONObject official_data = card.getJSONObject("Official");
             int official = official_data.getInt("role");
             String officialDesc = official_data.getString("title");
-            return new UserInfo(mid,name,avatar,sign,fans,level,followed,notice,official,officialDesc);
-        }
-        else return null;
+            return new UserInfo(mid, name, avatar, sign, fans, level, followed, notice, official, officialDesc);
+        } else return null;
 
     }
 
     public static UserInfo getCurrentUserInfo() throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/space/myinfo";
         JSONObject all = NetWorkUtil.getJson(url);
-        if(all.has("data") && !all.isNull("data")) {
+        if (all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
             long mid = data.getLong("mid");
             String name = data.getString("name");
@@ -66,24 +66,21 @@ public class UserInfoApi {
             JSONObject official_data = data.getJSONObject("official");
             int official = official_data.getInt("role");
             String officialDesc = official_data.getString("desc");
-            return new UserInfo(mid,name,avatar,sign,fans,level,false,"",official,officialDesc);
-        }
-        else return new UserInfo(0,"加载失败","","",0,0,false,"",0,"");
+            return new UserInfo(mid, name, avatar, sign, fans, level, false, "", official, officialDesc);
+        } else return new UserInfo(0, "加载失败", "", "", 0, 0, false, "", 0, "");
     }
-    
-    public static int getCurrentUserCoin()  {
-        try{
+
+    public static int getCurrentUserCoin() {
+        try {
             String url = "https://account.bilibili.com/site/getCoin";
             JSONObject all = NetWorkUtil.getJson(url);
-            if(all.has("data") && !all.isNull("data")) {
+            if (all.has("data") && !all.isNull("data")) {
                 JSONObject data = all.getJSONObject("data");
                 return data.has("money") ? data.getInt("money") : 0;
             }
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        catch(JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return 0;
@@ -95,12 +92,12 @@ public class UserInfoApi {
         url += "keyword=" + searchKeyword + "&mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
                 + "&ps=30&tid=0&web_location=333.999";
         JSONObject all = NetWorkUtil.getJson(ConfInfoApi.signWBI(DmImgParamUtil.getDmImgParamsUrl(url)));
-        if(all.has("data") && !all.isNull("data")) {
+        if (all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
             JSONObject list = data.getJSONObject("list");
-            if(list.has("vlist") && !list.isNull("vlist")){
+            if (list.has("vlist") && !list.isNull("vlist")) {
                 JSONArray vlist = list.getJSONArray("vlist");
-                if(vlist.length() == 0) return 1;
+                if (vlist.length() == 0) return 1;
                 for (int i = 0; i < vlist.length(); i++) {
                     JSONObject card = vlist.getJSONObject(i);
                     String cover = card.getString("pic");
@@ -110,14 +107,12 @@ public class UserInfoApi {
                     String bvid = card.getString("bvid");
                     String upName = card.getString("author");
                     String title = card.getString("title");
-                    
-                    videoList.add(new VideoCard(title,upName,playStr,cover,aid,bvid));
+
+                    videoList.add(new VideoCard(title, upName, playStr, cover, aid, bvid));
                 }
                 return 0;
-            }
-            else return -1;
-        }
-        else return -1;
+            } else return -1;
+        } else return -1;
     }
 
 
@@ -125,13 +120,13 @@ public class UserInfoApi {
         String url = "https://api.bilibili.com/x/space/wbi/article?";
         url += "mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
                 + "&ps=30&tid=0";
-        Log.e("debug",url);
+        Log.e("debug", url);
         JSONObject all = NetWorkUtil.getJson(ConfInfoApi.signWBI(url), NetWorkUtil.webHeaders);
-        if(all.has("data") && !all.isNull("data")) {
+        if (all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
-            if(data.has("articles")){
+            if (data.has("articles")) {
                 JSONArray list = data.getJSONArray("articles");
-                if(list.length() == 0) return 1;
+                if (list.length() == 0) return 1;
                 for (int i = 0; i < list.length(); i++) {
                     JSONObject card = list.getJSONObject(i);
 
@@ -146,39 +141,40 @@ public class UserInfoApi {
                     articleList.add(articleCard);
                 }
                 return 0;
-            }else return 1;
-        }
-        else return -1;
+            } else return 1;
+        } else return -1;
     }
-    
-    public static int getUserSeasons(long mid, int page, List<Collection> seasonList) throws IOException, JSONException{
+
+    public static int getUserSeasons(long mid, int page, List<Collection> seasonList) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/polymer/web-space/seasons_series_list?";
         url += "mid=" + mid + "&page_num=" + page + "&page_size=20";
-        Log.e("debug",url);
+        Log.e("debug", url);
         JSONObject all = NetWorkUtil.getJson(ConfInfoApi.signWBI(url), NetWorkUtil.webHeaders);
-        if(all.has("data") && !all.isNull("data")) {
+        if (all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
-            if(data.has("items_lists") && !data.isNull("items_lists")){
+            if (data.has("items_lists") && !data.isNull("items_lists")) {
                 JSONObject itemsLists = data.getJSONObject("items_lists");
                 boolean finished = false;
-                if(itemsLists.has("seasons_list")){
+                if (itemsLists.has("seasons_list")) {
                     JSONArray seasons = itemsLists.getJSONArray("seasons_list");
-                    for(int i = 0;i < seasons.length();i++) seasonList.add(CollectionApi.getSeasonByJson(seasons.getJSONObject(i)));
-                    if(seasons.length() > 0) finished = true;
+                    for (int i = 0; i < seasons.length(); i++)
+                        seasonList.add(CollectionApi.getSeasonByJson(seasons.getJSONObject(i)));
+                    if (seasons.length() > 0) finished = true;
                 }
-                if(itemsLists.has("series_list")){
+                if (itemsLists.has("series_list")) {
                     JSONArray series = itemsLists.getJSONArray("series_list");
-                    for(int i = 0;i < series.length();i++) seasonList.add(CollectionApi.getSeasonByJson(series.getJSONObject(i)));
-                    if(series.length() > 0) finished = true;
+                    for (int i = 0; i < series.length(); i++)
+                        seasonList.add(CollectionApi.getSeasonByJson(series.getJSONObject(i)));
+                    if (series.length() > 0) finished = true;
                 }
-                if(finished) return 0;
+                if (finished) return 0;
                 else return 1;
             }
         }
         return -1;
     }
 
-    public static int followUser(long mid,boolean isFollow) throws IOException, JSONException {
+    public static int followUser(long mid, boolean isFollow) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/relation/modify?";
         String arg = "fid=" + mid + "&csrf=" + NetWorkUtil.getInfoFromCookie("bili_jct", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
         if (isFollow) arg += "&act=1"; //关注
@@ -187,11 +183,11 @@ public class UserInfoApi {
         return all.getInt("code");
     }
 
-    public static void exitLogin(){
+    public static void exitLogin() {
         try {
             String url = "https://passport.bilibili.com/login/exit/v2";
             NetWorkUtil.get(url, NetWorkUtil.webHeaders);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

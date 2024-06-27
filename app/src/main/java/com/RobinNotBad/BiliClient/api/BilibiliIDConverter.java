@@ -15,17 +15,19 @@ public class BilibiliIDConverter {
             tr.put(table.charAt(i), i);
         }
     }
+
     public static Long bvtoaid(String bv) {
         long x = 0;
         for (int i = 0; i < 6; i++) {
             Integer temp = tr.get(bv.charAt(s[i]));
-            if(temp != null) {
+            if (temp != null) {
                 x += (long) (temp * Math.pow(58, i));
             }
         }
         x = (x - add) ^ xor;
         return x;
     }
+
     public static String aidtobv(Long aid) {
         long x = aid;
         x = (x ^ xor) + add;

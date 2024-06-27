@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 
+import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
 import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicAdapter;
@@ -19,7 +20,6 @@ import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,7 +86,7 @@ public class DynamicActivity extends RefreshMainActivity {
                                 Dynamic dynamic = DynamicApi.getDynamic(dynId);
                                 dynamicList.add(0, dynamic);
                                 runOnUiThread(() -> {
-                                    dynamicAdapter.notifyItemInserted( 0);
+                                    dynamicAdapter.notifyItemInserted(0);
                                     dynamicAdapter.notifyItemRangeChanged(0, dynamicList.size());
                                 });
                             } catch (Exception e) {
@@ -105,6 +105,7 @@ public class DynamicActivity extends RefreshMainActivity {
 
     /**
      * 该方法务必在Activity的onStart生命周期之前调用,否则系统底层会抛异常!!!
+     *
      * @param activity
      * @return
      */
@@ -150,14 +151,14 @@ public class DynamicActivity extends RefreshMainActivity {
         super.onCreate(savedInstanceState);
 
         setMenuClick();
-        Log.e("debug","进入动态页");
+        Log.e("debug", "进入动态页");
 
         setOnRefreshListener(this::refreshDynamic);
         setOnLoadMoreListener(page -> addDynamic(type));
 
         setPageName("动态");
-        
-        TutorialHelper.show(R.xml.tutorial_dynamic,this,"dynamic",1);
+
+        TutorialHelper.show(R.xml.tutorial_dynamic, this, "dynamic", 1);
 
         refreshDynamic();
     }
@@ -179,11 +180,11 @@ public class DynamicActivity extends RefreshMainActivity {
 
     private void addDynamic(String type) {
         Log.e("debug", "加载下一页");
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 List<Dynamic> list = new ArrayList<>();
-                offset = DynamicApi.getDynamicList(list,offset,0, type);
-                bottom = (offset==-1);
+                offset = DynamicApi.getDynamicList(list, offset, 0, type);
+                bottom = (offset == -1);
                 setRefreshing(false);
 
                 runOnUiThread(() -> {
@@ -211,7 +212,8 @@ public class DynamicActivity extends RefreshMainActivity {
                 if (data != null) {
                     DynamicHolder.removeDynamicFromList(dynamicList, data.getIntExtra("position", 0) - 1, dynamicAdapter);
                 }
-            } catch (Throwable ignored) {}
+            } catch (Throwable ignored) {
+            }
         }
     }
 }

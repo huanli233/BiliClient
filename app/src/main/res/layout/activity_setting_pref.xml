@@ -1,267 +1,284 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   xmlns:app="http://schemas.android.com/apk/res-auto"
-   xmlns:tools="http://schemas.android.com/tools"
-   android:layout_width="match_parent"
-   android:layout_height="match_parent"
-   tools:context=".activity.settings.SettingPrefActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.settings.SettingPrefActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/top"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-                android:id="@+id/pageName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="3dp"
-                android:layout_marginStart="8dp"
-                android:gravity="center"
-                android:text="偏好设置"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:drawableStartCompat="@drawable/arrow_back"/>
+            android:id="@+id/pageName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="3dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:text="偏好设置"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:drawableStartCompat="@drawable/arrow_back" />
 
         <TextClock
-                android:id="@+id/timeText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginVertical="3dp"
-                android:format12Hour="hh:mm"
-                android:format24Hour="HH:mm"
-                android:gravity="center"
-                android:text="11:45"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+            android:id="@+id/timeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginVertical="3dp"
+            android:format12Hour="hh:mm"
+            android:format24Hour="HH:mm"
+            android:gravity="center"
+            android:text="11:45"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/top"
-            app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/activity_padding_horizontal"
+            android:divider="@drawable/divider"
+            android:showDividers="middle"
+            android:paddingVertical="2dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/activity_padding_horizontal"
-                android:divider="@drawable/divider"
-                android:showDividers="middle"
-                android:paddingVertical="2dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
 
-            <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
                 <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/back_disable"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#00000000"
-                            android:text="禁用返回键"/>
+                        android:id="@+id/back_disable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="禁用返回键" />
+
                     <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="6dp"
-                            android:layout_marginBottom="4dp"
-                            android:text="@string/desc_back_disable"
-                            android:textSize="11sp"/>
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="@string/desc_back_disable"
+                        android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
 
             <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/fav_single"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#00000000"
-                            android:text="收藏夹单选"/>
+                        android:id="@+id/fav_single"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="收藏夹单选" />
+
                     <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="6dp"
-                            android:layout_marginBottom="4dp"
-                            android:text="@string/desc_fav_single"
-                            android:textSize="11sp"/>
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="@string/desc_fav_single"
+                        android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
 
             <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/fav_notice"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#00000000"
-                            android:text="收藏成功提示"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="6dp"
-                            android:layout_marginBottom="4dp"
-                            android:text="@string/desc_fav_notice"
-                            android:textSize="11sp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                <LinearLayout
+                        android:id="@+id/fav_notice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:background="#00000000"
+                        android:text="收藏成功提示" />
 
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/tags_enable"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#00000000"
-                            android:text="显示视频标签"/>
                     <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="6dp"
-                            android:layout_marginBottom="4dp"
-                            android:text="@string/desc_tags_enable"
-                            android:textSize="11sp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-
-            <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/related_enable"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#00000000"
-                            android:text="启用视频相关推荐"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="6dp"
-                            android:layout_marginBottom="4dp"
-                            android:text="@string/desc_related_enable"
-                            android:textSize="11sp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-
-            <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/creative_enable"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#00000000"
-                            android:text="创作中心"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="6dp"
-                            android:layout_marginBottom="4dp"
-                            android:text="@string/desc_creative_enable"
-                            android:textSize="11sp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-
-            <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/copy_enable"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#00000000"
-                            android:text="长按复制"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="6dp"
-                            android:layout_marginBottom="4dp"
-                            android:text="@string/desc_copy_enable"
-                            android:textSize="11sp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/cover_play_enable"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#00000000"
-                            android:text="点击封面播放"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="6dp"
-                            android:layout_marginBottom="4dp"
-                            android:text="@string/desc_cover_play_enable"
-                            android:textSize="11sp"/>
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="@string/desc_fav_notice"
+                        android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/tags_enable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="显示视频标签" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="@string/desc_tags_enable"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/related_enable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="启用视频相关推荐" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="@string/desc_related_enable"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/creative_enable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="创作中心" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="@string/desc_creative_enable"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/copy_enable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="长按复制" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="@string/desc_copy_enable"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/cover_play_enable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="点击封面播放" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="@string/desc_cover_play_enable"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -272,20 +289,22 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#00000000"
-                        android:text="翻动时不加载图片"/>
+                        android:text="翻动时不加载图片" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="6dp"
                         android:layout_marginBottom="4dp"
                         android:text="@string/desc_img_no_load_onscroll"
-                        android:textSize="11sp"/>
+                        android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -296,14 +315,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#00000000"
-                        android:text="识别链接"/>
+                        android:text="识别链接" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="6dp"
                         android:layout_marginBottom="4dp"
                         android:text="@string/desc_link_enable"
-                        android:textSize="11sp"/>
+                        android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -312,6 +332,7 @@
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -322,14 +343,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#00000000"
-                        android:text="禁用启动时检查网络"/>
+                        android:text="禁用启动时检查网络" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="6dp"
                         android:layout_marginBottom="4dp"
                         android:text="打开此选项，会跳过启动时连接bilibili.com进行检查网络的步骤"
-                        android:textSize="11sp"/>
+                        android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

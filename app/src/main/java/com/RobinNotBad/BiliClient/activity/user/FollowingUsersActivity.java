@@ -33,13 +33,13 @@ public class FollowingUsersActivity extends RefreshListActivity {
 
         recyclerView.setHasFixedSize(true);
 
-        mid = SharedPreferencesUtil.getLong("mid",0);
+        mid = SharedPreferencesUtil.getLong("mid", 0);
         userList = new ArrayList<>();
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 int result = FollowApi.getFollowList(mid, page, userList);
-                adapter = new UserListAdapter(this,userList);
+                adapter = new UserListAdapter(this, userList);
                 setOnLoadMoreListener(this::continueLoading);
                 setRefreshing(false);
                 setAdapter(adapter);
@@ -48,7 +48,7 @@ public class FollowingUsersActivity extends RefreshListActivity {
                     Log.e("debug", "到底了");
                     setBottom(true);
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 report(e);
                 setRefreshing(false);
             }
@@ -56,7 +56,7 @@ public class FollowingUsersActivity extends RefreshListActivity {
     }
 
     private void continueLoading(int page) {
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 List<UserInfo> list = new ArrayList<>();
                 int result = FollowApi.getFollowList(mid, page, list);
@@ -70,7 +70,7 @@ public class FollowingUsersActivity extends RefreshListActivity {
                     setBottom(true);
                 }
                 setRefreshing(false);
-            } catch (Exception e){
+            } catch (Exception e) {
                 report(e);
                 setRefreshing(false);
                 this.page--;

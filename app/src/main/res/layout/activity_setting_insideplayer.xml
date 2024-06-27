@@ -15,18 +15,18 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-                android:id="@+id/pageName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="3dp"
-                android:layout_marginStart="8dp"
-                android:gravity="center"
-                android:text="内置播放器"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:drawableStartCompat="@drawable/arrow_back"/>
+            android:id="@+id/pageName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="3dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:text="内置播放器"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:drawableStartCompat="@drawable/arrow_back" />
 
         <TextClock
             android:id="@+id/timeText"
@@ -100,6 +100,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -126,6 +127,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -152,6 +154,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -178,6 +181,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -190,6 +194,7 @@
                         android:layout_height="wrap_content"
                         android:background="#00000000"
                         android:text="缩放时可移动" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -211,6 +216,7 @@
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="6dp"
                     android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/displaymode"
                         android:layout_width="wrap_content"
@@ -232,12 +238,12 @@
                             android:textSize="12sp" />
 
                         <com.google.android.material.radiobutton.MaterialRadioButton
-                                android:id="@+id/SWtexture"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="TextureView"
-                                android:textColor="#fff"
-                                android:textSize="12sp" />
+                            android:id="@+id/SWtexture"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="TextureView"
+                            android:textColor="#fff"
+                            android:textSize="12sp" />
                     </RadioGroup>
 
                     <TextView
@@ -246,13 +252,14 @@
                         android:layout_marginTop="2dp"
                         android:text="！如果视频播放异常/闪退/未响应/无法缩放，请尝试切换该选项！\n已知：KidoX3只能Surface，小天才只能Texture，部分设备需要使用Texture才能进行缩放"
                         android:textSize="11sp" />
-                    </LinearLayout>
+                </LinearLayout>
 
-                </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="6dp"
@@ -270,6 +277,7 @@
                     <RadioGroup
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <com.google.android.material.radiobutton.MaterialRadioButton
                             android:id="@+id/SWhard"
                             android:layout_width="match_parent"
@@ -286,6 +294,7 @@
                             android:textColor="#fff"
                             android:textSize="12sp" />
                     </RadioGroup>
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -300,6 +309,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="6dp"
@@ -317,6 +327,7 @@
                     <RadioGroup
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <com.google.android.material.radiobutton.MaterialRadioButton
                             android:id="@+id/SWaudiotrack"
                             android:layout_width="match_parent"
@@ -333,6 +344,7 @@
                             android:textColor="#fff"
                             android:textSize="12sp" />
                     </RadioGroup>
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -348,7 +360,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="2dp"
-                android:background="#318C8C8C"/>
+                android:background="#318C8C8C" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/danmaku_allowoverlap"
@@ -365,17 +377,17 @@
                 android:text="合并重复弹幕" />
 
 
-
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="6dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="true"  
+                    android:focusable="true"
                     android:focusableInTouchMode="true">
 
                     <TextView
@@ -383,12 +395,13 @@
                         android:layout_height="wrap_content"
                         android:text="弹幕最大行数"
                         android:textSize="14sp" />
+
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
                         android:textSize="12sp"
-                        android:id="@+id/DMmaxline"/>
+                        android:id="@+id/DMmaxline" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -396,13 +409,14 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="6dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="true"  
+                    android:focusable="true"
                     android:focusableInTouchMode="true">
 
                     <TextView
@@ -410,37 +424,41 @@
                         android:layout_height="wrap_content"
                         android:text="弹幕字号大小"
                         android:textSize="14sp" />
+
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
                         android:textSize="12sp"
-                        android:id="@+id/danmakusize"/>
+                        android:id="@+id/danmakusize" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="6dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="true"  
+                    android:focusable="true"
                     android:focusableInTouchMode="true">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="弹幕速度"
                         android:textSize="14sp" />
+
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
                         android:textSize="12sp"
-                        android:id="@+id/danmakuspeed"/>
+                        android:id="@+id/danmakuspeed" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -448,6 +466,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="6dp"
@@ -460,22 +479,25 @@
                         android:layout_height="wrap_content"
                         android:text="弹幕不透明度"
                         android:textSize="14sp" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="true"  
+                        android:focusable="true"
                         android:focusableInTouchMode="true">
+
                         <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:minWidth="50dp"
                             android:inputType="phone"
                             android:textSize="12sp"
-                            android:id="@+id/danmaku_transparency"/>
+                            android:id="@+id/danmaku_transparency" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="%"/>
+                            android:text="%" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -485,7 +507,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="2dp"
-                android:background="#318C8C8C"/>
+                android:background="#318C8C8C" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/ui_showRotateBtn"
@@ -512,14 +534,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="2dp"
-                android:background="#318C8C8C"/>
+                android:background="#318C8C8C" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/preview"
                 android:layout_marginVertical="2dp"
                 android:text="查看预览"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 

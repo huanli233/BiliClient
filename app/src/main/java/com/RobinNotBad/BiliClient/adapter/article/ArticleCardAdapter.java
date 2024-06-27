@@ -28,21 +28,21 @@ public class ArticleCardAdapter extends RecyclerView.Adapter<ArticleCardHolder> 
         this.articleCardList = articleCardList;
     }
 
-    public void setOnLongClickListener(OnItemLongClickListener listener){
+    public void setOnLongClickListener(OnItemLongClickListener listener) {
         this.longClickListener = listener;
     }
 
     @NonNull
     @Override
     public ArticleCardHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_list,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_list, parent, false);
         return new ArticleCardHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ArticleCardHolder holder, int position) {
         ArticleCard articleCard = articleCardList.get(position);
-        holder.showArticleCard(articleCard,context);
+        holder.showArticleCard(articleCard, context);
 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent();
@@ -52,11 +52,10 @@ public class ArticleCardAdapter extends RecyclerView.Adapter<ArticleCardHolder> 
         });
 
         holder.itemView.setOnLongClickListener(view -> {
-            if(longClickListener != null) {
+            if (longClickListener != null) {
                 longClickListener.onItemLongClick(position);
                 return true;
-            }
-            else return false;
+            } else return false;
         });
     }
 

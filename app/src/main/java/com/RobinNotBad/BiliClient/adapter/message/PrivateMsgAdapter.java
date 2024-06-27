@@ -41,13 +41,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.ViewHolder>{
+public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.ViewHolder> {
     private final List<PrivateMessage> mPrivateMsgList;
     private long selfUid = -1;
     private final JSONArray emoteArray;
     private final Context context;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView nameTv;
         final TextView textContentTv;
         final TextView tipTv;
@@ -59,8 +59,8 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
         final ImageView picMsg;
         final ImageView videoCover;
         final LinearLayout root;
-        
-        public ViewHolder(View view){
+
+        public ViewHolder(View view) {
             super(view);
             root = view.findViewById(R.id.msg_layout);
             nameTv = view.findViewById(R.id.msg_name);
@@ -75,36 +75,39 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
             videoCover = view.findViewById(R.id.listCover);
         }
     }
-    public PrivateMsgAdapter(List<PrivateMessage> msgList,JSONArray emoteArray,Context context){
-        this.mPrivateMsgList=msgList;
+
+    public PrivateMsgAdapter(List<PrivateMessage> msgList, JSONArray emoteArray, Context context) {
+        this.mPrivateMsgList = msgList;
         this.context = context;
         this.emoteArray = emoteArray;
     }
+
     @Override
     @NonNull
-    public ViewHolder onCreateViewHolder(ViewGroup parent,int viewType){
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_private_msg,parent,false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_private_msg, parent, false);
         return new ViewHolder(view);
     }
+
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position){
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PrivateMessage msg = mPrivateMsgList.get(position);
         try {
             holder.nameTv.setText(msg.name);
-            if(selfUid ==-1) {
-            	selfUid=SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,-1);
+            if (selfUid == -1) {
+                selfUid = SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, -1);
             }
-            if(msg.uid==selfUid) {
-            	holder.root.setGravity(Gravity.END);
+            if (msg.uid == selfUid) {
+                holder.root.setGravity(Gravity.END);
                 holder.textContentCard.setCardBackgroundColor(context.getResources().getColor(R.color.pink));
                 holder.textContentCard.setStrokeWidth(0);
-            }else{
+            } else {
                 holder.root.setGravity(Gravity.START);
                 holder.textContentCard.setCardBackgroundColor(Color.parseColor("#78242424"));
                 holder.textContentCard.setStrokeWidth(1);
             }
-            
+
             switch (msg.type) {
                 case PrivateMessage.TYPE_TEXT:
                     holder.tipTv.setVisibility(View.GONE);
@@ -112,19 +115,19 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                     holder.nameTv.setVisibility(View.VISIBLE);
                     holder.videoCard.setVisibility(View.GONE);
                     holder.textContentCard.setVisibility(View.VISIBLE);
-                    Log.e("",emoteArray.toString());
-                    CenterThreadPool.run(()->{
+                    Log.e("", emoteArray.toString());
+                    CenterThreadPool.run(() -> {
                         try {
-                            SpannableString contentWithEmote = PrivateMsgApi.textReplaceEmote(msg.content.getString("content"),emoteArray,1f,context);
-                            ((Activity)context).runOnUiThread(()-> holder.textContentTv.setText(contentWithEmote));
-                        } catch(Exception err) {
-                            Log.e("",err.toString());
-                            ((Activity)context).runOnUiThread(()->{
-                                    try {
-                                    	holder.textContentTv.setText(msg.content.getString("content"));
-                                    } catch(JSONException e) {
-                                    	Log.e("",e.toString());
-                                    }
+                            SpannableString contentWithEmote = PrivateMsgApi.textReplaceEmote(msg.content.getString("content"), emoteArray, 1f, context);
+                            ((Activity) context).runOnUiThread(() -> holder.textContentTv.setText(contentWithEmote));
+                        } catch (Exception err) {
+                            Log.e("", err.toString());
+                            ((Activity) context).runOnUiThread(() -> {
+                                try {
+                                    holder.textContentTv.setText(msg.content.getString("content"));
+                                } catch (JSONException e) {
+                                    Log.e("", e.toString());
+                                }
                             });
                         }
                     });
@@ -142,15 +145,15 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                             .override(Target.SIZE_ORIGINAL)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(holder.picMsg);
-                    holder.picMsg.setOnClickListener(view->{
+                    holder.picMsg.setOnClickListener(view -> {
                         ArrayList<String> imageList = new ArrayList<>();
-                        try{
+                        try {
                             imageList.add(msg.content.getString("url"));
-                        }catch(JSONException e){
-                            Log.e("",e.toString());
+                        } catch (JSONException e) {
+                            Log.e("", e.toString());
                         }
-                        Intent intent = new Intent(context,ImageViewerActivity.class);
-                        intent.putStringArrayListExtra("imageList",imageList);
+                        Intent intent = new Intent(context, ImageViewerActivity.class);
+                        intent.putStringArrayListExtra("imageList", imageList);
                         context.startActivity(intent);
                     });
                     break;
@@ -177,20 +180,20 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                             .into(holder.videoCover);
                     holder.upNameTv.setText(msg.content.getString("author"));
                     holder.videoTitleTv.setText(msg.content.getString("title"));
-                    holder.videoCard.setOnClickListener(view-> CenterThreadPool.run(()->{
+                    holder.videoCard.setOnClickListener(view -> CenterThreadPool.run(() -> {
                         try {
                             long aid = msg.content.getLong("id");
                             String bvid = VideoInfoApi.getJsonByAid(aid).getString("bvid");
-                            Intent intent = new Intent(context,VideoInfoActivity.class);
-                            intent.putExtra("aid",aid);
-                            intent.putExtra("bvid",bvid);
-                            intent.putExtra("type","video");
+                            Intent intent = new Intent(context, VideoInfoActivity.class);
+                            intent.putExtra("aid", aid);
+                            intent.putExtra("bvid", bvid);
+                            intent.putExtra("type", "video");
                             context.startActivity(intent);
-                    } catch(IOException err) {
-                        Log.e("",err.toString());
-                    } catch(JSONException err){
-                        Log.e("",err.toString());
-                    }
+                        } catch (IOException err) {
+                            Log.e("", err.toString());
+                        } catch (JSONException err) {
+                            Log.e("", err.toString());
+                        }
                     }));
                     break;
                 default:
@@ -202,27 +205,29 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                     holder.videoCard.setVisibility(View.GONE);
             }
 
-            holder.textContentCard.setOnLongClickListener(view->{
+            holder.textContentCard.setOnLongClickListener(view -> {
                 try {
-                	Intent intent = new Intent(context,CopyTextActivity.class);
-                    intent.putExtra("content",msg.content.getString("content"));
+                    Intent intent = new Intent(context, CopyTextActivity.class);
+                    intent.putExtra("content", msg.content.getString("content"));
                     context.startActivity(intent);
-                  
-                } catch(Exception err) {
-                	err.printStackTrace();
-                }    
-                 return false; 
+
+                } catch (Exception err) {
+                    err.printStackTrace();
+                }
+                return false;
             });
         } catch (JSONException err) {
             Log.e(PrivateMessage.class.getName(), err.toString());
-        } 
+        }
     }
+
     public void addItem(ArrayList<PrivateMessage> list) {
-    	mPrivateMsgList.addAll(0,list);
-        this.notifyItemRangeInserted(0,list.size());
+        mPrivateMsgList.addAll(0, list);
+        this.notifyItemRangeInserted(0, list.size());
     }
-    @Override 
-    public int getItemCount(){
+
+    @Override
+    public int getItemCount() {
         return mPrivateMsgList.size();
     }
 }

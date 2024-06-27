@@ -49,7 +49,7 @@ public class RefreshListFragment extends Fragment {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (listener != null && !recyclerView.canScrollVertically(1) && !swipeRefreshLayout.isRefreshing() && newState==RecyclerView.SCROLL_STATE_DRAGGING && !bottom) {
+                if (listener != null && !recyclerView.canScrollVertically(1) && !swipeRefreshLayout.isRefreshing() && newState == RecyclerView.SCROLL_STATE_DRAGGING && !bottom) {
                     goOnLoad();
                 }
             }
@@ -71,22 +71,26 @@ public class RefreshListFragment extends Fragment {
         ImageAutoLoadScrollListener.install(recyclerView);
     }
 
-    public void setAdapter(RecyclerView.Adapter<?> adapter){
-        runOnUiThread(()-> recyclerView.setAdapter(adapter));
+    public void setAdapter(RecyclerView.Adapter<?> adapter) {
+        runOnUiThread(() -> recyclerView.setAdapter(adapter));
     }
 
-    public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener){
+    public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener) {
         swipeRefreshLayout.setOnRefreshListener(listener);
         swipeRefreshLayout.setEnabled(true);
     }
 
-    public void setRefreshing(boolean bool){runOnUiThread(()->swipeRefreshLayout.setRefreshing(bool));}
+    public void setRefreshing(boolean bool) {
+        runOnUiThread(() -> swipeRefreshLayout.setRefreshing(bool));
+    }
 
-    public void setOnLoadMoreListener(OnLoadMoreListener loadMore){listener = loadMore;}
+    public void setOnLoadMoreListener(OnLoadMoreListener loadMore) {
+        listener = loadMore;
+    }
 
-    private void goOnLoad(){
+    private void goOnLoad() {
         long timeCurrent = System.currentTimeMillis();
-        if(timeCurrent - lastLoadTimestamp > 100) {
+        if (timeCurrent - lastLoadTimestamp > 100) {
             swipeRefreshLayout.setRefreshing(true);
             page++;
             listener.onLoad(page);
@@ -94,10 +98,12 @@ public class RefreshListFragment extends Fragment {
         }
     }
 
-    public void setBottom(boolean bool){bottom = bool;}
+    public void setBottom(boolean bool) {
+        bottom = bool;
+    }
 
-    public void runOnUiThread(Runnable runnable){
-        if(isAdded()) requireActivity().runOnUiThread(runnable);
+    public void runOnUiThread(Runnable runnable) {
+        if (isAdded()) requireActivity().runOnUiThread(runnable);
     }
 
     public void showEmptyView() {
@@ -109,22 +115,22 @@ public class RefreshListFragment extends Fragment {
         }
     }
 
-    public boolean isRefreshing(){
-        if(swipeRefreshLayout!=null) return swipeRefreshLayout.isRefreshing();
+    public boolean isRefreshing() {
+        if (swipeRefreshLayout != null) return swipeRefreshLayout.isRefreshing();
         return false;
     }
 
-    public void report(Exception e){
-        runOnUiThread(()-> MsgUtil.err(e,requireContext()));
+    public void report(Exception e) {
+        runOnUiThread(() -> MsgUtil.err(e, requireContext()));
     }
 
-    public void loadFail(){
+    public void loadFail() {
         page--;
-        runOnUiThread(()->MsgUtil.toastLong("加载失败",requireContext()));
+        runOnUiThread(() -> MsgUtil.toastLong("加载失败", requireContext()));
         setRefreshing(false);
     }
 
-    public void loadFail(Exception e){
+    public void loadFail(Exception e) {
         page--;
         report(e);
         setRefreshing(false);

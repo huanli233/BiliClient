@@ -33,7 +33,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_announcement_list,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_announcement_list, parent, false);
         return new Holder(view);
     }
 
@@ -44,7 +44,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
 
         holder.name.setText(announcement.title);
         int extra_start = announcement.content.indexOf("<extra_insert>");
-        holder.content.setText(extra_start==-1 ? announcement.content : announcement.content.substring(0,extra_start) + "[附加内容]");
+        holder.content.setText(extra_start == -1 ? announcement.content : announcement.content.substring(0, extra_start) + "[附加内容]");
         holder.info.setText("ID:" + announcement.id + " | " + announcement.ctime);
 
         holder.cardView.setOnClickListener(view -> MsgUtil.showText(context, announcement.title, announcement.content));
@@ -56,7 +56,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         return list.size();
     }
 
-    public static class Holder extends RecyclerView.ViewHolder{
+    public static class Holder extends RecyclerView.ViewHolder {
         final TextView name;
         final TextView content;
         final TextView info;

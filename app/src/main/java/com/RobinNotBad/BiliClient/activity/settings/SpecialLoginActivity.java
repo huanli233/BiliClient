@@ -31,15 +31,15 @@ public class SpecialLoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_special);
-        Log.e("debug","使用特殊登录方式");
+        Log.e("debug", "使用特殊登录方式");
 
         textInput = findViewById(R.id.loginInput);
         MaterialCardView confirm = findViewById(R.id.confirm);
         TextView desc = findViewById(R.id.desc);
 
-        Intent intent= getIntent();
+        Intent intent = getIntent();
 
-        if(intent.getBooleanExtra("login",true)) {
+        if (intent.getBooleanExtra("login", true)) {
             confirm.setOnClickListener(view -> {
                 String loginInfo = textInput.getText().toString();
                 try {
@@ -48,8 +48,8 @@ public class SpecialLoginActivity extends BaseActivity {
                     SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(NetWorkUtil.getInfoFromCookie("DedeUserID", cookies)));
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, NetWorkUtil.getInfoFromCookie("bili_jct", cookies));
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies);
-                    SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,jsonObject.getString("refresh_token"));
-                    runOnUiThread(() -> MsgUtil.toast("登录成功！",this));
+                    SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token, jsonObject.getString("refresh_token"));
+                    runOnUiThread(() -> MsgUtil.toast("登录成功！", this));
                     SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup, true);
 
                     NetWorkUtil.refreshHeaders();
@@ -58,10 +58,11 @@ public class SpecialLoginActivity extends BaseActivity {
                     intent1.setClass(SpecialLoginActivity.this, SplashActivity.class);
                     startActivity(intent1);
                     finish();
-                } catch (JSONException e) {runOnUiThread(() -> MsgUtil.err(e, SpecialLoginActivity.this));}
+                } catch (JSONException e) {
+                    runOnUiThread(() -> MsgUtil.err(e, SpecialLoginActivity.this));
+                }
             });
-        }
-        else{
+        } else {
             desc.setText(R.string.special_login_export);
             TextView buttonText = findViewById(R.id.confirm_text);
             buttonText.setText("复制");
@@ -69,8 +70,8 @@ public class SpecialLoginActivity extends BaseActivity {
             buttonText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             JSONObject jsonObject = new JSONObject();
             try {
-                jsonObject.put("cookies",SharedPreferencesUtil.getString("cookies",""));
-                jsonObject.put("refresh_token",SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""));
+                jsonObject.put("cookies", SharedPreferencesUtil.getString("cookies", ""));
+                jsonObject.put("refresh_token", SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -80,7 +81,7 @@ public class SpecialLoginActivity extends BaseActivity {
                 ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clipData = ClipData.newPlainText("label", textInput.getText());
                 clipboardManager.setPrimaryClip(clipData);
-                MsgUtil.toast("已复制",this);
+                MsgUtil.toast("已复制", this);
             });
         }
     }

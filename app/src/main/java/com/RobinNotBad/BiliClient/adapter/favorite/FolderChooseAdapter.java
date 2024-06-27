@@ -48,7 +48,7 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
     @NonNull
     @Override
     public FolderHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_choose,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_choose, parent, false);
         return new FolderHolder(view);
     }
 
@@ -58,10 +58,10 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
         MaterialCardView cardView = (MaterialCardView) holder.itemView;
 
         holder.folder_name.setText(folderList.get(position));
-        setCardView(cardView,chooseState.get(position));
+        setCardView(cardView, chooseState.get(position));
 
         holder.itemView.setOnClickListener(view -> {
-            if(!adding) {
+            if (!adding) {
                 adding = true;
                 cardView.setStrokeColor(context.getResources().getColor(R.color.low_pink));
                 cardView.setStrokeWidth(ToolsUtil.dp2px(1f, context));
@@ -94,13 +94,13 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
                             adding = false;
                             if (result == 0) {
                                 chooseState.set(position, true);
-                                ((Activity) context).runOnUiThread(() -> setCardView(cardView,true));
+                                ((Activity) context).runOnUiThread(() -> setCardView(cardView, true));
                                 changed = true;
                                 added = true;
                             } else ((Activity) context).runOnUiThread(() -> {
-                                    MsgUtil.toast( "添加失败！错误码：" + result, context);
-                                    setCardView(cardView,false);
-                                });
+                                MsgUtil.toast("添加失败！错误码：" + result, context);
+                                setCardView(cardView, false);
+                            });
                             if (SharedPreferencesUtil.getBoolean("fav_single", false))
                                 ((Activity) context).finish();
                         } catch (IOException e) {
@@ -120,7 +120,7 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
         return folderList.size();
     }
 
-    public static class FolderHolder extends RecyclerView.ViewHolder{
+    public static class FolderHolder extends RecyclerView.ViewHolder {
         final TextView folder_name;
 
         public FolderHolder(@NonNull View itemView) {
@@ -129,20 +129,19 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
         }
     }
 
-    private void setCardView(MaterialCardView cardView, boolean bool){
-        if(bool){
+    private void setCardView(MaterialCardView cardView, boolean bool) {
+        if (bool) {
             cardView.setStrokeColor(context.getResources().getColor(R.color.pink));
-            cardView.setStrokeWidth(ToolsUtil.dp2px(1,context));
-        }
-        else{
+            cardView.setStrokeWidth(ToolsUtil.dp2px(1, context));
+        } else {
             cardView.setStrokeColor(context.getResources().getColor(R.color.gray));
-            cardView.setStrokeWidth(ToolsUtil.dp2px(0.1f,context));
+            cardView.setStrokeWidth(ToolsUtil.dp2px(0.1f, context));
         }
     }
 
-    public boolean isAllDeleted(){
-        for (boolean b:chooseState) {
-            if(b) return false;
+    public boolean isAllDeleted() {
+        for (boolean b : chooseState) {
+            if (b) return false;
         }
         return true;
     }

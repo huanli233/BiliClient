@@ -32,7 +32,7 @@ public class ShowTextActivity extends BaseActivity {
 
         TextView textView = findViewById(R.id.textView);
 
-        if(content!=null) {
+        if (content != null) {
             content.replace("[extra_insert]", "<extra_insert>");
             int extra_start = content.indexOf("<extra_insert>");
             if (extra_start != -1) {
@@ -53,12 +53,12 @@ public class ShowTextActivity extends BaseActivity {
                 }
             }
         }
-        if(intent.getData() != null){
+        if (intent.getData() != null) {
             content = intent.getData().toString();
         }
 
         textView.setText(content);
-        ToolsUtil.setCopy(textView,this);
+        ToolsUtil.setCopy(textView, this);
 
 
     }

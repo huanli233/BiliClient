@@ -22,15 +22,15 @@ public class MarqueeTextView extends androidx.appcompat.widget.AppCompatTextView
         setMarquee();
     }
 
-    public void setMarquee(){
-        if(!isInEditMode())
-        if(SharedPreferencesUtil.getBoolean("marquee_enable",true)) {
-            setSelected(true);
-            setEllipsize(TextUtils.TruncateAt.MARQUEE);
-            setSingleLine();
-            setMarqueeRepeatLimit(-1);
-            setFocusable(true);
-            setFocusableInTouchMode(true);
-        }
+    public void setMarquee() {
+        if (!isInEditMode())
+            if (SharedPreferencesUtil.getBoolean("marquee_enable", true)) {
+                setSelected(true);
+                setEllipsize(TextUtils.TruncateAt.MARQUEE);
+                setSingleLine();
+                setMarqueeRepeatLimit(-1);
+                setFocusable(true);
+                setFocusableInTouchMode(true);
+            }
     }
 }

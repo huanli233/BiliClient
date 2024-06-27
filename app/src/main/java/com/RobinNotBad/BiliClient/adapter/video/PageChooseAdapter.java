@@ -26,23 +26,23 @@ public class PageChooseAdapter extends RecyclerView.Adapter<PageChooseAdapter.Ho
     OnItemClickListener onItemClickListener;
     OnItemLongClickListener onItemLongClickListener;
 
-    public PageChooseAdapter(Context context, ArrayList<String> nameList){
+    public PageChooseAdapter(Context context, ArrayList<String> nameList) {
         this.context = context;
         this.nameList = nameList;
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener){
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.onItemClickListener = listener;
     }
 
-    public void setOnItemLongClickListener(OnItemLongClickListener listener){
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         this.onItemLongClickListener = listener;
     }
 
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_choose,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_choose, parent, false);
         return new Holder(view);
     }
 
@@ -53,15 +53,14 @@ public class PageChooseAdapter extends RecyclerView.Adapter<PageChooseAdapter.Ho
 
 
         holder.itemView.setOnClickListener(view -> {
-            if(onItemClickListener != null) onItemClickListener.onItemClick(position);
+            if (onItemClickListener != null) onItemClickListener.onItemClick(position);
         });
 
         holder.itemView.setOnLongClickListener(view -> {
-            if(onItemLongClickListener != null) {
+            if (onItemLongClickListener != null) {
                 onItemLongClickListener.onItemLongClick(position);
                 return true;
-            }
-            else return false;
+            } else return false;
         });
 
     }
@@ -71,7 +70,7 @@ public class PageChooseAdapter extends RecyclerView.Adapter<PageChooseAdapter.Ho
         return nameList.size();
     }
 
-    public static class Holder extends RecyclerView.ViewHolder{
+    public static class Holder extends RecyclerView.ViewHolder {
         final TextView folder_name;
 
         public Holder(@NonNull View itemView) {

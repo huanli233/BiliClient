@@ -20,7 +20,7 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 2024-05-01
  */
 
-public class RefreshListActivity extends BaseActivity{
+public class RefreshListActivity extends BaseActivity {
     public SwipeRefreshLayout swipeRefreshLayout;
     public RecyclerView recyclerView;
     public TextView emptyView;
@@ -44,7 +44,7 @@ public class RefreshListActivity extends BaseActivity{
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (listener != null && !recyclerView.canScrollVertically(1) && !swipeRefreshLayout.isRefreshing() && newState==RecyclerView.SCROLL_STATE_DRAGGING && !bottom) {
+                if (listener != null && !recyclerView.canScrollVertically(1) && !swipeRefreshLayout.isRefreshing() && newState == RecyclerView.SCROLL_STATE_DRAGGING && !bottom) {
                     goOnLoad();
                 }
             }
@@ -65,11 +65,11 @@ public class RefreshListActivity extends BaseActivity{
         });
     }
 
-    public void setAdapter(RecyclerView.Adapter<?> adapter){
-        runOnUiThread(()-> recyclerView.setAdapter(adapter));
+    public void setAdapter(RecyclerView.Adapter<?> adapter) {
+        runOnUiThread(() -> recyclerView.setAdapter(adapter));
     }
 
-    public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener){
+    public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener) {
         swipeRefreshLayout.setOnRefreshListener(listener);
         swipeRefreshLayout.setEnabled(true);
     }
@@ -83,14 +83,18 @@ public class RefreshListActivity extends BaseActivity{
         }
     }
 
-    public void setRefreshing(boolean bool){runOnUiThread(()->swipeRefreshLayout.setRefreshing(bool));}
+    public void setRefreshing(boolean bool) {
+        runOnUiThread(() -> swipeRefreshLayout.setRefreshing(bool));
+    }
 
-    public void setOnLoadMoreListener(OnLoadMoreListener loadMore){listener = loadMore;}
+    public void setOnLoadMoreListener(OnLoadMoreListener loadMore) {
+        listener = loadMore;
+    }
 
     //自动
-    private void goOnLoad(){
+    private void goOnLoad() {
         long timeCurrent = System.currentTimeMillis();
-        if(timeCurrent - lastLoadTimestamp > 100) {
+        if (timeCurrent - lastLoadTimestamp > 100) {
             swipeRefreshLayout.setRefreshing(true);
             page++;
             listener.onLoad(page);
@@ -98,15 +102,17 @@ public class RefreshListActivity extends BaseActivity{
         }
     }
 
-    public void setBottom(boolean bool){bottom = bool;}
+    public void setBottom(boolean bool) {
+        bottom = bool;
+    }
 
-    public void loadFail(){
+    public void loadFail() {
         page--;
-        MsgUtil.toastLong("加载失败",this);
+        MsgUtil.toastLong("加载失败", this);
         setRefreshing(false);
     }
 
-    public void loadFail(Exception e){
+    public void loadFail(Exception e) {
         page--;
         report(e);
         setRefreshing(false);

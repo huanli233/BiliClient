@@ -35,13 +35,16 @@ public class CreativeCenterActivity extends BaseActivity {
                         setStatsText(R.id.totalReply_number, stats, "total_reply", "incr_reply");
                         setStatsText(R.id.totalDm_number, stats, "total_dm", "incr_dm");
                     } catch (Exception e) {
-                        runOnUiThread(() -> MsgUtil.err(e,this));
+                        runOnUiThread(() -> MsgUtil.err(e, this));
                     }
                 });
-            } catch (Exception e) {runOnUiThread(() -> MsgUtil.err(e,this));}
+            } catch (Exception e) {
+                runOnUiThread(() -> MsgUtil.err(e, this));
+            }
 
         });
     }
+
     @SuppressLint("SetTextI18n")
     private void setStatsText(int viewId, JSONObject jsonObject, String totalKey, String incrKey) throws JSONException {
         TextView textView = findViewById(viewId);

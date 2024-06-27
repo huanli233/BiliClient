@@ -10,5 +10,6 @@ public class LocalVideo {
     public ArrayList<String> danmakuFileList;
 
 
-    public LocalVideo(){}
+    public LocalVideo() {
+    }
 }

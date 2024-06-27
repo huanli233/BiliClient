@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class WriteReplyActivity extends BaseActivity {
 
-    private static final Map<Integer,String> msgMap = new HashMap<>() {{
+    private static final Map<Integer, String> msgMap = new HashMap<>() {{
         put(-101, "没有登录or登录信息有误？");
         put(-102, "账号被封禁！");
         put(-509, "请求过于频繁！");
@@ -56,15 +56,15 @@ public class WriteReplyActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reply_write);
 
-        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)==0){
-            MsgUtil.toast("还没有登录喵~",this);
+        if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
+            MsgUtil.toast("还没有登录喵~", this);
             finish();
         }
 
         Intent intent = getIntent();
-        long oid = intent.getLongExtra("oid",0);
-        long rpid = intent.getLongExtra("rpid",0);
-        long parent = intent.getLongExtra("parent",0);
+        long oid = intent.getLongExtra("oid", 0);
+        long rpid = intent.getLongExtra("rpid", 0);
+        long parent = intent.getLongExtra("parent", 0);
         int replyType = intent.getIntExtra("replyType", ReplyApi.REPLY_TYPE_VIDEO);
         String parentSender = intent.getStringExtra("parentSender");
         int pos = intent.getIntExtra("pos", -1);
@@ -72,21 +72,21 @@ public class WriteReplyActivity extends BaseActivity {
         editText = findViewById(R.id.editText);
         MaterialCardView send = findViewById(R.id.send);
 
-        Log.e("debug-发送评论",String.valueOf(rpid));
+        Log.e("debug-发送评论", String.valueOf(rpid));
 
-        if(parentSender != null && !parentSender.isEmpty()) {
+        if (parentSender != null && !parentSender.isEmpty()) {
             editText.setText("回复 @" + parentSender + " :");
             editText.setSelection(editText.getText().length());
         }
 
         send.setOnClickListener(view -> {
-            if(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cookie_refresh,true)){
-                if(!sent) {
+            if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cookie_refresh, true)) {
+                if (!sent) {
                     CenterThreadPool.run(() -> {
                         String text = editText.getText().toString();
-                        if(!text.isEmpty()) {
+                        if (!text.isEmpty()) {
                             try {
-                                Log.e("debug-评论内容",text);
+                                Log.e("debug-评论内容", text);
 
                                 Pair<Integer, Reply> result = ReplyApi.sendReply(oid, rpid, parent, text, replyType);
                                 int resultCode = result.first;
@@ -95,25 +95,24 @@ public class WriteReplyActivity extends BaseActivity {
                                 sent = true;
 
                                 if (resultCode == 0) {
-                                    runOnUiThread(() -> MsgUtil.toast("发送成功>w<",this));
+                                    runOnUiThread(() -> MsgUtil.toast("发送成功>w<", this));
                                     resultReply.forceDelete = true;
                                     resultReply.pubTime = "刚刚";
                                     EventBus.getDefault().post(new ReplyEvent(1, resultReply, pos, oid));
                                     finish();
                                 } else {
                                     String toast_msg = "评论发送失败：\n" + (msgMap.containsKey(resultCode) ? msgMap.get(resultCode) : resultCode);
-                                    runOnUiThread(() -> MsgUtil.toast(toast_msg,this));
+                                    runOnUiThread(() -> MsgUtil.toast(toast_msg, this));
                                     sent = false;
                                 }
                             } catch (Exception e) {
-                                runOnUiThread(() -> MsgUtil.err(e,this));
+                                runOnUiThread(() -> MsgUtil.err(e, this));
                             }
-                        }
-                        else runOnUiThread(()-> MsgUtil.toast("还没输入内容呢~",this));
+                        } else runOnUiThread(() -> MsgUtil.toast("还没输入内容呢~", this));
                     });
-                }
-                else MsgUtil.toast("正在发送中",this);
-            } else MsgUtil.showDialog(this,"无法发送","上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作",-1);
+                } else MsgUtil.toast("正在发送中", this);
+            } else
+                MsgUtil.showDialog(this, "无法发送", "上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作", -1);
         });
 
         findViewById(R.id.emote).setOnClickListener(view -> emoteLauncher.launch(new Intent(this, EmoteActivity.class)));

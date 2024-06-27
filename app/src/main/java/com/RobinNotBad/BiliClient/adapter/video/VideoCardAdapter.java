@@ -35,21 +35,21 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
         this.preInflateHelper = new PreInflateHelper(context);
     }
 
-    public void setOnLongClickListener(OnItemLongClickListener listener){
+    public void setOnLongClickListener(OnItemLongClickListener listener) {
         this.longClickListener = listener;
     }
 
     @NonNull
     @Override
     public VideoCardHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_video_list,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_video_list, parent, false);
         return new VideoCardHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull VideoCardHolder holder, int position) {
         VideoCard videoCard = videoCardList.get(position);
-        holder.showVideoCard(videoCard,context);    //此函数在VideoCardHolder里
+        holder.showVideoCard(videoCard, context);    //此函数在VideoCardHolder里
 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent();
@@ -69,11 +69,10 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
         });
 
         holder.itemView.setOnLongClickListener(view -> {
-            if(longClickListener != null) {
+            if (longClickListener != null) {
                 longClickListener.onItemLongClick(position);
                 return true;    //必须要true表示事件已处理 不再继续传递，不然上面的点按也会触发
-            }
-            else return false;
+            } else return false;
         });
     }
 

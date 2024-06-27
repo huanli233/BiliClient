@@ -42,7 +42,7 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
     @NonNull
     @Override
     public FavoriteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_favorite_folder_list,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_favorite_folder_list, parent, false);
         return new FavoriteHolder(view);
     }
 
@@ -53,16 +53,16 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
         holder.count.setText(folderList.get(position).videoCount + "/" + folderList.get(position).maxCount);
         Glide.with(this.context).asDrawable().load(GlideUtil.url(folderList.get(position).cover))
                 .transition(GlideUtil.getTransitionOptions())
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))))
                 .format(DecodeFormat.PREFER_RGB_565)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.cover);
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setClass(context, FavoriteVideoListActivity.class);
-            intent.putExtra("fid",folderList.get(position).id);
-            intent.putExtra("mid",mid);
-            intent.putExtra("name",folderList.get(position).name);
+            intent.putExtra("fid", folderList.get(position).id);
+            intent.putExtra("mid", mid);
+            intent.putExtra("name", folderList.get(position).name);
             context.startActivity(intent);
         });
     }

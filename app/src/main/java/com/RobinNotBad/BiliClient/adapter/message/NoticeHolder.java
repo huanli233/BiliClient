@@ -33,12 +33,13 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.text.SimpleDateFormat;
 
-public class NoticeHolder extends RecyclerView.ViewHolder{
+public class NoticeHolder extends RecyclerView.ViewHolder {
     public final LinearLayout avaterList;
     public final TextView action;
     public final TextView pubdate;
     public final ConstraintLayout extraCard;
     public final View itemView;
+
     public NoticeHolder(@NonNull View itemView) {
         super(itemView);
         this.itemView = itemView;
@@ -47,12 +48,13 @@ public class NoticeHolder extends RecyclerView.ViewHolder{
         pubdate = itemView.findViewById(R.id.pubdate);
         extraCard = itemView.findViewById(R.id.extraCard);
     }
+
     @SuppressLint("SetTextI18n")
     public void showMessage(MessageCard message, Context context) {
         avaterList.removeAllViews();
-        if(message.user.size() < 1) avaterList.setVisibility(View.GONE);
+        if (message.user.size() < 1) avaterList.setVisibility(View.GONE);
         else avaterList.setVisibility(View.VISIBLE);
-        for(int i = 0;i<message.user.size();i++){
+        for (int i = 0; i < message.user.size(); i++) {
             ImageView imageView = new ImageView(context);
             Glide.with(context)
                     .asDrawable()
@@ -62,8 +64,8 @@ public class NoticeHolder extends RecyclerView.ViewHolder{
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .apply(RequestOptions.circleCropTransform())
                     .into(imageView);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(ToolsUtil.dp2px(32,context), ToolsUtil.dp2px(32,context)));
-            imageView.setLeft(ToolsUtil.dp2px(3,context));
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(ToolsUtil.dp2px(32, context), ToolsUtil.dp2px(32, context)));
+            imageView.setLeft(ToolsUtil.dp2px(3, context));
             int finalI = i;
             imageView.setOnClickListener(view1 -> {
                 Intent intent = new Intent();
@@ -75,22 +77,22 @@ public class NoticeHolder extends RecyclerView.ViewHolder{
 
             //这个View什么都没有，用来当间隔的
             View view = new View(context);
-            view.setLayoutParams(new ViewGroup.LayoutParams(ToolsUtil.dp2px(3,context), ToolsUtil.dp2px(32,context)));
+            view.setLayoutParams(new ViewGroup.LayoutParams(ToolsUtil.dp2px(3, context), ToolsUtil.dp2px(32, context)));
             avaterList.addView(view);
         }
 
-        if(message.timeStamp != 0){
+        if (message.timeStamp != 0) {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             pubdate.setText(sdf.format(message.timeStamp * 1000));
-        }else pubdate.setText(message.timeDesc);
+        } else pubdate.setText(message.timeDesc);
 
         action.setText(message.content);
-        ToolsUtil.setCopy(action,context);
-        
-        if (message.videoCard != null){
+        ToolsUtil.setCopy(action, context);
+
+        if (message.videoCard != null) {
             VideoCard childVideoCard = message.videoCard;
-            VideoCardHolder holder = new VideoCardHolder(View.inflate(context,R.layout.cell_dynamic_video,extraCard));
-            holder.showVideoCard(childVideoCard,context);
+            VideoCardHolder holder = new VideoCardHolder(View.inflate(context, R.layout.cell_dynamic_video, extraCard));
+            holder.showVideoCard(childVideoCard, context);
             holder.itemView.findViewById(R.id.videoCardView).setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(context, VideoInfoActivity.class);
@@ -99,9 +101,9 @@ public class NoticeHolder extends RecyclerView.ViewHolder{
                 context.startActivity(intent);
             });
         }
-        if(message.replyInfo != null || message.dynamicInfo != null){
+        if (message.replyInfo != null || message.dynamicInfo != null) {
             Reply childReply = message.replyInfo != null ? message.replyInfo : message.dynamicInfo;
-            ReplyCardHolder holder = new ReplyCardHolder(View.inflate(context, R.layout.cell_message_reply,extraCard));
+            ReplyCardHolder holder = new ReplyCardHolder(View.inflate(context, R.layout.cell_message_reply, extraCard));
             holder.showReplyCard(childReply);
             holder.itemView.findViewById(R.id.cardView).setOnClickListener(view -> {
                 Intent intent = new Intent();

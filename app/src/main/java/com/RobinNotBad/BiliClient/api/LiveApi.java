@@ -28,6 +28,7 @@ public class LiveApi {
 
     /**
      * 获取推荐直播间列表
+     *
      * @param page 页数
      * @return 直播间列表
      */
@@ -51,6 +52,7 @@ public class LiveApi {
 
     /**
      * 获取关注的直播间列表
+     *
      * @param page 页数
      * @return 关注的直播间列表
      */
@@ -73,6 +75,7 @@ public class LiveApi {
 
     /**
      * 获取直播间详情
+     *
      * @param room_id 直播间ID
      * @return 直播间信息
      */
@@ -91,8 +94,9 @@ public class LiveApi {
 
     /**
      * 获取直播间PlayInfo
+     *
      * @param roomId 直播间id
-     * @param qn 清晰度
+     * @param qn     清晰度
      * @return 直播间PlayInfo
      */
     public static LivePlayInfo getRoomPlayInfo(long roomId, int qn) throws JSONException, IOException {
@@ -283,9 +287,9 @@ public class LiveApi {
                 watched.icon_web = watched_show.optString("icon_web");
                 liveRoom.watched_show = watched;
             }
-            long live_time = jsonObject.optLong("live_time",-1);
+            long live_time = jsonObject.optLong("live_time", -1);
             @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            if(live_time != -1) liveRoom.liveTime = sdf.format(live_time * 1000);
+            if (live_time != -1) liveRoom.liveTime = sdf.format(live_time * 1000);
             else liveRoom.liveTime = jsonObject.optString("live_time");
             liveRooms.add(liveRoom);
         }

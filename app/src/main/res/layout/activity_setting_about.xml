@@ -1,65 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-     xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:app="http://schemas.android.com/apk/res-auto"
-     xmlns:tools="http://schemas.android.com/tools"
-     android:layout_height="match_parent"
-     android:layout_width="match_parent"
-     tools:context=".activity.settings.AboutActivity">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:context=".activity.settings.AboutActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-         android:layout_height="wrap_content"
-         android:layout_width="match_parent"
-         app:layout_constraintTop_toTopOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintEnd_toEndOf="parent"
-         android:id="@+id/top">
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/top">
 
         <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_marginVertical="3dp"
-                android:gravity="center"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="8dp"
-                android:id="@+id/pageName"
-                android:text="关于"
-                android:textStyle="bold"
-                app:drawableStartCompat="@drawable/arrow_back"/>
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginVertical="3dp"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="8dp"
+            android:id="@+id/pageName"
+            android:text="关于"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/arrow_back" />
 
         <TextClock
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             android:layout_marginEnd="8dp"
-             android:layout_marginVertical="3dp"
-             android:format24Hour="HH:mm"
-             app:layout_constraintBottom_toBottomOf="parent"
-             android:gravity="center"
-             app:layout_constraintTop_toTopOf="parent"
-             android:format12Hour="hh:mm"
-             app:layout_constraintEnd_toEndOf="parent"
-             android:id="@+id/timeText"
-             android:text="11:45"
-             android:textStyle="bold" />
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginVertical="3dp"
+            android:format24Hour="HH:mm"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            android:format12Hour="hh:mm"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/timeText"
+            android:text="11:45"
+            android:textStyle="bold" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
-         android:layout_height="0dp"
-         android:layout_width="match_parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintBottom_toBottomOf="parent"
-         app:layout_constraintTop_toBottomOf="@+id/top">
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top">
 
         <LinearLayout
-             android:layout_height="wrap_content"
-             android:layout_width="match_parent"
-             android:orientation="vertical"
-             android:paddingHorizontal="@dimen/activity_padding_horizontal"
-             android:paddingBottom="20dp">
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/activity_padding_horizontal"
+            android:paddingBottom="20dp">
 
             <ImageView
                 android:layout_height="65dp"
@@ -90,7 +89,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/version_name_card"
                     android:layout_height="wrap_content"
@@ -100,7 +99,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/version_code_card"
                     tools:ignore="MissingConstraints">
-                
+
                     <TextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
@@ -111,9 +110,9 @@
                         android:id="@+id/app_version"
                         android:layout_gravity="center"
                         android:gravity="center" />
-                    
+
                 </com.google.android.material.card.MaterialCardView>
-                
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/version_code_card"
                     android:layout_height="wrap_content"
@@ -122,7 +121,7 @@
                     app:layout_constraintStart_toEndOf="@id/version_name_card"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/version_name_card">
-                
+
                     <TextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
@@ -133,9 +132,9 @@
                         android:id="@+id/app_version_code"
                         android:layout_gravity="center"
                         android:gravity="center" />
-                    
+
                 </com.google.android.material.card.MaterialCardView>
-                
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.card.MaterialCardView
@@ -157,8 +156,8 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <include layout="@layout/cell_divider"/>
-            
+            <include layout="@layout/cell_divider" />
+
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -173,19 +172,19 @@
                     android:textSize="12sp" />
 
             </com.google.android.material.card.MaterialCardView>
-            
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/author_words"
                 android:layout_marginTop="6dp"
-                 android:layout_height="wrap_content"
-                 android:layout_width="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
 
                 <LinearLayout
-                     android:layout_height="wrap_content"
-                     android:layout_width="match_parent"
-                     android:paddingVertical="6dp"
-                     android:paddingHorizontal="4dp"
-                     android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:paddingVertical="6dp"
+                    android:paddingHorizontal="4dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -206,18 +205,18 @@
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
-            
+
             <com.google.android.material.card.MaterialCardView
                 android:layout_marginTop="6dp"
-                 android:layout_height="wrap_content"
-                 android:layout_width="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
 
                 <LinearLayout
-                     android:layout_height="wrap_content"
-                     android:layout_width="match_parent"
-                     android:paddingVertical="6dp"
-                     android:paddingHorizontal="4dp"
-                     android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:paddingVertical="6dp"
+                    android:paddingHorizontal="4dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -255,8 +254,8 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <include layout="@layout/cell_divider"/>
-            
+            <include layout="@layout/cell_divider" />
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/sponsor_list"
                 android:layout_marginBottom="4dp"
@@ -271,8 +270,8 @@
                     android:text="捐赠列表"
                     android:textAlignment="textStart"
                     android:textSize="13sp"
-                    tools:ignore="RtlCompat" 
-                    app:drawableEndCompat="@drawable/arrow_forward"/>
+                    tools:ignore="RtlCompat"
+                    app:drawableEndCompat="@drawable/arrow_forward" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -641,7 +640,7 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <include layout="@layout/cell_divider"/>
+            <include layout="@layout/cell_divider" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_height="wrap_content"
@@ -669,7 +668,7 @@
                         android:layout_marginTop="2dp"
                         android:text="@string/update_tip"
                         android:layout_gravity="center" />
-                    
+
                     <TextView
                         android:id="@+id/updatelog_view"
                         android:layout_height="wrap_content"
@@ -709,7 +708,7 @@
                         android:text="@string/about_opensource"
                         android:layout_gravity="center" />
                 </LinearLayout>
-                
+
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -761,7 +760,7 @@
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
-            
+
         </LinearLayout>
 
     </ScrollView>

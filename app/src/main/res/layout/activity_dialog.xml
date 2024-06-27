@@ -4,9 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.DialogActivity">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,21 +25,21 @@
                 android:textSize="17sp" />
 
             <com.google.android.material.card.MaterialCardView
-                 android:layout_height="wrap_content"
-                 android:layout_width="match_parent"
-                 android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
                 android:alpha="0.8"
                 android:padding="8dp">
 
                 <TextView
-                     android:layout_height="wrap_content"
-                     android:layout_width="match_parent"
-                     android:gravity="center"
-                     android:alpha="0.88"
-                     android:textSize="14sp"
-                     android:id="@+id/content"
-                     android:layout_margin="6dp"
-                     android:text="内容" />
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:alpha="0.88"
+                    android:textSize="14sp"
+                    android:id="@+id/content"
+                    android:layout_margin="6dp"
+                    android:text="内容" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -46,7 +48,7 @@
                 android:text="知道了"
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

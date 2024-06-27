@@ -35,7 +35,8 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
     private boolean bottom = false;
     private int page = 0;
 
-    public SearchUserFragment(){}
+    public SearchUserFragment() {
+    }
 
     public static SearchUserFragment newInstance() {
         return new SearchUserFragment();
@@ -62,7 +63,7 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
         recyclerView.setHasFixedSize(true);
 
         CenterThreadPool.run(() -> {
-            if(isAdded()) requireActivity().runOnUiThread(() -> {
+            if (isAdded()) requireActivity().runOnUiThread(() -> {
                 userInfoAdapter = new UserListAdapter(requireContext(), userInfoList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 recyclerView.setAdapter(userInfoAdapter);
@@ -72,6 +73,7 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
                     public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                         super.onScrollStateChanged(recyclerView, newState);
                     }
+
                     @Override
                     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                         super.onScrolled(recyclerView, dx, dy);
@@ -79,12 +81,12 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
                         assert manager != null;
                         int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();  //获取最后一个完全显示的itemPosition
                         int itemCount = manager.getItemCount();
-                        if (lastItemPosition >= (itemCount - 3) && dy>0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
+                        if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                             refreshing = true;
-                            CenterThreadPool.run(()->continueLoading()); //加载第二页
+                            CenterThreadPool.run(() -> continueLoading()); //加载第二页
                         }
 
-                        if(requireActivity() instanceof SearchActivity) {
+                        if (requireActivity() instanceof SearchActivity) {
                             SearchActivity activity = (SearchActivity) requireActivity();
                             activity.onScrolled(dy);
                         }
@@ -94,36 +96,39 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
         });
     }
 
-    private void continueLoading(){
+    private void continueLoading() {
         page++;
-        Log.e("debug","加载下一页");
+        Log.e("debug", "加载下一页");
         int lastSize = userInfoList.size();
         try {
-            JSONArray result = (JSONArray) SearchApi.searchType(keyword,page,"bili_user");
-            if(result!=null) {
+            JSONArray result = (JSONArray) SearchApi.searchType(keyword, page, "bili_user");
+            if (result != null) {
                 SearchApi.getUsersFromSearchResult(result, userInfoList);
-                CenterThreadPool.runOnUiThread(() -> userInfoAdapter.notifyItemRangeInserted(lastSize + 1,userInfoList.size()-lastSize));
-            }
-            else {
+                CenterThreadPool.runOnUiThread(() -> userInfoAdapter.notifyItemRangeInserted(lastSize + 1, userInfoList.size() - lastSize));
+            } else {
                 bottom = true;
-                if(isAdded() && !isFirstLoad) requireActivity().runOnUiThread(() ->  MsgUtil.toast("已经到底啦OwO",requireContext()));
+                if (isAdded() && !isFirstLoad)
+                    requireActivity().runOnUiThread(() -> MsgUtil.toast("已经到底啦OwO", requireContext()));
             }
             isFirstLoad = false;
-        } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,requireContext()));}
+        } catch (Exception e) {
+            if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+        }
         refreshing = false;
     }
 
     @Override
-    public void refresh(String keyword){
+    public void refresh(String keyword) {
         this.refreshing = true;
         this.page = 0;
         this.keyword = keyword;
-        if(this.userInfoList==null) this.userInfoList = new ArrayList<>();
-        if(this.userInfoAdapter==null) this.userInfoAdapter = new UserListAdapter(this.requireContext(),this.userInfoList);
+        if (this.userInfoList == null) this.userInfoList = new ArrayList<>();
+        if (this.userInfoAdapter == null)
+            this.userInfoAdapter = new UserListAdapter(this.requireContext(), this.userInfoList);
         int size_old = this.userInfoList.size();
         this.userInfoList.clear();
-        CenterThreadPool.runOnUiThread(()->{
-            if(size_old!=0) this.userInfoAdapter.notifyItemRangeRemoved(0,size_old);
+        CenterThreadPool.runOnUiThread(() -> {
+            if (size_old != 0) this.userInfoAdapter.notifyItemRangeRemoved(0, size_old);
             CenterThreadPool.run(this::continueLoading);
         });
     }

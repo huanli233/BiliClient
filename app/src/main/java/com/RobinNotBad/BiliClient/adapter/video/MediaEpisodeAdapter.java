@@ -24,7 +24,8 @@ public class MediaEpisodeAdapter extends RecyclerView.Adapter<MediaEpisodeAdapte
     public int selectedItemIndex = 0;
     private boolean useVerticalLayout;
 
-    public MediaEpisodeAdapter() {}
+    public MediaEpisodeAdapter() {
+    }
 
     public MediaEpisodeAdapter(boolean useVerticalLayout) {
         this.useVerticalLayout = useVerticalLayout;
@@ -58,14 +59,16 @@ public class MediaEpisodeAdapter extends RecyclerView.Adapter<MediaEpisodeAdapte
 
     @Override
     public void onBindViewHolder(@NonNull EposidesHolder holder, int position) {
-        if(listener != null){
+        if (listener != null) {
             holder.listener = listener;
         }
         holder.bind(position, selectedItemIndex == position);
     }
 
     @Override
-    public int getItemCount() {return episodeList.size();}
+    public int getItemCount() {
+        return episodeList.size();
+    }
 
     public class EposidesHolder extends RecyclerView.ViewHolder {
 

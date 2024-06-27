@@ -44,7 +44,8 @@ public class ScaleGestureDetector {
             return true;
         }
 
-        public void onScaleEnd(ScaleGestureDetector detector) {}
+        public void onScaleEnd(ScaleGestureDetector detector) {
+        }
     }
 
     private final Context mContext;
@@ -87,10 +88,9 @@ public class ScaleGestureDetector {
      * Creates a ScaleGestureDetector with the supplied listener.
      * You may only use this constructor from a {@link android.os.Looper Looper} thread.
      *
-     * @param context the application's context
+     * @param context  the application's context
      * @param listener the listener invoked for all the callbacks, this must
-     * not be null.
-     *
+     *                 not be null.
      * @throws NullPointerException if {@code listener} is null.
      */
     public ScaleGestureDetector(Context context, OnScaleGestureListener listener) {
@@ -218,7 +218,7 @@ public class ScaleGestureDetector {
         }
 
         final int minSpan = inAnchoredScaleMode() ? mSpanSlop : mMinSpan;
-        if (!mInProgress && span >=  minSpan &&
+        if (!mInProgress && span >= minSpan &&
                 (wasInProgress || Math.abs(span - mInitialSpan) > mSpanSlop)) {
             mPrevSpanX = mCurrSpanX = spanX;
             mPrevSpanY = mCurrSpanY = spanY;

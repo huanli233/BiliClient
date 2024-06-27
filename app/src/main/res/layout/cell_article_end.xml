@@ -29,16 +29,16 @@
         app:layout_constraintStart_toEndOf="@+id/viewsIcon"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:layout_height="0dp"
-            android:layout_width="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/icon_time"
-            android:alpha="0.5"
-            app:layout_constraintTop_toTopOf="@+id/timeText"
-            app:layout_constraintStart_toStartOf="@+id/viewsIcon"
-            app:layout_constraintBottom_toBottomOf="@+id/timeText"
-            android:id="@+id/timeIcon" />
+    <ImageView
+        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/icon_time"
+        android:alpha="0.5"
+        app:layout_constraintTop_toTopOf="@+id/timeText"
+        app:layout_constraintStart_toStartOf="@+id/viewsIcon"
+        app:layout_constraintBottom_toBottomOf="@+id/timeText"
+        android:id="@+id/timeIcon" />
 
     <TextView
         android:id="@+id/timeText"

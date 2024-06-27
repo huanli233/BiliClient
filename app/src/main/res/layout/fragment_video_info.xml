@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-     xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:app="http://schemas.android.com/apk/res-auto"
-     xmlns:tools="http://schemas.android.com/tools"
-     android:layout_height="match_parent"
-     android:layout_width="match_parent"
-     tools:context=".activity.video.info.VideoInfoFragment">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:context=".activity.video.info.VideoInfoFragment">
 
     <androidx.core.widget.NestedScrollView
-         android:layout_height="0dp"
-         android:layout_width="0dp"
-         app:layout_constraintTop_toTopOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintBottom_toBottomOf="parent"
-         android:id="@+id/scrollView">
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/scrollView">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-             android:layout_height="wrap_content"
-             android:layout_width="match_parent"
-             android:paddingHorizontal="@dimen/activity_padding_horizontal"
-             android:paddingBottom="4dp">
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingHorizontal="@dimen/activity_padding_horizontal"
+            android:paddingBottom="4dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/exclusiveTip"
@@ -100,7 +99,7 @@
                 app:layout_constraintTop_toBottomOf="@id/exclusiveTip"
                 tools:itemCount="3"
                 tools:listitem="@layout/cell_up_list" />
-            
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/collection"
                 android:layout_width="match_parent"
@@ -151,16 +150,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/collection" />
 
             <ImageView
-                 android:layout_height="0dp"
-                 android:layout_width="wrap_content"
-                 android:adjustViewBounds="true"
-                 android:src="@drawable/icon_danmaku"
-                 android:alpha="0.5"
-                 app:layout_constraintTop_toTopOf="@+id/danmakuCount"
-                 app:layout_constraintStart_toEndOf="@+id/viewsCount"
-                 app:layout_constraintBottom_toBottomOf="@+id/danmakuCount"
-                 android:layout_marginStart="6dp"
-                 android:id="@+id/danmakuIcon" />
+                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/icon_danmaku"
+                android:alpha="0.5"
+                app:layout_constraintTop_toTopOf="@+id/danmakuCount"
+                app:layout_constraintStart_toEndOf="@+id/viewsCount"
+                app:layout_constraintBottom_toBottomOf="@+id/danmakuCount"
+                android:layout_marginStart="6dp"
+                android:id="@+id/danmakuIcon" />
 
             <TextView
                 android:id="@+id/danmakuCount"
@@ -175,15 +174,15 @@
                 app:layout_constraintTop_toTopOf="@+id/viewsCount" />
 
             <ImageView
-                 android:layout_height="0dp"
-                 android:layout_width="wrap_content"
-                 android:adjustViewBounds="true"
-                 android:src="@drawable/icon_time"
-                 android:alpha="0.5"
-                 app:layout_constraintTop_toTopOf="@+id/timeText"
-                 app:layout_constraintStart_toStartOf="@+id/viewsIcon"
-                 app:layout_constraintBottom_toBottomOf="@+id/timeText"
-                 android:id="@+id/timeIcon" />
+                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/icon_time"
+                android:alpha="0.5"
+                app:layout_constraintTop_toTopOf="@+id/timeText"
+                app:layout_constraintStart_toStartOf="@+id/viewsIcon"
+                app:layout_constraintBottom_toBottomOf="@+id/timeText"
+                android:id="@+id/timeIcon" />
 
             <TextView
                 android:id="@+id/timeText"
@@ -203,15 +202,15 @@
                 app:layout_constraintTop_toBottomOf="@id/viewsCount" />
 
             <ImageView
-                 android:layout_height="0dp"
-                 android:layout_width="wrap_content"
-                 android:adjustViewBounds="true"
-                 android:src="@drawable/icon_bv"
-                 android:alpha="0.5"
-                 app:layout_constraintTop_toTopOf="@+id/bvidText"
-                 app:layout_constraintStart_toStartOf="@+id/viewsIcon"
-                 app:layout_constraintBottom_toBottomOf="@+id/bvidText"
-                 android:id="@+id/bvidIcon" />
+                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/icon_bv"
+                android:alpha="0.5"
+                app:layout_constraintTop_toTopOf="@+id/bvidText"
+                app:layout_constraintStart_toStartOf="@+id/viewsIcon"
+                app:layout_constraintBottom_toBottomOf="@+id/bvidText"
+                android:id="@+id/bvidIcon" />
 
             <TextView
                 android:id="@+id/bvidText"
@@ -255,7 +254,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tags" />
-            
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/play"
                 android:layout_width="match_parent"

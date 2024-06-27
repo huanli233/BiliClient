@@ -4,13 +4,13 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.RecommendApi;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class RecommendActivity extends RefreshMainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMenuClick();
-        Log.e("debug","进入推荐页");
+        Log.e("debug", "进入推荐页");
 
         setOnRefreshListener(this::refreshRecommend);
         setOnLoadMoreListener(page -> addRecommend());
@@ -37,8 +37,8 @@ public class RecommendActivity extends RefreshMainActivity {
         setPageName("推荐");
 
         recyclerView.setHasFixedSize(true);
-        
-        TutorialHelper.show(R.xml.tutorial_recommend,this,"recommend",1);
+
+        TutorialHelper.show(R.xml.tutorial_recommend, this, "recommend", 1);
 
         refreshRecommend();
     }
@@ -51,7 +51,7 @@ public class RecommendActivity extends RefreshMainActivity {
         } else {
             int last = videoCardList.size();
             videoCardList.clear();
-            videoCardAdapter.notifyItemRangeRemoved(0,last);
+            videoCardAdapter.notifyItemRangeRemoved(0, last);
         }
 
         addRecommend();
@@ -59,7 +59,7 @@ public class RecommendActivity extends RefreshMainActivity {
 
     private void addRecommend() {
         Log.e("debug", "加载下一页");
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 List<VideoCard> list = new ArrayList<>();
                 RecommendApi.getRecommend(list);

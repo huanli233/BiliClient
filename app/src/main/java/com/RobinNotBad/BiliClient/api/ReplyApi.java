@@ -60,7 +60,7 @@ public class ReplyApi {
                     analyzeReplyArray(true, data.getJSONArray("top_replies"), replyArrayList);
                 JSONArray replies = data.getJSONArray("replies");
                 analyzeReplyArray(rpid == 0, replies, replyArrayList);
-                if(replyArrayList.size() == size)return 1;
+                if (replyArrayList.size() == size) return 1;
                 else return 0;
             } else return 1;
         } else return -1;
@@ -86,7 +86,7 @@ public class ReplyApi {
                     analyzeReplyArray(true, data.getJSONArray("top_replies"), replyArrayList);
                 JSONArray replies = data.getJSONArray("replies");
                 analyzeReplyArray(true, replies, replyArrayList);
-                if(replyArrayList.size() == size)return 1;
+                if (replyArrayList.size() == size) return 1;
                 else return 0;
             } else return 1;
         } else return -1;
@@ -130,7 +130,7 @@ public class ReplyApi {
         replyReturn.likeCount = reply.getInt("like");
         replyReturn.liked = reply.getInt("action") == 1;
 
-        if(content.has("emote") && !content.isNull("emote")) {
+        if (content.has("emote") && !content.isNull("emote")) {
             ArrayList<Emote> emoteList = new ArrayList<>();
             JSONObject emoteJson = content.getJSONObject("emote");
             //Log.e("debug-emote",emoteJson.toString());
@@ -139,7 +139,7 @@ public class ReplyApi {
             //LsonObject lsonEmote = LsonUtil.parseAsObject(emote.toString());    //最终还是用了Lson的一个功能，因为原生方式确实难以解决，还好这个功能是github版已有的
             //String[] emoteKeys = lsonEmote.getKeys();                           //你看这多简单，唉，但是仅用这一处却引用整个库确实有些浪费，如果我有时间就自己写了。就当是致敬了罢（
             //最终结果是自己写了函数，luern的库彻底扔掉了
-            for (String emoteKey:emoteKeys) {
+            for (String emoteKey : emoteKeys) {
                 //Log.e("debug-key",emoteKey);
                 JSONObject key = emoteJson.getJSONObject(emoteKey);
                 emoteList.add(new Emote(
@@ -176,13 +176,15 @@ public class ReplyApi {
         //Log.e("debug-评论时间戳", String.valueOf(ctime));
 
         String timeStr;
-        if(timeCurr - ctime < 259200000 && replyCtrl.has("time_desc")) timeStr = replyCtrl.getString("time_desc");  //大于3天变成日期
+        if (timeCurr - ctime < 259200000 && replyCtrl.has("time_desc"))
+            timeStr = replyCtrl.getString("time_desc");  //大于3天变成日期
         else timeStr = sdf.format(ctime);
 
-        if(replyCtrl.has("location")) timeStr += " | IP:" + replyCtrl.getString("location").substring(5);  //这字符串还是切割一下吧不然太长了，只留个地址，前缀去了
+        if (replyCtrl.has("location"))
+            timeStr += " | IP:" + replyCtrl.getString("location").substring(5);  //这字符串还是切割一下吧不然太长了，只留个地址，前缀去了
 
-        if(replyCtrl.has("is_up_top")){
-            if(replyCtrl.getBoolean("is_up_top")) {
+        if (replyCtrl.has("is_up_top")) {
+            if (replyCtrl.getBoolean("is_up_top")) {
                 replyReturn.message = TOP_TIP + replyReturn.message;
                 replyReturn.isTop = true;
             }
@@ -224,9 +226,9 @@ public class ReplyApi {
     public static Pair<Integer, Reply> sendReply(long oid, long root, long parent, String text, int type) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/v2/reply/add";
         String arg = "oid=" + oid + "&type=" + type + (root == 0 ? "" : ("&root=" + root + "&parent=" + parent))
-                + "&message=" + text + "&jsonp=jsonp&csrf=" + SharedPreferencesUtil.getString("csrf","");
+                + "&message=" + text + "&jsonp=jsonp&csrf=" + SharedPreferencesUtil.getString("csrf", "");
         JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, arg, NetWorkUtil.webHeaders).body()).string());
-        Log.e("debug-发送评论",result.toString());
+        Log.e("debug-发送评论", result.toString());
         JSONObject reply = null;
         if (result.has("data") && !result.isNull("data") && result.getJSONObject("data").has("reply") && !result.getJSONObject("data").isNull("reply")) {
             reply = result.getJSONObject("data").getJSONObject("reply");
@@ -244,15 +246,16 @@ public class ReplyApi {
 
     public static int likeReply(long oid, long root, boolean action) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/v2/reply/action";
-        String arg = "oid=" + oid + "&type=1&rpid=" + root + "&action=" + (action ? "1" : "0") + "&jsonp=jsonp&csrf=" + SharedPreferencesUtil.getString("csrf","");
+        String arg = "oid=" + oid + "&type=1&rpid=" + root + "&action=" + (action ? "1" : "0") + "&jsonp=jsonp&csrf=" + SharedPreferencesUtil.getString("csrf", "");
         JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, arg, NetWorkUtil.webHeaders).body()).string());
-        Log.e("debug-点赞评论",result.toString());
+        Log.e("debug-点赞评论", result.toString());
         return result.getInt("code");
     }
 
     /**
      * 删除评论
-     * @param oid oid
+     *
+     * @param oid  oid
      * @param rpid rpid
      * @param type 评论区类型
      * @return 返回码
@@ -266,7 +269,7 @@ public class ReplyApi {
                 .put("csrf", SharedPreferencesUtil.getString("csrf", ""))
                 .toString();
         JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, reqBody, NetWorkUtil.webHeaders).body()).string());
-        Log.e("debug-点赞评论",result.toString());
+        Log.e("debug-点赞评论", result.toString());
         return result.getInt("code");
     }
 }

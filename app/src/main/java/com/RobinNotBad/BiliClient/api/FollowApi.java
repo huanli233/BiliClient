@@ -20,15 +20,15 @@ public class FollowApi {
         JSONObject callback = NetWorkUtil.getJson(url);
         JSONObject data = callback.getJSONObject("data");
         JSONArray list = data.getJSONArray("list");
-        if(list.length()==0) return 1;
-        else{
+        if (list.length() == 0) return 1;
+        else {
             for (int i = 0; i < list.length(); i++) {
                 JSONObject userInfo = list.getJSONObject(i);
                 String name = userInfo.getString("uname");
                 long uid = userInfo.getLong("mid");
                 String avatar = userInfo.getString("face");
                 String sign = userInfo.getString("sign");
-                userList.add(new UserInfo(uid,name,avatar,sign,0,0,true,"",0,""));
+                userList.add(new UserInfo(uid, name, avatar, sign, 0, 0, true, "", 0, ""));
             }
             return 0;
         }

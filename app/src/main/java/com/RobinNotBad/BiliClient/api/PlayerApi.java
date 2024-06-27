@@ -31,10 +31,10 @@ import java.util.Objects;
 import okhttp3.Response;
 
 public class PlayerApi {
-    public static void startGettingUrl(Context context, VideoInfo videoInfo, int page, int progress){
+    public static void startGettingUrl(Context context, VideoInfo videoInfo, int page, int progress) {
         Intent intent = new Intent()
                 .setClass(context, JumpToPlayerActivity.class)
-                .putExtra("title", (videoInfo.pagenames.size()==1 ? videoInfo.title : videoInfo.pagenames.get(page)))
+                .putExtra("title", (videoInfo.pagenames.size() == 1 ? videoInfo.title : videoInfo.pagenames.get(page)))
                 .putExtra("bvid", videoInfo.bvid)
                 .putExtra("aid", videoInfo.aid)
                 .putExtra("cid", videoInfo.cids.get(page))
@@ -43,17 +43,17 @@ public class PlayerApi {
         context.startActivity(intent);
     }
 
-    public static void startDownloadingVideo(Context context, VideoInfo videoInfo, int page){
+    public static void startDownloadingVideo(Context context, VideoInfo videoInfo, int page) {
         startDownloadingVideo(context, videoInfo, page, -1);
     }
 
-    public static void startDownloadingVideo(Context context, VideoInfo videoInfo, int page, int qn){
+    public static void startDownloadingVideo(Context context, VideoInfo videoInfo, int page, int qn) {
         Intent intent = new Intent()
                 .putExtra("aid", videoInfo.aid)
                 .putExtra("bvid", videoInfo.bvid)
                 .putExtra("cid", videoInfo.cids.get(page))
-                .putExtra("title", (videoInfo.pagenames.size()==1 ? videoInfo.title : videoInfo.pagenames.get(page)))
-                .putExtra("download", (videoInfo.pagenames.size()==1 ? 1 : 2))  //1：单页  2：分页
+                .putExtra("title", (videoInfo.pagenames.size() == 1 ? videoInfo.title : videoInfo.pagenames.get(page)))
+                .putExtra("download", (videoInfo.pagenames.size() == 1 ? 1 : 2))  //1：单页  2：分页
                 .putExtra("cover", videoInfo.cover)
                 .putExtra("parent_title", videoInfo.title)
                 .putExtra("qn", qn)
@@ -64,16 +64,17 @@ public class PlayerApi {
 
     /**
      * 解析视频，从JumpToPlayerActivity弄出来的，懒得改很多所以搞了个莫名其妙的Pair
-     * @param aid aid
-     * @param bvid bvid
-     * @param cid cid
+     *
+     * @param aid   aid
+     * @param bvid  bvid
+     * @param cid   cid
      * @param html5 html5(boolean)
-     * @param qn qn
+     * @param qn    qn
      * @return 视频url与完整返回信息
      */
     public static Pair<String, String> getVideo(long aid, String bvid, long cid, boolean html5, int qn) throws JSONException, IOException {
         String url = "https://api.bilibili.com/x/player/wbi/playurl?"
-                + (aid == 0 ? ("bvid=" + bvid): ("avid=" + aid))
+                + (aid == 0 ? ("bvid=" + bvid) : ("avid=" + aid))
                 + "&cid=" + cid + "&type=mp4"
                 + (html5 ? "&high_quality=1&qn=" + qn : "&qn=" + qn)
                 + "&platform=" + (html5 ? "html5" : "pc");
@@ -92,17 +93,17 @@ public class PlayerApi {
         return new Pair<>(videourl, body);
     }
 
-    public static void jumpToPlayer(Context context, String videourl, String danmakuurl, String title, boolean local, long aid, String bvid, long cid, long mid, int progress,boolean live_mode){
-        Log.e("debug-准备跳转","--------");
-        Log.e("debug-视频标题",title);
-        Log.e("debug-视频地址",videourl);
-        Log.e("debug-弹幕地址",danmakuurl);
-        Log.e("debug-准备跳转","--------");
+    public static void jumpToPlayer(Context context, String videourl, String danmakuurl, String title, boolean local, long aid, String bvid, long cid, long mid, int progress, boolean live_mode) {
+        Log.e("debug-准备跳转", "--------");
+        Log.e("debug-视频标题", title);
+        Log.e("debug-视频地址", videourl);
+        Log.e("debug-弹幕地址", danmakuurl);
+        Log.e("debug-准备跳转", "--------");
 
         Intent intent = new Intent();
         switch (SharedPreferencesUtil.getString("player", "null")) {
             case "terminalPlayer":
-                intent.setClass(context,PlayerActivity.class);
+                intent.setClass(context, PlayerActivity.class);
                 intent.putExtra("mode", (local ? 2 : 0));
                 intent.putExtra("url", videourl);
                 intent.putExtra("danmaku", danmakuurl);
@@ -111,8 +112,8 @@ public class PlayerApi {
                 intent.putExtra("bvid", bvid);
                 intent.putExtra("cid", cid);
                 intent.putExtra("mid", mid);
-                intent.putExtra("progress",progress);
-                intent.putExtra("live_mode",live_mode);
+                intent.putExtra("progress", progress);
+                intent.putExtra("live_mode", live_mode);
                 break;
 
             case "mtvPlayer":
@@ -128,21 +129,20 @@ public class PlayerApi {
             case "aliangPlayer":
                 intent.setClassName(context.getString(R.string.player_aliang_package), "com.aliangmaker.media.PlayVideoActivity");
                 intent.putExtra("name", title);
-                intent.putExtra("progress",0);
+                intent.putExtra("progress", 0);
                 intent.putExtra("danmaku", danmakuurl);
-                if(local) {
-                    intent.setData(getVideoUri(context,videourl));
-                }
-                else {
+                if (local) {
+                    intent.setData(getVideoUri(context, videourl));
+                } else {
                     intent.setData(Uri.parse(videourl));
-                    Map<String,String> headers = new HashMap<>();
-                    headers.put("Cookie",SharedPreferencesUtil.getString("cookies", ""));
-                    headers.put("Referer","https://www.bilibili.com/");
-                    intent.putExtra("cookie",(Serializable) headers);
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Cookie", SharedPreferencesUtil.getString("cookies", ""));
+                    headers.put("Referer", "https://www.bilibili.com/");
+                    intent.putExtra("cookie", (Serializable) headers);
                     intent.putExtra("agent", NetWorkUtil.USER_AGENT_WEB);
-                    intent.putExtra("progress",progress * 1000L);
+                    intent.putExtra("progress", progress * 1000L);
                 }
-                Log.e("uri",intent.getData().toString());
+                Log.e("uri", intent.getData().toString());
                 intent.setAction(Intent.ACTION_VIEW);
 
                 break;
@@ -154,22 +154,21 @@ public class PlayerApi {
         context.startActivity(intent);
     }
 
-    public static Uri getVideoUri(Context context, String path){
+    public static Uri getVideoUri(Context context, String path) {
         Cursor cursor = context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Video.Media._ID},
                 MediaStore.Video.Media.DATA + "=? ",
-                new String[]{path},null);
-        if(cursor!=null && cursor.moveToFirst()){
+                new String[]{path}, null);
+        if (cursor != null && cursor.moveToFirst()) {
             @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns._ID));
             Uri baseUri = Uri.parse("content://media/external/video/media");
             cursor.close();
-            return Uri.withAppendedPath(baseUri,String.valueOf(id));
-        }
-        else {
-            if(cursor!=null) cursor.close();
+            return Uri.withAppendedPath(baseUri, String.valueOf(id));
+        } else {
+            if (cursor != null) cursor.close();
             ContentValues values = new ContentValues();
-            values.put(MediaStore.Video.Media.DATA,path);
-            return context.getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,values);
+            values.put(MediaStore.Video.Media.DATA, path);
+            return context.getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
         }
     }
 }

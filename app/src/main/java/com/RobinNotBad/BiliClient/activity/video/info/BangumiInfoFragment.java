@@ -88,7 +88,7 @@ public class BangumiInfoFragment extends Fragment {
         selectedSection = 0;
 
         Glide.with(this)
-                .load(GlideUtil.url(bangumi.info.cover_horizontal) )
+                .load(GlideUtil.url(bangumi.info.cover_horizontal))
                 .transition(GlideUtil.getTransitionOptions())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .placeholder(R.mipmap.loading_2233)
@@ -117,7 +117,7 @@ public class BangumiInfoFragment extends Fragment {
             intent.putExtra("cid", episode.cid);
             intent.putExtra("title", episode.title);
             intent.putExtra("aid", episode.aid);
-            intent.putExtra("html5",false);
+            intent.putExtra("html5", false);
             startActivity(intent);
         });
         playButton.setOnLongClickListener(v -> {
@@ -183,9 +183,9 @@ public class BangumiInfoFragment extends Fragment {
         return dialog;
     }
 
-    private void refreshReplies(){
+    private void refreshReplies() {
         Activity activity = requireActivity();
-        if(activity instanceof VideoInfoActivity){
+        if (activity instanceof VideoInfoActivity) {
             ((VideoInfoActivity) activity).setCurrentAid(bangumi.sectionList.get(selectedSection).episodeList.get(selectedEpisode).aid);
         }
     }

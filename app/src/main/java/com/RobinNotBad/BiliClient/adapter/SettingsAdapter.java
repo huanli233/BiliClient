@@ -27,9 +27,9 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     final Context context;
     final List<SettingSection> list;
-    private static final Map<String,Integer> typeMap = new HashMap<>(){{
-        put("switch",0);
-        put("choose",1);
+    private static final Map<String, Integer> typeMap = new HashMap<>() {{
+        put("switch", 0);
+        put("choose", 1);
         //put("input_int",2);
         //put("input_float",3);
 
@@ -49,7 +49,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        switch (viewType){
+        switch (viewType) {
             case 1:
                 view = LayoutInflater.from(this.context).inflate(R.layout.cell_setting_choose, parent, false);
                 return new ChooseHolder(view);
@@ -63,7 +63,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         SettingSection settingSection = list.get(position);
-        switch (holder.getItemViewType()){
+        switch (holder.getItemViewType()) {
             case 1:
                 ChooseHolder chooseHolder = (ChooseHolder) holder;
                 chooseHolder.bind(settingSection);
@@ -80,7 +80,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return list.size();
     }
 
-    public static class SwitchHolder extends RecyclerView.ViewHolder{
+    public static class SwitchHolder extends RecyclerView.ViewHolder {
         final TextView desc;
         final SwitchMaterial switchMaterial;
 
@@ -90,16 +90,16 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             switchMaterial = itemView.findViewById(R.id.setting_switch);
         }
 
-        public void bind(SettingSection settingSection){
+        public void bind(SettingSection settingSection) {
             desc.setText(settingSection.desc);
             switchMaterial.setText(settingSection.name);
             switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) ->
-                    SharedPreferencesUtil.putBoolean(settingSection.id,isChecked));
+                    SharedPreferencesUtil.putBoolean(settingSection.id, isChecked));
             switchMaterial.setChecked(SharedPreferencesUtil.getBoolean(settingSection.id, Boolean.parseBoolean(settingSection.defaultValue)));
         }
     }
 
-    public static class ChooseHolder extends RecyclerView.ViewHolder{
+    public static class ChooseHolder extends RecyclerView.ViewHolder {
         final RadioButton chocola;
         final RadioButton vanilla;    //我在思考这样的命名方式是否合理（玩艹猫玩的
         final TextView name;
@@ -113,11 +113,11 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             name = itemView.findViewById(R.id.setting_choose_name);
         }
 
-        public void bind(SettingSection settingSection){
+        public void bind(SettingSection settingSection) {
             desc.setText(settingSection.desc);
             name.setText(settingSection.name);
             chocola.setOnCheckedChangeListener((buttonView, isChecked) ->
-                    SharedPreferencesUtil.putBoolean(settingSection.id,isChecked));
+                    SharedPreferencesUtil.putBoolean(settingSection.id, isChecked));
             boolean value = SharedPreferencesUtil.getBoolean(settingSection.id, Boolean.parseBoolean(settingSection.defaultValue));
             chocola.setChecked(value);
             vanilla.setChecked(!value);

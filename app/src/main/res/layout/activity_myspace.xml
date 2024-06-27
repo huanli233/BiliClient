@@ -60,7 +60,7 @@
             android:divider="@drawable/divider"
             android:showDividers="middle"
             android:paddingVertical="2dp"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -147,7 +147,7 @@
                         app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
-                            android:layout_width="0dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:ellipsize="end"
@@ -197,7 +197,7 @@
                         app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
-                            android:layout_width="0dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:ellipsize="end"
@@ -248,7 +248,7 @@
                         app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
-                            android:layout_width="0dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:ellipsize="end"
@@ -299,7 +299,7 @@
                         app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
-                            android:layout_width="0dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:ellipsize="end"

@@ -46,13 +46,13 @@ public class LocalPageChooseActivity extends BaseActivity {
         ArrayList<String> videoFileList = intent.getStringArrayListExtra("videoFileList");
         ArrayList<String> danmakuFileList = intent.getStringArrayListExtra("danmakuFileList");
 
-        PageChooseAdapter adapter = new PageChooseAdapter(this,pageList);
-        adapter.setOnItemClickListener(position -> PlayerApi.jumpToPlayer(LocalPageChooseActivity.this, videoFileList.get(position), danmakuFileList.get(position), pageList.get(position), true, 0, "", 0, 0,0,false));
+        PageChooseAdapter adapter = new PageChooseAdapter(this, pageList);
+        adapter.setOnItemClickListener(position -> PlayerApi.jumpToPlayer(LocalPageChooseActivity.this, videoFileList.get(position), danmakuFileList.get(position), pageList.get(position), true, 0, "", 0, 0, 0, false));
         adapter.setOnItemLongClickListener(position -> {
-            if(longClickPosition == position){
+            if (longClickPosition == position) {
                 File workPath = ConfInfoApi.getDownloadPath(this);
                 File videoPath = new File(workPath, title);
-                File pagePath = new File(videoPath,pageList.get(position));
+                File pagePath = new File(videoPath, pageList.get(position));
 
                 FileUtil.deleteFolder(pagePath);
                 pageList.remove(position);
@@ -60,18 +60,17 @@ public class LocalPageChooseActivity extends BaseActivity {
                 danmakuFileList.remove(position);
                 adapter.notifyItemRemoved(position);
 
-                if(pageList.isEmpty()){
+                if (pageList.isEmpty()) {
                     FileUtil.deleteFolder(videoPath);
                 }
 
-                MsgUtil.toast("删除成功",this);
+                MsgUtil.toast("删除成功", this);
                 longClickPosition = -1;
 
                 deleted = true;
-            }
-            else{
+            } else {
                 longClickPosition = position;
-                MsgUtil.toast("再次长按删除",this);
+                MsgUtil.toast("再次长按删除", this);
             }
         });
 
@@ -82,7 +81,8 @@ public class LocalPageChooseActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         InstanceActivity instance = BiliTerminal.instance;
-        if(deleted && instance instanceof LocalListActivity && !instance.isDestroyed()) ((LocalListActivity)(instance)).refresh();
+        if (deleted && instance instanceof LocalListActivity && !instance.isDestroyed())
+            ((LocalListActivity) (instance)).refresh();
         super.onDestroy();
     }
 }

@@ -34,38 +34,40 @@ public class FavoriteVideoListActivity extends RefreshListActivity {
 
         Intent intent = getIntent();
         mid = intent.getLongExtra("mid", 0);
-        fid = intent.getLongExtra("fid",0);
+        fid = intent.getLongExtra("fid", 0);
         String name = intent.getStringExtra("name");
 
         setPageName(name);
 
         videoList = new ArrayList<>();
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
-                int result = FavoriteApi.getFolderVideos(mid,fid,page,videoList);
-                if(result != -1) {
+                int result = FavoriteApi.getFolderVideos(mid, fid, page, videoList);
+                if (result != -1) {
                     videoCardAdapter = new VideoCardAdapter(this, videoList);
 
                     videoCardAdapter.setOnLongClickListener(position -> {
-                        if(longClickPosition == position) {
+                        if (longClickPosition == position) {
                             CenterThreadPool.run(() -> {
                                 try {
-                                    int delResult = FavoriteApi.deleteFavorite(videoList.get(position).aid,fid);
+                                    int delResult = FavoriteApi.deleteFavorite(videoList.get(position).aid, fid);
                                     longClickPosition = -1;
                                     if (delResult == 0) runOnUiThread(() -> {
-                                        MsgUtil.toast("删除成功",this);
+                                        MsgUtil.toast("删除成功", this);
                                         videoList.remove(position);
                                         videoCardAdapter.notifyItemRemoved(position);
-                                        videoCardAdapter.notifyItemRangeChanged(position,videoList.size() - position);
+                                        videoCardAdapter.notifyItemRangeChanged(position, videoList.size() - position);
                                     });
-                                    else runOnUiThread(()-> MsgUtil.toast("删除失败，错误码：" + delResult,this));
-                                } catch (Exception e) {report(e);}
+                                    else
+                                        runOnUiThread(() -> MsgUtil.toast("删除失败，错误码：" + delResult, this));
+                                } catch (Exception e) {
+                                    report(e);
+                                }
                             });
-                        }
-                        else {
+                        } else {
                             longClickPosition = position;
-                            MsgUtil.toast("再次长按删除",this);
+                            MsgUtil.toast("再次长按删除", this);
                         }
                     });
 
@@ -73,19 +75,22 @@ public class FavoriteVideoListActivity extends RefreshListActivity {
                     setAdapter(videoCardAdapter);
                     setRefreshing(false);
 
-                    if(result == 1) {
-                        Log.e("debug","到底了");
+                    if (result == 1) {
+                        Log.e("debug", "到底了");
                         setBottom(true);
                     }
                 }
 
-            } catch (Exception e){report(e); setRefreshing(false);}
+            } catch (Exception e) {
+                report(e);
+                setRefreshing(false);
+            }
         });
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void continueLoading(int page) {
-        CenterThreadPool.run(()-> {
+        CenterThreadPool.run(() -> {
             try {
                 int lastSize = videoList.size();
                 int result = FavoriteApi.getFolderVideos(mid, fid, page, videoList);

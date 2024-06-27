@@ -29,18 +29,18 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdap
         this.historyList = historyList;
     }
 
-    public void setOnLongClickListener(OnItemLongClickListener listener){
+    public void setOnLongClickListener(OnItemLongClickListener listener) {
         this.longClickListener = listener;
     }
 
-    public void setOnClickListener(OnItemClickListener listener){
+    public void setOnClickListener(OnItemClickListener listener) {
         this.clickListener = listener;
     }
 
     @NonNull
     @Override
     public BtnListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_choose,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_choose, parent, false);
         return new BtnListHolder(view);
     }
 
@@ -49,17 +49,16 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdap
         holder.show(historyList.get(position));
 
         holder.itemView.setOnClickListener(view -> {
-            if(clickListener != null){
+            if (clickListener != null) {
                 clickListener.onItemClick(position);
             }
         });
 
         holder.itemView.setOnLongClickListener(view -> {
-            if(longClickListener != null) {
+            if (longClickListener != null) {
                 longClickListener.onItemLongClick(position);
                 return true;    //必须要true哦，不然上面的点按也会触发
-            }
-            else return false;
+            } else return false;
         });
     }
 
@@ -68,7 +67,7 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdap
         return historyList.size();
     }
 
-    public static class BtnListHolder extends RecyclerView.ViewHolder{
+    public static class BtnListHolder extends RecyclerView.ViewHolder {
         final TextView text_view;
 
         public BtnListHolder(@NonNull View itemView) {
@@ -76,7 +75,7 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdap
             text_view = itemView.findViewById(R.id.text);
         }
 
-        public void show(String text){
+        public void show(String text) {
             text_view.setText(ToolsUtil.htmlToString(text));
         }
     }

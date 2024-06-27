@@ -10,8 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.adapter.user.UpListAdapter;
 import com.RobinNotBad.BiliClient.adapter.video.MediaEpisodeAdapter;
@@ -39,10 +39,10 @@ import java.util.ArrayList;
 public class LiveInfoActivity extends BaseActivity {
     private long room_id;
     private LiveRoom room;
-    private boolean desc_expand = false,tags_expand = false;
+    private boolean desc_expand = false, tags_expand = false;
 
-    private RecyclerView protocol_list,host_list;
-    private int selectedProtocol = 0,selectedHost = 0;
+    private RecyclerView protocol_list, host_list;
+    private int selectedProtocol = 0, selectedHost = 0;
     private MediaEpisodeAdapter hostAdapter;
     private LivePlayInfo playInfo;
 
@@ -51,8 +51,8 @@ public class LiveInfoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        room_id = getIntent().getLongExtra("room_id",0);
-        if(room_id == 0) {
+        room_id = getIntent().getLongExtra("room_id", 0);
+        if (room_id == 0) {
             finish();
             return;
         }
@@ -64,13 +64,13 @@ public class LiveInfoActivity extends BaseActivity {
             CenterThreadPool.run(() -> {
                 try {
                     room = LiveApi.getRoomInfo(room_id);
-                    if(room == null){
-                        MsgUtil.toast("直播不存在",this);
+                    if (room == null) {
+                        MsgUtil.toast("直播不存在", this);
                         finish();
                         return;
                     }
                     UserInfo userInfo = UserInfoApi.getUserInfo(room.uid);
-                    playInfo = LiveApi.getRoomPlayInfo(room_id,LiveApi.PlayerQnMap.get(SharedPreferencesUtil.getInt("play_qn", 16)));
+                    playInfo = LiveApi.getRoomPlayInfo(room_id, LiveApi.PlayerQnMap.get(SharedPreferencesUtil.getInt("play_qn", 16)));
                     runOnUiThread(() -> {
                         ImageView cover = findViewById(R.id.cover);
                         TextView title = findViewById(R.id.title);
@@ -93,8 +93,8 @@ public class LiveInfoActivity extends BaseActivity {
                         title.setText(room.title);
 
                         ArrayList<UserInfo> upList = new ArrayList<>();
-                        upList.add(new UserInfo(userInfo.mid,userInfo.name,userInfo.avatar,"主播",0,6,false,"",0,""));
-                        UpListAdapter upListAdapter = new UpListAdapter(this,upList);
+                        upList.add(new UserInfo(userInfo.mid, userInfo.name, userInfo.avatar, "主播", 0, 6, false, "", 0, ""));
+                        UpListAdapter upListAdapter = new UpListAdapter(this, upList);
                         up_recyclerView.setHasFixedSize(true);
                         up_recyclerView.setLayoutManager(new LinearLayoutManager(this));
                         up_recyclerView.setAdapter(upListAdapter);
@@ -109,7 +109,7 @@ public class LiveInfoActivity extends BaseActivity {
                             else tags.setMaxLines(233);
                             tags_expand = !tags_expand;
                         });
-                        ToolsUtil.setCopy(this,idText,tags,title);
+                        ToolsUtil.setCopy(this, idText, tags, title);
 
                         description.setText(ToolsUtil.htmlToString(room.description));
                         description.setOnClickListener(view1 -> {
@@ -126,10 +126,10 @@ public class LiveInfoActivity extends BaseActivity {
                                         codec = playInfo.playUrl.stream.get(selectedProtocol).format.get(0).codec.get(0);
                                         LivePlayInfo.UrlInfo urlInfo = codec.url_info.get(selectedHost);
                                         String play_url = urlInfo.host + codec.base_url + urlInfo.extra;
-                                        runOnUiThread(() -> PlayerApi.jumpToPlayer(this,play_url,"","直播·" + room.title,false,0,"",0,userInfo.mid,0,true));
+                                        runOnUiThread(() -> PlayerApi.jumpToPlayer(this, play_url, "", "直播·" + room.title, false, 0, "", 0, userInfo.mid, 0, true));
                                     }
-                                }catch (Exception e){
-                                    runOnUiThread(() -> MsgUtil.err(e,this));
+                                } catch (Exception e) {
+                                    runOnUiThread(() -> MsgUtil.err(e, this));
                                 }
                             });
                         });
@@ -140,11 +140,10 @@ public class LiveInfoActivity extends BaseActivity {
                             return true;
                         });
 
-                        if(playInfo.playUrl == null) {
-                            MsgUtil.toast("直播已结束",this);
+                        if (playInfo.playUrl == null) {
+                            MsgUtil.toast("直播已结束", this);
                             play.setVisibility(View.GONE);
-                        }
-                        else{
+                        } else {
                             //协议选择
                             MediaEpisodeAdapter protocolAdapter = new MediaEpisodeAdapter();
                             protocolAdapter.setOnItemClickListener(index -> {
@@ -152,7 +151,7 @@ public class LiveInfoActivity extends BaseActivity {
                                 refresh_host_list();
                             });
                             ArrayList<Bangumi.Episode> protocolList = new ArrayList<>();
-                            for (int i = 0;i < playInfo.playUrl.stream.size();i++){
+                            for (int i = 0; i < playInfo.playUrl.stream.size(); i++) {
                                 Bangumi.Episode episode = new Bangumi.Episode();
                                 episode.id = i;
                                 episode.title = playInfo.playUrl.stream.get(i).protocol_name;
@@ -161,7 +160,7 @@ public class LiveInfoActivity extends BaseActivity {
                             protocolAdapter.setData(protocolList);
                             protocol_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                             runOnUiThread(() -> protocol_list.setAdapter(protocolAdapter));
-    
+
                             //路线选择
                             hostAdapter = new MediaEpisodeAdapter();
                             hostAdapter.setOnItemClickListener(index -> selectedHost = index);
@@ -171,16 +170,16 @@ public class LiveInfoActivity extends BaseActivity {
                             refresh_host_list();
                         }
                     });
-                }catch (Exception e){
-                    runOnUiThread(() -> MsgUtil.err(e,this));
+                } catch (Exception e) {
+                    runOnUiThread(() -> MsgUtil.err(e, this));
                 }
             });
         });
     }
 
-    private void refresh_host_list(){
+    private void refresh_host_list() {
         ArrayList<Bangumi.Episode> hostList = new ArrayList<>();
-        for (int i = 0;i < playInfo.playUrl.stream.get(selectedProtocol).format.get(0).codec.get(0).url_info.size();i++){
+        for (int i = 0; i < playInfo.playUrl.stream.get(selectedProtocol).format.get(0).codec.get(0).url_info.size(); i++) {
             Bangumi.Episode episode = new Bangumi.Episode();
             episode.id = i;
             episode.title = "源" + i;

@@ -49,7 +49,7 @@ public class ReplyFragment extends RefreshListFragment {
         Bundle args = new Bundle();
         args.putLong("aid", aid);
         args.putInt("type", type);
-        args.putBoolean("dontload",dontload);
+        args.putBoolean("dontload", dontload);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,7 +69,7 @@ public class ReplyFragment extends RefreshListFragment {
         Bundle args = new Bundle();
         args.putLong("aid", aid);
         args.putInt("type", type);
-        args.putBoolean("dontload",dontload);
+        args.putBoolean("dontload", dontload);
         args.putLong("seek", seek_rpid);
         fragment.setArguments(args);
         return fragment;
@@ -82,7 +82,7 @@ public class ReplyFragment extends RefreshListFragment {
             aid = getArguments().getLong("aid");
             type = getArguments().getInt("type");
             replyType = type;
-            dontload = getArguments().getBoolean("dontload",false);
+            dontload = getArguments().getBoolean("dontload", false);
             seek = getArguments().getLong("seek", -1);
         }
     }
@@ -94,15 +94,15 @@ public class ReplyFragment extends RefreshListFragment {
         setOnRefreshListener(() -> refresh(aid));
         setOnLoadMoreListener(this::continueLoading);
 
-        Log.e("debug-av号",String.valueOf(aid));
+        Log.e("debug-av号", String.valueOf(aid));
 
         replyList = new ArrayList<>();
-        if(!dontload) {
-            CenterThreadPool.run(()->{
+        if (!dontload) {
+            CenterThreadPool.run(() -> {
                 try {
-                    int result = seek == -1 ? ReplyApi.getReplies(aid,0,page,type,sort,replyList) : ReplyApi.getRepliesLazy(aid,seek,page,type,3,replyList);
+                    int result = seek == -1 ? ReplyApi.getReplies(aid, 0, page, type, sort, replyList) : ReplyApi.getRepliesLazy(aid, seek, page, type, 3, replyList);
                     setRefreshing(false);
-                    if(result != -1 && isAdded()) {
+                    if (result != -1 && isAdded()) {
                         replyAdapter = getReplyAdapter();
                         setOnSortSwitch();
                         setAdapter(replyAdapter);
@@ -130,18 +130,19 @@ public class ReplyFragment extends RefreshListFragment {
 
     @SuppressLint("NotifyDataSetChanged")
     private void continueLoading(int page) {
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 List<Reply> list = new ArrayList<>();
-                int result = ReplyApi.getReplies(aid,0,page,type,sort,list);
+                int result = ReplyApi.getReplies(aid, 0, page, type, sort, list);
                 setRefreshing(false);
-                if(result != -1){
-                    Log.e("debug","下一页");
-                    runOnUiThread(()-> {
+                if (result != -1) {
+                    Log.e("debug", "下一页");
+                    runOnUiThread(() -> {
                         replyList.addAll(list);
-                        if (replyAdapter != null ) replyAdapter.notifyItemRangeInserted(replyList.size() - list.size() + 1, list.size());
+                        if (replyAdapter != null)
+                            replyAdapter.notifyItemRangeInserted(replyList.size() - list.size() + 1, list.size());
                     });
-                    if(result == 1) {
+                    if (result == 1) {
                         Log.e("debug", "到底了");
                         bottom = true;
                     }
@@ -173,26 +174,25 @@ public class ReplyFragment extends RefreshListFragment {
         }
     }
 
-    public void refresh(long aid){
+    public void refresh(long aid) {
         page = 1;
         this.aid = aid;
         setRefreshing(true);
-        if(replyList!=null) replyList.clear();
+        if (replyList != null) replyList.clear();
         else replyList = new ArrayList<>();
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
-                int result = ReplyApi.getReplies(aid,0,page,type,sort,replyList);
+                int result = ReplyApi.getReplies(aid, 0, page, type, sort, replyList);
                 setRefreshing(false);
-                if(result != -1 && isAdded()) {
+                if (result != -1 && isAdded()) {
                     replyAdapter = getReplyAdapter();
                     setOnSortSwitch();
                     setAdapter(replyAdapter);
                     //replyAdapter.notifyItemRangeInserted(0,replyList.size());
-                    if(result == 1) {
-                        Log.e("debug","到底了");
+                    if (result == 1) {
+                        Log.e("debug", "到底了");
                         bottom = true;
-                    }
-                    else bottom = false;
+                    } else bottom = false;
                 }
             } catch (Exception e) {
                 loadFail(e);
@@ -200,7 +200,7 @@ public class ReplyFragment extends RefreshListFragment {
         });
     }
 
-    private void setOnSortSwitch(){
+    private void setOnSortSwitch() {
         replyAdapter.setOnSortSwitchListener(position -> {
             sort = (sort == 0 ? 2 : 0);
             refresh(aid);

@@ -20,6 +20,7 @@ public class Collection implements Serializable {
         public int type;
         public List<Episode> episodes;
     }
+
     public static class Episode implements Serializable {
         public int season_id;
         public int section_id;

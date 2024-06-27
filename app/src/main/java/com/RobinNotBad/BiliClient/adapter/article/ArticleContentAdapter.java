@@ -55,18 +55,18 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
     @Override
     public ArticleLineHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        switch (viewType){    //-1=头，0=文本，1=图片
+        switch (viewType) {    //-1=头，0=文本，1=图片
             default:
-                view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_textview,parent,false);
+                view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_textview, parent, false);
                 break;
             case 1:
-                view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_image,parent,false);
+                view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_image, parent, false);
                 break;
             case -1:
-                view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_head,parent,false);
+                view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_head, parent, false);
                 break;
             case -2:
-                view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_end,parent,false);
+                view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_end, parent, false);
                 break;
         }
         return new ArticleLineHolder(view);
@@ -76,11 +76,11 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
     @Override
     public void onBindViewHolder(@NonNull ArticleLineHolder holder, int position) {
         int realPosition = position - 1;
-        switch (getItemViewType(position)){
+        switch (getItemViewType(position)) {
             default:
                 TextView textView = holder.itemView.findViewById(R.id.textView);  //文本
                 textView.setText(article.get(realPosition).content);
-                switch (article.get(realPosition).extra){
+                switch (article.get(realPosition).extra) {
                     default:
                         textView.setAlpha(0.85f);
                         break;
@@ -88,7 +88,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                         textView.setAlpha(0.92f);
                         break;
                     case "br":
-                        textView.setHeight(ToolsUtil.dp2px(6f,context));
+                        textView.setHeight(ToolsUtil.dp2px(6f, context));
                         break;
                 }
                 ToolsUtil.setCopy(context, textView);
@@ -100,10 +100,10 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
 
 
                 String url = article.get(realPosition).content;
-                    Glide.with(context).asDrawable().load(GlideUtil.url(url)).placeholder(R.mipmap.placeholder)
-                            .transition(GlideUtil.getTransitionOptions())
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .into(imageView);
+                Glide.with(context).asDrawable().load(GlideUtil.url(url)).placeholder(R.mipmap.placeholder)
+                        .transition(GlideUtil.getTransitionOptions())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .into(imageView);
 
                 imageView.setOnClickListener(view -> {
                     Intent intent = new Intent();
@@ -125,11 +125,11 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 ToolsUtil.setCopy(context, title);
 
                 upName.setText(articleInfo.upInfo.name);
-                if(articleInfo.banner.isEmpty()) cover.setVisibility(View.GONE);
-                else{
+                if (articleInfo.banner.isEmpty()) cover.setVisibility(View.GONE);
+                else {
                     Glide.with(context).asDrawable().load(GlideUtil.url(articleInfo.banner)).placeholder(R.mipmap.placeholder)
                             .transition(GlideUtil.getTransitionOptions())
-                            .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4,context))))
+                            .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, context))))
                             .format(DecodeFormat.PREFER_RGB_565)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(cover);
@@ -139,10 +139,10 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                         .apply(RequestOptions.circleCropTransform())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(upIcon);
-                upCard.setOnClickListener(view1 ->{
+                upCard.setOnClickListener(view1 -> {
                     Intent intent = new Intent();
                     intent.setClass(context, UserInfoActivity.class);
-                    intent.putExtra("mid",articleInfo.upInfo.mid);
+                    intent.putExtra("mid", articleInfo.upInfo.mid);
                     context.startActivity(intent);
                 });
                 ImageButton like = holder.itemView.findViewById(R.id.btn_like);
@@ -158,8 +158,8 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
 
                 like.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     try {
-                        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0){
-                            context.runOnUiThread(() -> MsgUtil.toast("还没有登录喵~",context));
+                        if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
+                            context.runOnUiThread(() -> MsgUtil.toast("还没有登录喵~", context));
                             return;
                         }
                         int result = ArticleApi.like(articleInfo.id, !articleInfo.stats.liked);
@@ -168,7 +168,8 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                             context.runOnUiThread(() -> {
                                 MsgUtil.toast((articleInfo.stats.liked ? "点赞成功" : "取消成功"), context);
 
-                                if (articleInfo.stats.liked) likeLabel.setText(ToolsUtil.toWan(++articleInfo.stats.like));
+                                if (articleInfo.stats.liked)
+                                    likeLabel.setText(ToolsUtil.toWan(++articleInfo.stats.like));
                                 else likeLabel.setText(ToolsUtil.toWan(--articleInfo.stats.like));
                                 like.setBackground(ContextCompat.getDrawable(context, (articleInfo.stats.liked ? R.drawable.icon_like_1 : R.drawable.icon_like_0)));
                             });
@@ -183,8 +184,8 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 coin.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     if (articleInfo.stats.coined < articleInfo.stats.allow_coin) {
                         try {
-                            if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0){
-                                context.runOnUiThread(() -> MsgUtil.toast("还没有登录喵~",context));
+                            if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
+                                context.runOnUiThread(() -> MsgUtil.toast("还没有登录喵~", context));
                                 return;
                             }
                             int result = ArticleApi.addCoin(articleInfo.id, articleInfo.upInfo.mid, 1);
@@ -239,10 +240,13 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                         if (viewInfo != null) {
                             articleInfo.stats = viewInfo.stats;
                             articleInfo.stats.allow_coin = 1;
-                            context.runOnUiThread(()->{
-                                if(articleInfo.stats.coined!=0) coin.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_coin_1));
-                                if(articleInfo.stats.liked) like.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_like_1));
-                                if(articleInfo.stats.favoured) fav.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_favourite_1));
+                            context.runOnUiThread(() -> {
+                                if (articleInfo.stats.coined != 0)
+                                    coin.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_coin_1));
+                                if (articleInfo.stats.liked)
+                                    like.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_like_1));
+                                if (articleInfo.stats.favoured)
+                                    fav.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_favourite_1));
                             });
                         }
                     } catch (Exception e) {
@@ -273,9 +277,9 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
 
     @Override
     public int getItemViewType(int position) {
-        if(position==0) return -1;
-        else if(position == article.size() + 1) return -2;
-        else return article.get(position-1).type;
+        if (position == 0) return -1;
+        else if (position == article.size() + 1) return -2;
+        else return article.get(position - 1).type;
     }
 
     public static class ArticleLineHolder extends RecyclerView.ViewHolder {

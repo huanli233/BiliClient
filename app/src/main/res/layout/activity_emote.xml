@@ -26,7 +26,7 @@
             android:id="@+id/pageName"
             android:text="表情"
             android:textStyle="bold"
-            app:drawableStartCompat="@drawable/arrow_back"/>
+            app:drawableStartCompat="@drawable/arrow_back" />
 
         <TextClock
             android:layout_height="wrap_content"

@@ -70,11 +70,11 @@ public class ListChooseActivity extends BaseActivity {
         OnItemClickListener onItemClickListener;
         OnItemLongClickListener onItemLongClickListener;
 
-        public Adapter(Context context){
+        public Adapter(Context context) {
             this.context = context;
         }
 
-        public void setOnItemClickListener(OnItemClickListener listener){
+        public void setOnItemClickListener(OnItemClickListener listener) {
             this.onItemClickListener = listener;
         }
 
@@ -87,7 +87,7 @@ public class ListChooseActivity extends BaseActivity {
         @NonNull
         @Override
         public com.RobinNotBad.BiliClient.adapter.QualityChooseAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_choose, parent,false);
+            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_choose, parent, false);
             return new com.RobinNotBad.BiliClient.adapter.QualityChooseAdapter.Holder(view);
         }
 
@@ -97,15 +97,14 @@ public class ListChooseActivity extends BaseActivity {
             holder.folder_name.setText(nameList.get(position));
 
             holder.itemView.setOnClickListener(view -> {
-                if(onItemClickListener != null) onItemClickListener.onItemClick(position);
+                if (onItemClickListener != null) onItemClickListener.onItemClick(position);
             });
 
             holder.itemView.setOnLongClickListener(view -> {
-                if(onItemLongClickListener != null) {
+                if (onItemLongClickListener != null) {
                     onItemLongClickListener.onItemLongClick(position);
                     return true;
-                }
-                else return false;
+                } else return false;
             });
 
         }
@@ -115,7 +114,7 @@ public class ListChooseActivity extends BaseActivity {
             return nameList.size();
         }
 
-        class Holder extends RecyclerView.ViewHolder{
+        class Holder extends RecyclerView.ViewHolder {
             TextView folder_name;
 
             public Holder(@NonNull View itemView) {

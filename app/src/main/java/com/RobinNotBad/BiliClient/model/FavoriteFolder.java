@@ -7,5 +7,6 @@ public class FavoriteFolder {
     public int videoCount;
     public int maxCount;
 
-    public FavoriteFolder(){}
+    public FavoriteFolder() {
+    }
 }

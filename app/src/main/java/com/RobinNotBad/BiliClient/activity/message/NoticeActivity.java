@@ -17,6 +17,7 @@ public class NoticeActivity extends RefreshListActivity {
     private List<MessageCard> messageList;
     private NoticeAdapter noticeAdapter;
     private MessageCard.Cursor cursor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +26,7 @@ public class NoticeActivity extends RefreshListActivity {
 
         messageList = new ArrayList<>();
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 Intent intent = getIntent();
                 String pageType = intent.getStringExtra("type");
@@ -52,7 +53,7 @@ public class NoticeActivity extends RefreshListActivity {
                 }
 
                 noticeAdapter = new NoticeAdapter(this, messageList);
-                runOnUiThread(()-> {
+                runOnUiThread(() -> {
                     setAdapter(noticeAdapter);
                     setRefreshing(false);
                     setOnLoadMoreListener(this::continueLoading);
@@ -64,7 +65,7 @@ public class NoticeActivity extends RefreshListActivity {
     }
 
     private void continueLoading(int i) {
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 int lastSize = messageList.size();
                 String pageType = getIntent().getStringExtra("type");
@@ -89,10 +90,12 @@ public class NoticeActivity extends RefreshListActivity {
                         messageList = MessageApi.getSystemMsg();
                         break;
                 }
-                runOnUiThread(()-> noticeAdapter.notifyItemRangeInserted(lastSize, messageList.size() - lastSize));
+                runOnUiThread(() -> noticeAdapter.notifyItemRangeInserted(lastSize, messageList.size() - lastSize));
                 bottom = cursor.is_end;
                 setRefreshing(false);
-            } catch (Exception e){loadFail(e);}
+            } catch (Exception e) {
+                loadFail(e);
+            }
         });
     }
 }

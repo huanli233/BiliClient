@@ -34,7 +34,8 @@ public class SearchVideoFragment extends Fragment implements SearchRefreshable {
     private boolean bottom = false;
     private int page = 0;
 
-    public SearchVideoFragment(){}
+    public SearchVideoFragment() {
+    }
 
     public static SearchVideoFragment newInstance() {
         return new SearchVideoFragment();
@@ -49,6 +50,7 @@ public class SearchVideoFragment extends Fragment implements SearchRefreshable {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_simple_list, container, false);
     }
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -86,35 +88,38 @@ public class SearchVideoFragment extends Fragment implements SearchRefreshable {
         });
     }
 
-    private void continueLoading(){
+    private void continueLoading() {
         page++;
-        Log.e("debug","加载下一页");
+        Log.e("debug", "加载下一页");
         int lastSize = videoCardList.size();
         try {
-            JSONArray result =  SearchApi.search(keyword,page);
-            if(result!=null) {
-                SearchApi.getVideosFromSearchResult(result, videoCardList,page==1);
-                CenterThreadPool.runOnUiThread(() -> videoCardAdapter.notifyItemRangeInserted(lastSize + 1,videoCardList.size()-lastSize));
-            }
-            else {
+            JSONArray result = SearchApi.search(keyword, page);
+            if (result != null) {
+                SearchApi.getVideosFromSearchResult(result, videoCardList, page == 1);
+                CenterThreadPool.runOnUiThread(() -> videoCardAdapter.notifyItemRangeInserted(lastSize + 1, videoCardList.size() - lastSize));
+            } else {
                 bottom = true;
-                if(isAdded()) requireActivity().runOnUiThread(() ->  MsgUtil.toast("已经到底啦OwO",requireContext()));
+                if (isAdded())
+                    requireActivity().runOnUiThread(() -> MsgUtil.toast("已经到底啦OwO", requireContext()));
             }
-        } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,requireContext()));}
+        } catch (Exception e) {
+            if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+        }
         refreshing = false;
     }
 
     @Override
-    public void refresh(String keyword){
+    public void refresh(String keyword) {
         this.refreshing = true;
         this.page = 0;
         this.keyword = keyword;
-        if(this.videoCardList==null) this.videoCardList = new ArrayList<>();
-        if(this.videoCardAdapter==null) this.videoCardAdapter = new VideoCardAdapter(this.requireContext(),this.videoCardList);
+        if (this.videoCardList == null) this.videoCardList = new ArrayList<>();
+        if (this.videoCardAdapter == null)
+            this.videoCardAdapter = new VideoCardAdapter(this.requireContext(), this.videoCardList);
         int size_old = this.videoCardList.size();
         this.videoCardList.clear();
-        CenterThreadPool.runOnUiThread(()->{
-            if(size_old!=0) this.videoCardAdapter.notifyItemRangeRemoved(0,size_old);
+        CenterThreadPool.runOnUiThread(() -> {
+            if (size_old != 0) this.videoCardAdapter.notifyItemRangeRemoved(0, size_old);
             CenterThreadPool.run(this::continueLoading);
         });
     }

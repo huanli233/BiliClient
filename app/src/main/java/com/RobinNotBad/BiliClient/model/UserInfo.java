@@ -31,7 +31,8 @@ public class UserInfo implements Serializable, Parcelable {
         this.officialDesc = officialDesc;
     }
 
-    public UserInfo(){}
+    public UserInfo() {
+    }
 
     protected UserInfo(Parcel in) {
         mid = in.readLong();

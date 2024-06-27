@@ -20,16 +20,16 @@ import java.util.Objects;
 public class BangumiApi {
     public static int getFollowingList(int page, List<VideoCard> cardList) throws JSONException, IOException {
         String url = "https://api.bilibili.com/x/space/bangumi/follow/list?type=1&follow_status=0&pn=" + page
-                + "&ps=15&vmid=" + SharedPreferencesUtil.getLong("mid",0);
+                + "&ps=15&vmid=" + SharedPreferencesUtil.getLong("mid", 0);
 
         JSONObject all = NetWorkUtil.getJson(url);
-        if(all.getInt("code")!=0) throw new JSONException(all.getString("message"));
+        if (all.getInt("code") != 0) throw new JSONException(all.getString("message"));
 
         JSONObject data = all.getJSONObject("data");
-        if(!data.has("list") || data.isNull("list")) return 1;
+        if (!data.has("list") || data.isNull("list")) return 1;
 
         JSONArray list = data.getJSONArray("list");
-        if(list.length()==0) return 1;
+        if (list.length() == 0) return 1;
 
         for (int i = 0; i < list.length(); i++) {
             JSONObject bangumi = list.getJSONObject(i);
@@ -46,10 +46,8 @@ public class BangumiApi {
     }
 
 
-
-
     //获取番剧信息, 详情页需要有基本的cover, 信息等
-    public static Bangumi getBangumi(long mediaId) throws JSONException,IOException {
+    public static Bangumi getBangumi(long mediaId) throws JSONException, IOException {
         Bangumi bangumi = new Bangumi();
         bangumi.info = getInfo(mediaId);
         bangumi.sectionList = getSections(bangumi.info.season_id);
@@ -62,13 +60,13 @@ public class BangumiApi {
             String url = "https://api.bilibili.com/pgc/view/web/season?ep_id=" + epid;
             JSONObject all = NetWorkUtil.getJson(url);
 
-            Log.e("debug-epid",String.valueOf(epid));
+            Log.e("debug-epid", String.valueOf(epid));
 
             int code = all.getInt("code");
             if (code != 0) return 0L;
 
             return all.getJSONObject("result").getLong("media_id");
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return 0L;
         }
@@ -79,7 +77,9 @@ public class BangumiApi {
         JSONObject all = NetWorkUtil.getJson(url);
 
         int code = all.getInt("code");
-        if (code != 0) {throw new JSONException("错误码：" + code);}
+        if (code != 0) {
+            throw new JSONException("错误码：" + code);
+        }
 
         JSONObject media = all.getJSONObject("result").getJSONObject("media");
 
@@ -93,7 +93,7 @@ public class BangumiApi {
         info.type_name = media.getString("type_name");
 
         JSONObject rating = media.optJSONObject("rating");
-        if(rating!=null) {
+        if (rating != null) {
             info.count = rating.optInt("count");
             info.score = (float) rating.optInt("score");
         }
@@ -104,7 +104,7 @@ public class BangumiApi {
             stringBuilder.append(areas.getJSONObject(i).getString("name"));
             stringBuilder.append("|");
         }
-        stringBuilder.substring(0,stringBuilder.length()-1);
+        stringBuilder.substring(0, stringBuilder.length() - 1);
         info.area_name = stringBuilder.toString();
 
         return info;

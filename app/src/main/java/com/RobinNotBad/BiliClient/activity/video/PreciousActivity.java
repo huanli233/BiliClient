@@ -42,7 +42,7 @@ public class PreciousActivity extends InstanceActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_main_refresh);
         setMenuClick();
-        Log.e("debug","进入入站必刷页");
+        Log.e("debug", "进入入站必刷页");
 
         recyclerView = findViewById(R.id.recyclerView);
         ImageAutoLoadScrollListener.install(recyclerView);
@@ -65,7 +65,7 @@ public class PreciousActivity extends InstanceActivity {
         } else {
             int last = videoCardList.size();
             videoCardList.clear();
-            videoCardAdapter.notifyItemRangeRemoved(0,last);
+            videoCardAdapter.notifyItemRangeRemoved(0, last);
         }
         swipeRefreshLayout.setRefreshing(true);
 
@@ -75,7 +75,7 @@ public class PreciousActivity extends InstanceActivity {
 
     private void addPrecious() {
         Log.e("debug", "加载下一页");
-        runOnUiThread(()->swipeRefreshLayout.setRefreshing(true));
+        runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
         try {
             List<VideoCard> list = new ArrayList<>();
             RecommendApi.getPrecious(list, page);
@@ -94,6 +94,7 @@ public class PreciousActivity extends InstanceActivity {
                         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                             super.onScrollStateChanged(recyclerView, newState);
                         }
+
                         @Override
                         public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                             super.onScrolled(recyclerView, dx, dy);
@@ -101,16 +102,18 @@ public class PreciousActivity extends InstanceActivity {
                             assert manager != null;
                             int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();  //获取最后一个完全显示的itemPosition
                             int itemCount = manager.getItemCount();
-                            if (lastItemPosition >= (itemCount - 3) && dy>0 && !refreshing) {// 滑动到倒数第三个就可以刷新了
+                            if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing) {// 滑动到倒数第三个就可以刷新了
                                 refreshing = true;
-                                CenterThreadPool.run(()->addPrecious()); //加载第二页
+                                CenterThreadPool.run(() -> addPrecious()); //加载第二页
                             }
                         }
                     });
-                }else {
-                    videoCardAdapter.notifyItemRangeInserted(videoCardList.size() - list.size(),  list.size());
+                } else {
+                    videoCardAdapter.notifyItemRangeInserted(videoCardList.size() - list.size(), list.size());
                 }
             });
-        } catch (Exception e){runOnUiThread(()-> MsgUtil.err(e,this));}
+        } catch (Exception e) {
+            runOnUiThread(() -> MsgUtil.err(e, this));
+        }
     }
 }

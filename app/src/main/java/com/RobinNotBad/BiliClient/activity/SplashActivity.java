@@ -48,13 +48,13 @@ public class SplashActivity extends Activity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(BiliTerminal.getFitDisplayContext(newBase));
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_BiliClient);
         setContentView(R.layout.activity_splash);
-        Log.e("debug","进入应用");
+        Log.e("debug", "进入应用");
 
         splashTextView = findViewById(R.id.splashText);
 
@@ -62,18 +62,18 @@ public class SplashActivity extends Activity {
         splashTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(()->showSplashText(splashFrame));
+                runOnUiThread(() -> showSplashText(splashFrame));
                 splashFrame++;
-                if(splashFrame>splashText.length()) this.cancel();
+                if (splashFrame > splashText.length()) this.cancel();
             }
-        },100,100);
+        }, 100, 100);
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
 
             //FileUtil.clearCache(this);  //先清个缓存（为了防止占用过大）
             //不需要了，我把大部分图片的硬盘缓存都关闭了，只有表情包保留，这样既可以缩减缓存占用又能在一定程度上减少流量消耗
 
-            if(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.setup,false)) {//判断是否设置完成
+            if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.setup, false)) {//判断是否设置完成
                 try {
                     // 未登录时请求bilibili.com
                     if (SharedPreferencesUtil.getLong("mid", 0) != 0) {
@@ -119,10 +119,10 @@ public class SplashActivity extends Activity {
                     interruptSplash();
                     finish();
                 } catch (IOException e) {
-                    runOnUiThread(()-> {
-                        MsgUtil.err(e,this);
+                    runOnUiThread(() -> {
+                        MsgUtil.err(e, this);
                         splashTextView.setText("网络错误");
-                        if(SharedPreferencesUtil.getBoolean("setup",false)){
+                        if (SharedPreferencesUtil.getBoolean("setup", false)) {
                             Timer timer = new Timer();
                             timer.schedule(new TimerTask() {
                                 @Override
@@ -133,19 +133,18 @@ public class SplashActivity extends Activity {
                                     interruptSplash();
                                     finish();
                                 }
-                            },200);
+                            }, 200);
                         }
                     });
                 } catch (JSONException e) {
-                    runOnUiThread(()-> MsgUtil.err(e,this));
+                    runOnUiThread(() -> MsgUtil.err(e, this));
                     Intent intent = new Intent();
                     intent.setClass(SplashActivity.this, LocalListActivity.class);
                     startActivity(intent);
                     interruptSplash();
                     finish();
                 }
-            }
-            else {
+            } else {
                 Intent intent = new Intent();
                 intent.setClass(SplashActivity.this, SetupUIActivity.class);   //没登录，去初次设置
                 startActivity(intent);
@@ -157,35 +156,35 @@ public class SplashActivity extends Activity {
     }
 
     private void checkCookie() {
-        try{
+        try {
             JSONObject cookieInfo = CookieRefreshApi.cookieInfo();
-            if(cookieInfo.getBoolean("refresh")){
-                Log.e("Cookie","需要刷新");
-                if(Objects.equals(SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), "")) runOnUiThread(()-> MsgUtil.toastLong("无法刷新Cookie，请重新登录！",this));
-                else{
+            if (cookieInfo.getBoolean("refresh")) {
+                Log.e("Cookie", "需要刷新");
+                if (Objects.equals(SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), ""))
+                    runOnUiThread(() -> MsgUtil.toastLong("无法刷新Cookie，请重新登录！", this));
+                else {
                     String correspondPath = CookieRefreshApi.getCorrespondPath(cookieInfo.getLong("timestamp"));
-                    Log.e("CorrespondPath",correspondPath);
+                    Log.e("CorrespondPath", correspondPath);
                     String refreshCsrf = CookieRefreshApi.getRefreshCsrf(correspondPath);
-                    Log.e("RefreshCsrf",refreshCsrf);
-                    if(CookieRefreshApi.refreshCookie(refreshCsrf)){
+                    Log.e("RefreshCsrf", refreshCsrf);
+                    if (CookieRefreshApi.refreshCookie(refreshCsrf)) {
                         NetWorkUtil.refreshHeaders();
-                        runOnUiThread(()-> MsgUtil.toast("Cookie已刷新",this));
-                    }
-                    else {
-                        runOnUiThread(()->MsgUtil.toastLong("登录信息过期，请重新登录！",this));
+                        runOnUiThread(() -> MsgUtil.toast("Cookie已刷新", this));
+                    } else {
+                        runOnUiThread(() -> MsgUtil.toastLong("登录信息过期，请重新登录！", this));
                         resetLogin();
                     }
                 }
             }
-        }catch (JSONException e){
-            runOnUiThread(()->MsgUtil.toastLong("登录信息过期，请重新登录！",this));
+        } catch (JSONException e) {
+            runOnUiThread(() -> MsgUtil.toastLong("登录信息过期，请重新登录！", this));
             resetLogin();
-        }catch (IOException e){
-            runOnUiThread(()->MsgUtil.err(e,this));
+        } catch (IOException e) {
+            runOnUiThread(() -> MsgUtil.err(e, this));
         }
     }
 
-    private void resetLogin(){
+    private void resetLogin() {
         SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, 0L);
         SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, "");
         SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, "");
@@ -194,13 +193,13 @@ public class SplashActivity extends Activity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void showSplashText(int i){
-        if(i> splashText.length()) splashTextView.setText(splashText);
-        else splashTextView.setText(splashText.substring(0,i) + "_");
+    private void showSplashText(int i) {
+        if (i > splashText.length()) splashTextView.setText(splashText);
+        else splashTextView.setText(splashText.substring(0, i) + "_");
     }
 
-    private void interruptSplash(){
-        if(splashTimer!=null) splashTimer.cancel();
-        runOnUiThread(()->splashTextView.setText(splashText));
+    private void interruptSplash() {
+        if (splashTimer != null) splashTimer.cancel();
+        runOnUiThread(() -> splashTextView.setText(splashText));
     }
 }

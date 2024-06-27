@@ -56,11 +56,10 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == 0) {
+        if (viewType == 0) {
             View view = LayoutInflater.from(context).inflate(R.layout.cell_user_info, parent, false);
             return new UserInfoHolder(view);
-        }
-        else {
+        } else {
             View view = preInflateHelper.getView(parent, R.layout.cell_dynamic, 3, false);
             return new DynamicHolder(view, (BaseActivity) context, false);
         }
@@ -69,13 +68,13 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof DynamicHolder) {
+        if (holder instanceof DynamicHolder) {
             int realPosition = position - 1;
             DynamicHolder dynamicHolder = (DynamicHolder) holder;
 
             dynamicHolder.showDynamic(dynamicList.get(realPosition), context, true);
 
-            if(dynamicList.get(realPosition).dynamic_forward != null){
+            if (dynamicList.get(realPosition).dynamic_forward != null) {
                 View childCard = dynamicHolder.cell_dynamic_child;
                 DynamicHolder childHolder = new DynamicHolder(childCard, (BaseActivity) context, true);
                 childHolder.showDynamic(dynamicList.get(realPosition).dynamic_forward, context, true);
@@ -86,9 +85,10 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             View.OnLongClickListener onDeleteLongClick = DynamicHolder.getDeleteListener((Activity) context, dynamicList, realPosition, this);
             dynamicHolder.item_dynamic_delete.setOnLongClickListener(onDeleteLongClick);
-            if (dynamicList.get(realPosition).canDelete) dynamicHolder.item_dynamic_delete.setVisibility(View.VISIBLE);
+            if (dynamicList.get(realPosition).canDelete)
+                dynamicHolder.item_dynamic_delete.setVisibility(View.VISIBLE);
         }
-        if (holder instanceof UserInfoHolder){
+        if (holder instanceof UserInfoHolder) {
             UserInfoHolder userInfoHolder = (UserInfoHolder) holder;
             userInfoHolder.userName.setText(userInfo.name);
             userInfoHolder.userDesc.setText(userInfo.sign);
@@ -97,11 +97,11 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ToolsUtil.setLink(userInfoHolder.userDesc, userInfoHolder.userDesc);
             userInfoHolder.userFans.setText("Lv" + userInfo.level + "\n" + ToolsUtil.toWan(userInfo.fans) + "粉丝");
 
-            if(userInfo.official != 0) {
+            if (userInfo.official != 0) {
                 userInfoHolder.officialIcon.setVisibility(View.VISIBLE);
                 userInfoHolder.userOfficial.setVisibility(View.VISIBLE);
-                String[] official_signs = {"哔哩哔哩不知名UP主","哔哩哔哩知名UP主","哔哩哔哩大V达人","哔哩哔哩企业认证",
-                        "哔哩哔哩组织认证","哔哩哔哩媒体认证","哔哩哔哩政府认证","哔哩哔哩高能主播","社会不知名人士", "社会知名人士"};
+                String[] official_signs = {"哔哩哔哩不知名UP主", "哔哩哔哩知名UP主", "哔哩哔哩大V达人", "哔哩哔哩企业认证",
+                        "哔哩哔哩组织认证", "哔哩哔哩媒体认证", "哔哩哔哩政府认证", "哔哩哔哩高能主播", "社会不知名人士", "社会知名人士"};
                 userInfoHolder.userOfficial.setText(official_signs[userInfo.official] + (userInfo.officialDesc.isEmpty() ? "" : ("\n" + userInfo.officialDesc)));
             } else {
                 userInfoHolder.officialIcon.setVisibility(View.GONE);
@@ -124,24 +124,25 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 context.startActivity(intent);
             });
 
-            if((userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)) || (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) || (userInfo.mid == 0)) userInfoHolder.followBtn.setVisibility(View.GONE);
+            if ((userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0)) || (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) || (userInfo.mid == 0))
+                userInfoHolder.followBtn.setVisibility(View.GONE);
             else userInfoHolder.followBtn.setChecked(userInfo.followed);
             userInfoHolder.followBtn.setOnClickListener(btn -> {
-                if(!follow_onprocess) {
+                if (!follow_onprocess) {
                     follow_onprocess = true;
                     userInfoHolder.setFollowed(!(userInfo.followed));
                     CenterThreadPool.run(() -> {
                         try {
-                            int result = UserInfoApi.followUser(userInfo.mid,!(userInfo.followed));
-                            if(result == 0){
+                            int result = UserInfoApi.followUser(userInfo.mid, !(userInfo.followed));
+                            if (result == 0) {
                                 userInfo.followed = !(userInfo.followed);
-                                CenterThreadPool.runOnUiThread(()->MsgUtil.toast("操作成功",context));
+                                CenterThreadPool.runOnUiThread(() -> MsgUtil.toast("操作成功", context));
                             } else {
                                 userInfoHolder.setFollowed(userInfo.followed);
-                                CenterThreadPool.runOnUiThread(() -> MsgUtil.toast("操作失败："+result,context));
+                                CenterThreadPool.runOnUiThread(() -> MsgUtil.toast("操作失败：" + result, context));
                             }
                         } catch (Exception e) {
-                            CenterThreadPool.runOnUiThread(()->MsgUtil.err(e,context));
+                            CenterThreadPool.runOnUiThread(() -> MsgUtil.err(e, context));
                         }
                         follow_onprocess = false;
                     });
@@ -152,7 +153,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             userInfoHolder.msgBtn.setOnClickListener(view -> {
                 Intent intent = new Intent(context, PrivateMsgActivity.class);
-                intent.putExtra("uid",userInfo.mid);
+                intent.putExtra("uid", userInfo.mid);
                 context.startActivity(intent);
             });
 
@@ -184,10 +185,10 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-        return (position==0 ? 0 : 1);
+        return (position == 0 ? 0 : 1);
     }
 
-    public static class UserInfoHolder extends RecyclerView.ViewHolder{
+    public static class UserInfoHolder extends RecyclerView.ViewHolder {
         final TextView userName;
         final TextView userFans;
         final TextView userDesc;
@@ -213,9 +214,9 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ToolsUtil.setCopy(itemView.getContext(), userDesc, userNotice);
         }
 
-        public void setFollowed(boolean followed){
+        public void setFollowed(boolean followed) {
             msgBtn.setVisibility((followed ? View.VISIBLE : View.GONE));
-            followBtn.setBackgroundTintList(ColorStateList.valueOf((followed ? Color.argb(0xDD,0x26,0x26,0x26) : Color.argb(0xFE,0xF0,0x5D,0x8E))));
+            followBtn.setBackgroundTintList(ColorStateList.valueOf((followed ? Color.argb(0xDD, 0x26, 0x26, 0x26) : Color.argb(0xFE, 0xF0, 0x5D, 0x8E))));
             followBtn.setText((followed ? "已关注" : "关注"));
         }
     }

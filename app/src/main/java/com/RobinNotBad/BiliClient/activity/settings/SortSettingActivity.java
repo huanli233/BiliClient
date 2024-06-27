@@ -38,7 +38,7 @@ public class SortSettingActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_list);
-        
+
         setPageName("菜单排序");
 
         Toast.makeText(this, "拖动以排序~", Toast.LENGTH_SHORT).show();
@@ -50,7 +50,7 @@ public class SortSettingActivity extends BaseActivity {
                 if (!MenuActivity.btnNames.containsKey(name)) {
                     data.clear();
                     displayKeyMap.clear();
-                    for (Map.Entry<String, Pair<String,Class<? extends InstanceActivity>>> entry : MenuActivity.btnNames.entrySet()) {
+                    for (Map.Entry<String, Pair<String, Class<? extends InstanceActivity>>> entry : MenuActivity.btnNames.entrySet()) {
                         String displayText = entry.getValue().first;
                         data.add(displayText);
                         displayKeyMap.put(displayText, entry.getKey());
@@ -63,7 +63,7 @@ public class SortSettingActivity extends BaseActivity {
                 }
             }
         } else {
-            for (Map.Entry<String, Pair<String,Class<? extends InstanceActivity>>> entry : MenuActivity.btnNames.entrySet()) {
+            for (Map.Entry<String, Pair<String, Class<? extends InstanceActivity>>> entry : MenuActivity.btnNames.entrySet()) {
                 String key = entry.getKey();
                 String displayText = entry.getValue().first;
                 data.add(displayText);
@@ -82,7 +82,9 @@ public class SortSettingActivity extends BaseActivity {
 
         dragAdapter.setOnItemClickListener(new DragAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {}
+            public void onItemClick(int position) {
+            }
+
             @Override
             public void onItemLongClick(DragAdapter.ViewHolder holder) {
                 if (holder.getAdapterPosition() != dragAdapter.getFixedPosition()) {
@@ -148,6 +150,7 @@ public class SortSettingActivity extends BaseActivity {
                 return 0;
             }
         }
+
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             // 起始位置

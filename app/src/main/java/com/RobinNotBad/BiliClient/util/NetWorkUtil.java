@@ -37,8 +37,7 @@ import okhttp3.ResponseBody;
  * #以下代码来源于腕上哔哩的开源项目，感谢开源者做出的贡献！
  */
 
-public class NetWorkUtil
-{
+public class NetWorkUtil {
     private static final AtomicReference<OkHttpClient> INSTANCE = new AtomicReference<>();
 
     public static OkHttpClient getOkHttpInstance() {
@@ -53,7 +52,8 @@ public class NetWorkUtil
                         boolean isSslRedirect = false;
                         try {
                             isSslRedirect = location != null && !request.isHttps() && new URI(location).getScheme().equalsIgnoreCase("https") && request.url().host().equalsIgnoreCase(new URI(location).getHost());
-                        } catch (URISyntaxException ignored) {}
+                        } catch (URISyntaxException ignored) {
+                        }
                         if ((response.code() == 301 || response.code() == 302) && location != null && request.url().host().equals("b23.tv") && !isSslRedirect && (handler = request.tag(RedirectHandler.class)) != null) {
                             handler.handleRedirect(location);
                         } else if (response.isRedirect() && location != null) {
@@ -73,22 +73,21 @@ public class NetWorkUtil
         return INSTANCE.get();
     }
 
-    public static JSONObject getJson(String url) throws IOException, JSONException{
+    public static JSONObject getJson(String url) throws IOException, JSONException {
         try (ResponseBody body = get(url).body()) {
             if (body != null) return new JSONObject(body.string());
             else throw new JSONException("在访问" + url + "时返回数据为空");
         }
     }
 
-    public static JSONObject getJson(String url, ArrayList<String> headers) throws IOException, JSONException{
+    public static JSONObject getJson(String url, ArrayList<String> headers) throws IOException, JSONException {
         try (ResponseBody body = get(url, headers).body()) {
             if (body != null) return new JSONObject(body.string());
             else throw new JSONException("在访问" + url + "时返回数据为空");
         }
     }
 
-    public static Response get(String url) throws IOException
-    {
+    public static Response get(String url) throws IOException {
         return get(url, webHeaders);
     }
 
@@ -97,28 +96,27 @@ public class NetWorkUtil
     }
 
     public static Response get(String url, ArrayList<String> headers, RedirectHandler redirectHandler) throws IOException {
-        Log.e("debug-get","----------------");
-        Log.e("debug-get-url",url);
-        Log.e("debug-get","----------------");
+        Log.e("debug-get", "----------------");
+        Log.e("debug-get-url", url);
+        Log.e("debug-get", "----------------");
         OkHttpClient client = getOkHttpInstance();
         Request.Builder requestBuilder = new Request.Builder().url(url).get();
-        for(int i = 0; i < headers.size(); i+=2)
-            requestBuilder = requestBuilder.addHeader(headers.get(i), headers.get(i+1));
+        for (int i = 0; i < headers.size(); i += 2)
+            requestBuilder = requestBuilder.addHeader(headers.get(i), headers.get(i + 1));
         if (redirectHandler != null) requestBuilder.tag(RedirectHandler.class, redirectHandler);
         Request request = requestBuilder.build();
         return client.newCall(request).execute();
     }
 
-    public static Response post(String url, String data, List<String> headers, String contentType) throws IOException
-    {
-        Log.e("debug-post","----------------");
-        Log.e("debug-post-url",url);
-        Log.e("debug-post-data",data);
-        Log.e("debug-post","----------------");
+    public static Response post(String url, String data, List<String> headers, String contentType) throws IOException {
+        Log.e("debug-post", "----------------");
+        Log.e("debug-post-url", url);
+        Log.e("debug-post-data", data);
+        Log.e("debug-post", "----------------");
         OkHttpClient client = getOkHttpInstance();
         RequestBody body = RequestBody.create(MediaType.parse(contentType + "; charset=utf-8"), data);
         Request.Builder requestBuilder = new Request.Builder().url(url).post(body);
-        for (int i = 0; i < headers.size(); i+=2) {
+        for (int i = 0; i < headers.size(); i += 2) {
             String key = headers.get(i);
             String val = headers.get(i + 1);
             if (key.equalsIgnoreCase("Content-Type")) val = contentType;
@@ -145,13 +143,11 @@ public class NetWorkUtil
     }
 
 
-    public static byte[] readStream(InputStream inStream) throws IOException
-    {
+    public static byte[] readStream(InputStream inStream) throws IOException {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
         int len;
-        while ((len = inStream.read(buffer)) != -1)
-        {
+        while ((len = inStream.read(buffer)) != -1) {
             outStream.write(buffer, 0, len);
         }
         outStream.close();
@@ -159,11 +155,9 @@ public class NetWorkUtil
         return outStream.toByteArray();
     }
 
-    public static byte[] uncompress(byte[] inputByte) throws IOException
-    {
+    public static byte[] uncompress(byte[] inputByte) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(inputByte.length);
-        try
-        {
+        try {
             Inflater inflater = new Inflater(true);
             inflater.setInput(inputByte);
             byte[] buffer = new byte[4 * 1024];
@@ -171,9 +165,7 @@ public class NetWorkUtil
                 int count = inflater.inflate(buffer);
                 outputStream.write(buffer, 0, count);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         byte[] output = outputStream.toByteArray();
@@ -181,12 +173,10 @@ public class NetWorkUtil
         return output;
     }
 
-    public static String getInfoFromCookie(String name, String cookie)
-    {
+    public static String getInfoFromCookie(String name, String cookie) {
         String[] cookies = cookie.split("; ");
-        for(String i : cookies)
-        {
-            if(i.contains(name + "="))
+        for (String i : cookies) {
+            if (i.contains(name + "="))
                 return i.substring(name.length() + 1);
         }
         return "";
@@ -203,13 +193,14 @@ public class NetWorkUtil
         for (String newCookie : newCookies) {  //对每一条新cookie遍历
 
             Cookies cookies = new Cookies(newCookie);
-            if (cookies.containsKey("Domain") && !cookies.get("Domain").endsWith("bilibili.com")) continue;
+            if (cookies.containsKey("Domain") && !cookies.get("Domain").endsWith("bilibili.com"))
+                continue;
 
             int index = newCookie.indexOf("; ");
             if (index != -1) newCookie = newCookie.substring(0, index);  //如果没有分号不做处理
 
             index = newCookie.indexOf("=") + 1;
-            if(index == 0) continue;   //如果没有等号，跳过
+            if (index == 0) continue;   //如果没有等号，跳过
 
             String key = newCookie.substring(0, index);    //key=
             Log.e("debug-newCookie", newCookie);
@@ -233,7 +224,7 @@ public class NetWorkUtil
             setCookies.append(setCookie).append("; ");
         }
         //如果一次setCookies都没有，就不要存了， 因为是个空字符串
-        if(setCookies.length() >= 2) {
+        if (setCookies.length() >= 2) {
             Log.e("debug-save-result", setCookies.substring(0, setCookies.length() - 2));
             SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, setCookies.substring(0, setCookies.length() - 2));
             refreshHeaders();
@@ -242,6 +233,7 @@ public class NetWorkUtil
 
     /**
      * 存储单个Cookie
+     *
      * @param key 键
      * @param val 值
      */
@@ -255,6 +247,7 @@ public class NetWorkUtil
 
     /**
      * 存储Cookies（覆盖写入）
+     *
      * @param cookies cookies
      */
     public static void setCookies(Cookies cookies) {
@@ -265,6 +258,7 @@ public class NetWorkUtil
 
     /**
      * 获取存储的Cookies
+     *
      * @return 存储的Cookies
      */
     public static Cookies getCookies() {
@@ -285,9 +279,10 @@ public class NetWorkUtil
         add("application/x-www-form-urlencoded");
     }};
 
-    public static void refreshHeaders(){
-        webHeaders.set(1,SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""));
+    public static void refreshHeaders() {
+        webHeaders.set(1, SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
     }
+
     public static class FormData {
         private final Map<String, String> data;
         private boolean isUrlParam;
@@ -340,8 +335,8 @@ public class NetWorkUtil
     }
 
     private static class CookieSaveInterceptor implements Interceptor {
-         @Nullable
-         public Response intercept(@NonNull Chain chain) throws IOException {
+        @Nullable
+        public Response intercept(@NonNull Chain chain) throws IOException {
             Response response = chain.proceed(chain.request());
             saveCookiesFromResponse(response);
             return response;

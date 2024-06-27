@@ -29,7 +29,7 @@ public class PrivateMsgApi {
 
     // 返回的是倒序的消息列表，使用时记得列表倒置
     //seqno传0时只看size，不进行seqno的筛选
-    public static JSONObject getPrivateMsg(long talkerId, int size,long beginSeqno,long endSeqno)
+    public static JSONObject getPrivateMsg(long talkerId, int size, long beginSeqno, long endSeqno)
             throws IOException, JSONException {
         String url =
                 "https://api.vc.bilibili.com/svr_sync/v1/svr_sync/fetch_session_msgs?session_type=1&talker_id=" + talkerId
@@ -45,7 +45,7 @@ public class PrivateMsgApi {
     public static ArrayList<PrivateMessage> getPrivateMsgList(JSONObject allMsgJson)
             throws IOException, JSONException {
         ArrayList<PrivateMessage> list = new ArrayList<>();
-        if(!allMsgJson.isNull("messages")) {
+        if (!allMsgJson.isNull("messages")) {
             JSONArray messages = allMsgJson.getJSONArray("messages");
             UserInfo myInfo = UserInfoApi.getCurrentUserInfo();
             UserInfo targetInfo = new UserInfo();
@@ -104,7 +104,7 @@ public class PrivateMsgApi {
             userString.append(uid).append(",");
         }
         String url = "https://api.vc.bilibili.com/account/v1/user/cards?uids="
-                        + userString.substring(0, userString.length() - 1);
+                + userString.substring(0, userString.length() - 1);
         HashMap<Long, UserInfo> userMap = new HashMap<>();
         JSONObject root = NetWorkUtil.getJson(url);
         if (root.has("data") && !root.isNull("data")) {
@@ -165,7 +165,7 @@ public class PrivateMsgApi {
                         + "&msg[timestamp]=" + timestamp;
 
         JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, NetWorkUtil.webHeaders).body()).string());
-        
+
         Log.e("debug-发送私信", result.toString());
         Log.e("debug-发送私信", NetWorkUtil.webHeaders.toString());
         return result;
@@ -191,7 +191,7 @@ public class PrivateMsgApi {
     // 由于接口特殊性定制的textReplaceEmote
     public static SpannableString textReplaceEmote(String text, JSONArray emote, float scale, Context context) throws JSONException, ExecutionException, InterruptedException {
         SpannableString result = new SpannableString(text);
-        if (emote!=null && emote.length()>0) {
+        if (emote != null && emote.length() > 0) {
             for (int i = 0; i < emote.length(); i++) {    //遍历每一个表情包
                 JSONObject key = emote.getJSONObject(i);
 
@@ -199,7 +199,7 @@ public class PrivateMsgApi {
                 String emoteUrl = key.getString("url");
                 int size = key.getInt("size");  //B站十分贴心的帮你把表情包大小都写好了，快说谢谢蜀黍
 
-                EmoteUtil.replaceSingle(text,result,name,emoteUrl,size,scale,context);
+                EmoteUtil.replaceSingle(text, result, name, emoteUrl, size, scale, context);
             }
         }
         return result;

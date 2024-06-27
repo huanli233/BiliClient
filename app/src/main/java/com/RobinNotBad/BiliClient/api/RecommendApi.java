@@ -25,6 +25,7 @@ import java.util.Random;
 
 public class RecommendApi {
     private static final long UNIQ_ID = (long) (new Random().nextDouble() * (1500000000000L - 1300000000000L));
+
     public static void getRecommend(List<VideoCard> videoCardList) throws IOException, JSONException {
         String url = ("https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd");
         url += new NetWorkUtil.FormData().setUrlParam(true)
@@ -61,7 +62,7 @@ public class RecommendApi {
         JSONObject result = NetWorkUtil.getJson(url);  //得到一整个json
 
         ArrayList<VideoCard> videoList = new ArrayList<>();
-        if(result.has("data") && !result.isNull("data")) {
+        if (result.has("data") && !result.isNull("data")) {
             JSONArray data = result.getJSONArray("data");
             for (int i = 0; i < data.length(); i++) {
                 JSONObject card = data.getJSONObject(i);
@@ -86,10 +87,10 @@ public class RecommendApi {
 
         JSONObject result = NetWorkUtil.getJson(url);  //得到一整个json
 
-        if(result.has("data") && !result.isNull("data")){
-            if(result.getJSONObject("data").has("list")){
+        if (result.has("data") && !result.isNull("data")) {
+            if (result.getJSONObject("data").has("list")) {
                 JSONArray list = result.getJSONObject("data").getJSONArray("list");
-                for(int i = 0;i < list.length();i++){
+                for (int i = 0; i < list.length(); i++) {
                     JSONObject card = list.getJSONObject(i);
                     VideoCard videoCard = new VideoCard();
                     videoCard.aid = card.getLong("aid");
@@ -102,6 +103,7 @@ public class RecommendApi {
             }
         }
     }
+
     public static void getPrecious(List<VideoCard> videoCardList, int page) throws JSONException, IOException {
         //热门接口在携带Cookie时返回的数据的排行是个性化的
 
@@ -109,10 +111,10 @@ public class RecommendApi {
 
         JSONObject result = NetWorkUtil.getJson(url);  //得到一整个json
 
-        if(result.has("data") && !result.isNull("data")){
-            if(result.getJSONObject("data").has("list")){
+        if (result.has("data") && !result.isNull("data")) {
+            if (result.getJSONObject("data").has("list")) {
                 JSONArray list = result.getJSONObject("data").getJSONArray("list");
-                for(int i = 0;i < list.length();i++){
+                for (int i = 0; i < list.length(); i++) {
                     JSONObject card = list.getJSONObject(i);
                     VideoCard videoCard = new VideoCard();
                     videoCard.aid = card.getLong("aid");

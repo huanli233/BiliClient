@@ -31,29 +31,29 @@ public class SettingMainActivity extends InstanceActivity {
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_main, null, (layoutView, layoutId, parent) -> {
             setContentView(R.layout.activity_setting_main);
             setMenuClick();
-            Log.e("debug","进入设置页");
- 
+            Log.e("debug", "进入设置页");
+
             //查看登录信息
             MaterialCardView login_cookie = findViewById(R.id.login_cookie);
             login_cookie.setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(this, SpecialLoginActivity.class);
-                intent.putExtra("login",false);
+                intent.putExtra("login", false);
                 startActivity(intent);
             });
-                
+
             //登录
             MaterialCardView login = findViewById(R.id.login);
-            if(SharedPreferencesUtil.getLong("mid",0)==0) {
+            if (SharedPreferencesUtil.getLong("mid", 0) == 0) {
                 login_cookie.setVisibility(View.GONE);
                 login.setVisibility(View.VISIBLE);
                 login.setOnClickListener(view -> {
                     Intent intent = new Intent();
-                    if(Build.VERSION.SDK_INT>=19)
+                    if (Build.VERSION.SDK_INT >= 19)
                         intent.setClass(this, LoginActivity.class);   //去扫码登录页面
-                    else{
+                    else {
                         intent.setClass(this, SpecialLoginActivity.class);   //4.4以下系统去特殊登录页面
-                        intent.putExtra("login",true);
+                        intent.putExtra("login", true);
                     }
                     startActivity(intent);
                 });
@@ -116,20 +116,20 @@ public class SettingMainActivity extends InstanceActivity {
             //彩蛋
             String[] eggList = getResources().getStringArray(R.array.eggs);
             about.setOnLongClickListener(view -> {
-                MsgUtil.showText(this,"彩蛋",eggList[eggClick]);
-                if(eggClick<eggList.length-1) eggClick++;
+                MsgUtil.showText(this, "彩蛋", eggList[eggClick]);
+                if (eggClick < eggList.length - 1) eggClick++;
                 return true;
             });
 
             //检查更新
             MaterialCardView checkUpdate = findViewById(R.id.checkupdate);
             checkUpdate.setOnClickListener(view -> {
-                MsgUtil.toast("正在获取...",this);
+                MsgUtil.toast("正在获取...", this);
                 CenterThreadPool.run(() -> {
                     try {
-                        AppInfoApi.checkUpdate(this,true,false);
+                        AppInfoApi.checkUpdate(this, true, false);
                     } catch (Exception e) {
-                        runOnUiThread(() -> MsgUtil.toast("连接到哔哩终端接口时发生错误",this));
+                        runOnUiThread(() -> MsgUtil.toast("连接到哔哩终端接口时发生错误", this));
                     }
                 });
             });
@@ -138,7 +138,7 @@ public class SettingMainActivity extends InstanceActivity {
             MaterialCardView announcement = findViewById(R.id.announcement);
             announcement.setOnClickListener(view -> {
                 Intent intent = new Intent();
-                intent.setClass(this,AnnouncementsActivity.class);
+                intent.setClass(this, AnnouncementsActivity.class);
                 startActivity(intent);
             });
 

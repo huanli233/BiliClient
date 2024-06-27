@@ -56,6 +56,7 @@ public class PreInflateHelper {
     public View getView(@NonNull ViewGroup parent, int layoutId, boolean attachToRoot) {
         return getView(parent, layoutId, DEFAULT_PRELOAD_COUNT, attachToRoot);
     }
+
     public View getView(@NonNull ViewGroup parent, int layoutId, int maxCount, boolean attachToRoot) {
 //        View view = mViewCache.getView(layoutId);
 //        preloadOnce(parent, layoutId, maxCount);
@@ -97,13 +98,14 @@ public class PreInflateHelper {
         /**
          * 同步加载View
          *
-         * @param parent   父布局
-         * @param layoutId 布局资源id
+         * @param parent       父布局
+         * @param layoutId     布局资源id
          * @param attachToRoot attachToRoot
          * @return 加载的View
          */
         View inflateView(@NonNull ViewGroup parent, int layoutId, boolean attachToRoot);
     }
+
     interface InflateCallback {
         void onInflateFinished(int layoutId, View view);
     }

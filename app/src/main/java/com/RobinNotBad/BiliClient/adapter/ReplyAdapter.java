@@ -86,18 +86,18 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this(context, replyList, oid, root, type, sort, null);
     }
 
-    public void setOnSortSwitchListener(OnItemClickListener listener){
+    public void setOnSortSwitchListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == 0){
-            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_reply_action,parent,false);
+        if (viewType == 0) {
+            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_reply_action, parent, false);
             return new WriteReply(view);
         } else {
-            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_reply_list,parent,false);
+            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_reply_list, parent, false);
             return new ReplyHolder(view);
         }
     }
@@ -105,29 +105,29 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof WriteReply){
+        if (holder instanceof WriteReply) {
             WriteReply writeReply = (WriteReply) holder;
             writeReply.write_reply.setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(context, WriteReplyActivity.class);
-                intent.putExtra("oid",oid);
-                intent.putExtra("rpid",root);
-                intent.putExtra("parent",root);
-                intent.putExtra("parentSender","");
+                intent.putExtra("oid", oid);
+                intent.putExtra("rpid", root);
+                intent.putExtra("parent", root);
+                intent.putExtra("parentSender", "");
                 intent.putExtra("replyType", replyType);
                 context.startActivity(intent);
             });
-            String[] sorts = {"时间排序","点赞排序","回复排序"};
+            String[] sorts = {"时间排序", "点赞排序", "回复排序"};
             if (isDetail) {
                 writeReply.sort.setVisibility(View.GONE);
             } else {
                 writeReply.sort.setText(sorts[sort]);
                 writeReply.sort.setOnClickListener(view -> {
-                    if(this.listener!=null) listener.onItemClick(0);
+                    if (this.listener != null) listener.onItemClick(0);
                 });
             }
         }
-        if(holder instanceof ReplyHolder) {
+        if (holder instanceof ReplyHolder) {
             int realPosition;
             if (isDetail) {
                 realPosition = position != 0 ? position - 1 : 0;
@@ -146,8 +146,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             String text = replyList.get(realPosition).message;
             replyHolder.message.setText(text);  //防止加载速度慢时露出鸡脚
-            ToolsUtil.setCopy(replyHolder.message,context);
-            if(replyList.get(realPosition).emotes != null) {
+            ToolsUtil.setCopy(replyHolder.message, context);
+            if (replyList.get(realPosition).emotes != null) {
                 CenterThreadPool.run(() -> {
                     try {
                         SpannableString spannableString = EmoteUtil.textReplaceEmote(text, replyList.get(realPosition).emotes, 1.0f, context, replyHolder.message.getText());
@@ -172,26 +172,29 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             replyHolder.likeCount.setText(String.valueOf(replyList.get(realPosition).likeCount));
 
             if (replyList.get(realPosition).liked) {
-                replyHolder.likeCount.setTextColor(Color.rgb(0xfe,0x67,0x9a));
-                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_liked),null,null,null);
+                replyHolder.likeCount.setTextColor(Color.rgb(0xfe, 0x67, 0x9a));
+                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_liked), null, null, null);
             } else {
-                replyHolder.likeCount.setTextColor(Color.rgb(0xff,0xff,0xff));
-                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_like),null,null,null);
+                replyHolder.likeCount.setTextColor(Color.rgb(0xff, 0xff, 0xff));
+                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_like), null, null, null);
             }
 
             if (replyList.get(realPosition).childCount != 0 && !(realPosition == 0 && isDetail)) {
                 replyHolder.childReplyCard.setVisibility(View.VISIBLE);
 
-                if (replyList.get(realPosition).upReplied) replyHolder.childCount.setText("UP主在内 共" + replyList.get(realPosition).childCount + "条回复");
-                else replyHolder.childCount.setText("共" + replyList.get(realPosition).childCount + "条回复");
+                if (replyList.get(realPosition).upReplied)
+                    replyHolder.childCount.setText("UP主在内 共" + replyList.get(realPosition).childCount + "条回复");
+                else
+                    replyHolder.childCount.setText("共" + replyList.get(realPosition).childCount + "条回复");
 
-                if(replyList.get(realPosition).childMsgList != null) {
+                if (replyList.get(realPosition).childMsgList != null) {
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.cell_reply_child, replyList.get(realPosition).childMsgList);
                     replyHolder.childReplies.setAdapter(adapter);
                 }
             } else replyHolder.childReplyCard.setVisibility(View.GONE);
 
-            if (replyList.get(realPosition).upLiked) replyHolder.upLiked.setVisibility(View.VISIBLE);
+            if (replyList.get(realPosition).upLiked)
+                replyHolder.upLiked.setVisibility(View.VISIBLE);
             else replyHolder.upLiked.setVisibility(View.GONE);
             replyHolder.pubDate.setText(replyList.get(realPosition).pubTime);
 
@@ -232,8 +235,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
 
             replyHolder.likeCount.setOnClickListener(view -> CenterThreadPool.run(() -> {
-                if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0){
-                    ((Activity) context).runOnUiThread(() -> MsgUtil.toast("还没有登录喵~",context));
+                if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
+                    ((Activity) context).runOnUiThread(() -> MsgUtil.toast("还没有登录喵~", context));
                     return;
                 }
                 if (!replyList.get(realPosition).liked) {
@@ -241,13 +244,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         if (ReplyApi.likeReply(oid, replyList.get(realPosition).rpid, true) == 0) {
                             replyList.get(realPosition).liked = true;
                             ((Activity) context).runOnUiThread(() -> {
-                                MsgUtil.toast("点赞成功",context);
+                                MsgUtil.toast("点赞成功", context);
                                 replyHolder.likeCount.setText(toWan(++replyList.get(realPosition).likeCount));
-                                replyHolder.likeCount.setTextColor(Color.rgb(0xfe,0x67,0x9a));
-                                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_liked),null,null,null);
+                                replyHolder.likeCount.setTextColor(Color.rgb(0xfe, 0x67, 0x9a));
+                                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_liked), null, null, null);
                             });
                         } else
-                            ((Activity) context).runOnUiThread(() -> MsgUtil.toast("点赞失败",context));
+                            ((Activity) context).runOnUiThread(() -> MsgUtil.toast("点赞失败", context));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
@@ -258,13 +261,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         if (ReplyApi.likeReply(oid, replyList.get(realPosition).rpid, false) == 0) {
                             replyList.get(realPosition).liked = false;
                             ((Activity) context).runOnUiThread(() -> {
-                                MsgUtil.toast("取消成功",context);
+                                MsgUtil.toast("取消成功", context);
                                 replyHolder.likeCount.setText(toWan(--replyList.get(realPosition).likeCount));
-                                replyHolder.likeCount.setTextColor(Color.rgb(0xff,0xff,0xff));
-                                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.icon_like),null,null,null);
+                                replyHolder.likeCount.setTextColor(Color.rgb(0xff, 0xff, 0xff));
+                                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_like), null, null, null);
                             });
                         } else
-                            ((Activity) context).runOnUiThread(() -> MsgUtil.toast("取消失败",context));
+                            ((Activity) context).runOnUiThread(() -> MsgUtil.toast("取消失败", context));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
@@ -278,6 +281,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             View.OnLongClickListener onDeleteLongClick = new View.OnLongClickListener() {
                 private int longClickPosition = -1;
                 private long longClickTime = -1;
+
                 @Override
                 public boolean onLongClick(View view) {
                     long currentTime = System.currentTimeMillis();
@@ -322,7 +326,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             };
             replyHolder.item_reply_delete.setOnLongClickListener(onDeleteLongClick);
-            if (!(replyList.get(realPosition).sender.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) || replyList.get(realPosition).sender.mid == 0 || replyList.get(realPosition).forceDelete)) {
+            if (!(replyList.get(realPosition).sender.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) || replyList.get(realPosition).sender.mid == 0 || replyList.get(realPosition).forceDelete)) {
                 replyHolder.item_reply_delete.setVisibility(View.GONE);
                 CenterThreadPool.run(() -> {
                     try {
@@ -331,7 +335,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             if (source instanceof VideoInfo) {
                                 List<UserInfo> staffs = ((VideoInfo) source).staff;
                                 for (UserInfo userInfo : staffs) {
-                                    if (userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)) {
+                                    if (userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0)) {
                                         isManager = true;
                                         break;
                                     }
@@ -346,7 +350,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             ((Activity) context).runOnUiThread(() -> replyHolder.item_reply_delete.setVisibility(View.VISIBLE));
                         }
                     } catch (Exception e) {
-                        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) != 0) ((Activity) context).runOnUiThread(() -> MsgUtil.err(e, context));
+                        if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) != 0)
+                            ((Activity) context).runOnUiThread(() -> MsgUtil.err(e, context));
                     }
                 });
             } else {
@@ -357,13 +362,14 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 boolean noParent = isDetail && realPosition == 0;
                 Intent intent = new Intent();
                 intent.setClass(context, WriteReplyActivity.class);
-                intent.putExtra("oid",oid);
+                intent.putExtra("oid", oid);
                 intent.putExtra("rpid", noParent ? root : replyList.get(realPosition).rpid);
                 intent.putExtra("parent", noParent ? root : replyList.get(realPosition).rpid);
                 intent.putExtra("replyType", replyType);
                 intent.putExtra("pos", realPosition);
-                if(root!=0 && !noParent) intent.putExtra("parentSender",replyList.get(realPosition).sender.name);
-                else intent.putExtra("parentSender","");
+                if (root != 0 && !noParent)
+                    intent.putExtra("parentSender", replyList.get(realPosition).sender.name);
+                else intent.putExtra("parentSender", "");
                 context.startActivity(intent);
             });
         }
@@ -372,7 +378,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void setTopSpan(int realPosition, ReplyHolder replyHolder) {
         if (replyList.get(realPosition).isTop && replyList.get(realPosition).message.startsWith(ReplyApi.TOP_TIP)) {
             SpannableString spannableString = new SpannableString(replyHolder.message.getText());
-            spannableString.setSpan(new ForegroundColorSpan(Color.rgb(207,75,95)), 0, ReplyApi.TOP_TIP.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(new ForegroundColorSpan(Color.rgb(207, 75, 95)), 0, ReplyApi.TOP_TIP.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
             replyHolder.message.setText(spannableString);
         }
     }
@@ -385,11 +391,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         intent.setClass(context, ReplyInfoActivity.class);
         intent.putExtra("rpid", rpid);
         intent.putExtra("oid", oid);
-        intent.putExtra("type",type);
+        intent.putExtra("type", type);
         intent.putExtra("origReply", reply);
-        if (source != null && source instanceof Serializable) intent.putExtra("source", (Serializable) source);
+        if (source != null && source instanceof Serializable)
+            intent.putExtra("source", (Serializable) source);
         context.startActivity(intent);
     }
+
     @Override
     public int getItemCount() {
         return replyList.size() + 1;
@@ -402,10 +410,10 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else if (!isDetail && position == 0) {
             return 0;
         }
-         return 1;
+        return 1;
     }
 
-    public static class ReplyHolder extends RecyclerView.ViewHolder{
+    public static class ReplyHolder extends RecyclerView.ViewHolder {
         final ImageView replyAvatar;
         final ImageView dislikeBtn;
         final CustomListView childReplies;
@@ -442,7 +450,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public static class WriteReply extends RecyclerView.ViewHolder{
+    public static class WriteReply extends RecyclerView.ViewHolder {
         final MaterialButton write_reply;
         final MaterialButton sort;
 

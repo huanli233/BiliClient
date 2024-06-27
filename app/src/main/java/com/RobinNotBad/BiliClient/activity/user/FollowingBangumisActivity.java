@@ -30,17 +30,17 @@ public class FollowingBangumisActivity extends RefreshListActivity {
 
         videoList = new ArrayList<>();
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
-                int result = BangumiApi.getFollowingList(page,videoList);
-                if(result != -1) {
+                int result = BangumiApi.getFollowingList(page, videoList);
+                if (result != -1) {
                     videoCardAdapter = new VideoCardAdapter(this, videoList);
                     setOnLoadMoreListener(this::continueLoading);
                     setRefreshing(false);
                     setAdapter(videoCardAdapter);
 
-                    if(result == 1) {
-                        Log.e("debug","到底了");
+                    if (result == 1) {
+                        Log.e("debug", "到底了");
                         setBottom(true);
                     }
                 }
@@ -53,18 +53,18 @@ public class FollowingBangumisActivity extends RefreshListActivity {
     }
 
     private void continueLoading(int page) {
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 List<VideoCard> list = new ArrayList<>();
-                int result = BangumiApi.getFollowingList(page,list);
-                if(result != -1){
-                    Log.e("debug","下一页");
-                    runOnUiThread(()-> {
+                int result = BangumiApi.getFollowingList(page, list);
+                if (result != -1) {
+                    Log.e("debug", "下一页");
+                    runOnUiThread(() -> {
                         videoList.addAll(list);
-                        videoCardAdapter.notifyItemRangeInserted(videoList.size() - list.size(),list.size());
+                        videoCardAdapter.notifyItemRangeInserted(videoList.size() - list.size(), list.size());
                     });
-                    if(result == 1) {
-                        Log.e("debug","到底了");
+                    if (result == 1) {
+                        Log.e("debug", "到底了");
                         setBottom(true);
                     }
                 }

@@ -26,7 +26,7 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_viewpager);
-        Log.e("debug","进入登录页面");
+        Log.e("debug", "进入登录页面");
         setPageName("登录");
 
         ViewPager viewPager = findViewById(R.id.viewPager);
@@ -34,12 +34,12 @@ public class LoginActivity extends BaseActivity {
         fragmentList.add(new QRLoginFragment());
 
         viewPager.setOffscreenPageLimit(fragmentList.size());
-        ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(),fragmentList);
+        ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(vpfAdapter);
 
         findViewById(R.id.loading).setVisibility(View.GONE);
         if (fragmentList.size() > 1 && SharedPreferencesUtil.getBoolean("first_" + LoginActivity.class.getSimpleName(), true)) {
-            MsgUtil.toastLong("提示：本页面可以左右滑动",this);
+            MsgUtil.toastLong("提示：本页面可以左右滑动", this);
             SharedPreferencesUtil.putBoolean("first_" + LoginActivity.class.getSimpleName(), false);
         }
     }

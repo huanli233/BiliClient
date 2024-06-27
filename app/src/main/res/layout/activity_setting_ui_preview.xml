@@ -13,18 +13,18 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-                android:id="@+id/pageName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="3dp"
-                android:layout_marginStart="8dp"
-                android:gravity="center"
-                android:text="界面预览"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:drawableStartCompat="@drawable/arrow_back"/>
+            android:id="@+id/pageName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="3dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:text="界面预览"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:drawableStartCompat="@drawable/arrow_back" />
 
         <TextClock
             android:id="@+id/timeText"
@@ -59,13 +59,11 @@
 
             <include layout="@layout/cell_user_list" />
 
-            <include
-                layout="@layout/cell_video_list"/>
+            <include layout="@layout/cell_video_list" />
 
-            <include
-                layout="@layout/cell_article_list"/>
-            <include
-                layout="@layout/cell_reply_list"/>
+            <include layout="@layout/cell_article_list" />
+
+            <include layout="@layout/cell_reply_list" />
         </LinearLayout>
     </ScrollView>
 

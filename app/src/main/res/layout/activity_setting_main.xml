@@ -26,7 +26,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:drawableStartCompat="@drawable/arrow_down"/>
+            app:drawableStartCompat="@drawable/arrow_down" />
 
         <TextClock
             android:id="@+id/timeText"
@@ -638,8 +638,8 @@
                     android:text="公告列表"
                     android:textAlignment="textStart"
                     android:textSize="13sp"
-                    tools:ignore="RtlCompat" 
-                    app:drawableEndCompat="@drawable/arrow_forward"/>
+                    tools:ignore="RtlCompat"
+                    app:drawableEndCompat="@drawable/arrow_forward" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -656,7 +656,7 @@
                     android:textAlignment="textStart"
                     android:textSize="13sp"
                     tools:ignore="RtlCompat" />
-                
+
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -674,7 +674,7 @@
                     android:textSize="13sp"
                     app:drawableEndCompat="@drawable/arrow_forward"
                     tools:ignore="RtlCompat" />
-                
+
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>

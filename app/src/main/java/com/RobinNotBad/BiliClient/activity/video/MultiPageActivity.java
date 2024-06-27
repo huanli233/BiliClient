@@ -25,6 +25,7 @@ import java.io.File;
 public class MultiPageActivity extends BaseActivity {
 
     boolean play_clicked;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,23 +40,23 @@ public class MultiPageActivity extends BaseActivity {
         Intent intent = getIntent();
         VideoInfo videoInfo = (VideoInfo) intent.getSerializableExtra("videoInfo");
 
-        PageChooseAdapter adapter = new PageChooseAdapter(this,videoInfo.pagenames);
+        PageChooseAdapter adapter = new PageChooseAdapter(this, videoInfo.pagenames);
 
-        if (intent.getIntExtra("download",0) == 1) {    //下载模式
+        if (intent.getIntExtra("download", 0) == 1) {    //下载模式
             adapter.setOnItemClickListener(position -> {
                 File rootPath = new File(ConfInfoApi.getDownloadPath(this), ToolsUtil.stringToFile(videoInfo.title));
                 File downPath = new File(rootPath, ToolsUtil.stringToFile(videoInfo.pagenames.get(position)));
-                if (downPath.exists()) MsgUtil.toast("已经缓存过了~",this);
+                if (downPath.exists()) MsgUtil.toast("已经缓存过了~", this);
                 else {
                     startActivity(new Intent().putExtra("page", position).putExtra("videoInfo", videoInfo).setClass(this, QualityChooserActivity.class));
                 }
             });
         } else {        //普通播放模式
-            int progress = intent.getIntExtra("progress",-1);
-            long progress_cid = intent.getLongExtra("progress_cid",0);
-            adapter.setOnItemClickListener(position ->{
+            int progress = intent.getIntExtra("progress", -1);
+            long progress_cid = intent.getLongExtra("progress_cid", 0);
+            adapter.setOnItemClickListener(position -> {
                 long cid = videoInfo.cids.get(position);
-                PlayerApi.startGettingUrl(this, videoInfo, position, (progress_cid==cid && !play_clicked) ? progress : -1);
+                PlayerApi.startGettingUrl(this, videoInfo, position, (progress_cid == cid && !play_clicked) ? progress : -1);
                 play_clicked = true;
             });
         }

@@ -66,7 +66,7 @@ public class QRLoginFragment extends Fragment {
                 startActivity(intent);
             }
             if (timer != null) timer.cancel();
-            if (isAdded())  requireActivity().finish();
+            if (isAdded()) requireActivity().finish();
         });
 
         MaterialCardView special = view.findViewById(R.id.special);
@@ -113,8 +113,8 @@ public class QRLoginFragment extends Fragment {
     }
 
     public void refreshQrCode() {
-        CenterThreadPool.run(() ->{
-            try{
+        CenterThreadPool.run(() -> {
+            try {
                 requireActivity().runOnUiThread(() -> scanStat.setText("正在获取二维码"));
                 QRImage = LoginApi.getLoginQR();
 
@@ -131,7 +131,7 @@ public class QRLoginFragment extends Fragment {
                     scanStat.setText("获取二维码失败，网络错误");
                 });
                 e.printStackTrace();
-            } catch (JSONException e){
+            } catch (JSONException e) {
                 requireActivity().runOnUiThread(() -> {
                     qrImageView.setEnabled(true);
                     scanStat.setText("登录接口可能失效，请找开发者");
@@ -143,11 +143,11 @@ public class QRLoginFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        if(timer != null) timer.cancel();
+        if (timer != null) timer.cancel();
         super.onDestroy();
     }
 
-    public void startLoginDetect(){
+    public void startLoginDetect() {
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -159,12 +159,14 @@ public class QRLoginFragment extends Fragment {
                     JSONObject loginJson = new JSONObject(response.body().string());
 
                     int code = loginJson.getJSONObject("data").getInt("code");
-                    switch (code){
+                    switch (code) {
                         case 86090:
-                            if (isAdded()) requireActivity().runOnUiThread(() -> scanStat.setText("已扫描，请在手机上点击登录"));
+                            if (isAdded())
+                                requireActivity().runOnUiThread(() -> scanStat.setText("已扫描，请在手机上点击登录"));
                             break;
                         case 86101:
-                            if (isAdded()) requireActivity().runOnUiThread(() -> scanStat.setText("请使用手机端哔哩哔哩扫码登录\n点击二维码可以进行放大和缩小"));
+                            if (isAdded())
+                                requireActivity().runOnUiThread(() -> scanStat.setText("请使用手机端哔哩哔哩扫码登录\n点击二维码可以进行放大和缩小"));
                             break;
                         case 86038:
                             if (isAdded()) requireActivity().runOnUiThread(() -> {
@@ -174,21 +176,21 @@ public class QRLoginFragment extends Fragment {
                             this.cancel();
                             break;
                         case 0:
-                            String cookies = SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,"");
+                            String cookies = SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, "");
 
                             SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(NetWorkUtil.getInfoFromCookie("DedeUserID", cookies)));
                             SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, NetWorkUtil.getInfoFromCookie("bili_jct", cookies));
-                            SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token,loginJson.getJSONObject("data").getString("refresh_token"));
+                            SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token, loginJson.getJSONObject("data").getString("refresh_token"));
 
-                            SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cookie_refresh,true);
+                            SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cookie_refresh, true);
 
-                            Log.e("refresh_token",SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token,""));
+                            Log.e("refresh_token", SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""));
 
-                            if(SharedPreferencesUtil.getBoolean("setup",false)) {
+                            if (SharedPreferencesUtil.getBoolean("setup", false)) {
                                 InstanceActivity instance = BiliTerminal.instance;
-                                if(instance != null && !instance.isDestroyed()) instance.finish();
-                            }
-                            else SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup,true);
+                                if (instance != null && !instance.isDestroyed()) instance.finish();
+                            } else
+                                SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup, true);
 
                             NetWorkUtil.refreshHeaders();
 
@@ -200,7 +202,8 @@ public class QRLoginFragment extends Fragment {
                             if (loginJson.getJSONObject("data").has("url")) {
                                 try {
                                     NetWorkUtil.get(loginJson.getJSONObject("data").optString("url"));
-                                } catch (Throwable ignored) {}
+                                } catch (Throwable ignored) {
+                                }
                             }
 
                             Intent intent = new Intent();
@@ -211,7 +214,8 @@ public class QRLoginFragment extends Fragment {
                             this.cancel();
                             break;
                         default:
-                            if (isAdded()) requireActivity().runOnUiThread(()->scanStat.setText("二维码登录API可能变动，\n但你仍然可以尝试扫码登录。\n建议反馈给开发者"));
+                            if (isAdded())
+                                requireActivity().runOnUiThread(() -> scanStat.setText("二维码登录API可能变动，\n但你仍然可以尝试扫码登录。\n建议反馈给开发者"));
                             break;
                     }
 

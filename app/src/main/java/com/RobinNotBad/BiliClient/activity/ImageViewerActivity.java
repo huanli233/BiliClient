@@ -45,21 +45,20 @@ public class ImageViewerActivity extends BaseActivity {
                         .override(Target.SIZE_ORIGINAL)//override这一项一定要加，这样才会显示原图，不然一放大就糊成使
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(photoView);
-            }catch (OutOfMemoryError e){
-                MsgUtil.toast("超出内存，加载失败",this);
+            } catch (OutOfMemoryError e) {
+                MsgUtil.toast("超出内存，加载失败", this);
             }
 
             int id = i;
             photoView.setOnLongClickListener(view -> {
-                if(longClickPosition != id){
-                    MsgUtil.toast("再次长按下载图片",this);
+                if (longClickPosition != id) {
+                    MsgUtil.toast("再次长按下载图片", this);
                     longClickPosition = id;
-                }
-                else{
+                } else {
                     Intent intent1 = new Intent()
-                            .setClass(ImageViewerActivity.this,DownloadActivity.class)
-                            .putExtra("link",imageList.get(id))
-                            .putExtra("type",0)
+                            .setClass(ImageViewerActivity.this, DownloadActivity.class)
+                            .putExtra("link", imageList.get(id))
+                            .putExtra("type", 0)
                             .putExtra("title", ToolsUtil.getFileNameFromLink(imageList.get(id)));
                     startActivity(intent1);
                     longClickPosition = -1;

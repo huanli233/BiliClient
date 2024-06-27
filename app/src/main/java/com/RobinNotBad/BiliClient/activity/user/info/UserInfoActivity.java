@@ -36,11 +36,11 @@ public class UserInfoActivity extends BaseActivity {
             setContentView(layoutView);
             setTopbarExit();
             Intent intent = getIntent();
-            long mid = intent.getLongExtra("mid",114514);
+            long mid = intent.getLongExtra("mid", 114514);
 
             setPageName("用户信息");
-                
-            TutorialHelper.show(R.xml.tutorial_space,this,"space",2);
+
+            TutorialHelper.show(R.xml.tutorial_space, this, "space", 2);
 
             ViewPager viewPager = findViewById(R.id.viewPager);
 

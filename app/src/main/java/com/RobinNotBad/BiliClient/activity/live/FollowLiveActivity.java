@@ -28,15 +28,15 @@ public class FollowLiveActivity extends RefreshListActivity {
 
         roomList = new ArrayList<>();
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 roomList = LiveApi.getFollowed(page);
-                adapter = new LiveCardAdapter(this,roomList);
+                adapter = new LiveCardAdapter(this, roomList);
                 setOnLoadMoreListener(this::continueLoading);
                 setRefreshing(false);
                 setAdapter(adapter);
-                if(roomList.size() < 1) showEmptyView();
-            } catch (Exception e){
+                if (roomList.size() < 1) showEmptyView();
+            } catch (Exception e) {
                 report(e);
                 setRefreshing(false);
             }
@@ -44,13 +44,13 @@ public class FollowLiveActivity extends RefreshListActivity {
     }
 
     private void continueLoading(int page) {
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 List<LiveRoom> list;
                 list = LiveApi.getFollowed(page);
                 Log.e("debug", "下一页");
                 runOnUiThread(() -> {
-                    if(list != null){
+                    if (list != null) {
                         roomList.addAll(list);
                         adapter.notifyItemRangeInserted(roomList.size() - list.size(), list.size());
                     }
@@ -60,7 +60,7 @@ public class FollowLiveActivity extends RefreshListActivity {
                     setBottom(true);
                 }
                 setRefreshing(false);
-            } catch (Exception e){
+            } catch (Exception e) {
                 report(e);
                 setRefreshing(false);
                 this.page--;

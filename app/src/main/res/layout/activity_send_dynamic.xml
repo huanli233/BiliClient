@@ -60,7 +60,7 @@
             android:divider="@drawable/divider"
             android:showDividers="middle"
             android:paddingVertical="2dp"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <EditText
                 android:id="@+id/editText"

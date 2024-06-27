@@ -34,6 +34,7 @@ public class ArticleInfoActivity extends BaseActivity {
 
     private ReplyFragment replyFragment;
     private long seek_reply;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +46,8 @@ public class ArticleInfoActivity extends BaseActivity {
 
         TextView pageName = findViewById(R.id.pageName);
         pageName.setText("专栏详情");
-        
-        TutorialHelper.show(R.xml.tutorial_article,this,"article",1);
+
+        TutorialHelper.show(R.xml.tutorial_article, this, "article", 1);
 
         ViewPager viewPager = findViewById(R.id.viewPager);
 
@@ -66,7 +67,7 @@ public class ArticleInfoActivity extends BaseActivity {
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
                     findViewById(R.id.loading).setVisibility(View.GONE);
                 });
-            }catch (Exception e){
+            } catch (Exception e) {
                 runOnUiThread(() -> {
                     ((ImageView) findViewById(R.id.loading)).setImageResource(R.mipmap.loading_2233_error);
                     MsgUtil.err(e, this);
@@ -81,7 +82,7 @@ public class ArticleInfoActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.ASYNC, sticky = true, priority = 1)
-    public void onEvent(ReplyEvent event){
+    public void onEvent(ReplyEvent event) {
         replyFragment.notifyReplyInserted(event);
     }
 }

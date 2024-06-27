@@ -37,42 +37,44 @@ public class WatchLaterActivity extends BaseActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 ArrayList<VideoCard> videoCardList = WatchLaterApi.getWatchLaterList();
-                VideoCardAdapter adapter = new VideoCardAdapter(this,videoCardList);
+                VideoCardAdapter adapter = new VideoCardAdapter(this, videoCardList);
 
                 adapter.setOnLongClickListener(position -> {
-                    if(longClickPosition == position) {
+                    if (longClickPosition == position) {
                         CenterThreadPool.run(() -> {
                             try {
                                 int result = WatchLaterApi.delete(videoCardList.get(position).aid);
                                 longClickPosition = -1;
                                 if (result == 0) runOnUiThread(() -> {
-                                    MsgUtil.toast("删除成功",this);
+                                    MsgUtil.toast("删除成功", this);
                                     videoCardList.remove(position);
                                     adapter.notifyItemRemoved(position);
-                                    adapter.notifyItemRangeChanged(position,videoCardList.size() - position);
+                                    adapter.notifyItemRangeChanged(position, videoCardList.size() - position);
                                 });
-                                else runOnUiThread(()-> MsgUtil.toast("删除失败，错误码：" + result,this));
+                                else
+                                    runOnUiThread(() -> MsgUtil.toast("删除失败，错误码：" + result, this));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         });
-                    }
-                    else {
+                    } else {
                         longClickPosition = position;
-                        MsgUtil.toast("再次长按删除",this);
+                        MsgUtil.toast("再次长按删除", this);
                     }
                 });
 
-                runOnUiThread(()->{
+                runOnUiThread(() -> {
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
                     recyclerView.setAdapter(adapter);
                 });
-            } catch (Exception e){runOnUiThread(()-> MsgUtil.err(e,this));}
+            } catch (Exception e) {
+                runOnUiThread(() -> MsgUtil.err(e, this));
+            }
         });
     }
 

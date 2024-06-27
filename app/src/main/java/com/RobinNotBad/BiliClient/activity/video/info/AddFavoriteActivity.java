@@ -31,19 +31,19 @@ public class AddFavoriteActivity extends RefreshListActivity {
         setPageName("添加收藏");
 
         Intent intent = getIntent();
-        aid = intent.getLongExtra("aid",0);
+        aid = intent.getLongExtra("aid", 0);
 
-        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) {
-            MsgUtil.toast("还没有登录喵~",this);
+        if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
+            MsgUtil.toast("还没有登录喵~", this);
             finish();
             return;
         }
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
-                FavoriteApi.getFavoriteState(aid,folderList,fidList,stateList);
+                FavoriteApi.getFavoriteState(aid, folderList, fidList, stateList);
 
-                adapter = new FolderChooseAdapter(this,folderList,fidList,stateList,aid);
+                adapter = new FolderChooseAdapter(this, folderList, fidList, stateList, aid);
 
                 setAdapter(adapter);
 
@@ -68,14 +68,14 @@ public class AddFavoriteActivity extends RefreshListActivity {
 
     @Override
     protected void onDestroy() {
-        if (adapter!=null) {
+        if (adapter != null) {
             if (SharedPreferencesUtil.getBoolean("fav_notice", false)) {
                 if (adapter.added) MsgUtil.toast("添加成功", this);
                 else if (adapter.changed) MsgUtil.toast("更改成功", this);
             }
         }
-        
+
         super.onDestroy();
-        
+
     }
 }

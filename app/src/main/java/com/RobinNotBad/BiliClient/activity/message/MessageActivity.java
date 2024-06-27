@@ -29,6 +29,7 @@ import java.util.HashMap;
 
 public class MessageActivity extends InstanceActivity {
     private RecyclerView sessionsView;
+
     @SuppressLint({"SetTextI18n", "InflateParams"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +44,9 @@ public class MessageActivity extends InstanceActivity {
             reply.setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(this, NoticeActivity.class);
-                intent.putExtra("type","reply");
+                intent.putExtra("type", "reply");
                 startActivity(intent);
-                ((TextView)findViewById(R.id.reply_text)).setText("回复我的");
+                ((TextView) findViewById(R.id.reply_text)).setText("回复我的");
             });
 
 
@@ -53,25 +54,25 @@ public class MessageActivity extends InstanceActivity {
             like.setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(this, NoticeActivity.class);
-                intent.putExtra("type","like");
+                intent.putExtra("type", "like");
                 startActivity(intent);
-                ((TextView)findViewById(R.id.like_text)).setText("收到的赞");
+                ((TextView) findViewById(R.id.like_text)).setText("收到的赞");
             });
 
             MaterialCardView at = findViewById(R.id.at);
             at.setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(this, NoticeActivity.class);
-                intent.putExtra("type","at");
+                intent.putExtra("type", "at");
                 startActivity(intent);
-                ((TextView)findViewById(R.id.at_text)).setText("@我");
+                ((TextView) findViewById(R.id.at_text)).setText("@我");
             });
 
             MaterialCardView system = findViewById(R.id.system);
             system.setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(this, NoticeActivity.class);
-                intent.putExtra("type","system");
+                intent.putExtra("type", "system");
                 startActivity(intent);
             });
 
@@ -83,11 +84,11 @@ public class MessageActivity extends InstanceActivity {
                     JSONObject stats = MessageApi.getUnread();
                     ArrayList<PrivateMsgSession> sessionsList = PrivateMsgApi.getSessionsList(20);
                     ArrayList<Long> uidList = new ArrayList<>();
-                    for(PrivateMsgSession item :sessionsList) {
+                    for (PrivateMsgSession item : sessionsList) {
                         uidList.add(item.talkerUid);
                     }
-                    HashMap<Long,UserInfo> userMap = PrivateMsgApi.getUsersInfo(uidList);
-                    PrivateMsgSessionsAdapter adapter = new PrivateMsgSessionsAdapter(this,sessionsList,userMap);
+                    HashMap<Long, UserInfo> userMap = PrivateMsgApi.getUsersInfo(uidList);
+                    PrivateMsgSessionsAdapter adapter = new PrivateMsgSessionsAdapter(this, sessionsList, userMap);
                     runOnUiThread(() -> {
                         try {
                             ((TextView) findViewById(R.id.reply_text)).setText("回复我的" + ((stats.getInt("reply") > 0) ? ("(" + stats.getInt("reply") + "未读)") : ""));
@@ -95,12 +96,16 @@ public class MessageActivity extends InstanceActivity {
                             ((TextView) findViewById(R.id.at_text)).setText("@我" + ((stats.getInt("at") > 0) ? ("(" + stats.getInt("at") + "未读)") : ""));
                             sessionsView.setLayoutManager(new LinearLayoutManager(this));
                             sessionsView.setAdapter(adapter);
-                        } catch (Exception e) {MsgUtil.err(e,this);}
+                        } catch (Exception e) {
+                            MsgUtil.err(e, this);
+                        }
                     });
-                } catch (Exception e) {runOnUiThread(()->MsgUtil.err(e,this));}
+                } catch (Exception e) {
+                    runOnUiThread(() -> MsgUtil.err(e, this));
+                }
             });
-                
-            TutorialHelper.show(R.xml.tutorial_message,this,"message",1);
+
+            TutorialHelper.show(R.xml.tutorial_message, this, "message", 1);
         });
     }
 }

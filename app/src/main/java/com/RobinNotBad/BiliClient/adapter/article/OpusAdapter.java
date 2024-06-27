@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
-    
+
     Context context;
     ArrayList<Opus> opusList;
     Opus parsedOpus;
@@ -46,7 +46,7 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
     @NonNull
     @Override
     public OpusHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_opus,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_opus, parent, false);
         return new OpusHolder(view);
     }
 
@@ -58,34 +58,36 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
         Glide.with(context).load(opus.cover)
                 .transition(GlideUtil.getTransitionOptions())
                 .placeholder(R.mipmap.placeholder)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.coverView);
-        if(opus.content.equals("内容失效")) {
-        	holder.itemView.setOnClickListener(v->{
-                MsgUtil.toast("内容失效，无法打开",context);
+        if (opus.content.equals("内容失效")) {
+            holder.itemView.setOnClickListener(v -> {
+                MsgUtil.toast("内容失效，无法打开", context);
             });
-        }else{
-            holder.itemView.setOnClickListener(v->{
-                CenterThreadPool.run(()->{
+        } else {
+            holder.itemView.setOnClickListener(v -> {
+                CenterThreadPool.run(() -> {
                     try {
-                    	parsedOpus = ArticleApi.opusId2cvid(opus.opusId);
+                        parsedOpus = ArticleApi.opusId2cvid(opus.opusId);
                         cvid = parsedOpus.parsedId;
-                    } catch(JSONException err) {
-                    	err.printStackTrace();
-                    } catch(IOException err){
+                    } catch (JSONException err) {
+                        err.printStackTrace();
+                    } catch (IOException err) {
                         err.printStackTrace();
                     }
-                    if(cvid == -1) ((Activity) context).runOnUiThread(() -> MsgUtil.toast("打开失败",context));
+                    if (cvid == -1)
+                        ((Activity) context).runOnUiThread(() -> MsgUtil.toast("打开失败", context));
                     else {
-                        CenterThreadPool.runOnUiThread(()->{
-                            if(parsedOpus.type == Opus.TYPE_ARTICLE) {
-                                Intent intent = new Intent(context,ArticleInfoActivity.class);
-                                intent.putExtra("cvid",cvid);
+                        CenterThreadPool.runOnUiThread(() -> {
+                            if (parsedOpus.type == Opus.TYPE_ARTICLE) {
+                                Intent intent = new Intent(context, ArticleInfoActivity.class);
+                                intent.putExtra("cvid", cvid);
                                 context.startActivity(intent);
-                            }if(parsedOpus.type == Opus.TYPE_DYNAMIC) {
-                                Intent intent = new Intent(context,DynamicInfoActivity.class);
-                                intent.putExtra("id",opus.opusId);
+                            }
+                            if (parsedOpus.type == Opus.TYPE_DYNAMIC) {
+                                Intent intent = new Intent(context, DynamicInfoActivity.class);
+                                intent.putExtra("id", opus.opusId);
                                 context.startActivity(intent);
                             }
                         });
@@ -93,8 +95,8 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
                 });
             });
         }
-        
-        
+
+
     }
 
     @Override
@@ -103,10 +105,11 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
     }
 
 
-    public static class OpusHolder extends RecyclerView.ViewHolder{
+    public static class OpusHolder extends RecyclerView.ViewHolder {
         ImageView coverView;
         TextView favTimeText;
         TextView titleText;
+
         public OpusHolder(View itemView) {
             super(itemView);
             coverView = itemView.findViewById(R.id.listCover);
@@ -115,9 +118,10 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
         }
 
     }
-    public void insertItem(ArrayList<Opus> list){
+
+    public void insertItem(ArrayList<Opus> list) {
         int oldSize = opusList.size();
         opusList.addAll(list);
-        this.notifyItemRangeInserted(oldSize,list.size()-1);
+        this.notifyItemRangeInserted(oldSize, list.size() - 1);
     }
 }

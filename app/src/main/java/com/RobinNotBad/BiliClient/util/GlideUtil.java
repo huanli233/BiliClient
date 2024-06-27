@@ -17,19 +17,19 @@ public class GlideUtil {
     public static final int QUALITY_HIGH = 80;
     public static final int QUALITY_LOW = 15;
 
-    public static String url(String url){
-        if(url.endsWith("gif") || url.endsWith("webp") || url.contains("afdiancdn.com"))
+    public static String url(String url) {
+        if (url.endsWith("gif") || url.endsWith("webp") || url.contains("afdiancdn.com"))
             return url;
         return url + "@" + QUALITY_LOW + "q.webp";
     }
 
-    public static String url_hq(String url){
-        if(url.endsWith("gif") || url.endsWith("webp"))
+    public static String url_hq(String url) {
+        if (url.endsWith("gif") || url.endsWith("webp"))
             return url;
         return url + "@" + QUALITY_HIGH + "q.webp";
     }
 
-    public static void request(ImageView view, String url, int placeholder){
+    public static void request(ImageView view, String url, int placeholder) {
         Glide.with(view).asDrawable().load(url(url))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .format(DecodeFormat.PREFER_RGB_565)
@@ -38,7 +38,7 @@ public class GlideUtil {
                 .into(view);
     }
 
-    public static void requestRound(ImageView view, String url, int placeholder){
+    public static void requestRound(ImageView view, String url, int placeholder) {
         Glide.with(view).asDrawable().load(url(url))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .format(DecodeFormat.PREFER_RGB_565)
@@ -48,7 +48,7 @@ public class GlideUtil {
                 .into(view);
     }
 
-    public static void request(ImageView view, String url, int roundCorners, int placeholder){
+    public static void request(ImageView view, String url, int roundCorners, int placeholder) {
         Glide.with(view).asDrawable().load(url(url))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .format(DecodeFormat.PREFER_RGB_565)

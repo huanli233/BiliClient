@@ -49,14 +49,14 @@ public class DynamicInfoActivity extends BaseActivity {
             setContentView(layoutView);
             setTopbarExit();
             Intent intent = getIntent();
-            long id = intent.getLongExtra("id",0);
+            long id = intent.getLongExtra("id", 0);
 
             TextView pageName = findViewById(R.id.pageName);
             pageName.setText("动态详情");
-                
-            TutorialHelper.show(R.xml.tutorial_dynamic_info,this,"dynamic_info",1);
 
-            CenterThreadPool.run(()->{
+            TutorialHelper.show(R.xml.tutorial_dynamic_info, this, "dynamic_info", 1);
+
+            CenterThreadPool.run(() -> {
                 try {
                     Dynamic dynamic = DynamicApi.getDynamic(id);
 
@@ -70,14 +70,14 @@ public class DynamicInfoActivity extends BaseActivity {
 
                     ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
 
-                    runOnUiThread(()->{
+                    runOnUiThread(() -> {
                         ViewPager viewPager = findViewById(R.id.viewPager);
                         viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
                         if (seek_reply != -1) viewPager.setCurrentItem(1);
 
-                        if(SharedPreferencesUtil.getBoolean("first_dynamicinfo",true)){
-                            MsgUtil.toast("下载完成",this);
-                            SharedPreferencesUtil.putBoolean("first_dynamicinfo",false);
+                        if (SharedPreferencesUtil.getBoolean("first_dynamicinfo", true)) {
+                            MsgUtil.toast("下载完成", this);
+                            SharedPreferencesUtil.putBoolean("first_dynamicinfo", false);
                         }
 
                         diFragment.setOnFinishLoad(() -> findViewById(R.id.loading).setVisibility(View.GONE));
@@ -99,7 +99,7 @@ public class DynamicInfoActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.ASYNC, sticky = true, priority = 1)
-    public void onEvent(ReplyEvent event){
+    public void onEvent(ReplyEvent event) {
         rFragment.notifyReplyInserted(event);
     }
 

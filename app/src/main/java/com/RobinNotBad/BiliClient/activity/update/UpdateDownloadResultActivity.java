@@ -78,7 +78,8 @@ public class UpdateDownloadResultActivity extends BaseActivity {
                 Bangumi.Episode episode = new Bangumi.Episode();
                 episode.id = i;
                 episode.title = wayIdToText.get(installWays.get(i));
-                if (episode.title == null) throw new RuntimeException("Mapping between ID and text is error");
+                if (episode.title == null)
+                    throw new RuntimeException("Mapping between ID and text is error");
                 episodeList.add(episode);
             }
             adapter.setData(episodeList);

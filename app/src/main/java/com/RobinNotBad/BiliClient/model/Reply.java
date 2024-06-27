@@ -26,5 +26,6 @@ public class Reply implements Serializable {
     public ArrayList<String> childMsgList;
     public boolean isTop;
 
-    public Reply(){}
+    public Reply() {
+    }
 }

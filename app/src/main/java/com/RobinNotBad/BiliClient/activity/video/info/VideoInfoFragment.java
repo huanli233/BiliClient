@@ -82,7 +82,7 @@ public class VideoInfoFragment extends Fragment {
     private TextView description;
     private TextView tagsText;
     private ImageButton fav;
-    private Pair<Long,Integer> progressPair;
+    private Pair<Long, Integer> progressPair;
     private boolean play_clicked = false;
 
     private Boolean clickCoverPlayEnable = SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cover_play_enable, false);
@@ -212,7 +212,7 @@ public class VideoInfoFragment extends Fragment {
         CenterThreadPool.run(() -> {
             try {
                 progressPair = VideoInfoApi.getWatchProgress(videoInfo.aid);
-                if(progressPair.first == null || !videoInfo.cids.contains(progressPair.first))
+                if (progressPair.first == null || !videoInfo.cids.contains(progressPair.first))
                     progressPair = new Pair<>(videoInfo.cids.get(0), 0);
 
                 HistoryApi.reportHistory(videoInfo.aid, progressPair.first, videoInfo.staff.get(0).mid, progressPair.second);
@@ -233,24 +233,24 @@ public class VideoInfoFragment extends Fragment {
                     else tags = VideoInfoApi.getTagsByBvid(videoInfo.bvid);
                     if (isAdded()) requireActivity().runOnUiThread(() -> {
                         SpannableStringBuilder tag_str = new SpannableStringBuilder("标签：");
-                        for(String str : tags.split("/")){
+                        for (String str : tags.split("/")) {
                             int old_len = tag_str.length();
                             tag_str.append(str).append("/");
-                            tag_str.setSpan(new ClickableSpan(){
+                            tag_str.setSpan(new ClickableSpan() {
                                 @Override
                                 public void onClick(View arg0) {
-                                    Intent intent = new Intent(requireContext(),SearchActivity.class);
-                                    intent.putExtra("keyword",str);
+                                    Intent intent = new Intent(requireContext(), SearchActivity.class);
+                                    intent.putExtra("keyword", str);
                                     requireContext().startActivity(intent);
                                 }
-                                            
+
                                 @Override
                                 public void updateDrawState(TextPaint ds) {
                                     super.updateDrawState(ds);
                                     ds.setUnderlineText(false);
                                     ds.setColor(Color.parseColor("#03a9f4"));
                                 }
-                            },old_len,tag_str.length() - 1,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                            }, old_len, tag_str.length() - 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                         }
                         tagsText.setMovementMethod(LinkMovementMethod.getInstance());
                         tagsText.setText("标签：" + tags);
@@ -266,7 +266,8 @@ public class VideoInfoFragment extends Fragment {
                         });
                     });
                 } catch (Exception e) {
-                    if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                    if (isAdded())
+                        requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
                 }
             });
         } else tagsText.setVisibility(View.GONE);
@@ -277,13 +278,17 @@ public class VideoInfoFragment extends Fragment {
                 videoInfo.stats.liked = LikeCoinFavApi.getLiked(videoInfo.aid);
                 videoInfo.stats.favoured = LikeCoinFavApi.getFavoured(videoInfo.aid);
                 videoInfo.stats.allow_coin = (videoInfo.copyright == VideoInfo.COPYRIGHT_REPRINT) ? 1 : 2;
-                if(isAdded()) requireActivity().runOnUiThread(()->{
-                    if(videoInfo.stats.coined!=0) coin.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_coin_1));
-                    if(videoInfo.stats.liked) like.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_like_1));
-                    if(videoInfo.stats.favoured) fav.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_favourite_1));
+                if (isAdded()) requireActivity().runOnUiThread(() -> {
+                    if (videoInfo.stats.coined != 0)
+                        coin.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_coin_1));
+                    if (videoInfo.stats.liked)
+                        like.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_like_1));
+                    if (videoInfo.stats.favoured)
+                        fav.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_favourite_1));
                 });
             } catch (Exception e) {
-                if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                if (isAdded())
+                    requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
             }
         });
 
@@ -310,12 +315,12 @@ public class VideoInfoFragment extends Fragment {
                 .into(cover);
 
         cover.setOnClickListener(view1 -> {
-            if(SharedPreferencesUtil.getString("player", null) == null){
+            if (SharedPreferencesUtil.getString("player", null) == null) {
                 SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cover_play_enable, true);
-                Toast.makeText(requireContext(),"将播放视频, 如需变更点击行为请至设置->偏好设置喵", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "将播放视频, 如需变更点击行为请至设置->偏好设置喵", Toast.LENGTH_SHORT).show();
                 clickCoverPlayEnable = true;
             }
-            if(clickCoverPlayEnable){
+            if (clickCoverPlayEnable) {
                 play();
                 return;
             }
@@ -358,8 +363,8 @@ public class VideoInfoFragment extends Fragment {
         });
 
         like.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
-            if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) {
-                requireActivity().runOnUiThread(() -> MsgUtil.toast("还没有登录喵~",requireContext()));
+            if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
+                requireActivity().runOnUiThread(() -> MsgUtil.toast("还没有登录喵~", requireContext()));
                 return;
             }
             try {
@@ -369,7 +374,8 @@ public class VideoInfoFragment extends Fragment {
                     if (isAdded()) requireActivity().runOnUiThread(() -> {
                         MsgUtil.toast((videoInfo.stats.liked ? "点赞成功" : "取消成功"), requireContext());
 
-                        if (videoInfo.stats.liked) likeLabel.setText(ToolsUtil.toWan(++videoInfo.stats.like));
+                        if (videoInfo.stats.liked)
+                            likeLabel.setText(ToolsUtil.toWan(++videoInfo.stats.like));
                         else likeLabel.setText(ToolsUtil.toWan(--videoInfo.stats.like));
                         like.setBackground(ContextCompat.getDrawable(requireContext(), (videoInfo.stats.liked ? R.drawable.icon_like_1 : R.drawable.icon_like_0)));
                     });
@@ -384,13 +390,14 @@ public class VideoInfoFragment extends Fragment {
                     requireActivity().runOnUiThread(() -> MsgUtil.toast(finalMsg, requireContext()));
                 }
             } catch (Exception e) {
-                if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                if (isAdded())
+                    requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
             }
         }));
 
         coin.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
-            if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) {
-                requireActivity().runOnUiThread(() -> MsgUtil.toast("还没有登录喵~",requireContext()));
+            if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
+                requireActivity().runOnUiThread(() -> MsgUtil.toast("还没有登录喵~", requireContext()));
                 return;
             }
             if (videoInfo.stats.coined < videoInfo.stats.allow_coin) {
@@ -414,7 +421,8 @@ public class VideoInfoFragment extends Fragment {
                         requireActivity().runOnUiThread(() -> MsgUtil.toast(finalMsg, requireContext()));
                     }
                 } catch (Exception e) {
-                    if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                    if (isAdded())
+                        requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
                 }
             } else {
                 if (isAdded())
@@ -478,7 +486,7 @@ public class VideoInfoFragment extends Fragment {
             writeDynamicLauncher.launch(intent);
         });
 
-        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) {
+        if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
             addWatchlater.setVisibility(View.GONE);
             relay.setVisibility(View.GONE);
         }
@@ -508,7 +516,7 @@ public class VideoInfoFragment extends Fragment {
         if (string.isEmpty()) return new SpannableString(videoInfo.title);
 
         SpannableString titleStr = new SpannableString(" " + string + " " + videoInfo.title);
-        RadiusBackgroundSpan badgeBG = new RadiusBackgroundSpan(0, (int) getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207,75,95));
+        RadiusBackgroundSpan badgeBG = new RadiusBackgroundSpan(0, (int) getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95));
         titleStr.setSpan(badgeBG, 0, string.length() + 2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         return titleStr;
     }
@@ -521,12 +529,12 @@ public class VideoInfoFragment extends Fragment {
             Intent intent = new Intent()
                     .setClass(requireContext(), MultiPageActivity.class)
                     .putExtra("videoInfo", videoInfo)
-                    .putExtra("progress_cid",progressPair.first)
-                    .putExtra("progress",(play_clicked ? -1 : progressPair.second));
+                    .putExtra("progress_cid", progressPair.first)
+                    .putExtra("progress", (play_clicked ? -1 : progressPair.second));
             //这里也会传过去，如果后面选择当页就不再获取直接传，选择其他页就传-1剩下的交给解析页
             startActivity(intent);
         } else {
-            PlayerApi.startGettingUrl(requireContext(), videoInfo, 0,(progressPair == null ? 0 :play_clicked ? -1 : progressPair.second));
+            PlayerApi.startGettingUrl(requireContext(), videoInfo, 0, (progressPair == null ? 0 : play_clicked ? -1 : progressPair.second));
             //避免重复获取的同时保证播放进度是新的，如果是-1会在解析页里再获取一次
         }
         play_clicked = true;

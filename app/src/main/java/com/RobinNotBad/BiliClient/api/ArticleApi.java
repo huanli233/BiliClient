@@ -7,12 +7,12 @@ import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-import java.util.TimeZone;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.TimeZone;
 
 import okhttp3.Response;
 
@@ -64,6 +64,7 @@ public class ArticleApi {
 
     /**
      * 另一个获取专栏相关信息api
+     *
      * @param id cvid
      */
     public static ArticleInfo getArticleViewInfo(long id) throws JSONException, IOException {
@@ -100,6 +101,7 @@ public class ArticleApi {
 
     /**
      * 专栏点赞
+     *
      * @param cvid cvid
      * @param type true=点赞，false=取消赞
      * @return resultCode
@@ -109,7 +111,7 @@ public class ArticleApi {
         Response resp = Objects.requireNonNull(NetWorkUtil.post(url, new NetWorkUtil.FormData()
                 .put("id", cvid)
                 .put("type", type ? 1 : 2)
-                .put("csrf", SharedPreferencesUtil.getString("csrf",""))
+                .put("csrf", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
         try {
             JSONObject respBody = new JSONObject(resp.body().string());
@@ -121,8 +123,9 @@ public class ArticleApi {
 
     /**
      * 专栏投币
-     * @param cvid CVID
-     * @param upid UP主ID
+     *
+     * @param cvid     CVID
+     * @param upid     UP主ID
      * @param multiply 投币数量
      * @return 返回码
      */
@@ -133,7 +136,7 @@ public class ArticleApi {
                 .put("upid", upid)
                 .put("avtype", 2)
                 .put("multiply", multiply)
-                .put("csrf", SharedPreferencesUtil.getString("csrf",""))
+                .put("csrf", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
         try {
             JSONObject respBody = new JSONObject(resp.body().string());
@@ -145,6 +148,7 @@ public class ArticleApi {
 
     /**
      * 收藏专栏
+     *
      * @param cvid CVID
      * @return 返回码
      */
@@ -152,7 +156,7 @@ public class ArticleApi {
         String url = "https://api.bilibili.com/x/article/favorites/add";
         Response resp = Objects.requireNonNull(NetWorkUtil.post(url, new NetWorkUtil.FormData()
                 .put("id", cvid)
-                .put("csrf", SharedPreferencesUtil.getString("csrf",""))
+                .put("csrf", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
         try {
             JSONObject respBody = new JSONObject(resp.body().string());
@@ -164,6 +168,7 @@ public class ArticleApi {
 
     /**
      * 取消收藏专栏
+     *
      * @param cvid CVID
      * @return 返回码
      */
@@ -171,7 +176,7 @@ public class ArticleApi {
         String url = "https://api.bilibili.com/x/article/favorites/del";
         Response resp = Objects.requireNonNull(NetWorkUtil.post(url, new NetWorkUtil.FormData()
                 .put("id", cvid)
-                .put("csrf", SharedPreferencesUtil.getString("csrf",""))
+                .put("csrf", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
         try {
             JSONObject respBody = new JSONObject(resp.body().string());
@@ -180,10 +185,13 @@ public class ArticleApi {
             return -1;
         }
     }
-    public static Opus opusId2cvid(long opusId) throws JSONException,IOException{
-        String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/opus/detail?id="+opusId+"&time_zone_offset="+TimeZone.getDefault().getRawOffset()/100000;
+
+    public static Opus opusId2cvid(long opusId) throws JSONException, IOException {
+        String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/opus/detail?id=" + opusId + "&time_zone_offset=" + TimeZone.getDefault().getRawOffset() / 100000;
         JSONObject result = NetWorkUtil.getJson(url);
-        if(result.getJSONObject("data").has("item")) return new Opus(Opus.TYPE_DYNAMIC,Long.parseLong(result.getJSONObject("data").getJSONObject("item").getJSONObject("basic").getString("rid_str")));
-        else return new Opus(Opus.TYPE_ARTICLE,Long.parseLong(result.getJSONObject("data").getJSONObject("fallback").getString("id")));
+        if (result.getJSONObject("data").has("item"))
+            return new Opus(Opus.TYPE_DYNAMIC, Long.parseLong(result.getJSONObject("data").getJSONObject("item").getJSONObject("basic").getString("rid_str")));
+        else
+            return new Opus(Opus.TYPE_ARTICLE, Long.parseLong(result.getJSONObject("data").getJSONObject("fallback").getString("id")));
     }
 }

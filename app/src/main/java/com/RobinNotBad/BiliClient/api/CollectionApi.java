@@ -20,9 +20,10 @@ import java.util.List;
 public class CollectionApi {
     /**
      * 获取合集信息
-     * @param mid mid（或许可以为任意）
+     *
+     * @param mid       mid（或许可以为任意）
      * @param season_id 合集id
-     * @param page 页数
+     * @param page      页数
      * @return Collection对象与分页信息
      */
     public static Pair<Collection, Page> getSeasonInfo(long mid, int season_id, int page) throws JSONException, IOException {
@@ -68,24 +69,24 @@ public class CollectionApi {
         }
         return new Pair<>(collection, pageInfo);
     }
-    
-    public static Collection getSeasonByJson(JSONObject data) throws JSONException{
+
+    public static Collection getSeasonByJson(JSONObject data) throws JSONException {
         Collection season = new Collection();
         JSONObject meta = data.getJSONObject("meta");
-        
-        if(meta.has("season_id")) season.id = meta.getInt("season_id");
+
+        if (meta.has("season_id")) season.id = meta.getInt("season_id");
         else season.id = meta.getInt("series_id");
         season.title = meta.getString("name");
-        season.cover = meta.optString("cover","");
+        season.cover = meta.optString("cover", "");
         season.mid = meta.getLong("mid");
         season.intro = meta.getString("description");
 
         ArrayList<VideoCard> cards = new ArrayList<>();
-        
+
         long view = 0;
         JSONArray archives = data.getJSONArray("archives");
-        Log.e("debug-collection","--------");
-        for(int i = 0;i < archives.length();i++) {
+        Log.e("debug-collection", "--------");
+        for (int i = 0; i < archives.length(); i++) {
             JSONObject card = archives.getJSONObject(i);
             String cover = card.getString("pic");
             long play = card.getJSONObject("stat").getLong("view");
@@ -95,14 +96,14 @@ public class CollectionApi {
             String bvid = card.getString("bvid");
             String title = card.getString("title");
 
-            Log.e("debug-collection",title);
-            cards.add(new VideoCard(title,"",playStr,cover,aid,bvid));
+            Log.e("debug-collection", title);
+            cards.add(new VideoCard(title, "", playStr, cover, aid, bvid));
         }
-        Log.e("debug-collection","--------");
+        Log.e("debug-collection", "--------");
         season.cards = cards;
-        
+
         season.view = ToolsUtil.toWan(view);
-        
+
         return season;
     }
 }

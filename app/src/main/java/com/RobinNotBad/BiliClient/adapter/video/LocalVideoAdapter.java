@@ -41,48 +41,46 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
         this.localVideoList = localVideoList;
     }
 
-    public void setOnLongClickListener(OnItemLongClickListener listener){
+    public void setOnLongClickListener(OnItemLongClickListener listener) {
         this.longClickListener = listener;
     }
 
     @NonNull
     @Override
     public LocalVideoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_local_video,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_local_video, parent, false);
         return new LocalVideoHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull LocalVideoHolder holder, int position) {
-        holder.showLocalVideo(localVideoList.get(position),context);    //此函数在VideoCardHolder里
+        holder.showLocalVideo(localVideoList.get(position), context);    //此函数在VideoCardHolder里
 
         holder.itemView.setOnClickListener(view -> {
             LocalVideo localVideo = localVideoList.get(position);
-            if(localVideo.videoFileList.size() == 1){
+            if (localVideo.videoFileList.size() == 1) {
                 try {
-                    PlayerApi.jumpToPlayer(context, localVideo.videoFileList.get(0), localVideo.danmakuFileList.get(0), localVideo.title,true, 0, "", 0, 0,0,false);
-                }catch (ActivityNotFoundException e){
-                    MsgUtil.toast("跳转失败",context);
+                    PlayerApi.jumpToPlayer(context, localVideo.videoFileList.get(0), localVideo.danmakuFileList.get(0), localVideo.title, true, 0, "", 0, 0, 0, false);
+                } catch (ActivityNotFoundException e) {
+                    MsgUtil.toast("跳转失败", context);
                     e.printStackTrace();
                 }
-            }
-            else{
+            } else {
                 Intent intent = new Intent();
                 intent.setClass(context, LocalPageChooseActivity.class);
-                intent.putExtra("pageList",localVideo.pageList);
-                intent.putExtra("videoFileList",localVideo.videoFileList);
-                intent.putExtra("danmakuFileList",localVideo.danmakuFileList);
-                intent.putExtra("title",localVideo.title);
+                intent.putExtra("pageList", localVideo.pageList);
+                intent.putExtra("videoFileList", localVideo.videoFileList);
+                intent.putExtra("danmakuFileList", localVideo.danmakuFileList);
+                intent.putExtra("title", localVideo.title);
                 context.startActivity(intent);
             }
         });
 
         holder.itemView.setOnLongClickListener(view -> {
-            if(longClickListener != null) {
+            if (longClickListener != null) {
                 longClickListener.onItemLongClick(position);
                 return true;    //必须要true哦，不然上面的点按也会触发
-            }
-            else return false;
+            } else return false;
         });
     }
 
@@ -92,8 +90,7 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
     }
 
 
-
-    public static class LocalVideoHolder extends RecyclerView.ViewHolder{
+    public static class LocalVideoHolder extends RecyclerView.ViewHolder {
         final TextView title;
         final ImageView cover;
 
@@ -103,12 +100,12 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
             cover = itemView.findViewById(R.id.listCover);
         }
 
-        public void showLocalVideo(LocalVideo videoCard, Context context){
+        public void showLocalVideo(LocalVideo videoCard, Context context) {
             title.setText(ToolsUtil.htmlToString(videoCard.title));
 
             Glide.with(context).asDrawable().load(videoCard.cover)
                     .transition(GlideUtil.getTransitionOptions())
-                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))))
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(cover);
         }

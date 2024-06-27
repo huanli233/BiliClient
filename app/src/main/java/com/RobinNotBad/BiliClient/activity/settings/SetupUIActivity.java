@@ -13,7 +13,7 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class SetupUIActivity extends BaseActivity {
 
-    private EditText uiScaleInput,uiPaddingH,uiPaddingV;
+    private EditText uiScaleInput, uiPaddingH, uiPaddingV;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -22,12 +22,12 @@ public class SetupUIActivity extends BaseActivity {
         setContentView(R.layout.activity_setup_ui);
 
         uiScaleInput = findViewById(R.id.ui_scale_input);
-        uiScaleInput.setText(String.valueOf(SharedPreferencesUtil.getFloat("dpi",1.0F)));
+        uiScaleInput.setText(String.valueOf(SharedPreferencesUtil.getFloat("dpi", 1.0F)));
 
         uiPaddingH = findViewById(R.id.ui_padding_horizontal);
-        uiPaddingH.setText(String.valueOf(SharedPreferencesUtil.getInt("paddingH_percent",0)));
+        uiPaddingH.setText(String.valueOf(SharedPreferencesUtil.getInt("paddingH_percent", 0)));
         uiPaddingV = findViewById(R.id.ui_padding_vertical);
-        uiPaddingV.setText(String.valueOf(SharedPreferencesUtil.getInt("paddingV_percent",0)));
+        uiPaddingV.setText(String.valueOf(SharedPreferencesUtil.getInt("paddingV_percent", 0)));
 
         findViewById(R.id.preview).setOnClickListener(view -> {
             save();
@@ -51,27 +51,27 @@ public class SetupUIActivity extends BaseActivity {
             uiScaleInput.setText("1.0");
             uiPaddingH.setText("0");
             uiPaddingV.setText("0");
-            MsgUtil.toast("恢复完成",this);
+            MsgUtil.toast("恢复完成", this);
         });
     }
 
     private void save() {
-        if(!uiScaleInput.getText().toString().isEmpty()) {
+        if (!uiScaleInput.getText().toString().isEmpty()) {
             float dpiTimes = Float.parseFloat(uiScaleInput.getText().toString());
             if (dpiTimes >= 0.1F && dpiTimes <= 10.0F)
                 SharedPreferencesUtil.putFloat("dpi", dpiTimes);
             Log.e("dpi", uiScaleInput.getText().toString());
         }
 
-        if(!uiPaddingH.getText().toString().isEmpty()) {
+        if (!uiPaddingH.getText().toString().isEmpty()) {
             int paddingH = Integer.parseInt(uiPaddingH.getText().toString());
-            if(paddingH <= 30) SharedPreferencesUtil.putInt("paddingH_percent", paddingH);
+            if (paddingH <= 30) SharedPreferencesUtil.putInt("paddingH_percent", paddingH);
             Log.e("paddingH", uiPaddingH.getText().toString());
         }
 
-        if(!uiPaddingV.getText().toString().isEmpty()) {
+        if (!uiPaddingV.getText().toString().isEmpty()) {
             int paddingV = Integer.parseInt(uiPaddingV.getText().toString());
-            if(paddingV <= 30) SharedPreferencesUtil.putInt("paddingV_percent", paddingV);
+            if (paddingV <= 30) SharedPreferencesUtil.putInt("paddingV_percent", paddingV);
             Log.e("paddingV", uiPaddingV.getText().toString());
         }
     }

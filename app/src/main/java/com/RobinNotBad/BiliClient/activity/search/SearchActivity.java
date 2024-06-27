@@ -60,7 +60,7 @@ public class SearchActivity extends InstanceActivity {
             setMenuClick();
             Log.e("debug", "进入搜索页");
 
-            TutorialHelper.show(R.xml.tutorial_search,this,"search",2);
+            TutorialHelper.show(R.xml.tutorial_search, this, "search", 2);
 
             handler = new Handler();
 
@@ -110,7 +110,7 @@ public class SearchActivity extends InstanceActivity {
             });
 
             try {
-                searchHistory = JsonUtil.jsonToArrayList(new JSONArray(SharedPreferencesUtil.getString(SharedPreferencesUtil.search_history,"[]")),false);
+                searchHistory = JsonUtil.jsonToArrayList(new JSONArray(SharedPreferencesUtil.getString(SharedPreferencesUtil.search_history, "[]")), false);
             } catch (JSONException e) {
                 runOnUiThread(() -> MsgUtil.err(e, this));
                 searchHistory = new ArrayList<>();
@@ -118,20 +118,20 @@ public class SearchActivity extends InstanceActivity {
             searchHistoryAdapter = new SearchHistoryAdapter(this, searchHistory);
             searchHistoryAdapter.setOnClickListener(position -> keywordInput.setText(searchHistory.get(position)));
             searchHistoryAdapter.setOnLongClickListener(position -> {
-                MsgUtil.toast("删除成功",this);
+                MsgUtil.toast("删除成功", this);
                 searchHistory.remove(position);
                 searchHistoryAdapter.notifyItemRemoved(position);
-                searchHistoryAdapter.notifyItemRangeChanged(position,searchHistory.size() - position);
-                SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history,new JSONArray(searchHistory).toString());
+                searchHistoryAdapter.notifyItemRangeChanged(position, searchHistory.size() - position);
+                SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history, new JSONArray(searchHistory).toString());
             });
             historyRecyclerview.setLayoutManager(new LinearLayoutManager(this));
             historyRecyclerview.setAdapter(searchHistoryAdapter);
-                
-                
-            if(getIntent().getStringExtra("keyword") != null){
-                findViewById(R.id.top).setOnClickListener(view1->finish());
+
+
+            if (getIntent().getStringExtra("keyword") != null) {
+                findViewById(R.id.top).setOnClickListener(view1 -> finish());
                 keywordInput.setText(getIntent().getStringExtra("keyword"));
-                MsgUtil.toast("可点击标题栏返回详情页",this);
+                MsgUtil.toast("可点击标题栏返回详情页", this);
             }
         });
     }
@@ -164,9 +164,9 @@ public class SearchActivity extends InstanceActivity {
             }
 
             if (str.isEmpty()) {
-                runOnUiThread(() -> MsgUtil.toast("还没输入内容喵~",this));
-            } else if(Objects.equals(lastKeyword, str)) {
-                runOnUiThread(()-> {
+                runOnUiThread(() -> MsgUtil.toast("还没输入内容喵~", this));
+            } else if (Objects.equals(lastKeyword, str)) {
+                runOnUiThread(() -> {
                     keywordInput.clearFocus();
                     historyRecyclerview.setVisibility(View.GONE);
                 });
@@ -175,12 +175,12 @@ public class SearchActivity extends InstanceActivity {
                 lastKeyword = str;
 
                 //搜索记录
-                runOnUiThread(()-> {
+                runOnUiThread(() -> {
                     historyRecyclerview.setVisibility(View.GONE);
                     keywordInput.clearFocus();
                 });
 
-                if(!searchHistory.contains(str)) {
+                if (!searchHistory.contains(str)) {
                     try {
                         searchHistory.add(0, str);
                         SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history, new JSONArray(searchHistory).toString());
@@ -211,13 +211,13 @@ public class SearchActivity extends InstanceActivity {
     public void onScrolled(int dy) {
         float height = searchBar.getHeight() + ToolsUtil.dp2px(2f, this);
 
-        if(System.currentTimeMillis() - animate_last > 200) {
+        if (System.currentTimeMillis() - animate_last > 200) {
             if (dy > 0 && searchBarVisible) {
                 animate_last = System.currentTimeMillis();
                 this.searchBarVisible = false;
                 @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofFloat(searchBar, "translationY", 0, -height);
                 animator.start();
-                handler.postDelayed(()->searchBar.setVisibility(View.GONE),200);
+                handler.postDelayed(() -> searchBar.setVisibility(View.GONE), 200);
             }
             if (dy < -1 && !searchBarVisible) {
                 animate_last = System.currentTimeMillis();

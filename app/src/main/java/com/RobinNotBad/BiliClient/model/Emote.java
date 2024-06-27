@@ -10,7 +10,8 @@ public class Emote implements Serializable {
     public String url;
     public int size;
 
-    public Emote(){}
+    public Emote() {
+    }
 
     public Emote(String name, String url, int size) {
         this.name = name;

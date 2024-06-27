@@ -36,7 +36,7 @@ public class LocalListActivity extends InstanceActivity {
     private LocalVideoAdapter adapter;
     private TextView emptyTip;
 
-    private int longClickPosition=-1;
+    private int longClickPosition = -1;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -61,26 +61,25 @@ public class LocalListActivity extends InstanceActivity {
         }
 
         CenterThreadPool.run(() -> {
-            runOnUiThread(()->swipeRefreshLayout.setRefreshing(true));
+            runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
             scan(ConfInfoApi.getDownloadPath(this));
-            adapter = new LocalVideoAdapter(this,videoList);
+            adapter = new LocalVideoAdapter(this, videoList);
             adapter.setOnLongClickListener(position -> {
-                if(longClickPosition == position) {
+                if (longClickPosition == position) {
                     File file = new File(ConfInfoApi.getDownloadPath(this), videoList.get(position).title);
-                    CenterThreadPool.run(()-> FileUtil.deleteFolder(file));
-                    MsgUtil.toast("删除成功",this);
+                    CenterThreadPool.run(() -> FileUtil.deleteFolder(file));
+                    MsgUtil.toast("删除成功", this);
                     videoList.remove(position);
                     adapter.notifyItemRemoved(position);
-                    adapter.notifyItemRangeChanged(position,videoList.size() - position);
+                    adapter.notifyItemRangeChanged(position, videoList.size() - position);
                     longClickPosition = -1;
                     checkEmpty();
-                }
-                else{
+                } else {
                     longClickPosition = position;
-                    MsgUtil.toast("再次长按删除",this);
+                    MsgUtil.toast("再次长按删除", this);
                 }
             });
-            runOnUiThread(()->{
+            runOnUiThread(() -> {
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false);
@@ -88,9 +87,9 @@ public class LocalListActivity extends InstanceActivity {
         });
     }
 
-    private void scan(File folder){
+    private void scan(File folder) {
         File[] files = folder.listFiles();
-        if(files!=null) {
+        if (files != null) {
             for (File video : files) {
                 if (video.isDirectory()) {
                     LocalVideo localVideo = new LocalVideo();
@@ -101,18 +100,17 @@ public class LocalListActivity extends InstanceActivity {
                     localVideo.danmakuFileList = new ArrayList<>();
                     localVideo.videoFileList = new ArrayList<>();
 
-                    File videoFile = new File(video,"video.mp4");
-                    File danmakuFile = new File(video,"danmaku.xml");
-                    if(videoFile.exists() && danmakuFile.exists()){
+                    File videoFile = new File(video, "video.mp4");
+                    File danmakuFile = new File(video, "danmaku.xml");
+                    if (videoFile.exists() && danmakuFile.exists()) {
                         localVideo.videoFileList.add(videoFile.toString());
                         localVideo.danmakuFileList.add(danmakuFile.toString());    //单集视频
                         videoList.add(localVideo);
-                    }
-                    else {
+                    } else {
                         File[] pages = video.listFiles();      //分页视频
-                        if(pages!=null) {
+                        if (pages != null) {
                             for (File page : pages) {
-                                if(page.isDirectory()) {
+                                if (page.isDirectory()) {
                                     File pageVideoFile = new File(page, "video.mp4");
                                     File pageDanmakuFile = new File(page, "danmaku.xml");
                                     if (pageVideoFile.exists() && pageDanmakuFile.exists()) {
@@ -145,14 +143,14 @@ public class LocalListActivity extends InstanceActivity {
         });
     }
 
-    public void refresh(){
-        CenterThreadPool.run(()->{
-            runOnUiThread(()->swipeRefreshLayout.setRefreshing(true));
+    public void refresh() {
+        CenterThreadPool.run(() -> {
+            runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
             int oldSize = videoList.size();
             videoList.clear();
             scan(ConfInfoApi.getDownloadPath(this));
-            runOnUiThread(()->{
-                adapter.notifyItemRangeChanged(0,oldSize);
+            runOnUiThread(() -> {
+                adapter.notifyItemRangeChanged(0, oldSize);
                 swipeRefreshLayout.setRefreshing(false);
             });
         });

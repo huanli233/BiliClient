@@ -17,5 +17,5 @@
         android:textAlignment="textStart"
         android:textSize="13sp"
         tools:ignore="RtlCompat"
-        app:drawableEndCompat="@drawable/arrow_forward"/>
+        app:drawableEndCompat="@drawable/arrow_forward" />
 </com.google.android.material.card.MaterialCardView>

@@ -73,7 +73,7 @@ public class DownloadActivity extends BaseActivity {
 
         Intent intent = getIntent();
 
-        type = intent.getIntExtra("type",0);  //0=单个文件，1=视频，2=分页视频
+        type = intent.getIntExtra("type", 0);  //0=单个文件，1=视频，2=分页视频
         String title = ToolsUtil.stringToFile(intent.getStringExtra("title"));
         link = intent.getStringExtra("link");
 
@@ -83,36 +83,35 @@ public class DownloadActivity extends BaseActivity {
 
         scrHeight = window_height;
 
-        timer.schedule(showText,100,100);
-        CenterThreadPool.run(()->{
-            if(type == 0){
-                rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"BiliClient");
-                if(!rootPath.exists()) rootPath.mkdirs();
-                downFile = new File(rootPath,title);
-                download(link,downFile,"下载文件中",true);
-            }
-            else{
+        timer.schedule(showText, 100, 100);
+        CenterThreadPool.run(() -> {
+            if (type == 0) {
+                rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "BiliClient");
+                if (!rootPath.exists()) rootPath.mkdirs();
+                downFile = new File(rootPath, title);
+                download(link, downFile, "下载文件中", true);
+            } else {
                 rootPath = ConfInfoApi.getDownloadPath(this);
 
-                if(type==1){
+                if (type == 1) {
                     downPath = new File(rootPath, title);
                     rootPath = downPath;
                 }
-                if(type==2) {
+                if (type == 2) {
                     rootPath = new File(rootPath, ToolsUtil.stringToFile(intent.getStringExtra("parent_title")));
                     downPath = new File(rootPath, title);
                 }
 
-                if(!downPath.exists()) downPath.mkdirs();
+                if (!downPath.exists()) downPath.mkdirs();
 
                 String danmaku = intent.getStringExtra("danmaku");
                 String cover = intent.getStringExtra("cover");
-                File dmFile = new File(downPath,"danmaku.xml");
-                File coverFile = new File(rootPath,"cover.png");
-                File videoFile = new File(downPath,"video.mp4");
-                downdanmu(danmaku,dmFile);
-                if(!coverFile.exists()) download(cover,coverFile,"下载封面",false);
-                download(link,videoFile,"下载视频",true);
+                File dmFile = new File(downPath, "danmaku.xml");
+                File coverFile = new File(rootPath, "cover.png");
+                File videoFile = new File(downPath, "video.mp4");
+                downdanmu(danmaku, dmFile);
+                if (!coverFile.exists()) download(cover, coverFile, "下载封面", false);
+                download(link, videoFile, "下载视频", true);
             }
         });
 
@@ -123,14 +122,14 @@ public class DownloadActivity extends BaseActivity {
         dldText = desc;
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder().url(url)
-                .addHeader("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""))
+                .addHeader("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""))
                 .addHeader("Connection", "Keep-Alive")
                 .addHeader("User-Agent", NetWorkUtil.USER_AGENT_WEB)
                 .addHeader("Referer", "https://www.bilibili.com/")
                 .build();
         try {
             Response response = okHttpClient.newCall(request).execute();
-            if(!file.exists()) file.createNewFile();
+            if (!file.exists()) file.createNewFile();
             InputStream inputStream = Objects.requireNonNull(response.body()).byteStream();
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             int len;
@@ -144,7 +143,7 @@ public class DownloadActivity extends BaseActivity {
             inputStream.close();
             fileOutputStream.close();
             if (exitOnFinish) {
-                runOnUiThread(() -> MsgUtil.toast("下载完成",this));
+                runOnUiThread(() -> MsgUtil.toast("下载完成", this));
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
@@ -152,10 +151,10 @@ public class DownloadActivity extends BaseActivity {
                         finish = true;
                         finish();
                     }
-                },200);
+                }, 200);
             }
         } catch (IOException e) {
-            runOnUiThread(() -> MsgUtil.toast("下载失败",this));
+            runOnUiThread(() -> MsgUtil.toast("下载失败", this));
             e.printStackTrace();
             finish();
         }
@@ -165,7 +164,7 @@ public class DownloadActivity extends BaseActivity {
     private void downdanmu(String danmaku, File danmakuFile) {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder().url(danmaku)
-                .addHeader("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies,""))
+                .addHeader("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""))
                 .addHeader("Connection", "Keep-Alive")
                 .addHeader("User-Agent", NetWorkUtil.USER_AGENT_WEB)
                 .addHeader("Referer", "https://www.bilibili.com/")
@@ -188,8 +187,8 @@ public class DownloadActivity extends BaseActivity {
                     bufferedSink.close();
                 }
             }
-        }catch (IOException e){
-            runOnUiThread(() -> MsgUtil.toast("弹幕下载失败！",this));
+        } catch (IOException e) {
+            runOnUiThread(() -> MsgUtil.toast("弹幕下载失败！", this));
             finish();
             e.printStackTrace();
         }
@@ -226,7 +225,7 @@ public class DownloadActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         timer.cancel();
-        if(!finish) {
+        if (!finish) {
             if (type != 0 && downPath != null) FileUtil.deleteFolder(downPath);
             else if (downFile != null) downFile.delete();
         }

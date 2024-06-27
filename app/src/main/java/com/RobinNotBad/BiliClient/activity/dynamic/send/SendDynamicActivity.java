@@ -76,8 +76,8 @@ public class SendDynamicActivity extends BaseActivity {
             setContentView(layoutView);
             setTopbarExit();
 
-            if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0)==0){
-                MsgUtil.toast("还没有登录喵~",this);
+            if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
+                MsgUtil.toast("还没有登录喵~", this);
                 setResult(RESULT_CANCELED);
                 finish();
             }
@@ -98,7 +98,7 @@ public class SendDynamicActivity extends BaseActivity {
 
             send.setOnClickListener(view -> {
                 // 不了解遂直接保留cookie刷新判断了
-                if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cookie_refresh,true)){
+                if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cookie_refresh, true)) {
                     String text = editText.getText().toString();
                     Intent result = new Intent();
                     // 原神级的传数据
@@ -107,7 +107,8 @@ public class SendDynamicActivity extends BaseActivity {
                     result.putExtra("text", text);
                     setResult(RESULT_OK, result);
                     finish();
-                } else MsgUtil.showDialog(this,"无法发送","上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作",-1);
+                } else
+                    MsgUtil.showDialog(this, "无法发送", "上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作", -1);
             });
 
             findViewById(R.id.emote).setOnClickListener(view -> emoteLauncher.launch(new Intent(this, EmoteActivity.class)));
@@ -127,7 +128,7 @@ public class SendDynamicActivity extends BaseActivity {
         cell_dynamic_article = extraCard.findViewById(R.id.dynamic_article_child);
         cell_dynamic_image = extraCard.findViewById(R.id.dynamic_image_child);
         username.setText(dynamic.userInfo.name);
-        if(dynamic.content != null && !dynamic.content.isEmpty()) {
+        if (dynamic.content != null && !dynamic.content.isEmpty()) {
             content.setVisibility(View.VISIBLE);
             content.setText(dynamic.content);
             if (dynamic.emotes != null) {
@@ -169,14 +170,14 @@ public class SendDynamicActivity extends BaseActivity {
                 view1.setVisibility(View.GONE);
             }
         }
-        if(dynamic.major_type != null) switch (dynamic.major_type){
+        if (dynamic.major_type != null) switch (dynamic.major_type) {
             case "MAJOR_TYPE_PGC":
                 isPgc = true;
             case "MAJOR_TYPE_ARCHIVE":
             case "MAJOR_TYPE_UGC_SEASON":
                 VideoCard childVideoCard = (VideoCard) dynamic.major_object;
                 VideoCardHolder video_holder = new VideoCardHolder(cell_dynamic_video);
-                video_holder.showVideoCard(childVideoCard,this);
+                video_holder.showVideoCard(childVideoCard, this);
                 boolean finalIsPgc = isPgc;
                 cell_dynamic_video.setOnClickListener(view -> {
                     Intent intent = new Intent();
@@ -192,7 +193,7 @@ public class SendDynamicActivity extends BaseActivity {
             case "MAJOR_TYPE_ARTICLE":
                 ArticleCard articleCard = (ArticleCard) dynamic.major_object;
                 ArticleCardHolder article_holder = new ArticleCardHolder(cell_dynamic_article);
-                article_holder.showArticleCard(articleCard,this);
+                article_holder.showArticleCard(articleCard, this);
                 cell_dynamic_article.setOnClickListener(view -> {
                     Intent intent = new Intent();
                     intent.setClass(this, ArticleInfoActivity.class);
@@ -227,8 +228,8 @@ public class SendDynamicActivity extends BaseActivity {
     }
 
     private void showVideo(View itemView, VideoInfo videoInfo) {
-        TextView title,upName,playTimes;
-        ImageView cover,playIcon,upIcon;
+        TextView title, upName, playTimes;
+        ImageView cover, playIcon, upIcon;
         title = itemView.findViewById(R.id.listVideoTitle);
         upName = itemView.findViewById(R.id.listUpName);
         playTimes = itemView.findViewById(R.id.listPlayTimes);
@@ -238,19 +239,17 @@ public class SendDynamicActivity extends BaseActivity {
 
         title.setText(ToolsUtil.htmlToString(videoInfo.title));
         String upNameStr = videoInfo.staff.get(0).name;
-        if (upNameStr.isEmpty()){
+        if (upNameStr.isEmpty()) {
             upName.setVisibility(View.GONE);
             upIcon.setVisibility(View.GONE);
-        }
-        else upName.setText(upNameStr);
+        } else upName.setText(upNameStr);
 
         // 很抽象的方法名
         String playTimesStr = toWan(videoInfo.stats.view);
-        if(playTimesStr.isEmpty()){
+        if (playTimesStr.isEmpty()) {
             playIcon.setVisibility(View.GONE);
             playTimes.setVisibility(View.GONE);
-        }
-        else playTimes.setText(playTimesStr);
+        } else playTimes.setText(playTimesStr);
 
         Glide.with(this).load(GlideUtil.url(videoInfo.cover))
                 .transition(GlideUtil.getTransitionOptions())
