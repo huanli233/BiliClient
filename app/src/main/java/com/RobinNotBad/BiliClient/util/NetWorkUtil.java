@@ -1,5 +1,7 @@
 package com.RobinNotBad.BiliClient.util;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,6 +26,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.Inflater;
+
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -42,7 +48,7 @@ public class NetWorkUtil {
 
     public static OkHttpClient getOkHttpInstance() {
         while (INSTANCE.get() == null) {
-            INSTANCE.compareAndSet(null, new OkHttpClient.Builder()
+            INSTANCE.compareAndSet(null, setOkHttpSsl(new OkHttpClient.Builder())
                     .followRedirects(false)
                     .addInterceptor(chain -> {
                         Request request = chain.request();
@@ -71,6 +77,34 @@ public class NetWorkUtil {
                     .readTimeout(15, TimeUnit.SECONDS).build());
         }
         return INSTANCE.get();
+    }
+
+    private synchronized static OkHttpClient.Builder setOkHttpSsl(OkHttpClient.Builder okhttpBuilder) {
+        if (Build.VERSION.SDK_INT > 22) return okhttpBuilder;
+        try {
+            @SuppressLint("CustomX509TrustManager") final X509TrustManager trustAllCert =
+                    new X509TrustManager() {
+                        @SuppressLint("TrustAllX509TrustManager")
+                        @Override
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @SuppressLint("TrustAllX509TrustManager")
+                        @Override
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return new java.security.cert.X509Certificate[]{};
+                        }
+                    };
+            final SSLSocketFactory sslSocketFactory = new SSLSocketFactoryCompat(trustAllCert);
+            okhttpBuilder.sslSocketFactory(sslSocketFactory, trustAllCert);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return okhttpBuilder;
     }
 
     public static JSONObject getJson(String url) throws IOException, JSONException {
