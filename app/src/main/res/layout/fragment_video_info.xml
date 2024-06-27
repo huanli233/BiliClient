@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:paddingHorizontal="@dimen/activity_padding_horizontal"
-            android:paddingBottom="4dp">
+            android:paddingBottom="4dp"
+            android:descendantFocusability="blocksDescendants">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/exclusiveTip"
@@ -52,7 +53,6 @@
                 android:layout_marginTop="8dp"
                 android:adjustViewBounds="true"
                 android:clickable="true"
-                android:focusable="true"
                 android:src="@mipmap/placeholder"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +121,6 @@
                     app:drawableEndCompat="@drawable/arrow_forward"
                     android:gravity="center_vertical"
                     android:textSize="13sp"
-                    android:visibility="visible"
                     tools:ignore="RtlCompat" />
             </com.google.android.material.card.MaterialCardView>
 

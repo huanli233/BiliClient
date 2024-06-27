@@ -62,12 +62,16 @@
 
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
+        <item>新增了下载新版本的功能</item>
         <item>新增了直播功能</item>
         <item>新增了表情面板</item>
         <item>实现了搜索直播</item>
         <item>实现了动态中的直播跳转</item>
-        <item>实现了快捷跳转至对应评论</item>
+        <item>实现了“回复我的”中跳转至对应评论功能</item>
+        <item>优化了图片的载入动画</item>
         <item>优化了发布评论后的评论显示</item>
+        <item>修复了进入视频详情页后不在顶部的问题</item>
+        <item>修复了偏好设置中选项会自动开启的问题</item>
         <item>修复了通知中心崩溃的问题</item>
         <item>修复了缓存时可能的崩溃问题</item>
         <item>修复了部分用户主页崩溃的问题</item>

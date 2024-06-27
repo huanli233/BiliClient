@@ -500,7 +500,6 @@ public class VideoInfoFragment extends Fragment {
         } else {
             collectionCard.setVisibility(View.GONE);
         }
-
     }
 
 
