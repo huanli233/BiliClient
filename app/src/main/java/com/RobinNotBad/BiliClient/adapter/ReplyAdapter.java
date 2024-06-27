@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.view.CustomListView;
+import com.RobinNotBad.BiliClient.view.RadiusBackgroundSpan;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -64,6 +66,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     final Context context;
     final ArrayList<Reply> replyList;
     final long oid;
+    final long up_mid;
     final long root;
     final int type;
     final int sort;
@@ -80,6 +83,19 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.sort = sort;
         this.replyType = type;
         this.source = source;
+        this.up_mid = -1;
+    }
+
+    public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort, Object source, long up_mid) {
+        this.context = context;
+        this.replyList = replyList;
+        this.oid = oid;
+        this.root = root;
+        this.type = type;
+        this.sort = sort;
+        this.replyType = type;
+        this.source = source;
+        this.up_mid = up_mid;
     }
 
     public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort) {
@@ -104,7 +120,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         if (holder instanceof WriteReply) {
             WriteReply writeReply = (WriteReply) holder;
             writeReply.write_reply.setOnClickListener(view -> {
@@ -142,7 +158,15 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .apply(RequestOptions.circleCropTransform())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(replyHolder.replyAvatar);
-            replyHolder.userName.setText(replyList.get(realPosition).sender.name);
+
+            UserInfo sender = replyList.get(realPosition).sender;
+            if (sender.mid == up_mid) {
+                SpannableString name_str = new SpannableString(replyList.get(realPosition).sender.name + "  UP ");
+                name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), sender.name.length() + 1, sender.name.length() + 5, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                name_str.setSpan(new RelativeSizeSpan(0.8f), sender.name.length() + 1, sender.name.length() + 5, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                replyHolder.userName.setText(name_str);
+            } else replyHolder.userName.setText(sender.name);
+
 
             String text = replyList.get(realPosition).message;
             replyHolder.message.setText(text);  //防止加载速度慢时露出鸡脚

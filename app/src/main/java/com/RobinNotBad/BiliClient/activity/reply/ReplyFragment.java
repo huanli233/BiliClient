@@ -26,7 +26,7 @@ import java.util.Objects;
 public class ReplyFragment extends RefreshListFragment {
 
     private boolean dontload;
-    protected long aid;
+    protected long aid, mid;
     protected int sort = 2;
     protected int type;
     protected ArrayList<Reply> replyList;
@@ -75,6 +75,17 @@ public class ReplyFragment extends RefreshListFragment {
         return fragment;
     }
 
+    public static ReplyFragment newInstance(long aid, int type, long seek_rpid, long up_mid) {
+        ReplyFragment fragment = new ReplyFragment();
+        Bundle args = new Bundle();
+        args.putLong("aid", aid);
+        args.putInt("type", type);
+        args.putLong("seek", seek_rpid);
+        args.putLong("mid", up_mid);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +95,7 @@ public class ReplyFragment extends RefreshListFragment {
             replyType = type;
             dontload = getArguments().getBoolean("dontload", false);
             seek = getArguments().getLong("seek", -1);
+            mid = getArguments().getLong("mid", -1);
         }
     }
 
@@ -125,7 +137,7 @@ public class ReplyFragment extends RefreshListFragment {
     }
 
     private ReplyAdapter getReplyAdapter() {
-        return new ReplyAdapter(requireContext(), replyList, aid, 0, type, sort, source);
+        return new ReplyAdapter(requireContext(), replyList, aid, 0, type, sort, source, mid);
     }
 
     @SuppressLint("NotifyDataSetChanged")

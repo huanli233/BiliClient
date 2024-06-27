@@ -62,6 +62,7 @@
 
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
+        <item>新增了评论区的UP主标识</item>
         <item>新增了下载新版本的功能</item>
         <item>新增了直播功能</item>
         <item>新增了表情面板</item>
