@@ -25,7 +25,6 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.PreInflateHelper;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
@@ -89,14 +88,11 @@ public class CollectionInfoActivity extends RefreshListActivity {
         final Collection collection;
         final Context context;
         final List<VideoCard> data;
-        final PreInflateHelper preInflateHelper;
 
         public CardAdapter(Context context, Collection collection, RecyclerView recyclerView) {
             this.context = context;
             this.data = collection.cards;
             this.collection = collection;
-            this.preInflateHelper = new PreInflateHelper(context);
-//            this.preInflateHelper.preload(recyclerView, R.layout.cell_video_list);
         }
 
         @Override
@@ -111,7 +107,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 View view = LayoutInflater.from(this.context).inflate(R.layout.cell_collection_info, parent, false);
                 return new CollectionInfoHolder(view);
             } else {
-                View view = preInflateHelper.getView(parent, R.layout.cell_video_list);
+                View view = LayoutInflater.from(this.context).inflate(R.layout.cell_video_list, parent, false);
                 return new VideoCardHolder(view);
             }
         }
@@ -171,15 +167,12 @@ public class CollectionInfoActivity extends RefreshListActivity {
         final Context context;
         final List<Collection.Section> data;
         final List<Integer> types = new ArrayList<>();
-        final PreInflateHelper preInflateHelper;
 
         public SectionAdapter(Context context, Collection collection, RecyclerView recyclerView) {
             this.context = context;
             this.data = collection.sections;
             this.collection = collection;
-            this.preInflateHelper = new PreInflateHelper(context);
             this.recyclerView = recyclerView;
-//            this.preInflateHelper.preload(recyclerView, R.layout.cell_video_list);
         }
 
         @Override
@@ -227,7 +220,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 View view = LayoutInflater.from(this.context).inflate(R.layout.cell_collection_info, parent, false);
                 return new CollectionInfoHolder(view);
             } else if (viewType == 0) {
-                View view = preInflateHelper.getView(parent, R.layout.cell_video_list);
+                View view = LayoutInflater.from(this.context).inflate(R.layout.cell_video_list, parent, false);
                 return new VideoCardHolder(view);
             } else {
                 return new SectionHolder(new TextView(context));

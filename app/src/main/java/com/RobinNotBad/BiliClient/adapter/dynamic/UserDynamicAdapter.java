@@ -25,7 +25,6 @@ import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.PreInflateHelper;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
@@ -44,13 +43,11 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     final UserInfo userInfo;
     boolean desc_expand, notice_expand;
     boolean follow_onprocess;
-    final PreInflateHelper preInflateHelper;
 
     public UserDynamicAdapter(Context context, ArrayList<Dynamic> dynamicList, UserInfo userInfo) {
         this.context = context;
         this.dynamicList = dynamicList;
         this.userInfo = userInfo;
-        this.preInflateHelper = new PreInflateHelper(context);
     }
 
     @NonNull
@@ -60,7 +57,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             View view = LayoutInflater.from(context).inflate(R.layout.cell_user_info, parent, false);
             return new UserInfoHolder(view);
         } else {
-            View view = preInflateHelper.getView(parent, R.layout.cell_dynamic, 3, false);
+            View view = LayoutInflater.from(context).inflate(R.layout.cell_dynamic, parent, false);
             return new DynamicHolder(view, (BaseActivity) context, false);
         }
     }

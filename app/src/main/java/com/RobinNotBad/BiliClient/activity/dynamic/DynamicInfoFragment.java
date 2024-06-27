@@ -15,7 +15,6 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicHolder;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.PreInflateHelper;
 
 //真正的视频详情页
 //2023-07-17
@@ -24,7 +23,6 @@ public class DynamicInfoFragment extends Fragment {
 
     Dynamic dynamic;
     Runnable onFinishLoad;
-    PreInflateHelper preInflateHelper;
 
 
     public DynamicInfoFragment() {
@@ -56,7 +54,6 @@ public class DynamicInfoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ScrollView scrollView = view.findViewById(R.id.scrollView);
-        if (preInflateHelper == null) preInflateHelper = new PreInflateHelper(requireContext());
 
         CenterThreadPool.run(() -> {
             if (isAdded()) requireActivity().runOnUiThread(() -> {

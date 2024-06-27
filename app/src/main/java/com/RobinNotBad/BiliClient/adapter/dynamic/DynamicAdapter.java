@@ -18,7 +18,6 @@ import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
 import com.RobinNotBad.BiliClient.activity.live.FollowLiveActivity;
 import com.RobinNotBad.BiliClient.model.Dynamic;
-import com.RobinNotBad.BiliClient.util.PreInflateHelper;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -42,7 +41,6 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.recyclerView = recyclerView;
         dynamicActivity = (DynamicActivity) context;
         this.writeDynamicLauncher = dynamicActivity.writeDynamicLauncher;
-//        getInflateHelper().preload(recyclerView, R.layout.cell_dynamic, 5, 0);
     }
 
     @Override
@@ -57,7 +55,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             View view = LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic_action, parent, false);
             return new WriteDynamic(view);
         } else {
-            return new DynamicHolder(getInflateHelper().getView(parent, R.layout.cell_dynamic, 3, false), dynamicActivity, false);
+            return new DynamicHolder(LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic, parent, false), dynamicActivity, false);
         }
     }
 
@@ -122,14 +120,4 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             live = itemView.findViewById(R.id.live);
         }
     }
-
-    PreInflateHelper preInflateHelper;
-
-    public PreInflateHelper getInflateHelper() {
-        if (preInflateHelper == null) {
-            preInflateHelper = new PreInflateHelper(context);
-        }
-        return preInflateHelper;
-    }
-
 }
