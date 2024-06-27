@@ -19,6 +19,7 @@ import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.Dynamic;
+import com.RobinNotBad.BiliClient.util.AnimationUtils;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -73,6 +74,7 @@ public class DynamicInfoActivity extends BaseActivity {
                     runOnUiThread(() -> {
                         ViewPager viewPager = findViewById(R.id.viewPager);
                         viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
+                        diFragment.requireView().setVisibility(View.GONE);
                         if (seek_reply != -1) viewPager.setCurrentItem(1);
 
                         if (SharedPreferencesUtil.getBoolean("first_dynamicinfo", true)) {
@@ -80,7 +82,7 @@ public class DynamicInfoActivity extends BaseActivity {
                             SharedPreferencesUtil.putBoolean("first_dynamicinfo", false);
                         }
 
-                        diFragment.setOnFinishLoad(() -> findViewById(R.id.loading).setVisibility(View.GONE));
+                        diFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(findViewById(R.id.loading), diFragment.requireView()));
                     });
 
                 } catch (Exception e) {

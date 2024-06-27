@@ -5,7 +5,6 @@ import android.os.Build;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -117,7 +116,7 @@ public class SSLSocketFactoryCompat extends SSLSocketFactory {
     }
 
     @Override
-    public Socket createSocket(String host, int port) throws IOException, UnknownHostException {
+    public Socket createSocket(String host, int port) throws IOException {
         Socket ssl = defaultFactory.createSocket(host, port);
         if (ssl instanceof SSLSocket)
             upgradeTLS((SSLSocket) ssl);
@@ -125,7 +124,7 @@ public class SSLSocketFactoryCompat extends SSLSocketFactory {
     }
 
     @Override
-    public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException, UnknownHostException {
+    public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException {
         Socket ssl = defaultFactory.createSocket(host, port, localHost, localPort);
         if (ssl instanceof SSLSocket)
             upgradeTLS((SSLSocket) ssl);

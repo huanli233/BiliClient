@@ -121,8 +121,8 @@ public class ReplyInfoActivity extends BaseActivity {
             int result = ReplyApi.getReplies(oid, rpid, page, type, sort, list);
             if (result != -1) {
                 Log.e("debug", "下一页");
-                replyList.addAll(list);
                 runOnUiThread(() -> {
+                    replyList.addAll(list);
                     replyAdapter.notifyItemRangeInserted(replyList.size() - list.size(), list.size());
                     refreshLayout.setRefreshing(false);
                 });
@@ -143,16 +143,18 @@ public class ReplyInfoActivity extends BaseActivity {
 
     private void refresh() {
         page = 1;
-        replyList.clear();
         refreshLayout.setRefreshing(true);
 
         CenterThreadPool.run(() -> {
             try {
-                int result = ReplyApi.getReplies(oid, rpid, page, type, sort, replyList);
+                List<Reply> list = new ArrayList<>();
+                int result = ReplyApi.getReplies(oid, rpid, page, type, sort, list);
 
                 if (result != -1) {
-                    replyList.add(0, origReply);
                     runOnUiThread(() -> {
+                        replyList.clear();
+                        replyList.add(0, origReply);
+                        replyList.addAll(list);
                         replyAdapter = new ReplyAdapter(this, replyList, oid, rpid, type, sort, mid);
                         replyAdapter.isDetail = true;
                         setOnSortSwitch();

@@ -186,20 +186,28 @@ public class ReplyFragment extends RefreshListFragment {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void refresh(long aid) {
         page = 1;
         this.aid = aid;
         setRefreshing(true);
-        if (replyList != null) replyList.clear();
-        else replyList = new ArrayList<>();
         CenterThreadPool.run(() -> {
             try {
-                int result = ReplyApi.getReplies(aid, 0, page, type, sort, replyList);
+                List<Reply> list = new ArrayList<>();
+                int result = ReplyApi.getReplies(aid, 0, page, type, sort, list);
                 setRefreshing(false);
                 if (result != -1 && isAdded()) {
-                    replyAdapter = getReplyAdapter();
-                    setOnSortSwitch();
-                    setAdapter(replyAdapter);
+                    runOnUiThread(() -> {
+                        if (replyList != null) replyList.clear();
+                        else replyList = new ArrayList<>();
+                        replyList.addAll(list);
+                        if (replyAdapter == null) {
+                            replyAdapter = getReplyAdapter();
+                            setAdapter(replyAdapter);
+                        } else {
+                            replyAdapter.notifyDataSetChanged();
+                        }
+                    });
                     //replyAdapter.notifyItemRangeInserted(0,replyList.size());
                     if (result == 1) {
                         Log.e("debug", "到底了");

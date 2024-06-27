@@ -59,7 +59,7 @@ public class GlideUtil {
     }
 
     public static TransitionOptions<?, ? super Drawable> getTransitionOptions() {
-        if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.IMAGE_LOAD_TRANSITION, true)) {
+        if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.LOAD_TRANSITION, true)) {
             return DrawableTransitionOptions.with(new DrawableCrossFadeFactory.Builder(300).setCrossFadeEnabled(true).build());
         } else {
             return new DrawableTransitionOptions();

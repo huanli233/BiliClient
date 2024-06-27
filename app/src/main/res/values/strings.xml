@@ -23,6 +23,7 @@
     <string-array name="eggs">
         <item>恭喜你找到了这个彩蛋喵~再长按几次试试吧？\n\n*此处的彩蛋可能会随着版本更新而变动，如果你看到了这个，也可以向我投稿下一个版本的彩蛋哦？</item>
 
+        <item>不要后悔、责备——自己的人生。\n不要否定——渴望幸福的想法。\n不要说——放弃生存，从痛苦中解脱这样悲伤的话。\n不要觉得——自己是为了受苦而生的。\n绝对没有那种事。\n\n#投稿者：huanli233</item>
         <item>Android3.0——世界遗忘了它，却从未抛弃它。\n\n#投稿者：船魔苏心</item>
         <item>愿母神三度为你阖眼，\n令你的血脉永远鼓动，\n旅途永远坦然，\n诡计永不败露。\n\n#投稿者：白什盘</item>
         <item>"phonk才是真正的音乐！"（个人观点）\n\n#投稿者：DICK</item>
@@ -58,7 +59,7 @@
     <string name="desc_img_no_load_onscroll">打开此选项，翻动列表时将不会加载图片，松手后再加载，观感可能有影响，可能增加流畅度。</string>
     <string name="desc_link_enable">打开此选项，会识别部分文本中的链接/BV号/AV号/CV号并标记为链接，点击可打开。</string>
     <string name="desc_async_inflate_enable">打开此选项，会对部分页面进行异步加载（显示一个加载中动画，加载完成后显示页面）\n* 请注意，异步加载的开启可能会触发一些崩溃问题，但关闭会导致一些页面在打开期间会阻塞UI无法操作，体验不佳。请自行判断！</string>
-    <string name="desc_image_load_transition">打开此选项，会使加载图片完成后显示时会有渐入动画。</string>
+    <string name="desc_load_transition">打开此选项，会使加载图片和部分页面完成后显示时会有渐入/渐出动画。</string>
 
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
@@ -68,11 +69,13 @@
         <item>新增了表情面板</item>
         <item>实现了搜索直播</item>
         <item>实现了动态中的直播跳转</item>
-        <item>实现了“回复我的”中跳转至对应评论功能</item>
+        <item>实现了消息中心中评论回复项跳转至对应评论功能</item>
         <item>优化了图片的载入动画</item>
+        <item>优化了页面的载入动画</item>
         <item>优化了发布评论后的评论显示</item>
         <item>修复了进入视频详情页后不在顶部的问题</item>
-        <item>修复了偏好设置中选项会自动开启的问题</item>
+        <item>修复了偏好设置中选项开关状态因滑动列表异常的问题</item>
+        <item>修复了评论刷新时操作可能出现的崩溃问题</item>
         <item>修复了通知中心崩溃的问题</item>
         <item>修复了缓存时可能的崩溃问题</item>
         <item>修复了部分用户主页崩溃的问题</item>

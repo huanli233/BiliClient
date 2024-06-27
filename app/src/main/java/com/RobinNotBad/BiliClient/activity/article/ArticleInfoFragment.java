@@ -34,6 +34,9 @@ public class ArticleInfoFragment extends Fragment {
     RecyclerView recyclerView;
     ArrayList<ArticleLine> lineList;
 
+
+    Runnable onFinishLoad;
+
     public ArticleInfoFragment() {
     }
 
@@ -51,6 +54,10 @@ public class ArticleInfoFragment extends Fragment {
         args.putSerializable("article", articleInfo);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void setOnFinishLoad(Runnable onFinishLoad) {
+        this.onFinishLoad = onFinishLoad;
     }
 
     @Override
@@ -111,6 +118,7 @@ public class ArticleInfoFragment extends Fragment {
                     ArticleContentAdapter adapter = new ArticleContentAdapter(requireActivity(), articleInfo, lineList);
                     recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
                     recyclerView.setAdapter(adapter);
+                    if (onFinishLoad != null) onFinishLoad.run();
                 });
             } catch (Exception e) {
                 if (isAdded())

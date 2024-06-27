@@ -19,6 +19,7 @@ import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
+import com.RobinNotBad.BiliClient.util.AnimationUtils;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
@@ -64,8 +65,10 @@ public class ArticleInfoActivity extends BaseActivity {
                 runOnUiThread(() -> {
                     ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
                     viewPager.setAdapter(vpfAdapter);
+                    articleInfoFragment.requireView().setVisibility(View.GONE);
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
-                    findViewById(R.id.loading).setVisibility(View.GONE);
+
+                    articleInfoFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(findViewById(R.id.loading), articleInfoFragment.requireView()));
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> {

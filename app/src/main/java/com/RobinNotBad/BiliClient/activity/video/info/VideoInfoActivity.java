@@ -19,6 +19,7 @@ import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
+import com.RobinNotBad.BiliClient.util.AnimationUtils;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -124,13 +125,14 @@ public class VideoInfoActivity extends BaseActivity {
                 viewPager.setOffscreenPageLimit(fragmentList.size());
                 ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
                 runOnUiThread(() -> {
-                    loading.setVisibility(View.GONE);
                     viewPager.setAdapter(vpfAdapter);
+                    fragmentList.get(0).requireView().setVisibility(View.GONE);
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
                     if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
                         MsgUtil.toastLong("提示：本页面可以左右滑动", this);
                         SharedPreferencesUtil.putBoolean("first_videoinfo", false);
                     }
+                    AnimationUtils.crossFade(loading, fragmentList.get(0).getView());
                 });
                 //没啥好说的，教科书式的ViewPager使用方法
             } catch (Exception e) {
