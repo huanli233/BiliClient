@@ -32,7 +32,7 @@ import java.util.Objects;
 public class ReplyInfoActivity extends BaseActivity {
 
     private long oid;
-    private long rpid;
+    private long rpid, mid;
     private int sort = 0;
     private int type;
     private RecyclerView recyclerView;
@@ -54,6 +54,7 @@ public class ReplyInfoActivity extends BaseActivity {
         rpid = intent.getLongExtra("rpid", 0);
         oid = intent.getLongExtra("oid", 0);
         type = intent.getIntExtra("type", 1);
+        mid = intent.getLongExtra("up_mid", -1);
         origReply = (Reply) intent.getSerializableExtra("origReply");
 
         refreshLayout = findViewById(R.id.swipeRefreshLayout);
@@ -70,7 +71,7 @@ public class ReplyInfoActivity extends BaseActivity {
                 int result = ReplyApi.getReplies(oid, rpid, page, type, sort, replyList);
                 if (result != -1) {
                     replyList.add(0, origReply);
-                    replyAdapter = new ReplyAdapter(this, replyList, oid, rpid, type, sort, getIntent().getSerializableExtra("source"));
+                    replyAdapter = new ReplyAdapter(this, replyList, oid, rpid, type, sort, getIntent().getSerializableExtra("source"), mid);
                     replyAdapter.isDetail = true;
                     setOnSortSwitch();
                     runOnUiThread(() -> {
@@ -152,7 +153,7 @@ public class ReplyInfoActivity extends BaseActivity {
                 if (result != -1) {
                     replyList.add(0, origReply);
                     runOnUiThread(() -> {
-                        replyAdapter = new ReplyAdapter(this, replyList, oid, rpid, type, sort);
+                        replyAdapter = new ReplyAdapter(this, replyList, oid, rpid, type, sort, mid);
                         replyAdapter.isDetail = true;
                         setOnSortSwitch();
                         recyclerView.setAdapter(replyAdapter);
