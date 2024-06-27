@@ -48,7 +48,6 @@ public class RadiusBackgroundSpan extends ReplacementSpan {
         int offsetX = (int) ((rect.right - rect.left - textWidth) / 2) + margin;
         int offsetY = (int) ((y + fontMetrics.ascent + y + fontMetrics.descent) / 2 - (top + bottom) / 2);
         canvas.drawText(text, start, end, x + offsetX, y - offsetY, newPaint);
-
     }
 
     private TextPaint getCustomTextPaint(Paint srcPaint) {

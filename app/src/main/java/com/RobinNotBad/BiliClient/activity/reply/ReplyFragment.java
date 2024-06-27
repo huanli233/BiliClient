@@ -180,7 +180,7 @@ public class ReplyFragment extends RefreshListFragment {
                 layoutManager.scrollToPositionWithOffset(finalPos + 1, 0);
             });
         } else if (replyEvent.getPos() >= 0) {
-            replyList.get(replyEvent.getPos()).childMsgList.add(String.format("%s：%s", reply.sender.name, reply.message));
+            replyList.get(replyEvent.getPos()).childMsgList.add(reply);
             replyList.get(replyEvent.getPos()).childCount++;
             runOnUiThread(() -> replyAdapter.notifyItemChanged(replyEvent.getPos() + 1));
         }

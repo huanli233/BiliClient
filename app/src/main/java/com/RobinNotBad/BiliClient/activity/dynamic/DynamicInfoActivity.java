@@ -64,7 +64,7 @@ public class DynamicInfoActivity extends BaseActivity {
                     List<Fragment> fragmentList = new ArrayList<>();
                     DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance(dynamic);
                     fragmentList.add(diFragment);
-                    rFragment = ReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type, seek_reply);
+                    rFragment = ReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type, seek_reply, dynamic.userInfo.mid);
                     rFragment.replyType = ReplyApi.REPLY_TYPE_DYNAMIC;
                     rFragment.setSource(dynamic);
                     fragmentList.add(rFragment);

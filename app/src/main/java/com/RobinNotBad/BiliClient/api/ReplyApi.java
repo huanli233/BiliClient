@@ -207,14 +207,11 @@ public class ReplyApi {
             replyReturn.childCount = reply.getInt("rcount");
 
             if (reply.has("replies") && !reply.isNull("replies")) {
-                ArrayList<String> childMsgList = new ArrayList<>();
+                ArrayList<Reply> childMsgList = new ArrayList<>();
                 JSONArray childReplies = reply.getJSONArray("replies");
                 for (int j = 0; j < childReplies.length(); j++) {
                     JSONObject childReply = childReplies.getJSONObject(j);
-                    String childUName = childReply.getJSONObject("member").getString("uname");
-                    String childMessage = childReply.getJSONObject("content").getString("message");
-                    //Log.e("debug-第" + j + "条子评论", childUName + "：" + childMessage);
-                    childMsgList.add(childUName + "：" + childMessage);
+                    childMsgList.add(analyzeReply(false, childReply, timeCurr, sdf));
                 }
                 replyReturn.childMsgList = childMsgList;
             }

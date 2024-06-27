@@ -212,7 +212,18 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     replyHolder.childCount.setText("共" + replyList.get(realPosition).childCount + "条回复");
 
                 if (replyList.get(realPosition).childMsgList != null) {
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.cell_reply_child, replyList.get(realPosition).childMsgList);
+                    final String up_tip = "  UP  ";
+                    List<CharSequence> childMsgViewList = new ArrayList<>();
+                    for (Reply reply : replyList.get(realPosition).childMsgList) {
+                        String senderName = reply.sender.name;
+                        SpannableString content = new SpannableString(senderName + (reply.sender.mid == up_mid ? up_tip : "") + "：" + reply.message);
+                        if (reply.sender.mid == up_mid) {
+                            content.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                            content.setSpan(new RelativeSizeSpan(0.8f), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        }
+                        childMsgViewList.add(content);
+                    }
+                    ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(context, R.layout.cell_reply_child, childMsgViewList);
                     replyHolder.childReplies.setAdapter(adapter);
                 }
             } else replyHolder.childReplyCard.setVisibility(View.GONE);

@@ -23,7 +23,7 @@ public class Reply implements Serializable {
     public boolean liked;
     public int childCount;
     public boolean isDynamic;
-    public ArrayList<String> childMsgList;
+    public ArrayList<Reply> childMsgList;
     public boolean isTop;
 
     public Reply() {
