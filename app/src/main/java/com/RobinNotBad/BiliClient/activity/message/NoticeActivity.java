@@ -94,7 +94,9 @@ public class NoticeActivity extends RefreshListActivity {
                 bottom = cursor.is_end;
                 setRefreshing(false);
             } catch (Exception e) {
-                loadFail(e);
+                e.printStackTrace();
+                page--;
+                setRefreshing(false);
             }
         });
     }
