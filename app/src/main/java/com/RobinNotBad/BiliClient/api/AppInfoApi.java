@@ -41,6 +41,7 @@ public class AppInfoApi {
                         MsgUtil.showDialog(context, "提醒", "当前的新版本实现了对抗部分类型的风控，建议您重新登录账号以确保成功使用");
                     if (last_ver < 20240615)
                         MsgUtil.showDialog(context, "提醒", "当前版本开始，内置播放器退出播放时会上传视频播放进度");
+                    MsgUtil.showDialog(context, "提醒", "欢迎更新到新版本，这个版本可能增加了一些设置项，可前往设置中查看");
                 }
                 MsgUtil.showText(context, "更新公告", context.getResources().getString(R.string.update_tip) + "\n\n更新日志：\n" + ToolsUtil.getUpdateLog(context));
                 if (ToolsUtil.isDebugBuild())

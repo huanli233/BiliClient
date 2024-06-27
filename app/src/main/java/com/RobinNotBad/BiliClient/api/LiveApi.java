@@ -25,6 +25,14 @@ public class LiveApi {
         put(64, 150);
         put(80, 250);
     }};
+    public static final LinkedHashMap<String, Integer> QualityMap = new LinkedHashMap<>() {{
+        //清晰度代码
+        put("流畅", 80);
+        put("高清", 150);
+        put("超清", 250);
+        put("蓝光", 400);
+        put("原画", 10000);
+    }};
 
     /**
      * 获取推荐直播间列表

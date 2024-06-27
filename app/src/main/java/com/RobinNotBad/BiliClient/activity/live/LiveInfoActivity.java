@@ -35,14 +35,15 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class LiveInfoActivity extends BaseActivity {
     private long room_id;
     private LiveRoom room;
     private boolean desc_expand = false, tags_expand = false;
 
-    private RecyclerView protocol_list, host_list;
-    private int selectedProtocol = 0, selectedHost = 0;
+    private RecyclerView host_list;
+    private int selectedHost = 0;
     private MediaEpisodeAdapter hostAdapter;
     private LivePlayInfo playInfo;
 
@@ -65,7 +66,7 @@ public class LiveInfoActivity extends BaseActivity {
                 try {
                     room = LiveApi.getRoomInfo(room_id);
                     if (room == null) {
-                        MsgUtil.toast("直播不存在", this);
+                        runOnUiThread(() -> MsgUtil.toast("直播不存在", this));
                         finish();
                         return;
                     }
@@ -81,8 +82,8 @@ public class LiveInfoActivity extends BaseActivity {
                         TextView idText = findViewById(R.id.idText);
                         TextView tags = findViewById(R.id.tags);
                         TextView description = findViewById(R.id.description);
-                        protocol_list = findViewById(R.id.protocol_list);
                         host_list = findViewById(R.id.host_list);
+                        RecyclerView quality_list = findViewById(R.id.quality_list);
 
                         Glide.with(this).asDrawable().load(GlideUtil.url(room.user_cover)).placeholder(R.mipmap.placeholder)
                                 .transition(GlideUtil.getTransitionOptions())
@@ -123,7 +124,7 @@ public class LiveInfoActivity extends BaseActivity {
                                 try {
                                     LivePlayInfo.Codec codec;
                                     if (playInfo != null) {
-                                        codec = playInfo.playUrl.stream.get(selectedProtocol).format.get(0).codec.get(0);
+                                        codec = playInfo.playUrl.stream.get(0).format.get(0).codec.get(0);
                                         LivePlayInfo.UrlInfo urlInfo = codec.url_info.get(selectedHost);
                                         String play_url = urlInfo.host + codec.base_url + urlInfo.extra;
                                         runOnUiThread(() -> PlayerApi.jumpToPlayer(this, play_url, "", "直播·" + room.title, false, 0, "", 0, userInfo.mid, 0, true));
@@ -144,26 +145,42 @@ public class LiveInfoActivity extends BaseActivity {
                             MsgUtil.toast("直播已结束", this);
                             play.setVisibility(View.GONE);
                         } else {
-                            //协议选择
-                            MediaEpisodeAdapter protocolAdapter = new MediaEpisodeAdapter();
-                            protocolAdapter.setOnItemClickListener(index -> {
-                                selectedProtocol = index;
-                                refresh_host_list();
+                            //清晰度选择
+                            MediaEpisodeAdapter qualityAdapter = new MediaEpisodeAdapter();
+                            ArrayList<Bangumi.Episode> qualityList = new ArrayList<>();
+                            qualityAdapter.setOnItemClickListener(index -> {
+                                hostAdapter.setData(new ArrayList<>()); //先留空
+                                play.setEnabled(false);
+                                CenterThreadPool.run(() -> {
+                                    try {
+                                        playInfo = LiveApi.getRoomPlayInfo(room_id, (int) qualityList.get(index).id);
+                                        runOnUiThread(() -> {
+                                            refresh_host_list();
+                                            play.setEnabled(true);
+                                        });
+                                    } catch (Exception e) {
+                                        runOnUiThread(() -> MsgUtil.err(e, this));
+                                    }
+                                });
                             });
-                            ArrayList<Bangumi.Episode> protocolList = new ArrayList<>();
-                            for (int i = 0; i < playInfo.playUrl.stream.size(); i++) {
+                            int selectedIndex = 0, index = 0;
+                            for (Map.Entry<String, Integer> entry : LiveApi.QualityMap.entrySet()) {
                                 Bangumi.Episode episode = new Bangumi.Episode();
-                                episode.id = i;
-                                episode.title = playInfo.playUrl.stream.get(i).protocol_name;
-                                protocolList.add(episode);
+                                episode.id = entry.getValue();
+                                episode.title = entry.getKey();
+                                qualityList.add(episode);
+                                if ((int) episode.id == LiveApi.PlayerQnMap.get(SharedPreferencesUtil.getInt("play_qn", 16)))
+                                    selectedIndex = index;
+                                index++;
                             }
-                            protocolAdapter.setData(protocolList);
-                            protocol_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-                            runOnUiThread(() -> protocol_list.setAdapter(protocolAdapter));
+                            qualityAdapter.setData(qualityList);
+                            qualityAdapter.setSelectedItemIndex(selectedIndex);
+                            quality_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                            runOnUiThread(() -> quality_list.setAdapter(qualityAdapter));
 
                             //路线选择
                             hostAdapter = new MediaEpisodeAdapter();
-                            hostAdapter.setOnItemClickListener(index -> selectedHost = index);
+                            hostAdapter.setOnItemClickListener(i -> selectedHost = i);
                             hostAdapter.setData(new ArrayList<>());
                             host_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                             runOnUiThread(() -> host_list.setAdapter(hostAdapter));
@@ -179,10 +196,10 @@ public class LiveInfoActivity extends BaseActivity {
 
     private void refresh_host_list() {
         ArrayList<Bangumi.Episode> hostList = new ArrayList<>();
-        for (int i = 0; i < playInfo.playUrl.stream.get(selectedProtocol).format.get(0).codec.get(0).url_info.size(); i++) {
+        for (int i = 0; i < playInfo.playUrl.stream.get(0).format.get(0).codec.get(0).url_info.size(); i++) {
             Bangumi.Episode episode = new Bangumi.Episode();
             episode.id = i;
-            episode.title = "源" + i;
+            episode.title = "路线" + (i + 1);
             hostList.add(episode);
         }
         hostAdapter.setData(hostList);

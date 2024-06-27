@@ -107,7 +107,7 @@
                 app:layout_constraintTop_toTopOf="@+id/viewsCount" />
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/protocols"
+                android:id="@+id/qualities"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="4dp"
@@ -120,21 +120,21 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/protocol_title"
+                        android:id="@+id/quality_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="4dp"
                         android:layout_marginTop="4dp"
                         android:paddingHorizontal="3dp"
-                        android:text="选择播放协议"
+                        android:text="选择清晰度"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/protocol_list"
-                        app:layout_constraintTop_toBottomOf="@+id/protocol_title"
+                        android:id="@+id/quality_list"
+                        app:layout_constraintTop_toBottomOf="@+id/quality_title"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_width="match_parent"
@@ -152,7 +152,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="4dp"
-                app:layout_constraintTop_toBottomOf="@id/protocols"
+                app:layout_constraintTop_toBottomOf="@id/qualities"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
 
