@@ -141,6 +141,7 @@ public class ReplyInfoActivity extends BaseActivity {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void refresh() {
         page = 1;
         refreshLayout.setRefreshing(true);
@@ -155,10 +156,14 @@ public class ReplyInfoActivity extends BaseActivity {
                         replyList.clear();
                         replyList.add(0, origReply);
                         replyList.addAll(list);
-                        replyAdapter = new ReplyAdapter(this, replyList, oid, rpid, type, sort, mid);
-                        replyAdapter.isDetail = true;
-                        setOnSortSwitch();
-                        recyclerView.setAdapter(replyAdapter);
+                        if (replyAdapter == null) {
+                            replyAdapter = new ReplyAdapter(this, replyList, oid, rpid, type, sort, mid);
+                            replyAdapter.isDetail = true;
+                            setOnSortSwitch();
+                            recyclerView.setAdapter(replyAdapter);
+                        } else {
+                            replyAdapter.notifyDataSetChanged();
+                        }
                         refreshLayout.setRefreshing(false);
                     });
                     if (result == 1) {

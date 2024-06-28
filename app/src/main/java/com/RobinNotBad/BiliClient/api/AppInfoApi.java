@@ -43,7 +43,7 @@ public class AppInfoApi {
                         MsgUtil.showDialog(context, "提醒", "当前版本开始，内置播放器退出播放时会上传视频播放进度");
                     MsgUtil.showDialog(context, "提醒", "欢迎更新到新版本，这个版本可能增加了一些设置项，可前往设置中查看");
                 }
-                MsgUtil.showText(context, "更新公告", context.getResources().getString(R.string.update_tip) + "\n\n更新日志：\n" + ToolsUtil.getUpdateLog(context));
+                MsgUtil.showText(context, "更新公告", context.getResources().getString(R.string.update_tip) + "\n\n更新细节：\n" + ToolsUtil.getUpdateLog(context));
                 if (ToolsUtil.isDebugBuild())
                     MsgUtil.showDialog(context, "警告", "这个版本是测试版，仅在测试群中发布，禁止外传到其他平台（如：奇妙应用等应用商店）");
                 SharedPreferencesUtil.putInt("app_version_last", version);
