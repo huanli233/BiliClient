@@ -163,9 +163,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             UserInfo sender = replyList.get(realPosition).sender;
             if (sender.mid == up_mid) {
-                SpannableString name_str = new SpannableString(replyList.get(realPosition).sender.name + " UP ");
-                name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), sender.name.length(), sender.name.length() + 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                name_str.setSpan(new RelativeSizeSpan(0.8f), sender.name.length(), sender.name.length() + 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                SpannableString name_str = new SpannableString(" UP " + replyList.get(realPosition).sender.name);
+                name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                name_str.setSpan(new RelativeSizeSpan(0.8f), 0,  4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 replyHolder.userName.setText(name_str);
             } else replyHolder.userName.setText(sender.name);
 
