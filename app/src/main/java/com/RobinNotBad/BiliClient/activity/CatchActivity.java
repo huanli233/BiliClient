@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Process;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
@@ -61,6 +62,12 @@ public class CatchActivity extends BaseActivity {
                 }
             });
         } else finish();
+
+        findViewById(R.id.restart_btn).setOnClickListener(view -> {
+            finish();
+            startActivity(new Intent(this, SplashActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            Process.killProcess(Process.myPid());
+        });
 
         if (reason_str != null) {
             reason_str.setSpan(new StyleSpan(Typeface.BOLD), 0, 8, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);

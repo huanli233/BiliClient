@@ -93,6 +93,12 @@
                 android:layout_height="wrap_content" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/restart_btn"
+                android:text="重启应用"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/exit_btn"
                 android:text="退出捕捉"
                 android:layout_marginBottom="6dp"
