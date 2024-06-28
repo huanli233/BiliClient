@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -85,7 +86,11 @@ public class BaseActivity extends AppCompatActivity {
     public void setTopbarExit() {
         View view = findViewById(R.id.top);
         if (view != null && !view.hasOnClickListeners()) {
-            view.setOnClickListener(view1 -> finish());
+            view.setOnClickListener(view1 -> {
+                if (!isDestroyed()) {
+                    finish();
+                };
+            });
             Log.e("debug", "set_exit");
         }
     }
@@ -119,5 +124,22 @@ public class BaseActivity extends AppCompatActivity {
         configuration.densityDpi = targetDensityDpi;
         configuration.fontScale = 1f;
         resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+    }
+
+    protected void asyncInflate(int id, InflateCallBack callBack) {
+        setContentView(R.layout.activity_loading);
+        new AsyncLayoutInflaterX(this).inflate(id, null, (view, layoutId, parent) -> {
+            setContentView(view);
+            if (this instanceof InstanceActivity) {
+                ((InstanceActivity) this).setMenuClick();
+            } else {
+                setTopbarExit();
+            }
+            callBack.finishInflate(view, layoutId);
+        });
+    }
+
+    protected interface InflateCallBack {
+        void finishInflate(View view, int id);
     }
 }

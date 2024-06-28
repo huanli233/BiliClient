@@ -54,7 +54,6 @@ public class BangumiApi {
         return bangumi;
     }
 
-
     public static Long getMdidFromEpid(long epid) {
         try {
             String url = "https://api.bilibili.com/pgc/view/web/season?ep_id=" + epid;
@@ -92,6 +91,11 @@ public class BangumiApi {
         info.type = media.getInt("type");
         info.type_name = media.getString("type_name");
 
+        JSONObject new_ep = media.optJSONObject("new_ep");
+        if (new_ep != null) {
+            info.indexShow = new_ep.optString("index_show", "敬请期待");
+        }
+
         JSONObject rating = media.optJSONObject("rating");
         if (rating != null) {
             info.count = rating.optInt("count");
@@ -116,11 +120,14 @@ public class BangumiApi {
         JSONObject result = all.getJSONObject("result");
         ArrayList<Bangumi.Section> sectionList = new ArrayList<>();
 
-        sectionList.add(analyzeSection(result.getJSONObject("main_section")));
+        JSONObject main_section = result.optJSONObject("main_section");
+        if (main_section != null) sectionList.add(analyzeSection(result.getJSONObject("main_section")));
 
-        JSONArray other_sections = result.getJSONArray("section");
-        for (int i = 0; i < other_sections.length(); i++) {
-            sectionList.add(analyzeSection(other_sections.getJSONObject(i)));
+        JSONArray other_sections = result.optJSONArray("section");
+        if (other_sections != null) {
+            for (int i = 0; i < other_sections.length(); i++) {
+                sectionList.add(analyzeSection(other_sections.getJSONObject(i)));
+            }
         }
 
         return sectionList;

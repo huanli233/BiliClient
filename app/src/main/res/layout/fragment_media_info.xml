@@ -23,6 +23,28 @@
             app:round="@dimen/card_round"
             tools:src="@mipmap/placeholder" />
 
+        <ImageView
+            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/icon_bv"
+            android:alpha="0.5"
+            app:layout_constraintTop_toTopOf="@+id/indexShow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/indexShow"
+            android:id="@+id/icon" />
+
+        <TextView
+            android:id="@+id/indexShow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:alpha="0.5"
+            tools:text="敬请期待"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/icon"
+            app:layout_constraintTop_toBottomOf="@+id/image_media_cover" />
+
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -31,7 +53,7 @@
             android:text="加载中"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_media_cover" />
+            app:layout_constraintTop_toBottomOf="@+id/indexShow" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/section_choose"

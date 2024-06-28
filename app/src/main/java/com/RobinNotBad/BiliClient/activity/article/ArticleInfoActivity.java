@@ -65,10 +65,10 @@ public class ArticleInfoActivity extends BaseActivity {
                 runOnUiThread(() -> {
                     ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
                     viewPager.setAdapter(vpfAdapter);
-                    articleInfoFragment.requireView().setVisibility(View.GONE);
+                    View view; if ((view = articleInfoFragment.getView()) != null) view.setVisibility(View.GONE);
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
 
-                    articleInfoFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(findViewById(R.id.loading), articleInfoFragment.requireView()));
+                    articleInfoFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(findViewById(R.id.loading), articleInfoFragment.getView()));
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> {

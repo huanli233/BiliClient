@@ -15,6 +15,7 @@ import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,10 @@ public class UserDynamicFragment extends RefreshListFragment {
         CenterThreadPool.run(() -> {
             try {
                 UserInfo userInfo = UserInfoApi.getUserInfo(mid);
+                if (userInfo == null) {
+                    MsgUtil.toast("用户不存在", requireContext());
+                    requireActivity().finish();
+                }
                 Log.e("debug", "获取到用户信息");
 
                 try {

@@ -10,9 +10,7 @@ import android.view.View;
 import com.RobinNotBad.BiliClient.BuildConfig;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.activity.update.UpdateInfoActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -28,9 +26,7 @@ public class SettingMainActivity extends InstanceActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_main, null, (layoutView, layoutId, parent) -> {
-            setContentView(R.layout.activity_setting_main);
-            setMenuClick();
+        asyncInflate(R.layout.activity_setting_main, ((layoutView, id) -> {
             Log.e("debug", "进入设置页");
 
             //查看登录信息
@@ -145,14 +141,15 @@ public class SettingMainActivity extends InstanceActivity {
             MaterialCardView test = findViewById(R.id.test);    //用于测试
             test.setVisibility(BuildConfig.BETA ? View.VISIBLE : View.GONE);
             test.setOnClickListener(view -> {
-                startActivity(new Intent(this, UpdateInfoActivity.class)
-                        .putExtra("versionName", "2.6.0")
-                        .putExtra("versionCode", 20240616)
-                        .putExtra("updateLog", "测试")
-                        .putExtra("ctime", System.currentTimeMillis())
-                        .putExtra("isRelease", 1)
-                        .putExtra("canDownload", 1));
+//                startActivity(new Intent(this, UpdateInfoActivity.class)
+//                        .putExtra("versionName", "2.6.0")
+//                        .putExtra("versionCode", 20240616)
+//                        .putExtra("updateLog", "测试")
+//                        .putExtra("ctime", System.currentTimeMillis())
+//                        .putExtra("isRelease", 1)
+//                        .putExtra("canDownload", 1));
+                MsgUtil.snackText(view, "[测试文字]\n-403:账号异常，操作失败");
             });
-        });
+        }));
     }
 }

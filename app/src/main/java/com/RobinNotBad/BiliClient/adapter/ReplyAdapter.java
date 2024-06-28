@@ -221,6 +221,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             content.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                             content.setSpan(new RelativeSizeSpan(0.8f), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                         }
+                        if (reply.emotes != null) {
+                            CenterThreadPool.run(() -> {
+                                try {
+                                    EmoteUtil.textReplaceEmote(content.toString(), reply.emotes, 1.0f, context, content);
+                                } catch (ExecutionException ignored) {} catch (InterruptedException ignored) {}
+                            });
+                        }
                         childMsgViewList.add(content);
                     }
                     ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(context, R.layout.cell_reply_child, childMsgViewList);

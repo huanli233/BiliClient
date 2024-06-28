@@ -100,37 +100,39 @@ public class SettingPlayerInsideActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SharedPreferencesUtil.putBoolean("player_display", SWtexture.isChecked());
-        SharedPreferencesUtil.putBoolean("player_codec", SWhard.isChecked());
-        SharedPreferencesUtil.putBoolean("player_audio", SWopensles.isChecked());
-        SharedPreferencesUtil.putBoolean("player_longclick", SWLClick.isChecked());
-        SharedPreferencesUtil.putBoolean("player_loop", SWloop.isChecked());
-        SharedPreferencesUtil.putBoolean("player_background", SWbackground.isChecked());
-        SharedPreferencesUtil.putBoolean("player_autolandscape", SWautolandscape.isChecked());
-        SharedPreferencesUtil.putBoolean("player_scale", SWscale.isChecked());
-        SharedPreferencesUtil.putBoolean("player_doublemove", SWdoublemove.isChecked());
-        SharedPreferencesUtil.putBoolean("show_online", online_total.isChecked());
-        SharedPreferencesUtil.putBoolean("player_from_last", fromLast.isChecked());
+        try {
+            SharedPreferencesUtil.putBoolean("player_display", SWtexture.isChecked());
+            SharedPreferencesUtil.putBoolean("player_codec", SWhard.isChecked());
+            SharedPreferencesUtil.putBoolean("player_audio", SWopensles.isChecked());
+            SharedPreferencesUtil.putBoolean("player_longclick", SWLClick.isChecked());
+            SharedPreferencesUtil.putBoolean("player_loop", SWloop.isChecked());
+            SharedPreferencesUtil.putBoolean("player_background", SWbackground.isChecked());
+            SharedPreferencesUtil.putBoolean("player_autolandscape", SWautolandscape.isChecked());
+            SharedPreferencesUtil.putBoolean("player_scale", SWscale.isChecked());
+            SharedPreferencesUtil.putBoolean("player_doublemove", SWdoublemove.isChecked());
+            SharedPreferencesUtil.putBoolean("show_online", online_total.isChecked());
+            SharedPreferencesUtil.putBoolean("player_from_last", fromLast.isChecked());
 
-        String newline = DMmaxline.getText().toString();
-        String newtextsize = danmakusize.getText().toString();
-        String newspeed = danmakuspeed.getText().toString();
-        String newtransparency = danmaku_transparency.getText().toString();
-        if (newspeed.length() <= 0) newspeed = "1.0";
-        if (newtextsize.length() <= 0) newtextsize = "1.0";
-        if (newtransparency.length() <= 0) newtransparency = "50";
-        if (newline.length() <= 0) newline = "0";
-        SharedPreferencesUtil.putInt("player_danmaku_maxline", Integer.parseInt(newline));
-        SharedPreferencesUtil.putFloat("player_danmaku_size", Float.parseFloat(newtextsize));
-        SharedPreferencesUtil.putFloat("player_danmaku_speed", Float.parseFloat(newspeed));
-        SharedPreferencesUtil.putFloat("player_danmaku_transparency", Float.parseFloat(newtransparency) / 100f);
-        SharedPreferencesUtil.putBoolean("player_danmaku_allowoverlap", danmaku_allowoverlap.isChecked());
-        SharedPreferencesUtil.putBoolean("player_danmaku_mergeduplicate", danmaku_mergeduplicate.isChecked());
-        SharedPreferencesUtil.putBoolean("player_ui_round", ui_round.isChecked());
-        SharedPreferencesUtil.putBoolean("player_ui_showRotateBtn", ui_showRotateBtn.isChecked());
-        SharedPreferencesUtil.putBoolean("player_ui_showDanmakuBtn", ui_showDanmakuBtn.isChecked());
-        SharedPreferencesUtil.putBoolean("player_ui_showLoopBtn", ui_showLoopBtn.isChecked());
+            String newline = DMmaxline.getText().toString();
+            String newtextsize = danmakusize.getText().toString();
+            String newspeed = danmakuspeed.getText().toString();
+            String newtransparency = danmaku_transparency.getText().toString();
+            if (newspeed.length() <= 0) newspeed = "1.0";
+            if (newtextsize.length() <= 0) newtextsize = "1.0";
+            if (newtransparency.length() <= 0) newtransparency = "50";
+            if (newline.length() <= 0) newline = "0";
+            SharedPreferencesUtil.putInt("player_danmaku_maxline", Integer.parseInt(newline));
+            SharedPreferencesUtil.putFloat("player_danmaku_size", Float.parseFloat(newtextsize));
+            SharedPreferencesUtil.putFloat("player_danmaku_speed", Float.parseFloat(newspeed));
+            SharedPreferencesUtil.putFloat("player_danmaku_transparency", Float.parseFloat(newtransparency) / 100f);
+            SharedPreferencesUtil.putBoolean("player_danmaku_allowoverlap", danmaku_allowoverlap.isChecked());
+            SharedPreferencesUtil.putBoolean("player_danmaku_mergeduplicate", danmaku_mergeduplicate.isChecked());
+            SharedPreferencesUtil.putBoolean("player_ui_round", ui_round.isChecked());
+            SharedPreferencesUtil.putBoolean("player_ui_showRotateBtn", ui_showRotateBtn.isChecked());
+            SharedPreferencesUtil.putBoolean("player_ui_showDanmakuBtn", ui_showDanmakuBtn.isChecked());
+            SharedPreferencesUtil.putBoolean("player_ui_showLoopBtn", ui_showLoopBtn.isChecked());
 
-        MsgUtil.toast("设置已保存喵~", this);
+            MsgUtil.toast("设置已保存喵~", this);
+        } catch (NullPointerException ignored) {}
     }
 }

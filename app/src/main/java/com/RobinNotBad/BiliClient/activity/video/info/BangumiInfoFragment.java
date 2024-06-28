@@ -41,6 +41,7 @@ public class BangumiInfoFragment extends Fragment {
     private RecyclerView eposideRecyclerView;
     private Button section_choose;
     private TextView eposide_choose;
+    private TextView indexShow;
 
     private Bangumi bangumi;
 
@@ -78,6 +79,7 @@ public class BangumiInfoFragment extends Fragment {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void initView() {
         //init data.
         ImageView imageMediaCover = rootView.findViewById(R.id.image_media_cover);
@@ -102,12 +104,22 @@ public class BangumiInfoFragment extends Fragment {
             refreshReplies();
         });
 
-        section_choose.setOnClickListener(v -> getSectionChooseDialog().show());
-        eposide_choose.setOnClickListener(v -> getEposideChooseDialog().show());
+        indexShow = rootView.findViewById(R.id.indexShow);
+        indexShow.setText(bangumi.info.indexShow);
 
-        adapter.setData(bangumi.sectionList.get(0).episodeList);
-        eposideRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        eposideRecyclerView.setAdapter(adapter);
+        if (!bangumi.sectionList.isEmpty()) {
+            section_choose.setText(bangumi.sectionList.get(0).title + " 点击切换");
+            section_choose.setOnClickListener(v -> getSectionChooseDialog().show());
+            eposide_choose.setOnClickListener(v -> getEposideChooseDialog().show());
+
+            adapter.setData(bangumi.sectionList.get(0).episodeList);
+            eposideRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+            eposideRecyclerView.setAdapter(adapter);
+        } else {
+            section_choose.setText("敬请期待");
+            playButton.setVisibility(View.GONE);
+            eposideRecyclerView.setVisibility(View.GONE);
+        }
 
         //play button setting
         playButton.setOnClickListener(v -> {

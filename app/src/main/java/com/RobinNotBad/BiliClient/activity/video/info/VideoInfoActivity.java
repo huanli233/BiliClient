@@ -126,7 +126,7 @@ public class VideoInfoActivity extends BaseActivity {
                 ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
                 runOnUiThread(() -> {
                     viewPager.setAdapter(vpfAdapter);
-                    fragmentList.get(0).requireView().setVisibility(View.GONE);
+                    View view; if ((view = fragmentList.get(0).getView()) != null) view.setVisibility(View.GONE);
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
                     if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
                         MsgUtil.toastLong("提示：本页面可以左右滑动", this);

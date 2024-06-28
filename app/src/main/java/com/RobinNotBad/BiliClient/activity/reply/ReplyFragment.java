@@ -176,7 +176,7 @@ public class ReplyFragment extends RefreshListFragment {
             int finalPos = pos;
             runOnUiThread(() -> {
                 replyAdapter.notifyItemInserted(finalPos);
-                replyAdapter.notifyItemRangeChanged(finalPos, replyList.size() - finalPos);
+                replyAdapter.notifyItemRangeChanged(finalPos, replyList.size() - finalPos + 1);
                 layoutManager.scrollToPositionWithOffset(finalPos + 1, 0);
             });
         } else if (replyEvent.getPos() >= 0) {
@@ -198,6 +198,7 @@ public class ReplyFragment extends RefreshListFragment {
                 setRefreshing(false);
                 if (result != -1 && isAdded()) {
                     runOnUiThread(() -> {
+                        if (!isAdded()) return;
                         if (replyList != null) replyList.clear();
                         else replyList = new ArrayList<>();
                         replyList.addAll(list);

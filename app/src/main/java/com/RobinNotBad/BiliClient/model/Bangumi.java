@@ -17,9 +17,7 @@ public class Bangumi {
         public String cover_horizontal;
         public String type_name;
         public String area_name;
-
-        public Info() {
-        }
+        public String indexShow;
     }
 
     public static class Section {

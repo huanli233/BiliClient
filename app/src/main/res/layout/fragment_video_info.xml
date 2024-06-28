@@ -301,7 +301,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:textSize="13sp"
+                            android:textSize="12sp"
                             android:text="点赞" />
                     </LinearLayout>
 
@@ -326,7 +326,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:textSize="13sp"
+                            android:textSize="12sp"
                             android:text="投币" />
                     </LinearLayout>
 
@@ -351,7 +351,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:textSize="13sp"
+                            android:textSize="12sp"
                             android:text="收藏" />
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
