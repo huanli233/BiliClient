@@ -7,10 +7,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -218,7 +220,11 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         String senderName = reply.sender.name;
                         SpannableString content = new SpannableString(senderName + (reply.sender.mid == up_mid ? up_tip : "") + "：" + reply.message);
                         if (reply.sender.mid == up_mid) {
-                            content.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                            Paint paint = new Paint();
+                            paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, context.getResources().getDisplayMetrics()));
+                            Paint.FontMetrics fontMetrics = paint.getFontMetrics();
+                            float lineHeight = fontMetrics.descent - fontMetrics.ascent;
+                            content.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95), (int) (lineHeight)), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                             content.setSpan(new RelativeSizeSpan(0.8f), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                         }
                         if (reply.emotes != null) {

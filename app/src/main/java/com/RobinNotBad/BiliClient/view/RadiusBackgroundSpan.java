@@ -46,7 +46,7 @@ public class RadiusBackgroundSpan extends ReplacementSpan {
         int textWidth = (int) newPaint.measureText(text, start, end);
 
         RectF rect = new RectF();
-        bottom = bottom - top > maxHeight ? top + maxHeight : bottom;
+        top = bottom - top > maxHeight ? Math.max(bottom - maxHeight, 0) : top;
         rect.top = top + margin;
         rect.bottom = bottom - margin;
         rect.left = (int) (x + margin);
