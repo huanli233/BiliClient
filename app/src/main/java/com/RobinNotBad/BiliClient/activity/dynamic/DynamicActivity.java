@@ -50,8 +50,13 @@ public class DynamicActivity extends RefreshMainActivity {
         if (code == RESULT_OK && data != null && data.getStringExtra("item") != null) {
             String type = typeNameMap.get(data.getStringExtra("item"));
             if (type != null) {
-                this.type = type;
-                refreshDynamic();
+                if (isRefreshing) {
+                    MsgUtil.showMsg("还在加载中OvO", this);
+                } else {
+                    this.type = type;
+                    setRefreshing(true);
+                    refreshDynamic();
+                }
             }
         }
     });
@@ -86,8 +91,10 @@ public class DynamicActivity extends RefreshMainActivity {
                                 Dynamic dynamic = DynamicApi.getDynamic(dynId);
                                 dynamicList.add(0, dynamic);
                                 runOnUiThread(() -> {
-                                    dynamicAdapter.notifyItemInserted(0);
-                                    dynamicAdapter.notifyItemRangeChanged(0, dynamicList.size());
+                                    if (type.equals("all")) {
+                                        dynamicAdapter.notifyItemInserted(0);
+                                        dynamicAdapter.notifyItemRangeChanged(0, dynamicList.size());
+                                    }
                                 });
                             } catch (Exception e) {
                                 MsgUtil.err(e, DynamicActivity.this);
@@ -175,10 +182,15 @@ public class DynamicActivity extends RefreshMainActivity {
             dynamicAdapter.notifyDataSetChanged();
         }
 
-        addDynamic(type);
+        addDynamic(type, true);
     }
 
     private void addDynamic(String type) {
+        addDynamic(type, false);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void addDynamic(String type, boolean refresh) {
         Log.e("debug", "加载下一页");
         CenterThreadPool.run(() -> {
             try {
@@ -194,7 +206,11 @@ public class DynamicActivity extends RefreshMainActivity {
                         dynamicAdapter = new DynamicAdapter(this, dynamicList, recyclerView);
                         setAdapter(dynamicAdapter);
                     } else {
-                        dynamicAdapter.notifyItemRangeInserted(dynamicList.size() - list.size(), list.size());
+                        if (refresh) {
+                            dynamicAdapter.notifyDataSetChanged();
+                        } else {
+                            dynamicAdapter.notifyItemRangeInserted(dynamicList.size() - list.size() + 1, list.size());
+                        }
                     }
                 });
 
@@ -209,11 +225,10 @@ public class DynamicActivity extends RefreshMainActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == DynamicHolder.GO_TO_INFO_REQUEST && resultCode == RESULT_OK) {
             try {
-                if (data != null) {
+                if (data != null && !isRefreshing) {
                     DynamicHolder.removeDynamicFromList(dynamicList, data.getIntExtra("position", 0) - 1, dynamicAdapter);
                 }
-            } catch (Throwable ignored) {
-            }
+            } catch (Throwable ignored) {}
         }
     }
 }

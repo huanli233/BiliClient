@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,7 +96,8 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             userInfoHolder.uidTv.setText(String.valueOf(userInfo.mid));
             ToolsUtil.setCopy(context, userInfoHolder.uidTv);
             ToolsUtil.setLink(userInfoHolder.userDesc, userInfoHolder.userNotice);
-            userInfoHolder.userLevel.setText("Lv" + userInfo.level);
+            SpannableString lvStr = new SpannableString("Lv" + userInfo.level);
+            userInfoHolder.userLevel.setText(lvStr);
             userInfoHolder.userFans.setText(ToolsUtil.toWan(userInfo.fans) + "粉丝");
             userInfoHolder.userFans.setOnClickListener((view) -> view.getContext().startActivity(new Intent(view.getContext(), FollowUsersActivity.class).putExtra("mode", 1).putExtra("mid", userInfo.mid)));
             userInfoHolder.userFollowings.setText(ToolsUtil.toWan(userInfo.following) + "关注");

@@ -26,7 +26,7 @@ public class RefreshMainActivity extends InstanceActivity {
     public boolean bottom = false;
     public int page = 1;
     public long lastLoadTimestamp;
-    boolean isRefreshing;
+    protected boolean isRefreshing;
 
     //帮你findView和设置滚动监测器，自动显示转圈动画
     @Override
