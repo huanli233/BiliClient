@@ -61,6 +61,7 @@
     <string name="desc_load_transition">打开此选项，会使加载图片和部分页面完成后显示时会有渐入/渐出动画。</string>
 
     <string name="update_tip">如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。\n此版本中的亮点：\n · 直播相关功能\n · 修复崩溃\n · 页面Fade动画\n · 表情面板\n · 下载新版本\n · 更多优化与修复\n</string>
+    <string name="desc_strict_url_match">打开此选项，会在识别链接时（不包含编号，如AV/BV/CV等）使用更严格的匹配规则。</string>
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
         <item>新增了评论区的UP主标识</item>

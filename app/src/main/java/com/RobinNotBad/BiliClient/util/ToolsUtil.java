@@ -164,7 +164,7 @@ public class ToolsUtil {
             String text = textView.getText().toString();
             SpannableString spannableString = new SpannableString(textView.getText());
 
-            Pattern urlPattern = Patterns.WEB_URL;
+            Pattern urlPattern = SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.STRICT_URL_MATCH, false) ? Pattern.compile("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]") : Patterns.WEB_URL;
             Matcher urlMatcher = urlPattern.matcher(text);
             while (urlMatcher.find()) {
                 int start = urlMatcher.start();

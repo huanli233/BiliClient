@@ -16,6 +16,7 @@ public class SharedPreferencesUtil {
     public static final String ASYNC_INFLATE_ENABLE = "async_inflate_enable";
     public static final String LOAD_TRANSITION = "load_transition";
     public static final String SNACKBAR_ENABLE = "snackbar_enable";
+    public static final String STRICT_URL_MATCH = "strict_url_match";
 
     public static String cookies = "cookies";
     public static String mid = "mid";

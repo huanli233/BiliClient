@@ -153,7 +153,7 @@ public class LinkUrlUtil {
             return new Pair<>(matcher.group(), TYPE_UID);
         }
 
-        matcher = Patterns.WEB_URL.matcher(item);
+        matcher = (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.STRICT_URL_MATCH, false) ? Pattern.compile("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]") :Patterns.WEB_URL).matcher(item);
         if (matcher.find()) {
             return new Pair<>(matcher.group(), TYPE_WEB_URL);
         }
