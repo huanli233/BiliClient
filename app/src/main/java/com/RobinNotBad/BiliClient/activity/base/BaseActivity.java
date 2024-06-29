@@ -112,8 +112,15 @@ public class BaseActivity extends AppCompatActivity {
             EventBus.getDefault().register(this);
             eventBusInit = true;
         }
-        SnackEvent snackEvent;
-        if ((snackEvent = EventBus.getDefault().getStickyEvent(SnackEvent.class)) != null) onEvent(snackEvent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (eventBusEnabled()) {
+            SnackEvent snackEvent;
+            if ((snackEvent = EventBus.getDefault().getStickyEvent(SnackEvent.class)) != null) onEvent(snackEvent);
+        }
     }
 
     @Override
