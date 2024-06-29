@@ -90,19 +90,19 @@ public class QRLoginFragment extends Fragment {
                     case 0:
                         guideline_left.setGuidelinePercent(0.00f);
                         guideline_right.setGuidelinePercent(1.00f);
-                        MsgUtil.toast("切换为大二维码", requireContext());
+                        MsgUtil.showMsg("切换为大二维码", requireContext());
                         qrScale = 1;
                         break;
                     case 1:
                         guideline_left.setGuidelinePercent(0.30f);
                         guideline_right.setGuidelinePercent(0.70f);
-                        MsgUtil.toast("切换为小二维码", requireContext());
+                        MsgUtil.showMsg("切换为小二维码", requireContext());
                         qrScale = 2;
                         break;
                     case 2:
                         guideline_left.setGuidelinePercent(0.15f);
                         guideline_right.setGuidelinePercent(0.85f);
-                        MsgUtil.toast("切换为默认大小", requireContext());
+                        MsgUtil.showMsg("切换为默认大小", requireContext());
                         qrScale = 0;
                         break;
                 }

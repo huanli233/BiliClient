@@ -83,7 +83,7 @@ public class VideoInfoActivity extends BaseActivity {
         viewPager.setAdapter(vpfAdapter);
         if (seek_reply != -1) viewPager.setCurrentItem(1);
         if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
-            MsgUtil.toastLong("提示：本页面可以左右滑动", this);
+            MsgUtil.showMsgLong("提示：本页面可以左右滑动", this);
             SharedPreferencesUtil.putBoolean("first_videoinfo", false);
         }
         findViewById(R.id.loading).setVisibility(View.GONE);
@@ -108,7 +108,7 @@ public class VideoInfoActivity extends BaseActivity {
                 if (data == null) {
                     loading.setImageResource(R.mipmap.loading_2233_error);
                     runOnUiThread(() ->
-                            MsgUtil.toast("获取信息失败！\n可能是视频不存在？", this));
+                            MsgUtil.showMsg("获取信息失败！\n可能是视频不存在？", this));
                     return;
                 }
                 videoInfo = VideoInfoApi.getInfoByJson(data);
@@ -129,7 +129,7 @@ public class VideoInfoActivity extends BaseActivity {
                     View view; if ((view = fragmentList.get(0).getView()) != null) view.setVisibility(View.GONE);
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
                     if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
-                        MsgUtil.toastLong("提示：本页面可以左右滑动", this);
+                        MsgUtil.showMsgLong("提示：本页面可以左右滑动", this);
                         SharedPreferencesUtil.putBoolean("first_videoinfo", false);
                     }
                     AnimationUtils.crossFade(loading, fragmentList.get(0).getView());

@@ -66,7 +66,7 @@ public class LiveInfoActivity extends BaseActivity {
                 try {
                     room = LiveApi.getRoomInfo(room_id);
                     if (room == null) {
-                        runOnUiThread(() -> MsgUtil.toast("直播不存在", this));
+                        runOnUiThread(() -> MsgUtil.showMsg("直播不存在", this));
                         finish();
                         return;
                     }
@@ -142,7 +142,7 @@ public class LiveInfoActivity extends BaseActivity {
                         });
 
                         if (playInfo.playUrl == null) {
-                            MsgUtil.toast("直播已结束", this);
+                            MsgUtil.showMsg("直播已结束", this);
                             play.setVisibility(View.GONE);
                         } else {
                             //清晰度选择

@@ -78,7 +78,7 @@ public class DynamicInfoActivity extends BaseActivity {
                         if (seek_reply != -1) viewPager.setCurrentItem(1);
 
                         if (SharedPreferencesUtil.getBoolean("first_dynamicinfo", true)) {
-                            MsgUtil.toast("下载完成", this);
+                            MsgUtil.showMsg("下载完成", this);
                             SharedPreferencesUtil.putBoolean("first_dynamicinfo", false);
                         }
 

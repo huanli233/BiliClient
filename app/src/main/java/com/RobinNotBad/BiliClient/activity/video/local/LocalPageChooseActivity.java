@@ -64,13 +64,13 @@ public class LocalPageChooseActivity extends BaseActivity {
                     FileUtil.deleteFolder(videoPath);
                 }
 
-                MsgUtil.toast("删除成功", this);
+                MsgUtil.showMsg("删除成功", this);
                 longClickPosition = -1;
 
                 deleted = true;
             } else {
                 longClickPosition = position;
-                MsgUtil.toast("再次长按删除", this);
+                MsgUtil.showMsg("再次长按删除", this);
             }
         });
 

@@ -101,7 +101,7 @@ public class RefreshMainActivity extends InstanceActivity {
 
     public void loadFail() {
         page--;
-        MsgUtil.toastLong("加载失败", this);
+        MsgUtil.showMsgLong("加载失败", this);
         setRefreshing(false);
     }
 

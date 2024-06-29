@@ -20,11 +20,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.event.SnackEvent;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 
 public class BaseActivity extends AppCompatActivity {
@@ -111,8 +114,24 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (eventBusInit) {
+            EventBus.getDefault().unregister(this);
+            eventBusInit = false;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEvent(SnackEvent event) {
+        if (isFinishing()) return;
+        if (event.getMessage() != null) MsgUtil.snackText(getWindow().getDecorView().getRootView(), event.getMessage());
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
     protected boolean eventBusEnabled() {
-        return false;
+        return SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, false);
     }
 
     public void setDensity(int targetDensityDpi) {

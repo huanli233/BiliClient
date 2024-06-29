@@ -159,14 +159,14 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 like.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     try {
                         if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                            context.runOnUiThread(() -> MsgUtil.toast("还没有登录喵~", context));
+                            context.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~", context));
                             return;
                         }
                         int result = ArticleApi.like(articleInfo.id, !articleInfo.stats.liked);
                         if (result == 0) {
                             articleInfo.stats.liked = !articleInfo.stats.liked;
                             context.runOnUiThread(() -> {
-                                MsgUtil.toast((articleInfo.stats.liked ? "点赞成功" : "取消成功"), context);
+                                MsgUtil.showMsg((articleInfo.stats.liked ? "点赞成功" : "取消成功"), context);
 
                                 if (articleInfo.stats.liked)
                                     likeLabel.setText(ToolsUtil.toWan(++articleInfo.stats.like));
@@ -174,7 +174,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                                 like.setBackground(ContextCompat.getDrawable(context, (articleInfo.stats.liked ? R.drawable.icon_like_1 : R.drawable.icon_like_0)));
                             });
                         } else {
-                            context.runOnUiThread(() -> MsgUtil.toast("操作失败：" + result, context));
+                            context.runOnUiThread(() -> MsgUtil.showMsg("操作失败：" + result, context));
                         }
                     } catch (Exception e) {
                         context.runOnUiThread(() -> MsgUtil.err(e, context));
@@ -185,14 +185,14 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                     if (articleInfo.stats.coined < articleInfo.stats.allow_coin) {
                         try {
                             if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                                context.runOnUiThread(() -> MsgUtil.toast("还没有登录喵~", context));
+                                context.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~", context));
                                 return;
                             }
                             int result = ArticleApi.addCoin(articleInfo.id, articleInfo.upInfo.mid, 1);
                             if (result == 0) {
                                 articleInfo.stats.coined++;
                                 context.runOnUiThread(() -> {
-                                    MsgUtil.toast("投币成功！", context);
+                                    MsgUtil.showMsg("投币成功！", context);
                                     coinLabel.setText(ToolsUtil.toWan(++articleInfo.stats.coin));
                                     coin.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_coin_1));
                                 });
@@ -203,13 +203,13 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                                         msg = "不能给自己投币哦！";
                                 }
                                 String finalMsg = msg;
-                                context.runOnUiThread(() -> MsgUtil.toast(finalMsg, context));
+                                context.runOnUiThread(() -> MsgUtil.showMsg(finalMsg, context));
                             }
                         } catch (Exception e) {
                             context.runOnUiThread(() -> MsgUtil.err(e, context));
                         }
                     } else {
-                        context.runOnUiThread(() -> MsgUtil.toast("投币数量到达上限", context));
+                        context.runOnUiThread(() -> MsgUtil.showMsg("投币数量到达上限", context));
                     }
                 }));
 
@@ -227,7 +227,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                         articleInfo.stats.favoured = !articleInfo.stats.favoured;
                         context.runOnUiThread(() -> {
                             favLabel.setText(ToolsUtil.toWan(articleInfo.stats.favorite));
-                            MsgUtil.toast("操作成功~", context);
+                            MsgUtil.showMsg("操作成功~", context);
                         });
                     } catch (IOException e) {
                         context.runOnUiThread(() -> MsgUtil.err(e, context));

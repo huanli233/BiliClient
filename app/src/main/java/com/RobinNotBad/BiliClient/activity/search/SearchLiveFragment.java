@@ -111,7 +111,7 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
             } else {
                 bottom = true;
                 if (isAdded() && !isFirstLoad)
-                    requireActivity().runOnUiThread(() -> MsgUtil.toast("已经到底啦OwO", requireContext()));
+                    requireActivity().runOnUiThread(() -> MsgUtil.showMsg("已经到底啦OwO", requireContext()));
             }
             isFirstLoad = false;
         } catch (Exception e) {

@@ -58,7 +58,7 @@ public class QualityChooserActivity extends BaseActivity {
                 }
                 runOnUiThread(() -> adapter.setNameList(descs));
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.toast("清晰度列表获取失败！", this));
+                runOnUiThread(() -> MsgUtil.showMsg("清晰度列表获取失败！", this));
                 e.printStackTrace();
             }
         });

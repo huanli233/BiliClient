@@ -33,7 +33,7 @@ public class AnnouncementsActivity extends RefreshListActivity {
 
             } catch (Exception e) {
                 report(e);
-                runOnUiThread(() -> MsgUtil.toast("连接到哔哩终端接口时发生错误", this));
+                runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误", this));
             }
         });
     }

@@ -49,7 +49,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
         int season_id = getIntent().getIntExtra("season_id", -1);
         long mid = getIntent().getLongExtra("mid", -1);
         if (collection == null/* && (season_id == -1 || mid == -1)*/) {
-            MsgUtil.toast("合集不存在", this);
+            MsgUtil.showMsg("合集不存在", this);
             finish();
             return;
         }

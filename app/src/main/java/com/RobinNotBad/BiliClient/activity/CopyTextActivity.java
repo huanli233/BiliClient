@@ -65,16 +65,16 @@ public class CopyTextActivity extends BaseActivity {
             ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText("label", content);
             clipboardManager.setPrimaryClip(clipData);
-            MsgUtil.toast("已复制", this);
+            MsgUtil.showMsg("已复制", this);
         });
         findViewById(R.id.copy).setOnClickListener(view -> {
             try {
                 ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clipData = ClipData.newPlainText("label", content.substring(Integer.parseInt(String.valueOf(beginEdit.getText())), Integer.parseInt(String.valueOf(endEdit.getText()))));
                 clipboardManager.setPrimaryClip(clipData);
-                MsgUtil.toast("已复制", this);
+                MsgUtil.showMsg("已复制", this);
             } catch (Exception e) {
-                MsgUtil.toast("复制失败，请检查范围", this);
+                MsgUtil.showMsg("复制失败，请检查范围", this);
             }
         });
 

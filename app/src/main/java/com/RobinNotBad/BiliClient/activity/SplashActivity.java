@@ -161,7 +161,7 @@ public class SplashActivity extends Activity {
             if (cookieInfo.getBoolean("refresh")) {
                 Log.e("Cookie", "需要刷新");
                 if (Objects.equals(SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), ""))
-                    runOnUiThread(() -> MsgUtil.toastLong("无法刷新Cookie，请重新登录！", this));
+                    runOnUiThread(() -> MsgUtil.showMsgLong("无法刷新Cookie，请重新登录！", this));
                 else {
                     String correspondPath = CookieRefreshApi.getCorrespondPath(cookieInfo.getLong("timestamp"));
                     Log.e("CorrespondPath", correspondPath);
@@ -169,15 +169,15 @@ public class SplashActivity extends Activity {
                     Log.e("RefreshCsrf", refreshCsrf);
                     if (CookieRefreshApi.refreshCookie(refreshCsrf)) {
                         NetWorkUtil.refreshHeaders();
-                        runOnUiThread(() -> MsgUtil.toast("Cookie已刷新", this));
+                        runOnUiThread(() -> MsgUtil.showMsg("Cookie已刷新", this));
                     } else {
-                        runOnUiThread(() -> MsgUtil.toastLong("登录信息过期，请重新登录！", this));
+                        runOnUiThread(() -> MsgUtil.showMsgLong("登录信息过期，请重新登录！", this));
                         resetLogin();
                     }
                 }
             }
         } catch (JSONException e) {
-            runOnUiThread(() -> MsgUtil.toastLong("登录信息过期，请重新登录！", this));
+            runOnUiThread(() -> MsgUtil.showMsgLong("登录信息过期，请重新登录！", this));
             resetLogin();
         } catch (IOException e) {
             runOnUiThread(() -> MsgUtil.err(e, this));

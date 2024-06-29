@@ -57,7 +57,7 @@ public class AppInfoApi {
             }
         } catch (Exception e) {
             Log.e("BiliClient", e.toString());
-            CenterThreadPool.runOnUiThread(() -> MsgUtil.toast("连接到哔哩终端接口时发生错误", context));
+            CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误", context));
         }
     }
 
@@ -112,8 +112,8 @@ public class AppInfoApi {
         int version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
         if (latest > version) {
             if (debug_ver)
-                CenterThreadPool.runOnUiThread(() -> MsgUtil.toast("发现新的测试版！", context));
-            else CenterThreadPool.runOnUiThread(() -> MsgUtil.toast("发现新版本！", context));
+                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("发现新的测试版！", context));
+            else CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("发现新版本！", context));
             context.startActivity(new Intent(context, UpdateInfoActivity.class)
                     .putExtra("versionName", version_name)
                     .putExtra("versionCode", latest)
@@ -123,8 +123,8 @@ public class AppInfoApi {
                     .putExtra("canDownload", can_download));
         } else if (need_toast) {
             if (debug_ver)
-                CenterThreadPool.runOnUiThread(() -> MsgUtil.toast("没有新的测试版了！", context));
-            else CenterThreadPool.runOnUiThread(() -> MsgUtil.toast("当前是最新版本！", context));
+                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("没有新的测试版了！", context));
+            else CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("当前是最新版本！", context));
         }
     }
 

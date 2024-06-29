@@ -80,4 +80,9 @@ public class CatchActivity extends BaseActivity {
             openStack = !openStack;
         });
     }
+
+    @Override
+    protected boolean eventBusEnabled() {
+        return false;
+    }
 }

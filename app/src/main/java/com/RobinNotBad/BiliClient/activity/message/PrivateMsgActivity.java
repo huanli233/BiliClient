@@ -135,22 +135,22 @@ public class PrivateMsgActivity extends BaseActivity {
                     runOnUiThread(() -> {
                         try {
                             if (result.getInt("code") == 0) {
-                                MsgUtil.toast("发送成功", this);
+                                MsgUtil.showMsg("发送成功", this);
                                 refresh();
                                 msgView.smoothScrollToPosition(list.size() - 1);
                             } else {
                                 if (result.getInt("code") == 21047) {
-                                    MsgUtil.toast(result.getString("message"), this);
+                                    MsgUtil.showMsg(result.getString("message"), this);
                                 }
-                                MsgUtil.toast("发送失败", this);
+                                MsgUtil.showMsg("发送失败", this);
                             }
                         } catch (JSONException e) {
-                            MsgUtil.toast("发送失败：\n" + result, this);
+                            MsgUtil.showMsg("发送失败：\n" + result, this);
                             e.printStackTrace();
                         }
                     });
                 } else {
-                    runOnUiThread(() -> MsgUtil.toast("你还木有输入喵~", this));
+                    runOnUiThread(() -> MsgUtil.showMsg("你还木有输入喵~", this));
                 }
             } catch (Exception e) {
                 runOnUiThread(() -> MsgUtil.err(e, this));
@@ -222,7 +222,7 @@ public class PrivateMsgActivity extends BaseActivity {
     @SuppressLint("SuspiciousIndentation")
     private void loadMore() {
         isLoadingMore = true;
-        MsgUtil.toast("加载更多中...", this);
+        MsgUtil.showMsg("加载更多中...", this);
         CenterThreadPool.run(() -> {
             try {
                 if (allMsg.getInt("has_more") == 1) {
@@ -242,10 +242,10 @@ public class PrivateMsgActivity extends BaseActivity {
                     Log.e("loadMore", "loadMore");
                     runOnUiThread(() -> {
                         adapter.addItem(newList);
-                        MsgUtil.toast("已加载更多消息！", this);
+                        MsgUtil.showMsg("已加载更多消息！", this);
                     });
                     isLoadingMore = false;
-                } else runOnUiThread(() -> MsgUtil.toast("没有更多消息了", this));
+                } else runOnUiThread(() -> MsgUtil.showMsg("没有更多消息了", this));
             } catch (Exception e) {
                 runOnUiThread(() -> MsgUtil.err(e, this));
             }

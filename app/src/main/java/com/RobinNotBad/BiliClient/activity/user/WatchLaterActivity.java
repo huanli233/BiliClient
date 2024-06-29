@@ -49,13 +49,13 @@ public class WatchLaterActivity extends BaseActivity {
                                 int result = WatchLaterApi.delete(videoCardList.get(position).aid);
                                 longClickPosition = -1;
                                 if (result == 0) runOnUiThread(() -> {
-                                    MsgUtil.toast("删除成功", this);
+                                    MsgUtil.showMsg("删除成功", this);
                                     videoCardList.remove(position);
                                     adapter.notifyItemRemoved(position);
                                     adapter.notifyItemRangeChanged(position, videoCardList.size() - position);
                                 });
                                 else
-                                    runOnUiThread(() -> MsgUtil.toast("删除失败，错误码：" + result, this));
+                                    runOnUiThread(() -> MsgUtil.showMsg("删除失败，错误码：" + result, this));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             } catch (JSONException e) {
@@ -64,7 +64,7 @@ public class WatchLaterActivity extends BaseActivity {
                         });
                     } else {
                         longClickPosition = position;
-                        MsgUtil.toast("再次长按删除", this);
+                        MsgUtil.showMsg("再次长按删除", this);
                     }
                 });
 

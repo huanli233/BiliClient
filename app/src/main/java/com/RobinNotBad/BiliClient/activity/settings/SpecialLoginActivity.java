@@ -49,7 +49,7 @@ public class SpecialLoginActivity extends BaseActivity {
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, NetWorkUtil.getInfoFromCookie("bili_jct", cookies));
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies);
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token, jsonObject.getString("refresh_token"));
-                    runOnUiThread(() -> MsgUtil.toast("登录成功！", this));
+                    runOnUiThread(() -> MsgUtil.showMsg("登录成功！", this));
                     SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup, true);
 
                     NetWorkUtil.refreshHeaders();
@@ -81,7 +81,7 @@ public class SpecialLoginActivity extends BaseActivity {
                 ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clipData = ClipData.newPlainText("label", textInput.getText());
                 clipboardManager.setPrimaryClip(clipData);
-                MsgUtil.toast("已复制", this);
+                MsgUtil.showMsg("已复制", this);
             });
         }
     }

@@ -51,7 +51,7 @@ public class SetupUIActivity extends BaseActivity {
             uiScaleInput.setText("1.0");
             uiPaddingH.setText("0");
             uiPaddingV.setText("0");
-            MsgUtil.toast("恢复完成", this);
+            MsgUtil.showMsg("恢复完成", this);
         });
     }
 

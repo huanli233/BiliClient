@@ -90,9 +90,9 @@ public class ArticleInfoFragment extends Fragment {
 
                 if (articleInfo == null) {
                     if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0)
-                        requireActivity().runOnUiThread(() -> MsgUtil.toast("登录后再尝试", requireContext()));
+                        requireActivity().runOnUiThread(() -> MsgUtil.showMsg("登录后再尝试", requireContext()));
                     else
-                        requireActivity().runOnUiThread(() -> MsgUtil.toast("获取信息失败！\n可能是专栏不存在？", requireContext()));
+                        requireActivity().runOnUiThread(() -> MsgUtil.showMsg("获取信息失败！\n可能是专栏不存在？", requireContext()));
                     requireActivity().finish();
                     return;
                 }

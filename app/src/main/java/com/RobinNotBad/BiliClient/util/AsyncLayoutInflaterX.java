@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.util;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -46,7 +45,7 @@ public class AsyncLayoutInflaterX {
     @UiThread
     public void inflate(@LayoutRes int resid, @Nullable ViewGroup parent,
                         @NonNull OnInflateFinishedListener callback) {
-        if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.ASYNC_INFLATE_ENABLE, Build.VERSION.SDK_INT >= 21)) {
+        if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.ASYNC_INFLATE_ENABLE, true)) {
             InflateRequest request = obtainRequest();
             request.inflater = this;
             request.resid = resid;

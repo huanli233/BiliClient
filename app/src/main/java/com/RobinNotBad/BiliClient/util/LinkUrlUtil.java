@@ -82,7 +82,7 @@ public class LinkUrlUtil {
         try {
             context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(text)));
         } catch (ActivityNotFoundException e) {
-            MsgUtil.toast("没有可处理此链接的应用！", context);
+            MsgUtil.showMsg("没有可处理此链接的应用！", context);
         } catch (Throwable th) {
             MsgUtil.err(th, context);
         }
@@ -121,11 +121,11 @@ public class LinkUrlUtil {
                 if (response.code() == 200 && (body = response.body()) != null) {
                     JSONObject json = new JSONObject(body.string());
                     if (json.has("code") && json.getInt("code") == -404) {
-                        CenterThreadPool.runOnUiThread(() -> MsgUtil.toast("啥都木有~", context));
+                        CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("啥都木有~", context));
                     }
                 }
             } catch (IOException | JSONException e) {
-                CenterThreadPool.runOnUiThread(() -> MsgUtil.toast("解析失败！", context));
+                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("解析失败！", context));
             }
         });
     }

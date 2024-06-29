@@ -54,20 +54,20 @@ public class FavoriteVideoListActivity extends RefreshListActivity {
                                     int delResult = FavoriteApi.deleteFavorite(videoList.get(position).aid, fid);
                                     longClickPosition = -1;
                                     if (delResult == 0) runOnUiThread(() -> {
-                                        MsgUtil.toast("删除成功", this);
+                                        MsgUtil.showMsg("删除成功", this);
                                         videoList.remove(position);
                                         videoCardAdapter.notifyItemRemoved(position);
                                         videoCardAdapter.notifyItemRangeChanged(position, videoList.size() - position);
                                     });
                                     else
-                                        runOnUiThread(() -> MsgUtil.toast("删除失败，错误码：" + delResult, this));
+                                        runOnUiThread(() -> MsgUtil.showMsg("删除失败，错误码：" + delResult, this));
                                 } catch (Exception e) {
                                     report(e);
                                 }
                             });
                         } else {
                             longClickPosition = position;
-                            MsgUtil.toast("再次长按删除", this);
+                            MsgUtil.showMsg("再次长按删除", this);
                         }
                     });
 

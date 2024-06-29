@@ -77,9 +77,9 @@ public class SendDynamicActivity extends BaseActivity {
             setTopbarExit();
 
             if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                MsgUtil.toast("还没有登录喵~", this);
                 setResult(RESULT_CANCELED);
                 finish();
+                MsgUtil.showMsg("还没有登录喵~", this);
             }
 
             editText = findViewById(R.id.editText);

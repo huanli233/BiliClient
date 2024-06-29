@@ -170,7 +170,7 @@ public class NoticeHolder extends RecyclerView.ViewHolder {
                 try {
                     context.startActivity(intent);
                 } catch (ActivityNotFoundException ignored) {
-                    MsgUtil.toast("此类型暂不支持跳转", context);
+                    MsgUtil.showMsg("此类型暂不支持跳转", context);
                 }
             });
         }

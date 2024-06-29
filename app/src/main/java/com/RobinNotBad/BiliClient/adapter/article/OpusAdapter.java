@@ -63,7 +63,7 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
                 .into(holder.coverView);
         if (opus.content.equals("内容失效")) {
             holder.itemView.setOnClickListener(v -> {
-                MsgUtil.toast("内容失效，无法打开", context);
+                MsgUtil.showMsg("内容失效，无法打开", context);
             });
         } else {
             holder.itemView.setOnClickListener(v -> {
@@ -77,7 +77,7 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
                         err.printStackTrace();
                     }
                     if (cvid == -1)
-                        ((Activity) context).runOnUiThread(() -> MsgUtil.toast("打开失败", context));
+                        ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("打开失败", context));
                     else {
                         CenterThreadPool.runOnUiThread(() -> {
                             if (parsedOpus.type == Opus.TYPE_ARTICLE) {

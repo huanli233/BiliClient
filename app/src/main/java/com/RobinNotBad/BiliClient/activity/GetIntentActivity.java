@@ -33,7 +33,7 @@ public class GetIntentActivity extends Activity {
                 BiliTerminal.jumpToUser(this, intent.getLongExtra("content", 0));
                 break;
             default:
-                MsgUtil.toastLong("不支持打开：" + type, this);
+                MsgUtil.showMsgLong("不支持打开：" + type, this);
                 break;
         }
 
@@ -50,7 +50,7 @@ public class GetIntentActivity extends Activity {
                     BiliTerminal.jumpToArticle(this, Long.parseLong(uri.getLastPathSegment()));
                     break;
                 default:
-                    MsgUtil.toastLong("不支持打开：" + host, this);
+                    MsgUtil.showMsgLong("不支持打开：" + host, this);
                     break;
             }
         }

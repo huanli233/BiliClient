@@ -118,7 +118,7 @@ public class SearchActivity extends InstanceActivity {
             searchHistoryAdapter = new SearchHistoryAdapter(this, searchHistory);
             searchHistoryAdapter.setOnClickListener(position -> keywordInput.setText(searchHistory.get(position)));
             searchHistoryAdapter.setOnLongClickListener(position -> {
-                MsgUtil.toast("删除成功", this);
+                MsgUtil.showMsg("删除成功", this);
                 searchHistory.remove(position);
                 searchHistoryAdapter.notifyItemRemoved(position);
                 searchHistoryAdapter.notifyItemRangeChanged(position, searchHistory.size() - position);
@@ -131,7 +131,7 @@ public class SearchActivity extends InstanceActivity {
             if (getIntent().getStringExtra("keyword") != null) {
                 findViewById(R.id.top).setOnClickListener(view1 -> finish());
                 keywordInput.setText(getIntent().getStringExtra("keyword"));
-                MsgUtil.toast("可点击标题栏返回详情页", this);
+                MsgUtil.showMsg("可点击标题栏返回详情页", this);
             }
         });
     }
@@ -164,7 +164,7 @@ public class SearchActivity extends InstanceActivity {
             }
 
             if (str.isEmpty()) {
-                runOnUiThread(() -> MsgUtil.toast("还没输入内容喵~", this));
+                runOnUiThread(() -> MsgUtil.showMsg("还没输入内容喵~", this));
             } else if (Objects.equals(lastKeyword, str)) {
                 runOnUiThread(() -> {
                     keywordInput.clearFocus();

@@ -58,7 +58,7 @@ public class SettingUIActivity extends BaseActivity {
                 uiPaddingV.setText("0");
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 density_input.setText(displayMetrics.densityDpi + "(默认)");
-                MsgUtil.toast("恢复完成", this);
+                MsgUtil.showMsg("恢复完成", this);
             });
         });
     }

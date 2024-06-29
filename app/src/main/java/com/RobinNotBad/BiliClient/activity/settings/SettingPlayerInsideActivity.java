@@ -132,7 +132,7 @@ public class SettingPlayerInsideActivity extends BaseActivity {
             SharedPreferencesUtil.putBoolean("player_ui_showDanmakuBtn", ui_showDanmakuBtn.isChecked());
             SharedPreferencesUtil.putBoolean("player_ui_showLoopBtn", ui_showLoopBtn.isChecked());
 
-            MsgUtil.toast("设置已保存喵~", this);
+            MsgUtil.showMsg("设置已保存喵~", this);
         } catch (NullPointerException ignored) {}
     }
 }

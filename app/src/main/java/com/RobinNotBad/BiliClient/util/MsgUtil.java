@@ -13,9 +13,11 @@ import android.widget.Toast;
 
 import com.RobinNotBad.BiliClient.activity.DialogActivity;
 import com.RobinNotBad.BiliClient.activity.ShowTextActivity;
+import com.RobinNotBad.BiliClient.event.SnackEvent;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.snackbar.SnackbarContentLayout;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -26,9 +28,25 @@ import java.io.Writer;
 public class MsgUtil {
     private static Toast toast;
 
+    public static void showMsg(String str, Context context) {
+        if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, false)) {
+            EventBus.getDefault().postSticky(new SnackEvent(str));
+        } else {
+            toast(str, context);
+        }
+    }
+
+    public static void showMsgLong(String str, Context context) {
+        if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, false)) {
+            EventBus.getDefault().postSticky(new SnackEvent(str));
+        } else {
+            toastLong(str, context);
+        }
+    }
+
     public static void toast(String str, Context context) {
         if (toast != null) toast.cancel();
-        toast = Toast.makeText(context, str, Toast.LENGTH_LONG);
+        toast = Toast.makeText(context, str, Toast.LENGTH_SHORT);
         toast.show();
     }
 
@@ -54,7 +72,7 @@ public class MsgUtil {
     public static Snackbar createSnack(View view, CharSequence text, int duration) {
         Snackbar snackbar;
         (snackbar = Snackbar.make(view, text, duration))
-                .setBackgroundTint(Color.parseColor("#90000000"))
+                .setBackgroundTint(Color.parseColor("#80808080"))
                 .setAction("x", (view1 -> snackbar.dismiss()))
                 .setTextMaxLines(3);
         View snackBarView = snackbar.getView();
@@ -76,7 +94,7 @@ public class MsgUtil {
 
     public static void err(Throwable e, Context context) {
         e.printStackTrace();
-        if (e instanceof IOException) toast("网络错误(＃°Д°)", context);
+        if (e instanceof IOException) showMsg("网络错误(＃°Д°)", context);
         else if (e instanceof JSONException) {
             if (SharedPreferencesUtil.getBoolean("develop_error_detailed", false)) {
                 Writer writer = new StringWriter();
@@ -84,12 +102,12 @@ public class MsgUtil {
                 e.printStackTrace(printWriter);
                 showText(context, "数据解析错误", writer.toString());
             } else if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                toastLong("解析错误，可登陆后再次尝试", context);
+                showMsgLong("解析错误，可登陆后再次尝试", context);
             } else if (e.toString().replace("org.json.JSONException:", "").contains("-352"))
-                toastLong("账号疑似被风控", context);
+                showMsgLong("账号疑似被风控", context);
             else
-                toastLong("数据解析错误：\n" + e.toString().replace("org.json.JSONException:", ""), context);
-        } else toastLong("错误：" + e, context);
+                showMsgLong("数据解析错误：\n" + e.toString().replace("org.json.JSONException:", ""), context);
+        } else showMsgLong("错误：" + e, context);
     }
 
     public static void showText(Context context, String title, String text) {

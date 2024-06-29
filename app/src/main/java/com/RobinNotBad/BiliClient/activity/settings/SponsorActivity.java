@@ -33,7 +33,7 @@ public class SponsorActivity extends RefreshListActivity {
                 if (userList.size() < 1) setBottom(true);
             } catch (Exception e) {
                 report(e);
-                runOnUiThread(() -> MsgUtil.toast("连接到哔哩终端接口时发生错误", this));
+                runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误", this));
                 setRefreshing(false);
             }
         });
@@ -49,7 +49,7 @@ public class SponsorActivity extends RefreshListActivity {
 
                 if (userList.size() < 1) setBottom(true);
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.toast("连接到哔哩终端接口时发生错误", this));
+                runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误", this));
                 loadFail(e);
             }
         });

@@ -63,7 +63,7 @@ public class UserDynamicFragment extends RefreshListFragment {
                 UserInfo userInfo = UserInfoApi.getUserInfo(mid);
                 if (userInfo == null) {
                     runOnUiThread(() -> {
-                        MsgUtil.toast("用户不存在", requireContext());
+                        MsgUtil.showMsg("用户不存在", requireContext());
                         requireActivity().finish();
                     });
                     return;

@@ -46,13 +46,13 @@ public class ImageViewerActivity extends BaseActivity {
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(photoView);
             } catch (OutOfMemoryError e) {
-                MsgUtil.toast("超出内存，加载失败", this);
+                MsgUtil.showMsg("超出内存，加载失败", this);
             }
 
             int id = i;
             photoView.setOnLongClickListener(view -> {
                 if (longClickPosition != id) {
-                    MsgUtil.toast("再次长按下载图片", this);
+                    MsgUtil.showMsg("再次长按下载图片", this);
                     longClickPosition = id;
                 } else {
                     Intent intent1 = new Intent()

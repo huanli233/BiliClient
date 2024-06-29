@@ -126,7 +126,7 @@ public class RefreshListFragment extends Fragment {
 
     public void loadFail() {
         page--;
-        runOnUiThread(() -> MsgUtil.toastLong("加载失败", requireContext()));
+        runOnUiThread(() -> MsgUtil.showMsgLong("加载失败", requireContext()));
         setRefreshing(false);
     }
 

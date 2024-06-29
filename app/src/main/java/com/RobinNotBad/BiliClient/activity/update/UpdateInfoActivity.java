@@ -99,22 +99,22 @@ public class UpdateInfoActivity extends BaseActivity {
                         if (time - lastClickTime <= 3000) {
                             stopDownload = true;
                         } else {
-                            MsgUtil.toast("再按一次中止下载", this);
+                            MsgUtil.showMsg("再按一次中止下载", this);
                         }
                     }
                     lastClickTime = time;
                     return;
                 }
                 if (!checkAndRequestPermissions()) {
-                    MsgUtil.toast("没有写入存储空间权限", this);
+                    MsgUtil.showMsg("没有写入存储空间权限", this);
                     return;
                 }
                 CenterThreadPool.run(() -> {
                     try {
-                        runOnUiThread(() -> MsgUtil.toast("开始获取下载地址", this));
+                        runOnUiThread(() -> MsgUtil.showMsg("开始获取下载地址", this));
                         String url = AppInfoApi.getDownloadUrl(versionCode);
                         if (TextUtils.isEmpty(url)) {
-                            runOnUiThread(() -> MsgUtil.toast("没有该版本的下载地址", this));
+                            runOnUiThread(() -> MsgUtil.showMsg("没有该版本的下载地址", this));
                         } else {
                             Request request = new Request.Builder()
                                     .get()
@@ -125,7 +125,7 @@ public class UpdateInfoActivity extends BaseActivity {
                                 @Override
                                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
                                     runOnUiThread(() -> {
-                                        MsgUtil.toast("下载失败: " + e.getMessage(), UpdateInfoActivity.this);
+                                        MsgUtil.showMsg("下载失败: " + e.getMessage(), UpdateInfoActivity.this);
                                         downloadBtn.setText("下载");
                                     });
                                 }
@@ -133,7 +133,7 @@ public class UpdateInfoActivity extends BaseActivity {
                                 @Override
                                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                                     if (!response.isSuccessful()) {
-                                        runOnUiThread(() -> MsgUtil.toast("下载失败！", UpdateInfoActivity.this));
+                                        runOnUiThread(() -> MsgUtil.showMsg("下载失败！", UpdateInfoActivity.this));
                                     } else {
                                         try {
                                             downloading = true;
@@ -167,9 +167,9 @@ public class UpdateInfoActivity extends BaseActivity {
                                                             .putExtra("path", file.getAbsolutePath()));
                                                 } else {
                                                     if (file.delete()) {
-                                                        runOnUiThread(() -> MsgUtil.toast("已中止下载并删除已下载的文件", UpdateInfoActivity.this));
+                                                        runOnUiThread(() -> MsgUtil.showMsg("已中止下载并删除已下载的文件", UpdateInfoActivity.this));
                                                     } else {
-                                                        runOnUiThread(() -> MsgUtil.toast("已中止下载但删除已下载的文件失败", UpdateInfoActivity.this));
+                                                        runOnUiThread(() -> MsgUtil.showMsg("已中止下载但删除已下载的文件失败", UpdateInfoActivity.this));
                                                     }
                                                 }
                                                 stopDownload = false;
@@ -177,7 +177,7 @@ public class UpdateInfoActivity extends BaseActivity {
                                             }
                                         } catch (Throwable th) {
                                             Log.e("BiliClient", th.toString());
-                                            runOnUiThread(() -> MsgUtil.toast("下载时发生了错误", UpdateInfoActivity.this));
+                                            runOnUiThread(() -> MsgUtil.showMsg("下载时发生了错误", UpdateInfoActivity.this));
                                             downloading = false;
                                         }
                                     }
@@ -186,9 +186,9 @@ public class UpdateInfoActivity extends BaseActivity {
                             });
                         }
                     } catch (IOException e) {
-                        runOnUiThread(() -> MsgUtil.toast("网络异常", this));
+                        runOnUiThread(() -> MsgUtil.showMsg("网络异常", this));
                     } catch (Throwable th) {
-                        runOnUiThread(() -> MsgUtil.toast("错误: " + th.getMessage(), this));
+                        runOnUiThread(() -> MsgUtil.showMsg("错误: " + th.getMessage(), this));
                     }
                 });
             });
@@ -223,7 +223,7 @@ public class UpdateInfoActivity extends BaseActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                MsgUtil.toast("拒绝了存储权限", this);
+                MsgUtil.showMsg("拒绝了存储权限", this);
             }
         }
     }

@@ -143,7 +143,7 @@ public class DownloadActivity extends BaseActivity {
             inputStream.close();
             fileOutputStream.close();
             if (exitOnFinish) {
-                runOnUiThread(() -> MsgUtil.toast("下载完成", this));
+                runOnUiThread(() -> MsgUtil.showMsg("下载完成", this));
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
@@ -154,7 +154,7 @@ public class DownloadActivity extends BaseActivity {
                 }, 200);
             }
         } catch (IOException e) {
-            runOnUiThread(() -> MsgUtil.toast("下载失败", this));
+            runOnUiThread(() -> MsgUtil.showMsg("下载失败", this));
             e.printStackTrace();
             finish();
         }
@@ -188,7 +188,7 @@ public class DownloadActivity extends BaseActivity {
                 }
             }
         } catch (IOException e) {
-            runOnUiThread(() -> MsgUtil.toast("弹幕下载失败！", this));
+            runOnUiThread(() -> MsgUtil.showMsg("弹幕下载失败！", this));
             finish();
             e.printStackTrace();
         }

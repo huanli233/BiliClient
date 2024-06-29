@@ -100,7 +100,7 @@ public class SearchVideoFragment extends Fragment implements SearchRefreshable {
             } else {
                 bottom = true;
                 if (isAdded())
-                    requireActivity().runOnUiThread(() -> MsgUtil.toast("已经到底啦OwO", requireContext()));
+                    requireActivity().runOnUiThread(() -> MsgUtil.showMsg("已经到底啦OwO", requireContext()));
             }
         } catch (Exception e) {
             if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));

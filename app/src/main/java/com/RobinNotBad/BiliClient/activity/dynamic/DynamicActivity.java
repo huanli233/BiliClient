@@ -80,7 +80,7 @@ public class DynamicActivity extends RefreshMainActivity {
                         dynId = DynamicApi.publishTextContent(text, atUids);
                     }
                     if (!(dynId == -1)) {
-                        runOnUiThread(() -> MsgUtil.toast("发送成功~", DynamicActivity.this));
+                        runOnUiThread(() -> MsgUtil.showMsg("发送成功~", DynamicActivity.this));
                         CenterThreadPool.run(() -> {
                             try {
                                 Dynamic dynamic = DynamicApi.getDynamic(dynId);
@@ -94,7 +94,7 @@ public class DynamicActivity extends RefreshMainActivity {
                             }
                         });
                     } else {
-                        runOnUiThread(() -> MsgUtil.toast("发送失败", DynamicActivity.this));
+                        runOnUiThread(() -> MsgUtil.showMsg("发送失败", DynamicActivity.this));
                     }
                 } catch (Exception e) {
                     runOnUiThread(() -> MsgUtil.err(e, DynamicActivity.this));
@@ -133,9 +133,9 @@ public class DynamicActivity extends RefreshMainActivity {
                         }
                         dynId = DynamicApi.relayDynamic(finalText, (atUids.isEmpty() ? null : atUids), dynamicId);
                         if (!(dynId == -1)) {
-                            activity.runOnUiThread(() -> MsgUtil.toast("转发成功~", activity));
+                            activity.runOnUiThread(() -> MsgUtil.showMsg("转发成功~", activity));
                         } else {
-                            activity.runOnUiThread(() -> MsgUtil.toast("转发失败", activity));
+                            activity.runOnUiThread(() -> MsgUtil.showMsg("转发失败", activity));
                         }
                     } catch (Exception e) {
                         activity.runOnUiThread(() -> MsgUtil.err(e, activity));

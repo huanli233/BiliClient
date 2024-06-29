@@ -127,7 +127,7 @@ public class ReplyInfoActivity extends BaseActivity {
                     refreshLayout.setRefreshing(false);
                 });
                 if (result == 1) {
-                    //runOnUiThread(()-> MsgUtil.toast("到底啦QwQ",this));
+                    //runOnUiThread(()-> MsgUtil.showMsg("到底啦QwQ",this));
                     Log.e("debug", "到底了");
                     bottom = true;
                 }

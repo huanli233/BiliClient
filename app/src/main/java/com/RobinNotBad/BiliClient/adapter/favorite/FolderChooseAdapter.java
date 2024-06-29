@@ -76,7 +76,7 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
                                 ((Activity) context).runOnUiThread(() -> setCardView(cardView, false));
                                 changed = true;
                             } else ((Activity) context).runOnUiThread(() -> {
-                                MsgUtil.toast("删除失败！错误码：" + result, context);
+                                MsgUtil.showMsg("删除失败！错误码：" + result, context);
                                 setCardView(cardView, true);
                             });
                         } catch (IOException e) {
@@ -98,7 +98,7 @@ public class FolderChooseAdapter extends RecyclerView.Adapter<FolderChooseAdapte
                                 changed = true;
                                 added = true;
                             } else ((Activity) context).runOnUiThread(() -> {
-                                MsgUtil.toast("添加失败！错误码：" + result, context);
+                                MsgUtil.showMsg("添加失败！错误码：" + result, context);
                                 setCardView(cardView, false);
                             });
                             if (SharedPreferencesUtil.getBoolean("fav_single", false))
