@@ -64,6 +64,8 @@ public class MsgUtil {
         int duration = 2750;
         if (snackEvent.getDuration() > 0) {
             duration = snackEvent.getDuration();
+        } else if (snackEvent.getDuration() == Snackbar.LENGTH_SHORT) {
+            duration = 1950;
         } else if (snackEvent.getDuration() == Snackbar.LENGTH_INDEFINITE) {
             duration = Integer.MAX_VALUE;
         }
