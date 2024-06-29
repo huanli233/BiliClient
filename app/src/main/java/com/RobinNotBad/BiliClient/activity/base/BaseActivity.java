@@ -115,8 +115,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         if (eventBusInit) {
             EventBus.getDefault().unregister(this);
             eventBusInit = false;
@@ -126,8 +126,7 @@ public class BaseActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEvent(SnackEvent event) {
         if (isFinishing()) return;
-        if (event.getMessage() != null) MsgUtil.snackText(getWindow().getDecorView().getRootView(), event.getMessage());
-        EventBus.getDefault().removeStickyEvent(event);
+        MsgUtil.processSnackEvent(event, getWindow().getDecorView().getRootView());
     }
 
     protected boolean eventBusEnabled() {

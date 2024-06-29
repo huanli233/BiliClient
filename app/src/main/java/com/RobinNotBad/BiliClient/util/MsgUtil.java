@@ -59,6 +59,24 @@ public class MsgUtil {
         toast.show();
     }
 
+    public static void processSnackEvent(SnackEvent snackEvent, View view) {
+        long currentTime = System.currentTimeMillis();
+        int duration = 2750;
+        if (snackEvent.getDuration() > 0) {
+            duration = snackEvent.getDuration();
+        } else if (snackEvent.getDuration() == Snackbar.LENGTH_INDEFINITE) {
+            duration = Integer.MAX_VALUE;
+        }
+        long endTime = snackEvent.getStartTime() + duration;
+        if (currentTime >= endTime) {
+            EventBus.getDefault().removeStickyEvent(snackEvent);
+        } else {
+            createSnack(view, snackEvent.getMessage(), (int) (endTime - currentTime))
+                    .show();
+        }
+
+    }
+
     public static void snackText(View view, CharSequence text) {
         createSnack(view, text).show();
     }
