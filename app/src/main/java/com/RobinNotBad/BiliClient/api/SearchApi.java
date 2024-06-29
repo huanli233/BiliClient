@@ -123,7 +123,7 @@ public class SearchApi {
             int fans = card.getInt("fans");
             int level = card.getInt("level");
 
-            userInfoList.add(new UserInfo(mid, name, avatar, sign, fans, level, false, "", 0, ""));
+            userInfoList.add(new UserInfo(mid, name, avatar, sign, fans, 0, level, false, "", 0, ""));
         }
     }
 

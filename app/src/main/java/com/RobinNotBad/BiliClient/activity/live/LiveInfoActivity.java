@@ -99,7 +99,7 @@ public class LiveInfoActivity extends BaseActivity {
                         title.setText(room.title);
 
                         ArrayList<UserInfo> upList = new ArrayList<>();
-                        upList.add(new UserInfo(userInfo.mid, userInfo.name, userInfo.avatar, "主播", 0, 6, false, "", 0, ""));
+                        upList.add(new UserInfo(userInfo.mid, userInfo.name, userInfo.avatar, "主播", 0, 0, 6, false, "", 0, ""));
                         UpListAdapter upListAdapter = new UpListAdapter(this, upList);
                         up_recyclerView.setHasFixedSize(true);
                         up_recyclerView.setLayoutManager(new LinearLayoutManager(this));

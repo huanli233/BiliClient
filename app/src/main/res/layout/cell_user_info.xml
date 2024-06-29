@@ -25,22 +25,58 @@
         android:layout_marginTop="2dp"
         android:singleLine="true"
         android:text="蔡徐坤"
-        app:layout_constraintBottom_toTopOf="@+id/userFans"
+        app:layout_constraintBottom_toTopOf="@+id/userLevel"
         app:layout_constraintStart_toEndOf="@id/userAvatar"
         app:layout_constraintTop_toTopOf="@id/userAvatar" />
 
     <TextView
-        android:id="@+id/userFans"
+        android:id="@+id/userLevel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:layout_marginBottom="2dp"
         android:alpha="0.7"
-        android:text="Lv114\n2.5万粉丝"
+        android:text="Lv114"
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="@+id/userAvatar"
         app:layout_constraintStart_toEndOf="@id/userAvatar"
         app:layout_constraintTop_toBottomOf="@+id/userName" />
+
+    <TextView
+        android:id="@+id/userFollowers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="4dp"
+        android:alpha="0.7"
+        tools:text="2.5万粉丝"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toTopOf="@+id/userDesc"
+        app:layout_constraintStart_toStartOf="@id/userDesc"
+        app:layout_constraintTop_toBottomOf="@+id/userAvatar" />
+
+    <View
+        android:id="@+id/followDivider"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="6dp"
+        android:background="#818C8C8C"
+        app:layout_constraintBottom_toBottomOf="@id/userFollowers"
+        app:layout_constraintStart_toEndOf="@id/userFollowers"
+        app:layout_constraintTop_toTopOf="@id/userFollowers" />
+
+    <TextView
+        android:id="@+id/userFollowings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:alpha="0.7"
+        tools:text="91关注"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/userFollowers"
+        app:layout_constraintStart_toEndOf="@id/followDivider"
+        app:layout_constraintTop_toTopOf="@+id/userFollowers" />
 
     <TextView
         android:id="@+id/userDesc"
@@ -53,7 +89,7 @@
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userAvatar"
+        app:layout_constraintTop_toBottomOf="@id/userFollowers"
         tools:ignore="TouchTargetSizeCheck" />
 
     <TextView
@@ -94,6 +130,29 @@
         app:layout_constraintStart_toEndOf="@+id/officialIcon"
         app:layout_constraintTop_toBottomOf="@id/userNotice" />
 
+    <ImageView
+        android:id="@+id/uidIcon"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.5"
+        android:src="@drawable/icon_uid"
+        app:layout_constraintBottom_toBottomOf="@id/uidText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/uidText" />
+
+    <TextView
+        android:id="@+id/uidText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:alpha="0.6"
+        android:text="1234567"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/uidIcon"
+        app:layout_constraintTop_toBottomOf="@id/userOfficial" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/followBtn"
         android:layout_width="0dp"
@@ -107,7 +166,7 @@
         android:text="关注"
         app:layout_constraintEnd_toStartOf="@+id/msgBtn"
         app:layout_constraintStart_toStartOf="@+id/userDesc"
-        app:layout_constraintTop_toBottomOf="@+id/userOfficial" />
+        app:layout_constraintTop_toBottomOf="@+id/uidText" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/msgBtn"

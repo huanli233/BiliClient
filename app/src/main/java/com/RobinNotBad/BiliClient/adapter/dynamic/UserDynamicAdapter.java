@@ -19,6 +19,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.message.PrivateMsgActivity;
+import com.RobinNotBad.BiliClient.activity.user.FollowUsersActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.UserInfo;
@@ -91,8 +92,14 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             userInfoHolder.userDesc.setText(userInfo.sign);
             if (!userInfo.notice.isEmpty()) userInfoHolder.userNotice.setText(userInfo.notice);
             else userInfoHolder.userNotice.setVisibility(View.GONE);
-            ToolsUtil.setLink(userInfoHolder.userDesc, userInfoHolder.userDesc);
-            userInfoHolder.userFans.setText("Lv" + userInfo.level + "\n" + ToolsUtil.toWan(userInfo.fans) + "粉丝");
+            userInfoHolder.uidTv.setText(String.valueOf(userInfo.mid));
+            ToolsUtil.setCopy(context, userInfoHolder.uidTv);
+            ToolsUtil.setLink(userInfoHolder.userDesc, userInfoHolder.userNotice);
+            userInfoHolder.userLevel.setText("Lv" + userInfo.level);
+            userInfoHolder.userFans.setText(ToolsUtil.toWan(userInfo.fans) + "粉丝");
+            userInfoHolder.userFans.setOnClickListener((view) -> view.getContext().startActivity(new Intent(view.getContext(), FollowUsersActivity.class).putExtra("mode", 1).putExtra("mid", userInfo.mid)));
+            userInfoHolder.userFollowings.setText(ToolsUtil.toWan(userInfo.following) + "关注");
+            userInfoHolder.userFollowings.setOnClickListener((view) -> view.getContext().startActivity(new Intent(view.getContext(), FollowUsersActivity.class).putExtra("mode", 0).putExtra("mid", userInfo.mid)));
 
             if (userInfo.official != 0) {
                 userInfoHolder.officialIcon.setVisibility(View.VISIBLE);
@@ -187,13 +194,15 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public static class UserInfoHolder extends RecyclerView.ViewHolder {
         final TextView userName;
+        final TextView userFollowings;
+        final TextView userLevel;
         final TextView userFans;
         final TextView userDesc;
         final TextView userNotice;
         final TextView userOfficial;
         final ImageView userAvatar;
         final ImageView officialIcon;
-
+        final TextView uidTv;
         final MaterialButton followBtn;
         final MaterialButton msgBtn;
 
@@ -202,12 +211,15 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             userName = itemView.findViewById(R.id.userName);
             userDesc = itemView.findViewById(R.id.userDesc);
             userNotice = itemView.findViewById(R.id.userNotice);
-            userFans = itemView.findViewById(R.id.userFans);
+            userLevel = itemView.findViewById(R.id.userLevel);
+            userFans = itemView.findViewById(R.id.userFollowers);
+            userFollowings = itemView.findViewById(R.id.userFollowings);
             userOfficial = itemView.findViewById(R.id.userOfficial);
             officialIcon = itemView.findViewById(R.id.officialIcon);
             userAvatar = itemView.findViewById(R.id.userAvatar);
             followBtn = itemView.findViewById(R.id.followBtn);
             msgBtn = itemView.findViewById(R.id.msgBtn);
+            uidTv = itemView.findViewById(R.id.uidText);
             ToolsUtil.setCopy(itemView.getContext(), userDesc, userNotice);
         }
 

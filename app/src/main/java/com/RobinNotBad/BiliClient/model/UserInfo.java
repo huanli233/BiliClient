@@ -12,23 +12,41 @@ public class UserInfo implements Serializable, Parcelable {
     public String sign;
     public int fans;
     public int level;
+    public int following;
     public boolean followed;
     public String notice;
 
     public int official;
     public String officialDesc;
+    public long mtime;
 
-    public UserInfo(long mid, String name, String avatar, String sign, int fans, int level, boolean followed, String notice, int official, String officialDesc) {
+    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc) {
         this.mid = mid;
         this.name = name;
         this.avatar = avatar;
         this.sign = sign;
         this.fans = fans;
         this.level = level;
+        this.following = following;
         this.followed = followed;
         this.notice = notice;
         this.official = official;
         this.officialDesc = officialDesc;
+    }
+
+    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, long mtime) {
+        this.mid = mid;
+        this.name = name;
+        this.avatar = avatar;
+        this.sign = sign;
+        this.fans = fans;
+        this.level = level;
+        this.following = following;
+        this.followed = followed;
+        this.notice = notice;
+        this.official = official;
+        this.officialDesc = officialDesc;
+        this.mtime = mtime;
     }
 
     public UserInfo() {
@@ -45,12 +63,12 @@ public class UserInfo implements Serializable, Parcelable {
         notice = in.readString();
         official = in.readInt();
         officialDesc = in.readString();
+        mtime = in.readLong();
     }
 
     public static final Creator<UserInfo> CREATOR = new Creator<>() {
         @Override
         public UserInfo createFromParcel(Parcel in) {
-
             return new UserInfo(in);
         }
 
@@ -77,5 +95,6 @@ public class UserInfo implements Serializable, Parcelable {
         parcel.writeString(notice);
         parcel.writeInt(official);
         parcel.writeString(officialDesc);
+        parcel.writeLong(mtime);
     }
 }

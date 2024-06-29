@@ -210,7 +210,7 @@
             android:label="特殊登录"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.FollowingUsersActivity"
+            android:name=".activity.user.FollowUsersActivity"
             android:exported="false"
             android:label="关注"
             android:screenOrientation="portrait" />

@@ -50,7 +50,7 @@ public class MessageApi {
                 ArrayList<UserInfo> userList = new ArrayList<>();
                 for (int j = 0; j < object.getJSONArray("users").length(); j++) {
                     JSONObject userArrayInfo = ((JSONObject) object.getJSONArray("users").get(j));
-                    userList.add(new UserInfo(userArrayInfo.getLong("mid"), userArrayInfo.getString("nickname"), userArrayInfo.getString("avatar"), "", userArrayInfo.getInt("fans"), 0, userArrayInfo.getBoolean("follow"), "", 0, ""));
+                    userList.add(new UserInfo(userArrayInfo.getLong("mid"), userArrayInfo.getString("nickname"), userArrayInfo.getString("avatar"), "", userArrayInfo.getInt("fans"), 0, 0, userArrayInfo.getBoolean("follow"), "", 0, ""));
                 }
 
                 likeInfo.id = object.getLong("id");
@@ -138,7 +138,7 @@ public class MessageApi {
                 MessageCard replyInfo = new MessageCard();
 
                 List<UserInfo> userList = new ArrayList<>();
-                userList.add(new UserInfo(object.getJSONObject("user").getLong("mid"), object.getJSONObject("user").getString("nickname"), object.getJSONObject("user").getString("avatar"), "", object.getJSONObject("user").getInt("fans"), 0, object.getJSONObject("user").getBoolean("follow"), "", 0, ""));
+                userList.add(new UserInfo(object.getJSONObject("user").getLong("mid"), object.getJSONObject("user").getString("nickname"), object.getJSONObject("user").getString("avatar"), "", object.getJSONObject("user").getInt("fans"), 0, 0, object.getJSONObject("user").getBoolean("follow"), "", 0, ""));
                 replyInfo.user = userList;
 
                 replyInfo.id = object.getLong("id");
@@ -221,7 +221,7 @@ public class MessageApi {
                 MessageCard replyInfo = new MessageCard();
 
                 List<UserInfo> userList = new ArrayList<>();
-                userList.add(new UserInfo(object.getJSONObject("user").getLong("mid"), object.getJSONObject("user").getString("nickname"), object.getJSONObject("user").getString("avatar"), "", object.getJSONObject("user").getInt("fans"), 0, object.getJSONObject("user").getBoolean("follow"), "", 0, ""));
+                userList.add(new UserInfo(object.getJSONObject("user").getLong("mid"), object.getJSONObject("user").getString("nickname"), object.getJSONObject("user").getString("avatar"), "", object.getJSONObject("user").getInt("fans"), 0, 0, object.getJSONObject("user").getBoolean("follow"), "", 0, ""));
                 replyInfo.user = userList;
 
                 replyInfo.id = object.getLong("id");
