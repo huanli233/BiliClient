@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Pair;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +18,7 @@ import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.DragAdapter;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
@@ -40,8 +40,6 @@ public class SortSettingActivity extends BaseActivity {
         setContentView(R.layout.activity_simple_list);
 
         setPageName("菜单排序");
-
-        Toast.makeText(this, "拖动以排序~", Toast.LENGTH_SHORT).show();
 
         String sortConf = SharedPreferencesUtil.getString(SharedPreferencesUtil.MENU_SORT, "");
         String[] splitName;
@@ -102,10 +100,16 @@ public class SortSettingActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        MsgUtil.showMsg("拖动以排序~", this);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         save();
-        Toast.makeText(this, "已保存", Toast.LENGTH_SHORT).show();
+        MsgUtil.showMsg("已保存", this);
     }
 
     private void save() {
@@ -209,12 +213,12 @@ public class SortSettingActivity extends BaseActivity {
 
         @Override
         public boolean isLongPressDragEnabled() {
-            return true;
+            return super.isLongPressDragEnabled();
         }
 
         @Override
         public boolean isItemViewSwipeEnabled() {
-            return true;
+            return super.isItemViewSwipeEnabled();
         }
     }
 
