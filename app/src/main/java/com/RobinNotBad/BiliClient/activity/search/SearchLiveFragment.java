@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 public class SearchLiveFragment extends Fragment implements SearchRefreshable {
     RecyclerView recyclerView;
-    private ArrayList<LiveRoom> roomList;
+    private ArrayList<LiveRoom> roomList = new ArrayList<>();
 
     private LiveCardAdapter liveCardAdapter;
 
@@ -134,12 +134,11 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
         this.refreshing = true;
         this.page = 0;
         this.keyword = keyword;
-        if (this.roomList == null) this.roomList = new ArrayList<>();
-        if (this.liveCardAdapter == null)
-            this.liveCardAdapter = new LiveCardAdapter(this.requireContext(), this.roomList);
-        int size_old = this.roomList.size();
-        this.roomList.clear();
         CenterThreadPool.runOnUiThread(() -> {
+            if (this.liveCardAdapter == null)
+                this.liveCardAdapter = new LiveCardAdapter(this.requireContext(), this.roomList);
+            int size_old = this.roomList.size();
+            this.roomList.clear();
             if (size_old != 0) this.liveCardAdapter.notifyItemRangeRemoved(0, size_old);
             CenterThreadPool.run(this::continueLoading);
         });

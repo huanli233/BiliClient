@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 public class SearchArticleFragment extends Fragment implements SearchRefreshable {
     RecyclerView recyclerView;
-    private ArrayList<ArticleCard> articleCardList;
+    private ArrayList<ArticleCard> articleCardList = new ArrayList<>();
 
     private ArticleCardAdapter articleCardAdapter;
 
@@ -137,12 +137,11 @@ public class SearchArticleFragment extends Fragment implements SearchRefreshable
         this.refreshing = true;
         this.page = 0;
         this.keyword = keyword;
-        if (this.articleCardList == null) this.articleCardList = new ArrayList<>();
-        if (this.articleCardAdapter == null)
-            this.articleCardAdapter = new ArticleCardAdapter(this.requireContext(), this.articleCardList);
-        int size_old = this.articleCardList.size();
-        this.articleCardList.clear();
         CenterThreadPool.runOnUiThread(() -> {
+            if (this.articleCardAdapter == null)
+                this.articleCardAdapter = new ArticleCardAdapter(this.requireContext(), this.articleCardList);
+            int size_old = this.articleCardList.size();
+            this.articleCardList.clear();
             if (size_old != 0) this.articleCardAdapter.notifyItemRangeRemoved(0, size_old);
             CenterThreadPool.run(this::continueLoading);
         });

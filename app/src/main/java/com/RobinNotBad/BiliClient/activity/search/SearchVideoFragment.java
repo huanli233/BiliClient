@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 public class SearchVideoFragment extends Fragment implements SearchRefreshable {
     RecyclerView recyclerView;
-    private ArrayList<VideoCard> videoCardList;
+    private ArrayList<VideoCard> videoCardList = new ArrayList<>();
 
     private VideoCardAdapter videoCardAdapter;
 
@@ -121,12 +121,11 @@ public class SearchVideoFragment extends Fragment implements SearchRefreshable {
         this.refreshing = true;
         this.page = 0;
         this.keyword = keyword;
-        if (this.videoCardList == null) this.videoCardList = new ArrayList<>();
-        if (this.videoCardAdapter == null)
-            this.videoCardAdapter = new VideoCardAdapter(this.requireContext(), this.videoCardList);
-        int size_old = this.videoCardList.size();
-        this.videoCardList.clear();
         CenterThreadPool.runOnUiThread(() -> {
+            if (this.videoCardAdapter == null)
+                this.videoCardAdapter = new VideoCardAdapter(this.requireContext(), this.videoCardList);
+            int size_old = this.videoCardList.size();
+            this.videoCardList.clear();
             if (size_old != 0) this.videoCardAdapter.notifyItemRangeRemoved(0, size_old);
             CenterThreadPool.run(this::continueLoading);
         });

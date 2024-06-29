@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 
 //搜索API 自己写的
@@ -112,7 +113,7 @@ public class SearchApi {
         }
     }
 
-    public static void getUsersFromSearchResult(JSONArray input, ArrayList<UserInfo> userInfoList) throws JSONException {
+    public static void getUsersFromSearchResult(JSONArray input, List<UserInfo> userInfoList) throws JSONException {
         for (int i = 0; i < input.length(); i++) {
             JSONObject card = input.getJSONObject(i);    //获得用户卡片
 

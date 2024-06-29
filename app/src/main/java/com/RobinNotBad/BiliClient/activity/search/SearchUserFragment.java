@@ -23,10 +23,11 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchUserFragment extends Fragment implements SearchRefreshable {
     RecyclerView recyclerView;
-    private ArrayList<UserInfo> userInfoList;
+    private List<UserInfo> userInfoList = new ArrayList<>();
 
     private UserListAdapter userInfoAdapter;
 
@@ -128,12 +129,11 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
         this.refreshing = true;
         this.page = 0;
         this.keyword = keyword;
-        if (this.userInfoList == null) this.userInfoList = new ArrayList<>();
-        if (this.userInfoAdapter == null)
-            this.userInfoAdapter = new UserListAdapter(this.requireContext(), this.userInfoList);
-        int size_old = this.userInfoList.size();
-        this.userInfoList.clear();
         CenterThreadPool.runOnUiThread(() -> {
+            if (this.userInfoAdapter == null)
+                this.userInfoAdapter = new UserListAdapter(this.requireContext(), this.userInfoList);
+            int size_old = this.userInfoList.size();
+            this.userInfoList.clear();
             if (size_old != 0) this.userInfoAdapter.notifyItemRangeRemoved(0, size_old);
             CenterThreadPool.run(this::continueLoading);
         });

@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.util.ArrayList;
+import java.util.List;
 
 //关注列表
 //2023-08-29
@@ -27,9 +27,9 @@ import java.util.ArrayList;
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.Holder> {
 
     final Context context;
-    final ArrayList<UserInfo> userList;
+    final List<UserInfo> userList;
 
-    public UserListAdapter(Context context, ArrayList<UserInfo> userList) {
+    public UserListAdapter(Context context, List<UserInfo> userList) {
         this.context = context;
         this.userList = userList;
     }
