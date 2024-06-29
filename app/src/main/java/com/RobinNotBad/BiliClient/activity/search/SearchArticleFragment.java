@@ -102,12 +102,16 @@ public class SearchArticleFragment extends Fragment implements SearchRefreshable
     private void continueLoading() {
         page++;
         Log.e("debug", "加载下一页");
-        int lastSize = articleCardList.size();
         try {
             JSONArray result = (JSONArray) SearchApi.searchType(keyword, page, "article");
             if (result != null) {
-                SearchApi.getArticlesFromSearchResult(result, articleCardList);
-                CenterThreadPool.runOnUiThread(() -> articleCardAdapter.notifyItemRangeInserted(lastSize + 1, articleCardList.size() - lastSize));
+                ArrayList<ArticleCard> list = new ArrayList<>();
+                SearchApi.getArticlesFromSearchResult(result, list);
+                CenterThreadPool.runOnUiThread(() -> {
+                    int lastSize = articleCardList.size();
+                    articleCardList.addAll(list);
+                    articleCardAdapter.notifyItemRangeInserted(lastSize + 1, articleCardList.size() - lastSize);
+                });
             } else {
                 bottom = true;
                 if (isAdded() && !isFirstLoad) {

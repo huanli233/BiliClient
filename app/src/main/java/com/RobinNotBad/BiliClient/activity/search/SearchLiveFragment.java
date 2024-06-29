@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchLiveFragment extends Fragment implements SearchRefreshable {
     RecyclerView recyclerView;
@@ -104,13 +105,17 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
     private void continueLoading() {
         page++;
         Log.e("debug", "加载下一页");
-        int lastSize = roomList.size();
         try {
             JSONObject result = (JSONObject) SearchApi.searchType(keyword, page, "live");
             if (result != null) {
                 JSONArray jsonArray = result.optJSONArray("live_room");
-                if (jsonArray != null) roomList.addAll(LiveApi.analyzeLiveRooms(jsonArray));
-                CenterThreadPool.runOnUiThread(() -> liveCardAdapter.notifyItemRangeInserted(lastSize + 1, roomList.size() - lastSize));
+                List<LiveRoom> list = new ArrayList<>();
+                if (jsonArray != null) list.addAll(LiveApi.analyzeLiveRooms(jsonArray));
+                CenterThreadPool.runOnUiThread(() -> {
+                    int lastSize = roomList.size();
+                    roomList.addAll(list);
+                    liveCardAdapter.notifyItemRangeInserted(lastSize + 1, roomList.size() - lastSize);
+                });
             } else {
                 bottom = true;
                 if (isAdded() && !isFirstLoad) {

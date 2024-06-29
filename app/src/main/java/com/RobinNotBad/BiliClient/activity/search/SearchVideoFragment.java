@@ -95,12 +95,16 @@ public class SearchVideoFragment extends Fragment implements SearchRefreshable {
     private void continueLoading() {
         page++;
         Log.e("debug", "加载下一页");
-        int lastSize = videoCardList.size();
         try {
             JSONArray result = SearchApi.search(keyword, page);
             if (result != null) {
-                SearchApi.getVideosFromSearchResult(result, videoCardList, page == 1);
-                CenterThreadPool.runOnUiThread(() -> videoCardAdapter.notifyItemRangeInserted(lastSize + 1, videoCardList.size() - lastSize));
+                ArrayList<VideoCard> list = new ArrayList<>();
+                SearchApi.getVideosFromSearchResult(result, list, page == 1);
+                CenterThreadPool.runOnUiThread(() -> {
+                    int lastSize = videoCardList.size();
+                    videoCardList.addAll(list);
+                    videoCardAdapter.notifyItemRangeInserted(lastSize + 1, videoCardList.size() - lastSize);
+                });
             } else {
                 bottom = true;
                 if (isAdded() && !isFirstLoad) {

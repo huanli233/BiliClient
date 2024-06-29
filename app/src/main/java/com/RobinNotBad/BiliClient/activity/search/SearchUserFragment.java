@@ -103,12 +103,16 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
     private void continueLoading() {
         page++;
         Log.e("debug", "加载下一页");
-        int lastSize = userInfoList.size();
         try {
             JSONArray result = (JSONArray) SearchApi.searchType(keyword, page, "bili_user");
             if (result != null) {
-                SearchApi.getUsersFromSearchResult(result, userInfoList);
-                CenterThreadPool.runOnUiThread(() -> userInfoAdapter.notifyItemRangeInserted(lastSize + 1, userInfoList.size() - lastSize));
+                List<UserInfo> list = new ArrayList<>();
+                SearchApi.getUsersFromSearchResult(result, list);
+                CenterThreadPool.runOnUiThread(() -> {
+                    int lastSize = userInfoList.size();
+                    userInfoList.addAll(list);
+                    userInfoAdapter.notifyItemRangeInserted(lastSize + 1, userInfoList.size() - lastSize);
+                });
             } else {
                 bottom = true;
                 if (isAdded() && !isFirstLoad) {
