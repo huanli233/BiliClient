@@ -112,11 +112,13 @@ public class BaseActivity extends AppCompatActivity {
             EventBus.getDefault().register(this);
             eventBusInit = true;
         }
+        SnackEvent snackEvent;
+        if ((snackEvent = EventBus.getDefault().getStickyEvent(SnackEvent.class)) != null) onEvent(snackEvent);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         if (eventBusInit) {
             EventBus.getDefault().unregister(this);
             eventBusInit = false;
