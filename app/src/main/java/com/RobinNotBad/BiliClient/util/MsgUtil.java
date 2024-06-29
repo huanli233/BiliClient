@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -68,32 +71,43 @@ public class MsgUtil {
         return createSnack(view, text, Snackbar.LENGTH_SHORT);
     }
 
-    @SuppressLint({"ClickableViewAccessibility", "RestrictedApi"})
     public static Snackbar createSnack(View view, CharSequence text, int duration) {
+        return createSnack(view, text, duration, null);
+    }
+
+    @SuppressLint({"ClickableViewAccessibility", "RestrictedApi"})
+    public static Snackbar createSnack(View view, CharSequence text, int duration, Action action) {
         Snackbar snackbar;
         (snackbar = Snackbar.make(view, text, duration))
-                .setBackgroundTint(Color.parseColor("#80808080"))
-                .setAction("x", (view1 -> snackbar.dismiss()))
+                .setBackgroundTint(Color.parseColor("#85808080"))
                 .setTextMaxLines(3);
+        if (action != null) snackbar.setAction(action.getText(), action.getOnClickListener());
+        else if (duration == Snackbar.LENGTH_INDEFINITE || duration >= 5000) snackbar.setAction("x", (view1 -> snackbar.dismiss()));
         View snackBarView = snackbar.getView();
         snackBarView.setOnTouchListener(((view12, motionEvent) -> false));
-        TextView actionView = ((SnackbarContentLayout) ((FrameLayout) snackBarView).getChildAt(0)).getActionView();
+        SnackbarContentLayout contentLayout = ((SnackbarContentLayout) ((FrameLayout) snackBarView).getChildAt(0));
+        Button actionView = contentLayout.getActionView();
         actionView.setTextSize(12);
         actionView.setMinWidth(ToolsUtil.dp2px(30, view.getContext()));
         actionView.setMinimumWidth(ToolsUtil.dp2px(30, view.getContext()));
         actionView.setMaxWidth(ToolsUtil.dp2px(48, view.getContext()));
+        actionView.setPadding(0, 0, ToolsUtil.dp2px(4, view.getContext()), 0);
+        actionView.setPaddingRelative(0, 0, ToolsUtil.dp2px(4, view.getContext()), 0);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) actionView.getLayoutParams();
         layoutParams.setMarginStart(0);
-        TextView msgView = ((SnackbarContentLayout) ((FrameLayout) snackBarView).getChildAt(0)).getMessageView();
-        msgView.setTextSize(10);
+        layoutParams.setMargins(0, layoutParams.topMargin, layoutParams.rightMargin, layoutParams.bottomMargin);
+        TextView msgView = contentLayout.getMessageView();
+        msgView.setTextSize(11);
         msgView.setTypeface(null, Typeface.BOLD);
-        LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) msgView.getLayoutParams();
-        layoutParams1.setMarginEnd(0);
+        msgView.setPadding(0, 0, 0, 0);
+        msgView.setPaddingRelative(0, 0, 0, 0);
+        ((ViewGroup.MarginLayoutParams) msgView.getLayoutParams()).setMargins(0, 0, 0, 0);
+        snackBarView.setPadding(ToolsUtil.dp2px(6, view.getContext()), 0, 0, 0);
         return snackbar;
     }
 
     public static void err(Throwable e, Context context) {
-        e.printStackTrace();
+        Log.e("BiliClient", e.getMessage(), e);
         if (e instanceof IOException) showMsg("网络错误(＃°Д°)", context);
         else if (e instanceof JSONException) {
             if (SharedPreferencesUtil.getBoolean("develop_error_detailed", false)) {
@@ -103,7 +117,7 @@ public class MsgUtil {
                 showText(context, "数据解析错误", writer.toString());
             } else if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
                 showMsgLong("解析错误，可登陆后再次尝试", context);
-            } else if (e.toString().replace("org.json.JSONException:", "").contains("-352"))
+            } else if (e.toString().replace("org.json.JSONException:", "")  .contains("-352"))
                 showMsgLong("账号疑似被风控", context);
             else
                 showMsgLong("数据解析错误：\n" + e.toString().replace("org.json.JSONException:", ""), context);
@@ -131,6 +145,32 @@ public class MsgUtil {
         intent.putExtra("content", content);
         intent.putExtra("wait_time", wait_time);
         context.startActivity(intent);
+    }
+
+    public static class Action {
+        private String text;
+        private View.OnClickListener onClickListener;
+
+        public Action(String text, View.OnClickListener onClickListener) {
+            this.text = text;
+            this.onClickListener = onClickListener;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public View.OnClickListener getOnClickListener() {
+            return onClickListener;
+        }
+
+        public void setOnClickListener(View.OnClickListener onClickListener) {
+            this.onClickListener = onClickListener;
+        }
     }
 
 }
