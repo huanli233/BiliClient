@@ -76,6 +76,7 @@ public class LiveInfoActivity extends BaseActivity {
                     UserInfo userInfo = UserInfoApi.getUserInfo(room.uid);
                     playInfo = LiveApi.getRoomPlayInfo(room_id, LiveApi.PlayerQnMap.get(SharedPreferencesUtil.getInt("play_qn", 16)));
                     runOnUiThread(() -> {
+                        if (isDestroyed()) return;
                         ImageView cover = findViewById(R.id.cover);
                         TextView title = findViewById(R.id.title);
                         RecyclerView up_recyclerView = findViewById(R.id.up_recyclerView);

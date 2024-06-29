@@ -155,7 +155,6 @@ public class SearchActivity extends InstanceActivity {
             }
         }
 
-
         if (!refreshing) {
             InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             View curFocus;
@@ -188,6 +187,20 @@ public class SearchActivity extends InstanceActivity {
                     } catch (Exception e) {
                         runOnUiThread(() -> MsgUtil.err(e, this));
                     }
+                } else {
+                    try {
+                        int pos = searchHistory.indexOf(str);
+                        searchHistory.remove(str);
+                        searchHistory.add(0, str);
+                        SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history, new JSONArray(searchHistory).toString());
+                        runOnUiThread(() -> {
+                            searchHistoryAdapter.notifyItemMoved(pos, 0);
+                            searchHistoryAdapter.notifyItemRangeChanged(0, searchHistory.size());
+                            historyRecyclerview.scrollToPosition(0);
+                        });
+                    } catch (Exception e) {
+                        runOnUiThread(() -> MsgUtil.err(e, this));
+                    }
                 }
 
                 try {
@@ -206,7 +219,6 @@ public class SearchActivity extends InstanceActivity {
             }
         }
     }
-
 
     public void onScrolled(int dy) {
         float height = searchBar.getHeight() + ToolsUtil.dp2px(2f, this);

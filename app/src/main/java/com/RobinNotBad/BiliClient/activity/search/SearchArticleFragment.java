@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -34,6 +35,7 @@ public class SearchArticleFragment extends Fragment implements SearchRefreshable
     private boolean refreshing = false;
     private boolean bottom = false;
     private int page = 0;
+    private TextView emptyView;
 
     public SearchArticleFragment() {
     }
@@ -58,6 +60,7 @@ public class SearchArticleFragment extends Fragment implements SearchRefreshable
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.recyclerView);
+        emptyView = view.findViewById(R.id.emptyTip);
         articleCardList = new ArrayList<>();
 
         recyclerView.setHasFixedSize(true);
@@ -107,8 +110,10 @@ public class SearchArticleFragment extends Fragment implements SearchRefreshable
                 CenterThreadPool.runOnUiThread(() -> articleCardAdapter.notifyItemRangeInserted(lastSize + 1, articleCardList.size() - lastSize));
             } else {
                 bottom = true;
-                if (isAdded() && !isFirstLoad)
+                if (isAdded() && !isFirstLoad) {
                     requireActivity().runOnUiThread(() -> MsgUtil.showMsg("已经到底啦OwO", requireContext()));
+                }
+                if (isFirstLoad) showEmptyView();
             }
             isFirstLoad = false;
         } catch (Exception e) {
@@ -117,8 +122,18 @@ public class SearchArticleFragment extends Fragment implements SearchRefreshable
         refreshing = false;
     }
 
+    public void showEmptyView() {
+        if (emptyView != null && isAdded()) {
+            requireActivity().runOnUiThread(() -> {
+                recyclerView.setVisibility(View.GONE);
+                emptyView.setVisibility(View.VISIBLE);
+            });
+        }
+    }
+
     @Override
     public void refresh(String keyword) {
+        this.isFirstLoad = true;
         this.refreshing = true;
         this.page = 0;
         this.keyword = keyword;

@@ -99,8 +99,8 @@ public class MsgUtil {
         TextView msgView = contentLayout.getMessageView();
         msgView.setTextSize(11);
         msgView.setTypeface(null, Typeface.BOLD);
-        msgView.setPadding(0, 0, 0, 0);
-        msgView.setPaddingRelative(0, 0, 0, 0);
+        msgView.setPadding(0, 0, ToolsUtil.dp2px(4, view.getContext()), 0);
+        msgView.setPaddingRelative(0, 0, ToolsUtil.dp2px(4, view.getContext()), 0);
         ((ViewGroup.MarginLayoutParams) msgView.getLayoutParams()).setMargins(0, 0, 0, 0);
         snackBarView.setPadding(ToolsUtil.dp2px(6, view.getContext()), 0, 0, 0);
         return snackbar;
