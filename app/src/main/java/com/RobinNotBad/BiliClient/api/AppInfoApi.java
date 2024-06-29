@@ -53,7 +53,7 @@ public class AppInfoApi {
                 Log.e("debug", "检查更新");
                 SharedPreferencesUtil.putInt("app_version_check", curr);
 
-                checkUpdate(context, false, false);
+                checkUpdate(context, false);
             }
         } catch (Exception e) {
             Log.e("BiliClient", e.toString());
@@ -93,8 +93,8 @@ public class AppInfoApi {
         }
     }};
 
-    public static void checkUpdate(Context context, boolean need_toast, boolean debug_ver) throws Exception {
-        debug_ver = ToolsUtil.isDebugBuild();
+    private static void checkUpdate(Context context, boolean need_toast, boolean debug_ver) throws Exception {
+        boolean realIsDebug = ToolsUtil.isDebugBuild();
         String url = "http://api.biliterminal.cn/terminal/version/get_last";
         if (debug_ver) url += "?debug";
         JSONObject result = NetWorkUtil.getJson(url, customHeaders);
@@ -121,11 +121,19 @@ public class AppInfoApi {
                     .putExtra("ctime", ctime)
                     .putExtra("isRelease", is_release)
                     .putExtra("canDownload", can_download));
-        } else if (need_toast) {
+            return;
+        } else if (need_toast && !(realIsDebug && !debug_ver)) {
             if (debug_ver)
                 CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("没有新的测试版了！", context));
             else CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("当前是最新版本！", context));
         }
+        if (realIsDebug && !debug_ver) {
+            checkUpdate(context, need_toast, true);
+        }
+    }
+
+    public static void checkUpdate(Context context, boolean need_toast) throws Exception {
+        checkUpdate(context, need_toast, false);
     }
 
     public static String getDownloadUrl(int versionCode) throws Exception {

@@ -59,9 +59,9 @@
     <string name="desc_link_enable">打开此选项，会识别部分文本中的链接/BV号/AV号/CV号并标记为链接，点击可打开。</string>
     <string name="desc_async_inflate_enable">打开此选项，会对部分页面进行异步加载（显示一个加载中动画，加载完成后显示页面）\n* 请注意，异步加载的开启可能会触发一些崩溃问题，但关闭会导致一些页面在打开期间会阻塞UI无法操作，体验不佳。请自行判断！</string>
     <string name="desc_load_transition">打开此选项，会使加载图片和部分页面完成后显示时会有渐入/渐出动画。</string>
-
-    <string name="update_tip">如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。\n此版本中的亮点：\n · 直播相关功能\n · 修复崩溃\n · 页面Fade动画\n · 表情面板\n · 下载新版本\n · 更多优化与修复\n</string>
     <string name="desc_strict_url_match">打开此选项，会在识别链接时（不包含编号，如AV/BV/CV等）使用更严格的匹配规则。</string>
+
+    <string name="update_tip">如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。\n此版本中的亮点：\n · 直播相关功能\n · 修复崩溃\n · 页面Fade动画\n · 表情面板\n · 新版本下载\n · 新的提示样式\n · 更多优化与修复</string>
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
         <item>新增了评论区的UP主标识</item>

@@ -123,7 +123,7 @@ public class SettingMainActivity extends InstanceActivity {
                 MsgUtil.showMsg("正在获取...", this);
                 CenterThreadPool.run(() -> {
                     try {
-                        AppInfoApi.checkUpdate(this, true, false);
+                        AppInfoApi.checkUpdate(this, true);
                     } catch (Exception e) {
                         runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误", this));
                     }
