@@ -20,7 +20,6 @@ import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.AnimationUtils;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -58,7 +57,7 @@ public class VideoInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_loading);
 
         String finalType = type;
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_simple_viewpager, null, (layoutView, resId, parent) -> {
+        asyncInflate(R.layout.activity_simple_viewpager, (layoutView, resId) -> {
             setContentView(layoutView);
             setTopbarExit();
 
@@ -70,11 +69,14 @@ public class VideoInfoActivity extends BaseActivity {
 
     public void initMediaInfoView() {
         ViewPager viewPager = findViewById(R.id.viewPager);
+        ImageView loading = findViewById(R.id.loading);
+        loading.setVisibility(View.VISIBLE);
 
         setPageName("视频详情");
 
         fragmentList = new ArrayList<>(2);
-        fragmentList.add(BangumiInfoFragment.newInstance(aid));
+        BangumiInfoFragment bangumiInfoFragment = BangumiInfoFragment.newInstance(aid);
+        fragmentList.add(bangumiInfoFragment);
         replyFragment = ReplyFragment.newInstance(aid, 1, seek_reply == -1, seek_reply);
         fragmentList.add(replyFragment);
 
@@ -82,11 +84,11 @@ public class VideoInfoActivity extends BaseActivity {
         ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(vpfAdapter);
         if (seek_reply != -1) viewPager.setCurrentItem(1);
+        bangumiInfoFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(loading, bangumiInfoFragment.getView()));
         if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
             MsgUtil.showMsgLong("提示：本页面可以左右滑动", this);
             SharedPreferencesUtil.putBoolean("first_videoinfo", false);
         }
-        findViewById(R.id.loading).setVisibility(View.GONE);
     }
 
     protected void initVideoInfoView() {

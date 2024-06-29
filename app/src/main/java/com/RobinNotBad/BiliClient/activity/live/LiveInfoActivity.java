@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.live;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.adapter.user.UpListAdapter;
@@ -22,7 +24,7 @@ import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.model.LivePlayInfo;
 import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.model.UserInfo;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
+import com.RobinNotBad.BiliClient.util.AnimationUtils;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -35,6 +37,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class LiveInfoActivity extends BaseActivity {
@@ -47,6 +50,7 @@ public class LiveInfoActivity extends BaseActivity {
     private MediaEpisodeAdapter hostAdapter;
     private LivePlayInfo playInfo;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,10 +62,9 @@ public class LiveInfoActivity extends BaseActivity {
             return;
         }
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_live_info, null, (layoutView, resId, parent) -> {
-            setContentView(layoutView);
-            setTopbarExit();
-
+        asyncInflate(R.layout.activity_live_info, (layoutView, id) -> {
+            ImageView loading = findViewById(R.id.loading);
+            View scrollView = findViewById(R.id.scrollView);
             CenterThreadPool.run(() -> {
                 try {
                     room = LiveApi.getRoomInfo(room_id);
@@ -85,11 +88,13 @@ public class LiveInfoActivity extends BaseActivity {
                         host_list = findViewById(R.id.host_list);
                         RecyclerView quality_list = findViewById(R.id.quality_list);
 
+                        AnimationUtils.crossFade(loading, scrollView);
                         Glide.with(this).asDrawable().load(GlideUtil.url(room.user_cover)).placeholder(R.mipmap.placeholder)
                                 .transition(GlideUtil.getTransitionOptions())
                                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, this))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .into(cover);
+                        cover.setOnClickListener((view) -> startActivity(new Intent(view.getContext(), ImageViewerActivity.class).putExtra("imageList", new ArrayList<>(List.of(room.user_cover)))));
 
                         title.setText(room.title);
 
