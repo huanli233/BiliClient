@@ -195,7 +195,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ToolsUtil.setLink(replyHolder.message);
             ToolsUtil.setAtLink(replyList.get(realPosition).atNameToMid, replyHolder.message);
 
-            replyHolder.likeCount.setText(String.valueOf(replyList.get(realPosition).likeCount));
+            replyHolder.likeCount.setText(toWan(replyList.get(realPosition).likeCount));
 
             if (replyList.get(realPosition).liked) {
                 replyHolder.likeCount.setTextColor(Color.rgb(0xfe, 0x67, 0x9a));
@@ -236,6 +236,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         }
                         childMsgViewList.add(content);
                     }
+                    replyHolder.childReplies.setVerticalScrollBarEnabled(false);
                     ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(context, R.layout.cell_reply_child, childMsgViewList);
                     replyHolder.childReplies.setAdapter(adapter);
                 }

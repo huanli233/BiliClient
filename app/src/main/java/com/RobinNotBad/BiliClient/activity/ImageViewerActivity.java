@@ -45,7 +45,7 @@ public class ImageViewerActivity extends BaseActivity {
                         .override(Target.SIZE_ORIGINAL)//override这一项一定要加，这样才会显示原图，不然一放大就糊成使
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(photoView);
-                photoView.setMaximumScale(10);
+                photoView.setMaximumScale(6.25f);
             } catch (OutOfMemoryError e) {
                 MsgUtil.showMsg("超出内存，加载失败", this);
             }
