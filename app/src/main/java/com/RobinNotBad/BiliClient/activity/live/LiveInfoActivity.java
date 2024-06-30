@@ -74,7 +74,7 @@ public class LiveInfoActivity extends BaseActivity {
                         return;
                     }
                     UserInfo userInfo = UserInfoApi.getUserInfo(room.uid);
-                    playInfo = LiveApi.getRoomPlayInfo(room_id, LiveApi.PlayerQnMap.get(SharedPreferencesUtil.getInt("play_qn", 16)));
+                    playInfo = LiveApi.getRoomPlayInfo(room_id, 80);
                     runOnUiThread(() -> {
                         if (isDestroyed()) return;
                         ImageView cover = findViewById(R.id.cover);
@@ -170,20 +170,16 @@ public class LiveInfoActivity extends BaseActivity {
                                     }
                                 });
                             });
-                            int selectedIndex = 0, index = 0;
                             for (Map.Entry<String, Integer> entry : LiveApi.QualityMap.entrySet()) {
                                 Bangumi.Episode episode = new Bangumi.Episode();
                                 episode.id = entry.getValue();
                                 episode.title = entry.getKey();
                                 qualityList.add(episode);
-                                if ((int) episode.id == LiveApi.PlayerQnMap.get(SharedPreferencesUtil.getInt("play_qn", 16)))
-                                    selectedIndex = index;
-                                index++;
                             }
                             qualityAdapter.setData(qualityList);
-                            qualityAdapter.setSelectedItemIndex(selectedIndex);
                             quality_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-                            runOnUiThread(() -> quality_list.setAdapter(qualityAdapter));
+                            quality_list.setAdapter(qualityAdapter);
+                            qualityAdapter.setSelectedItemIndex(0);
 
                             //路线选择
                             hostAdapter = new MediaEpisodeAdapter();

@@ -18,13 +18,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class LiveApi {
-
-    public static final LinkedHashMap<Integer, Integer> PlayerQnMap = new LinkedHashMap<>() {{
-        //用于将播放器的清晰度转换成直播的清晰度代码
-        put(16, 80);
-        put(64, 150);
-        put(80, 250);
-    }};
     public static final LinkedHashMap<String, Integer> QualityMap = new LinkedHashMap<>() {{
         //清晰度代码
         put("流畅", 80);
