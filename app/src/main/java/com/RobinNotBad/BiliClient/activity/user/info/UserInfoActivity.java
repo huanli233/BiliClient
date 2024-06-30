@@ -40,7 +40,7 @@ public class UserInfoActivity extends BaseActivity {
 
             setPageName("用户信息");
 
-            TutorialHelper.show(R.xml.tutorial_space, this, "space", 2);
+            TutorialHelper.show(R.xml.tutorial_space, this, "space", 3);
 
             ViewPager viewPager = findViewById(R.id.viewPager);
 
