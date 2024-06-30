@@ -1,6 +1,7 @@
 package com.RobinNotBad.BiliClient.activity.live;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -133,7 +134,15 @@ public class LiveInfoActivity extends BaseActivity {
                                         codec = playInfo.playUrl.stream.get(0).format.get(0).codec.get(0);
                                         LivePlayInfo.UrlInfo urlInfo = codec.url_info.get(selectedHost);
                                         String play_url = urlInfo.host + codec.base_url + urlInfo.extra;
-                                        runOnUiThread(() -> PlayerApi.jumpToPlayer(this, play_url, "", "直播·" + room.title, false, 0, "", 0, userInfo.mid, 0, true));
+                                        runOnUiThread(() -> {
+                                            try {
+                                                PlayerApi.jumpToPlayer(this, play_url, "", "直播·" + room.title, false, 0, "", 0, userInfo.mid, 0, true);
+                                            }catch (ActivityNotFoundException e){
+                                                MsgUtil.showMsg("没有找到播放器，请检查是否安装",this);
+                                            }catch (Exception e){
+                                                MsgUtil.err(e,this);
+                                            }
+                                        });
                                     }
                                 } catch (Exception e) {
                                     runOnUiThread(() -> MsgUtil.err(e, this));
