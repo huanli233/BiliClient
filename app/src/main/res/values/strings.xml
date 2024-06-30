@@ -65,25 +65,38 @@
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
         <item>新增了评论区的UP主标识</item>
-        <item>新增了下载新版本的功能</item>
+        <item>新增了在线更新功能</item>
         <item>新增了直播功能</item>
         <item>新增了表情面板</item>
-        <item>实现了搜索直播</item>
+        <item>新增了崩溃页面中重启应用的选项</item>
+        <item>新增了番剧更新进度的显示</item>
+        <item>新增了查看用户的关注列表的功能</item>
+        <item>实现了用户详情页的UID显示</item>
+        <item>实现了直播的搜索</item>
         <item>实现了动态中的直播跳转</item>
-        <item>实现了消息中心中评论回复项跳转至对应评论功能</item>
-        <item>实现了崩溃捕捉的重启应用选项</item>
+        <item>实现了消息中心内直接跳转至对应评论的功能</item>
         <item>实现了子评论卡片的表情包显示</item>
+        <item>实现了新的提示方式（snackbar）</item>
         <item>优化了图片的载入动画</item>
         <item>优化了页面的载入动画</item>
         <item>优化了发布评论后的评论显示</item>
+        <item>优化了用户不存在时的提示</item>
+        <item>优化了评论详情的刷新逻辑</item>
+        <item>优化了高亮链接的识别</item>
+        <item>优化了点赞数的显示</item>
+        <item>优化了搜索记录的展示</item>
+        <item>修复了搜索时崩溃的问题</item>
+        <item>修复了刷新动态时顶部按钮不显示的问题</item>
+        <item>修复了未开播番剧无法加载的问题</item>
         <item>修复了进入视频详情页后不在顶部的问题</item>
-        <item>修复了偏好设置中选项开关状态因滑动列表异常的问题</item>
+        <item>修复了偏好设置中选项开关状态因列表滑动而异常的问题</item>
         <item>修复了评论刷新时操作可能出现的崩溃问题</item>
-        <item>修复了通知中心崩溃的问题</item>
+        <item>修复了消息中心内查看通知时的崩溃问题</item>
         <item>修复了缓存时可能的崩溃问题</item>
         <item>修复了部分用户主页崩溃的问题</item>
         <item>修复了删除评论按钮的显示问题</item>
-        <item>修复了视频详情页在部分情况下消失的问题</item>
-        <item>修复了文本框获取焦点导致进入页面后不在页面顶部的问题</item>
+        <item>修复了保存设置时崩溃的问题</item>
+        <item>修复了视频详情页在部分情况下黑屏的问题</item>
+        <item>修复了部分页面的焦点问题</item>
     </string-array>
 </resources>
