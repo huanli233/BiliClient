@@ -25,6 +25,11 @@ public class CopyTextActivity extends BaseActivity {
 
         content = intent.getStringExtra("content");
 
+        if(content == null){
+            finish();
+            return;
+        }
+
         EditText edittext = findViewById(R.id.content);
         edittext.setText(content);
 
@@ -74,7 +79,7 @@ public class CopyTextActivity extends BaseActivity {
                 clipboardManager.setPrimaryClip(clipData);
                 MsgUtil.showMsg("已复制", this);
             } catch (Exception e) {
-                MsgUtil.showMsg("复制失败，请检查范围", this);
+                MsgUtil.showMsg("复制失败，请检查选择的范围", this);
             }
         });
 
@@ -90,8 +95,8 @@ public class CopyTextActivity extends BaseActivity {
         });
         findViewById(R.id.begin_right).setOnClickListener(view -> {
             try {
-                if (Integer.parseInt(String.valueOf(beginEdit.getText())) + 1 > content.length())
-                    beginEdit.setText(String.valueOf(content.length()));
+                if (Integer.parseInt(String.valueOf(beginEdit.getText())) + 1 > edittext.getText().length())
+                    beginEdit.setText(String.valueOf(edittext.getText().length()));
                 else
                     beginEdit.setText(String.valueOf(Integer.parseInt(String.valueOf(beginEdit.getText())) + 1));
             } catch (Exception e) {
@@ -110,8 +115,8 @@ public class CopyTextActivity extends BaseActivity {
         });
         findViewById(R.id.end_right).setOnClickListener(view -> {
             try {
-                if (Integer.parseInt(String.valueOf(endEdit.getText())) + 1 > content.length())
-                    endEdit.setText(String.valueOf(content.length()));
+                if (Integer.parseInt(String.valueOf(endEdit.getText())) + 1 > edittext.getText().length())
+                    endEdit.setText(String.valueOf(edittext.getText().length()));
                 else
                     endEdit.setText(String.valueOf(Integer.parseInt(String.valueOf(endEdit.getText())) + 1));
             } catch (Exception e) {
@@ -123,7 +128,7 @@ public class CopyTextActivity extends BaseActivity {
             return false;
         });
         findViewById(R.id.begin_right).setOnLongClickListener(view -> {
-            beginEdit.setText(String.valueOf(content.length()));
+            beginEdit.setText(String.valueOf(edittext.getText().length()));
             return false;
         });
         findViewById(R.id.end_left).setOnLongClickListener(view -> {
@@ -131,7 +136,7 @@ public class CopyTextActivity extends BaseActivity {
             return false;
         });
         findViewById(R.id.end_right).setOnLongClickListener(view -> {
-            endEdit.setText(String.valueOf(content.length()));
+            endEdit.setText(String.valueOf(edittext.getText().length()));
             return false;
         });
     }
