@@ -10,9 +10,7 @@ import android.view.View;
 import com.RobinNotBad.BiliClient.BuildConfig;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.activity.update.UpdateInfoActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -28,32 +26,30 @@ public class SettingMainActivity extends InstanceActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_main, null, (layoutView, layoutId, parent) -> {
-            setContentView(R.layout.activity_setting_main);
-            setMenuClick();
-            Log.e("debug","进入设置页");
- 
+        asyncInflate(R.layout.activity_setting_main, ((layoutView, id) -> {
+            Log.e("debug", "进入设置页");
+
             //查看登录信息
             MaterialCardView login_cookie = findViewById(R.id.login_cookie);
             login_cookie.setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(this, SpecialLoginActivity.class);
-                intent.putExtra("login",false);
+                intent.putExtra("login", false);
                 startActivity(intent);
             });
-                
+
             //登录
             MaterialCardView login = findViewById(R.id.login);
-            if(SharedPreferencesUtil.getLong("mid",0)==0) {
+            if (SharedPreferencesUtil.getLong("mid", 0) == 0) {
                 login_cookie.setVisibility(View.GONE);
                 login.setVisibility(View.VISIBLE);
                 login.setOnClickListener(view -> {
                     Intent intent = new Intent();
-                    if(Build.VERSION.SDK_INT>=19)
+                    if (Build.VERSION.SDK_INT >= 19)
                         intent.setClass(this, LoginActivity.class);   //去扫码登录页面
-                    else{
+                    else {
                         intent.setClass(this, SpecialLoginActivity.class);   //4.4以下系统去特殊登录页面
-                        intent.putExtra("login",true);
+                        intent.putExtra("login", true);
                     }
                     startActivity(intent);
                 });
@@ -116,20 +112,20 @@ public class SettingMainActivity extends InstanceActivity {
             //彩蛋
             String[] eggList = getResources().getStringArray(R.array.eggs);
             about.setOnLongClickListener(view -> {
-                MsgUtil.showText(this,"彩蛋",eggList[eggClick]);
-                if(eggClick<eggList.length-1) eggClick++;
+                MsgUtil.showText(this, "彩蛋", eggList[eggClick]);
+                if (eggClick < eggList.length - 1) eggClick++;
                 return true;
             });
 
             //检查更新
             MaterialCardView checkUpdate = findViewById(R.id.checkupdate);
             checkUpdate.setOnClickListener(view -> {
-                MsgUtil.toast("正在获取...",this);
+                MsgUtil.showMsg("正在获取...", this);
                 CenterThreadPool.run(() -> {
                     try {
-                        AppInfoApi.checkUpdate(this,true,false);
+                        AppInfoApi.checkUpdate(this, true);
                     } catch (Exception e) {
-                        runOnUiThread(() -> MsgUtil.toast("连接到哔哩终端接口时发生错误",this));
+                        runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误", this));
                     }
                 });
             });
@@ -138,21 +134,22 @@ public class SettingMainActivity extends InstanceActivity {
             MaterialCardView announcement = findViewById(R.id.announcement);
             announcement.setOnClickListener(view -> {
                 Intent intent = new Intent();
-                intent.setClass(this,AnnouncementsActivity.class);
+                intent.setClass(this, AnnouncementsActivity.class);
                 startActivity(intent);
             });
 
             MaterialCardView test = findViewById(R.id.test);    //用于测试
             test.setVisibility(BuildConfig.BETA ? View.VISIBLE : View.GONE);
             test.setOnClickListener(view -> {
-                startActivity(new Intent(this, UpdateInfoActivity.class)
-                        .putExtra("versionName", "2.6.0")
-                        .putExtra("versionCode", 20240616)
-                        .putExtra("updateLog", "测试")
-                        .putExtra("ctime", System.currentTimeMillis())
-                        .putExtra("isRelease", 1)
-                        .putExtra("canDownload", 1));
+//                startActivity(new Intent(this, UpdateInfoActivity.class)
+//                        .putExtra("versionName", "2.6.0")
+//                        .putExtra("versionCode", 20240616)
+//                        .putExtra("updateLog", "测试")
+//                        .putExtra("ctime", System.currentTimeMillis())
+//                        .putExtra("isRelease", 1)
+//                        .putExtra("canDownload", 1));
+                MsgUtil.snackText(view, "[测试文字]\n-403:账号异常，操作失败");
             });
-        });
+        }));
     }
 }

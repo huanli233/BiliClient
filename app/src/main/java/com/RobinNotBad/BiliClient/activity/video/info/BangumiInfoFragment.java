@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
 import com.RobinNotBad.BiliClient.adapter.video.MediaEpisodeAdapter;
@@ -32,6 +33,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BangumiInfoFragment extends Fragment {
     private long mediaId;
@@ -41,7 +43,8 @@ public class BangumiInfoFragment extends Fragment {
     private RecyclerView eposideRecyclerView;
     private Button section_choose;
     private TextView eposide_choose;
-
+    private TextView indexShow;
+    private Runnable onFinishLoad;
     private Bangumi bangumi;
 
     public static BangumiInfoFragment newInstance(long mediaId) {
@@ -65,6 +68,7 @@ public class BangumiInfoFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        view.setVisibility(View.GONE);
         eposideRecyclerView = rootView.findViewById(R.id.rv_eposide_list);
         //拉数据
         CenterThreadPool.run(() -> {
@@ -78,6 +82,7 @@ public class BangumiInfoFragment extends Fragment {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void initView() {
         //init data.
         ImageView imageMediaCover = rootView.findViewById(R.id.image_media_cover);
@@ -87,11 +92,15 @@ public class BangumiInfoFragment extends Fragment {
         eposide_choose = rootView.findViewById(R.id.eposide_choose);
         selectedSection = 0;
 
+        if (onFinishLoad != null) onFinishLoad.run();
+
         Glide.with(this)
-                .load(GlideUtil.url(bangumi.info.cover_horizontal) )
+                .load(GlideUtil.url(bangumi.info.cover_horizontal))
+                .transition(GlideUtil.getTransitionOptions())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .placeholder(R.mipmap.loading_2233)
+                .placeholder(R.mipmap.placeholder)
                 .into(imageMediaCover);
+        imageMediaCover.setOnClickListener((view) -> startActivity(new Intent(view.getContext(), ImageViewerActivity.class).putExtra("imageList", new ArrayList<>(List.of(bangumi.info.cover_horizontal)))));
         title.setText(bangumi.info.title);
         //section selector setting.
         MediaEpisodeAdapter adapter = new MediaEpisodeAdapter();
@@ -101,12 +110,22 @@ public class BangumiInfoFragment extends Fragment {
             refreshReplies();
         });
 
-        section_choose.setOnClickListener(v -> getSectionChooseDialog().show());
-        eposide_choose.setOnClickListener(v -> getEposideChooseDialog().show());
+        indexShow = rootView.findViewById(R.id.indexShow);
+        indexShow.setText(bangumi.info.indexShow);
 
-        adapter.setData(bangumi.sectionList.get(0).episodeList);
-        eposideRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        eposideRecyclerView.setAdapter(adapter);
+        if (!bangumi.sectionList.isEmpty()) {
+            section_choose.setText(bangumi.sectionList.get(0).title + " 点击切换");
+            section_choose.setOnClickListener(v -> getSectionChooseDialog().show());
+            eposide_choose.setOnClickListener(v -> getEposideChooseDialog().show());
+
+            adapter.setData(bangumi.sectionList.get(0).episodeList);
+            eposideRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+            eposideRecyclerView.setAdapter(adapter);
+        } else {
+            section_choose.setText("敬请期待");
+            playButton.setVisibility(View.GONE);
+            eposideRecyclerView.setVisibility(View.GONE);
+        }
 
         //play button setting
         playButton.setOnClickListener(v -> {
@@ -116,7 +135,7 @@ public class BangumiInfoFragment extends Fragment {
             intent.putExtra("cid", episode.cid);
             intent.putExtra("title", episode.title);
             intent.putExtra("aid", episode.aid);
-            intent.putExtra("html5",false);
+            intent.putExtra("html5", false);
             startActivity(intent);
         });
         playButton.setOnLongClickListener(v -> {
@@ -182,10 +201,14 @@ public class BangumiInfoFragment extends Fragment {
         return dialog;
     }
 
-    private void refreshReplies(){
+    private void refreshReplies() {
         Activity activity = requireActivity();
-        if(activity instanceof VideoInfoActivity){
+        if (activity instanceof VideoInfoActivity) {
             ((VideoInfoActivity) activity).setCurrentAid(bangumi.sectionList.get(selectedSection).episodeList.get(selectedEpisode).aid);
         }
+    }
+
+    public void setOnFinishLoad(Runnable onFinishLoad) {
+        this.onFinishLoad = onFinishLoad;
     }
 }

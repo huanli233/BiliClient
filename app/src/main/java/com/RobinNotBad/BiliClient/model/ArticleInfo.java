@@ -14,6 +14,7 @@ public class ArticleInfo implements Serializable {
     public String keywords;
     public String content; //文章内容
 
-    public ArticleInfo(){}
+    public ArticleInfo() {
+    }
 
 }

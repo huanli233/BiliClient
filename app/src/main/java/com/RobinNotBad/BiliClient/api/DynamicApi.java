@@ -43,6 +43,7 @@ public class DynamicApi {
 
     /**
      * 发送纯文本动态
+     *
      * @param content 文字内容
      * @return 发送成功返回的动态id，失败返回-1
      */
@@ -53,7 +54,7 @@ public class DynamicApi {
                 .put("type", 4)
                 .put("rid", 0)
                 .put("content", content)
-                .put("csrf", SharedPreferencesUtil.getString("csrf",""))
+                .put("csrf", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
         try {
             JSONObject respBody = new JSONObject(resp.body().string());
@@ -67,11 +68,12 @@ public class DynamicApi {
 
     /**
      * 发送复杂动态
+     *
      * @param contents 动态内容
-     * @param pics 携带图片
-     * @param option 选项
-     * @param topic 话题
-     * @param scene 动态类型
+     * @param pics     携带图片
+     * @param option   选项
+     * @param topic    话题
+     * @param scene    动态类型
      * @return 发送成功返回的动态id，失败返回-1
      */
     public static long publishComplex(@NonNull JSONArray contents, JSONArray pics, JSONObject option, JSONObject topic, int scene, Map<String, Object> otherArgs) throws IOException, JSONException {
@@ -108,7 +110,8 @@ public class DynamicApi {
 
     /**
      * 发布可包含艾特信息的文本动态
-     * @param content 文本内容
+     *
+     * @param content   文本内容
      * @param atUserUid 文本内at到的人的用户名uid map
      * @return 发送成功返回的动态id，失败返回-1
      */
@@ -119,21 +122,23 @@ public class DynamicApi {
 
     /**
      * 转发视频到动态，瞎扒的api
+     *
      * @param text 附加文字
-     * @param aid aid
+     * @param aid  aid
      * @return 发送成功返回的动态id，失败返回-1
      */
     public static long relayVideo(String text, Map<String, Long> atUserUid, long aid) throws JSONException, IOException {
         return publishComplex(text == null ? new JSONArray().put(Content.create("", 1, null)) : atUserUid != null ? parseAtContent(text, atUserUid) : new JSONArray().put(Content.create(text, 1, null)),
                 null, null, null,
                 5, Map.of("web_repost_src",
-                new JSONObject().put("revs_id", new JSONObject()
-                        .put("dyn_type", 8)
-                        .put("rid", aid))));
+                        new JSONObject().put("revs_id", new JSONObject()
+                                .put("dyn_type", 8)
+                                .put("rid", aid))));
     }
 
     /**
      * 转发动态
+     *
      * @param text 文字内容
      * @param dyid 动态id
      * @return 发送成功返回的动态id，失败返回-1
@@ -143,7 +148,7 @@ public class DynamicApi {
         Response resp = Objects.requireNonNull(NetWorkUtil.post(url, new NetWorkUtil.FormData()
                 .put("dynamic_id", dyid)
                 .put("content", text)
-                .put("csrf_token", SharedPreferencesUtil.getString("csrf",""))
+                .put("csrf_token", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
         try {
             JSONObject respBody = new JSONObject(resp.body().string());
@@ -157,9 +162,10 @@ public class DynamicApi {
 
     /**
      * 转发动态（复杂动态api），还是自己瞎扒的api
-     * @param text 文字内容
+     *
+     * @param text      文字内容
      * @param atUserUid 文本内at到的人的用户名uid map
-     * @param dyid 动态id
+     * @param dyid      动态id
      * @return 发送成功返回的动态id，失败返回-1
      */
     public static long relayDynamic(String text, Map<String, Long> atUserUid, long dyid) throws JSONException, IOException {
@@ -170,7 +176,8 @@ public class DynamicApi {
 
     /**
      * 解析包含艾特信息的文本动态内容
-     * @param content 文本内容
+     *
+     * @param content   文本内容
      * @param atUserUid 文本内at到的人的用户名uid map
      * @return Content JSON数组
      */
@@ -219,8 +226,9 @@ public class DynamicApi {
 
     /**
      * 动态点赞/取消赞
+     *
      * @param dyid 动态id
-     * @param up 是否为点赞
+     * @param up   是否为点赞
      * @return resultCode
      */
     public static int likeDynamic(long dyid, boolean up) throws IOException {
@@ -228,7 +236,7 @@ public class DynamicApi {
         Response resp = Objects.requireNonNull(NetWorkUtil.post(url, new NetWorkUtil.FormData()
                 .put("dynamic_id", dyid)
                 .put("up", up ? 1 : 2)
-                .put("csrf_token", SharedPreferencesUtil.getString("csrf",""))
+                .put("csrf_token", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
         try {
             JSONObject respBody = new JSONObject(resp.body().string());
@@ -242,7 +250,7 @@ public class DynamicApi {
         String url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/rm_dynamic";
         Response resp = Objects.requireNonNull(NetWorkUtil.post(url, new NetWorkUtil.FormData()
                 .put("dynamic_id", dyid)
-                .put("csrf_token", SharedPreferencesUtil.getString("csrf",""))
+                .put("csrf_token", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
         try {
             JSONObject respBody = new JSONObject(resp.body().string());
@@ -254,6 +262,7 @@ public class DynamicApi {
 
     /**
      * 寻找用户（完全匹配），仍然自己瞎扒的，不清楚是否有更好方案
+     *
      * @param name 名称
      * @return 用户UID，未找到返回-1
      */
@@ -268,7 +277,8 @@ public class DynamicApi {
                 for (int i = 0; i < groups.length(); i++) {
                     JSONArray items = groups.getJSONObject(i).getJSONArray("items");
                     for (int j = 0; j < items.length(); j++) {
-                        if (items.getJSONObject(j).getString("name").equals(name)) return Long.parseLong(items.getJSONObject(j).getString("uid"));
+                        if (items.getJSONObject(j).getString("name").equals(name))
+                            return Long.parseLong(items.getJSONObject(j).getString("uid"));
                     }
                 }
             }
@@ -279,11 +289,11 @@ public class DynamicApi {
 
     public static long getDynamicList(List<Dynamic> dynamicList, long offset, long mid, String type) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/"
-                + (mid==0 ? "all?type=" + type : "space?web_location=333.999&host_mid=" + mid)
-                + (offset==0 ? "" : "&offset=" + offset);
+                + (mid == 0 ? "all?type=" + type : "space?web_location=333.999&host_mid=" + mid)
+                + (offset == 0 ? "" : "&offset=" + offset);
 
         JSONObject all = NetWorkUtil.getJson(DmImgParamUtil.getDmImgParamsUrl(url));
-        if(all.getInt("code")!=0) throw new JSONException(all.getString("message"));
+        if (all.getInt("code") != 0) throw new JSONException(all.getString("message"));
 
         JSONObject data = all.getJSONObject("data");
 
@@ -302,7 +312,7 @@ public class DynamicApi {
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/detail?id=" + id;
 
         JSONObject all = NetWorkUtil.getJson(url);
-        if(all.getInt("code")!=0) throw new JSONException(all.getString("message"));
+        if (all.getInt("code") != 0) throw new JSONException(all.getString("message"));
 
         JSONObject data = all.getJSONObject("data");
         JSONObject item = data.getJSONObject("item");
@@ -310,18 +320,19 @@ public class DynamicApi {
     }
 
     public static Dynamic analyzeDynamic(JSONObject dynamic_json) throws JSONException {
-        Log.e("debug-dynamic","--------------");
+        Log.e("debug-dynamic", "--------------");
         Dynamic dynamic = new Dynamic();
 
-        if(!dynamic_json.isNull("id_str")) dynamic.dynamicId = Long.parseLong(dynamic_json.getString("id_str"));
+        if (!dynamic_json.isNull("id_str"))
+            dynamic.dynamicId = Long.parseLong(dynamic_json.getString("id_str"));
         else dynamic.dynamicId = 0;
         Log.e("debug-dynamic-id", String.valueOf(dynamic.dynamicId));
         dynamic.type = dynamic_json.getString("type");
-        Log.e("debug-dynamic-type",dynamic.type);
+        Log.e("debug-dynamic-type", dynamic.type);
 
         JSONObject basic = dynamic_json.getJSONObject("basic");
         String comment_id_str = basic.getString("comment_id_str");
-        if(!comment_id_str.equals("")) dynamic.comment_id = Long.parseLong(comment_id_str);
+        if (!comment_id_str.equals("")) dynamic.comment_id = Long.parseLong(comment_id_str);
         dynamic.comment_type = basic.getInt("comment_type");
 
         JSONObject modules = dynamic_json.getJSONObject("modules");
@@ -329,28 +340,29 @@ public class DynamicApi {
 
         //发布者
         UserInfo userInfo = new UserInfo();
-        if(modules.has("module_author") && !modules.isNull("module_author")) {
+        if (modules.has("module_author") && !modules.isNull("module_author")) {
             JSONObject module_author = modules.getJSONObject("module_author");
             userInfo.mid = module_author.getLong("mid");
             userInfo.name = module_author.getString("name");
-            if(!module_author.isNull("following")) userInfo.followed = module_author.getBoolean("following");
+            if (!module_author.isNull("following"))
+                userInfo.followed = module_author.getBoolean("following");
             userInfo.avatar = module_author.getString("face");
-            Log.e("debug-dynamic-sender",userInfo.name);
+            Log.e("debug-dynamic-sender", userInfo.name);
             dynamic.pubTime = module_author.getString("pub_time");
         }
         dynamic.userInfo = userInfo;
 
-        if(dynamic.type.equals("DYNAMIC_TYPE_NONE")) {
+        if (dynamic.type.equals("DYNAMIC_TYPE_NONE")) {
             dynamic.content = "[动态不存在]";
             return dynamic;
         }
 
         //动态主体
-        if(modules.has("module_dynamic") && !modules.isNull("module_dynamic")){
+        if (modules.has("module_dynamic") && !modules.isNull("module_dynamic")) {
             JSONObject module_dynamic = modules.getJSONObject("module_dynamic");
 
             //内容
-            if(module_dynamic.has("desc") && !module_dynamic.isNull("desc")) {
+            if (module_dynamic.has("desc") && !module_dynamic.isNull("desc")) {
                 StringBuilder dynamic_content = new StringBuilder();
                 ArrayList<Emote> dynamic_emotes = new ArrayList<>();
                 ArrayList<At> ats = new ArrayList<>();
@@ -360,7 +372,7 @@ public class DynamicApi {
                 for (int i = 0; i < rich_text_nodes.length(); i++) {
                     JSONObject rich_text_node = rich_text_nodes.getJSONObject(i);
                     String type = rich_text_node.getString("type");
-                    switch (type){
+                    switch (type) {
                         case "RICH_TEXT_NODE_TYPE_EMOJI":
                             dynamic_content.append(rich_text_node.getString("text"));
                             JSONObject emoji = rich_text_node.getJSONObject("emoji");
@@ -380,18 +392,17 @@ public class DynamicApi {
                     }
                 }
                 dynamic.content = dynamic_content.toString();
-                Log.e("debug-dynamic-content",dynamic.content);
+                Log.e("debug-dynamic-content", dynamic.content);
                 dynamic.emotes = dynamic_emotes;
                 dynamic.ats = ats;
-            }
-            else dynamic.content = "";
+            } else dynamic.content = "";
 
             //这里面什么都有，直译为主要的
-            if(module_dynamic.has("major") && !module_dynamic.isNull("major")){
+            if (module_dynamic.has("major") && !module_dynamic.isNull("major")) {
                 JSONObject major = module_dynamic.getJSONObject("major");
                 String major_type = major.getString("type");
                 dynamic.major_type = major_type;
-                switch (major_type){
+                switch (major_type) {
                     case "MAJOR_TYPE_ARCHIVE":
                         dynamic.major_object = analyzeVideoCard(major.getJSONObject("archive"));
                         break;
@@ -459,13 +470,12 @@ public class DynamicApi {
                         break;
                 }
             }
-            if (modules.has("module_additional") && !modules.isNull("module_additional")){
+            if (modules.has("module_additional") && !modules.isNull("module_additional")) {
                 JSONObject module_additional = modules.getJSONObject("module_additional");
-                if(module_additional.getString("type").equals("ADDITIONAL_TYPE_UGC")){
+                if (module_additional.getString("type").equals("ADDITIONAL_TYPE_UGC")) {
                     dynamic.major_type = "MAJOR_TYPE_ARCHIVE";
                     dynamic.major_object = analyzeVideoCard(module_additional.getJSONObject("ugc"));
-                }
-                else Log.e("debug-dynamic-addi",module_additional.getString("type"));
+                } else Log.e("debug-dynamic-addi", module_additional.getString("type"));
             }
         }
 
@@ -491,7 +501,7 @@ public class DynamicApi {
             dynamic.canDelete = supportItemTypes.contains("THREE_POINT_DELETE");
         }
 
-        if(dynamic_json.has("orig") && !dynamic_json.isNull("orig")){
+        if (dynamic_json.has("orig") && !dynamic_json.isNull("orig")) {
             dynamic.dynamic_forward = analyzeDynamic(dynamic_json.getJSONObject("orig"));
         }
 

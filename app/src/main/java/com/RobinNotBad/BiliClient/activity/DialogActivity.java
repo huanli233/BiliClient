@@ -15,7 +15,7 @@ import java.util.TimerTask;
 public class DialogActivity extends BaseActivity {
 
     int wait_time = 0;
-    
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,33 +26,34 @@ public class DialogActivity extends BaseActivity {
 
         Intent intent = getIntent();
 
-        ((TextView)findViewById(R.id.tip_title)).setText(intent.getStringExtra("title"));
-        ((TextView)findViewById(R.id.content)).setText(intent.getStringExtra("content"));
+        ((TextView) findViewById(R.id.tip_title)).setText(intent.getStringExtra("title"));
+        ((TextView) findViewById(R.id.content)).setText(intent.getStringExtra("content"));
 
-        if(intent.getIntExtra("wait_time",-1) > 0){
+        if (intent.getIntExtra("wait_time", -1) > 0) {
             close_btn.setEnabled(false);
-            wait_time = intent.getIntExtra("wait_time",0);
+            wait_time = intent.getIntExtra("wait_time", 0);
             Timer timer = new Timer();
             timer.scheduleAtFixedRate(new TimerTask() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void run() {
                     runOnUiThread(() -> {
-                        if(wait_time-- > 0){
+                        if (wait_time-- > 0) {
                             close_btn.setText("知道了(" + wait_time + "s)");
                             close_btn.setEnabled(false);
-                        }else{
+                        } else {
                             close_btn.setText("知道了");
                             close_btn.setEnabled(true);
                             timer.cancel();
                         }
                     });
                 }
-            },0,1000);
-        }else close_btn.setEnabled(true);
+            }, 0, 1000);
+        } else close_btn.setEnabled(true);
         close_btn.setOnClickListener(view -> finish());
     }
 
     @Override
-    public void onBackPressed() {}
+    public void onBackPressed() {
+    }
 }

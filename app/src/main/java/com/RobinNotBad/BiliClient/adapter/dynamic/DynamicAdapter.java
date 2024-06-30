@@ -18,7 +18,6 @@ import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
 import com.RobinNotBad.BiliClient.activity.live.FollowLiveActivity;
 import com.RobinNotBad.BiliClient.model.Dynamic;
-import com.RobinNotBad.BiliClient.util.PreInflateHelper;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -42,7 +41,6 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.recyclerView = recyclerView;
         dynamicActivity = (DynamicActivity) context;
         this.writeDynamicLauncher = dynamicActivity.writeDynamicLauncher;
-        getInflateHelper().preload(recyclerView, R.layout.cell_dynamic, 5, 0);
     }
 
     @Override
@@ -54,10 +52,10 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == 0) {
-            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic_action, parent,false);
+            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic_action, parent, false);
             return new WriteDynamic(view);
         } else {
-            return new DynamicHolder(getInflateHelper().getView(parent, R.layout.cell_dynamic, 3, false), dynamicActivity, false);
+            return new DynamicHolder(LayoutInflater.from(this.context).inflate(R.layout.cell_dynamic, parent, false), dynamicActivity, false);
         }
     }
 
@@ -82,7 +80,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             DynamicHolder dynamicHolder = (DynamicHolder) holder;
             dynamicHolder.showDynamic(dynamicList.get(position), context, true);      //该函数在DynamicHolder里
 
-            if (dynamicList.get(position).dynamic_forward != null){
+            if (dynamicList.get(position).dynamic_forward != null) {
                 View childCard = dynamicHolder.cell_dynamic_child;
                 DynamicHolder childHolder = new DynamicHolder(childCard, dynamicActivity, true);
                 childHolder.showDynamic(dynamicList.get(position).dynamic_forward, context, true);
@@ -94,7 +92,8 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             int finalPosition = position;
             View.OnLongClickListener onDeleteLongClick = DynamicHolder.getDeleteListener(dynamicActivity, dynamicList, finalPosition, this);
             dynamicHolder.item_dynamic_delete.setOnLongClickListener(onDeleteLongClick);
-            if (dynamicList.get(position).canDelete) dynamicHolder.item_dynamic_delete.setVisibility(View.VISIBLE);
+            if (dynamicList.get(position).canDelete)
+                dynamicHolder.item_dynamic_delete.setVisibility(View.VISIBLE);
             Log.d("BiliClient", "DynamicAdapter onBindViewHolder finish: " + (System.currentTimeMillis() - time));
         }
     }
@@ -107,13 +106,12 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return dynamicList.size();
+        return dynamicList.size() + 1;
     }
 
 
-
     public static class WriteDynamic extends RecyclerView.ViewHolder {
-        final MaterialButton write_dynamic,type,live;
+        final MaterialButton write_dynamic, type, live;
 
         public WriteDynamic(@NonNull View itemView) {
             super(itemView);
@@ -122,13 +120,4 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             live = itemView.findViewById(R.id.live);
         }
     }
-
-    PreInflateHelper preInflateHelper;
-    public PreInflateHelper getInflateHelper() {
-        if (preInflateHelper == null) {
-            preInflateHelper = new PreInflateHelper(context);
-        }
-        return preInflateHelper;
-    }
-
 }

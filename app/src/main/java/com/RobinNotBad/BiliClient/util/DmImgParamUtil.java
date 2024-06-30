@@ -57,6 +57,7 @@ public class DmImgParamUtil {
     }
 
     private static final int[] timestamps = {2943, 3046, 3152, 3252, 3354, 3454, 3558, 3665, 3767, 5566, 5676, 5778, 5881, 7296, 7573, 135289};
+
     private static String generateDmImgList() throws JSONException {
         Random random = new Random();
         JSONArray dmImgListJson = new JSONArray();
@@ -92,6 +93,7 @@ public class DmImgParamUtil {
 
     private static final String[] classNames = {
             "clearfix", "g-search", "section", "loading", "full-rows", "n-btn", "router-link-exact-active", "router-link-active", "active"};
+
     private static String generateDmImgInter() throws JSONException {
         Random random = new Random();
         JSONObject result = new JSONObject();

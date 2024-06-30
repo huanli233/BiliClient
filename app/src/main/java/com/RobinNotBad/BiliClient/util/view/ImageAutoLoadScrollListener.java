@@ -22,7 +22,8 @@ public class ImageAutoLoadScrollListener extends RecyclerView.OnScrollListener {
         switch (newState) {
             case SCROLL_STATE_IDLE: // The RecyclerView is not currently scrolling.
                 try {
-                    if (recyclerView.getContext() != null) Glide.with(recyclerView.getContext()).resumeRequests();
+                    if (recyclerView.getContext() != null)
+                        Glide.with(recyclerView.getContext()).resumeRequests();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -30,7 +31,8 @@ public class ImageAutoLoadScrollListener extends RecyclerView.OnScrollListener {
             case SCROLL_STATE_DRAGGING: // The RecyclerView is currently being dragged by outside input such as user touch input.
             case SCROLL_STATE_SETTLING: // The RecyclerView is currently animating to a final position while not under outside control.
                 try {
-                    if (recyclerView.getContext() != null) Glide.with(recyclerView.getContext()).pauseRequests();
+                    if (recyclerView.getContext() != null)
+                        Glide.with(recyclerView.getContext()).pauseRequests();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -39,7 +41,7 @@ public class ImageAutoLoadScrollListener extends RecyclerView.OnScrollListener {
     }
 
     public static void install(@NonNull RecyclerView recyclerView) {
-        if (SharedPreferencesUtil.getBoolean("image_no_load_onscroll",true))
+        if (SharedPreferencesUtil.getBoolean("image_no_load_onscroll", true))
             recyclerView.addOnScrollListener(new ImageAutoLoadScrollListener());
     }
 }

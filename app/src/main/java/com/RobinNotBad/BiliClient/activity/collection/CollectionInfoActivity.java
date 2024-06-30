@@ -25,7 +25,6 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.PreInflateHelper;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
@@ -36,6 +35,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class CollectionInfoActivity extends RefreshListActivity {
 
@@ -49,16 +49,31 @@ public class CollectionInfoActivity extends RefreshListActivity {
         int season_id = getIntent().getIntExtra("season_id", -1);
         long mid = getIntent().getLongExtra("mid", -1);
         if (collection == null/* && (season_id == -1 || mid == -1)*/) {
-            MsgUtil.toast( "合集不存在", this);
+            MsgUtil.showMsg("合集不存在", this);
             finish();
             return;
         }
+        long from_aid = getIntent().getLongExtra("fromVideo", -1);
 
         RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
         if (collection.sections == null && collection.cards != null) {
             adapter = new CardAdapter(this, collection, recyclerView);
         } else if (collection.sections != null) {
             adapter = new SectionAdapter(this, collection, recyclerView);
+            List<Collection.Section> sections = collection.sections;
+            int pos = 1;
+            for (int i = 0; i < sections.size(); i++) {
+                pos++;
+                Collection.Section section = sections.get(i);
+                List<Collection.Episode> episodes = section.episodes;
+                for (int j = 0; j < episodes.size(); j++) {
+                    pos++;
+                    Collection.Episode episode = episodes.get(j);
+                    if (episode.aid == from_aid) {
+                        Objects.requireNonNull(recyclerView.getLayoutManager()).scrollToPosition(--pos);
+                    }
+                }
+            }
         } else {
             finish();
             return;
@@ -73,14 +88,11 @@ public class CollectionInfoActivity extends RefreshListActivity {
         final Collection collection;
         final Context context;
         final List<VideoCard> data;
-        final PreInflateHelper preInflateHelper;
 
-        public CardAdapter(Context context, Collection collection, RecyclerView recyclerView){
+        public CardAdapter(Context context, Collection collection, RecyclerView recyclerView) {
             this.context = context;
             this.data = collection.cards;
             this.collection = collection;
-            this.preInflateHelper = new PreInflateHelper(context);
-            this.preInflateHelper.preload(recyclerView, R.layout.cell_video_list);
         }
 
         @Override
@@ -95,7 +107,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 View view = LayoutInflater.from(this.context).inflate(R.layout.cell_collection_info, parent, false);
                 return new CollectionInfoHolder(view);
             } else {
-                View view = preInflateHelper.getView(parent, R.layout.cell_video_list);
+                View view = LayoutInflater.from(this.context).inflate(R.layout.cell_video_list, parent, false);
                 return new VideoCardHolder(view);
             }
         }
@@ -115,9 +127,10 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 collectionInfoHolder.desc.setText(TextUtils.isEmpty(collection.intro) ? "这里没有简介哦" : collection.intro);
                 collectionInfoHolder.playTimes.setText("共" + collection.view);
                 Glide.with(context).asDrawable().load(GlideUtil.url(collection.cover))
+                        .transition(GlideUtil.getTransitionOptions())
                         .placeholder(R.mipmap.placeholder)
                         .format(DecodeFormat.PREFER_RGB_565)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))).sizeMultiplier(0.85f).dontAnimate())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(collectionInfoHolder.cover);
                 collectionInfoHolder.cover.setOnClickListener(view -> context.startActivity(new Intent(context, ImageViewerActivity.class).putExtra("imageList", new ArrayList<>(Collections.singletonList(collection.cover)))));
@@ -128,7 +141,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
 
         @Override
         public int getItemCount() {
-            return data.size()+1;
+            return data.size() + 1;
         }
 
         static class CollectionInfoHolder extends RecyclerView.ViewHolder {
@@ -136,6 +149,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
             final TextView desc;
             final TextView playTimes;
             final ImageView cover;
+
             public CollectionInfoHolder(@NonNull View itemView) {
                 super(itemView);
                 this.name = itemView.findViewById(R.id.name);
@@ -149,17 +163,16 @@ public class CollectionInfoActivity extends RefreshListActivity {
     static class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         final Collection collection;
+        final RecyclerView recyclerView;
         final Context context;
         final List<Collection.Section> data;
         final List<Integer> types = new ArrayList<>();
-        final PreInflateHelper preInflateHelper;
 
-        public SectionAdapter(Context context, Collection collection, RecyclerView recyclerView){
+        public SectionAdapter(Context context, Collection collection, RecyclerView recyclerView) {
             this.context = context;
             this.data = collection.sections;
             this.collection = collection;
-            this.preInflateHelper = new PreInflateHelper(context);
-            this.preInflateHelper.preload(recyclerView, R.layout.cell_video_list);
+            this.recyclerView = recyclerView;
         }
 
         @Override
@@ -207,7 +220,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 View view = LayoutInflater.from(this.context).inflate(R.layout.cell_collection_info, parent, false);
                 return new CollectionInfoHolder(view);
             } else if (viewType == 0) {
-                View view = preInflateHelper.getView(parent, R.layout.cell_video_list);
+                View view = LayoutInflater.from(this.context).inflate(R.layout.cell_video_list, parent, false);
                 return new VideoCardHolder(view);
             } else {
                 return new SectionHolder(new TextView(context));
@@ -233,9 +246,10 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 collectionInfoHolder.desc.setText(TextUtils.isEmpty(collection.intro) ? "这里没有简介哦" : collection.intro);
                 collectionInfoHolder.playTimes.setText("共" + collection.view);
                 Glide.with(context).asDrawable().load(GlideUtil.url(collection.cover))
+                        .transition(GlideUtil.getTransitionOptions())
                         .placeholder(R.mipmap.placeholder)
                         .format(DecodeFormat.PREFER_RGB_565)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5,context))).sizeMultiplier(0.85f).dontAnimate())
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))).sizeMultiplier(0.85f).dontAnimate())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(collectionInfoHolder.cover);
                 collectionInfoHolder.cover.setOnClickListener(view -> context.startActivity(new Intent(context, ImageViewerActivity.class).putExtra("imageList", new ArrayList<>(Collections.singletonList(collection.cover)))));
@@ -254,6 +268,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
 
         static class SectionHolder extends RecyclerView.ViewHolder {
             private final TextView item;
+
             public SectionHolder(@NonNull TextView itemView) {
                 super(itemView);
                 this.item = itemView;
@@ -266,6 +281,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
             final TextView desc;
             final TextView playTimes;
             final ImageView cover;
+
             public CollectionInfoHolder(@NonNull View itemView) {
                 super(itemView);
                 this.name = itemView.findViewById(R.id.name);

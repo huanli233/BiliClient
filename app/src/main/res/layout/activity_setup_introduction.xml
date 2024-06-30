@@ -15,18 +15,18 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-                android:id="@+id/pageName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="3dp"
-                android:layout_marginStart="8dp"
-                android:gravity="center"
-                android:text="介绍"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:drawableStartCompat="@drawable/arrow_back"/>
+            android:id="@+id/pageName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="3dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:text="介绍"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:drawableStartCompat="@drawable/arrow_back" />
 
         <TextClock
             android:id="@+id/timeText"
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/activity_padding_horizontal"
             android:paddingVertical="4dp"
-                android:orientation="vertical">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/desc"
@@ -74,15 +74,16 @@
                 android:layout_marginVertical="4dp">
 
                 <TextView
-                        android:layout_width="match_parent"
-                        android:layout_marginHorizontal="8dp"
-                        android:layout_height="35sp"
-                        android:gravity="center_vertical"
-                        android:text="哔哩终端，启动！"
-                        android:textAlignment="textStart"
-                        android:textSize="13sp"
-                        android:visibility="visible"
-                        tools:ignore="RtlCompat" app:drawableEndCompat="@drawable/arrow_forward"/>
+                    android:layout_width="match_parent"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_height="35sp"
+                    android:gravity="center_vertical"
+                    android:text="哔哩终端，启动！"
+                    android:textAlignment="textStart"
+                    android:textSize="13sp"
+                    android:visibility="visible"
+                    tools:ignore="RtlCompat"
+                    app:drawableEndCompat="@drawable/arrow_forward" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 

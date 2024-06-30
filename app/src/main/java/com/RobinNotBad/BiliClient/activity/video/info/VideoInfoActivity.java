@@ -19,7 +19,7 @@ import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
+import com.RobinNotBad.BiliClient.util.AnimationUtils;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -50,18 +50,18 @@ public class VideoInfoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
-        if(type == null) type = "video";
-        this.aid = intent.getLongExtra("aid",114514);
+        if (type == null) type = "video";
+        this.aid = intent.getLongExtra("aid", 114514);
         this.bvid = intent.getStringExtra("bvid");
         this.seek_reply = intent.getLongExtra("seekReply", -1);
         setContentView(R.layout.activity_loading);
 
         String finalType = type;
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_simple_viewpager, null, (layoutView, resId, parent) -> {
+        asyncInflate(R.layout.activity_simple_viewpager, (layoutView, resId) -> {
             setContentView(layoutView);
             setTopbarExit();
 
-            if(finalType.equals("media")) initMediaInfoView();
+            if (finalType.equals("media")) initMediaInfoView();
             else initVideoInfoView();
         });
     }
@@ -69,27 +69,31 @@ public class VideoInfoActivity extends BaseActivity {
 
     public void initMediaInfoView() {
         ViewPager viewPager = findViewById(R.id.viewPager);
+        ImageView loading = findViewById(R.id.loading);
+        loading.setVisibility(View.VISIBLE);
 
         setPageName("视频详情");
 
         fragmentList = new ArrayList<>(2);
-        fragmentList.add(BangumiInfoFragment.newInstance(aid));
+        BangumiInfoFragment bangumiInfoFragment = BangumiInfoFragment.newInstance(aid);
+        fragmentList.add(bangumiInfoFragment);
         replyFragment = ReplyFragment.newInstance(aid, 1, seek_reply == -1, seek_reply);
         fragmentList.add(replyFragment);
 
         viewPager.setOffscreenPageLimit(fragmentList.size());
-        ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(),fragmentList);
+        ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(vpfAdapter);
         if (seek_reply != -1) viewPager.setCurrentItem(1);
+        bangumiInfoFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(loading, bangumiInfoFragment.getView()));
         if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
-            MsgUtil.toastLong("提示：本页面可以左右滑动",this);
+            MsgUtil.showMsgLong("提示：本页面可以左右滑动", this);
             SharedPreferencesUtil.putBoolean("first_videoinfo", false);
         }
-        findViewById(R.id.loading).setVisibility(View.GONE);
     }
+
     protected void initVideoInfoView() {
-        TutorialHelper.show(R.xml.tutorial_video,this,"video",3);
-        
+        TutorialHelper.show(R.xml.tutorial_video, this, "video", 3);
+
         ViewPager viewPager = findViewById(R.id.viewPager);
         TextView pageName = findViewById(R.id.pageName);
         ImageView loading = findViewById(R.id.loading);
@@ -106,14 +110,14 @@ public class VideoInfoActivity extends BaseActivity {
                 if (data == null) {
                     loading.setImageResource(R.mipmap.loading_2233_error);
                     runOnUiThread(() ->
-                            MsgUtil.toast("获取信息失败！\n可能是视频不存在？", this));
+                            MsgUtil.showMsg("获取信息失败！\n可能是视频不存在？", this));
                     return;
                 }
                 videoInfo = VideoInfoApi.getInfoByJson(data);
 
                 fragmentList = new ArrayList<>(3);
                 fragmentList.add(VideoInfoFragment.newInstance(videoInfo));
-                replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1, seek_reply);
+                replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1, seek_reply, videoInfo.staff.get(0).mid);
                 replyFragment.setSource(videoInfo);
                 fragmentList.add(replyFragment);
                 if (SharedPreferencesUtil.getBoolean("related_enable", true)) {
@@ -123,13 +127,14 @@ public class VideoInfoActivity extends BaseActivity {
                 viewPager.setOffscreenPageLimit(fragmentList.size());
                 ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
                 runOnUiThread(() -> {
-                    loading.setVisibility(View.GONE);
                     viewPager.setAdapter(vpfAdapter);
+                    View view; if ((view = fragmentList.get(0).getView()) != null) view.setVisibility(View.GONE);
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
                     if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
-                        MsgUtil.toastLong("提示：本页面可以左右滑动",this);
+                        MsgUtil.showMsgLong("提示：本页面可以左右滑动", this);
                         SharedPreferencesUtil.putBoolean("first_videoinfo", false);
                     }
+                    AnimationUtils.crossFade(loading, fragmentList.get(0).getView());
                 });
                 //没啥好说的，教科书式的ViewPager使用方法
             } catch (Exception e) {
@@ -143,7 +148,7 @@ public class VideoInfoActivity extends BaseActivity {
     }
 
     public void setCurrentAid(long aid) {
-        if(replyFragment!=null) runOnUiThread(()->replyFragment.refresh(aid));
+        if (replyFragment != null) runOnUiThread(() -> replyFragment.refresh(aid));
     }
 
     @Override
@@ -152,8 +157,8 @@ public class VideoInfoActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.ASYNC, sticky = true, priority = 1)
-    public void onEvent(ReplyEvent event){
-        replyFragment.notifyReplyInserted(event.getMessage());
+    public void onEvent(ReplyEvent event) {
+        replyFragment.notifyReplyInserted(event);
     }
 
 }

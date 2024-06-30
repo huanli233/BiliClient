@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Pair;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +18,7 @@ import com.RobinNotBad.BiliClient.activity.MenuActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.DragAdapter;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
@@ -38,10 +38,8 @@ public class SortSettingActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_list);
-        
-        setPageName("菜单排序");
 
-        Toast.makeText(this, "拖动以排序~", Toast.LENGTH_SHORT).show();
+        setPageName("菜单排序");
 
         String sortConf = SharedPreferencesUtil.getString(SharedPreferencesUtil.MENU_SORT, "");
         String[] splitName;
@@ -50,7 +48,7 @@ public class SortSettingActivity extends BaseActivity {
                 if (!MenuActivity.btnNames.containsKey(name)) {
                     data.clear();
                     displayKeyMap.clear();
-                    for (Map.Entry<String, Pair<String,Class<? extends InstanceActivity>>> entry : MenuActivity.btnNames.entrySet()) {
+                    for (Map.Entry<String, Pair<String, Class<? extends InstanceActivity>>> entry : MenuActivity.btnNames.entrySet()) {
                         String displayText = entry.getValue().first;
                         data.add(displayText);
                         displayKeyMap.put(displayText, entry.getKey());
@@ -63,7 +61,7 @@ public class SortSettingActivity extends BaseActivity {
                 }
             }
         } else {
-            for (Map.Entry<String, Pair<String,Class<? extends InstanceActivity>>> entry : MenuActivity.btnNames.entrySet()) {
+            for (Map.Entry<String, Pair<String, Class<? extends InstanceActivity>>> entry : MenuActivity.btnNames.entrySet()) {
                 String key = entry.getKey();
                 String displayText = entry.getValue().first;
                 data.add(displayText);
@@ -82,7 +80,9 @@ public class SortSettingActivity extends BaseActivity {
 
         dragAdapter.setOnItemClickListener(new DragAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {}
+            public void onItemClick(int position) {
+            }
+
             @Override
             public void onItemLongClick(DragAdapter.ViewHolder holder) {
                 if (holder.getAdapterPosition() != dragAdapter.getFixedPosition()) {
@@ -100,10 +100,16 @@ public class SortSettingActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        MsgUtil.showMsg("拖动以排序~", this);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         save();
-        Toast.makeText(this, "已保存", Toast.LENGTH_SHORT).show();
+        MsgUtil.showMsg("已保存", this);
     }
 
     private void save() {
@@ -148,6 +154,7 @@ public class SortSettingActivity extends BaseActivity {
                 return 0;
             }
         }
+
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             // 起始位置
@@ -206,12 +213,12 @@ public class SortSettingActivity extends BaseActivity {
 
         @Override
         public boolean isLongPressDragEnabled() {
-            return true;
+            return super.isLongPressDragEnabled();
         }
 
         @Override
         public boolean isItemViewSwipeEnabled() {
-            return true;
+            return super.isItemViewSwipeEnabled();
         }
     }
 

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-        xmlns:tools="http://schemas.android.com/tools">
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:paddingHorizontal="@dimen/activity_padding_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.utils.widget.ImageFilterView
             android:id="@+id/image_media_cover"
@@ -23,6 +23,28 @@
             app:round="@dimen/card_round"
             tools:src="@mipmap/placeholder" />
 
+        <ImageView
+            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/icon_bv"
+            android:alpha="0.5"
+            app:layout_constraintTop_toTopOf="@+id/indexShow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/indexShow"
+            android:id="@+id/icon" />
+
+        <TextView
+            android:id="@+id/indexShow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:alpha="0.5"
+            tools:text="敬请期待"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/icon"
+            app:layout_constraintTop_toBottomOf="@+id/image_media_cover" />
+
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -31,7 +53,7 @@
             android:text="加载中"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_media_cover" />
+            app:layout_constraintTop_toBottomOf="@+id/indexShow" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/section_choose"
@@ -50,7 +72,7 @@
             android:layout_marginTop="4dp"
             app:layout_constraintTop_toBottomOf="@id/section_choose"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -70,18 +92,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_eposide_list"
-                app:layout_constraintTop_toBottomOf="@+id/eposide_choose"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="4dp"
-                android:orientation="horizontal"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_eposide_list"
+                    app:layout_constraintTop_toBottomOf="@+id/eposide_choose"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:orientation="horizontal"
 
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/cell_episode" />
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/cell_episode" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

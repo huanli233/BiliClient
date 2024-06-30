@@ -1,4 +1,5 @@
 package com.RobinNotBad.BiliClient.model;
+
 import java.util.List;
 
 public class MessageCard {

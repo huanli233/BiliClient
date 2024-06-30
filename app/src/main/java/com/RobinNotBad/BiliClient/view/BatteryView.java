@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 
 public class BatteryView extends View {
     private int mPower = 100;
+
     public BatteryView(Context context) {
         super(context);
     }
@@ -36,9 +37,9 @@ public class BatteryView extends View {
         int battery_inside_margin = (int) (getWidth() * 0.08f);
 
         Paint paint = new Paint();
-        if (mPower<=20) {
+        if (mPower <= 20) {
             paint.setColor(Color.RED);
-        }else {
+        } else {
             paint.setColor(Color.WHITE);
         }
         paint.setAntiAlias(true);
@@ -53,7 +54,7 @@ public class BatteryView extends View {
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth(0f);
         //画电量
-        if(power_percent != 0) {
+        if (power_percent != 0) {
             int p_right = (int) ((battery_width - battery_inside_margin) * power_percent);
             int p_bottom = battery_inside_margin + battery_height - battery_inside_margin * 2;
             Rect rect2 = new Rect(battery_inside_margin, battery_inside_margin, p_right, p_bottom);
@@ -65,10 +66,11 @@ public class BatteryView extends View {
         Rect rect4 = new Rect(battery_width, h_top, h_right, h_bottom);
         canvas.drawRect(rect4, paint);
     }
-    public void setPower(int power){
-        mPower=power;
-        if (mPower<0){
-            mPower=0;
+
+    public void setPower(int power) {
+        mPower = power;
+        if (mPower < 0) {
+            mPower = 0;
         }
         invalidate();
     }

@@ -25,7 +25,7 @@ public class UpListAdapter extends UserListAdapter {
     @NonNull
     @Override
     public UserListAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_up_list,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_up_list, parent, false);
         return new Holder(view);
     }
 

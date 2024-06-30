@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/activity_padding_horizontal"
             android:orientation="vertical"
-            android:focusable="true"  
+            android:focusable="true"
             android:focusableInTouchMode="true">
 
             <TextView

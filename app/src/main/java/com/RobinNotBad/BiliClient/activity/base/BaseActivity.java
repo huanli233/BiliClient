@@ -20,10 +20,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.event.SnackEvent;
+import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 
 public class BaseActivity extends AppCompatActivity {
@@ -42,8 +46,8 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int paddingH_percent = SharedPreferencesUtil.getInt("paddingH_percent",0);
-        int paddingV_percent = SharedPreferencesUtil.getInt("paddingV_percent",0);
+        int paddingH_percent = SharedPreferencesUtil.getInt("paddingH_percent", 0);
+        int paddingV_percent = SharedPreferencesUtil.getInt("paddingV_percent", 0);
 
         View rootView = this.getWindow().getDecorView().getRootView();
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
@@ -53,15 +57,14 @@ public class BaseActivity extends AppCompatActivity {
 
         int scrW = metrics.widthPixels;
         int scrH = metrics.heightPixels;
-        if(paddingH_percent != 0 || paddingV_percent != 0) {
-            Log.e("debug","调整边距");
+        if (paddingH_percent != 0 || paddingV_percent != 0) {
+            Log.e("debug", "调整边距");
             int paddingH = scrW * paddingH_percent / 100;
             int paddingV = scrH * paddingV_percent / 100;
             window_width = scrW - paddingH;
             window_height = scrH - paddingV;
             rootView.setPadding(paddingH, paddingV, paddingH, paddingV);
-        }
-        else {
+        } else {
             window_width = scrW;
             window_height = scrH;
         }
@@ -75,37 +78,68 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(!SharedPreferencesUtil.getBoolean("back_disable",false)) super.onBackPressed();
+        if (!SharedPreferencesUtil.getBoolean("back_disable", false)) super.onBackPressed();
     }
 
-    public void setPageName(String name){
+    public void setPageName(String name) {
         TextView textView = findViewById(R.id.pageName);
-        if(textView!=null) textView.setText(name);
+        if (textView != null) textView.setText(name);
     }
 
-    public void setTopbarExit(){
+    public void setTopbarExit() {
         View view = findViewById(R.id.top);
-        if(view!=null && !view.hasOnClickListeners()){
-            view.setOnClickListener(view1->finish());
-            Log.e("debug","set_exit");
+        if (view != null && !view.hasOnClickListeners()) {
+            view.setOnClickListener(view1 -> {
+                if (!isDestroyed()) {
+                    finish();
+                };
+            });
+            Log.e("debug", "set_exit");
         }
     }
 
-    public void report(Exception e){runOnUiThread(()-> MsgUtil.err(e,this));}
+    public void report(Exception e) {
+        runOnUiThread(() -> MsgUtil.err(e, this));
+    }
 
     private boolean eventBusInit = false;
+
     @Override
     protected void onStart() {
         super.onStart();
-        if(!(this instanceof InstanceActivity)) setTopbarExit();
+        if (!(this instanceof InstanceActivity)) setTopbarExit();
         if (eventBusEnabled() && !eventBusInit) {
             EventBus.getDefault().register(this);
             eventBusInit = true;
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (eventBusEnabled()) {
+            SnackEvent snackEvent;
+            if ((snackEvent = EventBus.getDefault().getStickyEvent(SnackEvent.class)) != null) onEvent(snackEvent);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (eventBusInit) {
+            EventBus.getDefault().unregister(this);
+            eventBusInit = false;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEvent(SnackEvent event) {
+        if (isFinishing()) return;
+        MsgUtil.processSnackEvent(event, getWindow().getDecorView().getRootView());
+    }
+
     protected boolean eventBusEnabled() {
-        return false;
+        return SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, false);
     }
 
     public void setDensity(int targetDensityDpi) {
@@ -117,5 +151,22 @@ public class BaseActivity extends AppCompatActivity {
         configuration.densityDpi = targetDensityDpi;
         configuration.fontScale = 1f;
         resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+    }
+
+    protected void asyncInflate(int id, InflateCallBack callBack) {
+        setContentView(R.layout.activity_loading);
+        new AsyncLayoutInflaterX(this).inflate(id, null, (view, layoutId, parent) -> {
+            setContentView(view);
+            if (this instanceof InstanceActivity) {
+                ((InstanceActivity) this).setMenuClick();
+            } else {
+                setTopbarExit();
+            }
+            callBack.finishInflate(view, layoutId);
+        });
+    }
+
+    protected interface InflateCallBack {
+        void finishInflate(View view, int id);
     }
 }

@@ -6,5 +6,6 @@ public class Announcement {
     public String title;
     public String content;
 
-    public Announcement(){}
+    public Announcement() {
+    }
 }

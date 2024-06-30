@@ -34,9 +34,9 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
 
     final Context context;
     final ArrayList<PrivateMsgSession> sessionsList;
-    final HashMap<Long,UserInfo> userMap;
+    final HashMap<Long, UserInfo> userMap;
 
-    public PrivateMsgSessionsAdapter(Context context, ArrayList<PrivateMsgSession> sessionsList,HashMap<Long,UserInfo> userMap) {
+    public PrivateMsgSessionsAdapter(Context context, ArrayList<PrivateMsgSession> sessionsList, HashMap<Long, UserInfo> userMap) {
         this.context = context;
         this.sessionsList = sessionsList;
         this.userMap = userMap;
@@ -45,7 +45,7 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
     @NonNull
     @Override
     public PrivateMsgSessionsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_user_list,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_user_list, parent, false);
         return new PrivateMsgSessionsHolder(view);
     }
 
@@ -53,7 +53,7 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
     public void onBindViewHolder(@NonNull PrivateMsgSessionsHolder holder, int position) {
         PrivateMsgSession msgContent = sessionsList.get(position);
         try {
-            switch (msgContent.contentType){
+            switch (msgContent.contentType) {
                 case PrivateMessage.TYPE_TEXT:
                     holder.contentText.setText(msgContent.content.getString("content"));
                     break;
@@ -81,22 +81,22 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
             holder.nameText.setText(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).name);
             Glide.with(context).asDrawable().load(GlideUtil.url(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).avatar))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .placeholder(R.mipmap.akari)
-                            .apply(RequestOptions.circleCropTransform())
-                            .into(holder.avatarView);
-            holder.itemView.setOnClickListener(view->{
-                Intent intent = new Intent(context,PrivateMsgActivity.class);
-                intent.putExtra("uid",msgContent.talkerUid);
+                    .placeholder(R.mipmap.akari)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.avatarView);
+            holder.itemView.setOnClickListener(view -> {
+                Intent intent = new Intent(context, PrivateMsgActivity.class);
+                intent.putExtra("uid", msgContent.talkerUid);
                 context.startActivity(intent);
             });
-            holder.itemView.setOnLongClickListener(view->{
-                Intent intent = new Intent(context,UserInfoActivity.class);
-                intent.putExtra("mid",msgContent.talkerUid);
+            holder.itemView.setOnLongClickListener(view -> {
+                Intent intent = new Intent(context, UserInfoActivity.class);
+                intent.putExtra("mid", msgContent.talkerUid);
                 context.startActivity(intent);
                 return true;
             });
         } catch (JSONException err) {
-            Log.e("PrivateMsgUserAdapter",err.toString());
+            Log.e("PrivateMsgUserAdapter", err.toString());
         }
     }
 
@@ -106,10 +106,11 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
     }
 
 
-    public static class PrivateMsgSessionsHolder extends RecyclerView.ViewHolder{
+    public static class PrivateMsgSessionsHolder extends RecyclerView.ViewHolder {
         final ImageView avatarView;
         final TextView nameText;
         final TextView contentText;
+
         public PrivateMsgSessionsHolder(View itemView) {
             super(itemView);
             avatarView = itemView.findViewById(R.id.userAvatar);

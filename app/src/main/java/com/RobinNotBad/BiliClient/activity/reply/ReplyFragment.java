@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.RobinNotBad.BiliClient.activity.base.RefreshListFragment;
 import com.RobinNotBad.BiliClient.adapter.ReplyAdapter;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
+import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 
@@ -25,7 +26,7 @@ import java.util.Objects;
 public class ReplyFragment extends RefreshListFragment {
 
     private boolean dontload;
-    protected long aid;
+    protected long aid, mid;
     protected int sort = 2;
     protected int type;
     protected ArrayList<Reply> replyList;
@@ -48,7 +49,7 @@ public class ReplyFragment extends RefreshListFragment {
         Bundle args = new Bundle();
         args.putLong("aid", aid);
         args.putInt("type", type);
-        args.putBoolean("dontload",dontload);
+        args.putBoolean("dontload", dontload);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,8 +69,19 @@ public class ReplyFragment extends RefreshListFragment {
         Bundle args = new Bundle();
         args.putLong("aid", aid);
         args.putInt("type", type);
-        args.putBoolean("dontload",dontload);
+        args.putBoolean("dontload", dontload);
         args.putLong("seek", seek_rpid);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static ReplyFragment newInstance(long aid, int type, long seek_rpid, long up_mid) {
+        ReplyFragment fragment = new ReplyFragment();
+        Bundle args = new Bundle();
+        args.putLong("aid", aid);
+        args.putInt("type", type);
+        args.putLong("seek", seek_rpid);
+        args.putLong("mid", up_mid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,8 +93,9 @@ public class ReplyFragment extends RefreshListFragment {
             aid = getArguments().getLong("aid");
             type = getArguments().getInt("type");
             replyType = type;
-            dontload = getArguments().getBoolean("dontload",false);
+            dontload = getArguments().getBoolean("dontload", false);
             seek = getArguments().getLong("seek", -1);
+            mid = getArguments().getLong("mid", -1);
         }
     }
 
@@ -93,15 +106,15 @@ public class ReplyFragment extends RefreshListFragment {
         setOnRefreshListener(() -> refresh(aid));
         setOnLoadMoreListener(this::continueLoading);
 
-        Log.e("debug-av号",String.valueOf(aid));
+        Log.e("debug-av号", String.valueOf(aid));
 
         replyList = new ArrayList<>();
-        if(!dontload) {
-            CenterThreadPool.run(()->{
+        if (!dontload) {
+            CenterThreadPool.run(() -> {
                 try {
-                    int result = seek == -1 ? ReplyApi.getReplies(aid,0,page,type,sort,replyList) : ReplyApi.getRepliesLazy(aid,seek,page,type,3,replyList);
+                    int result = seek == -1 ? ReplyApi.getReplies(aid, 0, page, type, sort, replyList) : ReplyApi.getRepliesLazy(aid, seek, page, type, 3, replyList);
                     setRefreshing(false);
-                    if(result != -1 && isAdded()) {
+                    if (result != -1 && isAdded()) {
                         replyAdapter = getReplyAdapter();
                         setOnSortSwitch();
                         setAdapter(replyAdapter);
@@ -124,23 +137,24 @@ public class ReplyFragment extends RefreshListFragment {
     }
 
     private ReplyAdapter getReplyAdapter() {
-        return new ReplyAdapter(requireContext(), replyList, aid, 0, type, sort, source);
+        return new ReplyAdapter(requireContext(), replyList, aid, 0, type, sort, source, mid);
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void continueLoading(int page) {
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 List<Reply> list = new ArrayList<>();
-                int result = ReplyApi.getReplies(aid,0,page,type,sort,list);
+                int result = ReplyApi.getReplies(aid, 0, page, type, sort, list);
                 setRefreshing(false);
-                if(result != -1){
-                    Log.e("debug","下一页");
-                    runOnUiThread(()-> {
+                if (result != -1) {
+                    Log.e("debug", "下一页");
+                    runOnUiThread(() -> {
                         replyList.addAll(list);
-                        if (replyAdapter != null ) replyAdapter.notifyItemRangeInserted(replyList.size() - list.size() + 1, list.size());
+                        if (replyAdapter != null)
+                            replyAdapter.notifyItemRangeInserted(replyList.size() - list.size() + 1, list.size());
                     });
-                    if(result == 1) {
+                    if (result == 1) {
                         Log.e("debug", "到底了");
                         bottom = true;
                     }
@@ -151,40 +165,55 @@ public class ReplyFragment extends RefreshListFragment {
         });
     }
 
-    public void notifyReplyInserted(Reply reply) {
-        if (reply.root != 0) return;
-        LinearLayoutManager layoutManager = (LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager());
-        int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
-        pos = Math.max(pos, 0);
-        replyList.add(pos, reply);
-        int finalPos = pos;
-        runOnUiThread(() -> {
-            replyAdapter.notifyItemInserted(finalPos);
-            replyAdapter.notifyItemRangeChanged(finalPos, replyList.size() - finalPos);
-            layoutManager.scrollToPositionWithOffset(finalPos + 1, 0);
-        });
+    public void notifyReplyInserted(ReplyEvent replyEvent) {
+        if (replyEvent.getOid() != aid) return;
+        Reply reply = replyEvent.getMessage();
+        if (reply.root == 0) {
+            LinearLayoutManager layoutManager = (LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager());
+            int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
+            pos = Math.max(pos, 0);
+            replyList.add(pos, reply);
+            int finalPos = pos;
+            runOnUiThread(() -> {
+                replyAdapter.notifyItemInserted(finalPos);
+                replyAdapter.notifyItemRangeChanged(finalPos, replyList.size() - finalPos + 1);
+                layoutManager.scrollToPositionWithOffset(finalPos + 1, 0);
+            });
+        } else if (replyEvent.getPos() >= 0) {
+            replyList.get(replyEvent.getPos()).childMsgList.add(reply);
+            replyList.get(replyEvent.getPos()).childCount++;
+            runOnUiThread(() -> replyAdapter.notifyItemChanged(replyEvent.getPos() + 1));
+        }
     }
 
-    public void refresh(long aid){
+    @SuppressLint("NotifyDataSetChanged")
+    public void refresh(long aid) {
         page = 1;
         this.aid = aid;
         setRefreshing(true);
-        if(replyList!=null) replyList.clear();
-        else replyList = new ArrayList<>();
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
-                int result = ReplyApi.getReplies(aid,0,page,type,sort,replyList);
+                List<Reply> list = new ArrayList<>();
+                int result = ReplyApi.getReplies(aid, 0, page, type, sort, list);
                 setRefreshing(false);
-                if(result != -1 && isAdded()) {
-                    replyAdapter = getReplyAdapter();
-                    setOnSortSwitch();
-                    setAdapter(replyAdapter);
+                if (result != -1 && isAdded()) {
+                    runOnUiThread(() -> {
+                        if (!isAdded()) return;
+                        if (replyList != null) replyList.clear();
+                        else replyList = new ArrayList<>();
+                        replyList.addAll(list);
+                        if (replyAdapter == null) {
+                            replyAdapter = getReplyAdapter();
+                            setAdapter(replyAdapter);
+                        } else {
+                            replyAdapter.notifyDataSetChanged();
+                        }
+                    });
                     //replyAdapter.notifyItemRangeInserted(0,replyList.size());
-                    if(result == 1) {
-                        Log.e("debug","到底了");
+                    if (result == 1) {
+                        Log.e("debug", "到底了");
                         bottom = true;
-                    }
-                    else bottom = false;
+                    } else bottom = false;
                 }
             } catch (Exception e) {
                 loadFail(e);
@@ -192,7 +221,7 @@ public class ReplyFragment extends RefreshListFragment {
         });
     }
 
-    private void setOnSortSwitch(){
+    private void setOnSortSwitch() {
         replyAdapter.setOnSortSwitchListener(position -> {
             sort = (sort == 0 ? 2 : 0);
             refresh(aid);

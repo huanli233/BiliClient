@@ -65,24 +65,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/content"
         android:orientation="vertical">
+
         <include
             layout="@layout/cell_dynamic_child"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/dynamic_child"
             android:visibility="gone" />
+
         <include
             layout="@layout/cell_dynamic_video"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/dynamic_video_extra"
             android:visibility="gone" />
+
         <include
             layout="@layout/cell_dynamic_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/dynamic_image_extra"
             android:visibility="gone" />
+
         <include
             layout="@layout/cell_dynamic_article"
             android:layout_width="match_parent"
@@ -100,7 +104,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/extraCard"/>
+        app:layout_constraintTop_toBottomOf="@id/extraCard" />
 
     <TextView
         android:id="@+id/likes"

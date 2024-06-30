@@ -5,8 +5,10 @@ public class ArticleLine {
     public String content;
     public String extra;
 
-    public ArticleLine(){}
-    public ArticleLine(int type, String content, String extra){
+    public ArticleLine() {
+    }
+
+    public ArticleLine(int type, String content, String extra) {
         this.type = type;
         this.content = content;
         this.extra = extra;

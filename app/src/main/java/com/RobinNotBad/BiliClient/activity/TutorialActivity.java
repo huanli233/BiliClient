@@ -23,6 +23,7 @@ import java.util.TimerTask;
 
 public class TutorialActivity extends BaseActivity {
     private int wait_time = 3;
+
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +38,16 @@ public class TutorialActivity extends BaseActivity {
 
             Tutorial tutorial = Objects.requireNonNull(TutorialHelper.loadTutorial(getResources().getXml(intent.getIntExtra("xml_id", R.xml.tutorial_recommend))));
 
-            ((TextView)findViewById(R.id.title)).setText(tutorial.name);
-            ((TextView)findViewById(R.id.content)).setText(TutorialHelper.loadText(tutorial.content));
+            ((TextView) findViewById(R.id.title)).setText(tutorial.name);
+            ((TextView) findViewById(R.id.content)).setText(TutorialHelper.loadText(tutorial.content));
 
-            try{
-                if(tutorial.imgid != null) {
-                    int indentify = getResources().getIdentifier(getPackageName() + ":" + tutorial.imgid,null,null);
-                    if(indentify > 0) ((ImageFilterView)findViewById(R.id.image_view)).setImageDrawable(getResources().getDrawable(indentify));
-                }
-                else findViewById(R.id.image_view).setVisibility(View.GONE);
-            }catch(Exception e){
+            try {
+                if (tutorial.imgid != null) {
+                    int indentify = getResources().getIdentifier(getPackageName() + ":" + tutorial.imgid, null, null);
+                    if (indentify > 0)
+                        ((ImageFilterView) findViewById(R.id.image_view)).setImageDrawable(getResources().getDrawable(indentify));
+                } else findViewById(R.id.image_view).setVisibility(View.GONE);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -57,25 +58,26 @@ public class TutorialActivity extends BaseActivity {
                 @Override
                 public void run() {
                     runOnUiThread(() -> {
-                        if(wait_time > 0){
+                        if (wait_time > 0) {
                             close_btn.setText(String.format(Locale.getDefault(), "已阅(%ds)", wait_time));
                             close_btn.setEnabled(false);
                             wait_time--;
-                        }else{
+                        } else {
                             close_btn.setText("已阅");
                             close_btn.setEnabled(true);
                             timer.cancel();
                         }
                     });
                 }
-            },0,1000);
+            }, 0, 1000);
             close_btn.setOnClickListener(view -> {
-                SharedPreferencesUtil.putInt("tutorial_ver_" + intent.getStringExtra("tag"),intent.getIntExtra("version",-1));
+                SharedPreferencesUtil.putInt("tutorial_ver_" + intent.getStringExtra("tag"), intent.getIntExtra("version", -1));
                 finish();
             });
         });
     }
-    
+
     @Override
-    public void onBackPressed() {}
+    public void onBackPressed() {
+    }
 }

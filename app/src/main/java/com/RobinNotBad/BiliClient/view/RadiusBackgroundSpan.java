@@ -14,12 +14,22 @@ public class RadiusBackgroundSpan extends ReplacementSpan {
     private final int radius;
     private final int textColor;
     private final int bgColor;
+    private final int maxHeight;
 
     public RadiusBackgroundSpan(int margin, int radius, int textColor, int bgColor) {
         this.margin = margin;
         this.radius = radius;
         this.textColor = textColor;
         this.bgColor = bgColor;
+        this.maxHeight = Integer.MAX_VALUE;
+    }
+
+    public RadiusBackgroundSpan(int margin, int radius, int textColor, int bgColor, int maxHeight) {
+        this.margin = margin;
+        this.radius = radius;
+        this.textColor = textColor;
+        this.bgColor = bgColor;
+        this.maxHeight = maxHeight;
     }
 
     @Override
@@ -36,6 +46,7 @@ public class RadiusBackgroundSpan extends ReplacementSpan {
         int textWidth = (int) newPaint.measureText(text, start, end);
 
         RectF rect = new RectF();
+        top = bottom - top > maxHeight ? Math.max(bottom - maxHeight, 0) : top;
         rect.top = top + margin;
         rect.bottom = bottom - margin;
         rect.left = (int) (x + margin);
@@ -48,7 +59,6 @@ public class RadiusBackgroundSpan extends ReplacementSpan {
         int offsetX = (int) ((rect.right - rect.left - textWidth) / 2) + margin;
         int offsetY = (int) ((y + fontMetrics.ascent + y + fontMetrics.descent) / 2 - (top + bottom) / 2);
         canvas.drawText(text, start, end, x + offsetX, y - offsetY, newPaint);
-
     }
 
     private TextPaint getCustomTextPaint(Paint srcPaint) {

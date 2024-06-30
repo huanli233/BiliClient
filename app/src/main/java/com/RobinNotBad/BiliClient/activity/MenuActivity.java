@@ -45,17 +45,17 @@ public class MenuActivity extends BaseActivity {
      * 需要使用排序，故用了LinkedHashMap
      * 请不要让它的顺序被打乱（
      */
-    public static final Map<String, Pair<String,Class<? extends InstanceActivity>>> btnNames = new LinkedHashMap<>() {{
-        put("recommend", new Pair<>("推荐"   , RecommendActivity.class));
-        put("popular",   new Pair<>("热门"   , PopularActivity.class));
-        put("precious",  new Pair<>("入站必刷", PreciousActivity.class));
-        put("live",  new Pair<>("直播", RecommendLiveActivity.class));
-        put("search",    new Pair<>("搜索"   , SearchActivity.class));
-        put("dynamic",   new Pair<>("动态"   , DynamicActivity.class));
-        put("myspace",   new Pair<>("我的"   , MySpaceActivity.class));
-        put("message",   new Pair<>("消息"   , MessageActivity.class));
-        put("local",     new Pair<>("缓存"   , LocalListActivity.class));
-        put("settings",  new Pair<>("设置"   , SettingMainActivity.class));
+    public static final Map<String, Pair<String, Class<? extends InstanceActivity>>> btnNames = new LinkedHashMap<>() {{
+        put("recommend", new Pair<>("推荐", RecommendActivity.class));
+        put("popular", new Pair<>("热门", PopularActivity.class));
+        put("precious", new Pair<>("入站必刷", PreciousActivity.class));
+        put("live", new Pair<>("直播", RecommendLiveActivity.class));
+        put("search", new Pair<>("搜索", SearchActivity.class));
+        put("dynamic", new Pair<>("动态", DynamicActivity.class));
+        put("myspace", new Pair<>("我的", MySpaceActivity.class));
+        put("message", new Pair<>("消息", MessageActivity.class));
+        put("local", new Pair<>("缓存", LocalListActivity.class));
+        put("settings", new Pair<>("设置", SettingMainActivity.class));
     }};
 
     long time;
@@ -98,37 +98,37 @@ public class MenuActivity extends BaseActivity {
         } else {
             btnList = getDefaultSortList();
         }
-        
-        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid,0) == 0) {
-            btnList.add(0,"login");
+
+        if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
+            btnList.add(0, "login");
             btnList.remove("dynamic");
             btnList.remove("message");
             btnList.remove("myspace");
         }
-        
-        if(!SharedPreferencesUtil.getBoolean("menu_popular",true)) btnList.remove("popular");
-        if(!SharedPreferencesUtil.getBoolean("menu_precious",false)) btnList.remove("precious");
-        
+
+        if (!SharedPreferencesUtil.getBoolean("menu_popular", true)) btnList.remove("popular");
+        if (!SharedPreferencesUtil.getBoolean("menu_precious", false)) btnList.remove("precious");
+
         btnList.add("exit"); //如果你希望用户手动把退出按钮排到第一个（
 
         LinearLayout layout = findViewById(R.id.menu_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        for (String btn:btnList) {
+        for (String btn : btnList) {
             MaterialButton materialButton = new MaterialButton(this);
-            switch(btn){
+            switch (btn) {
                 case "exit":
                     materialButton.setText("退出");
                     break;
                 case "login":
-                    materialButton.setText("登录"); 
+                    materialButton.setText("登录");
                     break;
                 default:
                     materialButton.setText(Objects.requireNonNull(btnNames.get(btn)).first);
                     break;
             }
-            materialButton.setOnClickListener(view-> killAndJump(btn));
-            layout.addView(materialButton,params);
+            materialButton.setOnClickListener(view -> killAndJump(btn));
+            layout.addView(materialButton, params);
         }
 
         Log.e("debug", "MenuActivity onCreate in: " + (System.currentTimeMillis() - time));
@@ -146,24 +146,24 @@ public class MenuActivity extends BaseActivity {
         Log.e("debug", "MenuActivity onResume in: " + (System.currentTimeMillis() - time));
     }
 
-    private void killAndJump(String name){
+    private void killAndJump(String name) {
         if (btnNames.containsKey(name) && !Objects.equals(name, from)) {
             InstanceActivity instance = BiliTerminal.instance;
-            if(instance != null && !instance.isDestroyed()) instance.finish();
+            if (instance != null && !instance.isDestroyed()) instance.finish();
 
             Intent intent = new Intent();
             intent.setClass(MenuActivity.this, Objects.requireNonNull(btnNames.get(name)).second);
             intent.putExtra("from", name);
             startActivity(intent);
-        }else{
-            switch(name){
+        } else {
+            switch (name) {
                 case "exit": //退出按钮
                     InstanceActivity instance = BiliTerminal.instance;
                     if (instance != null && !instance.isDestroyed()) instance.finish();
                     break;
                 case "login": //登录按钮
                     Intent intent = new Intent();
-                    intent.setClass(MenuActivity.this,LoginActivity.class);
+                    intent.setClass(MenuActivity.this, LoginActivity.class);
                     startActivity(intent);
                     break;
             }

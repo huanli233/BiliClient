@@ -44,17 +44,17 @@ public class JumpToPlayerActivity extends BaseActivity {
         textView = findViewById(R.id.title);
 
         Intent intent = getIntent();
-        Log.e("debug-哔哩终端-跳转页","已接收数据");
+        Log.e("debug-哔哩终端-跳转页", "已接收数据");
         String bvid = intent.getStringExtra("bvid");
         long aid = intent.getLongExtra("aid", 0);
         long cid = intent.getLongExtra("cid", 0);
         long mid = intent.getLongExtra("mid", 0);
-        progress = intent.getIntExtra("progress",-1);
+        progress = intent.getIntExtra("progress", -1);
 
         title = intent.getStringExtra("title");
-        download = intent.getIntExtra("download",0);
+        download = intent.getIntExtra("download", 0);
 
-        html5 = intent.getBooleanExtra("html5",true);
+        html5 = intent.getBooleanExtra("html5", true);
 
         qn = intent.getIntExtra("qn", -1);
 
@@ -71,10 +71,10 @@ public class JumpToPlayerActivity extends BaseActivity {
 
     @SuppressLint("SetTextI18n")
     private void requestVideo(long aid, String bvid, long cid, int qn, long mid) {
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
-                if(download == 0 && progress == -1) {
-                    Pair<Long,Integer> progressPair = VideoInfoApi.getWatchProgress(aid);
+                if (download == 0 && progress == -1) {
+                    Pair<Long, Integer> progressPair = VideoInfoApi.getWatchProgress(aid);
                     progress = progressPair.first == cid ? progressPair.second : 0;
                 }
                 Pair<String, String> video = PlayerApi.getVideo(aid, bvid, cid, html5, qn);
@@ -92,25 +92,25 @@ public class JumpToPlayerActivity extends BaseActivity {
                             intent.putExtra("parent_title", getIntent().getStringExtra("parent_title"));
                         startActivity(intent);
                     } else {
-                        PlayerApi.jumpToPlayer(JumpToPlayerActivity.this, videourl, danmakuurl, title, false, aid, bvid, cid, mid, progress,false);
+                        PlayerApi.jumpToPlayer(JumpToPlayerActivity.this, videourl, danmakuurl, title, false, aid, bvid, cid, mid, progress, false);
                     }
                     finish();
                 }
             } catch (IOException e) {
-                runOnUiThread(()-> setClickExit("网络错误！\n请检查你的网络连接是否正常"));
+                runOnUiThread(() -> setClickExit("网络错误！\n请检查你的网络连接是否正常"));
                 e.printStackTrace();
             } catch (JSONException e) {
-                runOnUiThread(()-> setClickExit("视频获取失败！\n可能的原因：\n1.本视频仅大会员可播放\n2.视频获取接口失效"));
+                runOnUiThread(() -> setClickExit("视频获取失败！\n可能的原因：\n1.本视频仅大会员可播放\n2.视频获取接口失效"));
                 e.printStackTrace();
-            } catch (ActivityNotFoundException e){
-                runOnUiThread(()-> setClickExit("跳转失败！\n请安装对应的播放器\n或在设置中选择正确的播放器\n或将哔哩终端和播放器同时更新到最新版本"));
+            } catch (ActivityNotFoundException e) {
+                runOnUiThread(() -> setClickExit("跳转失败！\n请安装对应的播放器\n或在设置中选择正确的播放器\n或将哔哩终端和播放器同时更新到最新版本"));
                 e.printStackTrace();
             }
         });
     }
 
     private void requestVideo(long aid, String bvid, long cid, long mid) {
-        requestVideo(aid, bvid, cid, (qn != -1 ? qn : SharedPreferencesUtil.getInt("play_qn",16)), mid);
+        requestVideo(aid, bvid, cid, (qn != -1 ? qn : SharedPreferencesUtil.getInt("play_qn", 16)), mid);
     }
 
     @Override
@@ -118,9 +118,9 @@ public class JumpToPlayerActivity extends BaseActivity {
         finish();
     }
 
-    private void setClickExit(String reason){
+    private void setClickExit(String reason) {
         textView.setText(reason);
-        findViewById(R.id.root_layout).setOnClickListener((view)-> finish());
+        findViewById(R.id.root_layout).setOnClickListener((view) -> finish());
     }
 
     @Override

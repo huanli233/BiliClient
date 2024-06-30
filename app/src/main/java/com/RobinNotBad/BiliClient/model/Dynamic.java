@@ -24,5 +24,6 @@ public class Dynamic implements Serializable {
     public List<At> ats;
     public boolean canDelete;
 
-    public Dynamic(){}
+    public Dynamic() {
+    }
 }

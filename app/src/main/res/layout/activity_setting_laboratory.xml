@@ -60,7 +60,7 @@
             android:paddingHorizontal="@dimen/activity_padding_horizontal"
             android:divider="@drawable/divider"
             android:showDividers="middle"
-            android:paddingVertical="2dp"/>
+            android:paddingVertical="2dp" />
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

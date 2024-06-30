@@ -26,7 +26,8 @@ public class UserArticleFragment extends RefreshListFragment {
     private ArrayList<ArticleCard> articleList;
     private ArticleCardAdapter adapter;
 
-    public UserArticleFragment() {}
+    public UserArticleFragment() {
+    }
 
     public static UserArticleFragment newInstance(long mid) {
         UserArticleFragment fragment = new UserArticleFragment();
@@ -51,38 +52,42 @@ public class UserArticleFragment extends RefreshListFragment {
         articleList = new ArrayList<>();
         setOnLoadMoreListener(this::continueLoading);
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
-                bottom = (UserInfoApi.getUserArticles(mid,page,articleList) == 1);
-                if(isAdded()){
+                bottom = (UserInfoApi.getUserArticles(mid, page, articleList) == 1);
+                if (isAdded()) {
                     adapter = new ArticleCardAdapter(requireContext(), articleList);
                     setAdapter(adapter);
                     setRefreshing(false);
                     if (bottom && articleList.isEmpty()) showEmptyView();
                 }
-            } catch (Exception e){loadFail(e);}
+            } catch (Exception e) {
+                loadFail(e);
+            }
         });
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void continueLoading(int page) {
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 List<ArticleCard> list = new ArrayList<>();
-                int result = UserInfoApi.getUserArticles(mid,page,list);
-                if(result != -1){
-                    Log.e("debug","下一页");
-                    if(isAdded()) requireActivity().runOnUiThread(()-> {
+                int result = UserInfoApi.getUserArticles(mid, page, list);
+                if (result != -1) {
+                    Log.e("debug", "下一页");
+                    if (isAdded()) requireActivity().runOnUiThread(() -> {
                         articleList.addAll(list);
                         adapter.notifyItemRangeInserted(articleList.size() - list.size(), list.size());
                     });
-                    if(result == 1) {
-                        Log.e("debug","到底了");
+                    if (result == 1) {
+                        Log.e("debug", "到底了");
                         bottom = true;
                     }
                 }
                 setRefreshing(false);
-            } catch (Exception e){loadFail(e);}
+            } catch (Exception e) {
+                loadFail(e);
+            }
         });
     }
 }

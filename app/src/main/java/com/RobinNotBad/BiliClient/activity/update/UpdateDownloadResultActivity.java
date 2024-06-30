@@ -78,7 +78,8 @@ public class UpdateDownloadResultActivity extends BaseActivity {
                 Bangumi.Episode episode = new Bangumi.Episode();
                 episode.id = i;
                 episode.title = wayIdToText.get(installWays.get(i));
-                if (episode.title == null) throw new RuntimeException("Mapping between ID and text is error");
+                if (episode.title == null)
+                    throw new RuntimeException("Mapping between ID and text is error");
                 episodeList.add(episode);
             }
             adapter.setData(episodeList);
@@ -92,7 +93,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
                         installBySystemInstaller();
                         break;
                     default:
-                        MsgUtil.toast("未知的安装方式", this);
+                        MsgUtil.showMsg("未知的安装方式", this);
                 }
             }));
         }));
@@ -113,7 +114,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
     private void installBySystemInstaller() {
         try {
             if (!checkRequestInstallPermission()) {
-                MsgUtil.toast("没有授予请求安装应用权限", this);
+                MsgUtil.showMsg("没有授予请求安装应用权限", this);
                 return;
             }
             Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -136,7 +137,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
             }
         } catch (Throwable th) {
             Log.e("BiliClient", th.toString());
-            MsgUtil.toast("未知错误: " + th.getMessage(), this);
+            MsgUtil.showMsg("未知错误: " + th.getMessage(), this);
         }
     }
 }

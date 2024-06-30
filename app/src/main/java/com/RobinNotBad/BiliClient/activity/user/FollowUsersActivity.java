@@ -9,7 +9,7 @@ import com.RobinNotBad.BiliClient.adapter.user.UserListAdapter;
 import com.RobinNotBad.BiliClient.api.FollowApi;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,28 +18,36 @@ import java.util.List;
 //2023-07-22
 //2024-05-01
 
-public class FollowingUsersActivity extends RefreshListActivity {
+public class FollowUsersActivity extends RefreshListActivity {
 
     private long mid;
     private ArrayList<UserInfo> userList;
     private UserListAdapter adapter;
+    private int mode;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setPageName("关注");
+        mode = getIntent().getIntExtra("mode", 0);
+        mid = getIntent().getLongExtra("mid", -1);
+
+        if (mode < 0 || mode > 1 || mid == -1) {
+            finish();
+            return;
+        }
+
+        setPageName(mode == 0 ? "关注列表" : "粉丝列表");
 
         recyclerView.setHasFixedSize(true);
 
-        mid = SharedPreferencesUtil.getLong("mid",0);
         userList = new ArrayList<>();
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
-                int result = FollowApi.getFollowList(mid, page, userList);
-                adapter = new UserListAdapter(this,userList);
+                int result = mode == 0 ? FollowApi.getFollowingList(mid, page, userList) : FollowApi.getFollowerList(mid, page, userList);
+                adapter = new UserListAdapter(this, userList);
                 setOnLoadMoreListener(this::continueLoading);
                 setRefreshing(false);
                 setAdapter(adapter);
@@ -48,18 +56,24 @@ public class FollowingUsersActivity extends RefreshListActivity {
                     Log.e("debug", "到底了");
                     setBottom(true);
                 }
-            } catch (Exception e){
-                report(e);
-                setRefreshing(false);
+            } catch (Exception e) {
+                if (e.getMessage() != null && (e.getMessage().startsWith("22115") || e.getMessage().startsWith("22118"))) {
+                    finish();
+                    MsgUtil.showMsg(e.getMessage(), this);
+                } else {
+                    report(e);
+                    setRefreshing(false);
+                    this.page--;
+                }
             }
         });
     }
 
     private void continueLoading(int page) {
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 List<UserInfo> list = new ArrayList<>();
-                int result = FollowApi.getFollowList(mid, page, list);
+                int result = mode == 0 ? FollowApi.getFollowingList(mid, page, list) : FollowApi.getFollowerList(mid, page, list);
                 Log.e("debug", "下一页");
                 runOnUiThread(() -> {
                     userList.addAll(list);
@@ -70,10 +84,15 @@ public class FollowingUsersActivity extends RefreshListActivity {
                     setBottom(true);
                 }
                 setRefreshing(false);
-            } catch (Exception e){
-                report(e);
-                setRefreshing(false);
-                this.page--;
+            } catch (Exception e) {
+                if (e.getMessage() != null && (e.getMessage().startsWith("22115") || e.getMessage().startsWith("22118"))) {
+                    finish();
+                    MsgUtil.showMsg(e.getMessage(), this);
+                } else {
+                    report(e);
+                    setRefreshing(false);
+                    this.page--;
+                }
             }
         });
     }

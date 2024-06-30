@@ -5,9 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.TutorialActivity">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,14 +26,14 @@
                 android:textSize="17sp" />
 
             <TextView
-                 android:layout_height="wrap_content"
-                 android:layout_width="match_parent"
-                 android:gravity="center"
-                 android:textSize="14sp"
-                 android:id="@+id/content"
-                 android:layout_margin="6dp"
-                 android:text="内容" />
-            
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:id="@+id/content"
+                android:layout_margin="6dp"
+                android:text="内容" />
+
             <androidx.constraintlayout.utils.widget.ImageFilterView
                 android:id="@+id/image_view"
                 android:layout_width="match_parent"
@@ -40,14 +42,14 @@
                 android:adjustViewBounds="true"
                 android:src="@mipmap/placeholder"
                 app:round="@dimen/card_round" />
-            
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/close_btn"
                 android:text="已阅"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

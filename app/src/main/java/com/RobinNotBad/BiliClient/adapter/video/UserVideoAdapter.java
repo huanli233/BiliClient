@@ -36,12 +36,12 @@ public class UserVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == 0) {
+        if (viewType == 0) {
             View view = LayoutInflater.from(context).inflate(R.layout.cell_goto, parent, false);
-            return new RecyclerView.ViewHolder(view){};
-        }
-        else {
-            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_video_list,parent,false);
+            return new RecyclerView.ViewHolder(view) {
+            };
+        } else {
+            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_video_list, parent, false);
             return new VideoCardHolder(view);
         }
     }
@@ -49,20 +49,19 @@ public class UserVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(position==0){
+        if (position == 0) {
             TextView textView = holder.itemView.findViewById(R.id.text);
             textView.setText("合集列表");
-            holder.itemView.setOnClickListener(view->{
+            holder.itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(context, UserCollectionActivity.class);
-                intent.putExtra("mid",mid);
+                intent.putExtra("mid", mid);
                 context.startActivity(intent);
             });
-        }
-        else {
+        } else {
             int realPosition = position - 1;
             VideoCardHolder videoCardHolder = (VideoCardHolder) holder;
             VideoCard videoCard = videoCardList.get(realPosition);
-            videoCardHolder.showVideoCard(videoCard,context);    //此函数在VideoCardHolder里
+            videoCardHolder.showVideoCard(videoCard, context);    //此函数在VideoCardHolder里
 
             holder.itemView.setOnClickListener(view -> {
                 Intent intent = new Intent();
@@ -77,7 +76,7 @@ public class UserVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-        if(holder instanceof DynamicHolder) ((DynamicHolder)holder).extraCard.removeAllViews();
+        if (holder instanceof DynamicHolder) ((DynamicHolder) holder).extraCard.removeAllViews();
         super.onViewRecycled(holder);
     }
 
@@ -88,6 +87,6 @@ public class UserVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-        return (position==0 ? 0 : 1);
+        return (position == 0 ? 0 : 1);
     }
 }

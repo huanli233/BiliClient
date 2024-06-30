@@ -26,14 +26,14 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeHolder> {
     @NonNull
     @Override
     public NoticeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_message,parent,false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_message, parent, false);
         return new NoticeHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull NoticeHolder holder, int position) {
-        holder.showMessage(messageList.get(position),context);
+        holder.showMessage(messageList.get(position), context);
     }
 
     @Override

@@ -5,6 +5,7 @@ public class CustomText {
     public String text; //内容
     public String style; //文本样式
     public String color; //文本颜色(rgb字符串)
-    
-    public CustomText(){}
+
+    public CustomText() {
+    }
 }

@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 
+import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
 import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicAdapter;
@@ -19,7 +20,6 @@ import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,8 +50,13 @@ public class DynamicActivity extends RefreshMainActivity {
         if (code == RESULT_OK && data != null && data.getStringExtra("item") != null) {
             String type = typeNameMap.get(data.getStringExtra("item"));
             if (type != null) {
-                this.type = type;
-                refreshDynamic();
+                if (isRefreshing) {
+                    MsgUtil.showMsg("还在加载中OvO", this);
+                } else {
+                    this.type = type;
+                    setRefreshing(true);
+                    refreshDynamic();
+                }
             }
         }
     });
@@ -80,21 +85,23 @@ public class DynamicActivity extends RefreshMainActivity {
                         dynId = DynamicApi.publishTextContent(text, atUids);
                     }
                     if (!(dynId == -1)) {
-                        runOnUiThread(() -> MsgUtil.toast("发送成功~", DynamicActivity.this));
+                        runOnUiThread(() -> MsgUtil.showMsg("发送成功~", DynamicActivity.this));
                         CenterThreadPool.run(() -> {
                             try {
                                 Dynamic dynamic = DynamicApi.getDynamic(dynId);
                                 dynamicList.add(0, dynamic);
                                 runOnUiThread(() -> {
-                                    dynamicAdapter.notifyItemInserted( 0);
-                                    dynamicAdapter.notifyItemRangeChanged(0, dynamicList.size());
+                                    if (type.equals("all")) {
+                                        dynamicAdapter.notifyItemInserted(0);
+                                        dynamicAdapter.notifyItemRangeChanged(0, dynamicList.size());
+                                    }
                                 });
                             } catch (Exception e) {
                                 MsgUtil.err(e, DynamicActivity.this);
                             }
                         });
                     } else {
-                        runOnUiThread(() -> MsgUtil.toast("发送失败", DynamicActivity.this));
+                        runOnUiThread(() -> MsgUtil.showMsg("发送失败", DynamicActivity.this));
                     }
                 } catch (Exception e) {
                     runOnUiThread(() -> MsgUtil.err(e, DynamicActivity.this));
@@ -105,6 +112,7 @@ public class DynamicActivity extends RefreshMainActivity {
 
     /**
      * 该方法务必在Activity的onStart生命周期之前调用,否则系统底层会抛异常!!!
+     *
      * @param activity
      * @return
      */
@@ -132,9 +140,9 @@ public class DynamicActivity extends RefreshMainActivity {
                         }
                         dynId = DynamicApi.relayDynamic(finalText, (atUids.isEmpty() ? null : atUids), dynamicId);
                         if (!(dynId == -1)) {
-                            activity.runOnUiThread(() -> MsgUtil.toast("转发成功~", activity));
+                            activity.runOnUiThread(() -> MsgUtil.showMsg("转发成功~", activity));
                         } else {
-                            activity.runOnUiThread(() -> MsgUtil.toast("转发失败", activity));
+                            activity.runOnUiThread(() -> MsgUtil.showMsg("转发失败", activity));
                         }
                     } catch (Exception e) {
                         activity.runOnUiThread(() -> MsgUtil.err(e, activity));
@@ -150,14 +158,14 @@ public class DynamicActivity extends RefreshMainActivity {
         super.onCreate(savedInstanceState);
 
         setMenuClick();
-        Log.e("debug","进入动态页");
+        Log.e("debug", "进入动态页");
 
         setOnRefreshListener(this::refreshDynamic);
         setOnLoadMoreListener(page -> addDynamic(type));
 
         setPageName("动态");
-        
-        TutorialHelper.show(R.xml.tutorial_dynamic,this,"dynamic",1);
+
+        TutorialHelper.show(R.xml.tutorial_dynamic, this, "dynamic", 1);
 
         refreshDynamic();
     }
@@ -174,16 +182,21 @@ public class DynamicActivity extends RefreshMainActivity {
             dynamicAdapter.notifyDataSetChanged();
         }
 
-        addDynamic(type);
+        addDynamic(type, true);
     }
 
     private void addDynamic(String type) {
+        addDynamic(type, false);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void addDynamic(String type, boolean refresh) {
         Log.e("debug", "加载下一页");
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 List<Dynamic> list = new ArrayList<>();
-                offset = DynamicApi.getDynamicList(list,offset,0, type);
-                bottom = (offset==-1);
+                offset = DynamicApi.getDynamicList(list, offset, 0, type);
+                bottom = (offset == -1);
                 setRefreshing(false);
 
                 runOnUiThread(() -> {
@@ -193,7 +206,11 @@ public class DynamicActivity extends RefreshMainActivity {
                         dynamicAdapter = new DynamicAdapter(this, dynamicList, recyclerView);
                         setAdapter(dynamicAdapter);
                     } else {
-                        dynamicAdapter.notifyItemRangeInserted(dynamicList.size() - list.size(), list.size());
+                        if (refresh) {
+                            dynamicAdapter.notifyDataSetChanged();
+                        } else {
+                            dynamicAdapter.notifyItemRangeInserted(dynamicList.size() - list.size() + 1, list.size());
+                        }
                     }
                 });
 
@@ -208,7 +225,7 @@ public class DynamicActivity extends RefreshMainActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == DynamicHolder.GO_TO_INFO_REQUEST && resultCode == RESULT_OK) {
             try {
-                if (data != null) {
+                if (data != null && !isRefreshing) {
                     DynamicHolder.removeDynamicFromList(dynamicList, data.getIntExtra("position", 0) - 1, dynamicAdapter);
                 }
             } catch (Throwable ignored) {}

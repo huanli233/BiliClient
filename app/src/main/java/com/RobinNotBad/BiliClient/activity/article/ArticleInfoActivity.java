@@ -19,6 +19,7 @@ import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
+import com.RobinNotBad.BiliClient.util.AnimationUtils;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
@@ -34,6 +35,7 @@ public class ArticleInfoActivity extends BaseActivity {
 
     private ReplyFragment replyFragment;
     private long seek_reply;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +47,8 @@ public class ArticleInfoActivity extends BaseActivity {
 
         TextView pageName = findViewById(R.id.pageName);
         pageName.setText("专栏详情");
-        
-        TutorialHelper.show(R.xml.tutorial_article,this,"article",1);
+
+        TutorialHelper.show(R.xml.tutorial_article, this, "article", 1);
 
         ViewPager viewPager = findViewById(R.id.viewPager);
 
@@ -56,17 +58,19 @@ public class ArticleInfoActivity extends BaseActivity {
                 List<Fragment> fragmentList = new ArrayList<>();
                 ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance(articleInfo = ArticleApi.getArticle(cvid));
                 fragmentList.add(articleInfoFragment);
-                replyFragment = ReplyFragment.newInstance(cvid, ReplyApi.REPLY_TYPE_ARTICLE, seek_reply);
+                replyFragment = ReplyFragment.newInstance(cvid, ReplyApi.REPLY_TYPE_ARTICLE, seek_reply, articleInfo != null ? articleInfo.upInfo.mid : -1);
                 replyFragment.setSource(articleInfo);
                 fragmentList.add(replyFragment);
 
                 runOnUiThread(() -> {
                     ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
                     viewPager.setAdapter(vpfAdapter);
+                    View view; if ((view = articleInfoFragment.getView()) != null) view.setVisibility(View.GONE);
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
-                    findViewById(R.id.loading).setVisibility(View.GONE);
+
+                    articleInfoFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(findViewById(R.id.loading), articleInfoFragment.getView()));
                 });
-            }catch (Exception e){
+            } catch (Exception e) {
                 runOnUiThread(() -> {
                     ((ImageView) findViewById(R.id.loading)).setImageResource(R.mipmap.loading_2233_error);
                     MsgUtil.err(e, this);
@@ -81,7 +85,7 @@ public class ArticleInfoActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.ASYNC, sticky = true, priority = 1)
-    public void onEvent(ReplyEvent event){
-        replyFragment.notifyReplyInserted(event.getMessage());
+    public void onEvent(ReplyEvent event) {
+        replyFragment.notifyReplyInserted(event);
     }
 }

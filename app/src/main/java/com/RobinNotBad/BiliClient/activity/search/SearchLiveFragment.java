@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,13 +21,15 @@ import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchLiveFragment extends Fragment implements SearchRefreshable {
     RecyclerView recyclerView;
-    private ArrayList<LiveRoom> roomList;
+    private ArrayList<LiveRoom> roomList = new ArrayList<>();
 
     private LiveCardAdapter liveCardAdapter;
 
@@ -35,8 +38,10 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
     private boolean refreshing = false;
     private boolean bottom = false;
     private int page = 0;
+    private TextView emptyView;
 
-    public SearchLiveFragment(){}
+    public SearchLiveFragment() {
+    }
 
     public static SearchLiveFragment newInstance() {
         return new SearchLiveFragment();
@@ -58,12 +63,13 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.recyclerView);
+        emptyView = view.findViewById(R.id.emptyTip);
         roomList = new ArrayList<>();
 
         recyclerView.setHasFixedSize(true);
 
         CenterThreadPool.run(() -> {
-            if(isAdded()) requireActivity().runOnUiThread(() -> {
+            if (isAdded()) requireActivity().runOnUiThread(() -> {
                 liveCardAdapter = new LiveCardAdapter(requireContext(), roomList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 recyclerView.setAdapter(liveCardAdapter);
@@ -73,6 +79,7 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
                     public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                         super.onScrollStateChanged(recyclerView, newState);
                     }
+
                     @Override
                     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                         super.onScrolled(recyclerView, dx, dy);
@@ -80,12 +87,12 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
                         assert manager != null;
                         int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();  //获取最后一个完全显示的itemPosition
                         int itemCount = manager.getItemCount();
-                        if (lastItemPosition >= (itemCount - 3) && dy>0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
+                        if (lastItemPosition >= (itemCount - 3) && dy > 0 && !refreshing && !bottom) {// 滑动到倒数第三个就可以刷新了
                             refreshing = true;
-                            CenterThreadPool.run(()->continueLoading()); //加载第二页
+                            CenterThreadPool.run(() -> continueLoading()); //加载第二页
                         }
 
-                        if(requireActivity() instanceof SearchActivity) {
+                        if (requireActivity() instanceof SearchActivity) {
                             SearchActivity activity = (SearchActivity) requireActivity();
                             activity.onScrolled(dy);
                         }
@@ -95,37 +102,59 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
         });
     }
 
-    private void continueLoading(){
+    private void continueLoading() {
         page++;
-        Log.e("debug","加载下一页");
-        int lastSize = roomList.size();
+        Log.e("debug", "加载下一页");
         try {
-            JSONObject result = (JSONObject) SearchApi.searchType(keyword,page,"live");
-            if(result!=null) {
-                roomList.addAll(LiveApi.analyzeLiveRooms(result.getJSONArray("live_room")));
-                CenterThreadPool.runOnUiThread(() -> liveCardAdapter.notifyItemRangeInserted(lastSize + 1, roomList.size()-lastSize));
-            }
-            else {
+            JSONObject result = (JSONObject) SearchApi.searchType(keyword, page, "live");
+            if (result != null) {
+                JSONArray jsonArray = result.optJSONArray("live_room");
+                List<LiveRoom> list = new ArrayList<>();
+                if (jsonArray != null) list.addAll(LiveApi.analyzeLiveRooms(jsonArray));
+                CenterThreadPool.runOnUiThread(() -> {
+                    int lastSize = roomList.size();
+                    roomList.addAll(list);
+                    liveCardAdapter.notifyItemRangeInserted(lastSize + 1, roomList.size() - lastSize);
+                });
+            } else {
                 bottom = true;
-                if(isAdded() && !isFirstLoad) requireActivity().runOnUiThread(() ->  MsgUtil.toast("已经到底啦OwO",requireContext()));
+                if (isAdded() && !isFirstLoad) {
+                    requireActivity().runOnUiThread(() -> MsgUtil.showMsg("已经到底啦OwO", requireContext()));
+                }
+                if (isFirstLoad) showEmptyView();
             }
             isFirstLoad = false;
-        } catch (Exception e){if(isAdded()) requireActivity().runOnUiThread(()-> MsgUtil.err(e,requireContext()));}
+        } catch (Exception e) {
+            if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+        }
         refreshing = false;
+        if (bottom && roomList.isEmpty()) {
+            showEmptyView();
+        }
     }
 
     @Override
-    public void refresh(String keyword){
+    public void refresh(String keyword) {
+        this.isFirstLoad = true;
         this.refreshing = true;
         this.page = 0;
         this.keyword = keyword;
-        if(this.roomList==null)this.roomList = new ArrayList<>();
-        if(this.liveCardAdapter==null)this.liveCardAdapter = new LiveCardAdapter(this.requireContext(),this.roomList);
-        int size_old = this.roomList.size();
-        this.roomList.clear();
-        CenterThreadPool.runOnUiThread(()->{
-            if(size_old!=0) this.liveCardAdapter.notifyItemRangeRemoved(0,size_old);
+        CenterThreadPool.runOnUiThread(() -> {
+            if (this.liveCardAdapter == null)
+                this.liveCardAdapter = new LiveCardAdapter(this.requireContext(), this.roomList);
+            int size_old = this.roomList.size();
+            this.roomList.clear();
+            if (size_old != 0) this.liveCardAdapter.notifyItemRangeRemoved(0, size_old);
             CenterThreadPool.run(this::continueLoading);
         });
+    }
+
+    public void showEmptyView() {
+        if (emptyView != null && isAdded()) {
+            requireActivity().runOnUiThread(() -> {
+                recyclerView.setVisibility(View.GONE);
+                emptyView.setVisibility(View.VISIBLE);
+            });
+        }
     }
 }

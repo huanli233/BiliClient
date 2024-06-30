@@ -16,7 +16,7 @@ public class SettingLaboratoryActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_laboratory);
-        Log.e("debug","进入实验性设置");
+        Log.e("debug", "进入实验性设置");
 
         //refresh_cookie = findViewById(R.id.refresh_cookie);
         //refresh_cookie.setChecked(SharedPreferencesUtil.getBoolean("dev_refresh_cookie",true));

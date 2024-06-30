@@ -41,24 +41,25 @@ public class ImageViewerActivity extends BaseActivity {
             PhotoView photoView = new PhotoView(this);
             try {
                 Glide.with(this).asDrawable().load(GlideUtil.url(imageList.get(i)))  //让b站自己压缩一下以加速获取
+                        .transition(GlideUtil.getTransitionOptions())
                         .override(Target.SIZE_ORIGINAL)//override这一项一定要加，这样才会显示原图，不然一放大就糊成使
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(photoView);
-            }catch (OutOfMemoryError e){
-                MsgUtil.toast("超出内存，加载失败",this);
+                photoView.setMaximumScale(6.25f);
+            } catch (OutOfMemoryError e) {
+                MsgUtil.showMsg("超出内存，加载失败", this);
             }
 
             int id = i;
             photoView.setOnLongClickListener(view -> {
-                if(longClickPosition != id){
-                    MsgUtil.toast("再次长按下载图片",this);
+                if (longClickPosition != id) {
+                    MsgUtil.showMsg("再次长按下载图片", this);
                     longClickPosition = id;
-                }
-                else{
+                } else {
                     Intent intent1 = new Intent()
-                            .setClass(ImageViewerActivity.this,DownloadActivity.class)
-                            .putExtra("link",imageList.get(id))
-                            .putExtra("type",0)
+                            .setClass(ImageViewerActivity.this, DownloadActivity.class)
+                            .putExtra("link", imageList.get(id))
+                            .putExtra("type", 0)
                             .putExtra("title", ToolsUtil.getFileNameFromLink(imageList.get(id)));
                     startActivity(intent1);
                     longClickPosition = -1;

@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/write_dynamic"/>
+        app:layout_constraintBottom_toTopOf="@id/write_dynamic" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/write_dynamic"

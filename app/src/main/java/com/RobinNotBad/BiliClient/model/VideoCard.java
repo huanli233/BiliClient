@@ -14,10 +14,10 @@ public class VideoCard implements Parcelable, Serializable {
     public long aid;
     public String bvid;
     public long cid = 0;
-    
+
     public Collection collection;
 
-    public VideoCard(String title, String upName, String view, String cover, long aid, String bvid,String type) {
+    public VideoCard(String title, String upName, String view, String cover, long aid, String bvid, String type) {
         this.title = title;
         this.upName = upName;
         this.view = view;
@@ -26,7 +26,8 @@ public class VideoCard implements Parcelable, Serializable {
         this.bvid = bvid;
         this.type = type;
     }
-    public VideoCard(String title, String upName, String view, String cover, long aid, String bvid,Long cid) {
+
+    public VideoCard(String title, String upName, String view, String cover, long aid, String bvid, Long cid) {
         this.title = title;
         this.upName = upName;
         this.view = view;
@@ -35,6 +36,7 @@ public class VideoCard implements Parcelable, Serializable {
         this.bvid = bvid;
         this.cid = cid;
     }
+
     public VideoCard(String title, String upName, String view, String cover, long aid, String bvid) {
         this.title = title;
         this.upName = upName;
@@ -43,6 +45,7 @@ public class VideoCard implements Parcelable, Serializable {
         this.aid = aid;
         this.bvid = bvid;
     }
+
     public VideoCard(String title, String upName, String view, String cover, long aid, String bvid, Collection collection) {
         this.title = title;
         this.upName = upName;
@@ -53,7 +56,8 @@ public class VideoCard implements Parcelable, Serializable {
         this.collection = collection;
     }
 
-    public VideoCard(){}
+    public VideoCard() {
+    }
 
     protected VideoCard(Parcel in) {
         title = in.readString();

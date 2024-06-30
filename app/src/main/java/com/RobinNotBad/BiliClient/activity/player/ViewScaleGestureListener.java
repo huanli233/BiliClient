@@ -12,9 +12,12 @@ public class ViewScaleGestureListener extends com.RobinNotBad.BiliClient.activit
         super();
         this.view = view;
     }
+
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
-        if(view == null || view.getVisibility() == View.GONE) {return false;}
+        if (view == null || view.getVisibility() == View.GONE) {
+            return false;
+        }
         float scaleFactor = detector.getScaleFactor();
 
         float currentScale = view.getScaleX();

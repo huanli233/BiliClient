@@ -11,8 +11,8 @@ import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.StringUtil;
-
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +39,7 @@ public class VideoInfoApi {
         return result.has("data") ? result.getJSONObject("data") : null;
     }
 
-    
+
     public static String getTagsByBvid(String bvid) throws IOException, JSONException {  //通过bvid获取tag
         String url = "https://api.bilibili.com/x/tag/archive/tags?bvid=" + bvid;
         JSONObject result = NetWorkUtil.getJson(url);
@@ -54,8 +54,8 @@ public class VideoInfoApi {
 
     public static String analyzeTags(JSONArray tagJson) throws JSONException {
         StringBuilder tags = new StringBuilder();
-        for (int i = 0;i<tagJson.length();i++){
-            if(i>0) tags.append("/");
+        for (int i = 0; i < tagJson.length(); i++) {
+            if (i > 0) tags.append("/");
             tags.append(((JSONObject) tagJson.get(i)).getString("tag_name"));
         }
         return tags.toString();
@@ -105,14 +105,14 @@ public class VideoInfoApi {
         }
         return collection;
     }
-    
+
     public static VideoInfo getInfoByJson(JSONObject data) throws JSONException {  //项目实在太多qwq 拆就完事了
         VideoInfo videoInfo = new VideoInfo();
-        Log.e("视频信息","--------");
+        Log.e("视频信息", "--------");
         videoInfo.title = data.getString("title");
-        Log.e("标题",videoInfo.title);
+        Log.e("标题", videoInfo.title);
         videoInfo.cover = data.getString("pic");
-        Log.e("封面",videoInfo.cover);
+        Log.e("封面", videoInfo.cover);
         if (data.has("desc_v2") && !data.isNull("desc_v2")) {
             StringBuilder sb = new StringBuilder();
             JSONArray descArray = data.getJSONArray("desc_v2");
@@ -135,17 +135,17 @@ public class VideoInfoApi {
         } else {
             videoInfo.description = data.getString("desc");
         }
-        Log.e("简介",videoInfo.description);
+        Log.e("简介", videoInfo.description);
 
         videoInfo.bvid = data.optString("bvid");
         videoInfo.aid = data.getLong("aid");
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         videoInfo.timeDesc = sdf.format(data.getLong("pubdate") * 1000);
-        Log.e("发布时间",String.valueOf(videoInfo.timeDesc));
+        Log.e("发布时间", String.valueOf(videoInfo.timeDesc));
 
         videoInfo.duration = ToolsUtil.toTime(data.getInt("duration"));
-        Log.e("视频时长",videoInfo.duration);
+        Log.e("视频时长", videoInfo.duration);
 
         JSONObject stat = data.getJSONObject("stat");
         Stats stats = new Stats();
@@ -165,10 +165,10 @@ public class VideoInfoApi {
                 JSONObject page = pages.getJSONObject(i);
                 String pagename = page.getString("part");
                 pagenames.add(pagename);
-                Log.e("第" + i + "个视频的标题",pagename);
+                Log.e("第" + i + "个视频的标题", pagename);
                 long cid = page.getLong("cid");
                 cids.add(cid);
-                Log.e("第" + i + "个视频的cid",String.valueOf(cid));
+                Log.e("第" + i + "个视频的cid", String.valueOf(cid));
             }
             videoInfo.pagenames = pagenames;
             videoInfo.cids = cids;
@@ -184,9 +184,9 @@ public class VideoInfoApi {
         }
 
         ArrayList<UserInfo> staff_list = new ArrayList<>();
-        if(videoInfo.isCooperation) { //如果是联合投稿就存储联合UP列表
+        if (videoInfo.isCooperation) { //如果是联合投稿就存储联合UP列表
             JSONArray staff = data.getJSONArray("staff");
-            for( int i = 0;i < staff.length();i++){
+            for (int i = 0; i < staff.length(); i++) {
                 UserInfo staff_member = new UserInfo();
                 JSONObject staff_info = staff.getJSONObject(i);
 
@@ -221,14 +221,16 @@ public class VideoInfoApi {
         }
 
         try {
-            if (data.has("redirect_url") && (!data.getString("redirect_url").isEmpty()) && (data.getString("redirect_url").contains("bangumi"))) videoInfo.epid = Long.parseLong(data.getString("redirect_url").replace("https://www.bilibili.com/bangumi/play/ep",""));
+            if (data.has("redirect_url") && (!data.getString("redirect_url").isEmpty()) && (data.getString("redirect_url").contains("bangumi")))
+                videoInfo.epid = Long.parseLong(data.getString("redirect_url").replace("https://www.bilibili.com/bangumi/play/ep", ""));
             else videoInfo.epid = -1;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             videoInfo.epid = -1;
         }
 
-        if (data.has("copyright") && !data.isNull("copyright")) videoInfo.copyright = data.getInt("copyright");
+        if (data.has("copyright") && !data.isNull("copyright"))
+            videoInfo.copyright = data.getInt("copyright");
 
         JSONObject ugc_season = data.optJSONObject("ugc_season");
         if (ugc_season != null) {
@@ -238,39 +240,41 @@ public class VideoInfoApi {
         return videoInfo;
     }
 
-    public static String getWatching(String bvid,long cid) throws IOException, JSONException{
+    public static String getWatching(String bvid, long cid) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/player/online/total?bvid=" + bvid + "&cid=" + cid;
         JSONObject result = NetWorkUtil.getJson(url);
-        if(result.has("data") && !result.isNull("data")){
+        if (result.has("data") && !result.isNull("data")) {
             JSONObject data = result.getJSONObject("data");
-            if(data.has("total") && !data.isNull("total")) return ToolsUtil.toWan(data.getLong("total"));
+            if (data.has("total") && !data.isNull("total"))
+                return ToolsUtil.toWan(data.getLong("total"));
         }
         return "";
     }
-    public static String getWatching(long aid,long cid) throws IOException, JSONException{
+
+    public static String getWatching(long aid, long cid) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/player/online/total?aid=" + aid + "&cid=" + cid;
         JSONObject result = NetWorkUtil.getJson(url);
-        if(result.has("data") && !result.isNull("data")){
+        if (result.has("data") && !result.isNull("data")) {
             JSONObject data = result.getJSONObject("data");
-            if(data.has("total") && !data.isNull("total")) {
-                if(data.get("total") instanceof String) return data.getString("total");
+            if (data.has("total") && !data.isNull("total")) {
+                if (data.get("total") instanceof String) return data.getString("total");
                 else return ToolsUtil.toWan(data.getLong("total"));
             }
         }
         return "";
     }
 
-    public static Pair<Long, Integer> getWatchProgress(long aid) throws IOException, JSONException{
+    public static Pair<Long, Integer> getWatchProgress(long aid) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/v2/history?max=" + aid + "&ps=1&business=archive";
         JSONObject result = NetWorkUtil.getJson(url);
-        if(!result.isNull("data")){
+        if (!result.isNull("data")) {
             JSONArray data = result.getJSONArray("data");
-            if(data.length() > 0){
+            if (data.length() > 0) {
                 JSONObject video = data.getJSONObject(0);
                 JSONObject page = video.optJSONObject("page");
                 return new Pair<>(page == null ? null : page.optLong("cid", 0), video.getInt("progress"));
             }
         }
-        return new Pair<>(0L,0);
+        return new Pair<>(0L, 0);
     }
 }

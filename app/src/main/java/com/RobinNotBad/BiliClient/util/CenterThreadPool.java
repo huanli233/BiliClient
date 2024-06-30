@@ -24,8 +24,9 @@ public class CenterThreadPool {
 
 
     private static final AtomicReference<ExecutorService> INSTANCE = new AtomicReference<>();
-    private static ExecutorService getInstance(){
-        while(INSTANCE.get() == null){
+
+    private static ExecutorService getInstance() {
+        while (INSTANCE.get() == null) {
             INSTANCE.compareAndSet(null, new ThreadPoolExecutor(
                     getBestThreadPoolSize() / 2,
                     getBestThreadPoolSize() * 2,
@@ -38,12 +39,12 @@ public class CenterThreadPool {
     }
 
 
-
     /**
      * 在后台运行, 用于网络请求等耗时操作
+     *
      * @param runnable 要运行的任务
      */
-    public static void run(Runnable runnable){
+    public static void run(Runnable runnable) {
       /*  BuildersKt.launch(INSTANCE, Dispatchers.getIO(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation continuation) -> {
             runnable.run();
             return Unit.INSTANCE;
@@ -54,9 +55,10 @@ public class CenterThreadPool {
     /**
      * 在后台运行, 用于网络请求等耗时操作, 有返回值,
      * 在fragment, activity等位置使用LiveData.observe()获取返回值, 会自动切到主线程,不需要再runOnUiThread().
+     *
      * @param supplier 要运行的任务
+     * @param <T>      返回值类型
      * @return LiveData包装的返回值
-     * @param <T> 返回值类型
      */
     public static <T> LiveData<T> supplyAsyncWithLiveData(Supplier<T> supplier) {
         MutableLiveData<T> retval = new MutableLiveData<>();
@@ -75,37 +77,39 @@ public class CenterThreadPool {
     /**
      * 在后台运行， 有返回值
      * 使用 CenterThreadPool.observe方法对返回值进行观察
+     *
      * @param supplier 一个带返回值的lambda表达式或Supplier的实现类
+     * @param <T>      返回值类型
      * @return 返回一个可供CenterThreadPool观察的Future对象
-     * @param <T> 返回值类型
      */
-    public static <T> Future<T> supplyAsyncWithFuture(Supplier<T> supplier){
+    public static <T> Future<T> supplyAsyncWithFuture(Supplier<T> supplier) {
         return getInstance().submit(supplier::get);
     }
 
     /**
      * 对Future 对象进行观察， 无需切换线程， 自动在ui线程进行观察
-     * @param future 一个将要在未来返回一个 T 类型对象的对象
+     *
+     * @param future   一个将要在未来返回一个 T 类型对象的对象
      * @param consumer 对T进行观察的lambda表达式或者类
-     * @param <T> 要观察的类型
+     * @param <T>      要观察的类型
      */
-    public static <T> void observe(Future<T> future, Consumer<T> consumer){
+    public static <T> void observe(Future<T> future, Consumer<T> consumer) {
         getInstance().execute(() -> {
             try {
                 T res = future.get();
                 CenterThreadPool.runOnUiThread(() -> consumer.accept(res));
-            }catch(Exception ignored){
+            } catch (Exception ignored) {
             }
         });
     }
 
 
-    public static <T> void observe(Future<T> future, Consumer<T> consumer, Consumer<Throwable> onFailure){
+    public static <T> void observe(Future<T> future, Consumer<T> consumer, Consumer<Throwable> onFailure) {
         getInstance().execute(() -> {
             try {
                 T res = future.get();
                 CenterThreadPool.runOnUiThread(() -> consumer.accept(res));
-            }catch(Exception e){
+            } catch (Exception e) {
                 onFailure.accept(e);
             }
         });
@@ -113,9 +117,10 @@ public class CenterThreadPool {
 
     /**
      * 在主线程运行, 用于更新UI, 例如Toast, Snackbar等
+     *
      * @param runnable 要运行的任务
      */
-    public static void runOnUiThread(Runnable runnable){
+    public static void runOnUiThread(Runnable runnable) {
 //       BuildersKt.launch(INSTANCE, Dispatchers.getMain(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation continuation) -> {
 //            runnable.run();
 //            return Unit.INSTANCE;
@@ -137,15 +142,16 @@ public class CenterThreadPool {
     /**
      * 考虑到可能有些设备内存可能比cpu核心数乘2还小，在这里做计算
      * 原理： java 一个线程占内存1mb
-     *  size1 = availableMemory / 1mb
-     *  size2 = cpuCore * 2
-     *  bestSize = min(size1, size2)
-     *  对于多网络请求的情况，最佳线程数量仍为2 * n(百度和google都有说)
-     *  故在这里取最小值
+     * size1 = availableMemory / 1mb
+     * size2 = cpuCore * 2
+     * bestSize = min(size1, size2)
+     * 对于多网络请求的情况，最佳线程数量仍为2 * n(百度和google都有说)
+     * 故在这里取最小值
+     *
      * @return 最佳线程数量
      */
 
-    private static int getBestThreadPoolSize(){
+    private static int getBestThreadPoolSize() {
         /*
         try {
             ActivityManager activityManager = (ActivityManager) BiliTerminal.context.getSystemService(Activity.ACTIVITY_SERVICE);

@@ -47,7 +47,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/desc"
         tools:ignore="ImageContrastCheck,SpeakableTextPresentCheck" />
-    
+
     <ImageView
         android:id="@+id/playView"
         android:layout_width="wrap_content"

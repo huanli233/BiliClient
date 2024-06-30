@@ -28,39 +28,43 @@ public class UserCollectionActivity extends RefreshListActivity {
         setPageName("投稿合集列表");
 
         seasonList = new ArrayList<>();
-        mid = getIntent().getLongExtra("mid",0);
+        mid = getIntent().getLongExtra("mid", 0);
 
         setOnLoadMoreListener(this::continueLoading);
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 bottom = (UserInfoApi.getUserSeasons(mid, page, seasonList) == 1);
                 setRefreshing(false);
                 adapter = new SeasonCardAdapter(this, seasonList);
                 setAdapter(adapter);
                 if (bottom && seasonList.isEmpty()) showEmptyView();
-            } catch (Exception e){loadFail(e);}
+            } catch (Exception e) {
+                loadFail(e);
+            }
         });
     }
 
     private void continueLoading(int page) {
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(() -> {
             try {
                 List<Collection> list = new ArrayList<>();
-                int result = UserInfoApi.getUserSeasons(mid,page,list);
-                if(result != -1){
-                    Log.e("debug","下一页");
-                    runOnUiThread(()-> {
+                int result = UserInfoApi.getUserSeasons(mid, page, list);
+                if (result != -1) {
+                    Log.e("debug", "下一页");
+                    runOnUiThread(() -> {
                         seasonList.addAll(list);
                         adapter.notifyItemRangeInserted(seasonList.size() - list.size(), list.size());
                     });
-                    if(result == 1) {
-                        Log.e("debug","到底了");
+                    if (result == 1) {
+                        Log.e("debug", "到底了");
                         bottom = true;
                     }
                 }
                 setRefreshing(false);
-            } catch (Exception e){loadFail(e);}
+            } catch (Exception e) {
+                loadFail(e);
+            }
         });
     }
 }

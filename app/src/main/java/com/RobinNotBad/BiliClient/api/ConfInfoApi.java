@@ -31,9 +31,8 @@ import okhttp3.HttpUrl;
  * #以下代码修改自腕上哔哩的开源项目，感谢开源者做出的贡献！
  */
 
-public class ConfInfoApi
-{
-    public static File getDownloadPath(Context context){
+public class ConfInfoApi {
+    public static File getDownloadPath(Context context) {
         return new File(Environment.getExternalStorageDirectory() + "/Android/media/" + context.getPackageName() + "/");
     }
 
@@ -43,9 +42,9 @@ public class ConfInfoApi
     https://socialsisteryi.github.io/bilibili-API-collect/docs/misc/sign/wbi.html#wbi-%E7%AD%BE%E5%90%8D%E7%AE%97%E6%B3%95
      */
     private static final int[] MIXIN_KEY_ENC_TAB = {46, 47, 18, 2, 53, 8, 23, 32, 15, 50, 10, 31, 58, 3, 45, 35, 27, 43, 5, 49,
-        33, 9, 42, 19, 29, 28, 14, 39, 12, 38, 41, 13, 37, 48, 7, 16, 24, 55, 40,
-        61, 26, 17, 0, 1, 60, 51, 30, 4, 22, 25, 54, 21, 56, 59, 6, 63, 57, 62, 11,
-        36, 20, 34, 44, 52};
+            33, 9, 42, 19, 29, 28, 14, 39, 12, 38, 41, 13, 37, 48, 7, 16, 24, 55, 40,
+            61, 26, 17, 0, 1, 60, 51, 30, 4, 22, 25, 54, 21, 56, 59, 6, 63, 57, 62, 11,
+            36, 20, 34, 44, 52};
 
     public static String getWBIRawKey() throws IOException, JSONException {
         JSONObject getJson = NetWorkUtil.getJson("https://api.bilibili.com/x/web-interface/nav");
@@ -56,7 +55,7 @@ public class ConfInfoApi
         return img_key + sub_key;  //相连
     }
 
-    public static String getWBIMixinKey(String raw_key){
+    public static String getWBIMixinKey(String raw_key) {
         StringBuilder key = new StringBuilder();
         for (int i = 0; i < 32; i++) {
             key.append(raw_key.charAt(MIXIN_KEY_ENC_TAB[i]));
@@ -73,13 +72,12 @@ public class ConfInfoApi
             SharedPreferencesUtil.putInt("last_wbi", curr);
 
             mixin_key = ConfInfoApi.getWBIMixinKey(ConfInfoApi.getWBIRawKey());
-            SharedPreferencesUtil.putString("wbi_mixin_key",mixin_key);
-        }
-        else mixin_key = SharedPreferencesUtil.getString("wbi_mixin_key","");
+            SharedPreferencesUtil.putString("wbi_mixin_key", mixin_key);
+        } else mixin_key = SharedPreferencesUtil.getString("wbi_mixin_key", "");
 
         String wts = String.valueOf(System.currentTimeMillis() / 1000);
         String calc_str = sortUrlParams(Uri.encode(url_query, "@#&=*+-_.,:!?()/~'%") + "&wts=" + wts) + mixin_key;
-        Log.e("calc_str",calc_str);
+        Log.e("calc_str", calc_str);
 
         String w_rid = md5(calc_str);
 
@@ -96,7 +94,7 @@ public class ConfInfoApi
             String[] keyValue = param.split("=");
             if (keyValue.length == 2) {
                 paramMap.put(keyValue[0], keyValue[1]);
-            }else if (keyValue.length == 1) {
+            } else if (keyValue.length == 1) {
                 paramMap.put(keyValue[0], "");
             }
         }
@@ -136,7 +134,7 @@ public class ConfInfoApi
     }
 
 
-    public static int getDateCurr(){
+    public static int getDateCurr() {
         Calendar calendar = Calendar.getInstance();
         return calendar.get(Calendar.YEAR) * 10000 + calendar.get(Calendar.MONTH) * 100 + calendar.get(Calendar.DATE);
     }

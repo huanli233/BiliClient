@@ -23,7 +23,7 @@
             android:layout_marginStart="8dp"
             android:id="@+id/pageName"
             android:text="加载中"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextClock
             android:layout_height="wrap_content"

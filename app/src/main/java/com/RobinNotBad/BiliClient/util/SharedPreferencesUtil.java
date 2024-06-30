@@ -9,11 +9,14 @@ import com.RobinNotBad.BiliClient.BiliTerminal;
  * 被 luern0313 创建于 2020/5/4.
  * #以下代码部分来源于腕上哔哩的开源项目，有修改。感谢开源者做出的贡献！
  */
-public class SharedPreferencesUtil
-{
+public class SharedPreferencesUtil {
     public static final String LINK_ENABLE = "link_enable";
     public static final String RCMD_API_NEW_PARAM = "rcmd_api_new_param";
     public static final String MENU_SORT = "menu_sort";
+    public static final String ASYNC_INFLATE_ENABLE = "async_inflate_enable";
+    public static final String LOAD_TRANSITION = "load_transition";
+    public static final String SNACKBAR_ENABLE = "snackbar_enable";
+    public static final String STRICT_URL_MATCH = "strict_url_match";
 
     public static String cookies = "cookies";
     public static String mid = "mid";
@@ -31,7 +34,7 @@ public class SharedPreferencesUtil
     public static String tutorial_version = "tutorial_version";
 
 
-    private static final SharedPreferences sharedPreferences = BiliTerminal.context.getSharedPreferences("default",Context.MODE_PRIVATE);
+    private static final SharedPreferences sharedPreferences = BiliTerminal.context.getSharedPreferences("default", Context.MODE_PRIVATE);
 
     public static String getString(String key, String def) {
         return sharedPreferences.getString(key, def);
@@ -41,8 +44,7 @@ public class SharedPreferencesUtil
         sharedPreferences.edit().putString(key, value).apply();
     }
 
-    public static int getInt(String key, int def)
-    {
+    public static int getInt(String key, int def) {
         return sharedPreferences.getInt(key, def);
     }
 
@@ -50,8 +52,7 @@ public class SharedPreferencesUtil
         sharedPreferences.edit().putInt(key, value).apply();
     }
 
-    public static long getLong(String key, long def)
-    {
+    public static long getLong(String key, long def) {
         return sharedPreferences.getLong(key, def);
     }
 
@@ -59,13 +60,11 @@ public class SharedPreferencesUtil
         sharedPreferences.edit().putLong(key, value).apply();
     }
 
-    public static boolean getBoolean(String key, boolean def)
-    {
+    public static boolean getBoolean(String key, boolean def) {
         return sharedPreferences.getBoolean(key, def);
     }
 
-    public static void putBoolean(String key, boolean value)
-    {
+    public static void putBoolean(String key, boolean value) {
         sharedPreferences.edit().putBoolean(key, value).apply();
     }
 
@@ -73,8 +72,7 @@ public class SharedPreferencesUtil
         sharedPreferences.edit().putFloat(key, value).apply();
     }
 
-    public static float getFloat(String key, float def)
-    {
+    public static float getFloat(String key, float def) {
         return sharedPreferences.getFloat(key, def);
     }
 

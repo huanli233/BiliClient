@@ -30,7 +30,7 @@ public class MySpaceActivity extends InstanceActivity {
 
     private ImageView userAvatar;
     private TextView userName, userFans;
-    private MaterialCardView myInfo,follow,watchLater,favorite,bangumi,history,creative,logout;
+    private MaterialCardView myInfo, watchLater, favorite, bangumi, history, creative, logout;
 
     private boolean confirmLogout = false;
 
@@ -43,14 +43,13 @@ public class MySpaceActivity extends InstanceActivity {
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_myspace, null, (layoutView, resId, parent) -> {
             setContentView(layoutView);
             setMenuClick();
-            Log.e("debug","进入个人页");
+            Log.e("debug", "进入个人页");
 
             userAvatar = findViewById(R.id.userAvatar);
             userName = findViewById(R.id.userName);
             userFans = findViewById(R.id.userFans);
 
             myInfo = findViewById(R.id.myinfo);
-            follow = findViewById(R.id.follow);
             watchLater = findViewById(R.id.watchlater);
             favorite = findViewById(R.id.favorite);
             bangumi = findViewById(R.id.bangumi);
@@ -59,13 +58,13 @@ public class MySpaceActivity extends InstanceActivity {
             logout = findViewById(R.id.logout);
 
 
-
-            CenterThreadPool.run(()->{
+            CenterThreadPool.run(() -> {
                 try {
                     UserInfo userInfo = UserInfoApi.getCurrentUserInfo();
                     int userCoin = UserInfoApi.getCurrentUserCoin();
-                    if(!this.isDestroyed()) runOnUiThread(() -> {
+                    if (!this.isDestroyed()) runOnUiThread(() -> {
                         Glide.with(MySpaceActivity.this).load(GlideUtil.url(userInfo.avatar))
+                                .transition(GlideUtil.getTransitionOptions())
                                 .placeholder(R.mipmap.akari).apply(RequestOptions.circleCropTransform())
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .into(userAvatar);
@@ -75,13 +74,7 @@ public class MySpaceActivity extends InstanceActivity {
                         myInfo.setOnClickListener(view -> {
                             Intent intent = new Intent();
                             intent.setClass(MySpaceActivity.this, UserInfoActivity.class);
-                            intent.putExtra("mid",userInfo.mid);
-                            startActivity(intent);
-                        });
-
-                        follow.setOnClickListener(view -> {
-                            Intent intent = new Intent();
-                            intent.setClass(MySpaceActivity.this, FollowingUsersActivity.class);
+                            intent.putExtra("mid", userInfo.mid);
                             startActivity(intent);
                         });
 
@@ -114,21 +107,22 @@ public class MySpaceActivity extends InstanceActivity {
                             intent.setClass(MySpaceActivity.this, CreativeCenterActivity.class);
                             startActivity(intent);
                         });
-                        if(!SharedPreferencesUtil.getBoolean("creative_enable",true)) creative.setVisibility(View.GONE);
+                        if (!SharedPreferencesUtil.getBoolean("creative_enable", true))
+                            creative.setVisibility(View.GONE);
 
                         logout.setOnClickListener(view -> {
-                            if(confirmLogout){
+                            if (confirmLogout) {
                                 CenterThreadPool.run(UserInfoApi::exitLogin);
                                 SharedPreferencesUtil.removeValue(SharedPreferencesUtil.cookies);
                                 SharedPreferencesUtil.removeValue(SharedPreferencesUtil.mid);
                                 SharedPreferencesUtil.removeValue(SharedPreferencesUtil.csrf);
                                 SharedPreferencesUtil.removeValue(SharedPreferencesUtil.refresh_token);
                                 SharedPreferencesUtil.removeValue(SharedPreferencesUtil.cookie_refresh);
-                                MsgUtil.toast("账号已退出",this);
+                                MsgUtil.showMsg("账号已退出", this);
                                 Intent intent = new Intent(this, LoginActivity.class);
                                 startActivity(intent);
                                 finish();
-                            }else MsgUtil.toast("再点一次退出登录！",this);
+                            } else MsgUtil.showMsg("再点一次退出登录！", this);
                             confirmLogout = !confirmLogout;
                         });
                     });
