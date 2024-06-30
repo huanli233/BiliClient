@@ -141,6 +141,7 @@ public class LiveInfoActivity extends BaseActivity {
                             });
                         });
                         play.setOnLongClickListener(view -> {
+                            if(!SharedPreferencesUtil.getString("player", "null").equals("terminalPlayer")) MsgUtil.showMsgLong("若无法播放请更换为内置播放器",this);
                             Intent intent = new Intent();
                             intent.setClass(this, SettingPlayerChooseActivity.class);
                             startActivity(intent);
@@ -192,6 +193,7 @@ public class LiveInfoActivity extends BaseActivity {
                             runOnUiThread(() -> host_list.setAdapter(hostAdapter));
                             refresh_host_list();
                         }
+                        if(!SharedPreferencesUtil.getString("player", "null").equals("terminalPlayer")) MsgUtil.showMsgLong("直播可能只有内置播放器可以正常播放",this);
                     });
                 } catch (Exception e) {
                     runOnUiThread(() -> MsgUtil.err(e, this));
@@ -210,5 +212,6 @@ public class LiveInfoActivity extends BaseActivity {
         }
         hostAdapter.setData(hostList);
         selectedHost = 0;
+        hostAdapter.setSelectedItemIndex(0);
     }
 }
