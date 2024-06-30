@@ -99,15 +99,14 @@ public class MsgUtil {
     public static Snackbar createSnack(View view, CharSequence text, int duration, Action action) {
         Snackbar snackbar;
         (snackbar = Snackbar.make(view, text, duration))
-                .setBackgroundTint(Color.parseColor("#85808080"))
-                .setTextMaxLines(3);
+                .setBackgroundTint(Color.parseColor("#85808080"));
         if (action != null) snackbar.setAction(action.getText(), action.getOnClickListener());
         else if (duration == Snackbar.LENGTH_INDEFINITE || duration >= 5000) snackbar.setAction("x", (view1 -> snackbar.dismiss()));
         View snackBarView = snackbar.getView();
         snackBarView.setOnTouchListener(((view12, motionEvent) -> false));
         SnackbarContentLayout contentLayout = ((SnackbarContentLayout) ((FrameLayout) snackBarView).getChildAt(0));
         Button actionView = contentLayout.getActionView();
-        actionView.setTextSize(12);
+        //actionView.setTextSize(ToolsUtil.sp2px(13, view.getContext()));
         actionView.setMinWidth(ToolsUtil.dp2px(30, view.getContext()));
         actionView.setMinimumWidth(ToolsUtil.dp2px(30, view.getContext()));
         actionView.setMaxWidth(ToolsUtil.dp2px(48, view.getContext()));
@@ -117,7 +116,7 @@ public class MsgUtil {
         layoutParams.setMarginStart(0);
         layoutParams.setMargins(0, layoutParams.topMargin, layoutParams.rightMargin, layoutParams.bottomMargin);
         TextView msgView = contentLayout.getMessageView();
-        msgView.setTextSize(11);
+        msgView.setTextSize(13);
         msgView.setTypeface(null, Typeface.BOLD);
         msgView.setPadding(0, 0, ToolsUtil.dp2px(4, view.getContext()), 0);
         msgView.setPaddingRelative(0, 0, ToolsUtil.dp2px(4, view.getContext()), 0);

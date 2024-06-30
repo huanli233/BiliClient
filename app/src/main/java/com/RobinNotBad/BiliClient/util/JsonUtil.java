@@ -63,15 +63,15 @@ public class JsonUtil {
         return defaultValue;
     }
 
-    public static ArrayList jsonToArrayList(JSONArray jsonArray, boolean reverse) throws JSONException {
-        ArrayList<Object> arrayList = new ArrayList<>();
+    public static ArrayList<String> jsonToArrayList(JSONArray jsonArray, boolean reverse) throws JSONException {
+        ArrayList<String> arrayList = new ArrayList<>();
         if (reverse) {
             for (int i = jsonArray.length() - 1; i >= 0; i--) {
-                arrayList.add(jsonArray.get(i));
+                arrayList.add((String) jsonArray.get(i));
             }
         } else {
             for (int i = 0; i < jsonArray.length(); i++) {
-                arrayList.add(jsonArray.get(i));
+                arrayList.add((String) jsonArray.get(i));
             }
         }
         return arrayList;
