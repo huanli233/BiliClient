@@ -6,6 +6,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.bumptech.glide.util.Executors;
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
+import kotlin.coroutines.CoroutineContext;
+import kotlin.coroutines.EmptyCoroutineContext;
+import kotlinx.coroutines.*;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -45,11 +50,12 @@ public class CenterThreadPool {
      * @param runnable 要运行的任务
      */
     public static void run(Runnable runnable) {
-      /*  BuildersKt.launch(INSTANCE, Dispatchers.getIO(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation continuation) -> {
+        //先将实现切换到协程上，在测试版看看，如果有崩溃，麻烦注释掉以下代码，并恢复原有线程池启动。
+        BuildersKt.launch(CoroutineScopeKt.CoroutineScope((CoroutineContext) Dispatchers.getIO()), EmptyCoroutineContext.INSTANCE, CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation contimuation) -> {
             runnable.run();
             return Unit.INSTANCE;
-        });*/
-        getInstance().execute(runnable);
+        });
+//        getInstance().execute(runnable);
     }
 
     /**
