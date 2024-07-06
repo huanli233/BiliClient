@@ -1,6 +1,7 @@
 package com.RobinNotBad.BiliClient.activity.video.local;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -47,7 +48,15 @@ public class LocalPageChooseActivity extends BaseActivity {
         ArrayList<String> danmakuFileList = intent.getStringArrayListExtra("danmakuFileList");
 
         PageChooseAdapter adapter = new PageChooseAdapter(this, pageList);
-        adapter.setOnItemClickListener(position -> PlayerApi.jumpToPlayer(LocalPageChooseActivity.this, videoFileList.get(position), danmakuFileList.get(position), pageList.get(position), true, 0, "", 0, 0, 0, false));
+        adapter.setOnItemClickListener(position -> {
+            try {
+                PlayerApi.jumpToPlayer(LocalPageChooseActivity.this, videoFileList.get(position), danmakuFileList.get(position), pageList.get(position), true, 0, "", 0, 0, 0, false);
+            }catch (ActivityNotFoundException e){
+                MsgUtil.showMsg("没有找到播放器，请检查是否安装",this);
+            }catch (Exception e){
+                MsgUtil.err(e,this);
+            }
+        });
         adapter.setOnItemLongClickListener(position -> {
             if (longClickPosition == position) {
                 File workPath = ConfInfoApi.getDownloadPath(this);
