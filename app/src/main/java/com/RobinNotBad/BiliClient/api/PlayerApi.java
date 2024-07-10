@@ -68,17 +68,20 @@ public class PlayerApi {
      * @param aid   aid
      * @param bvid  bvid
      * @param cid   cid
-     * @param html5 html5(boolean)
      * @param qn    qn
+     * @param download 是否下载
      * @return 视频url与完整返回信息
      */
-    public static Pair<String, String> getVideo(long aid, String bvid, long cid, boolean html5, int qn) throws JSONException, IOException {
+    public static Pair<String, String> getVideo(long aid, String bvid, long cid, int qn, boolean download) throws JSONException, IOException {
+        boolean html5 = !download && SharedPreferencesUtil.getString("player","").equals("mtvPlayer");
+        //html5方式现在已经仅对小电视播放器保留了
+
         String url = "https://api.bilibili.com/x/player/wbi/playurl?"
                 + (aid == 0 ? ("bvid=" + bvid) : ("avid=" + aid))
                 + "&cid=" + cid + "&type=mp4"
                 + (html5 ? "&high_quality=1&qn=" + qn : "&qn=" + qn)
                 + "&platform=" + (html5 ? "html5" : "pc");
-        //顺便把platform html5给删了,实测删除后放和番剧相关的东西不会404了 (不到为啥)
+
         url = ConfInfoApi.signWBI(url);
 
         Response response = NetWorkUtil.get(url, NetWorkUtil.webHeaders);
@@ -129,8 +132,8 @@ public class PlayerApi {
             case "aliangPlayer":
                 intent.setClassName(context.getString(R.string.player_aliang_package), "com.aliangmaker.media.PlayVideoActivity");
                 intent.putExtra("name", title);
-                intent.putExtra("progress", 0);
                 intent.putExtra("danmaku", danmakuurl);
+                intent.putExtra("live_mode",live_mode);
                 if (local) {
                     intent.setData(getVideoUri(context, videourl));
                 } else {

@@ -32,8 +32,6 @@ public class JumpToPlayerActivity extends BaseActivity {
 
     boolean destroyed = false;
 
-    boolean html5;
-
     int progress;
 
     @Override
@@ -53,8 +51,6 @@ public class JumpToPlayerActivity extends BaseActivity {
 
         title = intent.getStringExtra("title");
         download = intent.getIntExtra("download", 0);
-
-        html5 = intent.getBooleanExtra("html5", true);
 
         qn = intent.getIntExtra("qn", -1);
 
@@ -77,7 +73,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                     Pair<Long, Integer> progressPair = VideoInfoApi.getWatchProgress(aid);
                     progress = progressPair.first == cid ? progressPair.second : 0;
                 }
-                Pair<String, String> video = PlayerApi.getVideo(aid, bvid, cid, html5, qn);
+                Pair<String, String> video = PlayerApi.getVideo(aid, bvid, cid, qn, download!=0);
                 videourl = video.first;
                 if (!destroyed) {
                     if (download != 0) {
