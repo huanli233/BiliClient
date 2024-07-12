@@ -982,6 +982,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
                 @Override
                 public void updateTimer(DanmakuTimer timer) {
+                    timer.update(ijkPlayer.getCurrentPosition());
                 }
 
                 @Override
