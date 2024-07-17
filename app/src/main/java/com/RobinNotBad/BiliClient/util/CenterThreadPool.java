@@ -1,48 +1,25 @@
 package com.RobinNotBad.BiliClient.util;
 
 import androidx.core.util.Consumer;
-import androidx.core.util.Supplier;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.bumptech.glide.util.Executors;
 import kotlin.Unit;
-import kotlin.coroutines.Continuation;
-import kotlin.coroutines.CoroutineContext;
-import kotlin.coroutines.EmptyCoroutineContext;
+import kotlin.coroutines.*;
 import kotlinx.coroutines.*;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.*;
 
 /**
  * @author silent碎月
- * 核心运行线程池, 最大线程容量为CPU核心数的2倍, 最小线程容量为1, 线程空闲时间为60s, 线程队列容量为20
- * 注释掉的代码是由于当前第三方库的import不是很满足所以注掉了
- * BuildersKt.launch 系列调用当引入kotlin协程库后可用于替代当前线程池的设计， 可以在java端调起协程
+ * 核心运行线程池
+ * BuildersKt.launch 系列调用可以在java端调起协程,更加轻量
  */
 public class CenterThreadPool {
 
+    private CenterThreadPool(){}
 
-    private static final AtomicReference<ExecutorService> INSTANCE = new AtomicReference<>();
-
-    private static ExecutorService getInstance() {
-        while (INSTANCE.get() == null) {
-            INSTANCE.compareAndSet(null, new ThreadPoolExecutor(
-                    getBestThreadPoolSize() / 2,
-                    getBestThreadPoolSize() * 2,
-                    60,
-                    TimeUnit.SECONDS,
-                    new ArrayBlockingQueue<>(20)
-            ));
-        }
-        return INSTANCE.get();
-    }
-
+    private static final CoroutineScope COROUTINE_SCOPE = CoroutineScopeKt.CoroutineScope((CoroutineContext) Dispatchers.getIO());
 
     /**
      * 在后台运行, 用于网络请求等耗时操作
@@ -51,11 +28,10 @@ public class CenterThreadPool {
      */
     public static void run(Runnable runnable) {
         //先将实现切换到协程上，在测试版看看，如果有崩溃，麻烦注释掉以下代码，并恢复原有线程池启动。
-        BuildersKt.launch(CoroutineScopeKt.CoroutineScope((CoroutineContext) Dispatchers.getIO()), EmptyCoroutineContext.INSTANCE, CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation contimuation) -> {
+        BuildersKt.launch(COROUTINE_SCOPE, EmptyCoroutineContext.INSTANCE, CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation<? super Unit> continuation) -> {
             runnable.run();
             return Unit.INSTANCE;
         });
-//        getInstance().execute(runnable);
     }
 
     /**
@@ -66,16 +42,13 @@ public class CenterThreadPool {
      * @param <T>      返回值类型
      * @return LiveData包装的返回值
      */
-    public static <T> LiveData<T> supplyAsyncWithLiveData(Supplier<T> supplier) {
+    public static <T> LiveData<T> supplyAsyncWithLiveData(Callable<T> supplier) {
         MutableLiveData<T> retval = new MutableLiveData<>();
-        /*BuildersKt.launch(INSTANCE, Dispatchers.getIO(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation continuation) -> {
-            T res = supplier.get();
-            retval.postValue(res);
-            return Unit.INSTANCE;
-        });*/
-        getInstance().execute(() -> {
-            T res = supplier.get();
-            retval.postValue(res);
+        CenterThreadPool.run(() -> {
+            try {
+                T res = supplier.call();
+                retval.postValue(res);
+            }catch (Exception ignored){}
         });
         return retval;
     }
@@ -88,33 +61,35 @@ public class CenterThreadPool {
      * @param <T>      返回值类型
      * @return 返回一个可供CenterThreadPool观察的Future对象
      */
-    public static <T> Future<T> supplyAsyncWithFuture(Supplier<T> supplier) {
-        return getInstance().submit(supplier::get);
+    public static <T> Future<T> supplyAsyncWithFuture(Callable<T> supplier) {
+        FutureTask<T> ftask = new FutureTask<>(supplier);
+        CenterThreadPool.run(ftask);
+        return ftask;
     }
 
     /**
-     * 对Future 对象进行观察， 无需切换线程， 自动在ui线程进行观察
+     * 对Deferred 对象进行观察， 无需切换线程， 自动在ui线程进行观察
      *
-     * @param future   一个将要在未来返回一个 T 类型对象的对象
+     * @param deferred 一个将要在未来返回一个 T 类型对象的对象
      * @param consumer 对T进行观察的lambda表达式或者类
      * @param <T>      要观察的类型
      */
-    public static <T> void observe(Future<T> future, Consumer<T> consumer) {
-        getInstance().execute(() -> {
+    public static <T> void observe(Future<T> deferred, Consumer<T> consumer) {
+        CenterThreadPool.run(() -> {
             try {
-                T res = future.get();
-                CenterThreadPool.runOnUiThread(() -> consumer.accept(res));
-            } catch (Exception ignored) {
+                T value = deferred.get();
+                CenterThreadPool.runOnUiThread(() -> consumer.accept(value));
+            } catch (Throwable ignored) {
             }
         });
     }
 
 
     public static <T> void observe(Future<T> future, Consumer<T> consumer, Consumer<Throwable> onFailure) {
-        getInstance().execute(() -> {
+        CenterThreadPool.run(() -> {
             try {
-                T res = future.get();
-                CenterThreadPool.runOnUiThread(() -> consumer.accept(res));
+                T value = future.get();
+                CenterThreadPool.runOnUiThread(() -> consumer.accept(value));
             } catch (Exception e) {
                 onFailure.accept(e);
             }
@@ -127,53 +102,10 @@ public class CenterThreadPool {
      * @param runnable 要运行的任务
      */
     public static void runOnUiThread(Runnable runnable) {
-//       BuildersKt.launch(INSTANCE, Dispatchers.getMain(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation continuation) -> {
-//            runnable.run();
-//            return Unit.INSTANCE;
-//        });
-        Executors.mainThreadExecutor().execute(runnable);
+        BuildersKt.launch(COROUTINE_SCOPE, (CoroutineContext) Dispatchers.getMain(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation<? super Unit> continuation) -> {
+            runnable.run();
+            return Unit.INSTANCE;
+        });
     }
-
-// 想在这里实现一个自动切线程的网络请求一个方法,
-// 但是这种方式需要json转换器, 例如Gson, Moshi的第三方库的引入
-// 现在用的仍然是jsonObject做手动json转换, 先注释掉
-//    public static requireNetWork<T>(String url, NetWorkUtil.Callback<T> callback){
-//        CenterThreadPool.run(() -> {
-//        JsonObject obj = request(url);
-//        T res = Gson.fromJson(obj);
-//        runOnUiThread(() -> callback.onSuccess(res));
-//       });
-//    }
-
-    /**
-     * 考虑到可能有些设备内存可能比cpu核心数乘2还小，在这里做计算
-     * 原理： java 一个线程占内存1mb
-     * size1 = availableMemory / 1mb
-     * size2 = cpuCore * 2
-     * bestSize = min(size1, size2)
-     * 对于多网络请求的情况，最佳线程数量仍为2 * n(百度和google都有说)
-     * 故在这里取最小值
-     *
-     * @return 最佳线程数量
-     */
-
-    private static int getBestThreadPoolSize() {
-        /*
-        try {
-            ActivityManager activityManager = (ActivityManager) BiliTerminal.context.getSystemService(Activity.ACTIVITY_SERVICE);
-            ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
-            activityManager.getMemoryInfo(memoryInfo);
-            // 返回的应该是byte， 1mb = 1024kb = 1024 * 1024 byte
-            int size1 = (int) Long.min(memoryInfo.availMem / 1024 / 1024, Integer.MAX_VALUE);
-            int size2 = Runtime.getRuntime().availableProcessors() * 2;
-            return Integer.min(size1, size2);
-        }catch (Throwable e){
-            // 如果获取失败，避免有些设备阉割了ActivityManager返回cpu核心数的2倍      //然而还真就有设备不能用
-            return Runtime.getRuntime().availableProcessors() * 2;
-        }
-         */
-        return Runtime.getRuntime().availableProcessors() * 2;
-    }
-
 
 }
