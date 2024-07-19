@@ -4,6 +4,7 @@ import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import kotlin.Unit;
 import kotlin.coroutines.*;
 import kotlinx.coroutines.*;
@@ -48,7 +49,9 @@ public class CenterThreadPool {
             try {
                 T res = supplier.call();
                 retval.postValue(res);
-            }catch (Exception ignored){}
+            }catch (Exception e){
+                MsgUtil.err(e, BiliTerminal.context);
+            }
         });
         return retval;
     }

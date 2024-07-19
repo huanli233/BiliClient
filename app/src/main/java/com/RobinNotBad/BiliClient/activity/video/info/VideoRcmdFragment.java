@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.video.info;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,17 +63,17 @@ public class VideoRcmdFragment extends Fragment {
 
         Log.e("debug-av号", String.valueOf(aid));
 
-        CenterThreadPool.run(() -> {
+        CenterThreadPool.supplyAsyncWithLiveData(() -> RecommendApi.getRelated(aid)
+        ).observe(getViewLifecycleOwner(), (ArrayList<VideoCard> videoList) -> {
             try {
-                ArrayList<VideoCard> videoList = RecommendApi.getRelated(aid);
-                if (isAdded() && getActivity() != null) requireActivity().runOnUiThread(() -> {
-                    VideoCardAdapter adapter = new VideoCardAdapter(requireActivity(), videoList);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+                Activity attachedActivity = getActivity();
+                if (attachedActivity != null) {
+                    VideoCardAdapter adapter = new VideoCardAdapter(attachedActivity, videoList);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(attachedActivity));
                     recyclerView.setAdapter(adapter);
-                });
-
-            } catch (Exception e) {
-                if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, getContext()));
+                }
+            }catch (Exception e) {
+                MsgUtil.err(e, getContext());
             }
         });
     }
