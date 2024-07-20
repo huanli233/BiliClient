@@ -67,7 +67,7 @@ public class SettingPlayerInsideActivity extends BaseActivity {
             SWbackground.setChecked(SharedPreferencesUtil.getBoolean("player_background", false));
             SWautolandscape.setChecked(SharedPreferencesUtil.getBoolean("player_autolandscape", false));
             SWscale.setChecked(SharedPreferencesUtil.getBoolean("player_scale", true));
-            SWdoublemove.setChecked(SharedPreferencesUtil.getBoolean("player_doublemove", false));
+            SWdoublemove.setChecked(SharedPreferencesUtil.getBoolean("player_doublemove", true));
             online_total.setChecked(SharedPreferencesUtil.getBoolean("show_online", true));
             fromLast.setChecked(SharedPreferencesUtil.getBoolean("player_from_last", true));
 
@@ -78,7 +78,7 @@ public class SettingPlayerInsideActivity extends BaseActivity {
             SWopensles.setChecked(SharedPreferencesUtil.getBoolean("player_audio", false));
 
             DMmaxline.setText(SharedPreferencesUtil.getInt("player_danmaku_maxline", 15) + "");
-            danmakusize.setText((SharedPreferencesUtil.getFloat("player_danmaku_size", 1.0f)) + "");
+            danmakusize.setText((SharedPreferencesUtil.getFloat("player_danmaku_size", 0.7f)) + "");
             danmakuspeed.setText((SharedPreferencesUtil.getFloat("player_danmaku_speed", 1.0f)) + "");
             danmaku_transparency.setText((SharedPreferencesUtil.getFloat("player_danmaku_transparency", 0.5f) * 100) + "");
             danmaku_allowoverlap.setChecked(SharedPreferencesUtil.getBoolean("player_danmaku_allowoverlap", true));

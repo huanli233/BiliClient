@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -228,7 +229,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         mContext.setDanmakuStyle(IDisplayer.DANMAKU_STYLE_STROKEN, 1)
                 .setDuplicateMergingEnabled(SharedPreferencesUtil.getBoolean("player_danmaku_mergeduplicate", false))
                 .setScrollSpeedFactor(SharedPreferencesUtil.getFloat("player_danmaku_speed", 1.0f))
-                .setScaleTextSize(SharedPreferencesUtil.getFloat("player_danmaku_size", 1.0f))//缩放值
+                .setScaleTextSize(SharedPreferencesUtil.getFloat("player_danmaku_size", 0.7f))//缩放值
                 .setMaximumLines(maxLinesPair)
                 .setDanmakuTransparency(SharedPreferencesUtil.getFloat("player_danmaku_transparency", 0.5f))
                 .preventOverlapping(overlap);
@@ -419,7 +420,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             scaleGestureListener = new ViewScaleGestureListener(videoArea);
             scaleGestureDetector = new ScaleGestureDetector(this, scaleGestureListener);
 
-            boolean doublemove_enabled = SharedPreferencesUtil.getBoolean("player_doublemove", false);  //是否启用双指移动
+            boolean doublemove_enabled = SharedPreferencesUtil.getBoolean("player_doublemove", true);  //是否启用双指移动
 
             control_layout.setOnTouchListener((v, event) -> {
                 int action = event.getActionMasked();
@@ -614,6 +615,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         runOnUiThread(() -> loading_text0.setText("初始化播放"));
 
         ijkPlayer = new IjkMediaPlayer();
+
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", (SharedPreferencesUtil.getBoolean("player_codec", true) ? 1 : 0));
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", (SharedPreferencesUtil.getBoolean("player_audio", false) ? 1 : 0));
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
@@ -626,6 +628,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "packet-buffering", 1);
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "fflags", "flush_packets");
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "reconnect", 1);
+        ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "max-buffer-size", 1000);
         //这个坑死我！请允许我为解决此问题而大大地兴奋一下ohhhhhhhhhhhhhhhhhhhhhhhhhhhh
         //ijkplayer是自带一个useragent的，要把默认的改掉才能用！
         if (mode == 0) {
@@ -1202,5 +1205,28 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             }
         });
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(prepared) switch (keyCode){
+            case KeyEvent.KEYCODE_ENTER:
+            case KeyEvent.KEYCODE_DPAD_CENTER:
+                controlVideo();
+                break;
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                ijkPlayer.seekTo(ijkPlayer.getCurrentPosition() - 10000L);
+                break;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                ijkPlayer.seekTo(ijkPlayer.getCurrentPosition() + 10000L);
+                break;
+            case KeyEvent.KEYCODE_DPAD_UP:
+                changeVolume(true);
+                break;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                changeVolume(false);
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
