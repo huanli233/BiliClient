@@ -92,7 +92,8 @@ public class BaseActivity extends AppCompatActivity {
             view.setOnClickListener(view1 -> {
                 if (!isDestroyed()) {
                     finish();
-                };
+                }
+                ;
             });
             Log.e("debug", "set_exit");
         }
@@ -119,7 +120,8 @@ public class BaseActivity extends AppCompatActivity {
         super.onResume();
         if (eventBusEnabled()) {
             SnackEvent snackEvent;
-            if ((snackEvent = EventBus.getDefault().getStickyEvent(SnackEvent.class)) != null) onEvent(snackEvent);
+            if ((snackEvent = EventBus.getDefault().getStickyEvent(SnackEvent.class)) != null)
+                onEvent(snackEvent);
         }
     }
 

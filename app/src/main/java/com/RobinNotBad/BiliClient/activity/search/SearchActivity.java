@@ -60,7 +60,7 @@ public class SearchActivity extends InstanceActivity {
             setMenuClick();
             Log.e("debug", "进入搜索页");
 
-            TutorialHelper.show(R.xml.tutorial_search, this, "search", 3);
+            TutorialHelper.showTutorialList(this, R.array.tutorial_search, "search");
 
             handler = new Handler();
 

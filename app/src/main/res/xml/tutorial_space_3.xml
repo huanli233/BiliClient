@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tutorial>
+    <name>用户主页教程3</name>
+    <description>用于引导用户使用用户主页</description>
+    <type>0</type>
+    <content>
+        <item>
+            <type>0</type>
+            <text>点击用户名称下方显示的粉丝数/关注数可以查看对应列表</text>
+            <style>italic</style>
+            <color>#ffffff</color>
+        </item>
+    </content>
+</tutorial>

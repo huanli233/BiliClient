@@ -121,7 +121,8 @@ public class BangumiApi {
         ArrayList<Bangumi.Section> sectionList = new ArrayList<>();
 
         JSONObject main_section = result.optJSONObject("main_section");
-        if (main_section != null) sectionList.add(analyzeSection(result.getJSONObject("main_section")));
+        if (main_section != null)
+            sectionList.add(analyzeSection(result.getJSONObject("main_section")));
 
         JSONArray other_sections = result.optJSONArray("section");
         if (other_sections != null) {

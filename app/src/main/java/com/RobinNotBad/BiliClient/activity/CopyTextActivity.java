@@ -25,7 +25,7 @@ public class CopyTextActivity extends BaseActivity {
 
         content = intent.getStringExtra("content");
 
-        if(content == null){
+        if (content == null) {
             finish();
             return;
         }

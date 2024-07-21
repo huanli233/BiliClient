@@ -7,7 +7,8 @@ public class SnackEvent {
     private long startTime;
     private int duration;
 
-    public SnackEvent() {}
+    public SnackEvent() {
+    }
 
     public SnackEvent(String message) {
         this.message = message;

@@ -65,6 +65,52 @@
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
         <item>加回了单独的“我的关注”按钮</item>
+        <item>新增了按键控制功能</item>
+        <item>修复了视频详情页崩溃的问题</item>
         <item>修复了部分情况下未安装对应播放器时闪退的问题</item>
     </string-array>
+
+
+    //后来写新功能添加的教程请放在列表的第一个
+    <array name="tutorial_space">
+        <item>xml/tutorial_space_3</item>
+        <item>xml/tutorial_space_2</item>
+        <item>xml/tutorial_space</item>
+    </array>
+    //后来写新功能添加的教程请放在列表的第一个
+    <array name="tutorial_video">
+        <item>xml/tutorial_video_3</item>
+        <item>xml/tutorial_video_2</item>
+        <item>xml/tutorial_video</item>
+    </array>
+    //后来写新功能添加的教程请放在列表的第一个
+    <array name="tutorial_search">
+        <item>xml/tutorial_search_3</item>
+        <item>xml/tutorial_search_2</item>
+        <item>xml/tutorial_search</item>
+    </array>
+    //后来写新功能添加的教程请放在列表的第一个
+    <array name="tutorial_update_install">
+        <item>xml/tutorial_update_install</item>
+    </array>
+    //后来写新功能添加的教程请放在列表的第一个
+    <array name="tutorial_recommend">
+        <item>xml/tutorial_recommend</item>
+    </array>
+    //后来写新功能添加的教程请放在列表的第一个
+    <array name="tutorial_message">
+        <item>xml/tutorial_message</item>
+    </array>
+    //后来写新功能添加的教程请放在列表的第一个
+    <array name="tutorial_article">
+        <item>xml/tutorial_article</item>
+    </array>
+    //后来写新功能添加的教程请放在列表的第一个
+    <array name="tutorial_dynamic">
+        <item>xml/tutorial_dynamic</item>
+    </array>
+    //后来写新功能添加的教程请放在列表的第一个
+    <array name="tutorial_dynamic_info">
+        <item>xml/tutorial_dynamic_info</item>
+    </array>
 </resources>

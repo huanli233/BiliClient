@@ -92,7 +92,7 @@ public class VideoInfoActivity extends BaseActivity {
     }
 
     protected void initVideoInfoView() {
-        TutorialHelper.show(R.xml.tutorial_video, this, "video", 3);
+        TutorialHelper.showTutorialList(this, R.array.tutorial_video, "video");
 
         ViewPager viewPager = findViewById(R.id.viewPager);
         TextView pageName = findViewById(R.id.pageName);
@@ -128,7 +128,9 @@ public class VideoInfoActivity extends BaseActivity {
                 ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
                 runOnUiThread(() -> {
                     viewPager.setAdapter(vpfAdapter);
-                    View view; if ((view = fragmentList.get(0).getView()) != null) view.setVisibility(View.GONE);
+                    View view;
+                    if ((view = fragmentList.get(0).getView()) != null)
+                        view.setVisibility(View.GONE);
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
                     if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
                         MsgUtil.showMsgLong("提示：本页面可以左右滑动", this);

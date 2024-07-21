@@ -165,7 +165,7 @@ public class DynamicActivity extends RefreshMainActivity {
 
         setPageName("动态");
 
-        TutorialHelper.show(R.xml.tutorial_dynamic, this, "dynamic", 1);
+        TutorialHelper.showTutorialList(this, R.array.tutorial_dynamic, "dynamic");
 
         refreshDynamic();
     }
@@ -228,7 +228,8 @@ public class DynamicActivity extends RefreshMainActivity {
                 if (data != null && !isRefreshing) {
                     DynamicHolder.removeDynamicFromList(dynamicList, data.getIntExtra("position", 0) - 1, dynamicAdapter);
                 }
-            } catch (Throwable ignored) {}
+            } catch (Throwable ignored) {
+            }
         }
     }
 }

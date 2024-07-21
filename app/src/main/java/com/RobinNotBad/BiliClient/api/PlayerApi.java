@@ -65,15 +65,15 @@ public class PlayerApi {
     /**
      * 解析视频，从JumpToPlayerActivity弄出来的，懒得改很多所以搞了个莫名其妙的Pair
      *
-     * @param aid   aid
-     * @param bvid  bvid
-     * @param cid   cid
-     * @param qn    qn
+     * @param aid      aid
+     * @param bvid     bvid
+     * @param cid      cid
+     * @param qn       qn
      * @param download 是否下载
      * @return 视频url与完整返回信息
      */
     public static Pair<String, String> getVideo(long aid, String bvid, long cid, int qn, boolean download) throws JSONException, IOException {
-        boolean html5 = !download && SharedPreferencesUtil.getString("player","").equals("mtvPlayer");
+        boolean html5 = !download && SharedPreferencesUtil.getString("player", "").equals("mtvPlayer");
         //html5方式现在已经仅对小电视播放器保留了
 
         String url = "https://api.bilibili.com/x/player/wbi/playurl?"
@@ -133,7 +133,7 @@ public class PlayerApi {
                 intent.setClassName(context.getString(R.string.player_aliang_package), "com.aliangmaker.media.PlayVideoActivity");
                 intent.putExtra("name", title);
                 intent.putExtra("danmaku", danmakuurl);
-                intent.putExtra("live_mode",live_mode);
+                intent.putExtra("live_mode", live_mode);
                 if (local) {
                     intent.setData(getVideoUri(context, videourl));
                 } else {

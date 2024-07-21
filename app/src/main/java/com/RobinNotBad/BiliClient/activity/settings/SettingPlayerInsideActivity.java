@@ -133,6 +133,7 @@ public class SettingPlayerInsideActivity extends BaseActivity {
             SharedPreferencesUtil.putBoolean("player_ui_showLoopBtn", ui_showLoopBtn.isChecked());
 
             MsgUtil.showMsg("设置已保存喵~", this);
-        } catch (NullPointerException ignored) {}
+        } catch (NullPointerException ignored) {
+        }
     }
 }

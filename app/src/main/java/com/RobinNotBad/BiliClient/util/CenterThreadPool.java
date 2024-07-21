@@ -5,11 +5,20 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
-import kotlin.Unit;
-import kotlin.coroutines.*;
-import kotlinx.coroutines.*;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
+
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
+import kotlin.coroutines.CoroutineContext;
+import kotlin.coroutines.EmptyCoroutineContext;
+import kotlinx.coroutines.BuildersKt;
+import kotlinx.coroutines.CoroutineScope;
+import kotlinx.coroutines.CoroutineScopeKt;
+import kotlinx.coroutines.CoroutineStart;
+import kotlinx.coroutines.Dispatchers;
 
 /**
  * @author silent碎月
@@ -18,7 +27,8 @@ import java.util.concurrent.*;
  */
 public class CenterThreadPool {
 
-    private CenterThreadPool(){}
+    private CenterThreadPool() {
+    }
 
     private static final CoroutineScope COROUTINE_SCOPE = CoroutineScopeKt.CoroutineScope((CoroutineContext) Dispatchers.getIO());
 
@@ -49,7 +59,7 @@ public class CenterThreadPool {
             try {
                 T res = supplier.call();
                 retval.postValue(res);
-            }catch (Exception e){
+            } catch (Exception e) {
                 MsgUtil.err(e, BiliTerminal.context);
             }
         });

@@ -165,7 +165,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (sender.mid == up_mid) {
                 SpannableString name_str = new SpannableString(" UP " + replyList.get(realPosition).sender.name);
                 name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                name_str.setSpan(new RelativeSizeSpan(0.8f), 0,  4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                name_str.setSpan(new RelativeSizeSpan(0.8f), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 replyHolder.userName.setText(name_str);
             } else replyHolder.userName.setText(sender.name);
 
@@ -231,7 +231,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             CenterThreadPool.run(() -> {
                                 try {
                                     EmoteUtil.textReplaceEmote(content.toString(), reply.emotes, 1.0f, context, content);
-                                } catch (ExecutionException ignored) {} catch (InterruptedException ignored) {}
+                                } catch (ExecutionException ignored) {
+                                } catch (InterruptedException ignored) {
+                                }
                             });
                         }
                         childMsgViewList.add(content);

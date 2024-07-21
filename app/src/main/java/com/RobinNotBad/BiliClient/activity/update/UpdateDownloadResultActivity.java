@@ -60,7 +60,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
             return;
         }
 
-        TutorialHelper.show(R.xml.tutorial_update_install, this, "update_install", 0);
+        TutorialHelper.showTutorialList(this, R.array.tutorial_update_install, "update_install");
 
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_update_download_result, null, ((view, resid, parent) -> {
             setContentView(view);

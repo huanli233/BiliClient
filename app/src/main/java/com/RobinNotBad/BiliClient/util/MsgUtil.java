@@ -101,7 +101,8 @@ public class MsgUtil {
         (snackbar = Snackbar.make(view, text, duration))
                 .setBackgroundTint(Color.parseColor("#85808080"));
         if (action != null) snackbar.setAction(action.getText(), action.getOnClickListener());
-        else if (duration == Snackbar.LENGTH_INDEFINITE || duration >= 5000) snackbar.setAction("x", (view1 -> snackbar.dismiss()));
+        else if (duration == Snackbar.LENGTH_INDEFINITE || duration >= 5000)
+            snackbar.setAction("x", (view1 -> snackbar.dismiss()));
         View snackBarView = snackbar.getView();
         snackBarView.setOnTouchListener(((view12, motionEvent) -> false));
         SnackbarContentLayout contentLayout = ((SnackbarContentLayout) ((FrameLayout) snackBarView).getChildAt(0));
@@ -136,7 +137,7 @@ public class MsgUtil {
                 showText(context, "数据解析错误", writer.toString());
             } else if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
                 showMsgLong("解析错误，可登陆后再次尝试", context);
-            } else if (e.toString().replace("org.json.JSONException:", "")  .contains("-352"))
+            } else if (e.toString().replace("org.json.JSONException:", "").contains("-352"))
                 showMsgLong("账号疑似被风控", context);
             else
                 showMsgLong("数据解析错误：\n" + e.toString().replace("org.json.JSONException:", ""), context);

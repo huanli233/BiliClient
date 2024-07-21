@@ -83,7 +83,7 @@ public class MySpaceActivity extends InstanceActivity {
                             Intent intent = new Intent();
                             intent.setClass(MySpaceActivity.this, FollowUsersActivity.class);
                             intent.putExtra("mid", userInfo.mid);
-                            intent.putExtra("mode",0);
+                            intent.putExtra("mode", 0);
                             startActivity(intent);
                         });
 

@@ -73,7 +73,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                     Pair<Long, Integer> progressPair = VideoInfoApi.getWatchProgress(aid);
                     progress = progressPair.first == cid ? progressPair.second : 0;
                 }
-                Pair<String, String> video = PlayerApi.getVideo(aid, bvid, cid, qn, download!=0);
+                Pair<String, String> video = PlayerApi.getVideo(aid, bvid, cid, qn, download != 0);
                 videourl = video.first;
                 if (!destroyed) {
                     if (download != 0) {

@@ -27,6 +27,12 @@ import java.util.List;
 //因为不通用(只适用教程)就放进Helper了
 
 public class TutorialHelper {
+    /**
+     * 从xml加载教程对象
+     *
+     * @param xml 教程对应的XML的ID
+     * @return 教程对象
+     */
     public static Tutorial loadTutorial(XmlResourceParser xml) {
         try {
             xml.next();
@@ -111,7 +117,7 @@ public class TutorialHelper {
                     if (isInName) turtorial.name = xml.getText();
                     else if (isInDescrption) turtorial.description = xml.getText();
                     else if (isInImg) turtorial.imgid = xml.getText();
-                    else if (isInType) turtorial.type = Integer.valueOf(xml.getText());
+                    else if (isInType) turtorial.type = Integer.parseInt(xml.getText());
                     else if (item != null) {
                         if (isInContentItemType) item.type = Integer.parseInt(xml.getText());
                         else if (isInContentItemText) item.text = xml.getText();
@@ -131,12 +137,12 @@ public class TutorialHelper {
         }
     }
 
-    public static List<Tutorial> loadTutorials(List<XmlResourceParser> xmls) {
-        List<Tutorial> tutorials = new ArrayList<>();
-        for (XmlResourceParser parser : xmls) tutorials.add(loadTutorial(parser));
-        return tutorials;
-    }
-
+    /**
+     * 用于解析教程中的文本内容
+     *
+     * @param texts 文本对象列表，从xml解析得来
+     * @return 解析出来的文本内容
+     */
     public static SpannableStringBuilder loadText(List<CustomText> texts) {
         SpannableStringBuilder str = new SpannableStringBuilder("");
         for (CustomText text : texts) {
@@ -163,15 +169,41 @@ public class TutorialHelper {
         return str;
     }
 
+
+    /**
+     * 加载对应的教程，并且检查是否浏览过该教程
+     *
+     * @param xml_res_id       教程XML的ID
+     * @param context
+     * @param tutorial_tag     教程的Key，是保存浏览进度时使用的键值
+     * @param tutorial_version 教程版本，用于保存浏览进度（大于0）
+     */
     public static void show(int xml_res_id, Context context, String tutorial_tag, int tutorial_version) {
         if (SharedPreferencesUtil.getInt("tutorial_ver_" + tutorial_tag, -1) < tutorial_version) {
-            if (SharedPreferencesUtil.getInt("tutorial_ver_" + tutorial_tag, -1) != -1)
+            if (SharedPreferencesUtil.getInt("tutorial_ver_" + tutorial_tag, 0) != 0)
                 Toast.makeText(context.getApplicationContext(), "教程已更新", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, TutorialActivity.class);
             intent.putExtra("xml_id", xml_res_id);
             intent.putExtra("tag", tutorial_tag);
             intent.putExtra("version", tutorial_version);
             context.startActivity(intent);
+        }
+    }
+
+
+    /**
+     * 用于直接通过Array加载对应页面的所有教程，避免新功能的教程与之前的写在同一个教程内时用户不看的情况
+     *
+     * @param context
+     * @param array_id     教程Array的ID
+     * @param tutorial_key 教程的Key，是保存浏览进度时使用的键值
+     */
+    public static void showTutorialList(Context context, int array_id, String tutorial_key) {
+        int n = context.getResources().getStringArray(array_id).length; //用于修复version错误
+        for (int i = 1; i <= context.getResources().getStringArray(array_id).length; i++) {
+            int indentify = context.getResources().getIdentifier(context.getPackageName() + ":" + context.getResources().getStringArray(array_id)[i-1], null, null);
+            if (indentify > 0)
+                show(indentify, context, tutorial_key, n--);
         }
     }
 }

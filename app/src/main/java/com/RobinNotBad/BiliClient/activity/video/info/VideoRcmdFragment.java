@@ -72,7 +72,7 @@ public class VideoRcmdFragment extends Fragment {
                     recyclerView.setLayoutManager(new LinearLayoutManager(attachedActivity));
                     recyclerView.setAdapter(adapter);
                 }
-            }catch (Exception e) {
+            } catch (Exception e) {
                 MsgUtil.err(e, getContext());
             }
         });

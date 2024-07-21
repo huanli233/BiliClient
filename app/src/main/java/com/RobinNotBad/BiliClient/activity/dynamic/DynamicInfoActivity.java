@@ -55,7 +55,7 @@ public class DynamicInfoActivity extends BaseActivity {
             TextView pageName = findViewById(R.id.pageName);
             pageName.setText("动态详情");
 
-            TutorialHelper.show(R.xml.tutorial_dynamic_info, this, "dynamic_info", 1);
+            TutorialHelper.showTutorialList(this, R.array.tutorial_dynamic_info, "dynamic_info");
 
             CenterThreadPool.run(() -> {
                 try {
@@ -74,7 +74,8 @@ public class DynamicInfoActivity extends BaseActivity {
                     runOnUiThread(() -> {
                         ViewPager viewPager = findViewById(R.id.viewPager);
                         viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
-                        View view; if ((view = diFragment.getView()) != null) view.setVisibility(View.GONE);
+                        View view;
+                        if ((view = diFragment.getView()) != null) view.setVisibility(View.GONE);
                         if (seek_reply != -1) viewPager.setCurrentItem(1);
 
                         if (SharedPreferencesUtil.getBoolean("first_dynamicinfo", true)) {

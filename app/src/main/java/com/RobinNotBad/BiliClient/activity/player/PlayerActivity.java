@@ -1209,7 +1209,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(prepared) switch (keyCode){
+        if (prepared) switch (keyCode) {
             case KeyEvent.KEYCODE_ENTER:
             case KeyEvent.KEYCODE_DPAD_CENTER:
                 controlVideo();

@@ -48,7 +48,7 @@ public class ArticleInfoActivity extends BaseActivity {
         TextView pageName = findViewById(R.id.pageName);
         pageName.setText("专栏详情");
 
-        TutorialHelper.show(R.xml.tutorial_article, this, "article", 1);
+        TutorialHelper.showTutorialList(this, R.array.tutorial_article, "article");
 
         ViewPager viewPager = findViewById(R.id.viewPager);
 
@@ -65,7 +65,9 @@ public class ArticleInfoActivity extends BaseActivity {
                 runOnUiThread(() -> {
                     ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
                     viewPager.setAdapter(vpfAdapter);
-                    View view; if ((view = articleInfoFragment.getView()) != null) view.setVisibility(View.GONE);
+                    View view;
+                    if ((view = articleInfoFragment.getView()) != null)
+                        view.setVisibility(View.GONE);
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
 
                     articleInfoFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(findViewById(R.id.loading), articleInfoFragment.getView()));

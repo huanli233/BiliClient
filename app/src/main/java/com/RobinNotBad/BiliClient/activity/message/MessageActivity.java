@@ -105,7 +105,7 @@ public class MessageActivity extends InstanceActivity {
                 }
             });
 
-            TutorialHelper.show(R.xml.tutorial_message, this, "message", 1);
+            TutorialHelper.showTutorialList(this, R.array.tutorial_message, "message");
         });
     }
 }
