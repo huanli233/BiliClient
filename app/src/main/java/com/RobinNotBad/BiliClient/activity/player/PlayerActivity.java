@@ -801,7 +801,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if (SharedPreferencesUtil.getBoolean("player_from_last", true) && !live_mode) {
             if (lastProgress > 5) { //阈值
                 mediaPlayer.seekTo(lastProgress * 1000);
-                runOnUiThread(() -> MsgUtil.toast("已从上次的位置播放", this));
+                runOnUiThread(() -> MsgUtil.showMsg("已从上次的位置播放", this));
             }
         }
 
