@@ -799,7 +799,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         progress_all_str = ToolsUtil.toTime(videoall / 1000);
 
         if (SharedPreferencesUtil.getBoolean("player_from_last", true) && !live_mode) {
-            if (lastProgress > 5) { //阈值
+            if (lastProgress > 6 && ((videoall / 1000) - lastProgress) > 6) { //阈值
                 mediaPlayer.seekTo(lastProgress * 1000);
                 runOnUiThread(() -> MsgUtil.showMsg("已从上次的位置播放", this));
             }
