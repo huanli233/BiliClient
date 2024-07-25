@@ -28,6 +28,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -307,6 +308,14 @@ public class VideoInfoFragment extends Fragment {
         }); //加载UP主
 
         title.setText(getTitleSpan());
+
+        //封面
+        if(SharedPreferencesUtil.getBoolean("ui_landscape",false)){
+            ConstraintLayout.LayoutParams coverParams = (ConstraintLayout.LayoutParams) cover.getLayoutParams();
+            coverParams.matchConstraintPercentWidth = 0.25f;
+            coverParams.horizontalBias = 0;
+            cover.setLayoutParams(coverParams);    //横屏改变封面大小并靠左
+        }
 
         Glide.with(requireContext()).asDrawable().load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
                 .transition(GlideUtil.getTransitionOptions())

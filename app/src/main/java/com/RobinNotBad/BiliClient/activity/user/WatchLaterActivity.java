@@ -3,11 +3,7 @@ package com.RobinNotBad.BiliClient.activity.user;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.WatchLaterApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
@@ -22,7 +18,7 @@ import java.util.ArrayList;
 //稍后再看
 //2023-08-17
 
-public class WatchLaterActivity extends BaseActivity {
+public class WatchLaterActivity extends RefreshMainActivity {
 
     private int longClickPosition = -1;
 
@@ -30,11 +26,7 @@ public class WatchLaterActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simple_list);
-
         setPageName("稍后再看");
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
         CenterThreadPool.run(() -> {
@@ -68,12 +60,10 @@ public class WatchLaterActivity extends BaseActivity {
                     }
                 });
 
-                runOnUiThread(() -> {
-                    recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                    recyclerView.setAdapter(adapter);
-                });
+                setAdapter(adapter);
+                setRefreshing(false);
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.err(e, this));
+                loadFail(e);
             }
         });
     }

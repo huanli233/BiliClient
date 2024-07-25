@@ -94,7 +94,7 @@ public class SettingMainActivity extends InstanceActivity {
 
             //实验性设置
             MaterialCardView laboratorySetting = findViewById(R.id.laboratory);
-            laboratorySetting.setVisibility(View.GONE);
+            //laboratorySetting.setVisibility(View.GONE);
             laboratorySetting.setOnClickListener(view -> {
                 Intent intent = new Intent();
                 intent.setClass(this, SettingLaboratoryActivity.class);

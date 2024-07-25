@@ -4,6 +4,7 @@ import static com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity.getRel
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -17,6 +18,9 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
@@ -34,6 +38,7 @@ public class BaseActivity extends AppCompatActivity {
     public int window_width, window_height;
     public Context old_context;
     public final ActivityResultLauncher<Intent> relayDynamicLauncher = getRelayDynamicLauncher(this);
+    public boolean force_single_column = false;
 
     //调整应用内dpi的代码，其他Activity要继承于BaseActivity才能调大小
     @Override
@@ -45,7 +50,12 @@ public class BaseActivity extends AppCompatActivity {
     //调整页面边距，参考了hankmi的方式
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setRequestedOrientation(SharedPreferencesUtil.getBoolean("ui_landscape",false)
+                ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         super.onCreate(savedInstanceState);
+
         int paddingH_percent = SharedPreferencesUtil.getInt("paddingH_percent", 0);
         int paddingV_percent = SharedPreferencesUtil.getInt("paddingV_percent", 0);
 
@@ -169,5 +179,15 @@ public class BaseActivity extends AppCompatActivity {
 
     protected interface InflateCallBack {
         void finishInflate(View view, int id);
+    }
+
+    public RecyclerView.LayoutManager getLayoutManager(){
+        return SharedPreferencesUtil.getBoolean("ui_landscape",false) && !force_single_column
+                ? new GridLayoutManager(this,3)
+                : new LinearLayoutManager(this);
+    }
+
+    public void setForceSingleColumn(){
+        force_single_column = true;
     }
 }

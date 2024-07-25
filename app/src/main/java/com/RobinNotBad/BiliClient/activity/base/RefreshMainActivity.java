@@ -37,7 +37,7 @@ public class RefreshMainActivity extends InstanceActivity {
         swipeRefreshLayout.setEnabled(false);
         swipeRefreshLayout.setRefreshing(true);
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(getLayoutManager());
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {

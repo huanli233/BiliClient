@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -15,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.listener.OnLoadMoreListener;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.view.ImageAutoLoadScrollListener;
 
 /*
@@ -30,6 +32,7 @@ public class RefreshListFragment extends Fragment {
     public boolean bottom = false;
     public int page = 1;
     public long lastLoadTimestamp;
+    public boolean force_single_column = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,7 +47,7 @@ public class RefreshListFragment extends Fragment {
         swipeRefreshLayout.setEnabled(false);
         swipeRefreshLayout.setRefreshing(true);
         recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setLayoutManager(getLayoutManager());
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -134,5 +137,15 @@ public class RefreshListFragment extends Fragment {
         page--;
         report(e);
         setRefreshing(false);
+    }
+
+    public RecyclerView.LayoutManager getLayoutManager(){
+        return SharedPreferencesUtil.getBoolean("ui_landscape",false) && !force_single_column
+                ? new GridLayoutManager(requireContext(),3)
+                : new LinearLayoutManager(requireContext());
+    }
+
+    public void setForceSingleColumn(){
+        force_single_column = true;
     }
 }

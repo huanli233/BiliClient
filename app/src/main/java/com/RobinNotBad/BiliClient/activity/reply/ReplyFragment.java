@@ -101,6 +101,7 @@ public class ReplyFragment extends RefreshListFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        setForceSingleColumn();
         super.onViewCreated(view, savedInstanceState);
 
         setOnRefreshListener(() -> refresh(aid));

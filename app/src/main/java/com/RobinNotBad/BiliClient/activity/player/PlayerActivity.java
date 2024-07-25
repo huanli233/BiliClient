@@ -154,7 +154,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         Log.e("加载", "加载");
         super.onCreate(savedInstanceState);
 
-        landscape = SharedPreferencesUtil.getBoolean("player_autolandscape", false);
+        landscape = SharedPreferencesUtil.getBoolean("player_autolandscape", false) || SharedPreferencesUtil.getBoolean("ui_landscape",false);
         setRequestedOrientation(landscape ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setContentView(R.layout.activity_player);
