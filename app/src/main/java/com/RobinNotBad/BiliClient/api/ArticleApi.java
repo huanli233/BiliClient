@@ -114,6 +114,7 @@ public class ArticleApi {
                 .put("csrf", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
         try {
+            assert resp.body() != null;
             JSONObject respBody = new JSONObject(resp.body().string());
             return respBody.getInt("code");
         } catch (JSONException ignored) {
@@ -139,6 +140,7 @@ public class ArticleApi {
                 .put("csrf", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
         try {
+            assert resp.body() != null;
             JSONObject respBody = new JSONObject(resp.body().string());
             return respBody.getInt("code");
         } catch (JSONException ignored) {
@@ -152,18 +154,15 @@ public class ArticleApi {
      * @param cvid CVID
      * @return 返回码
      */
-    public static int favorite(long cvid) throws IOException {
+    public static int favorite(long cvid) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/article/favorites/add";
         Response resp = Objects.requireNonNull(NetWorkUtil.post(url, new NetWorkUtil.FormData()
                 .put("id", cvid)
                 .put("csrf", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
-        try {
-            JSONObject respBody = new JSONObject(resp.body().string());
-            return respBody.getInt("code");
-        } catch (JSONException ignored) {
-            return -1;
-        }
+        assert resp.body() != null;
+        JSONObject respBody = new JSONObject(resp.body().string());
+        return respBody.getInt("code");
     }
 
     /**
@@ -172,18 +171,15 @@ public class ArticleApi {
      * @param cvid CVID
      * @return 返回码
      */
-    public static int delFavorite(long cvid) throws IOException {
+    public static int delFavorite(long cvid) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/article/favorites/del";
         Response resp = Objects.requireNonNull(NetWorkUtil.post(url, new NetWorkUtil.FormData()
                 .put("id", cvid)
                 .put("csrf", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
-        try {
-            JSONObject respBody = new JSONObject(resp.body().string());
-            return respBody.getInt("code");
-        } catch (JSONException ignored) {
-            return -1;
-        }
+        assert resp.body() != null;
+        JSONObject respBody = new JSONObject(resp.body().string());
+        return respBody.getInt("code");
     }
 
     public static Opus opusId2cvid(long opusId) throws JSONException, IOException {

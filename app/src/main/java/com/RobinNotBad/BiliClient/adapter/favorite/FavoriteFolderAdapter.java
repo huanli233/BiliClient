@@ -10,10 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.user.favorite.FavoriteVideoListActivity;
+import com.RobinNotBad.BiliClient.activity.user.favorite.FavouriteOpusListActivity;
 import com.RobinNotBad.BiliClient.model.FavoriteFolder;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -49,27 +51,43 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull FavoriteHolder holder, int position) {
-        holder.name.setText(ToolsUtil.htmlToString(folderList.get(position).name));
-        holder.count.setText(folderList.get(position).videoCount + "/" + folderList.get(position).maxCount);
-        Glide.with(this.context).asDrawable().load(GlideUtil.url(folderList.get(position).cover))
-                .transition(GlideUtil.getTransitionOptions())
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))))
-                .format(DecodeFormat.PREFER_RGB_565)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(holder.cover);
-        holder.itemView.setOnClickListener(view -> {
-            Intent intent = new Intent();
-            intent.setClass(context, FavoriteVideoListActivity.class);
-            intent.putExtra("fid", folderList.get(position).id);
-            intent.putExtra("mid", mid);
-            intent.putExtra("name", folderList.get(position).name);
-            context.startActivity(intent);
-        });
+        if(position == folderList.size()) {
+            holder.name.setText("图文收藏夹");
+            holder.count.setText("");
+            Glide.with(context).asDrawable()
+                    .load(ResourcesCompat.getDrawable(context.getResources(), R.drawable.article_fav_cover, context.getTheme()))
+                    .transition(GlideUtil.getTransitionOptions())
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(holder.cover);
+            holder.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, FavouriteOpusListActivity.class);
+                context.startActivity(intent);
+            });
+        }
+        else {
+            holder.name.setText(ToolsUtil.htmlToString(folderList.get(position).name));
+            holder.count.setText(folderList.get(position).videoCount + "/" + folderList.get(position).maxCount);
+            Glide.with(this.context).asDrawable().load(GlideUtil.url(folderList.get(position).cover))
+                    .transition(GlideUtil.getTransitionOptions())
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))))
+                    .format(DecodeFormat.PREFER_RGB_565)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(holder.cover);
+            holder.itemView.setOnClickListener(view -> {
+                Intent intent = new Intent();
+                intent.setClass(context, FavoriteVideoListActivity.class);
+                intent.putExtra("fid", folderList.get(position).id);
+                intent.putExtra("mid", mid);
+                intent.putExtra("name", folderList.get(position).name);
+                context.startActivity(intent);
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return folderList.size();
+        return folderList.size() + 1;
     }
 
     public static class FavoriteHolder extends RecyclerView.ViewHolder {

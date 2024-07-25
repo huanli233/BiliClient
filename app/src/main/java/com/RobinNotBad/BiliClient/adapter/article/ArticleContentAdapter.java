@@ -216,20 +216,22 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 fav.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     try {
                         if (articleInfo.stats.favoured) {
-                            ArticleApi.delFavorite(articleInfo.id);
-                            context.runOnUiThread(() -> fav.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_favourite_0)));
-                            articleInfo.stats.favorite--;
+                            if(ArticleApi.delFavorite(articleInfo.id)==0) {
+                                context.runOnUiThread(() -> fav.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_favourite_0)));
+                                articleInfo.stats.favorite--;
+                            }
                         } else {
-                            ArticleApi.favorite(articleInfo.id);
-                            context.runOnUiThread(() -> fav.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_favourite_1)));
-                            articleInfo.stats.favorite++;
+                            if(ArticleApi.favorite(articleInfo.id)==0) {
+                                context.runOnUiThread(() -> fav.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_favourite_1)));
+                                articleInfo.stats.favorite++;
+                            }
                         }
                         articleInfo.stats.favoured = !articleInfo.stats.favoured;
                         context.runOnUiThread(() -> {
                             favLabel.setText(ToolsUtil.toWan(articleInfo.stats.favorite));
                             MsgUtil.showMsg("操作成功~", context);
                         });
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         context.runOnUiThread(() -> MsgUtil.err(e, context));
                     }
                 }));

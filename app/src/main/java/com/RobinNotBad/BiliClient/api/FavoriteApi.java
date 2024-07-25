@@ -122,14 +122,14 @@ public class FavoriteApi {
         } else return -1;
     }
 
-    public static ArrayList<Opus> getFavouriteOpus(int page) throws IOException, JSONException {
+    public static boolean getFavouriteOpus(ArrayList<Opus> list, int page) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/opus/favlist?page_size=10&page=" + page;
         JSONObject result = NetWorkUtil.getJson(url);
         Log.e("OpusFav", result.toString());
         boolean hasMore = result.getJSONObject("data").getBoolean("has_more");
         if (!hasMore) Log.e("图文", "没有更多啦");
         JSONArray items = result.getJSONObject("data").getJSONArray("items");
-        ArrayList<Opus> list = new ArrayList<>();
+
         for (int i = 0; i < items.length(); i++) {
             JSONObject item = items.getJSONObject(i);
             Opus opus = new Opus();
@@ -146,7 +146,8 @@ public class FavoriteApi {
             opus.timeText = item.getString("time_text");
             list.add(opus);
         }
-        return list;
+
+        return hasMore;
     }
 
     public static void getFavoriteState(long aid, ArrayList<String> folderList, ArrayList<Long> fidList, ArrayList<Boolean> stateList) throws IOException, JSONException {
