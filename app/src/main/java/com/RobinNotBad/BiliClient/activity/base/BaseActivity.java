@@ -93,7 +93,6 @@ public class BaseActivity extends AppCompatActivity {
                 if (!isDestroyed()) {
                     finish();
                 }
-                ;
             });
             Log.e("debug", "set_exit");
         }
