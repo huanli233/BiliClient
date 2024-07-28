@@ -68,7 +68,8 @@
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
         <item>加回了单独的“我的关注”按钮</item>
-        <item>新增了按键控制功能</item>
+        <item>新增了播放器的按键控制功能</item>
+        <item>新增了初步的横屏模式</item>
         <item>修复了视频详情页崩溃的问题</item>
         <item>修复了部分情况下未安装对应播放器时闪退的问题</item>
     </string-array>
