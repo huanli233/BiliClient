@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Make directory
         run: mkdir out
+      - name: Make directory
+        run: ls ${{ gitea.workspace }}
       - name: Build with Gradle
         run: |
           ${{ gitea.workspace }}/gradlew :app:assembleDebug
