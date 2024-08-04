@@ -12,9 +12,9 @@ jobs:
     runs-on: BiliClient
     steps:
       - name: Git clone BiliClient
-        run: cd .. && rm -rf action_build_biliclient && git clone -b develop https://git.biliterminal.cn/biliclient/BiliClient.git action_build_biliclient && cd action_build_biliclient
+        run: cd .. && rm -rf action_build_biliclient && git clone -b develop https://git.biliterminal.cn/biliclient/BiliClient.git action_build_biliclient
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: chmod +x action_build_biliclient/gradlew
       - name: mkdir
         run: mkdir out
       - name: set up JDK 11
@@ -25,8 +25,8 @@ jobs:
           cache: gradle
       - name: Build with Gradle
         run: |
-          ./gradlew :app:assembleDebug
-          mv app/build/outputs/apk/debug/app-debug.apk out/app-debug.apk
+          cd action_build_biliclient/gradlew :app:assembleDebug
+          mv cd action_build_biliclient/app/build/outputs/apk/debug/app-debug.apk out/app-debug.apk
       - name: Upload APK(debug)
         uses: actions/upload-artifact@v3
         with:
