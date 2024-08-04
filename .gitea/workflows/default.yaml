@@ -15,7 +15,7 @@ jobs:
         run: git clone -b develop https://git.biliterminal.cn/biliclient/BiliClient.git .
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: mkdir
+      - name: Make directory
         run: mkdir out
       - name: Build with Gradle
         run: |
