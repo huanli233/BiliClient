@@ -28,22 +28,14 @@ jobs:
           path: out/app-debug.*
 
   build-release:
-    runs-on: ubuntu-latest
+    runs-on: BiliClient
     steps:
       - name: Git clone BiliClient
-        run: cd .. && sudo rm -rf action_build_biliclient && git clone -b develop https://gitee.com/RobinNotBad/BiliClient.git action_build_biliclient
-      - name: ls
-        run: ls -l /home/runner/work/action_build_biliclient/action_build_biliclient
+        run: git clone -b develop https://git.biliterminal.cn/biliclient/BiliClient.git .
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: mkdir
+      - name: Make directory
         run: mkdir out
-      - name: set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'temurin'
-          cache: gradle
       - name: Build with Gradle
         run: |
           ./gradlew :app:assembleRelease
