@@ -17,16 +17,10 @@ jobs:
         run: chmod +x gradlew
       - name: mkdir
         run: mkdir out
-      - name: set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'temurin'
-          cache: gradle
       - name: Build with Gradle
         run: |
-          cd action_build_biliclient/gradlew :app:assembleDebug
-          mv cd action_build_biliclient/app/build/outputs/apk/debug/app-debug.apk out/app-debug.apk
+          ./gradlew :app:assembleDebug
+          mv app/build/outputs/apk/debug/app-debug.apk out/app-debug.apk
       - name: Upload APK(debug)
         uses: actions/upload-artifact@v3
         with:
