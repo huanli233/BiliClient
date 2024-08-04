@@ -15,9 +15,8 @@ jobs:
         run: mkdir out
       - name: Build with Gradle
         run: |
-          cd ${{ gitea.workspace }}
-          ./gradlew :app:assembleDebug
-          mv app/build/outputs/apk/debug/app-debug.apk out/app-debug.apk
+          ${{ gitea.workspace }}/gradlew :app:assembleDebug
+          mv ${{ gitea.workspace }}/app/build/outputs/apk/debug/app-debug.apk ${{ gitea.workspace }}/out/app-debug.apk
       - name: Upload APK(debug)
         uses: actions/upload-artifact@v3
         with:
