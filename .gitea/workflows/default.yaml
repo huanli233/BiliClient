@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-debug:
-    runs-on: bi
+    runs-on: BiliClient
     steps:
       - name: Make directory
         run: mkdir out
