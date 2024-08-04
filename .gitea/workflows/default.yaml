@@ -6,7 +6,6 @@ on:
   schedule:
     - cron: '59 23 * * *'
     - cron: '0 12 * * *'
-    - cron: '18 16 * * *'
 
 jobs:
   build-debug:
