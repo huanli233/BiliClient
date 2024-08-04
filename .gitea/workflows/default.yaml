@@ -4,21 +4,29 @@ on:
   workflow_dispatch:
   push:
   schedule:
-    - cron: '59 23 * * *'
     - cron: '0 12 * * *'
+    - cron: '59 23 * * *'
 
 jobs:
   build-debug:
     runs-on: BiliClient
     steps:
-      - name: Make directory
+      - name: Git clone BiliClient
+        run: cd .. && sudo rm -rf action_build_biliclient && git clone -b develop https://git.biliterminal.cn/biliclient/BiliClient/BiliClient.git action_build_biliclient
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: mkdir
         run: mkdir out
-      - name: Make directory
-        run: ls ${{ gitea.workspace }}
+      - name: set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: gradle
       - name: Build with Gradle
         run: |
-          ${{ gitea.workspace }}/gradlew :app:assembleDebug
-          mv ${{ gitea.workspace }}/app/build/outputs/apk/debug/app-debug.apk ${{ gitea.workspace }}/out/app-debug.apk
+          ./gradlew :app:assembleDebug
+          mv app/build/outputs/apk/debug/app-debug.apk out/app-debug.apk
       - name: Upload APK(debug)
         uses: actions/upload-artifact@v3
         with:
@@ -28,9 +36,15 @@ jobs:
   build-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Make directory
+      - name: Git clone BiliClient
+        run: cd .. && sudo rm -rf action_build_biliclient && git clone -b develop https://gitee.com/RobinNotBad/BiliClient.git action_build_biliclient
+      - name: ls
+        run: ls -l /home/runner/work/action_build_biliclient/action_build_biliclient
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: mkdir
         run: mkdir out
-      - name: Set up JDK 11
+      - name: set up JDK 11
         uses: actions/setup-java@v3
         with:
           java-version: '11'
