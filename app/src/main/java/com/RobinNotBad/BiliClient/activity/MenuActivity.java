@@ -148,7 +148,7 @@ public class MenuActivity extends BaseActivity {
 
     private void killAndJump(String name) {
         if (btnNames.containsKey(name) && !Objects.equals(name, from)) {
-            InstanceActivity instance = BiliTerminal.instance;
+            InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
             if (instance != null && !instance.isDestroyed()) instance.finish();
 
             Intent intent = new Intent();
@@ -158,7 +158,7 @@ public class MenuActivity extends BaseActivity {
         } else {
             switch (name) {
                 case "exit": //退出按钮
-                    InstanceActivity instance = BiliTerminal.instance;
+                    InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
                     if (instance != null && !instance.isDestroyed()) instance.finish();
                     break;
                 case "login": //登录按钮

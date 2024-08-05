@@ -89,7 +89,7 @@ public class LocalPageChooseActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        InstanceActivity instance = BiliTerminal.instance;
+        InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
         if (deleted && instance instanceof LocalListActivity && !instance.isDestroyed())
             ((LocalListActivity) (instance)).refresh();
         super.onDestroy();

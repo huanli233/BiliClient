@@ -187,7 +187,7 @@ public class QRLoginFragment extends Fragment {
                             Log.e("refresh_token", SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""));
 
                             if (SharedPreferencesUtil.getBoolean("setup", false)) {
-                                InstanceActivity instance = BiliTerminal.instance;
+                                InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
                                 if (instance != null && !instance.isDestroyed()) instance.finish();
                             } else
                                 SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup, true);

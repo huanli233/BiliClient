@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.util.DisplayMetrics;
 
+import androidx.annotation.Nullable;
 import androidx.multidex.MultiDex;
 
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
@@ -16,12 +17,14 @@ import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
+import java.lang.ref.WeakReference;
+
 public class BiliTerminal extends Application {
 
     @SuppressLint("StaticFieldLeak")
     public static Context context;
-    @SuppressLint("StaticFieldLeak")
-    public static InstanceActivity instance;
+
+    public static WeakReference<InstanceActivity> instance = new WeakReference<>(null);
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -40,7 +43,12 @@ public class BiliTerminal extends Application {
     }
 
     public static void setInstance(InstanceActivity instanceActivity) {
-        instance = instanceActivity;
+        instance = new WeakReference<>(instanceActivity);
+    }
+
+    @Nullable
+    public static InstanceActivity getInstanceActivityOnTop(){
+        return instance.get();
     }
 
     /**
