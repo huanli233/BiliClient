@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +31,14 @@ import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.view.RadiusBackgroundSpan;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 //用户信息页专用Adapter 独立出来也是为了做首项不同
 
@@ -89,6 +93,20 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
         if (holder instanceof UserInfoHolder) {
             UserInfoHolder userInfoHolder = (UserInfoHolder) holder;
+
+            SpannableStringBuilder lvStr = new SpannableStringBuilder("Lv" + userInfo.level);
+            if(userInfo.vip_role > 0){
+                LinkedHashMap<Integer, String> vipTypeMap = new LinkedHashMap<>() {{
+                    put(1,"月度大会员");
+                    put(3,"年度大会员");
+                    put(7,"十年大会员");
+                    put(15,"百年大会员");
+                }};
+                lvStr.append("  " + vipTypeMap.get(userInfo.vip_role) + " ");
+                lvStr.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), ("Lv" + userInfo.level).length() + 1, lvStr.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            }
+            userInfoHolder.userLevel.setText(lvStr);
+
             userInfoHolder.userName.setText(userInfo.name);
             userInfoHolder.userDesc.setText(userInfo.sign);
             if (!userInfo.notice.isEmpty()) userInfoHolder.userNotice.setText(userInfo.notice);
@@ -96,8 +114,6 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             userInfoHolder.uidTv.setText(String.valueOf(userInfo.mid));
             ToolsUtil.setCopy(context, userInfoHolder.uidTv);
             ToolsUtil.setLink(userInfoHolder.userDesc, userInfoHolder.userNotice);
-            SpannableString lvStr = new SpannableString("Lv" + userInfo.level);
-            userInfoHolder.userLevel.setText(lvStr);
             userInfoHolder.userFans.setText(ToolsUtil.toWan(userInfo.fans) + "粉丝");
             userInfoHolder.userFans.setOnClickListener((view) -> view.getContext().startActivity(new Intent(view.getContext(), FollowUsersActivity.class).putExtra("mode", 1).putExtra("mid", userInfo.mid)));
             userInfoHolder.userFollowings.setText(ToolsUtil.toWan(userInfo.following) + "关注");

@@ -47,7 +47,12 @@ public class UserInfoApi {
             JSONObject official_data = card.getJSONObject("Official");
             int official = official_data.getInt("role");
             String officialDesc = official_data.getString("title");
-            return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc);
+
+            JSONObject vip = card.getJSONObject("vip");
+            if(vip.getInt("status") == 1){
+                return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, vip.getInt("role"));
+            }else return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc);
+
         } else return null;
 
     }

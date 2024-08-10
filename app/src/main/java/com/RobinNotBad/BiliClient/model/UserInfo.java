@@ -19,6 +19,8 @@ public class UserInfo implements Serializable, Parcelable {
     public int official;
     public String officialDesc;
     public long mtime;
+    public int vip_role = 0;
+    public String vip_nickname_color = "#cf5f2d";
 
     public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc) {
         this.mid = mid;
@@ -32,6 +34,21 @@ public class UserInfo implements Serializable, Parcelable {
         this.notice = notice;
         this.official = official;
         this.officialDesc = officialDesc;
+    }
+
+    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, int vip_role) {
+        this.mid = mid;
+        this.name = name;
+        this.avatar = avatar;
+        this.sign = sign;
+        this.fans = fans;
+        this.level = level;
+        this.following = following;
+        this.followed = followed;
+        this.notice = notice;
+        this.official = official;
+        this.officialDesc = officialDesc;
+        this.vip_role = vip_role;
     }
 
     public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, long mtime) {

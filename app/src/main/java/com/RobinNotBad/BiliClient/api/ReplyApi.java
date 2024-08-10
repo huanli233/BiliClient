@@ -120,6 +120,8 @@ public class ReplyApi {
         userInfo.mid = mid;
         userInfo.name = uname;
         userInfo.avatar = avatar;
+        userInfo.vip_role = member.getJSONObject("vip").getInt("vipStatus");
+        userInfo.vip_nickname_color = member.getJSONObject("vip").getString("nickname_color");
         replyReturn.sender = userInfo;    //发送者
 
         JSONObject content = reply.getJSONObject("content");
