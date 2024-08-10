@@ -54,7 +54,7 @@
     <string name="desc_fav_notice">打开此选项，退出收藏页面会提示收藏成功。\n但其实在你框选了收藏夹的时候就已经收藏了，这个选项只是为了看上去放心（</string>
     <string name="desc_tags_enable">打开此选项，视频详情页会显示形如“原神UP主激励计划/原神/纳西妲/手机游戏”的视频标签</string>
     <string name="desc_new_rcmd_param_enable">打开此选项，会使用新版首页推荐API，基本与网页版完全一致，请自行测试体验后决定是否开启</string>
-    <string name="desc_related_enable">打开此选项，视频评论区右侧会有相关视频推荐</string>
+    <string name="desc_related_enable">打开此选项，视频详情页的评论区右侧会有相关视频推荐</string>
     <string name="desc_creative_enable">打开此选项，在“我的”页面会显示创作中心（可查看投稿视频的数据变化情况）</string>
     <string name="desc_copy_enable">打开此选项，长按一些文字（如视频描述或评论）可以打开复制界面以复制这些文本</string>
     <string name="desc_cover_play_enable">打开此选项，视频详情页点击封面由查看图片变更为播放。默认根据你首次使用时点击了视频封面还是播放按钮来决定开关。</string>
@@ -65,6 +65,7 @@
     <string name="desc_strict_url_match">打开此选项，会在识别链接时（不包含编号，如AV/BV/CV等）使用更严格的匹配规则以避免整段被识别为链接。</string>
 
     <string name="update_tip">如果图片变扁请尝试前往偏好设置关闭“加载渐入渐出动画”\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
+    <string name="desc_no_vip_color">开启此选项后，将不会在评论区为大会员用户显示专属的红色名称</string>
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
         <item>加回了单独的“我的关注”按钮</item>

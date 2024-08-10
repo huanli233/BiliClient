@@ -162,7 +162,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .into(replyHolder.replyAvatar);
 
             UserInfo sender = replyList.get(realPosition).sender;
-            if (sender.vip_role > 0) replyHolder.userName.setTextColor(Color.parseColor(sender.vip_nickname_color));
+            if (sender.vip_role > 0 && !SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.NO_VIP_COLOR,false)) replyHolder.userName.setTextColor(Color.parseColor(sender.vip_nickname_color));
             if (sender.mid == up_mid) {
                 SpannableString name_str = new SpannableString(" UP " + replyList.get(realPosition).sender.name);
                 name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);

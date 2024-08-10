@@ -419,13 +419,155 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
                         android:singleLine="true"
-                        android:text="寻找某些功能时看看这里吧"
+                        android:text="找不到某些功能时就看看这里吧"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/prefSetting_go"
                         app:layout_constraintStart_toEndOf="@+id/prefSetting_icon"
                         app:layout_constraintTop_toBottomOf="@+id/prefSetting_title" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/repliesSetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/repliesSetting_go"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:src="@drawable/arrow_forward"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/repliesSetting_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/icon_reply"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHeight_percent="0.4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.5" />
+
+                    <TextView
+                        android:id="@+id/repliesSetting_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:text="评论区设置"
+                        android:textColor="#fff"
+                        android:textSize="11sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toTopOf="@+id/repliesSetting_desription"
+                        app:layout_constraintEnd_toStartOf="@+id/repliesSetting_go"
+                        app:layout_constraintStart_toEndOf="@+id/repliesSetting_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                        android:id="@+id/repliesSetting_desription"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="10dp"
+                        android:singleLine="true"
+                        android:text="关于评论区的一些设置选项"
+                        android:textColor="#fff"
+                        android:textSize="11sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/repliesSetting_go"
+                        app:layout_constraintStart_toEndOf="@+id/repliesSetting_icon"
+                        app:layout_constraintTop_toBottomOf="@+id/repliesSetting_title" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/infoSetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/infoSetting_go"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:src="@drawable/arrow_forward"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/infoSetting_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/icon_cv"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHeight_percent="0.4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.5" />
+
+                    <TextView
+                        android:id="@+id/infoSetting_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:text="详情页设置"
+                        android:textColor="#fff"
+                        android:textSize="11sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toTopOf="@+id/infoSetting_desription"
+                        app:layout_constraintEnd_toStartOf="@+id/infoSetting_go"
+                        app:layout_constraintStart_toEndOf="@+id/infoSetting_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                        android:id="@+id/infoSetting_desription"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="10dp"
+                        android:singleLine="true"
+                        android:text="视频详情页、专栏详情页等各类详情页相关设置"
+                        android:textColor="#fff"
+                        android:textSize="11sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/infoSetting_go"
+                        app:layout_constraintStart_toEndOf="@+id/infoSetting_icon"
+                        app:layout_constraintTop_toBottomOf="@+id/infoSetting_title" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

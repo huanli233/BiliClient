@@ -92,6 +92,22 @@ public class SettingMainActivity extends InstanceActivity {
                 startActivity(intent);
             });
 
+            //评论区设置
+            MaterialCardView repliesSetting = findViewById(R.id.repliesSetting);
+            repliesSetting.setOnClickListener(view -> {
+                Intent intent = new Intent();
+                intent.setClass(this, SettingRepliesActivity.class);
+                startActivity(intent);
+            });
+
+            //评论区设置
+            MaterialCardView infoSetting = findViewById(R.id.infoSetting);
+            infoSetting.setOnClickListener(view -> {
+                Intent intent = new Intent();
+                intent.setClass(this, SettingInfoActivity.class);
+                startActivity(intent);
+            });
+
             //实验性设置
             MaterialCardView laboratorySetting = findViewById(R.id.laboratory);
             //laboratorySetting.setVisibility(View.GONE);

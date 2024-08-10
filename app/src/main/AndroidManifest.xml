@@ -145,6 +145,16 @@
             android:label="偏好设置"
             android:screenOrientation="locked" />
         <activity
+            android:name=".activity.settings.SettingRepliesActivity"
+            android:exported="false"
+            android:label="评论区设置"
+            android:screenOrientation="locked" />
+        <activity
+            android:name=".activity.settings.SettingInfoActivity"
+            android:exported="false"
+            android:label="详情页设置"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".activity.settings.SettingMenuActivity"
             android:exported="false"
             android:label="菜单设置"
