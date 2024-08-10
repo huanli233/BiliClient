@@ -29,7 +29,7 @@ import com.google.android.material.card.MaterialCardView;
 public class MySpaceActivity extends InstanceActivity {
 
     private ImageView userAvatar;
-    private TextView userName, userFans;
+    private TextView userName, userFans, userExp;
     private MaterialCardView myInfo, follow, watchLater, favorite, bangumi, history, creative, logout;
 
     private boolean confirmLogout = false;
@@ -48,6 +48,7 @@ public class MySpaceActivity extends InstanceActivity {
             userAvatar = findViewById(R.id.userAvatar);
             userName = findViewById(R.id.userName);
             userFans = findViewById(R.id.userFans);
+            userExp = findViewById(R.id.userExp);
 
             myInfo = findViewById(R.id.myinfo);
             follow = findViewById(R.id.follow);
@@ -71,6 +72,7 @@ public class MySpaceActivity extends InstanceActivity {
                                 .into(userAvatar);
                         userName.setText(userInfo.name);
                         userFans.setText(ToolsUtil.toWan(userInfo.fans) + "粉丝 " + userCoin + "硬币");
+                        userExp.setText("当前成长" + userInfo.current_exp + (userInfo.level >= 6 ? "" : ",距离Lv" + (userInfo.level + 1) + "还需" + (userInfo.next_exp - userInfo.current_exp)));
 
                         myInfo.setOnClickListener(view -> {
                             Intent intent = new Intent();

@@ -72,7 +72,12 @@ public class UserInfoApi {
             JSONObject official_data = data.getJSONObject("official");
             int official = official_data.getInt("role");
             String officialDesc = official_data.getString("desc");
-            return new UserInfo(mid, name, avatar, sign, fans, 0, level, false, "", official, officialDesc);
+
+            JSONObject level_exp = data.getJSONObject("level_exp");
+            long current_exp = level_exp.getLong("current_exp");
+            long next_exp = level_exp.getLong("next_exp");
+
+            return new UserInfo(mid, name, avatar, sign, fans, 0, level, false, "", official, officialDesc,current_exp,next_exp);
         } else return new UserInfo(0, "加载失败", "", "", 0, 0, 0, false, "", 0, "");
     }
 
