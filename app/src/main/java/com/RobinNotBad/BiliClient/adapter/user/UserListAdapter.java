@@ -49,12 +49,16 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.Holder
         if (userList.get(position).avatar.isEmpty()) {
             holder.avatar.setVisibility(View.GONE);
             holder.desc.setSingleLine(false);
-        } else Glide.with(context).asDrawable().load(GlideUtil.url(userList.get(position).avatar))
-                .transition(GlideUtil.getTransitionOptions())
-                .placeholder(R.mipmap.akari)
-                .apply(RequestOptions.circleCropTransform())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(holder.avatar);
+        } else {
+            Glide.with(context).asDrawable().load(GlideUtil.url(userList.get(position).avatar))
+                    .transition(GlideUtil.getTransitionOptions())
+                    .placeholder(R.mipmap.akari)
+                    .apply(RequestOptions.circleCropTransform())
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(holder.avatar);
+            holder.avatar.setVisibility(View.VISIBLE);
+            holder.desc.setSingleLine(true);
+        }
 
         if (userList.get(position).mid != -1) {
             holder.itemView.setOnClickListener(view -> {
