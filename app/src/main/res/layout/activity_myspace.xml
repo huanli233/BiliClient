@@ -108,7 +108,7 @@
                     app:layout_constraintStart_toEndOf="@id/userAvatar"
                     app:layout_constraintTop_toBottomOf="@id/userName" />
 
-                <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                <TextView
                     android:id="@+id/userExp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -118,7 +118,6 @@
                     android:alpha="0.7"
                     android:textColor="#fff"
                     android:textSize="11sp"
-                    android:text="1145"
                     app:layout_constraintStart_toEndOf="@id/userAvatar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/userFans" />

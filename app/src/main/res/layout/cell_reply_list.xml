@@ -19,7 +19,7 @@
 
     <com.RobinNotBad.BiliClient.view.MarqueeTextView
         android:id="@+id/replyUsername"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:singleLine="true"
@@ -27,11 +27,12 @@
         android:text="蔡徐坤"
         app:layout_constraintBottom_toTopOf="@+id/replyPubDate"
         app:layout_constraintStart_toEndOf="@+id/replyAvatar"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/replyAvatar" />
 
     <com.RobinNotBad.BiliClient.view.MarqueeTextView
         android:id="@+id/replyPubDate"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:alpha="0.7"
@@ -39,6 +40,7 @@
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="@+id/replyAvatar"
         app:layout_constraintStart_toEndOf="@+id/replyAvatar"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/replyUsername" />
 
     <TextView
