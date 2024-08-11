@@ -136,7 +136,7 @@ public class LiveInfoActivity extends BaseActivity {
                                         String play_url = urlInfo.host + codec.base_url + urlInfo.extra;
                                         runOnUiThread(() -> {
                                             try {
-                                                PlayerApi.jumpToPlayer(this, play_url, "", "直播·" + room.title, false, 0, "", 0, userInfo.mid, 0, true);
+                                                PlayerApi.jumpToPlayer(this, play_url, "", "直播·" + room.title, false, room_id, "", 0, userInfo.mid, 0, true);
                                             } catch (ActivityNotFoundException e) {
                                                 MsgUtil.showMsg("没有找到播放器，请检查是否安装", this);
                                             } catch (Exception e) {

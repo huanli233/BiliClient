@@ -39,8 +39,10 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
+import com.RobinNotBad.BiliClient.listener.PlayerDanmuClientListener;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -48,6 +50,9 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.view.BatteryView;
 import com.bumptech.glide.Glide;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -72,6 +77,8 @@ import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.danmaku.parser.IDataSource;
 import master.flame.danmaku.danmaku.parser.android.BiliDanmukuParser;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.Response;
 import okio.BufferedSink;
 import okio.Okio;
@@ -305,7 +312,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         loading_text0.setText("装填弹幕中");
                         loading_text1.setText("(≧∇≦)");
                     });
-                    downdanmu();
+                    if(!live_mode) downdanmu();
                     setDisplay();
                     break;
                 case 1:
@@ -320,6 +327,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         if (live_mode) {
             progressBar.setEnabled(false);
+            danmuSocketConnect();
         }
     }
 
@@ -1197,7 +1205,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         CenterThreadPool.run(() -> {
             try {
-                if (mid != 0 && aid != 0) {
+                if (mid != 0 && aid != 0 && !live_mode) {
                     HistoryApi.reportHistory(aid, cid, mid, videonow / 1000);
                 }
             } catch (Exception e) {
@@ -1228,5 +1236,35 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 break;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    OkHttpClient okHttpClient;
+    private void danmuSocketConnect(){
+        CenterThreadPool.run(() -> {
+            try {
+                String url = "https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo?id=" + aid;
+                Response response = NetWorkUtil.get(url, NetWorkUtil.webHeaders);
+                JSONObject data = new JSONObject(Objects.requireNonNull(response.body()).string()).getJSONObject("data");
+                JSONObject host = data.getJSONArray("host_list").getJSONObject(0);
+
+                url = "wss://" + host.getString("host") + ":" + host.getInt("wss_port") + "/sub";
+                Log.e("debug","连接WebSocket：" + url);
+
+                okHttpClient = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .url(url)
+                        .build();
+
+                PlayerDanmuClientListener listener = new PlayerDanmuClientListener();
+                listener.mid = mid;
+                listener.roomid = aid;
+                listener.key = data.getString("token");
+
+                okHttpClient.newWebSocket(request, listener);
+                okHttpClient.dispatcher().executorService().shutdown();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        });
     }
 }
