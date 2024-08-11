@@ -111,7 +111,7 @@
 
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/exclusiveTip"
+        android:id="@+id/liveRoom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="2dp"
@@ -119,6 +119,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/userNotice">
+
+        <TextView
+            android:id="@+id/liveRoomLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="6dp"
+            android:gravity="center_vertical"
+            android:textColor="#FB7299"
+            android:text="直播中：xxxx"
+            android:textAlignment="textStart"
+            android:textSize="13sp"
+            app:drawableRightCompat="@drawable/arrow_forward"
+            tools:ignore="RtlCompat" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/exclusiveTip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="2dp"
+        android:alpha="0.78"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/liveRoom">
 
         <TextView
             android:id="@+id/exclusiveTipLabel"
@@ -133,7 +160,6 @@
             android:textSize="13sp"
             tools:ignore="RtlCompat" />
     </com.google.android.material.card.MaterialCardView>
-
 
     <ImageView
         android:id="@+id/officialIcon"

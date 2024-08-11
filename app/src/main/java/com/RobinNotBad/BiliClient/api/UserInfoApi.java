@@ -5,6 +5,7 @@ import android.util.Log;
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.Collection;
+import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.DmImgParamUtil;
@@ -51,17 +52,31 @@ public class UserInfoApi {
             String officialDesc = official_data.getString("title");
 
             String sys_notice = "";
+            LiveRoom liveroom = null;
             try {
                 JSONObject spaceInfo = getUserSpaceInfo(mid);
                 if(spaceInfo != null){
-                    if(!spaceInfo.isNull("sys_notice")) sys_notice = spaceInfo.getJSONObject("sys_notice").getString("content").replace("请点此查看纪念账号相关说明","");
+                    if(!spaceInfo.isNull("sys_notice")) {
+                        sys_notice = spaceInfo.getJSONObject("sys_notice").optString("content");
+                        if(sys_notice == null) sys_notice = "";
+                        else sys_notice = sys_notice.replace("请点此查看纪念账号相关说明","");
+                    }
+                    if(!spaceInfo.isNull("live_room")){
+                        JSONObject live_room = spaceInfo.getJSONObject("live_room");
+                        if(live_room.getInt("roomStatus") == 1 && live_room.getInt("liveStatus") == 1) {
+                            liveroom = new LiveRoom();
+                            liveroom.title = "直播中：" + live_room.getString("title");
+                            liveroom.user_cover = live_room.getString("cover");
+                            liveroom.roomid = live_room.getLong("roomid");
+                        }
+                    }
                 }
             }catch (Exception ignore){}
 
             JSONObject vip = card.getJSONObject("vip");
             if(vip.getInt("status") == 1){
-                return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, vip.getInt("role"), sys_notice);
-            }else return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, sys_notice);
+                return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, vip.getInt("role"), sys_notice, liveroom);
+            }else return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, sys_notice, liveroom);
         } else return null;
     }
 

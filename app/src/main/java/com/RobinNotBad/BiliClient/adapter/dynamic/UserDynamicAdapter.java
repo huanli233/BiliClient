@@ -11,6 +11,7 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.live.LiveInfoActivity;
 import com.RobinNotBad.BiliClient.activity.message.PrivateMsgActivity;
 import com.RobinNotBad.BiliClient.activity.user.FollowUsersActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
@@ -107,7 +109,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     put(15,"百年大会员");
                 }};
                 lvStr.append("  " + vipTypeMap.get(userInfo.vip_role) + " ");
-                lvStr.setSpan(new RadiusBackgroundSpan(0, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), ("Lv" + userInfo.level).length() + 1, lvStr.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                lvStr.setSpan(new RadiusBackgroundSpan(1, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), ("Lv" + userInfo.level).length() + 1, lvStr.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
             userInfoHolder.userLevel.setText(lvStr);
 
@@ -158,6 +160,16 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 spannableString.setSpan(new ImageSpan(drawable),0,2,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 userInfoHolder.exclusiveTipLabel.setText(spannableString);
             }else userInfoHolder.exclusiveTip.setVisibility(View.GONE);
+
+            if(userInfo.live_room != null){
+                userInfoHolder.liveRoom.setVisibility(View.VISIBLE);
+                userInfoHolder.liveRoomLabel.setText(userInfo.live_room.title);
+                userInfoHolder.liveRoom.setOnClickListener(view -> {
+                    Intent intent = new Intent(context, LiveInfoActivity.class);
+                    intent.putExtra("room_id", userInfo.live_room.roomid);
+                    context.startActivity(intent);
+                });
+            }else userInfoHolder.liveRoom.setVisibility(View.GONE);
 
             if ((userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0)) || (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) || (userInfo.mid == 0))
                 userInfoHolder.followBtn.setVisibility(View.GONE);
@@ -232,7 +244,9 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         final TextView userNotice;
         final TextView userOfficial;
         final TextView exclusiveTipLabel;
+        final TextView liveRoomLabel;
         final MaterialCardView exclusiveTip;
+        final MaterialCardView liveRoom;
         final ImageView userAvatar;
         final ImageView officialIcon;
         final TextView uidTv;
@@ -250,6 +264,8 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             userOfficial = itemView.findViewById(R.id.userOfficial);
             exclusiveTip = itemView.findViewById(R.id.exclusiveTip);
             exclusiveTipLabel = itemView.findViewById(R.id.exclusiveTipLabel);
+            liveRoom = itemView.findViewById(R.id.liveRoom);
+            liveRoomLabel = itemView.findViewById(R.id.liveRoomLabel);
             officialIcon = itemView.findViewById(R.id.officialIcon);
             userAvatar = itemView.findViewById(R.id.userAvatar);
             followBtn = itemView.findViewById(R.id.followBtn);
