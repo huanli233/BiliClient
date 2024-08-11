@@ -145,6 +145,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 writeReply.sort.setOnClickListener(view -> {
                     if (this.listener != null) listener.onItemClick(0);
                 });
+
+                CenterThreadPool.run(() -> {
+                    try {
+                        long count = ReplyApi.getReplyCount(oid,type);
+                        CenterThreadPool.runOnUiThread(() -> writeReply.count_label.setText("共" + count + "条评论"));
+                    }catch (Exception ignore){}
+                });
             }
         }
         if (holder instanceof ReplyHolder) {
@@ -526,12 +533,14 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static class WriteReply extends RecyclerView.ViewHolder {
         final MaterialButton write_reply;
         final MaterialButton sort;
+        final TextView count_label;
 
         public WriteReply(@NonNull View itemView) {
             super(itemView);
 
             write_reply = itemView.findViewById(R.id.write_reply);
             sort = itemView.findViewById(R.id.sort);
+            count_label = itemView.findViewById(R.id.count_label);
         }
     }
 }

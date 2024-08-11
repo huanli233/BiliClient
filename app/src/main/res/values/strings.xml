@@ -70,12 +70,16 @@
     <string name="desc_reply_marquee_name">开启此选项后，评论区的用户名称将会以跑马灯的形式展现，而不是换行</string>
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
-        <item>加回了单独的“我的关注”按钮</item>
-        <item>新增了播放器的按键控制功能</item>
+        <item>添加了单独的“我的关注”按钮</item>
         <item>新增了初步的横屏模式</item>
         <item>新增了初步的经验值显示</item>
+        <item>新增了用户空间中直播状态的展示</item>
+        <item>实现了用户空间中提示信息的展示</item>
         <item>实现了大会员状态的显示</item>
         <item>实现了评论区中粉丝铭牌的显示</item>
+        <item>实现了等级标识的显示</item>
+        <item>实现了播放器的按键控制功能</item>
+        <item>实现了评论区数量的显示</item>
         <item>修复了视频详情页崩溃的问题</item>
         <item>修复了部分情况下未安装对应播放器时闪退的问题</item>
         <item>修复了捐赠列表内部分捐赠者不显示头像的问题</item>

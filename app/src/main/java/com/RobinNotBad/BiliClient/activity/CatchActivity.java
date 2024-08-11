@@ -18,6 +18,8 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 public class CatchActivity extends BaseActivity {
     private boolean openStack = false;
@@ -52,8 +54,10 @@ public class CatchActivity extends BaseActivity {
                 reason_str = new SpannableString("可能的崩溃原因：\n内存爆了，在小内存设备上很正常");
 
             findViewById(R.id.upload_btn).setOnClickListener(view -> {
-                if (stack.contains("java.lang.OutOfMemoryError"))
-                    Toast.makeText(this, "无需上报", Toast.LENGTH_SHORT).show();
+                if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, -1) == -1)
+                    MsgUtil.showMsg( "不会对未登录时遇到的问题负责", this);
+                else if (stack.contains("java.lang.OutOfMemoryError"))
+                    MsgUtil.showMsg( "无需上报", this);
                 else {
                     CenterThreadPool.run(() -> {
                         String res = AppInfoApi.uploadStack(stack, this);

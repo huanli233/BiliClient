@@ -277,4 +277,13 @@ public class ReplyApi {
         Log.e("debug-点赞评论", result.toString());
         return result.getInt("code");
     }
+
+    public static long getReplyCount(long oid, int type) throws JSONException, IOException {
+        String url = "https://api.bilibili.com/x/v2/reply/count?oid=" + oid + "&type=" + type;
+        JSONObject all = NetWorkUtil.getJson(url);
+        if (all.has("data") && (!all.isNull("data"))) {
+            return all.getJSONObject("data").getLong("count");
+        }
+        return 0;
+    }
 }
