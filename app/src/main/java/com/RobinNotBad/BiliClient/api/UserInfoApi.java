@@ -2,11 +2,13 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.util.Log;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.DmImgParamUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -48,13 +50,29 @@ public class UserInfoApi {
             int official = official_data.getInt("role");
             String officialDesc = official_data.getString("title");
 
+            String sys_notice = "";
+            try {
+                JSONObject spaceInfo = getUserSpaceInfo(mid);
+                if(spaceInfo != null){
+                    if(!spaceInfo.isNull("sys_notice")) sys_notice = spaceInfo.getJSONObject("sys_notice").getString("content").replace("请点此查看纪念账号相关说明","");
+                }
+            }catch (Exception ignore){}
+
             JSONObject vip = card.getJSONObject("vip");
             if(vip.getInt("status") == 1){
-                return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, vip.getInt("role"));
-            }else return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc);
-
+                return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, vip.getInt("role"), sys_notice);
+            }else return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, sys_notice);
         } else return null;
+    }
 
+    public static JSONObject getUserSpaceInfo(long mid) throws JSONException, IOException {
+        String url = "https://api.bilibili.com/x/space/wbi/acc/info?";
+        url += "mid=" + mid;
+        JSONObject all = NetWorkUtil.getJson(ConfInfoApi.signWBI(DmImgParamUtil.getDmImgParamsUrl(url)));
+        if (all.has("data") && !all.isNull("data")) {
+            return all.getJSONObject("data");
+        }
+        return null;
     }
 
     public static UserInfo getCurrentUserInfo() throws IOException, JSONException {

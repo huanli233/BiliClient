@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -147,6 +150,15 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 context.startActivity(intent);
             });
 
+            if(!userInfo.sys_notice.isEmpty()){
+                userInfoHolder.exclusiveTip.setVisibility(View.VISIBLE);
+                SpannableString spannableString = new SpannableString("!:" + userInfo.sys_notice);
+                Drawable drawable = context.getResources().getDrawable(R.drawable.icon_warning);
+                drawable.setBounds(0,0,30,30);
+                spannableString.setSpan(new ImageSpan(drawable),0,2,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                userInfoHolder.exclusiveTipLabel.setText(spannableString);
+            }else userInfoHolder.exclusiveTip.setVisibility(View.GONE);
+
             if ((userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0)) || (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) || (userInfo.mid == 0))
                 userInfoHolder.followBtn.setVisibility(View.GONE);
             else userInfoHolder.followBtn.setChecked(userInfo.followed);
@@ -219,6 +231,8 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         final TextView userDesc;
         final TextView userNotice;
         final TextView userOfficial;
+        final TextView exclusiveTipLabel;
+        final MaterialCardView exclusiveTip;
         final ImageView userAvatar;
         final ImageView officialIcon;
         final TextView uidTv;
@@ -234,6 +248,8 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             userFans = itemView.findViewById(R.id.userFollowers);
             userFollowings = itemView.findViewById(R.id.userFollowings);
             userOfficial = itemView.findViewById(R.id.userOfficial);
+            exclusiveTip = itemView.findViewById(R.id.exclusiveTip);
+            exclusiveTipLabel = itemView.findViewById(R.id.exclusiveTipLabel);
             officialIcon = itemView.findViewById(R.id.officialIcon);
             userAvatar = itemView.findViewById(R.id.userAvatar);
             followBtn = itemView.findViewById(R.id.followBtn);

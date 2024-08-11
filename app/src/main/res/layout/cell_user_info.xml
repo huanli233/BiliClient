@@ -109,6 +109,32 @@
         app:layout_constraintTop_toBottomOf="@id/userDesc"
         tools:ignore="TouchTargetSizeCheck" />
 
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/exclusiveTip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="2dp"
+        android:alpha="0.78"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/userNotice">
+
+        <TextView
+            android:id="@+id/exclusiveTipLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="6dp"
+            android:gravity="center_vertical"
+            android:text="该用户存在争议行为，已冻结其帐号功能的使用"
+            android:textAlignment="textStart"
+            android:textSize="13sp"
+            tools:ignore="RtlCompat" />
+    </com.google.android.material.card.MaterialCardView>
+
+
     <ImageView
         android:id="@+id/officialIcon"
         android:layout_width="14dp"
@@ -130,7 +156,7 @@
         android:textSize="11sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/officialIcon"
-        app:layout_constraintTop_toBottomOf="@id/userNotice" />
+        app:layout_constraintTop_toBottomOf="@id/exclusiveTip" />
 
     <ImageView
         android:id="@+id/uidIcon"

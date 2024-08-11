@@ -29,6 +29,8 @@ public class UserInfo implements Serializable, Parcelable {
     public String medal_name = "";
     public int medal_level = 0;
 
+    public String sys_notice = "";
+
     public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc) {
         this.mid = mid;
         this.name = name;
@@ -41,6 +43,21 @@ public class UserInfo implements Serializable, Parcelable {
         this.notice = notice;
         this.official = official;
         this.officialDesc = officialDesc;
+    }
+
+    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, String sys_notice) {
+        this.mid = mid;
+        this.name = name;
+        this.avatar = avatar;
+        this.sign = sign;
+        this.fans = fans;
+        this.level = level;
+        this.following = following;
+        this.followed = followed;
+        this.notice = notice;
+        this.official = official;
+        this.officialDesc = officialDesc;
+        this.sys_notice = sys_notice;
     }
 
     public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, long current_exp, long next_exp) {
@@ -59,7 +76,7 @@ public class UserInfo implements Serializable, Parcelable {
         this.next_exp = next_exp;
     }
 
-    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, int vip_role) {
+    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, int vip_role, String sys_notice) {
         this.mid = mid;
         this.name = name;
         this.avatar = avatar;
@@ -72,6 +89,7 @@ public class UserInfo implements Serializable, Parcelable {
         this.official = official;
         this.officialDesc = officialDesc;
         this.vip_role = vip_role;
+        this.sys_notice = sys_notice;
     }
 
     public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, long mtime) {

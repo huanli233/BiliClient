@@ -378,7 +378,7 @@ public class ToolsUtil {
                 drawable = context.getResources().getDrawable(R.mipmap.level_0);
                 break;
         }
-        drawable.setBounds(0,0, (int) (drawable.getIntrinsicWidth() * 0.52), (int) (drawable.getIntrinsicHeight() * 0.52));
+        drawable.setBounds(0,0, 40, 23);
         return new ImageSpan(drawable);
     }
 }
