@@ -25,6 +25,7 @@ public class SettingRepliesActivity extends RefreshListActivity {
         final List<SettingSection> sectionList = new ArrayList<>() {{
             add(new SettingSection("switch", "众生平等的名称颜色", SharedPreferencesUtil.NO_VIP_COLOR, getString(R.string.desc_no_vip_color), "false"));
             add(new SettingSection("switch", "不想看见铭牌", SharedPreferencesUtil.NO_MEDAL, getString(R.string.desc_no_medal), "false"));
+            add(new SettingSection("switch", "跑马灯展示名称", SharedPreferencesUtil.REPLY_MARQUEE_NAME, getString(R.string.desc_reply_marquee_name), "false"));
         }};
 
         recyclerView.setHasFixedSize(true);

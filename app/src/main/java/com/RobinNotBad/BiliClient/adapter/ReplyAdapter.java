@@ -171,13 +171,24 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 name_str.setSpan(new RelativeSizeSpan(0.8f), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
+            int last_length = name_str.length();
+            name_str.append(" " + sender.level);
+            name_str.setSpan(ToolsUtil.getLevelBadge(context,sender), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             if (!sender.medal_name.isEmpty()){
-                int last_length = name_str.length();
+                last_length = name_str.length();
                 name_str.append("  ").append(sender.medal_name).append("Lv").append(String.valueOf(sender.medal_level)).append(" ");
                 name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.argb(140,158,186,232)), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 name_str.setSpan(new RelativeSizeSpan(0.8f), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
             replyHolder.userName.setText(name_str);
+
+            if(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.REPLY_MARQUEE_NAME,false)) {
+                replyHolder.userName.setSingleLine(true);
+                replyHolder.userName.setMaxLines(1);
+            }else{
+                replyHolder.userName.setSingleLine(false);
+                replyHolder.userName.setMaxLines(3);
+            }
 
 
             String text = replyList.get(realPosition).message;

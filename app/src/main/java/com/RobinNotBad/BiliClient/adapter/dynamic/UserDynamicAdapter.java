@@ -95,6 +95,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             UserInfoHolder userInfoHolder = (UserInfoHolder) holder;
 
             SpannableStringBuilder lvStr = new SpannableStringBuilder("Lv" + userInfo.level);
+            lvStr.setSpan(ToolsUtil.getLevelBadge(context,userInfo), 0, lvStr.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             if(userInfo.vip_role > 0){
                 LinkedHashMap<Integer, String> vipTypeMap = new LinkedHashMap<>() {{
                     put(1,"月度大会员");
@@ -103,7 +104,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     put(15,"百年大会员");
                 }};
                 lvStr.append("  " + vipTypeMap.get(userInfo.vip_role) + " ");
-                lvStr.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), ("Lv" + userInfo.level).length() + 1, lvStr.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                lvStr.setSpan(new RadiusBackgroundSpan(0, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), ("Lv" + userInfo.level).length() + 1, lvStr.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
             userInfoHolder.userLevel.setText(lvStr);
 

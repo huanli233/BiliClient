@@ -19,6 +19,7 @@ public class SharedPreferencesUtil {
     public static final String STRICT_URL_MATCH = "strict_url_match";
     public static final String NO_VIP_COLOR = "no_vip_color";
     public static final String NO_MEDAL = "no_medal";
+    public static final String REPLY_MARQUEE_NAME = "reply_marquee_name";
 
     public static String cookies = "cookies";
     public static String mid = "mid";

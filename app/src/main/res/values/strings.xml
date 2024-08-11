@@ -67,6 +67,7 @@
     <string name="update_tip">如果图片变扁请尝试前往偏好设置关闭“加载渐入渐出动画”\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
     <string name="desc_no_vip_color">开启此选项后，将不会在评论区为大会员用户显示专属的红色名称</string>
     <string name="desc_no_medal">开启此选项后，将不会在评论区显示用户的粉丝铭牌</string>
+    <string name="desc_reply_marquee_name">开启此选项后，评论区的用户名称将会以跑马灯的形式展现，而不是换行</string>
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
         <item>加回了单独的“我的关注”按钮</item>

@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:layout_marginBottom="2dp"
-        android:alpha="0.7"
+        android:alpha="0.86"
         tools:text="Lv114"
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="@+id/userAvatar"

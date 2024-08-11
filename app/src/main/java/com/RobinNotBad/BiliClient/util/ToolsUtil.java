@@ -13,12 +13,16 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
+import android.text.style.ImageSpan;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,6 +35,7 @@ import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.model.At;
+import com.RobinNotBad.BiliClient.model.UserInfo;
 
 import java.util.List;
 import java.util.Locale;
@@ -346,5 +351,34 @@ public class ToolsUtil {
 
     public static boolean isDebugBuild() {
         return BuildConfig.BETA;
+    }
+
+    public static ImageSpan getLevelBadge(Context context,UserInfo userInfo){
+        Drawable drawable;
+        switch (userInfo.level){
+            case 6:
+                drawable = context.getResources().getDrawable(R.mipmap.level_6);
+                break;
+            case 5:
+                drawable = context.getResources().getDrawable(R.mipmap.level_5);
+                break;
+            case 4:
+                drawable = context.getResources().getDrawable(R.mipmap.level_4);
+                break;
+            case 3:
+                drawable = context.getResources().getDrawable(R.mipmap.level_3);
+                break;
+            case 2:
+                drawable = context.getResources().getDrawable(R.mipmap.level_2);
+                break;
+            case 1:
+                drawable = context.getResources().getDrawable(R.mipmap.level_1);
+                break;
+            default:
+                drawable = context.getResources().getDrawable(R.mipmap.level_0);
+                break;
+        }
+        drawable.setBounds(0,0, (int) (drawable.getIntrinsicWidth() * 0.52), (int) (drawable.getIntrinsicHeight() * 0.52));
+        return new ImageSpan(drawable);
     }
 }
