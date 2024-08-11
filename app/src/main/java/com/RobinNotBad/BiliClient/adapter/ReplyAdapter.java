@@ -9,9 +9,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -162,13 +164,20 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .into(replyHolder.replyAvatar);
 
             UserInfo sender = replyList.get(realPosition).sender;
+            SpannableStringBuilder name_str = new SpannableStringBuilder(replyList.get(realPosition).sender.name);
             if (sender.vip_role > 0 && !SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.NO_VIP_COLOR,false)) replyHolder.userName.setTextColor(Color.parseColor(sender.vip_nickname_color));
             if (sender.mid == up_mid) {
-                SpannableString name_str = new SpannableString(" UP " + replyList.get(realPosition).sender.name);
+                name_str = new SpannableStringBuilder(" UP " + replyList.get(realPosition).sender.name);
                 name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 name_str.setSpan(new RelativeSizeSpan(0.8f), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                replyHolder.userName.setText(name_str);
-            } else replyHolder.userName.setText(sender.name);
+            }
+            if (!sender.medal_name.isEmpty()){
+                int last_length = name_str.length();
+                name_str.append("  ").append(sender.medal_name).append("Lv").append(String.valueOf(sender.medal_level)).append(" ");
+                name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.argb(140,158,186,232)), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                name_str.setSpan(new RelativeSizeSpan(0.8f), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            }
+            replyHolder.userName.setText(name_str);
 
 
             String text = replyList.get(realPosition).message;

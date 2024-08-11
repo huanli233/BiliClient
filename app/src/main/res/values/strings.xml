@@ -66,13 +66,15 @@
 
     <string name="update_tip">如果图片变扁请尝试前往偏好设置关闭“加载渐入渐出动画”\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
     <string name="desc_no_vip_color">开启此选项后，将不会在评论区为大会员用户显示专属的红色名称</string>
+    <string name="desc_no_medal">开启此选项后，将不会在评论区显示用户的粉丝铭牌</string>
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
         <item>加回了单独的“我的关注”按钮</item>
         <item>新增了播放器的按键控制功能</item>
         <item>新增了初步的横屏模式</item>
         <item>新增了初步的经验值显示</item>
-        <item>新增了大会员状态的显示</item>
+        <item>实现了大会员状态的显示</item>
+        <item>实现了评论区中粉丝铭牌的显示</item>
         <item>修复了视频详情页崩溃的问题</item>
         <item>修复了部分情况下未安装对应播放器时闪退的问题</item>
         <item>修复了捐赠列表内部分捐赠者不显示头像的问题</item>

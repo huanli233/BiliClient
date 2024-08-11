@@ -120,8 +120,14 @@ public class ReplyApi {
         userInfo.mid = mid;
         userInfo.name = uname;
         userInfo.avatar = avatar;
-        userInfo.vip_role = member.getJSONObject("vip").getInt("vipStatus");
-        userInfo.vip_nickname_color = member.getJSONObject("vip").getString("nickname_color");
+        JSONObject vip = member.getJSONObject("vip");
+        userInfo.vip_role = vip.getInt("vipStatus");
+        userInfo.vip_nickname_color = vip.getString("nickname_color");
+        if((!member.isNull("fans_detail")) && (!SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.NO_MEDAL,false))){
+            JSONObject fans_detail = member.getJSONObject("fans_detail");
+            userInfo.medal_name = fans_detail.getString("medal_name");
+            userInfo.medal_level = fans_detail.getInt("level");
+        }
         replyReturn.sender = userInfo;    //发送者
 
         JSONObject content = reply.getJSONObject("content");

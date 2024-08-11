@@ -19,10 +19,15 @@ public class UserInfo implements Serializable, Parcelable {
     public int official;
     public String officialDesc;
     public long mtime;
+
     public int vip_role = 0;
     public String vip_nickname_color = "#cf5f2d";
+
     public long current_exp = 0;
     public long next_exp = 0;
+
+    public String medal_name = "";
+    public int medal_level = 0;
 
     public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc) {
         this.mid = mid;
