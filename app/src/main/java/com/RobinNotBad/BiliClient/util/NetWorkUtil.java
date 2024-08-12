@@ -349,7 +349,7 @@ public class NetWorkUtil {
 
             try {
                 for (String key : data.keySet()) {
-                    if (sb.length() > 0) {
+                    if (sb.length() > (isUrlParam ? 1 : 0)) {
                         sb.append("&");
                     }
                     sb.append(URLEncoder.encode(key, "UTF-8"));
