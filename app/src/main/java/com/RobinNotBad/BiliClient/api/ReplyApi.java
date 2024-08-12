@@ -90,12 +90,15 @@ public class ReplyApi {
             JSONObject data = all.getJSONObject("data");
             JSONObject cursor = data.getJSONObject("cursor");
             if (!data.isNull("replies") && data.getJSONArray("replies").length() > 0) {
-                if (rpid == 0 && data.has("top_replies") && cursor.getBoolean("is_begin"))
+                if (rpid <= 0 && data.has("top_replies") && !data.isNull("top_replies") && cursor.getBoolean("is_begin"))
                     analyzeReplyArray(true, data.getJSONArray("top_replies"), replyArrayList);
                 JSONArray replies = data.getJSONArray("replies");
                 analyzeReplyArray(true, replies, replyArrayList);
                 if (cursor.optBoolean("is_end", false)) return 1;
                 else return 0;
+            } else if (rpid <= 0 && data.has("top_replies") && !data.isNull("top_replies") && cursor.getBoolean("is_begin")) {
+                analyzeReplyArray(true, data.getJSONArray("top_replies"), replyArrayList);
+                return 1;
             } else return 1;
         } else return -1;
     }  //-1错误,0正常，1到底了
