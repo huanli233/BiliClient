@@ -72,6 +72,7 @@ public class NetWorkUtil {
                         return response;
                     })
                     .addInterceptor(new CookieSaveInterceptor())
+                    .pingInterval(40, TimeUnit.SECONDS)
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(15, TimeUnit.SECONDS).build());
         }

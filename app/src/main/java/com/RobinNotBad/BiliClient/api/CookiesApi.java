@@ -128,6 +128,7 @@ public class CookiesApi {
         put("header_theme_version", "undefined");
         put("home_feed_column", "4");
         put("browser_resolution", "839-959");
+        put("PVID", "1");
     }};
 
     public static void checkCookies() throws JSONException, IOException {
@@ -171,6 +172,13 @@ public class CookiesApi {
         // b_nut
         if (!cookies.containsKey("b_nut")) {
             NetWorkUtil.putCookie("b_nut", gen_b_nut());
+        }
+
+        // LIVE_BUVID
+        if (!cookies.containsKey("LIVE_BUVID")) {
+            long min = 1000000000000000L;
+            long max = 9999999999999999L;
+            NetWorkUtil.putCookie("LIVE_BUVID", "AUTO" + (min + (long) (new Random().nextDouble() * (max - min))));
         }
 
         // Others

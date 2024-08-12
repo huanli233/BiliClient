@@ -2,6 +2,8 @@ package com.RobinNotBad.BiliClient.activity.player;
 
 import static android.media.AudioManager.STREAM_MUSIC;
 
+import static com.RobinNotBad.BiliClient.util.NetWorkUtil.USER_AGENT_WEB;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -39,7 +41,6 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.listener.PlayerDanmuClientListener;
@@ -51,12 +52,12 @@ import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.RobinNotBad.BiliClient.view.BatteryView;
 import com.bumptech.glide.Glide;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -640,7 +641,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         //这个坑死我！请允许我为解决此问题而大大地兴奋一下ohhhhhhhhhhhhhhhhhhhhhhhhhhhh
         //ijkplayer是自带一个useragent的，要把默认的改掉才能用！
         if (mode == 0) {
-            ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "user_agent", NetWorkUtil.USER_AGENT_WEB);
+            ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "user_agent", USER_AGENT_WEB);
             Log.e("debug", "设置ua");
         }
 
@@ -1242,8 +1243,11 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private void danmuSocketConnect(){
         CenterThreadPool.run(() -> {
             try {
-                String url = "https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo?id=" + aid;
-                Response response = NetWorkUtil.get(url, NetWorkUtil.webHeaders);
+                String url = "https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo?type=0&id=" + aid;
+                ArrayList<String> mHeaders = new ArrayList<>(NetWorkUtil.webHeaders);
+                mHeaders.add("Referer"); mHeaders.add("https://live.bilibili.com/" + aid);
+                mHeaders.add("Origin"); mHeaders.add("https://live.bilibili.com");
+                Response response = NetWorkUtil.get(url, mHeaders);
                 JSONObject data = new JSONObject(Objects.requireNonNull(response.body()).string()).getJSONObject("data");
                 JSONObject host = data.getJSONArray("host_list").getJSONObject(0);
 
@@ -1253,6 +1257,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 okHttpClient = new OkHttpClient();
                 Request request = new Request.Builder()
                         .url(url)
+                        .header("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""))
+                        .header("Origin", "https://live.bilibili.com")
+                        .header("User-Agent", USER_AGENT_WEB)
                         .build();
 
                 PlayerDanmuClientListener listener = new PlayerDanmuClientListener();
@@ -1261,7 +1268,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 listener.key = data.getString("token");
 
                 okHttpClient.newWebSocket(request, listener);
-                okHttpClient.dispatcher().executorService().shutdown();
+//                okHttpClient.dispatcher().executorService().shutdown();
             }catch (Exception e){
                 e.printStackTrace();
             }

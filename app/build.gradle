@@ -109,8 +109,11 @@ dependencies {
     //ijk
     implementation project(path: ':ijkplayer-java')
     implementation project(path: ':DanmakuFlameMaster')
+    implementation project(path: ':brotlij')
     implementation 'androidx.asynclayoutinflater:asynclayoutinflater:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     def multidex_version = "2.0.1"
     implementation "androidx.multidex:multidex:$multidex_version"
+    implementation "org.brotli:dec:0.1.2"
+    implementation "com.aayushatharva.brotli4j:brotli4j:1.16.0"
 }

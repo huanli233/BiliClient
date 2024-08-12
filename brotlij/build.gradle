@@ -1,0 +1,55 @@
+apply plugin: 'com.android.library'
+
+version = '0.0.1-SNAPSHOT'
+group = 'com.netease.hearttouch'
+
+android {
+    compileSdkVersion 34
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 35
+        versionCode 3
+        versionName "0.0.3"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        debug {
+            ndk {
+                abiFilters 'armeabi-v7a', 'x86'
+            }
+        }
+        release {
+            minifyEnabled false
+            proguardFiles.add(file("proguard-rules.pro"))
+            ndk {
+                abiFilters 'armeabi-v7a', 'x86'
+//                    abiFilters 'armeabi-v7a'
+            }
+        }
+    }
+
+
+    // Encapsulates your external native build configurations.
+    externalNativeBuild {
+
+        // Encapsulates your CMake build configurations.
+        ndkBuild {
+
+            // Provides a relative path to your CMake build script.
+            path "src/main/jni/Android.mk"
+        }
+    }
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testImplementation 'junit:junit:4.13.2'
+}

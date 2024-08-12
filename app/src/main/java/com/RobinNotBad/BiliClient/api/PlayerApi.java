@@ -32,13 +32,17 @@ import okhttp3.Response;
 
 public class PlayerApi {
     public static void startGettingUrl(Context context, VideoInfo videoInfo, int page, int progress) {
+        long mid;
+        try {
+            mid = SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
+        } catch (Throwable ignored) { mid = 0; }
         Intent intent = new Intent()
                 .setClass(context, JumpToPlayerActivity.class)
                 .putExtra("title", (videoInfo.pagenames.size() == 1 ? videoInfo.title : videoInfo.pagenames.get(page)))
                 .putExtra("bvid", videoInfo.bvid)
                 .putExtra("aid", videoInfo.aid)
                 .putExtra("cid", videoInfo.cids.get(page))
-                .putExtra("mid", videoInfo.staff.get(0).mid)
+                .putExtra("mid", mid)
                 .putExtra("progress", progress);
         context.startActivity(intent);
     }
