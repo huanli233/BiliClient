@@ -378,7 +378,7 @@ public class ToolsUtil {
                 drawable = context.getResources().getDrawable(R.mipmap.level_0);
                 break;
         }
-        float lineHeight = ToolsUtil.getTextHeightWithSize(context, 11);
+        float lineHeight = ToolsUtil.getTextHeightWithSize(context, 10);
         drawable.setBounds(0,0, ((int) lineHeight) * 2, (int) lineHeight);
         return new ImageSpan(drawable);
     }
