@@ -68,8 +68,8 @@ public class ReplyApi {
 
     public static int getRepliesLazy(long oid, long rpid, int pn, int type, int sort, List<Reply> replyArrayList) throws JSONException, IOException {
 
-        String url = "https://api.bilibili.com/x/v2/reply/wbi/main" + "?next=" + --pn
-                + "&type=" + type + "&oid=" + oid + "&plat=1&web_location=1315875&mode=" + sort + (rpid == 0 ? "" : ("&seek_rpid=" + rpid));
+        String url = "https://api.bilibili.com/x/v2/reply/wbi/main" + "?next=" + pn
+                + "&type=" + type + "&oid=" + oid + "&plat=1&web_location=1315875&mode=" + sort + (rpid <= 0 ? "" : ("&seek_rpid=" + rpid));
 
         //Log.e("debug-评论区链接", url);
 
@@ -86,7 +86,7 @@ public class ReplyApi {
                     analyzeReplyArray(true, data.getJSONArray("top_replies"), replyArrayList);
                 JSONArray replies = data.getJSONArray("replies");
                 analyzeReplyArray(true, replies, replyArrayList);
-                if (replyArrayList.size() == size) return 1;
+                if (cursor.optBoolean("is_end", false) || replyArrayList.size() == size) return 1;
                 else return 0;
             } else return 1;
         } else return -1;

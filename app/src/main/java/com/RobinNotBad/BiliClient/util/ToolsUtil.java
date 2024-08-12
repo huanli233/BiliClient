@@ -13,17 +13,17 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.util.Patterns;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -378,7 +378,8 @@ public class ToolsUtil {
                 drawable = context.getResources().getDrawable(R.mipmap.level_0);
                 break;
         }
-        drawable.setBounds(0,0, 40, 23);
+        float lineHeight = ToolsUtil.getTextHeightWithSize(context, 11);
+        drawable.setBounds(0,0, ((int) lineHeight) * 2, (int) lineHeight);
         return new ImageSpan(drawable);
     }
 
@@ -395,5 +396,12 @@ public class ToolsUtil {
         System.arraycopy(byte_1, 0, byte_3, 0, byte_1.length);
         System.arraycopy(byte_2, 0, byte_3, byte_1.length, byte_2.length);
         return byte_3;
+    }
+
+    public static float getTextHeightWithSize(Context context, int sizeSp) {
+        Paint paint = new Paint();
+        paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, context.getResources().getDisplayMetrics()));
+        Paint.FontMetrics fontMetrics = paint.getFontMetrics();
+        return fontMetrics.descent - fontMetrics.ascent;
     }
 }

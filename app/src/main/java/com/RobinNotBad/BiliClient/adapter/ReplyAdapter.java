@@ -7,14 +7,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +70,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     final long up_mid;
     final long root;
     final int type;
-    final int sort;
+    public int sort;
     public final int replyType;
     OnItemClickListener listener;
     public Object source;
@@ -137,13 +134,15 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 intent.putExtra("replyType", replyType);
                 context.startActivity(intent);
             });
-            String[] sorts = {"时间排序", "点赞排序", "回复排序"};
+            String[] sorts = {"未知排序", "未知排序", "时间排序", "热度排序"};
             if (isDetail) {
                 writeReply.sort.setVisibility(View.GONE);
+                writeReply.count_label.setVisibility(View.GONE);
             } else {
                 writeReply.sort.setText(sorts[sort]);
                 writeReply.sort.setOnClickListener(view -> {
                     if (this.listener != null) listener.onItemClick(0);
+                    writeReply.sort.setText(sorts[sort]);
                 });
 
                 CenterThreadPool.run(() -> {
@@ -179,7 +178,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 name_str.setSpan(new RelativeSizeSpan(0.8f), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
             int last_length = name_str.length();
-            name_str.append(" " + sender.level);
+            name_str.append(" ").append(String.valueOf(sender.level));
             name_str.setSpan(ToolsUtil.getLevelBadge(context,sender), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             if (!sender.medal_name.isEmpty()){
                 last_length = name_str.length();
@@ -248,10 +247,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         String senderName = reply.sender.name;
                         SpannableString content = new SpannableString(senderName + (reply.sender.mid == up_mid ? up_tip : "") + "：" + reply.message);
                         if (reply.sender.mid == up_mid) {
-                            Paint paint = new Paint();
-                            paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, context.getResources().getDisplayMetrics()));
-                            Paint.FontMetrics fontMetrics = paint.getFontMetrics();
-                            float lineHeight = fontMetrics.descent - fontMetrics.ascent;
+                            float lineHeight = ToolsUtil.getTextHeightWithSize(context, 12);
                             content.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95), (int) (lineHeight)), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                             content.setSpan(new RelativeSizeSpan(0.8f), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                         }

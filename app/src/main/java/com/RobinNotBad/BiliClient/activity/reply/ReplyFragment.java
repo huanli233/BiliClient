@@ -27,7 +27,7 @@ public class ReplyFragment extends RefreshListFragment {
 
     private boolean dontload;
     protected long aid, mid;
-    protected int sort = 2;
+    protected int sort = 3;
     protected int type;
     protected ArrayList<Reply> replyList;
     protected ReplyAdapter replyAdapter;
@@ -113,7 +113,7 @@ public class ReplyFragment extends RefreshListFragment {
         if (!dontload) {
             CenterThreadPool.run(() -> {
                 try {
-                    int result = seek == -1 ? ReplyApi.getReplies(aid, 0, page, type, sort, replyList) : ReplyApi.getRepliesLazy(aid, seek, page, type, 3, replyList);
+                    int result = ReplyApi.getRepliesLazy(aid, seek, page, type, sort, replyList);
                     setRefreshing(false);
                     if (result != -1 && isAdded()) {
                         replyAdapter = getReplyAdapter();
@@ -146,7 +146,7 @@ public class ReplyFragment extends RefreshListFragment {
         CenterThreadPool.run(() -> {
             try {
                 List<Reply> list = new ArrayList<>();
-                int result = ReplyApi.getReplies(aid, 0, page, type, sort, list);
+                int result = ReplyApi.getRepliesLazy(aid, 0, page, type, sort, list);
                 setRefreshing(false);
                 if (result != -1) {
                     Log.e("debug", "下一页");
@@ -195,7 +195,7 @@ public class ReplyFragment extends RefreshListFragment {
         CenterThreadPool.run(() -> {
             try {
                 List<Reply> list = new ArrayList<>();
-                int result = ReplyApi.getReplies(aid, 0, page, type, sort, list);
+                int result = ReplyApi.getRepliesLazy(aid, 0, page, type, sort, list);
                 setRefreshing(false);
                 if (result != -1 && isAdded()) {
                     runOnUiThread(() -> {
@@ -224,7 +224,8 @@ public class ReplyFragment extends RefreshListFragment {
 
     private void setOnSortSwitch() {
         replyAdapter.setOnSortSwitchListener(position -> {
-            sort = (sort == 0 ? 2 : 0);
+            sort = (sort == 2 ? 3 : 2);
+            replyAdapter.sort = this.sort;
             refresh(aid);
         });
     }
