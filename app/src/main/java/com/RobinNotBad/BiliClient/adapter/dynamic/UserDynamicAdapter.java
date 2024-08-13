@@ -111,7 +111,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 lvStr.setSpan(new RadiusBackgroundSpan(1, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), ("Lv" + userInfo.level).length() + 1, lvStr.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
             userInfoHolder.userLevel.setText(lvStr);
-
+            if (!userInfo.vip_nickname_color.isEmpty()) userInfoHolder.userName.setTextColor(Color.parseColor(userInfo.vip_nickname_color));
             userInfoHolder.userName.setText(userInfo.name);
             userInfoHolder.userDesc.setText(userInfo.sign);
             if (!userInfo.notice.isEmpty()) userInfoHolder.userNotice.setText(userInfo.notice);

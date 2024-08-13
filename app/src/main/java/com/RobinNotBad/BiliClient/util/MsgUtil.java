@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,12 +49,32 @@ public class MsgUtil {
     }
 
     public static void toast(String str, Context context) {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            CenterThreadPool.runOnUiThread(() -> {
+                toastInternal(str, context);
+            });
+        } else {
+            toastInternal(str, context);
+        }
+    }
+
+    public static void toastLong(String str, Context context) {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            CenterThreadPool.runOnUiThread(() -> {
+                toastLongInternal(str, context);
+            });
+        } else {
+            toastLongInternal(str, context);
+        }
+    }
+
+    private static void toastInternal(String str, Context context) {
         if (toast != null) toast.cancel();
         toast = Toast.makeText(context, str, Toast.LENGTH_SHORT);
         toast.show();
     }
 
-    public static void toastLong(String str, Context context) {
+    private static void toastLongInternal(String str, Context context) {
         if (toast != null) toast.cancel();
         toast = Toast.makeText(context, str, Toast.LENGTH_LONG);
         toast.show();

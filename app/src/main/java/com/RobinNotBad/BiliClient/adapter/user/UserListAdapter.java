@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.adapter.user;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,9 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.Holder
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         holder.name.setText(userList.get(position).name);
+        if (!userList.get(position).vip_nickname_color.isEmpty()) {
+            holder.name.setTextColor(Color.parseColor(userList.get(position).vip_nickname_color));
+        }
         holder.desc.setText(userList.get(position).sign);
 
         if (userList.get(position).avatar.isEmpty()) {

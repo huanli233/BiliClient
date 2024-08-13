@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -205,7 +206,7 @@ public class DynamicApi {
         }
 
         ArrayList<Pair<Integer, Integer>> indexesList = new ArrayList<>(indexes);
-        Collections.sort(indexesList, (p1, p2) -> p1.first - p2.first);
+        Collections.sort(indexesList, Comparator.comparingInt(p -> p.first));
         int pos = 0;
         for (Pair<Integer, Integer> index : indexesList) {
             int start = index.first;
@@ -347,6 +348,10 @@ public class DynamicApi {
             if (!module_author.isNull("following"))
                 userInfo.followed = module_author.getBoolean("following");
             userInfo.avatar = module_author.getString("face");
+            JSONObject vipJson = module_author.optJSONObject("vip");
+            if (vipJson != null) {
+                userInfo.vip_nickname_color = vipJson.optString("nickname_color", "");
+            }
             Log.e("debug-dynamic-sender", userInfo.name);
             dynamic.pubTime = module_author.getString("pub_time");
         }

@@ -21,7 +21,7 @@ public class UserInfo implements Serializable, Parcelable {
     public long mtime;
 
     public int vip_role = 0;
-    public String vip_nickname_color = "#cf5f2d";
+    public String vip_nickname_color = "";
 
     public long current_exp = 0;
     public long next_exp = 0;
