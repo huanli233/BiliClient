@@ -45,6 +45,8 @@ public class QRLoginFragment extends Fragment {
     final boolean need_refresh = false;
     int qrScale = 0;
 
+    public QRLoginFragment(){}
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_qr_login, container, false);

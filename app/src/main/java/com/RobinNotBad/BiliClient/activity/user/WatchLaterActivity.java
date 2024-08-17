@@ -3,7 +3,7 @@ package com.RobinNotBad.BiliClient.activity.user;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
-import com.RobinNotBad.BiliClient.activity.base.RefreshMainActivity;
+import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.WatchLaterApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 //稍后再看
 //2023-08-17
 
-public class WatchLaterActivity extends RefreshMainActivity {
+public class WatchLaterActivity extends RefreshListActivity {
 
     private int longClickPosition = -1;
 
