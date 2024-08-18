@@ -39,17 +39,15 @@ public class AppInfoApi {
                 if (last_ver != -1) {
                     if (last_ver < 20240606)
                         MsgUtil.showDialog(context, "提醒", "当前的新版本实现了对抗部分类型的风控，建议您重新登录账号以确保成功使用");
-                    if (last_ver < 20240615)
-                        MsgUtil.showDialog(context, "提醒", "当前版本开始，内置播放器退出播放时会上传视频播放进度");
                     if (last_ver < 20240818)
                         MsgUtil.showDialog(context, "提醒", "当前版本开始，内置播放器支持查看直播弹幕");
-                    MsgUtil.showDialog(context, "提醒", "欢迎更新到新版本，这个版本增加了一些设置项，可前往设置中查看");
+                    MsgUtil.showDialog(context, "提醒", "欢迎更新到这个版本，这个版本增加了一些设置项，可前往设置中查看");
                     if (SharedPreferencesUtil.getString("player", "null").equals("mtvPlayer"))
-                        MsgUtil.showDialog(context, "提示", "发现你还在使用小电视播放器，小电视播放器已经不支持部分哔哩终端的新功能，建议换为内置播放器");
+                        MsgUtil.showDialog(context, "提示", "发现你还在使用小电视播放器，请注意，小电视播放器已经不支持部分哔哩终端的新功能（比如记录播放进度、显示直播弹幕）");
                 }
                 MsgUtil.showText(context, "更新公告", context.getResources().getString(R.string.update_tip) + "\n\n更新细节：\n" + ToolsUtil.getUpdateLog(context));
                 if (ToolsUtil.isDebugBuild())
-                    MsgUtil.showDialog(context, "警告", "这个版本是测试版，仅在测试群中发布，禁止外传到其他平台（如：奇妙应用等应用商店）");
+                    MsgUtil.showDialog(context, "警告", "这个版本是测试版，仅在测试群中发布，禁止外传到如奇妙应用、小趣空间等平台或其他QQ群");
                 SharedPreferencesUtil.putInt("app_version_last", version);
             }
 
