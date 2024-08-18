@@ -81,6 +81,7 @@ import master.flame.danmaku.danmaku.parser.android.BiliDanmukuParser;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.WebSocket;
 import okio.BufferedSink;
 import okio.Okio;
 import okio.Sink;
@@ -328,6 +329,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         if (live_mode) {
             progressBar.setEnabled(false);
+            streamdanmaku(null);
             danmuSocketConnect();
         }
     }
@@ -983,13 +985,12 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     private void streamdanmaku(String danmakuPath) {
         Log.e("debug", "streamdanmaku");
-        Log.e("debug", danmakuPath);
         if (mDanmakuView != null) {
             BaseDanmakuParser mParser = createParser(danmakuPath);
             mDanmakuView.setCallback(new DrawHandler.Callback() {
                 @Override
                 public void prepared() {
-                    adddanmaku();
+                    adddanmaku("弹幕君准备完毕～(*≧ω≦)",Color.WHITE);
                 }
 
                 @Override
@@ -1010,12 +1011,14 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
     }
 
-    private void adddanmaku() {
+    public void adddanmaku(String text,int color) {
         BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
-        danmaku.text = "弹幕君准备完毕～(*≧ω≦)";
+        danmaku.text = text;
         danmaku.padding = 5;
         danmaku.priority = 1;
-        danmaku.textColor = Color.WHITE;
+        danmaku.textColor = color;
+        danmaku.textSize = 25 * (mContext.getDisplayer().getDensity() - 0.6f);
+        danmaku.time = ijkPlayer.getCurrentPosition();
         mDanmakuView.addDanmaku(danmaku);
     }
 
@@ -1190,6 +1193,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         Log.e("debug", "onStop");
     }
 
+
+    WebSocket liveWebSocket = null;
+
     @Override
     protected void onDestroy() {
         playerPause();
@@ -1213,6 +1219,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 runOnUiThread(() -> MsgUtil.err(e, this));
             }
         });
+
+        if(liveWebSocket != null) liveWebSocket.cancel();
+
         super.onDestroy();
     }
 
@@ -1266,8 +1275,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 listener.mid = mid;
                 listener.roomid = aid;
                 listener.key = data.getString("token");
+                listener.playerActivity = this;
 
-                okHttpClient.newWebSocket(request, listener);
+                liveWebSocket = okHttpClient.newWebSocket(request, listener);
 //                okHttpClient.dispatcher().executorService().shutdown();
             }catch (Exception e){
                 e.printStackTrace();
