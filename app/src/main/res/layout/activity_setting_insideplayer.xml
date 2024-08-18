@@ -146,7 +146,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="6dp"
                         android:layout_marginBottom="4dp"
-                        android:text="开启选项后，播放视频时如果获取成功，右下角将会显示当前视频的实时观看人数\n如果观看视频中途崩溃可以尝试关闭此开关\n\n该功能为内置播放器专属"
+                        android:text="开启选项后，播放视频时如果获取成功，右下角将会显示当前视频的实时观看人数\n如果观看视频中途崩溃可以尝试关闭此开关\n\n在直播中则为观看过的人数和进入直播间提醒\n\n该功能为内置播放器专属"
                         android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -201,6 +201,34 @@
                         android:layout_marginHorizontal="6dp"
                         android:layout_marginBottom="4dp"
                         android:text="大屏幕设备上会更好用，手表上可能会造成操作不便"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="2dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/danmaku_showSender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="显示直播弹幕发送者" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="播放直播时，将会显示聊天弹幕的发送者名称"
                         android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

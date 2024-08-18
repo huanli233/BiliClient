@@ -142,7 +142,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     private boolean preview_mode = false;
 
-    private String online_number = "0";
+    public String online_number = "0";
 
     private long aid, cid, mid;
     private String bvid;
@@ -196,7 +196,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             //一种很新的使用ConstraintLayout的方法（
         }
 
-        if ((!SharedPreferencesUtil.getBoolean("show_online", true)) || live_mode)
+        if ((!SharedPreferencesUtil.getBoolean("show_online", true)))
             online_text.setVisibility(View.GONE);
 
         if (mode == -1) {
@@ -328,8 +328,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }), 30);
 
         if (live_mode) {
+            control_btn.setVisibility(View.GONE); //暂停的话可能会出一些bug，那就别暂停了，卡住就退出重进吧（
+            progressBar.setVisibility(View.GONE);
             progressBar.setEnabled(false);
-            streamdanmaku(null);
+            streamdanmaku(null); //用来初始化一下弹幕层
             danmuSocketConnect();
         }
     }
@@ -903,7 +905,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     if (videonow_last != videonow) {               //检测进度是否在变动
                         videonow_last = videonow;
                         runOnUiThread(() -> {
-                            if (live_mode) text_progress.setText(ToolsUtil.toTime(videonow / 1000));
+                            if (live_mode) {
+                                text_progress.setText(ToolsUtil.toTime(videonow / 1000));
+                                online_text.setText(online_number);
+                            }
                             else progressBar.setProgress(videonow);
                         });
                         //progressBar上有一个onProgressChange的监听器，文字更改在那里
@@ -925,8 +930,11 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     try {
                         if ((aid == 0 && bvid == null) || cid == 0) online_number = "";
                         else if (SharedPreferencesUtil.getBoolean("show_online", true)) {
-                            if (bvid == null) online_number = VideoInfoApi.getWatching(aid, cid);
-                            else online_number = VideoInfoApi.getWatching(bvid, cid);
+                            if(!live_mode) {
+                                if (bvid == null)
+                                    online_number = VideoInfoApi.getWatching(aid, cid);
+                                else online_number = VideoInfoApi.getWatching(bvid, cid);
+                            }
                         }
                     } catch (Exception e) {
                         runOnUiThread(() -> MsgUtil.err(e, PlayerActivity.this));
