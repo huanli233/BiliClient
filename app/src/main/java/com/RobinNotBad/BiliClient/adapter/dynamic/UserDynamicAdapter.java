@@ -34,7 +34,7 @@ import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
-import com.RobinNotBad.BiliClient.view.RadiusBackgroundSpan;
+import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -99,25 +99,26 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             UserInfoHolder userInfoHolder = (UserInfoHolder) holder;
 
             SpannableStringBuilder lvStr = new SpannableStringBuilder("Lv" + userInfo.level);
-            lvStr.setSpan(ToolsUtil.getLevelBadge(context,userInfo), 0, lvStr.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            if(userInfo.vip_role > 0){
+            lvStr.setSpan(ToolsUtil.getLevelBadge(context, userInfo), 0, lvStr.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            if (userInfo.vip_role > 0) {
                 LinkedHashMap<Integer, String> vipTypeMap = new LinkedHashMap<>() {{
-                    put(1,"月度大会员");
-                    put(3,"年度大会员");
-                    put(7,"十年大会员");
-                    put(15,"百年大会员");
+                    put(1, "月度大会员");
+                    put(3, "年度大会员");
+                    put(7, "十年大会员");
+                    put(15, "百年大会员");
                 }};
                 lvStr.append("  ").append(vipTypeMap.get(userInfo.vip_role)).append(" ");
                 lvStr.setSpan(new RadiusBackgroundSpan(1, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), ("Lv" + userInfo.level).length() + 1, lvStr.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
             userInfoHolder.userLevel.setText(lvStr);
-            if (!userInfo.vip_nickname_color.isEmpty()) userInfoHolder.userName.setTextColor(Color.parseColor(userInfo.vip_nickname_color));
+            if (!userInfo.vip_nickname_color.isEmpty())
+                userInfoHolder.userName.setTextColor(Color.parseColor(userInfo.vip_nickname_color));
             userInfoHolder.userName.setText(userInfo.name);
             userInfoHolder.userDesc.setText(userInfo.sign);
             if (!userInfo.notice.isEmpty()) userInfoHolder.userNotice.setText(userInfo.notice);
             else userInfoHolder.userNotice.setVisibility(View.GONE);
             userInfoHolder.uidTv.setText(String.valueOf(userInfo.mid));
-            ToolsUtil.setCopy(context, userInfoHolder.uidTv);
+            ToolsUtil.setCopy(userInfoHolder.uidTv);
             ToolsUtil.setLink(userInfoHolder.userDesc, userInfoHolder.userNotice);
             userInfoHolder.userFans.setText(ToolsUtil.toWan(userInfo.fans) + "粉丝");
             userInfoHolder.userFans.setOnClickListener((view) -> view.getContext().startActivity(new Intent(view.getContext(), FollowUsersActivity.class).putExtra("mode", 1).putExtra("mid", userInfo.mid)));
@@ -151,16 +152,16 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 context.startActivity(intent);
             });
 
-            if(!userInfo.sys_notice.isEmpty()){
+            if (!userInfo.sys_notice.isEmpty()) {
                 userInfoHolder.exclusiveTip.setVisibility(View.VISIBLE);
                 SpannableString spannableString = new SpannableString("!:" + userInfo.sys_notice);
                 Drawable drawable = context.getResources().getDrawable(R.drawable.icon_warning);
-                drawable.setBounds(0,0,30,30);
-                spannableString.setSpan(new ImageSpan(drawable),0,2,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                drawable.setBounds(0, 0, 30, 30);
+                spannableString.setSpan(new ImageSpan(drawable), 0, 2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 userInfoHolder.exclusiveTipLabel.setText(spannableString);
-            }else userInfoHolder.exclusiveTip.setVisibility(View.GONE);
+            } else userInfoHolder.exclusiveTip.setVisibility(View.GONE);
 
-            if(userInfo.live_room != null){
+            if (userInfo.live_room != null) {
                 userInfoHolder.liveRoom.setVisibility(View.VISIBLE);
                 userInfoHolder.liveRoomLabel.setText(userInfo.live_room.title);
                 userInfoHolder.liveRoom.setOnClickListener(view -> {
@@ -168,7 +169,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     intent.putExtra("room_id", userInfo.live_room.roomid);
                     context.startActivity(intent);
                 });
-            }else userInfoHolder.liveRoom.setVisibility(View.GONE);
+            } else userInfoHolder.liveRoom.setVisibility(View.GONE);
 
             if ((userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0)) || (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) || (userInfo.mid == 0))
                 userInfoHolder.followBtn.setVisibility(View.GONE);
@@ -270,7 +271,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             followBtn = itemView.findViewById(R.id.followBtn);
             msgBtn = itemView.findViewById(R.id.msgBtn);
             uidTv = itemView.findViewById(R.id.uidText);
-            ToolsUtil.setCopy(itemView.getContext(), userDesc, userNotice);
+            ToolsUtil.setCopy(userDesc, userNotice);
         }
 
         public void setFollowed(boolean followed) {

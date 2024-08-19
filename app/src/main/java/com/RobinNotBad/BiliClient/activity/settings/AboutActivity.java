@@ -52,7 +52,7 @@ public class AboutActivity extends BaseActivity {
                 ((TextView) findViewById(R.id.app_version_code)).setText(code_str);
 
                 ((TextView) findViewById(R.id.updatelog_view)).setText("\n更新细节：\n " + ToolsUtil.getUpdateLog(this));
-                ToolsUtil.setCopy(findViewById(R.id.updatelog_view), this, ToolsUtil.getUpdateLog(this));
+                ToolsUtil.setCopy(findViewById(R.id.updatelog_view), ToolsUtil.getUpdateLog(this));
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }

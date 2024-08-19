@@ -58,7 +58,7 @@ public class ShowTextActivity extends BaseActivity {
         }
 
         textView.setText(content);
-        ToolsUtil.setCopy(textView, this);
+        ToolsUtil.setCopy(textView);
 
 
     }

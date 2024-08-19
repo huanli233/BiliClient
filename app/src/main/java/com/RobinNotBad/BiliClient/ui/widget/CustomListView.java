@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.view;
+package com.RobinNotBad.BiliClient.ui.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;

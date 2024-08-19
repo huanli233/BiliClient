@@ -94,7 +94,7 @@
             app:layout_constraintStart_toEndOf="@+id/listPlayTimes"
             app:layout_constraintTop_toTopOf="@+id/listUpName" />
 
-        <com.RobinNotBad.BiliClient.view.MarqueeTextView
+        <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
             android:id="@+id/listUpName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

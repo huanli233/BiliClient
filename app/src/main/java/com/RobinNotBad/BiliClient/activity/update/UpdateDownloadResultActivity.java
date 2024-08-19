@@ -71,7 +71,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
             installWayList = findViewById(R.id.install_way_list);
 
             pathTv.setText(String.format("下载的APK保存在: \n%s\n\n你可以另外使用自己的安装方法安装，或在下方选择一个安装方案进行安装", path));
-            ToolsUtil.setCopy(pathTv, this, path);
+            ToolsUtil.setCopy(pathTv, path);
             installWayList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
             List<Bangumi.Episode> episodeList = new ArrayList<>();
             for (int i = 0; i < installWays.size(); i++) {

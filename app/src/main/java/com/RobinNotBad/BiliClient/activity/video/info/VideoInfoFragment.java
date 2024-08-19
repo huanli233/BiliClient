@@ -59,7 +59,7 @@ import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
-import com.RobinNotBad.BiliClient.view.RadiusBackgroundSpan;
+import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -293,7 +293,7 @@ public class VideoInfoFragment extends Fragment {
             }
         });
 
-        ToolsUtil.setCopy(title, requireContext(), videoInfo.title);
+        ToolsUtil.setCopy(title, videoInfo.title);
 
         if (!videoInfo.argueMsg.isEmpty()) {
             exclusiveTipLabel.setText(videoInfo.argueMsg);
@@ -360,8 +360,8 @@ public class VideoInfoFragment extends Fragment {
         ToolsUtil.setLink(description);
         ToolsUtil.setAtLink(videoInfo.descAts, description);
 
-        ToolsUtil.setCopy(description, requireContext());
-        ToolsUtil.setCopy(bvidText, requireContext());
+        ToolsUtil.setCopy(description);
+        ToolsUtil.setCopy(bvidText, videoInfo.bvid);
 
         play.setOnClickListener(view1 -> play());
         play.setOnLongClickListener(view1 -> {

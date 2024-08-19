@@ -75,7 +75,7 @@
                 android:gravity="center"
                 android:text="@string/app_name" />
 
-            <com.RobinNotBad.BiliClient.view.MarqueeTextView
+            <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:textSize="12sp"
@@ -328,7 +328,7 @@
                                 app:layout_constraintStart_toEndOf="@id/robinAvatar"
                                 app:layout_constraintTop_toTopOf="@id/robinAvatar" />
 
-                            <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                            <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                                 android:id="@+id/robinDesc"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -392,7 +392,7 @@
                                 app:layout_constraintStart_toEndOf="@id/moyeAvatar"
                                 app:layout_constraintTop_toTopOf="@id/moyeAvatar" />
 
-                            <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                            <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                                 android:id="@+id/moyeDesc"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -448,7 +448,7 @@
                                 app:layout_constraintStart_toEndOf="@id/silentAvatar"
                                 app:layout_constraintTop_toTopOf="@id/silentAvatar" />
 
-                            <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                            <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                                 android:id="@+id/silentDesc"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -504,7 +504,7 @@
                                 app:layout_constraintStart_toEndOf="@id/duduAvatar"
                                 app:layout_constraintTop_toTopOf="@id/duduAvatar" />
 
-                            <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                            <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                                 android:id="@+id/duduDesc"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -560,7 +560,7 @@
                                 app:layout_constraintStart_toEndOf="@id/huanliAvatar"
                                 app:layout_constraintTop_toTopOf="@id/huanliAvatar" />
 
-                            <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                            <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                                 android:id="@+id/huanliDesc"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -602,7 +602,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                            <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                                 android:id="@+id/dadaName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

@@ -49,7 +49,7 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
-import com.RobinNotBad.BiliClient.view.BatteryView;
+import com.RobinNotBad.BiliClient.ui.widget.BatteryView;
 import com.bumptech.glide.Glide;
 
 import org.json.JSONObject;

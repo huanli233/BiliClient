@@ -79,7 +79,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.RobinNotBad.BiliClient.view.MarqueeTextView
+            <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                 android:id="@+id/text_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.RobinNotBad.BiliClient.view.BatteryView
+                <com.RobinNotBad.BiliClient.ui.widget.BatteryView
                     android:id="@+id/battery"
                     android:layout_width="15dp"
                     android:layout_height="7dp"

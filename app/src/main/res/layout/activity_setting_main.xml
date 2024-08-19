@@ -133,7 +133,7 @@
                         app:layout_constraintStart_toEndOf="@+id/playerSetting_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                    <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                         android:id="@+id/playerSetting_desc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -203,7 +203,7 @@
                         app:layout_constraintStart_toEndOf="@+id/clientPlayerSetting_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                    <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                         android:id="@+id/clientPlayerSetting_desc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -272,7 +272,7 @@
                         app:layout_constraintStart_toEndOf="@+id/uiSetting_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                    <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                         android:id="@+id/uiSetting_desription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -342,7 +342,7 @@
                         app:layout_constraintStart_toEndOf="@+id/menuSetting_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                    <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                         android:id="@+id/menuSetting_desription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -412,7 +412,7 @@
                         app:layout_constraintStart_toEndOf="@+id/prefSetting_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                    <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                         android:id="@+id/prefSetting_desription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -483,7 +483,7 @@
                         app:layout_constraintStart_toEndOf="@+id/repliesSetting_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                    <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                         android:id="@+id/repliesSetting_desription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -554,7 +554,7 @@
                         app:layout_constraintStart_toEndOf="@+id/infoSetting_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                    <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                         android:id="@+id/infoSetting_desription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -624,7 +624,7 @@
                         app:layout_constraintStart_toEndOf="@+id/laboratory_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                    <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                         android:id="@+id/laboratory_desription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -693,7 +693,7 @@
                         app:layout_constraintStart_toEndOf="@+id/about_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                    <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                         android:id="@+id/about_desription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -749,7 +749,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                    <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                         android:id="@+id/cookie_desription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

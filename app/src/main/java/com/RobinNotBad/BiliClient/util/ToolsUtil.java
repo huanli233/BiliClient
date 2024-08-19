@@ -28,6 +28,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
+
 import com.RobinNotBad.BiliClient.BuildConfig;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.CopyTextActivity;
@@ -47,6 +50,13 @@ import java.util.regex.Pattern;
 
 @SuppressLint("ClickableViewAccessibility")
 public class ToolsUtil {
+
+    /**
+     * 单位转换
+     *
+     * @param num 原始数字
+     * @return 转换后的字符串
+     */
     public static String toWan(long num) {
         if (num >= 100000000)
             return String.format(Locale.CHINA, "%.1f", (float) num / 100000000) + "亿";
@@ -143,23 +153,23 @@ public class ToolsUtil {
         return "fail";
     }
 
-    public static void setCopy(TextView textView, Context context, String customText) {
+    public static void setCopy(TextView textView, String customText) {
         if (SharedPreferencesUtil.getBoolean("copy_enable", true)) {
             textView.setOnLongClickListener(view1 -> {
-                Intent intent = new Intent(context, CopyTextActivity.class);
+                Intent intent = new Intent(textView.getContext(), CopyTextActivity.class);
                 intent.putExtra("content", customText == null ? textView.getText().toString() : customText);
-                context.startActivity(intent);
+                textView.getContext().startActivity(intent);
                 return true;
             });
         }
     }
 
-    public static void setCopy(TextView textView, Context context) {
-        setCopy(textView, context, null); //直接传getText()会导致文本变化后点击不了
+    public static void setCopy(TextView textView) {
+        setCopy(textView, null); //直接传getText()会导致文本变化后点击不了
     }
 
-    public static void setCopy(Context context, TextView... textViews) {
-        for (TextView textView : textViews) setCopy(textView, context);
+    public static void setCopy(TextView... textViews) {
+        for (TextView textView : textViews) setCopy(textView);
     }
 
     public static void setLink(TextView... textViews) {
@@ -272,7 +282,7 @@ public class ToolsUtil {
         }
 
         @Override
-        public void onClick(View widget) {
+        public void onClick(@NonNull View widget) {
             switch (type) {
                 case TYPE_USER:
                     widget.getContext().startActivity(new Intent(widget.getContext(), UserInfoActivity.class).putExtra("mid", Long.parseLong(val)));
@@ -293,7 +303,7 @@ public class ToolsUtil {
         }
 
         @Override
-        public void updateDrawState(TextPaint ds) {
+        public void updateDrawState(@NonNull TextPaint ds) {
             super.updateDrawState(ds);
             ds.setUnderlineText(false);
             ds.setColor(Color.parseColor("#03a9f4"));
@@ -343,43 +353,45 @@ public class ToolsUtil {
     }
 
     public static String getUpdateLog(Context context) {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         String[] logItems = context.getResources().getStringArray(R.array.update_log_items);
-        for (int i = 0; i < logItems.length; i++) str += (i + 1) + "." + logItems[i] + "\n";
-        return str;
+        for (int i = 0; i < logItems.length; i++)
+            str.append((i + 1)).append(".").append(logItems[i]).append("\n");
+        return str.toString();
     }
 
     public static boolean isDebugBuild() {
         return BuildConfig.BETA;
     }
 
-    public static ImageSpan getLevelBadge(Context context,UserInfo userInfo){
+    public static ImageSpan getLevelBadge(Context context, UserInfo userInfo) {
         Drawable drawable;
-        switch (userInfo.level){
+        switch (userInfo.level) {
             case 6:
-                drawable = context.getResources().getDrawable(R.mipmap.level_6);
+                drawable = ResourcesCompat.getDrawable(context.getResources(), R.mipmap.level_6, context.getTheme());
                 break;
             case 5:
-                drawable = context.getResources().getDrawable(R.mipmap.level_5);
+                drawable = ResourcesCompat.getDrawable(context.getResources(), R.mipmap.level_5, context.getTheme());
                 break;
             case 4:
-                drawable = context.getResources().getDrawable(R.mipmap.level_4);
+                drawable = ResourcesCompat.getDrawable(context.getResources(), R.mipmap.level_4, context.getTheme());
                 break;
             case 3:
-                drawable = context.getResources().getDrawable(R.mipmap.level_3);
+                drawable = ResourcesCompat.getDrawable(context.getResources(), R.mipmap.level_3, context.getTheme());
                 break;
             case 2:
-                drawable = context.getResources().getDrawable(R.mipmap.level_2);
+                drawable = ResourcesCompat.getDrawable(context.getResources(), R.mipmap.level_2, context.getTheme());
                 break;
             case 1:
-                drawable = context.getResources().getDrawable(R.mipmap.level_1);
+                drawable = ResourcesCompat.getDrawable(context.getResources(), R.mipmap.level_1, context.getTheme());
                 break;
             default:
-                drawable = context.getResources().getDrawable(R.mipmap.level_0);
+                drawable = ResourcesCompat.getDrawable(context.getResources(), R.mipmap.level_0, context.getTheme());
                 break;
         }
         float lineHeight = ToolsUtil.getTextHeightWithSize(context, 10);
-        drawable.setBounds(0,0, ((int) lineHeight) * 2, (int) lineHeight);
+        assert drawable != null;
+        drawable.setBounds(0, 0, ((int) lineHeight) * 2, (int) lineHeight);
         return new ImageSpan(drawable);
     }
 
@@ -391,8 +403,8 @@ public class ToolsUtil {
         return bytes;
     }
 
-    public static byte[] byteMerger(byte[] byte_1, byte[] byte_2){
-        byte[] byte_3 = new byte[byte_1.length+byte_2.length];
+    public static byte[] byteMerger(byte[] byte_1, byte[] byte_2) {
+        byte[] byte_3 = new byte[byte_1.length + byte_2.length];
         System.arraycopy(byte_1, 0, byte_3, 0, byte_1.length);
         System.arraycopy(byte_2, 0, byte_3, byte_1.length, byte_2.length);
         return byte_3;

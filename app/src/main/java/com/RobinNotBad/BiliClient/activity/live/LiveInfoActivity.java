@@ -121,7 +121,7 @@ public class LiveInfoActivity extends BaseActivity {
                             else tags.setMaxLines(233);
                             tags_expand = !tags_expand;
                         });
-                        ToolsUtil.setCopy(this, idText, tags, title);
+                        ToolsUtil.setCopy(idText, tags, title);
 
                         description.setText(ToolsUtil.htmlToString(room.description));
                         description.setOnClickListener(view1 -> {

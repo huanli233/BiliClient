@@ -78,7 +78,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.RobinNotBad.BiliClient.view.MarqueeTextView
+                <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                     android:id="@+id/userName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

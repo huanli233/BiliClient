@@ -134,7 +134,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(collectionInfoHolder.cover);
                 collectionInfoHolder.cover.setOnClickListener(view -> context.startActivity(new Intent(context, ImageViewerActivity.class).putExtra("imageList", new ArrayList<>(Collections.singletonList(collection.cover)))));
-                ToolsUtil.setCopy(context, collectionInfoHolder.name, collectionInfoHolder.desc);
+                ToolsUtil.setCopy(collectionInfoHolder.name, collectionInfoHolder.desc);
                 ToolsUtil.setLink(collectionInfoHolder.desc);
             }
         }

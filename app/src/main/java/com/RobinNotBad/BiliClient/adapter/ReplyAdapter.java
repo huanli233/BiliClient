@@ -42,8 +42,8 @@ import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
-import com.RobinNotBad.BiliClient.view.CustomListView;
-import com.RobinNotBad.BiliClient.view.RadiusBackgroundSpan;
+import com.RobinNotBad.BiliClient.ui.widget.CustomListView;
+import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -199,7 +199,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             String text = replyList.get(realPosition).message;
             replyHolder.message.setText(text);  //防止加载速度慢时露出鸡脚
-            ToolsUtil.setCopy(replyHolder.message, context);
+            ToolsUtil.setCopy(replyHolder.message);
             if (replyList.get(realPosition).emotes != null) {
                 CenterThreadPool.run(() -> {
                     try {

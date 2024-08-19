@@ -87,7 +87,7 @@ public class NoticeHolder extends RecyclerView.ViewHolder {
         } else pubdate.setText(message.timeDesc);
 
         action.setText(message.content);
-        ToolsUtil.setCopy(action, context);
+        ToolsUtil.setCopy(action);
 
         if (message.videoCard != null) {
             VideoCard childVideoCard = message.videoCard;

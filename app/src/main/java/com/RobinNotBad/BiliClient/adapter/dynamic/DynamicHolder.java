@@ -203,7 +203,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
 
     @SuppressLint("SetTextI18n")
     public void showDynamic(Dynamic dynamic, Context context, boolean clickable) {    //公用的显示函数 这样修改和调用都方便
-        ToolsUtil.setCopy(content, context);
+        ToolsUtil.setCopy(content);
         username.setText(dynamic.userInfo.name);
         if (!dynamic.userInfo.vip_nickname_color.isEmpty()) {
             username.setTextColor(Color.parseColor(dynamic.userInfo.vip_nickname_color));
