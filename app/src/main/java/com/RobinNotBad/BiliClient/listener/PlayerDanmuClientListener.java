@@ -167,10 +167,13 @@ public class PlayerDanmuClientListener extends WebSocketListener {
             JSONObject result;
 
             //有些包不会压缩，要判断一下，虽然方式有点（
-            if(Brotli.decompress(bytes.substring(16).toByteArray()).length > 5)
-                result = new JSONObject(ByteString.of(Brotli.decompress(bytes.substring(16).toByteArray())).substring(16).utf8()); //问就是懒得用别的方式sub
-            else if(bytes.substring(16).utf8().startsWith("{"))
-                result = new JSONObject(bytes.utf8().substring(bytes.utf8().indexOf("{")));
+            ByteString bytes2 = bytes.substring((int)bytes.getByte(5));
+            if(Brotli.decompress(bytes2.toByteArray()).length > 5){
+                ByteString bytes3 = ByteString.of(Brotli.decompress(bytes2.toByteArray()));
+                result = new JSONObject(bytes3.substring((int)bytes3.getByte(5)).utf8()); //问就是懒得用别的方式sub
+            }
+            else if(bytes2.utf8().contains("{"))
+                result = new JSONObject(bytes2.utf8().substring(bytes2.utf8().indexOf("{")));
             else return;
 
             JSONObject data;
