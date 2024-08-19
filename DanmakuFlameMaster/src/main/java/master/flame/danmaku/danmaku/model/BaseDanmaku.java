@@ -78,6 +78,13 @@ public abstract class BaseDanmaku {
      * 阴影/描边颜色
      */
     public int textShadowColor;
+    
+    /**
+     * 背景颜色
+     */
+    public int backgroundColor = 0;
+    public int backgroundRadius = 10;
+    
 
     /**
      * 下划线颜色,0表示无下划线

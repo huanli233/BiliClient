@@ -22,6 +22,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.TextPaint;
@@ -51,6 +52,8 @@ public class AndroidDisplayer extends AbsDisplayer<Canvas, Typeface> {
     private final Paint UNDERLINE_PAINT;
 
     private final Paint BORDER_PAINT;
+    
+    private final Paint BACKGROUND_PAINT;
 
     /**
      * 下划线高度
@@ -120,6 +123,8 @@ public class AndroidDisplayer extends AbsDisplayer<Canvas, Typeface> {
         BORDER_PAINT = new Paint();
         BORDER_PAINT.setStyle(Style.STROKE);
         BORDER_PAINT.setStrokeWidth(BORDER_WIDTH);
+        BACKGROUND_PAINT = new Paint();
+        BACKGROUND_PAINT.setStyle(Style.FILL);
     }
 
     @SuppressLint("NewApi")
@@ -340,6 +345,19 @@ public class AndroidDisplayer extends AbsDisplayer<Canvas, Typeface> {
         ANTI_ALIAS = fromWorkerThread && CONFIG_ANTI_ALIAS;
         TextPaint paint = getPaint(danmaku, fromWorkerThread);
         sStuffer.drawBackground(danmaku, canvas, _left, _top);
+        
+        //draw background
+        if (danmaku.backgroundColor != 0) {
+            Paint backgroundPaint = getBackgroundPaint(danmaku);
+
+            RectF rect = new RectF();
+            rect.top = _top;
+            rect.bottom = _top + danmaku.paintHeight;
+            rect.left = _left;
+            rect.right = rect.left + danmaku.paintWidth;
+            canvas.drawRoundRect(rect, danmaku.backgroundRadius, danmaku.backgroundRadius, backgroundPaint);
+        }
+        
         if (danmaku.lines != null) {
             String[] lines = danmaku.lines;
             if (lines.length == 1) {
@@ -405,7 +423,7 @@ public class AndroidDisplayer extends AbsDisplayer<Canvas, Typeface> {
             canvas.drawRect(_left, _top, _left + danmaku.paintWidth, _top + danmaku.paintHeight,
                     borderPaint);
         }
-
+        
     }
 
     private boolean hasStroke(BaseDanmaku danmaku) {
@@ -420,6 +438,11 @@ public class AndroidDisplayer extends AbsDisplayer<Canvas, Typeface> {
     public Paint getUnderlinePaint(BaseDanmaku danmaku) {
         UNDERLINE_PAINT.setColor(danmaku.underlineColor);
         return UNDERLINE_PAINT;
+    }
+    
+    public Paint getBackgroundPaint(BaseDanmaku danmaku) {
+        BACKGROUND_PAINT.setColor(danmaku.backgroundColor);
+        return BACKGROUND_PAINT;
     }
 
     private synchronized TextPaint getPaint(BaseDanmaku danmaku, boolean fromWorkerThread) {
