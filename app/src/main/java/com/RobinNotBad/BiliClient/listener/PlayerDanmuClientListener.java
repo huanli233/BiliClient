@@ -48,7 +48,8 @@ public class PlayerDanmuClientListener extends WebSocketListener {
         //发送认证包
         try {
             JSONObject object = new JSONObject();
-            object.put("uid",mid);
+            if(SharedPreferencesUtil.getBoolean("live_by_guest",false)) object.put("uid",0);
+            else object.put("uid",mid);
             object.put("roomid",roomid);
             object.put("protover",3);
             object.put("platform","web");
@@ -127,7 +128,7 @@ public class PlayerDanmuClientListener extends WebSocketListener {
                         }
                     }
                 };
-                heartTimer.schedule(heartTimerTask,0,32000);
+                heartTimer.schedule(heartTimerTask,3000,32000);
                 break;
 
             case 5:

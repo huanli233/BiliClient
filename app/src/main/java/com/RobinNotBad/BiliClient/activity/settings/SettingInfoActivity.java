@@ -28,6 +28,7 @@ public class SettingInfoActivity extends RefreshListActivity {
             add(new SettingSection("switch", "显示视频标签", "tags_enable", getString(R.string.desc_tags_enable), "true"));
             add(new SettingSection("switch", "视频相关推荐", "related_enable", getString(R.string.desc_related_enable), "true"));
             add(new SettingSection("switch", "点击封面播放", "cover_play_enable", getString(R.string.desc_cover_play_enable), "false"));
+            add(new SettingSection("switch", "以游客方式观看直播", "live_by_guest", getString(R.string.desc_live_by_guest), "false"));
         }};
 
         recyclerView.setHasFixedSize(true);

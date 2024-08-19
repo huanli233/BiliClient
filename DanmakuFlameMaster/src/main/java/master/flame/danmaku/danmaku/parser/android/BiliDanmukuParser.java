@@ -16,6 +16,7 @@
 
 package master.flame.danmaku.danmaku.parser.android;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.text.TextUtils;
 
@@ -41,7 +42,7 @@ import master.flame.danmaku.danmaku.model.android.DanmakuFactory;
 import master.flame.danmaku.danmaku.util.DanmakuUtils;
 
 public class BiliDanmukuParser extends BaseDanmakuParser {
-
+    
     static {
         System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver");
     }
@@ -117,6 +118,9 @@ public class BiliDanmukuParser extends BaseDanmakuParser {
                 if (values.length > 0) {
                     long time = (long) (Float.parseFloat(values[0]) * 1000); // 出现时间
                     int type = Integer.parseInt(values[1]); // 弹幕类型
+                    
+                    if(sharedPreferences != null && type != 7 && type != 8 && sharedPreferences.getBoolean("player_danmaku_forceR2L",false)) type = 1;
+                    
                     float textSize = Float.parseFloat(values[2]); // 字体大小
                     int color = Integer.parseInt(values[3]) | 0xFF000000; // 颜色
                     // int poolType = Integer.parseInt(values[5]); // 弹幕池类型（忽略

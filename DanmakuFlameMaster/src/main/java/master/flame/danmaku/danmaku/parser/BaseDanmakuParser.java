@@ -16,6 +16,7 @@
 
 package master.flame.danmaku.danmaku.parser;
 
+import android.content.SharedPreferences;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
 import master.flame.danmaku.danmaku.model.IDanmakus;
 import master.flame.danmaku.danmaku.model.IDisplayer;
@@ -37,7 +38,9 @@ public abstract class BaseDanmakuParser {
 
     protected IDisplayer mDisp;
     protected DanmakuContext mContext;
-
+    
+    public SharedPreferences sharedPreferences = null;
+    
     public BaseDanmakuParser setDisplayer(IDisplayer disp){
         mDisp = disp;
     	mDispWidth = disp.getWidth();

@@ -39,6 +39,10 @@ public class SharedPreferencesUtil {
 
     private static final SharedPreferences sharedPreferences = BiliTerminal.context.getSharedPreferences("default", Context.MODE_PRIVATE);
 
+    public static SharedPreferences getSharedPreferences(){
+        return sharedPreferences;
+    }
+    
     public static String getString(String key, String def) {
         return sharedPreferences.getString(key, def);
     }

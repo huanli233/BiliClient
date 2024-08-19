@@ -986,6 +986,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         assert loader != null;
         loader.load(stream);
         BaseDanmakuParser parser = new BiliDanmukuParser();
+        parser.sharedPreferences = SharedPreferencesUtil.getSharedPreferences();
         IDataSource<?> dataSource = loader.getDataSource();
         parser.load(dataSource);
         return parser;
@@ -1021,6 +1022,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     public void adddanmaku(String text,int color) {
         BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
+        if(text == null || danmaku == null) return;
         danmaku.text = text;
         danmaku.padding = 5;
         danmaku.priority = 1;
