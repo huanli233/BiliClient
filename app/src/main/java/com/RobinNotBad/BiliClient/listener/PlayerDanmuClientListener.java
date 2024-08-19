@@ -193,9 +193,15 @@ public class PlayerDanmuClientListener extends WebSocketListener {
 
                     //进入直播间
                     if(data.getInt("msg_type") == 1) {
-                        playerActivity.adddanmaku(data.getString("uname") + " 进入了直播间", Color.CYAN, 14, 4);
+                        playerActivity.adddanmaku(data.getString("uname") + " 进入了直播间", Color.CYAN, 12, 4, 0);
                     }
 
+                    break;
+                
+                case "SEND_GIFT":
+                    data = result.getJSONObject("data");
+                    String content2 = data.getString("uname") + " " + data.getString("action") + data.getInt("num") + "个" + data.getString("giftName");
+                    playerActivity.adddanmaku(content2, Color.WHITE, 25, 1, Color.argb(160,255,80,80));
                     break;
 
                 default:

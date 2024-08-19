@@ -1022,7 +1022,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     public void adddanmaku(String text,int color) {
         BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
-        if(text == null || danmaku == null) return;
+        if(text == null || danmaku == null || ijkPlayer == null) return;
         danmaku.text = text;
         danmaku.padding = 5;
         danmaku.priority = 1;
@@ -1032,13 +1032,14 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         mDanmakuView.addDanmaku(danmaku);
     }
     
-    public void adddanmaku(String text,int color, int textSize, int type) {
+    public void adddanmaku(String text,int color, int textSize, int type, int backgroundColor) {
         BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(type);
-        if(text == null || danmaku == null) return;
+        if(text == null || danmaku == null || ijkPlayer  == null) return;
         danmaku.text = text;
         danmaku.padding = 5;
         danmaku.priority = 1;
         danmaku.textColor = color;
+        danmaku.backgroundColor = backgroundColor;
         danmaku.textSize = textSize * (mContext.getDisplayer().getDensity() - 0.6f);
         danmaku.time = ijkPlayer.getCurrentPosition();
         mDanmakuView.addDanmaku(danmaku);
