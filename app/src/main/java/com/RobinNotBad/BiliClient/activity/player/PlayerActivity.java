@@ -1031,6 +1031,18 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         danmaku.time = ijkPlayer.getCurrentPosition();
         mDanmakuView.addDanmaku(danmaku);
     }
+    
+    public void adddanmaku(String text,int color, int textSize, int type) {
+        BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(type);
+        if(text == null || danmaku == null) return;
+        danmaku.text = text;
+        danmaku.padding = 5;
+        danmaku.priority = 1;
+        danmaku.textColor = color;
+        danmaku.textSize = textSize * (mContext.getDisplayer().getDensity() - 0.6f);
+        danmaku.time = ijkPlayer.getCurrentPosition();
+        mDanmakuView.addDanmaku(danmaku);
+    }
 
     public static byte[] decompress(byte[] data) {
         byte[] output;
