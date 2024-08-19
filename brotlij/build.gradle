@@ -6,7 +6,8 @@ group = 'com.netease.hearttouch'
 android {
     compileSdkVersion 34
     buildToolsVersion "21.1.2"
-
+    ndkVersion "24.0.8215888"
+    
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 35

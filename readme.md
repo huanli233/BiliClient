@@ -75,3 +75,23 @@
 
 > `develop`分支用于在线开发，获取到的为最新源码，但可能会存在未修复的问题。
 > 欢迎提交 pr （
+
+## 部分问题的解决方法
+
+### Android IDE无法正常编译
+
+不用使用Android IDE自动下载的Android NDK
+
+正确的方法：
+
+1.打开Android IDE的终端，运行`pkg install wget && wget https://github.com/MrIkso/AndroidIDE-NDK/raw/main/ndk-install.sh --no-verbose --show-progress -N && chmod +x ndk-install.sh && bash ndk-install.sh`
+
+2.输入数字选择`r24`选项
+
+3.等待安装完毕
+
+4.当出现`finish`并退出脚本后，重启Android IDE
+
+5.在`brotlij/build.gradle`中的`android`结构中加入`ndkVersion "24.0.8215888"`
+
+6.编译你的哔哩终端吧
