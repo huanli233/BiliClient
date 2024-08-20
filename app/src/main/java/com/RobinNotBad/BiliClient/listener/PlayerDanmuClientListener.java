@@ -178,6 +178,8 @@ public class PlayerDanmuClientListener extends WebSocketListener {
 
             JSONObject data;
             switch (result.getString("cmd")){
+                
+                //聊天弹幕
                 case "DANMU_MSG":
                     JSONArray info = result.getJSONArray("info");
                     String nickname = info.getJSONArray(0).getJSONObject(15).getJSONObject("user").getJSONObject("base").getString("name");
@@ -186,6 +188,7 @@ public class PlayerDanmuClientListener extends WebSocketListener {
                     else playerActivity.adddanmaku(content, Color.WHITE);
                     break;
 
+                //看过的人数
                 case "WATCHED_CHANGE":
                     data = result.getJSONObject("data");
                     playerActivity.online_number = data.getString("text_large");
@@ -195,16 +198,27 @@ public class PlayerDanmuClientListener extends WebSocketListener {
                     data = result.getJSONObject("data");
 
                     //进入直播间
-                    if(data.getInt("msg_type") == 1) {
+                    if(data.getInt("msg_type") == 1)
                         playerActivity.adddanmaku(data.getString("uname") + " 进入了直播间", Color.CYAN, 12, 4, 0);
-                    }
 
                     break;
                 
+                //送礼弹幕
                 case "SEND_GIFT":
                     data = result.getJSONObject("data");
                     String content2 = data.getString("uname") + " " + data.getString("action") + data.getInt("num") + "个" + data.getString("giftName");
                     playerActivity.adddanmaku(content2, Color.WHITE, 25, 1, Color.argb(160,255,80,80));
+                    break;
+                
+                //特殊入场
+                case "ENTRY_EFFECT":
+                    data = result.getJSONObject("data");
+                    playerActivity.adddanmaku(data.getString("copy_writing"), Color.WHITE, 25, 1, Color.argb(160,80,80,255));
+                    break;
+                
+                //通知消息
+                case "NOTICE_MSG":
+                    playerActivity.adddanmaku(result.getString("msg_common"), Color.RED, 25, 1, Color.argb(60,255,255,255));
                     break;
 
                 default:
