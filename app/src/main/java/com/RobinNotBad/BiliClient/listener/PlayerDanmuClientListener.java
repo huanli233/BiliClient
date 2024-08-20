@@ -213,12 +213,22 @@ public class PlayerDanmuClientListener extends WebSocketListener {
                 //特殊入场
                 case "ENTRY_EFFECT":
                     data = result.getJSONObject("data");
-                    playerActivity.adddanmaku(data.getString("copy_writing"), Color.WHITE, 25, 1, Color.argb(160,80,80,255));
+                    playerActivity.adddanmaku(data.getString("copy_writing").replace("<%","").replace("%>",""), Color.WHITE, 25, 1, Color.argb(160,80,80,255));
                     break;
                 
                 //通知消息
                 case "NOTICE_MSG":
                     playerActivity.adddanmaku(result.getString("msg_common"), Color.RED, 25, 1, Color.argb(60,255,255,255));
+                    break;
+                
+                //直播间消息修改
+                case "ROOM_CHANGE":
+                    data = result.getJSONObject("data");
+                    playerActivity.runOnUiThread(() -> {
+                        try {
+                        	playerActivity.text_title.setText(data.getString("title"));
+                        } catch(Exception ignore) {}
+                    });
                     break;
 
                 default:

@@ -59,7 +59,7 @@ public class SpecialLoginActivity extends BaseActivity {
                     startActivity(intent1);
                     finish();
                 } catch (JSONException e) {
-                    runOnUiThread(() -> MsgUtil.err(e, SpecialLoginActivity.this));
+                    runOnUiThread(() -> MsgUtil.showMsg("请检查输入的内容，不要有多余空格或字符",this));
                 }
             });
         } else {

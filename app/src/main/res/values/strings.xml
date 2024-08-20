@@ -72,7 +72,7 @@
     
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
-        <item>支持了直播弹幕</item>
+        <item>支持了直播弹幕(内置播放器特色功能)</item>
         <item>添加了单独的“我的关注”按钮</item>
         <item>新增了初步的横屏模式</item>
         <item>新增了初步的经验值显示</item>
@@ -85,7 +85,6 @@
         <item>实现了评论区数量的显示</item>
         <item>修复了视频详情页崩溃的问题</item>
         <item>修复了评论区排序问题</item>
-        <item>修复了部分情况下不显示评论区问题</item>
         <item>修复了部分情况下未安装对应播放器时闪退的问题</item>
         <item>修复了捐赠列表内部分捐赠者不显示头像的问题</item>
     </string-array>

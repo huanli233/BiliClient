@@ -110,7 +110,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private float screen_width, screen_height;
     private int video_width, video_height;
     private boolean ischanging, isdanmakushowing = false, live_mode = false;
-    private TextView text_progress, online_text, text_volume, text_title, loading_text0, loading_text1, text_speed, text_newspeed;
+    private TextView text_progress, online_text, text_volume, loading_text0, loading_text1, text_speed, text_newspeed;
+    
+    public TextView text_title;
+    
     private String progress_all_str;
     private AudioManager audioManager;
     private ImageView circle;
@@ -1021,15 +1024,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     }
 
     public void adddanmaku(String text,int color) {
-        BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
-        if(text == null || danmaku == null || ijkPlayer == null) return;
-        danmaku.text = text;
-        danmaku.padding = 5;
-        danmaku.priority = 1;
-        danmaku.textColor = color;
-        danmaku.textSize = 25 * (mContext.getDisplayer().getDensity() - 0.6f);
-        danmaku.time = ijkPlayer.getCurrentPosition();
-        mDanmakuView.addDanmaku(danmaku);
+        adddanmaku(text,color,25,1,0);
     }
     
     public void adddanmaku(String text,int color, int textSize, int type, int backgroundColor) {

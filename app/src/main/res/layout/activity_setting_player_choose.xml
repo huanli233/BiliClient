@@ -107,7 +107,7 @@
                         android:layout_marginStart="6dp"
                         android:layout_marginBottom="10dp"
                         android:singleLine="true"
-                        android:text="支持记录视频播放进度 | 长按这里进入设置"
+                        android:text="支持直播弹幕等特色功能 | 长按这里进入设置"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

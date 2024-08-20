@@ -210,7 +210,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
                         android:singleLine="true"
-                        android:text="哔哩终端内置播放器设置项"
+                        android:text="试试内置播放器的特色功能吧"
                         android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
