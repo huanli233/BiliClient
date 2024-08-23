@@ -1238,7 +1238,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             }
         });
 
-        if(liveWebSocket != null) liveWebSocket.cancel();
+        if(liveWebSocket != null) liveWebSocket.close(1000,"");
 
         super.onDestroy();
     }
