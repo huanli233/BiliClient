@@ -1,8 +1,5 @@
 package com.RobinNotBad.BiliClient.activity;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +9,7 @@ import android.widget.EditText;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 public class CopyTextActivity extends BaseActivity {
     private String content = "";
@@ -47,7 +45,6 @@ public class CopyTextActivity extends BaseActivity {
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -55,6 +52,7 @@ public class CopyTextActivity extends BaseActivity {
                 try {
                     edittext.setSelection(Integer.parseInt(String.valueOf(beginEdit.getText())), Integer.parseInt(String.valueOf(endEdit.getText())));
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -67,16 +65,13 @@ public class CopyTextActivity extends BaseActivity {
         endEdit.addTextChangedListener(textWatcher);
 
         findViewById(R.id.copy_all).setOnClickListener(view -> {
-            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clipData = ClipData.newPlainText("label", content);
-            clipboardManager.setPrimaryClip(clipData);
+            ToolsUtil.copyText(this,content);
             MsgUtil.showMsg("已复制", this);
         });
         findViewById(R.id.copy).setOnClickListener(view -> {
             try {
-                ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clipData = ClipData.newPlainText("label", content.substring(Integer.parseInt(String.valueOf(beginEdit.getText())), Integer.parseInt(String.valueOf(endEdit.getText()))));
-                clipboardManager.setPrimaryClip(clipData);
+                ToolsUtil.copyText(this, content.substring(Integer.parseInt(String.valueOf(beginEdit.getText()))
+                        , Integer.parseInt(String.valueOf(endEdit.getText()))));   //我嘞个超级括号
                 MsgUtil.showMsg("已复制", this);
             } catch (Exception e) {
                 MsgUtil.showMsg("复制失败，请检查选择的范围", this);

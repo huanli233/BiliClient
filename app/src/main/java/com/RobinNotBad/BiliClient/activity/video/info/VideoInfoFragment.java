@@ -54,12 +54,12 @@ import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.api.WatchLaterApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
+import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
-import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -310,7 +310,7 @@ public class VideoInfoFragment extends Fragment {
         title.setText(getTitleSpan());
 
         //封面
-        if(SharedPreferencesUtil.getBoolean("ui_landscape",false)){
+        if (SharedPreferencesUtil.getBoolean("ui_landscape", false)) {
             ConstraintLayout.LayoutParams coverParams = (ConstraintLayout.LayoutParams) cover.getLayoutParams();
             coverParams.matchConstraintPercentWidth = 0.25f;
             coverParams.horizontalBias = 0;
@@ -361,7 +361,11 @@ public class VideoInfoFragment extends Fragment {
         ToolsUtil.setAtLink(videoInfo.descAts, description);
 
         ToolsUtil.setCopy(description);
-        ToolsUtil.setCopy(bvidText, videoInfo.bvid);
+        bvidText.setOnLongClickListener(v -> {
+            ToolsUtil.copyText(requireContext(), videoInfo.bvid);
+            MsgUtil.showMsg("BV号已复制", requireContext());
+            return true;
+        });
 
         play.setOnClickListener(view1 -> play());
         play.setOnLongClickListener(view1 -> {
@@ -488,22 +492,17 @@ public class VideoInfoFragment extends Fragment {
                 }
             }
         });
-relay.setOnLongClickListener(new View.OnLongClickListener() {
-    @Override
-    public boolean onLongClick(View v) {
-    //这是一个傻逼写的代码请不要骂我qaq
-    //有话我们可以好好说(
-      ClipboardManager cm = (ClipboardManager) getSystemService (Context.CLIPBOARD_SERVICE);
-      ClipData mClipData = ClipData.newPlainText ("Label", "https://bilibili.com/video/"+videoInfo.bvid);
-      cm.setPrimaryClip (mClipData)
-   MsgUtil.showMsg("视频链接已复制到剪切板", requireContext());
-      return true;
-    }
-});
+
+        //转发
         relay.setOnClickListener((view1) -> {
             Intent intent = new Intent();
             intent.setClass(requireContext(), SendDynamicActivity.class).putExtra("video", videoInfo);
             writeDynamicLauncher.launch(intent);
+        });
+        relay.setOnLongClickListener(v -> {
+            ToolsUtil.copyText(requireContext(), "https://www.bilibili.com/"+videoInfo.bvid);
+            MsgUtil.showMsg("视频完整链接已复制", requireContext());
+            return true;
         });
 
         if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {

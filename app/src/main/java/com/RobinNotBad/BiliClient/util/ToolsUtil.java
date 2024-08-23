@@ -10,6 +10,8 @@ import static com.RobinNotBad.BiliClient.util.LinkUrlUtil.TYPE_USER;
 import static com.RobinNotBad.BiliClient.util.LinkUrlUtil.TYPE_WEB_URL;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -170,6 +172,12 @@ public class ToolsUtil {
 
     public static void setCopy(TextView... textViews) {
         for (TextView textView : textViews) setCopy(textView);
+    }
+
+    public static void copyText(Context context, String str){
+        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData mClipData = ClipData.newPlainText("Label", str);
+        cm.setPrimaryClip(mClipData);
     }
 
     public static void setLink(TextView... textViews) {
