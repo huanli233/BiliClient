@@ -590,7 +590,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 videoArea.setY(video_origY);
                 videoArea.setScaleX(1.0f);
                 videoArea.setScaleY(1.0f);
-            } else {
+            } else if(!live_mode) {
                 if (playing) playerPause();
                 else playerResume();
                 showcon();
