@@ -64,17 +64,19 @@
     <string name="desc_load_transition">打开此选项，图片和部分页面加载完成时会有渐入/渐出动画。</string>
     <string name="desc_strict_url_match">打开此选项，会在识别链接时（不包含编号，如AV/BV/CV等）使用更严格的匹配规则以避免整段被识别为链接。</string>
 
-    <string name="update_tip">如果图片变扁请尝试前往偏好设置关闭“加载渐入渐出动画”\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
+    <string name="update_tip">如果图片变扁请尝试前往偏好设置关闭“加载渐入渐出动画”\n\n视频播放出现问题（如不够清晰、黑屏）请尝试切换显示模式\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
     <string name="desc_no_vip_color">开启此选项后，将不会在评论区为大会员用户显示专属的红色名称</string>
     <string name="desc_no_medal">开启此选项后，将不会在评论区显示用户的粉丝铭牌</string>
     <string name="desc_reply_marquee_name">开启此选项后，评论区的用户名称将会以跑马灯的形式展现，而不是换行</string>
-    <string name="desc_live_by_guest">开启此选项后，进入直播间时将会使用游客身份\n\n注意：开启后的漏弹幕情况可能会更加严重</string>
+    <string name="desc_live_by_guest">开启此选项后，进入直播间时将会使用游客身份\n\n注意：开启后的漏弹幕情况将会更加严重</string>
     
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
+        <item>完善了内置播放器的直播适配</item>
         <item>支持了直播弹幕(内置播放器特色功能)</item>
         <item>添加了单独的“我的关注”按钮</item>
         <item>新增了初步的横屏模式</item>
+        <item>新增了长按视频转发按钮复制完整链接的功能</item>
         <item>新增了初步的经验值显示</item>
         <item>新增了用户空间中直播状态的展示</item>
         <item>实现了用户空间中提示信息的展示</item>

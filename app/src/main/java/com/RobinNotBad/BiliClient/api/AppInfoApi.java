@@ -43,7 +43,7 @@ public class AppInfoApi {
                         MsgUtil.showDialog(context, "提醒", "当前版本开始，内置播放器支持查看直播弹幕");
                     MsgUtil.showDialog(context, "提醒", "欢迎更新到这个版本，这个版本增加了一些设置项，可前往设置中查看");
                     if (!SharedPreferencesUtil.getString("player", "null").equals("terminalPlayer"))
-                        MsgUtil.showDialog(context, "提示", "内置播放器已支持以下特色功能：\n·视频实时观看人数\n·显示直播弹幕\n·强制滚动显示弹幕\n\n欢迎切换尝试哦");
+                        MsgUtil.showDialog(context, "小提醒", "现在的内置播放器已支持以下特色功能：\n·视频实时观看人数\n·显示直播弹幕\n·强制滚动显示弹幕\n\n欢迎在需要时切换到内置播放器使用哦");
                 }
                 MsgUtil.showText(context, "更新公告", context.getResources().getString(R.string.update_tip) + "\n\n更新细节：\n" + ToolsUtil.getUpdateLog(context));
                 if (ToolsUtil.isDebugBuild())

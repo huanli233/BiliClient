@@ -46,18 +46,23 @@ public class CatchActivity extends BaseActivity {
         SpannableString reason_str = null;
 
         if (stack != null) {
-            if (stack.contains("java.lang.IndexOutOfBoundsException"))
-                reason_str = new SpannableString("可能的崩溃原因：\n滑动速度太快或触发bug");
+
+            findViewById(R.id.upload_btn).setEnabled(false);
+
+            if (stack.contains("java.lang.NumberFormatException"))
+                reason_str = new SpannableString("可能的崩溃原因：\n请正确输入数值");
+            else if(stack.contains("java.lang.UnsatisfiedLinkError"))
+                reason_str = new SpannableString("可能的崩溃原因：\n请不要乱删外部库");
             else if (stack.contains("org.json.JSONException"))
                 reason_str = new SpannableString("可能的崩溃原因：\n数据解析错误");
             else if (stack.contains("java.lang.OutOfMemoryError"))
                 reason_str = new SpannableString("可能的崩溃原因：\n内存爆了，在小内存设备上很正常");
+            else
+                findViewById(R.id.upload_btn).setEnabled(true);
 
             findViewById(R.id.upload_btn).setOnClickListener(view -> {
                 if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, -1) == -1)
                     MsgUtil.showMsg( "不会对未登录时遇到的问题负责", this);
-                else if (stack.contains("java.lang.OutOfMemoryError"))
-                    MsgUtil.showMsg( "无需上报", this);
                 else {
                     CenterThreadPool.run(() -> {
                         String res = AppInfoApi.uploadStack(stack, this);
@@ -65,6 +70,7 @@ public class CatchActivity extends BaseActivity {
                     });
                 }
             });
+
         } else finish();
 
         findViewById(R.id.restart_btn).setOnClickListener(view -> {
