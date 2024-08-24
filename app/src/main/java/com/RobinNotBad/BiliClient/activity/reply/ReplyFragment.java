@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity.reply;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ public class ReplyFragment extends RefreshListFragment {
     public int replyType = ReplyApi.REPLY_TYPE_VIDEO;
     private Object source;
     private long seek;
+    private String pagination = "";
 
     public static ReplyFragment newInstance(long aid, int type) {
         ReplyFragment fragment = new ReplyFragment();
@@ -113,10 +115,12 @@ public class ReplyFragment extends RefreshListFragment {
         if (!dontload) {
             CenterThreadPool.run(() -> {
                 try {
-                    int result = ReplyApi.getRepliesLazy(aid, seek, page, type, sort, replyList);
+                    Pair<Integer, String> pageState = ReplyApi.getRepliesLazy(aid, seek, pagination, type, sort, replyList);
+                    int result = pageState.first;
+                    this.pagination = pageState.second;
                     setRefreshing(false);
                     if (result != -1 && isAdded()) {
-                        replyAdapter = getReplyAdapter();
+                        replyAdapter = createReplyAdapter();
                         setOnSortSwitch();
                         setAdapter(replyAdapter);
 
@@ -137,7 +141,7 @@ public class ReplyFragment extends RefreshListFragment {
         if (replyAdapter != null) replyAdapter.source = source;
     }
 
-    private ReplyAdapter getReplyAdapter() {
+    private ReplyAdapter createReplyAdapter() {
         return new ReplyAdapter(requireContext(), replyList, aid, 0, type, sort, source, mid);
     }
 
@@ -146,7 +150,9 @@ public class ReplyFragment extends RefreshListFragment {
         CenterThreadPool.run(() -> {
             try {
                 List<Reply> list = new ArrayList<>();
-                int result = ReplyApi.getRepliesLazy(aid, 0, page, type, sort, list);
+                Pair<Integer, String> pageState = ReplyApi.getRepliesLazy(aid, 0, pagination, type, sort, list);
+                int result = pageState.first;
+                this.pagination = pageState.second;
                 setRefreshing(false);
                 if (result != -1) {
                     Log.e("debug", "下一页");
@@ -189,13 +195,15 @@ public class ReplyFragment extends RefreshListFragment {
 
     @SuppressLint("NotifyDataSetChanged")
     public void refresh(long aid) {
-        page = 1;
+        pagination = "";
         this.aid = aid;
         setRefreshing(true);
         CenterThreadPool.run(() -> {
             try {
                 List<Reply> list = new ArrayList<>();
-                int result = ReplyApi.getRepliesLazy(aid, 0, page, type, sort, list);
+                Pair<Integer, String> pageState = ReplyApi.getRepliesLazy(aid, 0, pagination, type, sort, list);
+                int result = pageState.first;
+                this.pagination = pageState.second;
                 setRefreshing(false);
                 if (result != -1 && isAdded()) {
                     runOnUiThread(() -> {
@@ -204,7 +212,7 @@ public class ReplyFragment extends RefreshListFragment {
                         else replyList = new ArrayList<>();
                         replyList.addAll(list);
                         if (replyAdapter == null) {
-                            replyAdapter = getReplyAdapter();
+                            replyAdapter = createReplyAdapter();
                             setAdapter(replyAdapter);
                         } else {
                             replyAdapter.notifyDataSetChanged();

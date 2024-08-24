@@ -1,8 +1,11 @@
 package com.RobinNotBad.BiliClient.api;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import com.RobinNotBad.BiliClient.model.Emote;
 import com.RobinNotBad.BiliClient.model.Reply;
@@ -66,7 +69,17 @@ public class ReplyApi {
         } else return -1;
     }  //-1错误,0正常，1到底了
 
-    public static int getRepliesLazy(long oid, long rpid, int pn, int type, int sort, List<Reply> replyArrayList) throws JSONException, IOException {
+    /**
+     * 获取评论列表（/x/v2/reply/wbi/main）
+     * @param oid 评论区oid
+     * @param rpid 指定要寻找的评论的rpid
+     * @param pagination 页
+     * @param type 评论区类型
+     * @param sort 排序方式
+     * @return 返回码（0=继续加载，1=到底了，-1=错误）与下一页的pagination
+     */
+    @NonNull
+    public static Pair<Integer, String> getRepliesLazy(long oid, long rpid, String pagination, int type, int sort, List<Reply> replyArrayList) throws JSONException, IOException {
 
         NetWorkUtil.FormData reqData = new NetWorkUtil.FormData()
                 .setUrlParam(true)
@@ -75,9 +88,9 @@ public class ReplyApi {
                 .put("plat", 1)
                 .put("web_location", "1315875")
                 .put("mode", sort);
-        if (pn != 1) reqData.put("next", pn);
+        reqData.put("pagination_str", new JSONObject().put("offset", TextUtils.isEmpty(pagination) ? "" : pagination));
         if (rpid > 0) reqData.put("seek_rpid", rpid);
-        String url = "https://api.bilibili.com/x/v2/reply/wbi/main" + reqData.toString();
+        String url = "https://api.bilibili.com/x/v2/reply/wbi/main" + reqData;
 
         //Log.e("debug-评论区链接", url);
 
@@ -85,7 +98,6 @@ public class ReplyApi {
 
         //Log.e("debug-评论区",all.toString());
 
-        int size = replyArrayList.size();
         if (all.getInt("code") == 0 && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");
             JSONObject cursor = data.getJSONObject("cursor");
@@ -94,13 +106,18 @@ public class ReplyApi {
                     analyzeReplyArray(true, data.getJSONArray("top_replies"), replyArrayList);
                 JSONArray replies = data.getJSONArray("replies");
                 analyzeReplyArray(true, replies, replyArrayList);
-                if (cursor.optBoolean("is_end", false)) return 1;
-                else return 0;
+                JSONObject paginationReply = cursor.optJSONObject("pagination_reply");
+                String nextOffset = paginationReply == null ? null : paginationReply.optString("next_offset");
+                if (cursor.optBoolean("is_end", false) || TextUtils.isEmpty(nextOffset)) {
+                    return new Pair<>(1, "");
+                } else {
+                    return new Pair<>(0, nextOffset);
+                }
             } else if (rpid <= 0 && data.has("top_replies") && !data.isNull("top_replies") && cursor.getBoolean("is_begin")) {
                 analyzeReplyArray(true, data.getJSONArray("top_replies"), replyArrayList);
-                return 1;
-            } else return 1;
-        } else return -1;
+                return new Pair<>(1, "");
+            } else return new Pair<>(1, "");
+        } else return new Pair<>(-1, "");
     }  //-1错误,0正常，1到底了
 
     public static void analyzeReplyArray(boolean isRoot, JSONArray replies, List<Reply> replyArrayList) throws JSONException {
