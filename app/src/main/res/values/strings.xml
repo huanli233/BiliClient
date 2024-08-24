@@ -100,6 +100,7 @@
     </array>
     //后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_video">
+        <item>xml/tutorial_video_4</item>
         <item>xml/tutorial_video_3</item>
         <item>xml/tutorial_video_2</item>
         <item>xml/tutorial_video</item>

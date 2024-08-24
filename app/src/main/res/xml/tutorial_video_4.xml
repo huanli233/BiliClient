@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tutorial>
+    <name>视频详情页教程4</name>
+    <description>用于引导用户使用视频详情页</description>
+    <type>0</type>
+    <content>
+        <item>
+            <type>0</type>
+            <text>长按“转发”按钮可以复制完整的视频链接哦</text>
+            <style>none</style>
+            <color>#ffffff</color>
+        </item>
+    </content>
+</tutorial>
