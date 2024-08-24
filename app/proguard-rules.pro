@@ -23,6 +23,7 @@
 -keeppackagenames org.jsoup.nodes
 -keep class com.RobinNotBad.BiliClient.** {*;}
 -keep class tv.danmaku.ijk.media.** {*;}
+-keep class com.netease.hearttouch.brotlij.** {*;}
 
 -keepattributes *Annotation*
 -keepclassmembers class * {

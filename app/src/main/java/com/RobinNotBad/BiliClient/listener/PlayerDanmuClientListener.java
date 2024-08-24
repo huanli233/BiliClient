@@ -2,8 +2,6 @@ package com.RobinNotBad.BiliClient.listener;
 
 import android.graphics.Color;
 import android.util.Log;
-import android.view.View;
-
 import androidx.annotation.NonNull;
 
 import com.RobinNotBad.BiliClient.activity.player.PlayerActivity;
