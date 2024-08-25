@@ -44,6 +44,8 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
     final ArrayList<ArticleLine> article;
     final ArticleInfo articleInfo;
 
+    private int coinAdd = 0;
+
     public ArticleContentAdapter(Activity context, ArticleInfo articleInfo, ArrayList<ArticleLine> article) {
         this.context = context;
         this.article = article;
@@ -189,7 +191,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                             }
                             int result = ArticleApi.addCoin(articleInfo.id, articleInfo.upInfo.mid, 1);
                             if (result == 0) {
-                                articleInfo.stats.coined++;
+                                if(++coinAdd <= 2) articleInfo.stats.coined++;
                                 context.runOnUiThread(() -> {
                                     MsgUtil.showMsg("投币成功！", context);
                                     coinLabel.setText(ToolsUtil.toWan(++articleInfo.stats.coin));

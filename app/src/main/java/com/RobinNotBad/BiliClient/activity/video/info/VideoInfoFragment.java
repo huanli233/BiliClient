@@ -91,6 +91,8 @@ public class VideoInfoFragment extends Fragment {
     final int RESULT_ADDED = 1;
     final int RESULT_DELETED = -1;
 
+    private int coinAdd = 0;
+
     private boolean desc_expand = false, tags_expand = false;
     final ActivityResultLauncher<Intent> favLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
         @Override
@@ -417,7 +419,7 @@ public class VideoInfoFragment extends Fragment {
                 try {
                     int result = LikeCoinFavApi.coin(videoInfo.aid, 1);
                     if (result == 0) {
-                        videoInfo.stats.coined++;
+                        if(++coinAdd <= 2) videoInfo.stats.coined++;
                         if (isAdded()) requireActivity().runOnUiThread(() -> {
                             MsgUtil.showMsg("投币成功", requireContext());
                             coinLabel.setText(ToolsUtil.toWan(++videoInfo.stats.coin));

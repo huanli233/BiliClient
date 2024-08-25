@@ -34,7 +34,6 @@ public class ArticleInfoFragment extends Fragment {
     RecyclerView recyclerView;
     ArrayList<ArticleLine> lineList;
 
-
     Runnable onFinishLoad;
 
     public ArticleInfoFragment() {
