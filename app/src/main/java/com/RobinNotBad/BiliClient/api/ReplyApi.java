@@ -71,11 +71,12 @@ public class ReplyApi {
 
     /**
      * 获取评论列表（/x/v2/reply/wbi/main）
-     * @param oid 评论区oid
-     * @param rpid 指定要寻找的评论的rpid
+     *
+     * @param oid        评论区oid
+     * @param rpid       指定要寻找的评论的rpid
      * @param pagination 页
-     * @param type 评论区类型
-     * @param sort 排序方式
+     * @param type       评论区类型
+     * @param sort       排序方式
      * @return 返回码（0=继续加载，1=到底了，-1=错误）与下一页的pagination
      */
     @NonNull
@@ -151,7 +152,7 @@ public class ReplyApi {
         JSONObject vip = member.getJSONObject("vip");
         userInfo.vip_role = vip.getInt("vipStatus");
         userInfo.vip_nickname_color = vip.getString("nickname_color");
-        if((!member.isNull("fans_detail")) && (!SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.NO_MEDAL,false))){
+        if ((!member.isNull("fans_detail")) && (!SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.NO_MEDAL, false))) {
             JSONObject fans_detail = member.getJSONObject("fans_detail");
             userInfo.medal_name = fans_detail.getString("medal_name");
             userInfo.medal_level = fans_detail.getInt("level");

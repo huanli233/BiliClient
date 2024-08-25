@@ -51,7 +51,7 @@ public class CatchActivity extends BaseActivity {
 
             if (stack.contains("java.lang.NumberFormatException"))
                 reason_str = new SpannableString("可能的崩溃原因：\n请正确输入数值");
-            else if(stack.contains("java.lang.UnsatisfiedLinkError"))
+            else if (stack.contains("java.lang.UnsatisfiedLinkError"))
                 reason_str = new SpannableString("可能的崩溃原因：\n请不要乱删外部库");
             else if (stack.contains("org.json.JSONException"))
                 reason_str = new SpannableString("可能的崩溃原因：\n数据解析错误");
@@ -61,8 +61,8 @@ public class CatchActivity extends BaseActivity {
                 findViewById(R.id.upload_btn).setEnabled(true);
 
             findViewById(R.id.upload_btn).setOnClickListener(view -> {
-                if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, -1) == -1)
-                    MsgUtil.showMsg( "不会对未登录时遇到的问题负责", this);
+                if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, -1) == -1)
+                    MsgUtil.showMsg("不会对未登录时遇到的问题负责", this);
                 else {
                     CenterThreadPool.run(() -> {
                         String res = AppInfoApi.uploadStack(stack, this);

@@ -174,7 +174,7 @@ public class ToolsUtil {
         for (TextView textView : textViews) setCopy(textView);
     }
 
-    public static void copyText(Context context, String str){
+    public static void copyText(Context context, String str) {
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData mClipData = ClipData.newPlainText("Label", str);
         cm.setPrimaryClip(mClipData);

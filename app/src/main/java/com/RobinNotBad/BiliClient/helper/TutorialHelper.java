@@ -23,7 +23,6 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 //这个Helper是给教程使用的
@@ -207,12 +206,12 @@ public class TutorialHelper {
         try {
             int n = context.getResources().getStringArray(array_id).length; //用于修复version错误
             for (int i = 1; i <= context.getResources().getStringArray(array_id).length; i++) {
-                int indentify = context.getResources().getIdentifier(context.getPackageName() + ":" + context.getResources().getStringArray(array_id)[i-1], null, null);
+                int indentify = context.getResources().getIdentifier(context.getPackageName() + ":" + context.getResources().getStringArray(array_id)[i - 1], null, null);
                 if (indentify > 0)
                     show(indentify, context, context.getResources().getStringArray(R.array.tutorial_list)[tutorial_key], n--);
             }
-        }catch (Exception e){
-            MsgUtil.showMsg("加载教程时遇到问题",context);
+        } catch (Exception e) {
+            MsgUtil.showMsg("加载教程时遇到问题", context);
             e.printStackTrace();
         }
     }

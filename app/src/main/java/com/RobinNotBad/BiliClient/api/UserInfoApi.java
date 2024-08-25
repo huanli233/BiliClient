@@ -53,15 +53,15 @@ public class UserInfoApi {
             LiveRoom liveroom = null;
             try {
                 JSONObject spaceInfo = getUserSpaceInfo(mid);
-                if(spaceInfo != null){
-                    if(!spaceInfo.isNull("sys_notice")) {
+                if (spaceInfo != null) {
+                    if (!spaceInfo.isNull("sys_notice")) {
                         sys_notice = spaceInfo.getJSONObject("sys_notice").optString("content");
-                        if(sys_notice == null) sys_notice = "";
-                        else sys_notice = sys_notice.replace("请点此查看纪念账号相关说明","");
+                        if (sys_notice == null) sys_notice = "";
+                        else sys_notice = sys_notice.replace("请点此查看纪念账号相关说明", "");
                     }
-                    if(!spaceInfo.isNull("live_room")){
+                    if (!spaceInfo.isNull("live_room")) {
                         JSONObject live_room = spaceInfo.getJSONObject("live_room");
-                        if(live_room.getInt("roomStatus") == 1 && live_room.getInt("liveStatus") == 1) {
+                        if (live_room.getInt("roomStatus") == 1 && live_room.getInt("liveStatus") == 1) {
                             liveroom = new LiveRoom();
                             liveroom.title = "直播中：" + live_room.getString("title");
                             liveroom.user_cover = live_room.getString("cover");
@@ -69,14 +69,16 @@ public class UserInfoApi {
                         }
                     }
                 }
-            }catch (Exception ignore){}
+            } catch (Exception ignore) {
+            }
 
             JSONObject vip = card.getJSONObject("vip");
             if (vip.getInt("status") == 1) {
                 UserInfo result = new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, vip.getInt("role"), sys_notice, liveroom);
                 result.vip_nickname_color = vip.optString("nickname_color", "");
                 return result;
-            } else return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, sys_notice, liveroom);
+            } else
+                return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, sys_notice, liveroom);
         } else return null;
     }
 
@@ -110,7 +112,7 @@ public class UserInfoApi {
             long current_exp = level_exp.getLong("current_exp");
             long next_exp = level_exp.getLong("next_exp");
 
-            return new UserInfo(mid, name, avatar, sign, fans, 0, level, false, "", official, officialDesc,current_exp,next_exp);
+            return new UserInfo(mid, name, avatar, sign, fans, 0, level, false, "", official, officialDesc, current_exp, next_exp);
         } else return new UserInfo(0, "加载失败", "", "", 0, 0, 0, false, "", 0, "");
     }
 

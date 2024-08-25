@@ -55,7 +55,7 @@ public class DynamicInfoActivity extends BaseActivity {
             TextView pageName = findViewById(R.id.pageName);
             pageName.setText("动态详情");
 
-            TutorialHelper.showTutorialList(this, R.array.tutorial_dynamic_info,  6);
+            TutorialHelper.showTutorialList(this, R.array.tutorial_dynamic_info, 6);
 
             CenterThreadPool.run(() -> {
                 try {

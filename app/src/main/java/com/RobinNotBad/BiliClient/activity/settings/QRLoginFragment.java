@@ -45,7 +45,8 @@ public class QRLoginFragment extends Fragment {
     final boolean need_refresh = false;
     int qrScale = 0;
 
-    public QRLoginFragment(){}
+    public QRLoginFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

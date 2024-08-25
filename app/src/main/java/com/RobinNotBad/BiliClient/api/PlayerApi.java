@@ -35,7 +35,9 @@ public class PlayerApi {
         long mid;
         try {
             mid = SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
-        } catch (Throwable ignored) { mid = 0; }
+        } catch (Throwable ignored) {
+            mid = 0;
+        }
         Intent intent = new Intent()
                 .setClass(context, JumpToPlayerActivity.class)
                 .putExtra("title", (videoInfo.pagenames.size() == 1 ? videoInfo.title : videoInfo.pagenames.get(page)))

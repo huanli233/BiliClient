@@ -16,10 +16,14 @@ public abstract class AbstractAdapter<VH extends BaseHolder> extends RecyclerVie
     protected View headerView;
 
     public abstract void doBindViewHolder(VH viewHolder, int position);
+
     public abstract VH doCreateViewHolder(ViewGroup parent, int viewType);
 
-    public void bindHeaderView(BaseHolder viewHolder) {}
-    public void bindFooterView(BaseHolder viewHolder) {}
+    public void bindHeaderView(BaseHolder viewHolder) {
+    }
+
+    public void bindFooterView(BaseHolder viewHolder) {
+    }
 
     public AbstractAdapter(Context context) {
         this.mContext = context;
@@ -36,7 +40,8 @@ public abstract class AbstractAdapter<VH extends BaseHolder> extends RecyclerVie
         return doCreateViewHolder(parent, viewType);
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public final void onBindViewHolder(@NonNull BaseHolder holder, int position) {
         int viewType = holder.getItemViewType();
         if (viewType == VIEW_TYPE_HEADER) {

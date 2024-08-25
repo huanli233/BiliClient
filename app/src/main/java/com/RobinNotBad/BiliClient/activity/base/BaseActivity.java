@@ -50,7 +50,7 @@ public class BaseActivity extends AppCompatActivity {
     //调整页面边距，参考了hankmi的方式
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setRequestedOrientation(SharedPreferencesUtil.getBoolean("ui_landscape",false)
+        setRequestedOrientation(SharedPreferencesUtil.getBoolean("ui_landscape", false)
                 ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -181,13 +181,13 @@ public class BaseActivity extends AppCompatActivity {
         void finishInflate(View view, int id);
     }
 
-    public RecyclerView.LayoutManager getLayoutManager(){
-        return SharedPreferencesUtil.getBoolean("ui_landscape",false) && !force_single_column
-                ? new GridLayoutManager(this,3)
+    public RecyclerView.LayoutManager getLayoutManager() {
+        return SharedPreferencesUtil.getBoolean("ui_landscape", false) && !force_single_column
+                ? new GridLayoutManager(this, 3)
                 : new LinearLayoutManager(this);
     }
 
-    public void setForceSingleColumn(){
+    public void setForceSingleColumn() {
         force_single_column = true;
     }
 }

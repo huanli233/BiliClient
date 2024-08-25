@@ -8,7 +8,6 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
 import com.RobinNotBad.BiliClient.adapter.SettingsAdapter;
 import com.RobinNotBad.BiliClient.model.SettingSection;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;

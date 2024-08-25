@@ -36,14 +36,14 @@ import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
+import com.RobinNotBad.BiliClient.ui.widget.CustomListView;
+import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
-import com.RobinNotBad.BiliClient.ui.widget.CustomListView;
-import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -147,9 +147,10 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                 CenterThreadPool.run(() -> {
                     try {
-                        long count = ReplyApi.getReplyCount(oid,type);
+                        long count = ReplyApi.getReplyCount(oid, type);
                         CenterThreadPool.runOnUiThread(() -> writeReply.count_label.setText("共" + count + "条评论"));
-                    }catch (Exception ignore){}
+                    } catch (Exception ignore) {
+                    }
                 });
             }
         }
@@ -171,7 +172,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             UserInfo sender = replyList.get(realPosition).sender;
             SpannableStringBuilder name_str = new SpannableStringBuilder(replyList.get(realPosition).sender.name);
-            if (sender.vip_role > 0 && !SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.NO_VIP_COLOR,false)) replyHolder.userName.setTextColor(Color.parseColor(sender.vip_nickname_color));
+            if (sender.vip_role > 0 && !SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.NO_VIP_COLOR, false))
+                replyHolder.userName.setTextColor(Color.parseColor(sender.vip_nickname_color));
             if (sender.mid == up_mid) {
                 name_str = new SpannableStringBuilder(" UP " + replyList.get(realPosition).sender.name);
                 name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
@@ -179,19 +181,19 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
             int last_length = name_str.length();
             name_str.append(" ").append(String.valueOf(sender.level));
-            name_str.setSpan(ToolsUtil.getLevelBadge(context,sender), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            if (!sender.medal_name.isEmpty()){
+            name_str.setSpan(ToolsUtil.getLevelBadge(context, sender), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            if (!sender.medal_name.isEmpty()) {
                 last_length = name_str.length();
                 name_str.append("  ").append(sender.medal_name).append("Lv").append(String.valueOf(sender.medal_level)).append(" ");
-                name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.argb(140,158,186,232)), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.argb(140, 158, 186, 232)), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 name_str.setSpan(new RelativeSizeSpan(0.8f), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
             replyHolder.userName.setText(name_str);
 
-            if(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.REPLY_MARQUEE_NAME,false)) {
+            if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.REPLY_MARQUEE_NAME, false)) {
                 replyHolder.userName.setSingleLine(true);
                 replyHolder.userName.setMaxLines(1);
-            }else{
+            } else {
                 replyHolder.userName.setSingleLine(false);
                 replyHolder.userName.setMaxLines(3);
             }

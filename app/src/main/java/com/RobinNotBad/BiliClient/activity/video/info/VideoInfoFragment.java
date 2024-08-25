@@ -500,7 +500,7 @@ public class VideoInfoFragment extends Fragment {
             writeDynamicLauncher.launch(intent);
         });
         relay.setOnLongClickListener(v -> {
-            ToolsUtil.copyText(requireContext(), "https://www.bilibili.com/"+videoInfo.bvid);
+            ToolsUtil.copyText(requireContext(), "https://www.bilibili.com/" + videoInfo.bvid);
             MsgUtil.showMsg("视频完整链接已复制", requireContext());
             return true;
         });

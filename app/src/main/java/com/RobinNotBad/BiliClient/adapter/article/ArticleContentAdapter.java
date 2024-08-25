@@ -215,12 +215,12 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 fav.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     try {
                         if (articleInfo.stats.favoured) {
-                            if(ArticleApi.delFavorite(articleInfo.id)==0) {
+                            if (ArticleApi.delFavorite(articleInfo.id) == 0) {
                                 context.runOnUiThread(() -> fav.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_favourite_0)));
                                 articleInfo.stats.favorite--;
                             }
                         } else {
-                            if(ArticleApi.favorite(articleInfo.id)==0) {
+                            if (ArticleApi.favorite(articleInfo.id) == 0) {
                                 context.runOnUiThread(() -> fav.setBackground(ContextCompat.getDrawable(context, R.drawable.icon_favourite_1)));
                                 articleInfo.stats.favorite++;
                             }

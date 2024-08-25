@@ -12,6 +12,7 @@ public class ImageViewer {
     public static ImageViewer from(String url) {
         return new ImageViewer(new ArrayList<>(List.of(url)));
     }
+
     public static ImageViewer from(List<String> urls) {
         return new ImageViewer(new ArrayList<>(urls));
     }

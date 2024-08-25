@@ -139,13 +139,13 @@ public class RefreshListFragment extends Fragment {
         setRefreshing(false);
     }
 
-    public RecyclerView.LayoutManager getLayoutManager(){
-        return SharedPreferencesUtil.getBoolean("ui_landscape",false) && !force_single_column
-                ? new GridLayoutManager(requireContext(),3)
+    public RecyclerView.LayoutManager getLayoutManager() {
+        return SharedPreferencesUtil.getBoolean("ui_landscape", false) && !force_single_column
+                ? new GridLayoutManager(requireContext(), 3)
                 : new LinearLayoutManager(requireContext());
     }
 
-    public void setForceSingleColumn(){
+    public void setForceSingleColumn() {
         force_single_column = true;
     }
 }

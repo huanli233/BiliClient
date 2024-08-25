@@ -69,7 +69,8 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
                     e.printStackTrace();
                     cvid = -1;
                 }
-                if (cvid == -1) ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("打开失败", context));
+                if (cvid == -1)
+                    ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("打开失败", context));
                 else {
                     if (parsedOpus.type == Opus.TYPE_ARTICLE) {
                         Intent intent = new Intent(context, ArticleInfoActivity.class);

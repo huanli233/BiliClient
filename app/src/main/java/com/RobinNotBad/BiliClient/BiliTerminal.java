@@ -47,7 +47,7 @@ public class BiliTerminal extends Application {
     }
 
     @Nullable
-    public static InstanceActivity getInstanceActivityOnTop(){
+    public static InstanceActivity getInstanceActivityOnTop() {
         return instance.get();
     }
 

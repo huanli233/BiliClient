@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.player;
 
 import static android.media.AudioManager.STREAM_MUSIC;
-
 import static com.RobinNotBad.BiliClient.util.NetWorkUtil.USER_AGENT_WEB;
 
 import android.annotation.SuppressLint;
@@ -44,12 +43,12 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.listener.PlayerDanmuClientListener;
+import com.RobinNotBad.BiliClient.ui.widget.BatteryView;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
-import com.RobinNotBad.BiliClient.ui.widget.BatteryView;
 import com.bumptech.glide.Glide;
 
 import org.json.JSONObject;
@@ -111,9 +110,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private int video_width, video_height;
     private boolean ischanging, isdanmakushowing = false, live_mode = false;
     private TextView text_progress, online_text, text_volume, loading_text0, loading_text1, text_speed, text_newspeed;
-    
+
     public TextView text_title;
-    
+
     private String progress_all_str;
     private AudioManager audioManager;
     private ImageView circle;
@@ -166,7 +165,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         Log.e("加载", "加载");
         super.onCreate(savedInstanceState);
 
-        landscape = SharedPreferencesUtil.getBoolean("player_autolandscape", false) || SharedPreferencesUtil.getBoolean("ui_landscape",false);
+        landscape = SharedPreferencesUtil.getBoolean("player_autolandscape", false) || SharedPreferencesUtil.getBoolean("ui_landscape", false);
         setRequestedOrientation(landscape ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setContentView(R.layout.activity_player);
@@ -317,7 +316,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         loading_text0.setText("装填弹幕中");
                         loading_text1.setText("(≧∇≦)");
                     });
-                    if(!live_mode) downdanmu();
+                    if (!live_mode) downdanmu();
                     setDisplay();
                     break;
                 case 1:
@@ -590,7 +589,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 videoArea.setY(video_origY);
                 videoArea.setScaleX(1.0f);
                 videoArea.setScaleY(1.0f);
-            } else if(!live_mode) {
+            } else if (!live_mode) {
                 if (playing) playerPause();
                 else playerResume();
                 showcon();
@@ -644,7 +643,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "packet-buffering", 1);
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "fflags", "flush_packets");
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "reconnect", 1);
-        ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "max-buffer-size", 15*1000*1000);
+        ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "max-buffer-size", 15 * 1000 * 1000);
         //这个坑死我！请允许我为解决此问题而大大地兴奋一下ohhhhhhhhhhhhhhhhhhhhhhhhhhhh
         //ijkplayer是自带一个useragent的，要把默认的改掉才能用！
         if (mode == 0) {
@@ -911,8 +910,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                             if (live_mode) {
                                 text_progress.setText(ToolsUtil.toTime(videonow / 1000));
                                 online_text.setText(online_number);
-                            }
-                            else progressBar.setProgress(videonow);
+                            } else progressBar.setProgress(videonow);
                         });
                         //progressBar上有一个onProgressChange的监听器，文字更改在那里
                     }
@@ -933,7 +931,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     try {
                         if ((aid == 0 && bvid == null) || cid == 0) online_number = "";
                         else if (SharedPreferencesUtil.getBoolean("show_online", true)) {
-                            if(!live_mode) {
+                            if (!live_mode) {
                                 if (bvid == null)
                                     online_number = VideoInfoApi.getWatching(aid, cid);
                                 else online_number = VideoInfoApi.getWatching(bvid, cid);
@@ -1002,7 +1000,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             mDanmakuView.setCallback(new DrawHandler.Callback() {
                 @Override
                 public void prepared() {
-                    adddanmaku("弹幕君准备完毕～(*≧ω≦)",Color.WHITE);
+                    adddanmaku("弹幕君准备完毕～(*≧ω≦)", Color.WHITE);
                 }
 
                 @Override
@@ -1023,13 +1021,13 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
     }
 
-    public void adddanmaku(String text,int color) {
-        adddanmaku(text,color,25,1,0);
+    public void adddanmaku(String text, int color) {
+        adddanmaku(text, color, 25, 1, 0);
     }
-    
-    public void adddanmaku(String text,int color, int textSize, int type, int backgroundColor) {
+
+    public void adddanmaku(String text, int color, int textSize, int type, int backgroundColor) {
         BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(type);
-        if(text == null || danmaku == null || ijkPlayer  == null) return;
+        if (text == null || danmaku == null || ijkPlayer == null) return;
         danmaku.text = text;
         danmaku.padding = 5;
         danmaku.priority = 1;
@@ -1238,7 +1236,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             }
         });
 
-        if(liveWebSocket != null) liveWebSocket.close(1000,"");
+        if (liveWebSocket != null) liveWebSocket.close(1000, "");
 
         super.onDestroy();
     }
@@ -1267,19 +1265,22 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     }
 
     OkHttpClient okHttpClient;
-    private void danmuSocketConnect(){
+
+    private void danmuSocketConnect() {
         CenterThreadPool.run(() -> {
             try {
                 String url = "https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo?type=0&id=" + aid;
                 ArrayList<String> mHeaders = new ArrayList<>(NetWorkUtil.webHeaders);
-                mHeaders.add("Referer"); mHeaders.add("https://live.bilibili.com/" + aid);
-                mHeaders.add("Origin"); mHeaders.add("https://live.bilibili.com");
+                mHeaders.add("Referer");
+                mHeaders.add("https://live.bilibili.com/" + aid);
+                mHeaders.add("Origin");
+                mHeaders.add("https://live.bilibili.com");
                 Response response = NetWorkUtil.get(url, mHeaders);
                 JSONObject data = new JSONObject(Objects.requireNonNull(response.body()).string()).getJSONObject("data");
                 JSONObject host = data.getJSONArray("host_list").getJSONObject(0);
 
                 url = "wss://" + host.getString("host") + ":" + host.getInt("wss_port") + "/sub";
-                Log.e("debug","连接WebSocket：" + url);
+                Log.e("debug", "连接WebSocket：" + url);
 
                 okHttpClient = new OkHttpClient();
                 Request request = new Request.Builder()
@@ -1297,7 +1298,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
                 liveWebSocket = okHttpClient.newWebSocket(request, listener);
 //                okHttpClient.dispatcher().executorService().shutdown();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });

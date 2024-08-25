@@ -51,7 +51,7 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull FavoriteHolder holder, int position) {
-        if(position == folderList.size()) {
+        if (position == folderList.size()) {
             holder.name.setText("图文收藏夹");
             holder.count.setText("");
             Glide.with(context).asDrawable()
@@ -64,8 +64,7 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
                 Intent intent = new Intent(context, FavouriteOpusListActivity.class);
                 context.startActivity(intent);
             });
-        }
-        else {
+        } else {
             holder.name.setText(ToolsUtil.htmlToString(folderList.get(position).name));
             holder.count.setText(folderList.get(position).videoCount + "/" + folderList.get(position).maxCount);
             Glide.with(this.context).asDrawable().load(GlideUtil.url(folderList.get(position).cover))

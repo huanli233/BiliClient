@@ -21,7 +21,8 @@ public class VideoRcmdFragment extends RefreshListFragment {
 
     private long aid;
 
-    public VideoRcmdFragment() {}
+    public VideoRcmdFragment() {
+    }
 
     public static VideoRcmdFragment newInstance(long aid) {
         VideoRcmdFragment fragment = new VideoRcmdFragment();

@@ -65,7 +65,7 @@ public class CopyTextActivity extends BaseActivity {
         endEdit.addTextChangedListener(textWatcher);
 
         findViewById(R.id.copy_all).setOnClickListener(view -> {
-            ToolsUtil.copyText(this,content);
+            ToolsUtil.copyText(this, content);
             MsgUtil.showMsg("已复制", this);
         });
         findViewById(R.id.copy).setOnClickListener(view -> {
