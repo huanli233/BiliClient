@@ -39,8 +39,9 @@ public class AppInfoApi {
                 if (last_ver != -1) {
                     if (last_ver < 20240606)
                         MsgUtil.showDialog(context, "提醒", "当前的新版本实现了对抗部分类型的风控，建议您重新登录账号以确保成功使用");
-                    if (last_ver < 20240818)
-                        MsgUtil.showDialog(context, "提醒", "当前版本开始，内置播放器支持查看直播弹幕");
+                    if (last_ver < 20240825)
+                        MsgUtil.showDialog(context, "提醒", "此版本修复了教程问题，建议前往设置中“清除教程进度”，以便补全在之前由于打包问题丢失而漏过的教程");
+
                     MsgUtil.showDialog(context, "提醒", "欢迎更新到这个版本，这个版本增加了一些设置项，可前往设置中查看");
                     if (!SharedPreferencesUtil.getString("player", "null").equals("terminalPlayer"))
                         MsgUtil.showDialog(context, "小提醒", "现在的内置播放器已支持以下特色功能：\n·视频实时观看人数\n·显示直播弹幕\n·强制滚动显示弹幕\n\n欢迎在需要时切换到内置播放器使用哦");

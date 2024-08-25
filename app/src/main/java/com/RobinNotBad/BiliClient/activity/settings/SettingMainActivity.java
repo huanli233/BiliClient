@@ -20,6 +20,8 @@ public class SettingMainActivity extends InstanceActivity {
 
     private int eggClick = 0;
 
+    private int refreshTutorialClick = 0;
+
     @SuppressLint({"MissingInflatedId", "InflateParams"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +154,20 @@ public class SettingMainActivity extends InstanceActivity {
                 Intent intent = new Intent();
                 intent.setClass(this, AnnouncementsActivity.class);
                 startActivity(intent);
+            });
+
+            //清除教程进度
+            MaterialCardView refreshTutorial = findViewById(R.id.refresh_tutorial);
+            refreshTutorial.setOnClickListener(view -> {
+                if(refreshTutorialClick++ > 0){
+                    refreshTutorialClick = 0;
+
+                    for (int i = 0; i < getResources().getStringArray(R.array.tutorial_list).length; i++) {
+                        SharedPreferencesUtil.removeValue("tutorial_ver_" + getResources().getStringArray(R.array.tutorial_list)[i]);
+                    }
+
+                    MsgUtil.showMsg("教程进度已清除",this);
+                }else MsgUtil.showMsg("再点一次清除",this);
             });
 
             MaterialCardView test = findViewById(R.id.test);    //用于测试
