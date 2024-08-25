@@ -92,7 +92,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private DanmakuContext mContext;
     private Timer progressTimer, autoHideTimer, volumeTimer, speedTimer, loadingShowTimer, onlineTimer;
     private String video_url, danmaku_url;
-    private int mode;
+
+    private boolean hasDanmaku, isOnlineVideo,isLiveMode;
+
     private int videoall, videonow, videonow_last;
     private long lastProgress;
 
@@ -108,7 +110,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private SeekBar progressBar, speed_seekbar;
     private float screen_width, screen_height;
     private int video_width, video_height;
-    private boolean ischanging, isdanmakushowing = false, live_mode = false;
+    private boolean ischanging, isdanmakushowing = false;
     private TextView text_progress, online_text, text_volume, loading_text0, loading_text1, text_speed, text_newspeed;
 
     public TextView text_title;
@@ -142,7 +144,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     private boolean landscape = false;
 
-    private boolean preview_mode = false;
+    private boolean isPreviewMode = false;
 
     public String online_number = "0";
 
@@ -157,6 +159,31 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(BiliTerminal.getFitDisplayContext(newBase));
+    }
+
+    private void getExtras() {
+        Intent intent = getIntent();
+        isPreviewMode = intent.getBooleanExtra("preview",false);
+        if(isPreviewMode) return;
+
+        video_url = intent.getStringExtra("url");//视频链接
+        danmaku_url = intent.getStringExtra("danmaku");//弹幕链接
+        String title = intent.getStringExtra("title");//视频标题
+        if (danmaku_url != null) Log.e("弹幕", danmaku_url);
+        if (video_url != null) Log.e("视频", video_url);
+        if (title != null) Log.e("标题", title);
+        if (title != null) text_title.setText(title);
+
+        bvid = intent.getStringExtra("bvid");
+        aid = intent.getLongExtra("aid", 0);
+        cid = intent.getLongExtra("cid", 0);
+        mid = intent.getLongExtra("mid", 0);
+
+        lastProgress = intent.getIntExtra("progress", 0);
+
+        isLiveMode = intent.getBooleanExtra("live_mode", false);
+        isOnlineVideo = video_url.contains("http");
+        hasDanmaku = !danmaku_url.equals("");
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -201,7 +228,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if ((!SharedPreferencesUtil.getBoolean("show_online", true)))
             online_text.setVisibility(View.GONE);
 
-        if (mode == -1) {
+        if (isPreviewMode) {
             loading_text0.setText("预览中");
             loading_text1.setText("点击上方标题栏退出");
             videoArea.setBackgroundColor(Color.argb(0x50, 0xff, 0xff, 0xff));
@@ -212,7 +239,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             if (SharedPreferencesUtil.getBoolean("player_ui_showLoopBtn", true))
                 loop_btn.setVisibility(View.VISIBLE);
             else loop_btn.setVisibility(View.GONE);
-            preview_mode = true;
+            isPreviewMode = true;
             return;
         }
 
@@ -231,19 +258,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         danmakuFile = new File(cachepath, "danmaku.xml");
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        mContext = DanmakuContext.create();
-        HashMap<Integer, Integer> maxLinesPair = new HashMap<>();
-        maxLinesPair.put(BaseDanmaku.TYPE_SCROLL_RL, SharedPreferencesUtil.getInt("player_danmaku_maxline", 15));
-        HashMap<Integer, Boolean> overlap = new HashMap<>();
-        overlap.put(BaseDanmaku.TYPE_SCROLL_LR, SharedPreferencesUtil.getBoolean("player_danmaku_allowoverlap", true));
-        overlap.put(BaseDanmaku.TYPE_FIX_BOTTOM, SharedPreferencesUtil.getBoolean("player_danmaku_allowoverlap", true));
-        mContext.setDanmakuStyle(IDisplayer.DANMAKU_STYLE_STROKEN, 1)
-                .setDuplicateMergingEnabled(SharedPreferencesUtil.getBoolean("player_danmaku_mergeduplicate", false))
-                .setScrollSpeedFactor(SharedPreferencesUtil.getFloat("player_danmaku_speed", 1.0f))
-                .setScaleTextSize(SharedPreferencesUtil.getFloat("player_danmaku_size", 0.7f))//缩放值
-                .setMaximumLines(maxLinesPair)
-                .setDanmakuTransparency(SharedPreferencesUtil.getFloat("player_danmaku_transparency", 0.5f))
-                .preventOverlapping(overlap);
 
         setVideoGestures();
         autohide();
@@ -254,7 +268,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             @Override
             public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
                 runOnUiThread(() -> {
-                    if (!live_mode)
+                    if (!isLiveMode)
                         text_progress.setText(ToolsUtil.toTime(position / 1000) + "/" + progress_all_str);
                     if (!online_number.isEmpty())
                         online_text.setText("实时" + online_number + "人");
@@ -307,35 +321,30 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             }
         });
 
-        Handler handler = new Handler();
-        handler.postDelayed(() -> CenterThreadPool.run(() -> {    //等界面加载完成
-            switch (mode) {
-                case 0:
-                    Log.e("debug", "准备在线播放");
-                    runOnUiThread(() -> {
-                        loading_text0.setText("装填弹幕中");
-                        loading_text1.setText("(≧∇≦)");
-                    });
-                    if (!live_mode) downdanmu();
-                    setDisplay();
-                    break;
-                case 1:
-                    setDisplay();
-                    break;
-                case 2:
-                    streamdanmaku(danmaku_url);
-                    setDisplay();
-                    break;
-            }
-        }), 30);
-
-        if (live_mode) {
+        if(isLiveMode){
             control_btn.setVisibility(View.GONE); //暂停的话可能会出一些bug，那就别暂停了，卡住就退出重进吧（
             progressBar.setVisibility(View.GONE);
             progressBar.setEnabled(false);
             streamdanmaku(null); //用来初始化一下弹幕层
             danmuSocketConnect();
         }
+
+        Handler handler = new Handler();
+        handler.postDelayed(() -> CenterThreadPool.run(() -> {    //等界面加载完成
+            if(isLiveMode) {
+                setDisplay();
+                return;
+            }
+
+            runOnUiThread(() -> {
+                loading_text0.setText("装填弹幕中");
+                loading_text1.setText("(≧∇≦)");
+            });
+            if(isOnlineVideo) downdanmu();
+            else streamdanmaku(danmaku_url);
+
+            setDisplay();
+        }), 30);
     }
 
 
@@ -407,27 +416,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     }
 
-    private void getExtras() {
-        Intent intent = getIntent();
-        mode = intent.getIntExtra("mode", 0);//新增：模式  0=普通播放，1=本地无弹幕视频，2=本地有弹幕视频
-        video_url = intent.getStringExtra("url");//视频链接
-        danmaku_url = intent.getStringExtra("danmaku");//弹幕链接
-        String title = intent.getStringExtra("title");//视频标题
-        if (danmaku_url != null) Log.e("弹幕", danmaku_url);
-        if (video_url != null) Log.e("视频", video_url);
-        if (title != null) Log.e("标题", title);
-        Log.e("mode", String.valueOf(mode));
-        if (title != null) text_title.setText(title);
-
-        bvid = intent.getStringExtra("bvid");
-        aid = intent.getLongExtra("aid", 0);
-        cid = intent.getLongExtra("cid", 0);
-        mid = intent.getLongExtra("mid", 0);
-
-        lastProgress = intent.getIntExtra("progress", 0);
-
-        live_mode = intent.getBooleanExtra("live_mode", false);
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     private void setVideoGestures() {
@@ -549,7 +537,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         });
         //这个管长按开始
         control_layout.setOnLongClickListener(view -> {
-            if (SharedPreferencesUtil.getBoolean("player_longclick", true) && ijkPlayer != null && (playing) && (!live_mode)) {
+            if (SharedPreferencesUtil.getBoolean("player_longclick", true) && ijkPlayer != null && (playing) && (!isLiveMode)) {
                 if (!onLongClick && !gesture_moved && !gesture_scaled) {
                     hidecon();
                     ijkPlayer.setSpeed(3.0F);
@@ -589,7 +577,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 videoArea.setY(video_origY);
                 videoArea.setScaleX(1.0f);
                 videoArea.setScaleY(1.0f);
-            } else if (!live_mode) {
+            } else if (!isLiveMode) {
                 if (playing) playerPause();
                 else playerResume();
                 showcon();
@@ -606,7 +594,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         right_control.setVisibility(View.VISIBLE);
         top_control.setVisibility(View.VISIBLE);
         bottom_control.setVisibility(View.VISIBLE);
-        if (prepared && !live_mode) text_speed.setVisibility(View.VISIBLE);
+        if (prepared && !isLiveMode) text_speed.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             batteryView.setPower(manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
         }
@@ -646,7 +634,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "max-buffer-size", 15 * 1000 * 1000);
         //这个坑死我！请允许我为解决此问题而大大地兴奋一下ohhhhhhhhhhhhhhhhhhhhhhhhhhhh
         //ijkplayer是自带一个useragent的，要把默认的改掉才能用！
-        if (mode == 0) {
+        if (isOnlineVideo) {
             ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "user_agent", USER_AGENT_WEB);
             Log.e("debug", "设置ua");
         }
@@ -716,10 +704,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private void MPPrepare(String nowurl) {
         ijkPlayer.setOnPreparedListener(this);
 
-        if (live_mode) runOnUiThread(() -> loading_text0.setText("载入直播中"));
+        if (isLiveMode) runOnUiThread(() -> loading_text0.setText("载入直播中"));
         else runOnUiThread(() -> loading_text0.setText("载入视频中"));
         try {
-            if (mode == 0) {
+            if (isOnlineVideo) {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Referer", "https://www.bilibili.com/");
                 headers.put("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
@@ -736,7 +724,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 ijkPlayer.start();
             } else {
                 playing = false;
-                if (mode != 1 && mDanmakuView != null) mDanmakuView.pause();
+                if (hasDanmaku) mDanmakuView.pause();
                 control_btn.setImageResource(R.drawable.btn_player_play);
             }
         });
@@ -799,7 +787,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         //原作者居然把旋转按钮命名为danmaku_btn，也是没谁了...我改过来了  ----RobinNotBad
         //他大抵是觉得能用就行
 
-        if (SharedPreferencesUtil.getBoolean("player_ui_showLoopBtn", true) && !live_mode) {
+        if (SharedPreferencesUtil.getBoolean("player_ui_showLoopBtn", true) && !isLiveMode) {
             if (loop) loop_btn.setImageResource(R.mipmap.loopon);
             else loop_btn.setImageResource(R.mipmap.loopoff);
             loop_btn.setOnClickListener(view -> {
@@ -813,7 +801,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         progressBar.setMax(videoall);
         progress_all_str = ToolsUtil.toTime(videoall / 1000);
 
-        if (SharedPreferencesUtil.getBoolean("player_from_last", true) && !live_mode) {
+        if (SharedPreferencesUtil.getBoolean("player_from_last", true) && !isLiveMode) {
             if (lastProgress > 6 && ((videoall / 1000) - lastProgress) > 6) { //阈值
                 mediaPlayer.seekTo(lastProgress * 1000);
                 runOnUiThread(() -> MsgUtil.showMsg("已从上次的位置播放", this));
@@ -825,7 +813,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         control_btn.setImageResource(R.drawable.btn_player_pause);
 
         text_speed.setVisibility(top_control.getVisibility());
-        if (live_mode) text_speed.setVisibility(View.GONE);
+        if (isLiveMode) text_speed.setVisibility(View.GONE);
         text_speed.setOnClickListener(view -> speed_layout.setVisibility(View.VISIBLE));
         speed_layout.setOnClickListener(view -> speed_layout.setVisibility(View.GONE));
 
@@ -907,7 +895,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     if (videonow_last != videonow) {               //检测进度是否在变动
                         videonow_last = videonow;
                         runOnUiThread(() -> {
-                            if (live_mode) {
+                            if (isLiveMode) {
                                 text_progress.setText(ToolsUtil.toTime(videonow / 1000));
                                 online_text.setText(online_number);
                             } else progressBar.setProgress(videonow);
@@ -926,12 +914,12 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             @SuppressLint("SetTextI18n")
             @Override
             public void run() {
-                if (live_mode) onlineTimer.cancel();
+                if (isLiveMode) onlineTimer.cancel();
                 if (ijkPlayer != null && !ischanging) {
                     try {
                         if ((aid == 0 && bvid == null) || cid == 0) online_number = "";
                         else if (SharedPreferencesUtil.getBoolean("show_online", true)) {
-                            if (!live_mode) {
+                            if (!isLiveMode) {
                                 if (bvid == null)
                                     online_number = VideoInfoApi.getWatching(aid, cid);
                                 else online_number = VideoInfoApi.getWatching(bvid, cid);
@@ -995,30 +983,43 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     private void streamdanmaku(String danmakuPath) {
         Log.e("debug", "streamdanmaku");
-        if (mDanmakuView != null) {
-            BaseDanmakuParser mParser = createParser(danmakuPath);
-            mDanmakuView.setCallback(new DrawHandler.Callback() {
-                @Override
-                public void prepared() {
-                    adddanmaku("弹幕君准备完毕～(*≧ω≦)", Color.WHITE);
-                }
 
-                @Override
-                public void updateTimer(DanmakuTimer timer) {
-                    timer.update(ijkPlayer.getCurrentPosition());
-                }
+        mContext = DanmakuContext.create();
+        HashMap<Integer, Integer> maxLinesPair = new HashMap<>();
+        maxLinesPair.put(BaseDanmaku.TYPE_SCROLL_RL, SharedPreferencesUtil.getInt("player_danmaku_maxline", 15));
+        HashMap<Integer, Boolean> overlap = new HashMap<>();
+        overlap.put(BaseDanmaku.TYPE_SCROLL_LR, SharedPreferencesUtil.getBoolean("player_danmaku_allowoverlap", true));
+        overlap.put(BaseDanmaku.TYPE_FIX_BOTTOM, SharedPreferencesUtil.getBoolean("player_danmaku_allowoverlap", true));
+        mContext.setDanmakuStyle(IDisplayer.DANMAKU_STYLE_STROKEN, 1)
+                .setDuplicateMergingEnabled(SharedPreferencesUtil.getBoolean("player_danmaku_mergeduplicate", false))
+                .setScrollSpeedFactor(SharedPreferencesUtil.getFloat("player_danmaku_speed", 1.0f))
+                .setScaleTextSize(SharedPreferencesUtil.getFloat("player_danmaku_size", 0.7f))//缩放值
+                .setMaximumLines(maxLinesPair)
+                .setDanmakuTransparency(SharedPreferencesUtil.getFloat("player_danmaku_transparency", 0.5f))
+                .preventOverlapping(overlap);
 
-                @Override
-                public void danmakuShown(BaseDanmaku danmaku) {
-                }
+        BaseDanmakuParser mParser = createParser(danmakuPath);
 
-                @Override
-                public void drawingFinished() {
-                }
-            });
-            mDanmakuView.prepare(mParser, mContext);
-            mDanmakuView.enableDanmakuDrawingCache(true);
-        }
+        mDanmakuView.setCallback(new DrawHandler.Callback() {
+            @Override
+            public void prepared() {
+                adddanmaku("弹幕君准备完毕～(*≧ω≦)", Color.WHITE);
+            }
+
+            @Override
+            public void updateTimer(DanmakuTimer timer) {
+            }
+
+            @Override
+            public void danmakuShown(BaseDanmaku danmaku) {
+            }
+
+            @Override
+            public void drawingFinished() {
+            }
+        });
+        mDanmakuView.prepare(mParser, mContext);
+        mDanmakuView.enableDanmakuDrawingCache(true);
     }
 
     public void adddanmaku(String text, int color) {
@@ -1071,14 +1072,12 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             if (autoHideTimer != null) autoHideTimer.cancel();
         } else {
             playing = true;
-            if (mDanmakuView != null && mode != 1 && (!live_mode)) {
-                if (videonow >= videoall - 250) {     //别问为啥有个>=，问就是这TM都能有误差，视频停止时并不是播放到最后一帧,可以多或者少出来几十甚至上百个毫秒...  ----RobinNotBad
-                    ijkPlayer.seekTo(0);
-                    mDanmakuView.seekTo(0L);
-                    mDanmakuView.resume();
-                    Log.e("debug", "播完重播");
-                } else mDanmakuView.start(ijkPlayer.getCurrentPosition());
-            }
+            if (videonow >= videoall - 250) {     //别问为啥有个>=，问就是这TM都能有误差，视频停止时并不是播放到最后一帧,可以多或者少出来几十甚至上百个毫秒...  ----RobinNotBad
+                ijkPlayer.seekTo(0);
+                mDanmakuView.seekTo(0L);
+                mDanmakuView.resume();
+                Log.e("debug", "播完重播");
+            } else mDanmakuView.start(ijkPlayer.getCurrentPosition());
             ijkPlayer.start();
             control_btn.setImageResource(R.drawable.btn_player_pause);
         }
@@ -1087,7 +1086,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     @SuppressLint("SetTextI18n")
     public void changeVolume(Boolean add_or_cut) {
-        if (preview_mode) return;
+        if (isPreviewMode) return;
         if (autoHideTimer != null) autoHideTimer.cancel();
         int volumeNow = audioManager.getStreamVolume(STREAM_MUSIC);
         int volumeMax = audioManager.getStreamMaxVolume(STREAM_MUSIC);
@@ -1167,7 +1166,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private void playerPause() {
         playing = false;
         if (ijkPlayer != null && prepared) ijkPlayer.pause();
-        if (mDanmakuView != null && mode != 1) mDanmakuView.pause();
+        if (hasDanmaku) mDanmakuView.pause();
         if (control_btn != null) control_btn.setImageResource(R.drawable.btn_player_play);
     }
 
@@ -1175,7 +1174,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         playing = true;
         if (ijkPlayer != null && prepared) {
             ijkPlayer.start();
-            if (mDanmakuView != null && mode != 1)
+            if (hasDanmaku)
                 mDanmakuView.start(ijkPlayer.getCurrentPosition());
         }
         if (control_btn != null) control_btn.setImageResource(R.drawable.btn_player_pause);
@@ -1228,7 +1227,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         CenterThreadPool.run(() -> {
             try {
-                if (mid != 0 && aid != 0 && !live_mode) {
+                if (mid != 0 && aid != 0 && !isLiveMode) {
                     HistoryApi.reportHistory(aid, cid, mid, videonow / 1000);
                 }
             } catch (Exception e) {
@@ -1241,40 +1240,22 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         super.onDestroy();
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (prepared) switch (keyCode) {
-            case KeyEvent.KEYCODE_ENTER:
-            case KeyEvent.KEYCODE_DPAD_CENTER:
-                controlVideo();
-                break;
-            case KeyEvent.KEYCODE_DPAD_LEFT:
-                ijkPlayer.seekTo(ijkPlayer.getCurrentPosition() - 10000L);
-                break;
-            case KeyEvent.KEYCODE_DPAD_RIGHT:
-                ijkPlayer.seekTo(ijkPlayer.getCurrentPosition() + 10000L);
-                break;
-            case KeyEvent.KEYCODE_DPAD_UP:
-                changeVolume(true);
-                break;
-            case KeyEvent.KEYCODE_DPAD_DOWN:
-                changeVolume(false);
-                break;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
     OkHttpClient okHttpClient;
 
     private void danmuSocketConnect() {
         CenterThreadPool.run(() -> {
             try {
                 String url = "https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo?type=0&id=" + aid;
-                ArrayList<String> mHeaders = new ArrayList<>(NetWorkUtil.webHeaders);
-                mHeaders.add("Referer");
-                mHeaders.add("https://live.bilibili.com/" + aid);
-                mHeaders.add("Origin");
-                mHeaders.add("https://live.bilibili.com");
+                ArrayList<String> mHeaders = new ArrayList<>() {{
+                    add("Cookie");
+                    add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
+                    add("Referer");
+                    add("https://live.bilibili.com/" + aid);
+                    add("Origin");
+                    add("https://live.bilibili.com");
+                    add("User-Agent");
+                    add(USER_AGENT_WEB);
+                }};
                 Response response = NetWorkUtil.get(url, mHeaders);
                 JSONObject data = new JSONObject(Objects.requireNonNull(response.body()).string()).getJSONObject("data");
                 JSONObject host = data.getJSONArray("host_list").getJSONObject(0);
@@ -1299,8 +1280,36 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 liveWebSocket = okHttpClient.newWebSocket(request, listener);
 //                okHttpClient.dispatcher().executorService().shutdown();
             } catch (Exception e) {
+                MsgUtil.showMsg("直播弹幕连接失败",this);
                 e.printStackTrace();
             }
         });
+    }
+
+
+
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (prepared) switch (keyCode) {
+            case KeyEvent.KEYCODE_ENTER:
+            case KeyEvent.KEYCODE_DPAD_CENTER:
+                controlVideo();
+                break;
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                ijkPlayer.seekTo(ijkPlayer.getCurrentPosition() - 10000L);
+                break;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                ijkPlayer.seekTo(ijkPlayer.getCurrentPosition() + 10000L);
+                break;
+            case KeyEvent.KEYCODE_DPAD_UP:
+                changeVolume(true);
+                break;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                changeVolume(false);
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

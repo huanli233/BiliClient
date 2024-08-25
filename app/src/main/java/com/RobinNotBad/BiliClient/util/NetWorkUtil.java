@@ -309,8 +309,6 @@ public class NetWorkUtil {
         add("https://www.bilibili.com/");
         add("User-Agent");
         add(USER_AGENT_WEB);
-        add("Content-Type");
-        add("application/x-www-form-urlencoded");
     }};
 
     public static void refreshHeaders() {
