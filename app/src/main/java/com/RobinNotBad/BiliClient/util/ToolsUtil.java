@@ -42,6 +42,8 @@ import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.model.At;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 
+import org.jsoup.Jsoup;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -107,6 +109,10 @@ public class ToolsUtil {
                 .replace("<br>", "\n")
                 .replace("<em class=\"keyword\">", "")
                 .replace("</em>", "");
+    }
+
+    public static String removeHtml(String html){
+        return Jsoup.parse(html).text();
     }
 
     public static String stringToFile(String str) {

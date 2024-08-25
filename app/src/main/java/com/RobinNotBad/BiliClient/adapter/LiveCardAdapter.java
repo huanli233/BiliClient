@@ -47,7 +47,7 @@ public class LiveCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
         LiveRoom room = roomList.get(position);
 
         VideoCard videoCard = new VideoCard();
-        videoCard.title = room.title;
+        videoCard.title = ToolsUtil.removeHtml(room.title);
         if (!room.user_cover.startsWith("http")) videoCard.cover = "http:" + room.user_cover;
         else videoCard.cover = room.user_cover;
         if (TextUtils.isEmpty(videoCard.cover) || videoCard.cover.equals("http:"))
