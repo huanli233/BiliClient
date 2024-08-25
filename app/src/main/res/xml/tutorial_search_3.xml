@@ -7,7 +7,7 @@
     <content>
         <item>
             <type>0</type>
-            <text>提醒：可以通过搜索番剧名称来搜到番剧</text>
+            <text>提醒：可以通过搜索番剧名称来搜到番剧，输入BV号后长按搜索按钮可直接直接跳转</text>
             <style>italic</style>
             <color>#ffffff</color>
         </item>
