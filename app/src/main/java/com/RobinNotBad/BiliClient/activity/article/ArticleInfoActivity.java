@@ -48,7 +48,7 @@ public class ArticleInfoActivity extends BaseActivity {
         TextView pageName = findViewById(R.id.pageName);
         pageName.setText("专栏详情");
 
-        TutorialHelper.showTutorialList(this, R.array.tutorial_article, "article");
+        TutorialHelper.showTutorialList(this, R.array.tutorial_article, 7);
 
         ViewPager viewPager = findViewById(R.id.viewPager);
 

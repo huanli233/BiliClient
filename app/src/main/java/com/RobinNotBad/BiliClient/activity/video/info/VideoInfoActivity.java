@@ -92,7 +92,7 @@ public class VideoInfoActivity extends BaseActivity {
     }
 
     protected void initVideoInfoView() {
-        TutorialHelper.showTutorialList(this, R.array.tutorial_video, "video");
+        TutorialHelper.showTutorialList(this, R.array.tutorial_video, 1);
 
         ViewPager viewPager = findViewById(R.id.viewPager);
         TextView pageName = findViewById(R.id.pageName);

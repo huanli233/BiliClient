@@ -13,20 +13,25 @@ import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.widget.Toast;
 
+import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.TutorialActivity;
 import com.RobinNotBad.BiliClient.model.CustomText;
 import com.RobinNotBad.BiliClient.model.Tutorial;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 //这个Helper是给教程使用的
 //因为不通用(只适用教程)就放进Helper了
 
 public class TutorialHelper {
+
+
     /**
      * 从xml加载教程对象
      *
@@ -196,14 +201,19 @@ public class TutorialHelper {
      *
      * @param context
      * @param array_id     教程Array的ID
-     * @param tutorial_key 教程的Key，是保存浏览进度时使用的键值
+     * @param tutorial_key 教程的Key值，是保存浏览进度时使用的键值，在string.xml中存储
      */
-    public static void showTutorialList(Context context, int array_id, String tutorial_key) {
-        int n = context.getResources().getStringArray(array_id).length; //用于修复version错误
-        for (int i = 1; i <= context.getResources().getStringArray(array_id).length; i++) {
-            int indentify = context.getResources().getIdentifier(context.getPackageName() + ":" + context.getResources().getStringArray(array_id)[i-1], null, null);
-            if (indentify > 0)
-                show(indentify, context, tutorial_key, n--);
+    public static void showTutorialList(Context context, int array_id, int tutorial_key) {
+        try {
+            int n = context.getResources().getStringArray(array_id).length; //用于修复version错误
+            for (int i = 1; i <= context.getResources().getStringArray(array_id).length; i++) {
+                int indentify = context.getResources().getIdentifier(context.getPackageName() + ":" + context.getResources().getStringArray(array_id)[i-1], null, null);
+                if (indentify > 0)
+                    show(indentify, context, context.getResources().getStringArray(R.array.tutorial_list)[tutorial_key], n--);
+            }
+        }catch (Exception e){
+            MsgUtil.showMsg("加载教程时遇到问题",context);
+            e.printStackTrace();
         }
     }
 }

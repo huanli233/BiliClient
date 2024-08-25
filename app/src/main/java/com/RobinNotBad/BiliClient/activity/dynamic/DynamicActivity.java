@@ -165,7 +165,7 @@ public class DynamicActivity extends RefreshMainActivity {
 
         setPageName("动态");
 
-        TutorialHelper.showTutorialList(this, R.array.tutorial_dynamic, "dynamic");
+        TutorialHelper.showTutorialList(this, R.array.tutorial_dynamic, 6);
 
         refreshDynamic();
     }

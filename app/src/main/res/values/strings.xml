@@ -135,4 +135,17 @@
     <array name="tutorial_dynamic_info">
         <item>xml/tutorial_dynamic_info</item>
     </array>
+
+
+    <array name="tutorial_list">
+        <item>recommend</item>
+        <item>video</item>
+        <item>space</item>
+        <item>update_install</item>
+        <item>search</item>
+        <item>message</item>
+        <item>dynamic</item>
+        <item>dynamic_info</item>
+        <item>article</item>
+    </array>
 </resources>

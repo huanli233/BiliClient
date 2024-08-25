@@ -38,7 +38,7 @@ public class RecommendActivity extends RefreshMainActivity {
 
         recyclerView.setHasFixedSize(true);
 
-        TutorialHelper.showTutorialList(this, R.array.tutorial_recommend, "recommend");
+        TutorialHelper.showTutorialList(this, R.array.tutorial_recommend, 0);
 
         refreshRecommend();
     }
