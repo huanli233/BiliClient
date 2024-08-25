@@ -104,6 +104,14 @@
                 android:layout_marginBottom="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="0.1"
+                android:textSize="12sp"
+                android:text="“哔哩终端坏掉了，这不是终端的错，绝对不是”"
+                android:textAlignment="center" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -77,7 +77,7 @@ public class SplashActivity extends Activity {
                 try {
                     // 未登录时请求bilibili.com
                     if (SharedPreferencesUtil.getLong("mid", 0) != 0) {
-                        checkCookie();
+                        checkCookieRefresh();
                     } else {
                         // [开发者]RobinNotBad: 如果提前不请求bilibili.com，未登录时的推荐有概率一直返回同样的内容
                         NetWorkUtil.get("https://www.bilibili.com", NetWorkUtil.webHeaders);
@@ -155,7 +155,7 @@ public class SplashActivity extends Activity {
         });
     }
 
-    private void checkCookie() {
+    private void checkCookieRefresh() throws IOException{
         try {
             JSONObject cookieInfo = CookieRefreshApi.cookieInfo();
             if (cookieInfo.getBoolean("refresh")) {
@@ -179,8 +179,6 @@ public class SplashActivity extends Activity {
         } catch (JSONException e) {
             runOnUiThread(() -> MsgUtil.showMsgLong("登录信息过期，请重新登录！", this));
             resetLogin();
-        } catch (IOException e) {
-            runOnUiThread(() -> MsgUtil.err(e, this));
         }
     }
 

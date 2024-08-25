@@ -45,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
+            android:alpha="0.9"
             android:text="虽然但是，Robin只喜欢纳西妲嘿嘿嘿"
             android:textSize="11sp" />
 

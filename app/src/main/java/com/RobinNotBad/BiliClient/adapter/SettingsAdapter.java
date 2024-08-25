@@ -2,9 +2,13 @@ package com.RobinNotBad.BiliClient.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -30,8 +34,9 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final Map<String, Integer> typeMap = new HashMap<>() {{
         put("switch", 0);
         put("choose", 1);
-        //put("input_int",2);
-        //put("input_float",3);
+        put("input_int",2);
+        put("input_float",3);
+        put("input_string",4);
 
     }};
 
@@ -48,14 +53,13 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
         switch (viewType) {
             case 1:
-                view = LayoutInflater.from(this.context).inflate(R.layout.cell_setting_choose, parent, false);
-                return new ChooseHolder(view);
+                return new ChooseHolder(LayoutInflater.from(this.context).inflate(R.layout.cell_setting_choose, parent, false));
+            case 4:
+                return new InputHolder(LayoutInflater.from(this.context).inflate(R.layout.cell_setting_input, parent, false));
             default:
-                view = LayoutInflater.from(this.context).inflate(R.layout.cell_setting_switch, parent, false);
-                return new SwitchHolder(view);
+                return new SwitchHolder(LayoutInflater.from(this.context).inflate(R.layout.cell_setting_switch, parent, false));
         }
     }
 
@@ -67,6 +71,10 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case 1:
                 ChooseHolder chooseHolder = (ChooseHolder) holder;
                 chooseHolder.bind(settingSection);
+                break;
+            case 4:
+                InputHolder inputHolder = (InputHolder) holder;
+                inputHolder.bind(settingSection);
                 break;
             default:
                 SwitchHolder switchHolder = (SwitchHolder) holder;
@@ -121,6 +129,74 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             boolean value = SharedPreferencesUtil.getBoolean(settingSection.id, Boolean.parseBoolean(settingSection.defaultValue));
             chocola.setChecked(value);
             vanilla.setChecked(!value);
+        }
+    }
+
+    public static class InputHolder extends RecyclerView.ViewHolder {
+        final EditText input;
+        final TextView name;
+        final TextView desc;
+
+        public InputHolder(@NonNull View itemView) {
+            super(itemView);
+            input = itemView.findViewById(R.id.setting_input_edittext);
+            desc = itemView.findViewById(R.id.setting_input_desc);
+            name = itemView.findViewById(R.id.setting_input_name);
+        }
+
+        public void bind(SettingSection settingSection) {
+            desc.setText(settingSection.desc);
+            name.setText(settingSection.name);
+            switch (settingSection.type){
+                case "input_int":
+                    int intValue = SharedPreferencesUtil.getInt(settingSection.id, Integer.parseInt(settingSection.defaultValue));
+                    input.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+                    input.setText(String.valueOf(intValue));
+                    input.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+                            try {
+                                SharedPreferencesUtil.putInt(settingSection.id, Integer.parseInt(editable.toString()));
+                            } catch (Exception ignored){}
+                        }
+                    });
+                    break;
+                case "input_float":
+                    float floatValue = SharedPreferencesUtil.getFloat(settingSection.id, Float.parseFloat(settingSection.defaultValue));
+                    input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    input.setText(String.valueOf(floatValue));
+                    input.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+                            try {
+                                SharedPreferencesUtil.putFloat(settingSection.id, Float.parseFloat(editable.toString()));
+                            } catch (Exception ignored){}
+                        }
+                    });
+                    break;
+                default:
+                    String strValue = SharedPreferencesUtil.getString(settingSection.id, settingSection.defaultValue);
+                    input.setInputType(InputType.TYPE_CLASS_TEXT);
+                    input.setText(strValue);
+                    input.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+                            SharedPreferencesUtil.putString(settingSection.id, editable.toString());
+                        }
+                    });
+            }
         }
     }
 }

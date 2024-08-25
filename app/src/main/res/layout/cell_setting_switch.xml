@@ -25,6 +25,7 @@
             android:layout_marginHorizontal="6dp"
             android:layout_marginTop="1dp"
             android:layout_marginBottom="4dp"
+            android:alpha="0.9"
             android:text="你打开的不是开关，而是通往异世界的大门"
             android:textSize="11sp" />
     </LinearLayout>

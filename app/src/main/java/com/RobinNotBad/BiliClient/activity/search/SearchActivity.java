@@ -49,6 +49,8 @@ public class SearchActivity extends InstanceActivity {
     Handler handler;
     ArrayList<String> searchHistory;
 
+    String[] specialList = {"自杀","自尽","自残","抑郁","双相"};
+
     @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged", "InflateParams"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +154,12 @@ public class SearchActivity extends InstanceActivity {
             if (str.contains("纳西妲")) {
                 MsgUtil.showText(this, "特殊彩蛋", getString(R.string.egg_robin_nahida));
                 return;
+            }
+        }
+        for (String s:specialList) {
+            if(str.contains(s)){
+                MsgUtil.showText(this, "特殊彩蛋", getString(R.string.egg_warmwords_warmworld));
+                break;
             }
         }
 
