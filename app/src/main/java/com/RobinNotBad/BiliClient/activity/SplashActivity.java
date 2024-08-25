@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
@@ -42,7 +43,8 @@ public class SplashActivity extends Activity {
     private TextView splashTextView;
     private int splashFrame;
     private Timer splashTimer;
-    private final String splashText = "欢迎使用\n哔哩终端";
+    private Handler handler;
+    private String splashText = "欢迎使用\n哔哩终端";
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -56,7 +58,10 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         Log.e("debug", "进入应用");
 
+        handler = new Handler();
+
         splashTextView = findViewById(R.id.splashText);
+        splashText = SharedPreferencesUtil.getString("ui_splashtext","欢迎使用\n哔哩终端");
 
         splashTimer = new Timer();
         splashTimer.schedule(new TimerTask() {
@@ -112,28 +117,27 @@ public class SplashActivity extends Activity {
                     Intent intent = new Intent();
                     intent.setClass(SplashActivity.this, (activityClass != null ? activityClass : RecommendActivity.class));
                     intent.putExtra("from", firstActivity);
-                    startActivity(intent);
-
-                    CenterThreadPool.run(() -> AppInfoApi.check(SplashActivity.this));
 
                     interruptSplash();
-                    finish();
+
+                    handler.postDelayed(()->{
+                        startActivity(intent);
+                        CenterThreadPool.run(() -> AppInfoApi.check(SplashActivity.this));
+                        finish();
+                    },100);
+
                 } catch (IOException e) {
                     runOnUiThread(() -> {
                         MsgUtil.err(e, this);
+                        interruptSplash();
                         splashTextView.setText("网络错误");
                         if (SharedPreferencesUtil.getBoolean("setup", false)) {
-                            Timer timer = new Timer();
-                            timer.schedule(new TimerTask() {
-                                @Override
-                                public void run() {
-                                    Intent intent = new Intent();
-                                    intent.setClass(SplashActivity.this, LocalListActivity.class);
-                                    startActivity(intent);
-                                    interruptSplash();
-                                    finish();
-                                }
-                            }, 200);
+                            handler.postDelayed(()->{
+                                Intent intent = new Intent();
+                                intent.setClass(SplashActivity.this, LocalListActivity.class);
+                                startActivity(intent);
+                                finish();
+                            },300);
                         }
                     });
                 } catch (JSONException e) {

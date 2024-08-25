@@ -56,6 +56,8 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         switch (viewType) {
             case 1:
                 return new ChooseHolder(LayoutInflater.from(this.context).inflate(R.layout.cell_setting_choose, parent, false));
+            case 2:
+            case 3:
             case 4:
                 return new InputHolder(LayoutInflater.from(this.context).inflate(R.layout.cell_setting_input, parent, false));
             default:
@@ -72,6 +74,8 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 ChooseHolder chooseHolder = (ChooseHolder) holder;
                 chooseHolder.bind(settingSection);
                 break;
+            case 2:
+            case 3:
             case 4:
                 InputHolder inputHolder = (InputHolder) holder;
                 inputHolder.bind(settingSection);
@@ -150,7 +154,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             switch (settingSection.type){
                 case "input_int":
                     int intValue = SharedPreferencesUtil.getInt(settingSection.id, Integer.parseInt(settingSection.defaultValue));
-                    input.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+                    input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
                     input.setText(String.valueOf(intValue));
                     input.addTextChangedListener(new TextWatcher() {
                         @Override
@@ -167,7 +171,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     break;
                 case "input_float":
                     float floatValue = SharedPreferencesUtil.getFloat(settingSection.id, Float.parseFloat(settingSection.defaultValue));
-                    input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     input.setText(String.valueOf(floatValue));
                     input.addTextChangedListener(new TextWatcher() {
                         @Override
@@ -184,7 +188,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     break;
                 default:
                     String strValue = SharedPreferencesUtil.getString(settingSection.id, settingSection.defaultValue);
-                    input.setInputType(InputType.TYPE_CLASS_TEXT);
+                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                     input.setText(strValue);
                     input.addTextChangedListener(new TextWatcher() {
                         @Override
