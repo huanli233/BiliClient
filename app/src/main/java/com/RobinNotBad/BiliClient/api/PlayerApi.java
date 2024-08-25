@@ -113,7 +113,6 @@ public class PlayerApi {
         switch (SharedPreferencesUtil.getString("player", "null")) {
             case "terminalPlayer":
                 intent.setClass(context, PlayerActivity.class);
-                intent.putExtra("mode", (local ? 2 : 0));
                 intent.putExtra("url", videourl);
                 intent.putExtra("danmaku", danmakuurl);
                 intent.putExtra("title", title);
