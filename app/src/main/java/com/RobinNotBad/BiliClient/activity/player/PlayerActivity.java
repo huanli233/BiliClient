@@ -35,8 +35,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
@@ -98,9 +96,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private int videoall, videonow, videonow_last;
     private long lastProgress;
 
-    private ConstraintLayout control_layout, top_control, bottom_control, speed_layout;
-    private RelativeLayout videoArea;
-    private LinearLayout right_control, loading_info;
+    private RelativeLayout control_layout, top_control, videoArea, bottom_buttons;
+    private LinearLayout bottom_control, speed_layout, right_control, loading_info;
 
     private IjkMediaPlayer ijkPlayer;
     private SurfaceView surfaceView;
@@ -206,19 +203,13 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         else rotate_btn.setVisibility(View.GONE);
 
         if (SharedPreferencesUtil.getBoolean("player_ui_round", false)) {
-            int padding = ToolsUtil.dp2px(6, this);
+            int padding = ToolsUtil.dp2px(8, this);
 
             top_control.setPaddingRelative(padding, padding, padding, 0);
 
-            bottom_control.setPaddingRelative(padding, 0, 0, padding);
+            bottom_control.setPaddingRelative(padding, 0, padding, padding);
 
             right_control.setPaddingRelative(0, 0, padding, 0);
-            ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.clone(control_layout);
-            constraintSet.connect(right_control.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-            constraintSet.connect(right_control.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-            constraintSet.applyTo(control_layout);
-            //一种很新的使用ConstraintLayout的方法（
         }
 
         if ((!SharedPreferencesUtil.getBoolean("show_online", true)))
@@ -372,6 +363,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         speed_layout = findViewById(R.id.layout_speed);
         speed_seekbar = findViewById(R.id.seekbar_speed);
         text_newspeed = findViewById(R.id.text_newspeed);
+        bottom_buttons = findViewById(R.id.bottom_buttons);
 
         top_control.setOnClickListener(view -> finish());
 
@@ -589,7 +581,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private void showcon() {
         right_control.setVisibility(View.VISIBLE);
         top_control.setVisibility(View.VISIBLE);
-        bottom_control.setVisibility(View.VISIBLE);
+        bottom_buttons.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         if (isPrepared && !isLiveMode) text_speed.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             batteryView.setPower(manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
@@ -601,7 +594,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private void hidecon() {
         right_control.setVisibility(View.GONE);
         top_control.setVisibility(View.GONE);
-        bottom_control.setVisibility(View.GONE);
+        bottom_buttons.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
         if (isPrepared) text_speed.setVisibility(View.GONE);
     }
 
@@ -873,7 +867,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
 
         runOnUiThread(() -> {
-            videoArea.setLayoutParams(new ConstraintLayout.LayoutParams(video_width, video_height));
+            videoArea.setLayoutParams(new RelativeLayout.LayoutParams(video_width, video_height));
             Log.e("debug-改变视频区域大小", video_width + "x" + video_height);
             video_origX = (screen_width - video_width) / 2;
             video_origY = (screen_height - video_height) / 2;
