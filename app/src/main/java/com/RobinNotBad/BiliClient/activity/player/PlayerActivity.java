@@ -309,7 +309,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         });
 
         if(isLiveMode){
-            control_btn.setVisibility(View.GONE); //暂停的话可能会出一些bug，那就别暂停了，卡住就退出重进吧（
+            control_btn.setVisibility(View.INVISIBLE); //暂停的话可能会出一些bug，那就别暂停了，卡住就退出重进吧（
             progressBar.setVisibility(View.GONE);
             progressBar.setEnabled(false);
             streamdanmaku(null); //用来初始化一下弹幕层
@@ -761,11 +761,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         changeVideoSize(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight());
 
-        if (SharedPreferencesUtil.getBoolean("player_ui_showDanmakuBtn", true) && hasDanmaku) {
-            danmaku_btn.setImageResource(R.mipmap.danmakuon);
-            isDanmakuVisible = true;
-            mDanmakuView.start();
-
+        if(isLiveMode || hasDanmaku) mDanmakuView.start();
+        if(!isLiveMode && hasDanmaku) {
             danmakuAdjustTimer = new Timer();
             danmakuAdjustTimer.schedule(new TimerTask() {
                 @Override
@@ -773,6 +770,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     if(isPlaying) mDanmakuView.start(mediaPlayer.getCurrentPosition());
                 }
             },30000,30000);
+        }
+        if (SharedPreferencesUtil.getBoolean("player_ui_showDanmakuBtn", true)) {
+            danmaku_btn.setImageResource(R.mipmap.danmakuon);
+            isDanmakuVisible = true;
 
             danmaku_btn.setOnClickListener(view -> {
                 if (isDanmakuVisible) mDanmakuView.hide();
@@ -1001,6 +1002,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         mDanmakuView.setCallback(new DrawHandler.Callback() {
             @Override
             public void prepared() {
+                Log.e("debug","danmaku_prepared");
                 adddanmaku("弹幕君准备完毕～(*≧ω≦)", Color.WHITE);
             }
 
@@ -1033,7 +1035,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         danmaku.textColor = color;
         danmaku.backgroundColor = backgroundColor;
         danmaku.textSize = textSize * (mContext.getDisplayer().getDensity() - 0.6f);
-        danmaku.time = ijkPlayer.getCurrentPosition();
+        danmaku.time = mDanmakuView.getCurrentTime() + 100;
         mDanmakuView.addDanmaku(danmaku);
     }
 

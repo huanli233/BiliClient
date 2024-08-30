@@ -166,10 +166,10 @@ public class PlayerDanmuClientListener extends WebSocketListener {
             JSONObject result;
 
             //有些包不会压缩，要判断一下，虽然方式有点（
-            ByteString bytes2 = bytes.substring((int) bytes.getByte(5));
+            ByteString bytes2 = bytes.substring(bytes.getByte(5));
             if (Brotli.decompress(bytes2.toByteArray()).length > 5) {
                 ByteString bytes3 = ByteString.of(Brotli.decompress(bytes2.toByteArray()));
-                result = new JSONObject(bytes3.substring((int) bytes3.getByte(5)).utf8()); //问就是懒得用别的方式sub
+                result = new JSONObject(bytes3.substring(bytes3.getByte(5)).utf8()); //问就是懒得用别的方式sub
             } else if (bytes2.utf8().contains("{"))
                 result = new JSONObject(bytes2.utf8().substring(bytes2.utf8().indexOf("{")));
             else return;
@@ -185,6 +185,8 @@ public class PlayerDanmuClientListener extends WebSocketListener {
                     if (SharedPreferencesUtil.getBoolean("player_danmaku_showsender", true))
                         playerActivity.adddanmaku(nickname + "：" + content, Color.WHITE);
                     else playerActivity.adddanmaku(content, Color.WHITE);
+
+                    Log.e("debug","pkg_dm");
                     break;
 
                 //看过的人数

@@ -4,13 +4,11 @@ version = '0.0.1-SNAPSHOT'
 group = 'com.netease.hearttouch'
 
 android {
-    compileSdkVersion 34
+    compileSdk 33
+    
     buildToolsVersion "21.1.2"
-    ndkVersion "24.0.8215888"
     
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 35
         versionCode 3
         versionName "0.0.3"
 
@@ -34,17 +32,6 @@ android {
         }
     }
 
-
-    // Encapsulates your external native build configurations.
-    externalNativeBuild {
-
-        // Encapsulates your CMake build configurations.
-        ndkBuild {
-
-            // Provides a relative path to your CMake build script.
-            path "src/main/jni/Android.mk"
-        }
-    }
 }
 
 dependencies {
