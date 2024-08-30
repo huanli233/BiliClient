@@ -211,19 +211,17 @@ public class AppInfoApi {
         }
     }
 
-    public static ArrayList<UserInfo> getSponsors(int page) throws Exception {
+    public static int getSponsors(ArrayList<UserInfo> list, int page) throws Exception {
         String url = "http://api.biliterminal.cn/terminal/afdian/get_sponsor?page=" + page;
         JSONObject result = NetWorkUtil.getJson(url, customHeaders);
 
         if (result.getInt("code") != 200) throw new Exception("获取失败");
         JSONArray data = result.getJSONArray("data");
 
+        if(data.length() == 0) return 1;
+
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
-        ArrayList<UserInfo> list = new ArrayList<>();
-        if (page == 1) {
-            list.add(new UserInfo(-1, "温馨提醒", "", "若有捐赠意向请访问https://afdian.net/a/bili_terminal\n捐赠为纯自愿行为，收到的捐款仅用于维护服务器，未成年人请征求父母意见\n你可以尽管放心终端不会设置任何付费功能，并且无论是否捐赠，你所提出的意见和建议都会被同等考虑（难以实现或没有必要的功能我们也有权拒绝）\n捐赠者信息来自于爱发电，我们不对列表内的信息内容负责", -1, -1, 6, true, "", 0, ""));
-        }
         for (int i = 0; i < data.length(); i++) {
             JSONObject sponsor = data.getJSONObject(i);
 
@@ -242,6 +240,6 @@ public class AppInfoApi {
 
             list.add(user);
         }
-        return list;
+        return 0;
     }
 }
