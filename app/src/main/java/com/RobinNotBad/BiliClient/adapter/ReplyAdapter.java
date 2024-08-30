@@ -176,7 +176,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 replyHolder.userName.setTextColor(Color.parseColor(sender.vip_nickname_color));
             if (sender.mid == up_mid) {
                 name_str = new SpannableStringBuilder(" UP " + replyList.get(realPosition).sender.name);
-                name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.round_small), Color.WHITE, Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 name_str.setSpan(new RelativeSizeSpan(0.8f), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
             int last_length = name_str.length();
@@ -185,7 +185,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (!sender.medal_name.isEmpty()) {
                 last_length = name_str.length();
                 name_str.append("  ").append(sender.medal_name).append("Lv").append(String.valueOf(sender.medal_level)).append(" ");
-                name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.argb(140, 158, 186, 232)), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.round_small), Color.WHITE, Color.argb(140, 158, 186, 232)), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 name_str.setSpan(new RelativeSizeSpan(0.8f), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
             replyHolder.userName.setText(name_str);
@@ -463,12 +463,11 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void startReplyInfoActivity(Reply reply) {
         long rpid = reply.rpid;
         long oid = reply.oid;
-        int type = replyType;
         Intent intent = new Intent();
         intent.setClass(context, ReplyInfoActivity.class);
         intent.putExtra("rpid", rpid);
         intent.putExtra("oid", oid);
-        intent.putExtra("type", type);
+        intent.putExtra("type", replyType);
         intent.putExtra("origReply", reply);
         intent.putExtra("up_mid", up_mid);
         if (source != null && source instanceof Serializable)

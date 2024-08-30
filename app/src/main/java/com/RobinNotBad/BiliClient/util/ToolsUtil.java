@@ -378,34 +378,28 @@ public class ToolsUtil {
         return BuildConfig.BETA;
     }
 
+    static final int[] levelBadges = {
+            R.mipmap.level_0,
+            R.mipmap.level_1,
+            R.mipmap.level_2,
+            R.mipmap.level_3,
+            R.mipmap.level_4,
+            R.mipmap.level_5,
+            R.mipmap.level_6,
+            R.mipmap.level_h
+    };
+
     public static ImageSpan getLevelBadge(Context context, UserInfo userInfo) {
+        int level = userInfo.level;
         Drawable drawable;
-        switch (userInfo.level) {
-            case 6:
-                drawable = ResourcesCompat.getDrawable(context.getResources(), R.mipmap.level_6, context.getTheme());
-                break;
-            case 5:
-                drawable = ResourcesCompat.getDrawable(context.getResources(), R.mipmap.level_5, context.getTheme());
-                break;
-            case 4:
-                drawable = ResourcesCompat.getDrawable(context.getResources(), R.mipmap.level_4, context.getTheme());
-                break;
-            case 3:
-                drawable = ResourcesCompat.getDrawable(context.getResources(), R.mipmap.level_3, context.getTheme());
-                break;
-            case 2:
-                drawable = ResourcesCompat.getDrawable(context.getResources(), R.mipmap.level_2, context.getTheme());
-                break;
-            case 1:
-                drawable = ResourcesCompat.getDrawable(context.getResources(), R.mipmap.level_1, context.getTheme());
-                break;
-            default:
-                drawable = ResourcesCompat.getDrawable(context.getResources(), R.mipmap.level_0, context.getTheme());
-                break;
-        }
-        float lineHeight = ToolsUtil.getTextHeightWithSize(context, 10);
+        if(level > -1 && level < 7)
+            drawable = ResourcesCompat.getDrawable(context.getResources(), levelBadges[userInfo.level], context.getTheme());
+        else drawable = ResourcesCompat.getDrawable(context.getResources(), levelBadges[0], context.getTheme());
+
+        float lineHeight = ToolsUtil.getTextHeightWithSize(context, 11);
+        float lineWidth = lineHeight * 1.56f;
         assert drawable != null;
-        drawable.setBounds(0, 0, ((int) lineHeight) * 2, (int) lineHeight);
+        drawable.setBounds(0, 0, (int) lineWidth, (int) lineHeight);
         return new ImageSpan(drawable);
     }
 

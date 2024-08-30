@@ -1,11 +1,10 @@
-package com.RobinNotBad.BiliClient.listener;
+package com.RobinNotBad.BiliClient.activity.player;
 
 import android.graphics.Color;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.RobinNotBad.BiliClient.activity.player.PlayerActivity;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.netease.hearttouch.brotlij.Brotli;

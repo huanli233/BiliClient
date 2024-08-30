@@ -6,4 +6,5 @@
     <dimen name="grid_spacing">6dp</dimen>
     <dimen name="card_round">6dp</dimen>
     <dimen name="card_stroke">0dp</dimen>
+    <dimen name="round_small">4dp</dimen>
 </resources>
