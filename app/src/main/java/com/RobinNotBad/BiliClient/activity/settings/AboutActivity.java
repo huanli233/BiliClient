@@ -19,6 +19,7 @@ import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AboutActivity extends BaseActivity {
-    int eggClick_authorWords = 0, eggClick_toUncle = 0;
+    int eggClick_authorWords = 0, eggClick_toUncle = 0, eggClick_Dev = 0;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n", "InflateParams"})
     @Override
@@ -129,6 +130,18 @@ public class AboutActivity extends BaseActivity {
             });
 
             if (!ToolsUtil.isDebugBuild()) findViewById(R.id.debug_tip).setVisibility(View.GONE);
+            else {
+                findViewById(R.id.version_code_card).setOnClickListener(view -> {
+                    if(!SharedPreferencesUtil.getBoolean("developer", false)) eggClick_Dev++;
+                    else MsgUtil.showMsg("你已处于开发者模式，无需进行此操作", AboutActivity.this);
+
+                    if(eggClick_Dev == 7) {
+                        SharedPreferencesUtil.putBoolean("developer", true);
+                        MsgUtil.showMsg("已启用开发者模式！", AboutActivity.this);
+
+                    }
+                });
+            }
         });
 
     }

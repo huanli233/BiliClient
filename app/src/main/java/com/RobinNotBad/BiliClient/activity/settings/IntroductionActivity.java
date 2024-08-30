@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.settings.login.LoginActivity;
+import com.RobinNotBad.BiliClient.activity.settings.login.SpecialLoginActivity;
 import com.google.android.material.card.MaterialCardView;
 
 public class IntroductionActivity extends BaseActivity {

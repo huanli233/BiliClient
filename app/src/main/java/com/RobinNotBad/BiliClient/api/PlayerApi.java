@@ -84,7 +84,7 @@ public class PlayerApi {
 
         String url = "https://api.bilibili.com/x/player/wbi/playurl?"
                 + (aid == 0 ? ("bvid=" + bvid) : ("avid=" + aid))
-                + "&cid=" + cid + "&type=mp4"
+                + "&cid=" + cid
                 + (html5 ? "&high_quality=1&qn=" + qn : "&qn=" + qn)
                 + "&platform=" + (html5 ? "html5" : "pc");
 

@@ -5,7 +5,8 @@
     <uses-sdk tools:overrideLibrary="com.geetest.sdk" />
 
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -40,6 +41,11 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <activity
+            android:name=".activity.settings.TestActivity"
+            android:exported="true"
+            android:label="测试页面"
+            android:screenOrientation="locked"/>
         <activity
             android:name=".activity.update.UpdateDownloadResultActivity"
             android:exported="false"
@@ -215,7 +221,7 @@
             android:label="介绍"
             android:screenOrientation="locked" />
         <activity
-            android:name=".activity.settings.SpecialLoginActivity"
+            android:name=".activity.settings.login.SpecialLoginActivity"
             android:exported="true"
             android:label="特殊登录"
             android:screenOrientation="locked" />
@@ -382,7 +388,7 @@
             android:label="推荐"
             android:screenOrientation="locked" />
         <activity
-            android:name=".activity.settings.LoginActivity"
+            android:name=".activity.settings.login.LoginActivity"
             android:exported="true"
             android:label="登录"
             android:screenOrientation="locked" />
@@ -404,6 +410,7 @@
             android:theme="@style/Theme.BiliClient.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

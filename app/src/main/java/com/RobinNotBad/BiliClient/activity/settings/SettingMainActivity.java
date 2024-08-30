@@ -7,9 +7,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.RobinNotBad.BiliClient.BuildConfig;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
+import com.RobinNotBad.BiliClient.activity.settings.login.LoginActivity;
+import com.RobinNotBad.BiliClient.activity.settings.login.SpecialLoginActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -171,16 +172,10 @@ public class SettingMainActivity extends InstanceActivity {
             });
 
             MaterialCardView test = findViewById(R.id.test);    //用于测试
-            test.setVisibility(BuildConfig.BETA ? View.VISIBLE : View.GONE);
+            test.setVisibility(SharedPreferencesUtil.getBoolean("developer", false) ? View.VISIBLE : View.GONE);
             test.setOnClickListener(view -> {
-//                startActivity(new Intent(this, UpdateInfoActivity.class)
-//                        .putExtra("versionName", "2.6.0")
-//                        .putExtra("versionCode", 20240616)
-//                        .putExtra("updateLog", "测试")
-//                        .putExtra("ctime", System.currentTimeMillis())
-//                        .putExtra("isRelease", 1)
-//                        .putExtra("canDownload", 1));
-                MsgUtil.snackText(view, "[测试文字]\n-403:账号异常，操作失败");
+                Intent intent = new Intent(this, TestActivity.class);
+                startActivity(intent);
             });
         }));
     }

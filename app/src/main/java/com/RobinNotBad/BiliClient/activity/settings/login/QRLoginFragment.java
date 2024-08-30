@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.activity.settings;
+package com.RobinNotBad.BiliClient.activity.settings.login;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
