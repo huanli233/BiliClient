@@ -16,7 +16,6 @@
 
 package master.flame.danmaku.danmaku.parser.android;
 
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.text.TextUtils;
 
@@ -36,9 +35,9 @@ import master.flame.danmaku.danmaku.model.AlphaValue;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.Duration;
 import master.flame.danmaku.danmaku.model.IDisplayer;
+import master.flame.danmaku.danmaku.model.android.DanmakuFactory;
 import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
-import master.flame.danmaku.danmaku.model.android.DanmakuFactory;
 import master.flame.danmaku.danmaku.util.DanmakuUtils;
 
 public class BiliDanmukuParser extends BaseDanmakuParser {
@@ -190,11 +189,11 @@ public class BiliDanmukuParser extends BaseDanmakuParser {
                     long translationDuration = alphaDuraion;
                     long translationStartDelay = 0;
                     float rotateY = 0, rotateZ = 0;
-                    if (textArr.length >= 7) {
+                    if (textArr.length >= 7 && !textArr[5].isEmpty()) {
                         rotateZ = Float.parseFloat(textArr[5]);
                         rotateY = Float.parseFloat(textArr[6]);
                     }
-                    if (textArr.length >= 11) {
+                    if (textArr.length >= 11 && !textArr[7].isEmpty()) {
                         endX = Float.parseFloat(textArr[7]);
                         endY = Float.parseFloat(textArr[8]);
                         if(!"".equals(textArr[9])){
@@ -240,7 +239,7 @@ public class BiliDanmukuParser extends BaseDanmakuParser {
                         if (!"".equals(textArr[14])) {
                             String motionPathString = textArr[14].substring(1);
                             String[] pointStrArray = motionPathString.split("L");
-                            if (pointStrArray != null && pointStrArray.length > 0) {
+                            if (pointStrArray.length > 0) {
                                 float[][] points = new float[pointStrArray.length][2];
                                 for (int i = 0; i < pointStrArray.length; i++) {
                                     String[] pointArray = pointStrArray[i].split(",");
