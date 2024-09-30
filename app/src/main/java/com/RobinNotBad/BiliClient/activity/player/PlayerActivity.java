@@ -1214,7 +1214,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     protected void onDestroy() {
         playerPause();
         Log.e("debug", "结束");
+        if (isPlaying) playerPause();
         if (ijkPlayer != null) ijkPlayer.release();
+        DrawHandler.setSpeed(1.0f);
         if (mDanmakuView != null) mDanmakuView.release();
 
         if (autoHideTimer != null) autoHideTimer.cancel();
@@ -1237,6 +1239,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         });
 
         if (liveWebSocket != null) liveWebSocket.close(1000, "");
+
+        setRequestedOrientation(SharedPreferencesUtil.getBoolean("ui_landscape", false) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         super.onDestroy();
     }
