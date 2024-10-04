@@ -687,8 +687,13 @@ public class DrawHandler extends Handler {
         int frames = mDrawTimes.size();
         if(frames <= 0)
             return 0;
-        long dtime = mDrawTimes.getLast() - mDrawTimes.getFirst();
-        return dtime / frames;
+        try {
+            long dtime = mDrawTimes.getLast() - mDrawTimes.getFirst();
+            return dtime / frames;
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     private synchronized void recordRenderingTime() {

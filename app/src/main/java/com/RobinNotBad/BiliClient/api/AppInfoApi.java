@@ -34,9 +34,9 @@ public class AppInfoApi {
 
             checkAnnouncement(context);
 
-            if (SharedPreferencesUtil.getInt("app_version_last", 0) < version) {
-                int last_ver = SharedPreferencesUtil.getInt("app_version_last", 0);
-                if (last_ver != -1) {
+            int last_ver = SharedPreferencesUtil.getInt("app_version_last", 0);
+            if (last_ver < version) {
+                if (last_ver != 0) {
                     if (last_ver < 20240606)
                         MsgUtil.showDialog(context, "提醒", "当前的新版本实现了对抗部分类型的风控，建议您重新登录账号以确保成功使用");
                     if (last_ver < 20240825)
