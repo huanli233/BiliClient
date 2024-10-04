@@ -20,8 +20,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "BiliClient"
 include ':app'
-include ':ijkplayer-armv7a'
-include ':ijkplayer-x86'
 include ':ijkplayer-java'
 include ':DanmakuFlameMaster'
 include ':brotlij'

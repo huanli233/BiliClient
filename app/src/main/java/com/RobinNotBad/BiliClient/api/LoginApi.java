@@ -23,17 +23,13 @@ import okhttp3.Response;
 
 public class LoginApi {
     private static String oauthKey;
-    private static String sid;
     private static ArrayList<String> headers = new ArrayList<>();
 
     public static Bitmap getLoginQR() throws JSONException, IOException {
-        sid = String.valueOf(Math.round(Math.random() * 100000000));
         CookiesApi.checkCookies();
         NetWorkUtil.refreshHeaders();
 
         headers = new ArrayList<>() {{
-            /* 我抓到的登录generate请求似乎不需要sid？ */
-//            NetWorkUtil.putCookie("sid", sid);
             addAll(NetWorkUtil.webHeaders);
             add("Sec-Ch-Ua");
             add("\"Chromium\";v=\"109\", \"Not_A Brand\";v=\"99\"");
