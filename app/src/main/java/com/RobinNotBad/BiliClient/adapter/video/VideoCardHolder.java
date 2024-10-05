@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.adapter.video;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.SpannableString;
@@ -25,7 +26,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 public class VideoCardHolder extends RecyclerView.ViewHolder {
     TextView title, upName, viewCount;
-    ImageView cover, playIcon, upIcon;
+    ImageView cover;
 
     public VideoCardHolder(@NonNull View itemView) {
         super(itemView);
@@ -33,15 +34,13 @@ public class VideoCardHolder extends RecyclerView.ViewHolder {
         upName = itemView.findViewById(R.id.listUpName);
         viewCount = itemView.findViewById(R.id.listPlayTimes);
         cover = itemView.findViewById(R.id.listCover);
-        playIcon = itemView.findViewById(R.id.imageView3);
-        upIcon = itemView.findViewById(R.id.avatarIcon);
     }
 
+    @SuppressLint("SetTextI18n")
     public void showVideoCard(VideoCard videoCard, Context context) {
         String upNameStr = videoCard.upName;
         if (upNameStr == null || upNameStr.isEmpty()) {
             upName.setVisibility(View.GONE);
-            upIcon.setVisibility(View.GONE);
         } else upName.setText(upNameStr);
 
         if (videoCard.collection != null) {
@@ -51,7 +50,6 @@ public class VideoCardHolder extends RecyclerView.ViewHolder {
             title.setText(spannableString);
             String playTimesStr = collection.view;
             if (playTimesStr == null || playTimesStr.isEmpty()) {
-                playIcon.setVisibility(View.GONE);
                 viewCount.setVisibility(View.GONE);
             } else viewCount.setText("共" + playTimesStr);
             Glide.with(context).asDrawable().load(GlideUtil.url(collection.cover))
@@ -64,7 +62,6 @@ public class VideoCardHolder extends RecyclerView.ViewHolder {
         } else {
             String playTimesStr = videoCard.view;
             if (playTimesStr == null || playTimesStr.isEmpty()) {
-                playIcon.setVisibility(View.GONE);
                 viewCount.setVisibility(View.GONE);
             } else viewCount.setText(playTimesStr);
             Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
