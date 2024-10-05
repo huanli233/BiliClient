@@ -389,10 +389,10 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
             if (dynamic.stats != null) {
                 if (dynamic.stats.liked) {           //这里，还有下面，一定要加else！否则会导致错乱
                     likeCount.setTextColor(Color.rgb(0xfe, 0x67, 0x9a));
-                    likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_liked), null, null, null);
+                    likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_reply_like1), null, null, null);
                 } else {
                     likeCount.setTextColor(Color.rgb(0xff, 0xff, 0xff));
-                    likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_like), null, null, null);
+                    likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_reply_like0), null, null, null);
                 }
                 likeCount.setText(toWan(dynamic.stats.like));
             } else {
@@ -407,7 +407,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                                 MsgUtil.showMsg("点赞成功", context);
                                 likeCount.setText(toWan(++dynamic.stats.like));
                                 likeCount.setTextColor(Color.rgb(0xfe, 0x67, 0x9a));
-                                likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_liked), null, null, null);
+                                likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_reply_like1), null, null, null);
                             });
                         } else
                             ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("点赞失败", context));
@@ -422,7 +422,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                                 MsgUtil.showMsg("取消成功", context);
                                 likeCount.setText(toWan(--dynamic.stats.like));
                                 likeCount.setTextColor(Color.rgb(0xff, 0xff, 0xff));
-                                likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_like), null, null, null);
+                                likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_reply_like0), null, null, null);
                             });
                         } else
                             ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("取消失败", context));

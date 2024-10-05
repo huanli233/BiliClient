@@ -228,10 +228,10 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             if (replyList.get(realPosition).liked) {
                 replyHolder.likeCount.setTextColor(Color.rgb(0xfe, 0x67, 0x9a));
-                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_liked), null, null, null);
+                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_reply_like1), null, null, null);
             } else {
                 replyHolder.likeCount.setTextColor(Color.rgb(0xff, 0xff, 0xff));
-                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_like), null, null, null);
+                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_reply_like0), null, null, null);
             }
 
             if (replyList.get(realPosition).childCount != 0 && !(realPosition == 0 && isDetail)) {
@@ -324,7 +324,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                 MsgUtil.showMsg("点赞成功", context);
                                 replyHolder.likeCount.setText(toWan(++replyList.get(realPosition).likeCount));
                                 replyHolder.likeCount.setTextColor(Color.rgb(0xfe, 0x67, 0x9a));
-                                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_liked), null, null, null);
+                                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_reply_like1), null, null, null);
                             });
                         } else
                             ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("点赞失败", context));
@@ -341,7 +341,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                 MsgUtil.showMsg("取消成功", context);
                                 replyHolder.likeCount.setText(toWan(--replyList.get(realPosition).likeCount));
                                 replyHolder.likeCount.setTextColor(Color.rgb(0xff, 0xff, 0xff));
-                                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_like), null, null, null);
+                                replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_reply_like0), null, null, null);
                             });
                         } else
                             ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("取消失败", context));

@@ -60,7 +60,7 @@
         app:layout_constraintStart_toStartOf="@id/cover"
         app:layout_constraintTop_toTopOf="@id/playTimes"
         app:layout_constraintVertical_bias="0.5"
-        android:src="@drawable/icon_play" />
+        android:src="@drawable/icon_play_12" />
 
     <TextView
         android:id="@+id/playTimes"

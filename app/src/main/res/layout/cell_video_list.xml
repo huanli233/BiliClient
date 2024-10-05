@@ -4,107 +4,80 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/activity_padding_horizontal"
-    android:layout_marginVertical="@dimen/list_margin_vertical"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    android:layout_marginVertical="@dimen/list_margin_vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp"
+        android:orientation="vertical"
         android:paddingVertical="8dp">
 
-        <ImageView
-            android:id="@+id/listCover"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
+        <LinearLayout
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="5dp"
-            android:adjustViewBounds="true"
-            android:src="@mipmap/placeholder"
-            app:layout_constraintDimensionRatio="16:9"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/listVideoTitle"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="10dp"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="3"
-            android:text="标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题"
-            android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="@+id/listCover"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toTopOf="@+id/listCover" />
+            android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/listCover"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="0.48"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/placeholder"
+                app:layout_constraintDimensionRatio="16:9" />
+
+            <TextView
+                android:id="@+id/listVideoTitle"
+                android:layout_marginStart="4dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.52"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="3"
+                android:text="标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.48" />
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
-            android:adjustViewBounds="true"
-            android:alpha="0.5"
-            app:layout_constraintBottom_toBottomOf="@+id/listPlayTimes"
-            app:layout_constraintStart_toStartOf="@+id/listCover"
-            app:layout_constraintTop_toTopOf="@+id/listPlayTimes"
-            app:layout_constraintVertical_bias="0.5"
-            android:src="@drawable/icon_play" />
+            <TextView
+                android:id="@+id/listPlayTimes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.5"
+                android:singleLine="true"
+                android:text="11.4万"
+                android:textSize="11sp"
+                android:drawableStart="@drawable/icon_play_12"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintTop_toBottomOf="@+id/listCover" />
 
-        <TextView
-            android:id="@+id/listPlayTimes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:alpha="0.5"
-            android:singleLine="true"
-            android:textSize="11sp"
-            android:text=""
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView3"
-            app:layout_constraintTop_toBottomOf="@+id/listCover" />
 
-        <ImageView
-            android:id="@+id/avatarIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
-            android:adjustViewBounds="true"
-            android:alpha="0.5"
-            android:src="@drawable/icon_person"
-            app:layout_constraintBottom_toBottomOf="@+id/listUpName"
-            app:layout_constraintStart_toEndOf="@+id/listPlayTimes"
-            app:layout_constraintTop_toTopOf="@+id/listUpName" />
+            <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
+                android:id="@+id/listUpName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="0.5"
+                android:layout_marginStart="4dp"
+                android:singleLine="true"
+                android:textSize="11sp"
+                android:drawableStart="@drawable/icon_person"
+                android:text="蔡徐坤"/>
 
-        <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
-            android:id="@+id/listUpName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:alpha="0.5"
-            android:singleLine="true"
-            android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="@+id/listPlayTimes"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/avatarIcon"
-            app:layout_constraintTop_toTopOf="@+id/listPlayTimes" />
+        </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

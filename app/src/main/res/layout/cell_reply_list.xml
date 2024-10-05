@@ -62,7 +62,7 @@
         android:alpha="0.7"
         android:text="514"
         android:textSize="13sp"
-        app:drawableStartCompat="@drawable/icon_like"
+        app:drawableStartCompat="@drawable/icon_reply_like0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageCard" />
 
@@ -139,7 +139,7 @@
         android:paddingBottom="5dp"
         android:text=" UP主觉得很赞"
         android:textSize="11sp"
-        app:drawableStartCompat="@drawable/icon_like"
+        app:drawableStartCompat="@drawable/icon_reply_like0"
         app:layout_constraintStart_toStartOf="@+id/replyText"
         app:layout_constraintTop_toBottomOf="@+id/likes" />
 

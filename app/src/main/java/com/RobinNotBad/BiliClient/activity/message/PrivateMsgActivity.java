@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,7 +42,7 @@ public class PrivateMsgActivity extends BaseActivity {
     RecyclerView msgView;
     EditText contentEt;
     ImageButton sendBtn;
-    ConstraintLayout layout_input;
+    View layout_input;
     PrivateMsgAdapter adapter;
     long uid;
     boolean isLoadingMore = false;

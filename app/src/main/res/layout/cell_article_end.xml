@@ -12,7 +12,7 @@
         android:layout_marginStart="@dimen/activity_padding_horizontal"
         android:adjustViewBounds="true"
         android:alpha="0.5"
-        android:src="@drawable/icon_play"
+        android:src="@drawable/icon_play_12"
         app:layout_constraintBottom_toBottomOf="@+id/viewsCount"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/viewsCount" />

@@ -19,7 +19,7 @@ apply plugin: 'com.android.library'
 def SourcePath = 'src/main/'
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     buildTypes {
         release {

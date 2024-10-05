@@ -53,7 +53,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/layout_input"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
@@ -63,9 +63,10 @@
 
         <EditText
             android:id="@+id/msg_input_et"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
+            android:layout_toStartOf="@id/send_btn"
             android:background="@drawable/background_edittext_privatemsg"
             android:hint="爱国诚信友善..."
             android:maxHeight="128dp"
@@ -74,10 +75,7 @@
             android:paddingVertical="6dp"
             android:textColorHint="#80ffffff"
             android:textCursorDrawable="@drawable/cursor_drawable"
-            android:textSize="13sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/send_btn"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textSize="13sp" />
 
         <ImageButton
             android:id="@+id/send_btn"
@@ -85,8 +83,7 @@
             android:layout_height="38dp"
             android:background="@drawable/background_privatemsg_send"
             android:src="@drawable/send"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:layout_alignParentEnd="true"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </FrameLayout>

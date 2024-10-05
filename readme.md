@@ -78,9 +78,9 @@
 
 ## 部分问题的解决方法
 
-### Android IDE无法正常编译
+### ~~Android IDE无法正常编译（当前版本已经不会出现）~~
 
-不用使用Android IDE自动下载的Android NDK
+不使用Android IDE自动下载的Android NDK
 
 正确的方法：
 
