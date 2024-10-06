@@ -337,7 +337,7 @@
                                 android:layout_marginBottom="2dp"
                                 android:alpha="0.7"
                                 android:singleLine="true"
-                                android:text="和他的纳西妲酱"
+                                android:text="和他的纳西妲酱（项目发起者|屎山奠基人）"
                                 android:textSize="11sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/robinAvatar"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -347,14 +347,6 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </com.google.android.material.card.MaterialCardView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="6dp"
-                        android:text="联合开发者"
-                        android:textSize="14sp" />
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/moye_card"
@@ -401,7 +393,7 @@
                                 android:layout_marginBottom="2dp"
                                 android:alpha="0.7"
                                 android:singleLine="true"
-                                android:text="你就说能不能用吧"
+                                android:text="你就说能不能用吧（代码贡献量大，同时负责了网站运营）"
                                 android:textSize="11sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/moyeAvatar"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -411,6 +403,14 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="6dp"
+                        android:text="联合开发者"
+                        android:textSize="14sp" />
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/silent_card"
