@@ -30,7 +30,6 @@ import java.text.SimpleDateFormat;
  * 从安卓自带的DigitalClock（被TextClock替代而废弃）复制来的，进行了一些修改
  * 这样的方式貌似要好一些？
  */
-@Deprecated
 public class TextClock extends TextView {
     @SuppressLint("SimpleDateFormat")
     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
