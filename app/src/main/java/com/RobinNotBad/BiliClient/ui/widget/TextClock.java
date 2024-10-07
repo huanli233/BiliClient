@@ -1,91 +1,89 @@
+/*
+ * Copyright (C) 2006 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.RobinNotBad.BiliClient.ui.widget;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.icu.util.Calendar;
 import android.os.Handler;
-import android.os.Message;
+import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.TextView;
+
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
+/**
+ * 从安卓自带的DigitalClock（被TextClock替代而废弃）复制来的，进行了一些修改
+ * 这样的方式貌似要好一些？
+ */
+@Deprecated
 public class TextClock extends TextView {
+    @SuppressLint("SimpleDateFormat")
+    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
 
-    private final TextView textView;
-    private String time;
-    private TimeHandler mTimehandler = new TimeHandler();
+    private Runnable mTicker;
+    private Handler mHandler;
+
+    private boolean mTickerStopped = false;
+
+    private static long delta;
+
 
     public TextClock(Context context) {
-        this(context, null);
+        super(context);
+        init();
     }
 
     public TextClock(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.textView = this;
-        init(context);
+        init();
     }
 
-    private void init(Context context) {
-        try {
-            // 初始化textview显示时间
-            updateClock();
-            // 更新进程开始
-            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mTimehandler.startScheduleUpdate();
-                                }
-                            })
-                    .start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void init(){
+        delta = System.currentTimeMillis() - SystemClock.uptimeMillis();
+        Log.i("debug-clock","init,delta=" + delta);
     }
 
-    // 更新Handler通过handler的延时发送消息来更新时间
+    @Override
+    protected void onAttachedToWindow() {
+        mTickerStopped = false;
+        super.onAttachedToWindow();
 
-    private class TimeHandler extends Handler {
-        private boolean mStopped;
-        private void post() {
-            // 每隔1秒发送一次消息
-            sendMessageDelayed(obtainMessage(0), 60000);
-        }
+        mHandler = new Handler();
 
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (!mStopped) {
-                updateClock();
-                // 实现实时更新
-                post();
-            }
-        }
-
-        // 开始更新
-        public void startScheduleUpdate() {
-            mStopped = false;
-            post();
-        }
-
-        // 停止更新
-
-        public void stopScheduleUpdate() {
-            mStopped = true;
-            removeMessages(0);
-        }
+        mTicker = () -> {
+            if (mTickerStopped) return;
+            long now = System.currentTimeMillis();
+            setText(dateFormat.format(now));
+            invalidate();
+            long next = now + (60000 - now % 60000) - delta;
+            mHandler.postAtTime(mTicker, next);
+            Log.i("debug-clock","tick");
+            //这样的方式非常巧妙，计算好下一时刻然后postAtTime
+            //原先是一秒一次，我改成了一分钟一次
+            //由于基准是systemclock（开机时间），如果开机时不是整分钟，可能会有误差几十秒。经过修改，增加了偏差值计算，避免了这个问题（但其实没啥必要的说
+        };
+        mTicker.run();
     }
 
-    // 返回当前的时间，并结束handler的信息发送
-
-    public String getTime() {
-        // 停止发送消息
-        mTimehandler.stopScheduleUpdate();
-        return time;
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mTickerStopped = true;
     }
 
-    private void updateClock() {
-        // 获取当前的时间
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
-        textView.setText(simpleDateFormat.format(date));
-    }
 }
