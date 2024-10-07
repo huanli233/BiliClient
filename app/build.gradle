@@ -18,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId "com.RobinNotBad.BiliClient"
-        minSdk 17
+        minSdk 14
         //noinspection ExpiredTargetSdkVersion
         targetSdk 26
         versionCode 20240830

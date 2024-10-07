@@ -28,7 +28,7 @@
             app:drawableStartCompat="@drawable/arrow_back"
             tools:ignore="HardcodedText" />
 
-        <TextClock
+        <com.RobinNotBad.BiliClient.ui.widget.TextClock
             android:id="@+id/timeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

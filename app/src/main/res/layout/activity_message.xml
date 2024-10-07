@@ -28,7 +28,7 @@
             android:text="消息"
             android:textStyle="bold" />
 
-        <TextClock
+        <com.RobinNotBad.BiliClient.ui.widget.TextClock
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_marginEnd="8dp"
