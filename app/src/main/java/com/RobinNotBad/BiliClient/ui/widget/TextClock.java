@@ -21,7 +21,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -30,6 +29,7 @@ import java.text.SimpleDateFormat;
  * 从安卓自带的DigitalClock（被TextClock替代而废弃）复制来的，进行了一些修改
  * 这样的方式貌似要好一些？
  */
+@SuppressLint("AppCompatCustomView")
 public class TextClock extends TextView {
     @SuppressLint("SimpleDateFormat")
     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
@@ -54,7 +54,7 @@ public class TextClock extends TextView {
 
     public void init(){
         delta = System.currentTimeMillis() - SystemClock.uptimeMillis();
-        Log.i("debug-clock","init,delta=" + delta);
+        //Log.i("debug-clock","init,delta=" + delta);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class TextClock extends TextView {
             invalidate();
             long next = now + (60000 - now % 60000) - delta;
             mHandler.postAtTime(mTicker, next);
-            Log.i("debug-clock","tick");
+            //Log.i("debug-clock","tick");
             //这样的方式非常巧妙，计算好下一时刻然后postAtTime
             //原先是一秒一次，我改成了一分钟一次
             //由于基准是systemclock（开机时间），如果开机时不是整分钟，可能会有误差几十秒。经过修改，增加了偏差值计算，避免了这个问题（但其实没啥必要的说
