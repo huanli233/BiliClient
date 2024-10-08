@@ -1,14 +1,19 @@
 package com.RobinNotBad.BiliClient;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.util.DisplayMetrics;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.multidex.MultiDex;
 
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
@@ -59,7 +64,7 @@ public class BiliTerminal extends Application {
      */
     public static Context getFitDisplayContext(Context old) {
         float dpiTimes = SharedPreferencesUtil.getFloat("dpi", 1.0F);
-        if (dpiTimes == 1.0F) return old;
+        if(getSystemSdk() < 17 || dpiTimes == 1.0F) return old;
         try {
             DisplayMetrics displayMetrics = old.getResources().getDisplayMetrics();
             Configuration configuration = old.getResources().getConfiguration();
@@ -103,5 +108,20 @@ public class BiliTerminal extends Application {
         intent.setClass(context, UserInfoActivity.class);
         intent.putExtra("mid", mid);
         context.startActivity(intent);
+    }
+
+    public static boolean checkStoragePermission(){
+        int sdk = getSystemSdk();
+        if(sdk < 17) return true;
+        return ContextCompat.checkSelfPermission(BiliTerminal.context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(BiliTerminal.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static void requestStoragePermission(Activity activity){
+        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
+    }
+
+    public static int getSystemSdk(){
+        return Build.VERSION.SDK_INT;
     }
 }

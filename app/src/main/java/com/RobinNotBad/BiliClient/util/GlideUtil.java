@@ -18,7 +18,7 @@ public class GlideUtil {
     public static final int QUALITY_LOW = 15;
 
     public static String url(String url) {
-        if (url.endsWith("gif") || url.endsWith("webp") || url.contains("afdiancdn.com"))
+        if (url.isEmpty() || url.endsWith("gif") || url.endsWith("webp") || url.contains("afdiancdn.com"))
             return url;
         return url + "@" + QUALITY_LOW + "q.webp";
     }

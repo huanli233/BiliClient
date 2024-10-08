@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.activity.collection;
+package com.RobinNotBad.BiliClient.activity.video.collection;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -51,7 +51,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
         if (collection == null/* && (season_id == -1 || mid == -1)*/) {
             MsgUtil.showMsg("合集不存在", this);
             finish();
-            return;
+            return; 
         }
         long from_aid = getIntent().getLongExtra("fromVideo", -1);
 

@@ -226,7 +226,8 @@
                         android:id="@+id/btn_like"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:background="@drawable/icon_like_0" />
+                        android:background="#0000"
+                        android:src="@drawable/icon_like_0" />
 
                     <TextView
                         android:id="@+id/like_label"
@@ -248,7 +249,8 @@
                         android:id="@+id/btn_coin"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:background="@drawable/icon_coin_0" />
+                        android:background="#0000"
+                        android:src="@drawable/icon_coin_0" />
 
                     <TextView
                         android:id="@+id/coin_label"
@@ -271,7 +273,8 @@
                         android:id="@+id/btn_fav"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:background="@drawable/icon_favourite_0" />
+                        android:background="#0000"
+                        android:src="@drawable/icon_favourite_0" />
 
                     <TextView
                         android:id="@+id/fav_label"

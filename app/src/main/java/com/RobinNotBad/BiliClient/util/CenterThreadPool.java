@@ -1,5 +1,8 @@
 package com.RobinNotBad.BiliClient.util;
 
+import android.os.Build;
+import android.os.Handler;
+
 import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -27,6 +30,8 @@ import kotlinx.coroutines.Dispatchers;
  */
 public class CenterThreadPool {
 
+    public static Handler handler;
+
     private CenterThreadPool() {
     }
 
@@ -38,11 +43,16 @@ public class CenterThreadPool {
      * @param runnable 要运行的任务
      */
     public static void run(Runnable runnable) {
-        //先将实现切换到协程上，在测试版看看，如果有崩溃，麻烦注释掉以下代码，并恢复原有线程池启动。
-        BuildersKt.launch(COROUTINE_SCOPE, EmptyCoroutineContext.INSTANCE, CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation<? super Unit> continuation) -> {
-            runnable.run();
-            return Unit.INSTANCE;
-        });
+        if (Build.VERSION.SDK_INT < 17) {
+            new Thread(runnable).start();
+        }
+        else{
+            //先将实现切换到协程上，在测试版看看，如果有崩溃，麻烦注释掉以下代码，并恢复原有线程池启动。
+            BuildersKt.launch(COROUTINE_SCOPE, EmptyCoroutineContext.INSTANCE, CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation<? super Unit> continuation) -> {
+                runnable.run();
+                return Unit.INSTANCE;
+            });
+        }
     }
 
     /**
@@ -115,10 +125,15 @@ public class CenterThreadPool {
      * @param runnable 要运行的任务
      */
     public static void runOnUiThread(Runnable runnable) {
-        BuildersKt.launch(COROUTINE_SCOPE, (CoroutineContext) Dispatchers.getMain(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation<? super Unit> continuation) -> {
-            runnable.run();
-            return Unit.INSTANCE;
-        });
+        if(Build.VERSION.SDK_INT < 17){
+            if(handler!=null) handler.post(runnable);
+        }
+        else {
+            BuildersKt.launch(COROUTINE_SCOPE, (CoroutineContext) Dispatchers.getMain(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation<? super Unit> continuation) -> {
+                runnable.run();
+                return Unit.INSTANCE;
+            });
+        }
     }
 
 }

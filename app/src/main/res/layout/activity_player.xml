@@ -123,19 +123,20 @@
                 android:thumb="@drawable/selector_progress"
                 android:thumbOffset="8dp" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/bottom_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_marginTop="2dp"
-                android:layout_marginBottom="3dp">
+                android:layout_marginBottom="3dp"
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/button_sound_cut"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginEnd="6dp"
-                    android:layout_toStartOf="@id/button_video"
                     android:adjustViewBounds="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:scaleType="fitXY"
@@ -145,7 +146,6 @@
                     android:id="@+id/button_video"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:layout_centerInParent="true"
                     android:adjustViewBounds="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:scaleType="fitXY"
@@ -156,12 +156,11 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginStart="6dp"
-                    android:layout_toEndOf="@id/button_video"
                     android:adjustViewBounds="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:scaleType="fitXY"
                     android:src="@mipmap/soundadd" />
-            </RelativeLayout>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -172,7 +171,7 @@
             android:layout_above="@+id/bottom_control"
             android:gravity="center"
             android:layout_below="@+id/top"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_marginEnd="4dp"
             android:orientation="vertical">
 
@@ -208,7 +207,7 @@
             android:id="@+id/text_speed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="4dp"
             android:paddingVertical="5dp"

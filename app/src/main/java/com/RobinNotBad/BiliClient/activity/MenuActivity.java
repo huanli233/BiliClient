@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -149,7 +150,7 @@ public class MenuActivity extends BaseActivity {
     private void killAndJump(String name) {
         if (btnNames.containsKey(name) && !Objects.equals(name, from)) {
             InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
-            if (instance != null && !instance.isDestroyed()) instance.finish();
+            if (instance != null && (Build.VERSION.SDK_INT < 17 || !instance.isDestroyed())) instance.finish();
 
             Intent intent = new Intent();
             intent.setClass(MenuActivity.this, Objects.requireNonNull(btnNames.get(name)).second);
@@ -159,7 +160,7 @@ public class MenuActivity extends BaseActivity {
             switch (name) {
                 case "exit": //退出按钮
                     InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
-                    if (instance != null && !instance.isDestroyed()) instance.finish();
+                    if (instance != null && (Build.VERSION.SDK_INT < 17 || !instance.isDestroyed())) instance.finish();
                     break;
                 case "login": //登录按钮
                     Intent intent = new Intent();

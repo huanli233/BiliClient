@@ -86,19 +86,18 @@
                 android:singleLine="true"
                 android:gravity="center" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/version_name_card"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
                     android:layout_width="0dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="2dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/version_code_card"
-                    tools:ignore="MissingConstraints">
+                    android:layout_marginEnd="2dp">
 
                     <TextView
                         android:layout_height="match_parent"
@@ -117,10 +116,8 @@
                     android:id="@+id/version_code_card"
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
-                    android:layout_marginStart="2dp"
-                    app:layout_constraintStart_toEndOf="@id/version_name_card"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/version_name_card">
+                    android:layout_weight="0.5"
+                    android:layout_marginStart="2dp">
 
                     <TextView
                         android:layout_height="match_parent"
@@ -135,7 +132,7 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/debug_tip"

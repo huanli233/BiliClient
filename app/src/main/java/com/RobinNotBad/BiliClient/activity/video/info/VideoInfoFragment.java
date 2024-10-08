@@ -2,10 +2,8 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -29,21 +27,20 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
-import com.RobinNotBad.BiliClient.activity.collection.CollectionInfoActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
 import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.user.WatchLaterActivity;
 import com.RobinNotBad.BiliClient.activity.video.MultiPageActivity;
 import com.RobinNotBad.BiliClient.activity.video.QualityChooserActivity;
+import com.RobinNotBad.BiliClient.activity.video.collection.CollectionInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.user.UpListAdapter;
 import com.RobinNotBad.BiliClient.api.BangumiApi;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
@@ -283,11 +280,11 @@ public class VideoInfoFragment extends Fragment {
                 videoInfo.stats.allow_coin = (videoInfo.copyright == VideoInfo.COPYRIGHT_REPRINT) ? 1 : 2;
                 if (isAdded()) requireActivity().runOnUiThread(() -> {
                     if (videoInfo.stats.coined != 0)
-                        coin.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_coin_1));
+                        coin.setImageResource(R.drawable.icon_coin_1);
                     if (videoInfo.stats.liked)
-                        like.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_like_1));
+                        like.setImageResource(R.drawable.icon_like_1);
                     if (videoInfo.stats.favoured)
-                        fav.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_favourite_1));
+                        fav.setImageResource(R.drawable.icon_favourite_1);
                 });
             } catch (Exception e) {
                 if (isAdded())
@@ -392,7 +389,7 @@ public class VideoInfoFragment extends Fragment {
                         if (videoInfo.stats.liked)
                             likeLabel.setText(ToolsUtil.toWan(++videoInfo.stats.like));
                         else likeLabel.setText(ToolsUtil.toWan(--videoInfo.stats.like));
-                        like.setBackground(ContextCompat.getDrawable(requireContext(), (videoInfo.stats.liked ? R.drawable.icon_like_1 : R.drawable.icon_like_0)));
+                        like.setImageResource(videoInfo.stats.liked ? R.drawable.icon_like_1 : R.drawable.icon_like_0);
                     });
                 } else if (isAdded()) {
                     String msg = "操作失败：" + result;
@@ -423,7 +420,7 @@ public class VideoInfoFragment extends Fragment {
                         if (isAdded()) requireActivity().runOnUiThread(() -> {
                             MsgUtil.showMsg("投币成功", requireContext());
                             coinLabel.setText(ToolsUtil.toWan(++videoInfo.stats.coin));
-                            coin.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.icon_coin_1));
+                            coin.setImageResource(R.drawable.icon_coin_1);
                         });
                     } else if (isAdded()) {
                         String msg = "投币失败：" + result;
@@ -473,9 +470,8 @@ public class VideoInfoFragment extends Fragment {
         });
 
         download.setOnClickListener(view1 -> {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
+            if (!BiliTerminal.checkStoragePermission()) {
+                BiliTerminal.requestStoragePermission(requireActivity());
             } else {
                 File downPath = new File(ConfInfoApi.getDownloadPath(requireContext()), ToolsUtil.stringToFile(videoInfo.title));
 

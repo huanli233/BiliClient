@@ -59,6 +59,7 @@ public class SplashActivity extends Activity {
         Log.e("debug", "进入应用");
 
         handler = new Handler();
+        CenterThreadPool.handler = new Handler();
 
         splashTextView = findViewById(R.id.splashText);
         splashText = SharedPreferencesUtil.getString("ui_splashtext","欢迎使用\n哔哩终端");

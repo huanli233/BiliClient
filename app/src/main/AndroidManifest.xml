@@ -71,7 +71,7 @@
             android:label="表情包选择"
             android:screenOrientation="locked" />
         <activity
-            android:name=".activity.collection.CollectionInfoActivity"
+            android:name=".activity.video.collection.CollectionInfoActivity"
             android:exported="false"
             android:label="合集详情"
             android:screenOrientation="locked" />

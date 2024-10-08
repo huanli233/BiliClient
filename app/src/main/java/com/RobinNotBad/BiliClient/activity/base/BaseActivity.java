@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.event.SnackEvent;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -98,14 +100,14 @@ public class BaseActivity extends AppCompatActivity {
 
     public void setTopbarExit() {
         View view = findViewById(R.id.top);
-        if (view != null && !view.hasOnClickListeners()) {
-            view.setOnClickListener(view1 -> {
-                if (!isDestroyed()) {
-                    finish();
-                }
-            });
-            Log.e("debug", "set_exit");
-        }
+        if(view==null) return;
+        if(Build.VERSION.SDK_INT > 17 && view.hasOnClickListeners()) return;
+        view.setOnClickListener(view1 -> {
+            if (Build.VERSION.SDK_INT < 17 || !isDestroyed()) {
+                finish();
+            }
+        });
+        Log.e("debug", "set_exit");
     }
 
     public void report(Exception e) {

@@ -95,8 +95,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private int videoall, videonow, videonow_last;
     private long lastProgress;
 
-    private RelativeLayout control_layout, top_control, videoArea, bottom_buttons;
-    private LinearLayout bottom_control, speed_layout, right_control, loading_info;
+    private RelativeLayout control_layout, top_control, videoArea;
+    private LinearLayout bottom_control, speed_layout, right_control, loading_info, bottom_buttons;
 
     private IjkMediaPlayer ijkPlayer;
     private SurfaceView surfaceView;
@@ -201,7 +201,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             rotate_btn.setVisibility(View.VISIBLE);
         else rotate_btn.setVisibility(View.GONE);
 
-        if (SharedPreferencesUtil.getBoolean("player_ui_round", false)) {
+        if (SharedPreferencesUtil.getBoolean("player_ui_round", false) && BiliTerminal.getSystemSdk() > 17) {
             int padding = ToolsUtil.dp2px(8, this);
 
             top_control.setPaddingRelative(padding, padding, padding, 0);
