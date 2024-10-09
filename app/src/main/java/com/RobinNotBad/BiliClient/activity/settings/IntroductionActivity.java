@@ -28,6 +28,7 @@ public class IntroductionActivity extends BaseActivity {
             } else {
                 intent.setClass(IntroductionActivity.this, SpecialLoginActivity.class);   //4.4以下系统去特殊登录页面
                 intent.putExtra("login", true);
+                intent.putExtra("allow_refuse", true);
             }
             startActivity(intent);
             finish();

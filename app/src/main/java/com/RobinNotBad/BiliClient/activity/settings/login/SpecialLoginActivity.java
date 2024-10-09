@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +41,17 @@ public class SpecialLoginActivity extends BaseActivity {
         Intent intent = getIntent();
 
         if (intent.getBooleanExtra("login", true)) {
+            if(intent.getBooleanExtra("allow_refuse", false)) {
+                MaterialCardView refuse = findViewById(R.id.refuse);
+                refuse.setVisibility(View.VISIBLE);
+                refuse.setOnClickListener(v -> {
+                    if (!SharedPreferencesUtil.getBoolean("setup", false)) {
+                        SharedPreferencesUtil.putBoolean("setup", true);
+                        startActivity(new Intent(this,SplashActivity.class));
+                    }
+                });
+            }
+
             confirm.setOnClickListener(view -> {
                 String loginInfo = textInput.getText().toString();
                 try {
@@ -67,7 +79,9 @@ public class SpecialLoginActivity extends BaseActivity {
             TextView buttonText = findViewById(R.id.confirm_text);
             buttonText.setText("复制");
             buttonText.setCompoundDrawables(null, null, null, null);
-            buttonText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                buttonText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            }
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("cookies", SharedPreferencesUtil.getString("cookies", ""));

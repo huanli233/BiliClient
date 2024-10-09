@@ -96,7 +96,25 @@
                     android:text="登录"
                     android:textAlignment="textEnd"
                     android:textSize="13sp"
-                    android:visibility="visible"
+                    app:drawableEndCompat="@drawable/arrow_forward"
+                    tools:ignore="RtlCompat" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/refuse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
+                    android:layout_marginHorizontal="8dp"
+                    android:gravity="center_vertical"
+                    android:text="但是我拒绝"
+                    android:textAlignment="textEnd"
+                    android:textSize="13sp"
                     app:drawableEndCompat="@drawable/arrow_forward"
                     tools:ignore="RtlCompat" />
             </com.google.android.material.card.MaterialCardView>
