@@ -29,7 +29,7 @@ public class BiliTerminal extends Application {
     @SuppressLint("StaticFieldLeak")
     public static Context context;
 
-    public static WeakReference<InstanceActivity> instance = new WeakReference<>(null);
+    private static WeakReference<InstanceActivity> instance = new WeakReference<>(null);
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -64,7 +64,7 @@ public class BiliTerminal extends Application {
      */
     public static Context getFitDisplayContext(Context old) {
         float dpiTimes = SharedPreferencesUtil.getFloat("dpi", 1.0F);
-        if(getSystemSdk() < 17 || dpiTimes == 1.0F) return old;
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || dpiTimes == 1.0F) return old;
         try {
             DisplayMetrics displayMetrics = old.getResources().getDisplayMetrics();
             Configuration configuration = old.getResources().getConfiguration();

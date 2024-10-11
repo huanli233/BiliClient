@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.util;
 import android.os.Build;
 import android.os.Handler;
 
+import android.os.Looper;
 import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -30,7 +31,7 @@ import kotlinx.coroutines.Dispatchers;
  */
 public class CenterThreadPool {
 
-    public static Handler handler;
+    private static final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
     private CenterThreadPool() {
     }
@@ -125,15 +126,7 @@ public class CenterThreadPool {
      * @param runnable 要运行的任务
      */
     public static void runOnUiThread(Runnable runnable) {
-        if(Build.VERSION.SDK_INT < 17){
-            if(handler!=null) handler.post(runnable);
-        }
-        else {
-            BuildersKt.launch(COROUTINE_SCOPE, (CoroutineContext) Dispatchers.getMain(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation<? super Unit> continuation) -> {
-                runnable.run();
-                return Unit.INSTANCE;
-            });
-        }
+        mainThreadHandler.post(runnable);
     }
 
 }
