@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 import static android.app.Activity.RESULT_OK;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -361,30 +362,37 @@ public class VideoInfoFragment extends Fragment {
 
         ToolsUtil.setCopy(description);
         bvidText.setOnLongClickListener(v -> {
-            ToolsUtil.copyText(requireContext(), videoInfo.bvid);
-            MsgUtil.showMsg("BV号已复制", requireContext());
+            Context context = getContext();
+            if (context == null) {
+                return true;
+            }
+            ToolsUtil.copyText(context, videoInfo.bvid);
+            MsgUtil.showMsg("BV号已复制", context);
             return true;
         });
 
         play.setOnClickListener(view1 -> play());
         play.setOnLongClickListener(view1 -> {
             Intent intent = new Intent();
-            intent.setClass(requireContext(), SettingPlayerChooseActivity.class);
-            startActivity(intent);
+            Context context = getContext();
+            if (context != null) {
+                intent.setClass(context, SettingPlayerChooseActivity.class);
+                startActivity(intent);
+            }
             return true;
         });
 
         like.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
             if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                requireActivity().runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~", requireContext()));
+                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~", getContext()));
                 return;
             }
             try {
                 int result = LikeCoinFavApi.like(videoInfo.aid, (videoInfo.stats.liked ? 2 : 1));
                 if (result == 0) {
                     videoInfo.stats.liked = !videoInfo.stats.liked;
-                    if (isAdded()) requireActivity().runOnUiThread(() -> {
-                        MsgUtil.showMsg((videoInfo.stats.liked ? "点赞成功" : "取消成功"), requireContext());
+                    if (isAdded()) CenterThreadPool.runOnUiThread(() -> {
+                        MsgUtil.showMsg((videoInfo.stats.liked ? "点赞成功" : "取消成功"), getContext());
 
                         if (videoInfo.stats.liked)
                             likeLabel.setText(ToolsUtil.toWan(++videoInfo.stats.like));
@@ -399,17 +407,17 @@ public class VideoInfoFragment extends Fragment {
                             break;
                     }
                     String finalMsg = msg;
-                    requireActivity().runOnUiThread(() -> MsgUtil.showMsg(finalMsg, requireContext()));
+                    CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg(finalMsg, getContext()));
                 }
             } catch (Exception e) {
                 if (isAdded())
-                    requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                    CenterThreadPool.runOnUiThread(() -> MsgUtil.err(e, getContext()));
             }
         }));
 
         coin.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
             if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                requireActivity().runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~", requireContext()));
+                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~", getContext()));
                 return;
             }
             if (videoInfo.stats.coined < videoInfo.stats.allow_coin) {
