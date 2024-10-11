@@ -31,7 +31,7 @@ public class DynamicInfoFragment extends Fragment {
     public static DynamicInfoFragment newInstance(Dynamic dynamic) {
         DynamicInfoFragment fragment = new DynamicInfoFragment();
         Bundle args = new Bundle();
-        args.putSerializable("dynamic", dynamic);
+        args.putParcelable("dynamic", dynamic);
         fragment.setArguments(args);
         return fragment;
     }
@@ -40,7 +40,7 @@ public class DynamicInfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.dynamic = (Dynamic) getArguments().getSerializable("dynamic");
+            this.dynamic = (Dynamic) getArguments().getParcelable("dynamic");
         }
     }
 

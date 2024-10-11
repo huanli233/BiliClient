@@ -149,7 +149,7 @@ public class VideoInfoFragment extends Fragment {
     public static VideoInfoFragment newInstance(VideoInfo videoInfo) {
         VideoInfoFragment fragment = new VideoInfoFragment();
         Bundle args = new Bundle();
-        args.putSerializable("videoInfo", videoInfo);
+        args.putParcelable("videoInfo", videoInfo);
         fragment.setArguments(args);
         return fragment;
     }
@@ -157,8 +157,9 @@ public class VideoInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            videoInfo = (VideoInfo) getArguments().getSerializable("videoInfo");
+        Bundle args = getArguments();
+        if (args != null) {
+            videoInfo = args.getParcelable("videoInfo");
         }
     }
 

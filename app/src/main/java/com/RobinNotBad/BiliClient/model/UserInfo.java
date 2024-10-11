@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 
-public class UserInfo implements Serializable, Parcelable {
+public class UserInfo implements Parcelable {
     public long mid;
     public String name;
     public String avatar;
@@ -121,14 +121,52 @@ public class UserInfo implements Serializable, Parcelable {
         sign = in.readString();
         fans = in.readInt();
         level = in.readInt();
-        followed = in.readInt() != 0;
+        following = in.readInt();
+        followed = in.readByte() != 0;
         notice = in.readString();
         official = in.readInt();
         officialDesc = in.readString();
         mtime = in.readLong();
+        vip_role = in.readInt();
+        vip_nickname_color = in.readString();
+        current_exp = in.readLong();
+        next_exp = in.readLong();
+        medal_name = in.readString();
+        medal_level = in.readInt();
+        sys_notice = in.readString();
+        live_room = in.readParcelable(LiveRoom.class.getClassLoader());
     }
 
-    public static final Creator<UserInfo> CREATOR = new Creator<>() {
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(mid);
+        dest.writeString(name);
+        dest.writeString(avatar);
+        dest.writeString(sign);
+        dest.writeInt(fans);
+        dest.writeInt(level);
+        dest.writeInt(following);
+        dest.writeByte((byte) (followed ? 1 : 0));
+        dest.writeString(notice);
+        dest.writeInt(official);
+        dest.writeString(officialDesc);
+        dest.writeLong(mtime);
+        dest.writeInt(vip_role);
+        dest.writeString(vip_nickname_color);
+        dest.writeLong(current_exp);
+        dest.writeLong(next_exp);
+        dest.writeString(medal_name);
+        dest.writeInt(medal_level);
+        dest.writeString(sys_notice);
+        dest.writeParcelable(live_room, flags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {
         @Override
         public UserInfo createFromParcel(Parcel in) {
             return new UserInfo(in);
@@ -139,24 +177,4 @@ public class UserInfo implements Serializable, Parcelable {
             return new UserInfo[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(mid);
-        parcel.writeString(name);
-        parcel.writeString(avatar);
-        parcel.writeString(sign);
-        parcel.writeInt(fans);
-        parcel.writeInt(level);
-        parcel.writeInt((followed ? 1 : 0));
-        parcel.writeString(notice);
-        parcel.writeInt(official);
-        parcel.writeString(officialDesc);
-        parcel.writeLong(mtime);
-    }
 }
