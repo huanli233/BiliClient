@@ -44,7 +44,7 @@ public class CenterThreadPool {
      */
     public static void run(Runnable runnable) {
         if (Build.VERSION.SDK_INT < 17) {
-            new Thread(runnable).start();
+            new Thread(runnable).start();    //对超低版本安卓直接用简单粗暴朴实无华的方法
         }
         else{
             //先将实现切换到协程上，在测试版看看，如果有崩溃，麻烦注释掉以下代码，并恢复原有线程池启动。
@@ -126,7 +126,7 @@ public class CenterThreadPool {
      */
     public static void runOnUiThread(Runnable runnable) {
         if(Build.VERSION.SDK_INT < 17){
-            if(handler!=null) handler.post(runnable);
+            if(handler!=null) handler.post(runnable);    //对超低版本安卓直接用简单粗暴朴实无华的方法
         }
         else {
             BuildersKt.launch(COROUTINE_SCOPE, (CoroutineContext) Dispatchers.getMain(), CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation<? super Unit> continuation) -> {

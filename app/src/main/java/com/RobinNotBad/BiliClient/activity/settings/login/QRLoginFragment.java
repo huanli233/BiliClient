@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -158,27 +157,30 @@ public class QRLoginFragment extends Fragment {
                 try {
                     Response response = LoginApi.getLoginState();
                     assert response.body() != null;
+                    if(!isAdded()) {
+                        this.cancel();
+                        return;
+                    }
 
                     JSONObject loginJson = new JSONObject(response.body().string());
 
                     int code = loginJson.getJSONObject("data").getInt("code");
                     switch (code) {
                         case 86090:
-                            if (isAdded())
-                                requireActivity().runOnUiThread(() -> scanStat.setText("已扫描，请在手机上点击登录"));
+                            requireActivity().runOnUiThread(() -> scanStat.setText("已扫描，请在手机上点击登录"));
                             break;
                         case 86101:
-                            if (isAdded())
-                                requireActivity().runOnUiThread(() -> scanStat.setText("请使用手机端哔哩哔哩扫码登录\n点击二维码可以进行放大和缩小"));
+                            requireActivity().runOnUiThread(() -> scanStat.setText("请使用官方手机端哔哩哔哩扫码登录\n点击二维码可以进行放大和缩小"));
                             break;
                         case 86038:
-                            if (isAdded()) requireActivity().runOnUiThread(() -> {
+                            requireActivity().runOnUiThread(() -> {
                                 scanStat.setText("二维码已失效，点击上方重新获取");
                                 qrImageView.setEnabled(true);
                             });
                             this.cancel();
                             break;
                         case 0:
+                            requireActivity().runOnUiThread(()->scanStat.setText("正在处理登录……"));
                             String cookies = SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, "");
 
                             SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(NetWorkUtil.getInfoFromCookie("DedeUserID", cookies)));
@@ -199,7 +201,7 @@ public class QRLoginFragment extends Fragment {
 
                             int activeResult = CookiesApi.activeCookieInfo();
                             if (activeResult != 0) {
-                                Toast.makeText(requireContext(), "警告：激活Cookies失败", Toast.LENGTH_SHORT).show();
+                                requireActivity().runOnUiThread(()->MsgUtil.showMsg("警告：激活Cookies失败",requireContext()));
                             }
                             LoginApi.requestSSOs();
                             if (loginJson.getJSONObject("data").has("url")) {
@@ -217,8 +219,7 @@ public class QRLoginFragment extends Fragment {
                             this.cancel();
                             break;
                         default:
-                            if (isAdded())
-                                requireActivity().runOnUiThread(() -> scanStat.setText("二维码登录API可能变动，\n但你仍然可以尝试扫码登录。\n建议反馈给开发者"));
+                            requireActivity().runOnUiThread(() -> scanStat.setText("二维码登录API可能变动，\n但你仍然可以尝试扫码登录。\n建议反馈给开发者"));
                             break;
                     }
 

@@ -50,9 +50,7 @@ public class MsgUtil {
 
     public static void toast(String str, Context context) {
         if (Looper.myLooper() != Looper.getMainLooper()) {
-            CenterThreadPool.runOnUiThread(() -> {
-                toastInternal(str, context);
-            });
+            CenterThreadPool.runOnUiThread(() -> toastInternal(str, context));
         } else {
             toastInternal(str, context);
         }
@@ -60,9 +58,7 @@ public class MsgUtil {
 
     public static void toastLong(String str, Context context) {
         if (Looper.myLooper() != Looper.getMainLooper()) {
-            CenterThreadPool.runOnUiThread(() -> {
-                toastLongInternal(str, context);
-            });
+            CenterThreadPool.runOnUiThread(() -> toastLongInternal(str, context));
         } else {
             toastLongInternal(str, context);
         }

@@ -23,6 +23,7 @@ public class SettingLaboratoryActivity extends RefreshListActivity {
         final List<SettingSection> sectionList = new ArrayList<>() {{
             add(new SettingSection("switch", "横屏模式", "ui_landscape", getString(R.string.setting_lab_ui_landscape), "false"));
             add(new SettingSection("input_string","开屏文字","ui_splashtext", "顾名思义，可以更改开屏文字，支持换行。开屏文字在网络请求完成后就会被打断。","欢迎使用\n哔哩终端"));
+            add(new SettingSection("switch","数据解析报错更详细","develop_error_detailed","如果你遇到了某些接口问题，开发者可能会需要你打开这个以提供更详细的报错信息。\n——当然开发者调试的时候也可能会用到这个。","false"));
             //add(new SettingSection("input_int","test_int","test_int", "这是描述描述描述","123"));
             //add(new SettingSection("input_float","test_float","test_float_2", "这是描述描述描述","1.1"));
             //add(new SettingSection("switch", "圆屏模式", "ui_round", getString(R.string.setting_lab_ui_round), "false"));
