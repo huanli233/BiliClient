@@ -86,8 +86,8 @@ public class SendDynamicActivity extends BaseActivity {
             MaterialCardView send = findViewById(R.id.send);
 
             ConstraintLayout extraCard = findViewById(R.id.extraCard);
-            Dynamic forward = (Dynamic) getIntent().getSerializableExtra("forward");
-            VideoInfo video = (VideoInfo) getIntent().getSerializableExtra("video");
+            Dynamic forward = (Dynamic) getIntent().getParcelableExtra("forward");
+            VideoInfo video = (VideoInfo) getIntent().getParcelableExtra("video");
             if (forward != null) {
                 View childCard = View.inflate(this, R.layout.cell_dynamic_child, extraCard);
                 showChildDyn(childCard, forward);

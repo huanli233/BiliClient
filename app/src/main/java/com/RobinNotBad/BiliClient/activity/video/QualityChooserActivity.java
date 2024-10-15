@@ -39,7 +39,7 @@ public class QualityChooserActivity extends BaseActivity {
 
         ((TextView) findViewById(R.id.pageName)).setText("请选择清晰度");
 
-        VideoInfo videoInfo = (VideoInfo) getIntent().getSerializableExtra("videoInfo");
+        VideoInfo videoInfo = (VideoInfo) getIntent().getParcelableExtra("videoInfo");
         QualityChooseAdapter adapter = new QualityChooseAdapter(this);
         int page = getIntent().getIntExtra("page", 0);
         CenterThreadPool.run(() -> {

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
@@ -58,9 +59,7 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         Log.e("debug", "进入应用");
 
-        handler = new Handler();
-        CenterThreadPool.handler = new Handler();
-
+        handler = new Handler(Looper.getMainLooper());
         splashTextView = findViewById(R.id.splashText);
         splashText = SharedPreferencesUtil.getString("ui_splashtext","欢迎使用\n哔哩终端");
 

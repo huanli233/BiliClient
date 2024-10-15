@@ -38,7 +38,7 @@ public class MultiPageActivity extends BaseActivity {
         textView.setText("请选择分页");
 
         Intent intent = getIntent();
-        VideoInfo videoInfo = (VideoInfo) intent.getSerializableExtra("videoInfo");
+        VideoInfo videoInfo = (VideoInfo) intent.getParcelableExtra("videoInfo");
 
         PageChooseAdapter adapter = new PageChooseAdapter(this, videoInfo.pagenames);
 
