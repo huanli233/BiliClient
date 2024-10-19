@@ -3,24 +3,26 @@ package com.RobinNotBad.BiliClient.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Collection implements Parcelable {
+public class Collection implements Parcelable, Serializable {
     public int id;
     public String title;
     public String cover;
     public String intro;
     public long mid;
-    public List<Section> sections;
-    public List<VideoCard> cards;
+    public List<Section> sections = new ArrayList<>();
+    public List<VideoCard> cards = new ArrayList<>();
     public String view;
 
-    public static class Section implements Parcelable {
+    public static class Section implements Parcelable, Serializable {
         public int season_id;
         public int id;
         public String title;
         public int type;
-        public List<Episode> episodes;
+        public List<Episode> episodes = new ArrayList<>();
         public Section(){}
 
         protected Section(Parcel in) {
@@ -45,7 +47,7 @@ public class Collection implements Parcelable {
             return 0;
         }
 
-        public static final Creator<Section> CREATOR = new Creator<Section>() {
+        public static final Creator<Section> CREATOR = new Creator<>() {
             @Override
             public Section createFromParcel(Parcel in) {
                 return new Section(in);
@@ -58,7 +60,7 @@ public class Collection implements Parcelable {
         };
     }
 
-    public static class Episode implements Parcelable {
+    public static class Episode implements Parcelable, Serializable {
         public int season_id;
         public int section_id;
         public long id;
@@ -98,7 +100,7 @@ public class Collection implements Parcelable {
             return 0;
         }
 
-        public static final Creator<Episode> CREATOR = new Creator<Episode>() {
+        public static final Creator<Episode> CREATOR = new Creator<>() {
             @Override
             public Episode createFromParcel(Parcel in) {
                 return new Episode(in);
@@ -139,7 +141,7 @@ public class Collection implements Parcelable {
         return 0;
     }
 
-    public static final Creator<Collection> CREATOR = new Creator<Collection>() {
+    public static final Creator<Collection> CREATOR = new Creator<>() {
         @Override
         public Collection createFromParcel(Parcel in) {
             return new Collection(in);

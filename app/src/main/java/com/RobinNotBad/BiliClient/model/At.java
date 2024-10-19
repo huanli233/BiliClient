@@ -3,7 +3,9 @@ package com.RobinNotBad.BiliClient.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class At implements Parcelable {
+import java.io.Serializable;
+
+public class At implements Parcelable, Serializable {
     public final long rid;
     public int textStartIndex;
     public int textEndIndex;
@@ -40,7 +42,7 @@ public class At implements Parcelable {
         return 0;
     }
 
-    public static final Creator<At> CREATOR = new Creator<At>() {
+    public static final Creator<At> CREATOR = new Creator<>() {
         @Override
         public At createFromParcel(Parcel in) {
             return new At(in);

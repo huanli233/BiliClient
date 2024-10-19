@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity.video;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,7 +39,7 @@ public class MultiPageActivity extends BaseActivity {
         textView.setText("请选择分页");
 
         Intent intent = getIntent();
-        VideoInfo videoInfo = (VideoInfo) intent.getParcelableExtra("videoInfo");
+        VideoInfo videoInfo = intent.getParcelableExtra("videoInfo");
 
         PageChooseAdapter adapter = new PageChooseAdapter(this, videoInfo.pagenames);
 
@@ -48,7 +49,7 @@ public class MultiPageActivity extends BaseActivity {
                 File downPath = new File(rootPath, ToolsUtil.stringToFile(videoInfo.pagenames.get(position)));
                 if (downPath.exists()) MsgUtil.showMsg("已经缓存过了~", this);
                 else {
-                    startActivity(new Intent().putExtra("page", position).putExtra("videoInfo", videoInfo).setClass(this, QualityChooserActivity.class));
+                    startActivity(new Intent().putExtra("page", position).putExtra("videoInfo", (Parcelable) videoInfo).setClass(this, QualityChooserActivity.class));
                 }
             });
         } else {        //普通播放模式

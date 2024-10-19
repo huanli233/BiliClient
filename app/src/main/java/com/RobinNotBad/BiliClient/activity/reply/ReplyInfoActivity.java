@@ -55,7 +55,7 @@ public class ReplyInfoActivity extends BaseActivity {
         oid = intent.getLongExtra("oid", 0);
         type = intent.getIntExtra("type", 1);
         mid = intent.getLongExtra("up_mid", -1);
-        origReply = (Reply) intent.getSerializableExtra("origReply");
+        origReply =  intent.getParcelableExtra("origReply");
 
         refreshLayout = findViewById(R.id.swipeRefreshLayout);
         recyclerView = findViewById(R.id.recyclerView);

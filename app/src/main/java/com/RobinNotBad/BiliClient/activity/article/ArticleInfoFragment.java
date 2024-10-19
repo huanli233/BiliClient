@@ -50,7 +50,7 @@ public class ArticleInfoFragment extends Fragment {
     public static ArticleInfoFragment newInstance(ArticleInfo articleInfo) {
         ArticleInfoFragment fragment = new ArticleInfoFragment();
         Bundle args = new Bundle();
-        args.putSerializable("article", articleInfo);
+        args.putParcelable("article", articleInfo);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,7 +64,7 @@ public class ArticleInfoFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             cvid = getArguments().getLong("cvid");
-            articleInfo = (ArticleInfo) getArguments().getSerializable("article");
+            articleInfo =  getArguments().getParcelable("article");
         }
     }
 

@@ -144,7 +144,7 @@ public class EmoteActivity extends BaseActivity {
         public static EmoteFragment newInstance(EmotePackage emotePackage) {
             EmoteFragment emoteFragment = new EmoteFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("emotePackage", emotePackage);
+            bundle.putParcelable("emotePackage", emotePackage);
             emoteFragment.setArguments(bundle);
             return emoteFragment;
         }
@@ -154,7 +154,7 @@ public class EmoteActivity extends BaseActivity {
             super.onCreate(savedInstanceState);
             Bundle bundle = getArguments();
             if (bundle != null) {
-                this.emotePackage = (EmotePackage) bundle.getSerializable("emotePackage");
+                this.emotePackage = bundle.getParcelable("emotePackage");
             }
         }
 

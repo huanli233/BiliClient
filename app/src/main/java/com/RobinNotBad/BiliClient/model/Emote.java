@@ -3,7 +3,9 @@ package com.RobinNotBad.BiliClient.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Emote implements Parcelable {
+import java.io.Serializable;
+
+public class Emote implements Parcelable, Serializable {
     public int id;
     public int packageId;
     public String name;
@@ -44,7 +46,7 @@ public class Emote implements Parcelable {
         return 0;
     }
 
-    public static final Creator<Emote> CREATOR = new Creator<Emote>() {
+    public static final Creator<Emote> CREATOR = new Creator<>() {
         @Override
         public Emote createFromParcel(Parcel in) {
             return new Emote(in);

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -404,10 +405,8 @@ public class VideoInfoFragment extends Fragment {
                             });
                         } else if (isAdded()) {
                             String msg = "操作失败：" + result;
-                            switch (result) {
-                                case -403:
-                                    msg = "当前请求触发B站风控";
-                                    break;
+                            if (result == -403) {
+                                msg = "当前请求触发B站风控";
                             }
                             String finalMsg = msg;
                             CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg(finalMsg, getContext()));
@@ -435,10 +434,8 @@ public class VideoInfoFragment extends Fragment {
                                 });
                             } else if (isAdded()) {
                                 String msg = "投币失败：" + result;
-                                switch (result) {
-                                    case -403:
-                                        msg = "当前请求触发B站风控";
-                                        break;
+                                if (result == -403) {
+                                    msg = "当前请求触发B站风控";
                                 }
                                 String finalMsg = msg;
                                 requireActivity().runOnUiThread(() -> MsgUtil.showMsg(finalMsg, requireContext()));
@@ -493,10 +490,10 @@ public class VideoInfoFragment extends Fragment {
                                 Intent intent = new Intent();
                                 intent.setClass(requireContext(), MultiPageActivity.class);
                                 intent.putExtra("download", 1);
-                                intent.putExtra("videoInfo", videoInfo);
+                                intent.putExtra("videoInfo", (Parcelable) videoInfo);
                                 startActivity(intent);
                             } else {
-                                startActivity(new Intent().putExtra("videoInfo", videoInfo).putExtra("page", 0).setClass(requireContext(), QualityChooserActivity.class));
+                                startActivity(new Intent().putExtra("videoInfo", (Parcelable) videoInfo).putExtra("page", 0).setClass(requireContext(), QualityChooserActivity.class));
                             }
                         }
                     }
@@ -505,7 +502,7 @@ public class VideoInfoFragment extends Fragment {
                 //转发
                 relay.setOnClickListener((view1) -> {
                     Intent intent = new Intent();
-                    intent.setClass(requireContext(), SendDynamicActivity.class).putExtra("video", videoInfo);
+                    intent.setClass(requireContext(), SendDynamicActivity.class).putExtra("video", (Parcelable) videoInfo);
                     writeDynamicLauncher.launch(intent);
                 });
                 relay.setOnLongClickListener(v -> {
@@ -523,7 +520,7 @@ public class VideoInfoFragment extends Fragment {
                     collectionTitle.setText(String.format("合集 · %s", videoInfo.collection.title));
                     collectionCard.setOnClickListener((view1) ->
                             startActivity(new Intent(requireContext(), CollectionInfoActivity.class)
-                                    .putExtra("collection", videoInfo.collection)
+                                    .putExtra("collection", (Parcelable) videoInfo.collection)
                                     .putExtra("fromVideo", videoInfo.aid)));
                 } else {
                     collectionCard.setVisibility(View.GONE);
@@ -558,7 +555,7 @@ public class VideoInfoFragment extends Fragment {
         if (videoInfo.pagenames.size() > 1) {
             Intent intent = new Intent()
                     .setClass(requireContext(), MultiPageActivity.class)
-                    .putExtra("videoInfo", videoInfo)
+                    .putExtra("videoInfo", (Parcelable) videoInfo)
                     .putExtra("progress_cid", progressPair.first)
                     .putExtra("progress", (play_clicked ? -1 : progressPair.second));
             //这里也会传过去，如果后面选择当页就不再获取直接传，选择其他页就传-1剩下的交给解析页

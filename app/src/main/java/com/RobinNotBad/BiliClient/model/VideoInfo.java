@@ -4,10 +4,11 @@ package com.RobinNotBad.BiliClient.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoInfo implements Parcelable {    //自定义类需要加这个才能传输
+public class VideoInfo implements Parcelable, Serializable {    //自定义类需要加这个才能传输
 
     public static final int COPYRIGHT_SELF = 1;
     public static final int COPYRIGHT_REPRINT = 2;
@@ -15,15 +16,15 @@ public class VideoInfo implements Parcelable {    //自定义类需要加这个�
     public String bvid;
     public long aid;
     public String title;
-    public ArrayList<UserInfo> staff; //UP主列表
+    public ArrayList<UserInfo> staff = new ArrayList<>(); //UP主列表
     public String cover;
     public String description;
     public String duration;
     public Stats stats;
     public String timeDesc;
-    public ArrayList<String> pagenames;
-    public ArrayList<Long> cids;
-    public List<At> descAts;
+    public ArrayList<String> pagenames = new ArrayList<>();
+    public ArrayList<Long> cids = new ArrayList<>();
+    public List<At> descAts = new ArrayList<>();
 
     public boolean upowerExclusive; //充电专属
     public String argueMsg; //争议信息
@@ -46,9 +47,9 @@ public class VideoInfo implements Parcelable {    //自定义类需要加这个�
         cover = in.readString();
         description = in.readString();
         duration = in.readString();
+        stats = in.readParcelable(Stats.class.getClassLoader());
         timeDesc = in.readString();
         pagenames = in.createStringArrayList();
-        cids = new ArrayList<>();
         in.readList(cids, Long.class.getClassLoader());
         descAts = in.createTypedArrayList(At.CREATOR);
         upowerExclusive = in.readByte() != 0;
@@ -70,6 +71,7 @@ public class VideoInfo implements Parcelable {    //自定义类需要加这个�
         dest.writeString(cover);
         dest.writeString(description);
         dest.writeString(duration);
+        dest.writeParcelable(stats, flags);
         dest.writeString(timeDesc);
         dest.writeStringList(pagenames);
         dest.writeList(cids);

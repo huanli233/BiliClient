@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
+import android.os.Parcelable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
@@ -323,26 +325,33 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                 break;
 
             case "MAJOR_TYPE_DRAW":
-                ArrayList<String> pictureList = (ArrayList<String>) dynamic.major_object;
+                ArrayList<String> pictureList;
+                if (dynamic.major_object instanceof ArrayList) {
+                    pictureList = (ArrayList<String>) dynamic.major_object;
+                } else {
+                    pictureList = new ArrayList<>();
+                }
                 View imageCard = cell_dynamic_image;
                 ImageView imageView = imageCard.findViewById(R.id.imageView);
-                Glide.with(context).asDrawable().load(GlideUtil.url(pictureList.get(0)))
-                        .transition(GlideUtil.getTransitionOptions())
-                        .placeholder(R.mipmap.placeholder)
-                        .centerCrop()
-                        .format(DecodeFormat.PREFER_RGB_565)
-                        .sizeMultiplier(0.85f)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .into(imageView);
-                TextView textView = imageCard.findViewById(R.id.imageCount);
-                textView.setText("共" + pictureList.size() + "张图片");
-                cell_dynamic_image.setOnClickListener(view -> {
-                    Intent intent = new Intent();
-                    intent.setClass(context, ImageViewerActivity.class);
-                    intent.putExtra("imageList", pictureList);
-                    context.startActivity(intent);
-                });
-                cell_dynamic_image.setVisibility(View.VISIBLE);
+                if(pictureList.size() > 0) {
+                    Glide.with(context).asDrawable().load(GlideUtil.url(pictureList.get(0)))
+                            .transition(GlideUtil.getTransitionOptions())
+                            .placeholder(R.mipmap.placeholder)
+                            .centerCrop()
+                            .format(DecodeFormat.PREFER_RGB_565)
+                            .sizeMultiplier(0.85f)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .into(imageView);
+                    TextView textView = imageCard.findViewById(R.id.imageCount);
+                    textView.setText("共" + pictureList.size() + "张图片");
+                    cell_dynamic_image.setOnClickListener(view -> {
+                        Intent intent = new Intent();
+                        intent.setClass(context, ImageViewerActivity.class);
+                        intent.putExtra("imageList", pictureList);
+                        context.startActivity(intent);
+                    });
+                    cell_dynamic_image.setVisibility(View.VISIBLE);
+                }
                 break;
         }
 
@@ -360,7 +369,15 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                         context.startActivity(intent);
                     }
                 });
-                content.setOnClickListener(view -> (isChild ? itemView.findViewById(R.id.dynamic_child) : itemView).callOnClick());
+                content.setOnClickListener(view -> {
+                    View targetView = (isChild ? itemView.findViewById(R.id.dynamic_child) : itemView);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                        targetView.callOnClick();
+                    } else {
+                        targetView.performClick();
+                    }
+                });
+
             }
         } else {
             content.setMaxLines(999);
@@ -374,7 +391,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
             Intent intent = new Intent();
             intent.setClass(mActivity, SendDynamicActivity.class);
             intent.putExtra("dynamicId", dynamic.dynamicId);
-            intent.putExtra("forward", dynamic);
+            intent.putExtra("forward", (Parcelable) dynamic);
             relayDynamicLauncher.launch(intent);
         };
         if (item_dynamic_share != null) item_dynamic_share.setOnClickListener(onRelayClick);

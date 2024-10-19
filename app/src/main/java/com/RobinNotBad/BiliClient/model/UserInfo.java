@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 
-public class UserInfo implements Parcelable {
+public class UserInfo implements Parcelable, Serializable {
     public long mid;
     public String name;
     public String avatar;
@@ -166,7 +166,7 @@ public class UserInfo implements Parcelable {
         return 0;
     }
 
-    public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {
+    public static final Creator<UserInfo> CREATOR = new Creator<>() {
         @Override
         public UserInfo createFromParcel(Parcel in) {
             return new UserInfo(in);

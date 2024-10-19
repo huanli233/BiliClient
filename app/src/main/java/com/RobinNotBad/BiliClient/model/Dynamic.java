@@ -3,10 +3,11 @@ package com.RobinNotBad.BiliClient.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Dynamic implements Parcelable {
+public class Dynamic implements Parcelable, Serializable {
     public final static String DYNAMIC_TYPE_UGC_SEASON = "DYNAMIC_TYPE_UGC_SEASON";
     public long dynamicId;
     public String type;
@@ -15,7 +16,7 @@ public class Dynamic implements Parcelable {
 
     public UserInfo userInfo;
     public String content;
-    public ArrayList<Emote> emotes;
+    public ArrayList<Emote> emotes = new ArrayList<>();
     public String pubTime;
 
     public Stats stats;
@@ -23,11 +24,12 @@ public class Dynamic implements Parcelable {
     public String major_type;
     public Object major_object;
     public Dynamic dynamic_forward;
-    public List<At> ats;
+    public List<At> ats = new ArrayList<>();
     public boolean canDelete;
 
     public Dynamic() {
     }
+
 
     protected Dynamic(Parcel in) {
         dynamicId = in.readLong();
@@ -38,6 +40,7 @@ public class Dynamic implements Parcelable {
         content = in.readString();
         emotes = in.createTypedArrayList(Emote.CREATOR);
         pubTime = in.readString();
+        stats = in.readParcelable(Stats.class.getClassLoader());
         major_type = in.readString();
         dynamic_forward = in.readParcelable(Dynamic.class.getClassLoader());
         ats = in.createTypedArrayList(At.CREATOR);
@@ -54,6 +57,7 @@ public class Dynamic implements Parcelable {
         dest.writeString(content);
         dest.writeTypedList(emotes);
         dest.writeString(pubTime);
+        dest.writeParcelable(stats, flags);
         dest.writeString(major_type);
         dest.writeParcelable(dynamic_forward, flags);
         dest.writeTypedList(ats);
@@ -65,7 +69,7 @@ public class Dynamic implements Parcelable {
         return 0;
     }
 
-    public static final Creator<Dynamic> CREATOR = new Creator<Dynamic>() {
+    public static final Creator<Dynamic> CREATOR = new Creator<>() {
         @Override
         public Dynamic createFromParcel(Parcel in) {
             return new Dynamic(in);

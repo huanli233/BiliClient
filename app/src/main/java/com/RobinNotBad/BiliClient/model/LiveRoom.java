@@ -3,7 +3,9 @@ package com.RobinNotBad.BiliClient.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class LiveRoom implements Parcelable {
+import java.io.Serializable;
+
+public class LiveRoom implements Parcelable, Serializable {
     public long roomid;
     public long uid;
     public String title;
@@ -30,7 +32,7 @@ public class LiveRoom implements Parcelable {
     public Verify verify;
     public Watched watched_show;
 
-    public static class Verify implements Parcelable {
+    public static class Verify implements Parcelable, Serializable {
         public int role;
         public String desc;
         public int type;
@@ -54,7 +56,7 @@ public class LiveRoom implements Parcelable {
             return 0;
         }
 
-        public static final Creator<Verify> CREATOR = new Creator<Verify>() {
+        public static final Creator<Verify> CREATOR = new Creator<>() {
             @Override
             public Verify createFromParcel(Parcel in) {
                 return new Verify(in);
@@ -67,7 +69,7 @@ public class LiveRoom implements Parcelable {
         };
     }
 
-    public static class Watched implements Parcelable {
+    public static class Watched implements Parcelable, Serializable {
         public boolean isSwitch;
         public int num;
         public String text_small;
@@ -103,7 +105,7 @@ public class LiveRoom implements Parcelable {
             return 0;
         }
 
-        public static final Creator<Watched> CREATOR = new Creator<Watched>() {
+        public static final Creator<Watched> CREATOR = new Creator<>() {
             @Override
             public Watched createFromParcel(Parcel in) {
                 return new Watched(in);
@@ -179,7 +181,7 @@ public class LiveRoom implements Parcelable {
         return 0;
     }
 
-    public static final Creator<LiveRoom> CREATOR = new Creator<LiveRoom>() {
+    public static final Creator<LiveRoom> CREATOR = new Creator<>() {
         @Override
         public LiveRoom createFromParcel(Parcel in) {
             return new LiveRoom(in);

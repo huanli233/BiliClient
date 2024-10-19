@@ -45,7 +45,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
 
         setPageName("合集详情");
 
-        Collection collection = (Collection) getIntent().getSerializableExtra("collection");
+        Collection collection = getIntent().getParcelableExtra("collection");
         int season_id = getIntent().getIntExtra("season_id", -1);
         long mid = getIntent().getLongExtra("mid", -1);
         if (collection == null/* && (season_id == -1 || mid == -1)*/) {
@@ -62,13 +62,11 @@ public class CollectionInfoActivity extends RefreshListActivity {
             adapter = new SectionAdapter(this, collection, recyclerView);
             List<Collection.Section> sections = collection.sections;
             int pos = 1;
-            for (int i = 0; i < sections.size(); i++) {
+            for (Collection.Section section : sections) {
                 pos++;
-                Collection.Section section = sections.get(i);
                 List<Collection.Episode> episodes = section.episodes;
-                for (int j = 0; j < episodes.size(); j++) {
+                for (Collection.Episode episode : episodes) {
                     pos++;
-                    Collection.Episode episode = episodes.get(j);
                     if (episode.aid == from_aid) {
                         Objects.requireNonNull(recyclerView.getLayoutManager()).scrollToPosition(--pos);
                     }

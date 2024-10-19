@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -468,7 +469,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         intent.putExtra("rpid", rpid);
         intent.putExtra("oid", oid);
         intent.putExtra("type", replyType);
-        intent.putExtra("origReply", reply);
+        intent.putExtra("origReply", (Parcelable) reply);
         intent.putExtra("up_mid", up_mid);
         if (source != null && source instanceof Serializable)
             intent.putExtra("source", (Serializable) source);

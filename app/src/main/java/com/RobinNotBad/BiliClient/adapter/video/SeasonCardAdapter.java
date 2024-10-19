@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.adapter.video;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ public class SeasonCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(context, CollectionInfoActivity.class);
-            intent.putExtra("collection", seasonList.get(position));
+            intent.putExtra("collection", (Parcelable) seasonList.get(position));
             context.startActivity(intent);
         });
     }
