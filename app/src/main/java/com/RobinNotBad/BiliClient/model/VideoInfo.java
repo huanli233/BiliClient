@@ -51,7 +51,7 @@ public class VideoInfo implements Parcelable {    //自定义类需要加这个�
         long[] cidArray = in.createLongArray();
         cids = new ArrayList<>(cidArray.length);
         for(int i = 0; i < cidArray.length; i++) {
-            cids.set(i, cidArray[i]);
+            cids.add(cidArray[i]);
         }
         descAts = in.createTypedArrayList(At.CREATOR);
         upowerExclusive = in.readByte() != 0;
