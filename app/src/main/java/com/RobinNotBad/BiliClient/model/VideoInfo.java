@@ -96,7 +96,7 @@ public class VideoInfo implements Parcelable {    //自定义类需要加这个�
         return 0;
     }
 
-    public static final Creator<VideoInfo> CREATOR = new Creator<VideoInfo>() {
+    public static final Creator<VideoInfo> CREATOR = new Creator<>() {
         @Override
         public VideoInfo createFromParcel(Parcel in) {
             return new VideoInfo(in);

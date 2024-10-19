@@ -222,310 +222,315 @@ public class VideoInfoFragment extends Fragment {
             } catch (Exception e) {
                 if (isAdded())
                     requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                progressPair = new Pair<>(0L,0);
             }
-        });
 
-        //标签
-        if (SharedPreferencesUtil.getBoolean("tags_enable", true)) {
+            //标签
+            if (SharedPreferencesUtil.getBoolean("tags_enable", true)) {
+                CenterThreadPool.run(() -> {
+                    try {
+                        String tags;
+                        if (videoInfo.bvid == null || videoInfo.bvid.isEmpty())
+                            tags = VideoInfoApi.getTagsByAid(videoInfo.aid);
+                        else tags = VideoInfoApi.getTagsByBvid(videoInfo.bvid);
+                        if (isAdded()) requireActivity().runOnUiThread(() -> {
+                            SpannableStringBuilder tag_str = new SpannableStringBuilder("标签：");
+                            for (String str : tags.split("/")) {
+                                int old_len = tag_str.length();
+                                tag_str.append(str).append("/");
+                                tag_str.setSpan(new ClickableSpan() {
+                                    @Override
+                                    public void onClick(View arg0) {
+                                        Intent intent = new Intent(requireContext(), SearchActivity.class);
+                                        intent.putExtra("keyword", str);
+                                        requireContext().startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void updateDrawState(TextPaint ds) {
+                                        super.updateDrawState(ds);
+                                        ds.setUnderlineText(false);
+                                        ds.setColor(Color.parseColor("#03a9f4"));
+                                    }
+                                }, old_len, tag_str.length() - 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                            }
+                            tagsText.setMovementMethod(LinkMovementMethod.getInstance());
+                            tagsText.setText("标签：" + tags);
+                            tagsText.setOnClickListener(view1 -> {
+                                if (tags_expand) {
+                                    tagsText.setMaxLines(1);
+                                    tagsText.setText("标签：" + tags);
+                                } else {
+                                    tagsText.setMaxLines(233);
+                                    tagsText.setText(tag_str);
+                                }
+                                tags_expand = !tags_expand;
+                            });
+                        });
+                    } catch (Exception e) {
+                        if (isAdded())
+                            requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                    }
+                });
+            } else tagsText.setVisibility(View.GONE);
+
             CenterThreadPool.run(() -> {
                 try {
-                    String tags;
-                    if (videoInfo.bvid == null || videoInfo.bvid.isEmpty())
-                        tags = VideoInfoApi.getTagsByAid(videoInfo.aid);
-                    else tags = VideoInfoApi.getTagsByBvid(videoInfo.bvid);
+                    videoInfo.stats.coined = LikeCoinFavApi.getCoined(videoInfo.aid);
+                    videoInfo.stats.liked = LikeCoinFavApi.getLiked(videoInfo.aid);
+                    videoInfo.stats.favoured = LikeCoinFavApi.getFavoured(videoInfo.aid);
+                    videoInfo.stats.allow_coin = (videoInfo.copyright == VideoInfo.COPYRIGHT_REPRINT) ? 1 : 2;
                     if (isAdded()) requireActivity().runOnUiThread(() -> {
-                        SpannableStringBuilder tag_str = new SpannableStringBuilder("标签：");
-                        for (String str : tags.split("/")) {
-                            int old_len = tag_str.length();
-                            tag_str.append(str).append("/");
-                            tag_str.setSpan(new ClickableSpan() {
-                                @Override
-                                public void onClick(View arg0) {
-                                    Intent intent = new Intent(requireContext(), SearchActivity.class);
-                                    intent.putExtra("keyword", str);
-                                    requireContext().startActivity(intent);
-                                }
-
-                                @Override
-                                public void updateDrawState(TextPaint ds) {
-                                    super.updateDrawState(ds);
-                                    ds.setUnderlineText(false);
-                                    ds.setColor(Color.parseColor("#03a9f4"));
-                                }
-                            }, old_len, tag_str.length() - 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                        }
-                        tagsText.setMovementMethod(LinkMovementMethod.getInstance());
-                        tagsText.setText("标签：" + tags);
-                        tagsText.setOnClickListener(view1 -> {
-                            if (tags_expand) {
-                                tagsText.setMaxLines(1);
-                                tagsText.setText("标签：" + tags);
-                            } else {
-                                tagsText.setMaxLines(233);
-                                tagsText.setText(tag_str);
-                            }
-                            tags_expand = !tags_expand;
-                        });
+                        if (videoInfo.stats.coined != 0)
+                            coin.setImageResource(R.drawable.icon_coin_1);
+                        if (videoInfo.stats.liked)
+                            like.setImageResource(R.drawable.icon_like_1);
+                        if (videoInfo.stats.favoured)
+                            fav.setImageResource(R.drawable.icon_favourite_1);
                     });
                 } catch (Exception e) {
                     if (isAdded())
                         requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
                 }
             });
-        } else tagsText.setVisibility(View.GONE);
 
-        CenterThreadPool.run(() -> {
-            try {
-                videoInfo.stats.coined = LikeCoinFavApi.getCoined(videoInfo.aid);
-                videoInfo.stats.liked = LikeCoinFavApi.getLiked(videoInfo.aid);
-                videoInfo.stats.favoured = LikeCoinFavApi.getFavoured(videoInfo.aid);
-                videoInfo.stats.allow_coin = (videoInfo.copyright == VideoInfo.COPYRIGHT_REPRINT) ? 1 : 2;
-                if (isAdded()) requireActivity().runOnUiThread(() -> {
-                    if (videoInfo.stats.coined != 0)
-                        coin.setImageResource(R.drawable.icon_coin_1);
-                    if (videoInfo.stats.liked)
-                        like.setImageResource(R.drawable.icon_like_1);
-                    if (videoInfo.stats.favoured)
-                        fav.setImageResource(R.drawable.icon_favourite_1);
+            if(isAdded()) requireActivity().runOnUiThread(()-> {
+
+                ToolsUtil.setCopy(title, videoInfo.title);
+
+                if (!videoInfo.argueMsg.isEmpty()) {
+                    exclusiveTipLabel.setText(videoInfo.argueMsg);
+                    exclusiveTip.setVisibility(View.VISIBLE);
+                }
+
+                if (isAdded()) {
+                    UpListAdapter adapter = new UpListAdapter(requireContext(), videoInfo.staff);
+                    up_recyclerView.setHasFixedSize(true);
+                    up_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    up_recyclerView.setAdapter(adapter);
+                } //加载UP主
+
+                title.setText(getTitleSpan());
+
+                //封面
+                if (SharedPreferencesUtil.getBoolean("ui_landscape", false)) {
+                    ConstraintLayout.LayoutParams coverParams = (ConstraintLayout.LayoutParams) cover.getLayoutParams();
+                    coverParams.matchConstraintPercentWidth = 0.25f;
+                    coverParams.horizontalBias = 0;
+                    cover.setLayoutParams(coverParams);    //横屏改变封面大小并靠左
+                }
+
+                Glide.with(requireContext()).asDrawable().load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
+                        .transition(GlideUtil.getTransitionOptions())
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, requireContext()))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .into(cover);
+
+                cover.setOnClickListener(view1 -> {
+                    if (SharedPreferencesUtil.getString("player", null) == null) {
+                        SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cover_play_enable, true);
+                        Toast.makeText(requireContext(), "将播放视频, 如需变更点击行为请至设置->偏好设置喵", Toast.LENGTH_SHORT).show();
+                        clickCoverPlayEnable = true;
+                    }
+                    if (clickCoverPlayEnable) {
+                        play();
+                        return;
+                    }
+                    Intent intent = new Intent();
+                    intent.setClass(view1.getContext(), ImageViewerActivity.class);
+                    ArrayList<String> imageList = new ArrayList<>();
+                    imageList.add(videoInfo.cover);
+                    intent.putExtra("imageList", imageList);
+                    view1.getContext().startActivity(intent);
                 });
-            } catch (Exception e) {
-                if (isAdded())
-                    requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
-            }
-        });
 
-        ToolsUtil.setCopy(title, videoInfo.title);
+                viewCount.setText(ToolsUtil.toWan(videoInfo.stats.view));
+                likeLabel.setText(ToolsUtil.toWan(videoInfo.stats.like));
+                coinLabel.setText(ToolsUtil.toWan(videoInfo.stats.coin));
+                favLabel.setText(ToolsUtil.toWan(videoInfo.stats.favorite));
 
-        if (!videoInfo.argueMsg.isEmpty()) {
-            exclusiveTipLabel.setText(videoInfo.argueMsg);
-            exclusiveTip.setVisibility(View.VISIBLE);
-        }
+                danmakuCount.setText(String.valueOf(videoInfo.stats.danmaku));
+                bvidText.setText(videoInfo.bvid);
+                timeText.setText(videoInfo.timeDesc);
+                durationText.setText(videoInfo.duration);
 
-        if (isAdded()) requireActivity().runOnUiThread(() -> {
-            UpListAdapter adapter = new UpListAdapter(requireContext(), videoInfo.staff);
-            up_recyclerView.setHasFixedSize(true);
-            up_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            up_recyclerView.setAdapter(adapter);
-        }); //加载UP主
+                description.setText(videoInfo.description);
+                description.setOnClickListener(view1 -> {
+                    if (desc_expand) description.setMaxLines(3);
+                    else description.setMaxLines(512);
+                    desc_expand = !desc_expand;
+                });
+                ToolsUtil.setLink(description);
+                ToolsUtil.setAtLink(videoInfo.descAts, description);
 
-        title.setText(getTitleSpan());
-
-        //封面
-        if (SharedPreferencesUtil.getBoolean("ui_landscape", false)) {
-            ConstraintLayout.LayoutParams coverParams = (ConstraintLayout.LayoutParams) cover.getLayoutParams();
-            coverParams.matchConstraintPercentWidth = 0.25f;
-            coverParams.horizontalBias = 0;
-            cover.setLayoutParams(coverParams);    //横屏改变封面大小并靠左
-        }
-
-        Glide.with(requireContext()).asDrawable().load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
-                .transition(GlideUtil.getTransitionOptions())
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, requireContext()))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(cover);
-
-        cover.setOnClickListener(view1 -> {
-            if (SharedPreferencesUtil.getString("player", null) == null) {
-                SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cover_play_enable, true);
-                Toast.makeText(requireContext(), "将播放视频, 如需变更点击行为请至设置->偏好设置喵", Toast.LENGTH_SHORT).show();
-                clickCoverPlayEnable = true;
-            }
-            if (clickCoverPlayEnable) {
-                play();
-                return;
-            }
-            Intent intent = new Intent();
-            intent.setClass(view1.getContext(), ImageViewerActivity.class);
-            ArrayList<String> imageList = new ArrayList<>();
-            imageList.add(videoInfo.cover);
-            intent.putExtra("imageList", imageList);
-            view1.getContext().startActivity(intent);
-        });
-
-        viewCount.setText(ToolsUtil.toWan(videoInfo.stats.view));
-        likeLabel.setText(ToolsUtil.toWan(videoInfo.stats.like));
-        coinLabel.setText(ToolsUtil.toWan(videoInfo.stats.coin));
-        favLabel.setText(ToolsUtil.toWan(videoInfo.stats.favorite));
-
-        danmakuCount.setText(String.valueOf(videoInfo.stats.danmaku));
-        bvidText.setText(videoInfo.bvid);
-        timeText.setText(videoInfo.timeDesc);
-        durationText.setText(videoInfo.duration);
-
-        description.setText(videoInfo.description);
-        description.setOnClickListener(view1 -> {
-            if (desc_expand) description.setMaxLines(3);
-            else description.setMaxLines(512);
-            desc_expand = !desc_expand;
-        });
-        ToolsUtil.setLink(description);
-        ToolsUtil.setAtLink(videoInfo.descAts, description);
-
-        ToolsUtil.setCopy(description);
-        bvidText.setOnLongClickListener(v -> {
-            Context context = getContext();
-            if (context == null) {
-                return true;
-            }
-            ToolsUtil.copyText(context, videoInfo.bvid);
-            MsgUtil.showMsg("BV号已复制", context);
-            return true;
-        });
-
-        play.setOnClickListener(view1 -> play());
-        play.setOnLongClickListener(view1 -> {
-            Intent intent = new Intent();
-            Context context = getContext();
-            if (context != null) {
-                intent.setClass(context, SettingPlayerChooseActivity.class);
-                startActivity(intent);
-            }
-            return true;
-        });
-
-        like.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
-            if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~", getContext()));
-                return;
-            }
-            try {
-                int result = LikeCoinFavApi.like(videoInfo.aid, (videoInfo.stats.liked ? 2 : 1));
-                if (result == 0) {
-                    videoInfo.stats.liked = !videoInfo.stats.liked;
-                    if (isAdded()) CenterThreadPool.runOnUiThread(() -> {
-                        MsgUtil.showMsg((videoInfo.stats.liked ? "点赞成功" : "取消成功"), getContext());
-
-                        if (videoInfo.stats.liked)
-                            likeLabel.setText(ToolsUtil.toWan(++videoInfo.stats.like));
-                        else likeLabel.setText(ToolsUtil.toWan(--videoInfo.stats.like));
-                        like.setImageResource(videoInfo.stats.liked ? R.drawable.icon_like_1 : R.drawable.icon_like_0);
-                    });
-                } else if (isAdded()) {
-                    String msg = "操作失败：" + result;
-                    switch (result) {
-                        case -403:
-                            msg = "当前请求触发B站风控";
-                            break;
+                ToolsUtil.setCopy(description);
+                bvidText.setOnLongClickListener(v -> {
+                    Context context = getContext();
+                    if (context == null) {
+                        return true;
                     }
-                    String finalMsg = msg;
-                    CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg(finalMsg, getContext()));
-                }
-            } catch (Exception e) {
-                if (isAdded())
-                    CenterThreadPool.runOnUiThread(() -> MsgUtil.err(e, getContext()));
-            }
-        }));
+                    ToolsUtil.copyText(context, videoInfo.bvid);
+                    MsgUtil.showMsg("BV号已复制", context);
+                    return true;
+                });
 
-        coin.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
-            if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~", getContext()));
-                return;
-            }
-            if (videoInfo.stats.coined < videoInfo.stats.allow_coin) {
-                try {
-                    int result = LikeCoinFavApi.coin(videoInfo.aid, 1);
-                    if (result == 0) {
-                        if(++coinAdd <= 2) videoInfo.stats.coined++;
-                        if (isAdded()) requireActivity().runOnUiThread(() -> {
-                            MsgUtil.showMsg("投币成功", requireContext());
-                            coinLabel.setText(ToolsUtil.toWan(++videoInfo.stats.coin));
-                            coin.setImageResource(R.drawable.icon_coin_1);
-                        });
-                    } else if (isAdded()) {
-                        String msg = "投币失败：" + result;
-                        switch (result) {
-                            case -403:
-                                msg = "当前请求触发B站风控";
-                                break;
-                        }
-                        String finalMsg = msg;
-                        requireActivity().runOnUiThread(() -> MsgUtil.showMsg(finalMsg, requireContext()));
-                    }
-                } catch (Exception e) {
-                    if (isAdded())
-                        requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
-                }
-            } else {
-                if (isAdded())
-                    requireActivity().runOnUiThread(() -> MsgUtil.showMsg("投币数量到达上限", requireContext()));
-            }
-        }));
-
-        fav.setOnClickListener(view1 -> {
-            Intent intent = new Intent();
-            intent.setClass(requireContext(), AddFavoriteActivity.class);
-            intent.putExtra("aid", videoInfo.aid);
-            intent.putExtra("bvid", videoInfo.bvid);
-            favLauncher.launch(intent);
-        });
-
-
-        addWatchlater.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
-            try {
-                int result = WatchLaterApi.add(videoInfo.aid);
-                if (result == 0)
-                    requireActivity().runOnUiThread(() -> MsgUtil.showMsg("添加成功", requireContext()));
-                else
-                    requireActivity().runOnUiThread(() -> MsgUtil.showMsg("添加失败，错误码：" + result, requireContext()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }));
-        addWatchlater.setOnLongClickListener(view1 -> {
-            Intent intent = new Intent();
-            intent.setClass(requireContext(), WatchLaterActivity.class);
-            startActivity(intent);
-            return true;
-        });
-
-        download.setOnClickListener(view1 -> {
-            if (!BiliTerminal.checkStoragePermission()) {
-                BiliTerminal.requestStoragePermission(requireActivity());
-            } else {
-                File downPath = new File(ConfInfoApi.getDownloadPath(requireContext()), ToolsUtil.stringToFile(videoInfo.title));
-
-                if (downPath.exists() && videoInfo.pagenames.size() == 1)
-                    MsgUtil.showMsg("已经缓存过了~", requireContext());
-                else {
-                    if (videoInfo.pagenames.size() > 1) {
-                        Intent intent = new Intent();
-                        intent.setClass(requireContext(), MultiPageActivity.class);
-                        intent.putExtra("download", 1);
-                        intent.putExtra("videoInfo", videoInfo);
+                play.setOnClickListener(view1 -> play());
+                play.setOnLongClickListener(view1 -> {
+                    Intent intent = new Intent();
+                    Context context = getContext();
+                    if (context != null) {
+                        intent.setClass(context, SettingPlayerChooseActivity.class);
                         startActivity(intent);
-                    } else {
-                        startActivity(new Intent().putExtra("videoInfo", videoInfo).putExtra("page", 0).setClass(requireContext(), QualityChooserActivity.class));
                     }
+                    return true;
+                });
+
+                like.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
+                    if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
+                        CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~", getContext()));
+                        return;
+                    }
+                    try {
+                        int result = LikeCoinFavApi.like(videoInfo.aid, (videoInfo.stats.liked ? 2 : 1));
+                        if (result == 0) {
+                            videoInfo.stats.liked = !videoInfo.stats.liked;
+                            if (isAdded()) CenterThreadPool.runOnUiThread(() -> {
+                                MsgUtil.showMsg((videoInfo.stats.liked ? "点赞成功" : "取消成功"), getContext());
+
+                                if (videoInfo.stats.liked)
+                                    likeLabel.setText(ToolsUtil.toWan(++videoInfo.stats.like));
+                                else likeLabel.setText(ToolsUtil.toWan(--videoInfo.stats.like));
+                                like.setImageResource(videoInfo.stats.liked ? R.drawable.icon_like_1 : R.drawable.icon_like_0);
+                            });
+                        } else if (isAdded()) {
+                            String msg = "操作失败：" + result;
+                            switch (result) {
+                                case -403:
+                                    msg = "当前请求触发B站风控";
+                                    break;
+                            }
+                            String finalMsg = msg;
+                            CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg(finalMsg, getContext()));
+                        }
+                    } catch (Exception e) {
+                        if (isAdded())
+                            CenterThreadPool.runOnUiThread(() -> MsgUtil.err(e, getContext()));
+                    }
+                }));
+
+                coin.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
+                    if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
+                        CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~", getContext()));
+                        return;
+                    }
+                    if (videoInfo.stats.coined < videoInfo.stats.allow_coin) {
+                        try {
+                            int result = LikeCoinFavApi.coin(videoInfo.aid, 1);
+                            if (result == 0) {
+                                if (++coinAdd <= 2) videoInfo.stats.coined++;
+                                if (isAdded()) requireActivity().runOnUiThread(() -> {
+                                    MsgUtil.showMsg("投币成功", requireContext());
+                                    coinLabel.setText(ToolsUtil.toWan(++videoInfo.stats.coin));
+                                    coin.setImageResource(R.drawable.icon_coin_1);
+                                });
+                            } else if (isAdded()) {
+                                String msg = "投币失败：" + result;
+                                switch (result) {
+                                    case -403:
+                                        msg = "当前请求触发B站风控";
+                                        break;
+                                }
+                                String finalMsg = msg;
+                                requireActivity().runOnUiThread(() -> MsgUtil.showMsg(finalMsg, requireContext()));
+                            }
+                        } catch (Exception e) {
+                            if (isAdded())
+                                requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                        }
+                    } else {
+                        if (isAdded())
+                            requireActivity().runOnUiThread(() -> MsgUtil.showMsg("投币数量到达上限", requireContext()));
+                    }
+                }));
+
+                fav.setOnClickListener(view1 -> {
+                    Intent intent = new Intent();
+                    intent.setClass(requireContext(), AddFavoriteActivity.class);
+                    intent.putExtra("aid", videoInfo.aid);
+                    intent.putExtra("bvid", videoInfo.bvid);
+                    favLauncher.launch(intent);
+                });
+
+
+                addWatchlater.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
+                    try {
+                        int result = WatchLaterApi.add(videoInfo.aid);
+                        if (result == 0)
+                            requireActivity().runOnUiThread(() -> MsgUtil.showMsg("添加成功", requireContext()));
+                        else
+                            requireActivity().runOnUiThread(() -> MsgUtil.showMsg("添加失败，错误码：" + result, requireContext()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }));
+                addWatchlater.setOnLongClickListener(view1 -> {
+                    Intent intent = new Intent();
+                    intent.setClass(requireContext(), WatchLaterActivity.class);
+                    startActivity(intent);
+                    return true;
+                });
+
+                download.setOnClickListener(view1 -> {
+                    if (!BiliTerminal.checkStoragePermission()) {
+                        BiliTerminal.requestStoragePermission(requireActivity());
+                    } else {
+                        File downPath = new File(ConfInfoApi.getDownloadPath(requireContext()), ToolsUtil.stringToFile(videoInfo.title));
+
+                        if (downPath.exists() && videoInfo.pagenames.size() == 1)
+                            MsgUtil.showMsg("已经缓存过了~", requireContext());
+                        else {
+                            if (videoInfo.pagenames.size() > 1) {
+                                Intent intent = new Intent();
+                                intent.setClass(requireContext(), MultiPageActivity.class);
+                                intent.putExtra("download", 1);
+                                intent.putExtra("videoInfo", videoInfo);
+                                startActivity(intent);
+                            } else {
+                                startActivity(new Intent().putExtra("videoInfo", videoInfo).putExtra("page", 0).setClass(requireContext(), QualityChooserActivity.class));
+                            }
+                        }
+                    }
+                });
+
+                //转发
+                relay.setOnClickListener((view1) -> {
+                    Intent intent = new Intent();
+                    intent.setClass(requireContext(), SendDynamicActivity.class).putExtra("video", videoInfo);
+                    writeDynamicLauncher.launch(intent);
+                });
+                relay.setOnLongClickListener(v -> {
+                    ToolsUtil.copyText(requireContext(), "https://www.bilibili.com/" + videoInfo.bvid);
+                    MsgUtil.showMsg("视频完整链接已复制", requireContext());
+                    return true;
+                });
+
+                if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
+                    addWatchlater.setVisibility(View.GONE);
+                    relay.setVisibility(View.GONE);
                 }
-            }
-        });
 
-        //转发
-        relay.setOnClickListener((view1) -> {
-            Intent intent = new Intent();
-            intent.setClass(requireContext(), SendDynamicActivity.class).putExtra("video", videoInfo);
-            writeDynamicLauncher.launch(intent);
-        });
-        relay.setOnLongClickListener(v -> {
-            ToolsUtil.copyText(requireContext(), "https://www.bilibili.com/" + videoInfo.bvid);
-            MsgUtil.showMsg("视频完整链接已复制", requireContext());
-            return true;
-        });
+                if (videoInfo.collection != null) {
+                    collectionTitle.setText(String.format("合集 · %s", videoInfo.collection.title));
+                    collectionCard.setOnClickListener((view1) ->
+                            startActivity(new Intent(requireContext(), CollectionInfoActivity.class)
+                                    .putExtra("collection", videoInfo.collection)
+                                    .putExtra("fromVideo", videoInfo.aid)));
+                } else {
+                    collectionCard.setVisibility(View.GONE);
+                }
 
-        if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-            addWatchlater.setVisibility(View.GONE);
-            relay.setVisibility(View.GONE);
-        }
-
-        if (videoInfo.collection != null) {
-            collectionTitle.setText(String.format("合集 · %s", videoInfo.collection.title));
-            collectionCard.setOnClickListener((view1) ->
-                    startActivity(new Intent(requireContext(), CollectionInfoActivity.class)
-                            .putExtra("collection", videoInfo.collection)
-                            .putExtra("fromVideo", videoInfo.aid)));
-        } else {
-            collectionCard.setVisibility(View.GONE);
-        }
+            });
+        });
     }
 
 

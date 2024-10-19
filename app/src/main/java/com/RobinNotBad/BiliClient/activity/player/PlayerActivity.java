@@ -203,12 +203,13 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         if (SharedPreferencesUtil.getBoolean("player_ui_round", false) && BiliTerminal.getSystemSdk() > 17) {
             int padding = ToolsUtil.dp2px(8, this);
+            progressBar.setPadding(padding,0,padding,0);
 
-            top_control.setPaddingRelative(padding, padding, padding, 0);
+            top_control.setPadding(padding, padding, padding, 0);
 
-            bottom_control.setPaddingRelative(padding, 0, padding, padding);
+            bottom_control.setPadding(padding, 0, padding, padding);
 
-            right_control.setPaddingRelative(0, 0, padding, 0);
+            right_control.setPadding(0, 0, padding, 0);
         }
 
         if ((!SharedPreferencesUtil.getBoolean("show_online", true)))
@@ -257,7 +258,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     if (!isLiveMode)
                         text_progress.setText(ToolsUtil.toTime(position / 1000) + "/" + progress_all_str);
                     if (!online_number.isEmpty())
-                        text_online.setText("实时" + online_number + "人");
+                        text_online.setText(online_number + "在看");
                     else text_online.setText("");
                 });
             }
