@@ -37,6 +37,7 @@ public class VideoInfo implements Parcelable {    //自定义类需要加这个�
 
     public VideoInfo() {}
 
+
     protected VideoInfo(Parcel in) {
         bvid = in.readString();
         aid = in.readLong();
@@ -47,6 +48,11 @@ public class VideoInfo implements Parcelable {    //自定义类需要加这个�
         duration = in.readString();
         timeDesc = in.readString();
         pagenames = in.createStringArrayList();
+        long[] cidArray = in.createLongArray();
+        cids = new ArrayList<>(cidArray.length);
+        for(int i = 0; i < cidArray.length; i++) {
+            cids.set(i, cidArray[i]);
+        }
         descAts = in.createTypedArrayList(At.CREATOR);
         upowerExclusive = in.readByte() != 0;
         argueMsg = in.readString();
@@ -69,6 +75,11 @@ public class VideoInfo implements Parcelable {    //自定义类需要加这个�
         dest.writeString(duration);
         dest.writeString(timeDesc);
         dest.writeStringList(pagenames);
+        long[] cidArray = new long[cids.size()];
+        for (int i = 0; i < cids.size(); i++) {
+            cidArray[i] = cids.get(i);
+        }
+        dest.writeLongArray(cidArray);
         dest.writeTypedList(descAts);
         dest.writeByte((byte) (upowerExclusive ? 1 : 0));
         dest.writeString(argueMsg);
