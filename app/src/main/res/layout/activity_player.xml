@@ -30,31 +30,39 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/text_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/text_progress"
+            android:alpha="0.8"
+            android:background="#5000"
+            android:gravity="center"
+            android:paddingHorizontal="4dp"
+            android:text="当你的天空突然下起了大雨~\n那是我在为你炸乌云~"
+            android:textSize="11sp"
+            android:visibility="gone" />
+
+        <TextView
             android:id="@+id/text_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp"
+            android:paddingStart="2dp"
             android:gravity="start"
             android:text="00:00/00:00"
-            android:textAlignment="textStart"
-            android:textColor="#D3B8BDBF"
+            android:alpha="0.8"
             android:textSize="11sp"
-            android:layout_alignParentEnd="true"
             android:layout_above="@id/bottom_control"/>
 
         <TextView
-            android:id="@+id/online_text"
+            android:id="@+id/text_online"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp"
+            android:paddingEnd="2dp"
+            android:alpha="0.8"
             android:gravity="end"
             android:text="实时0人"
-
             android:layout_above="@id/bottom_control"
             android:textAlignment="textEnd"
-            android:textColor="#D3B8BDBF"
             android:textSize="11sp" />
 
         <RelativeLayout
@@ -127,9 +135,9 @@
                 android:id="@+id/bottom_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="3dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <ImageButton

@@ -107,7 +107,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private float screen_width, screen_height;
     private int video_width, video_height;
 
-    private TextView text_progress, online_text, text_volume, loading_text0, loading_text1, text_speed, text_newspeed;
+    private TextView text_progress, text_online, text_volume, loading_text0, loading_text1, text_speed, text_newspeed;
 
     public TextView text_title;
 
@@ -212,7 +212,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
 
         if ((!SharedPreferencesUtil.getBoolean("show_online", true)))
-            online_text.setVisibility(View.GONE);
+            text_online.setVisibility(View.GONE);
 
         if (isPreviewMode) {
             loading_text0.setText("预览中");
@@ -257,8 +257,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     if (!isLiveMode)
                         text_progress.setText(ToolsUtil.toTime(position / 1000) + "/" + progress_all_str);
                     if (!online_number.isEmpty())
-                        online_text.setText("实时" + online_number + "人");
-                    else online_text.setText("");
+                        text_online.setText("实时" + online_number + "人");
+                    else text_online.setText("");
                 });
             }
 
@@ -344,7 +344,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         circle = findViewById(R.id.circle);
         text_progress = findViewById(R.id.text_progress);
-        online_text = findViewById(R.id.online_text);
+        text_online = findViewById(R.id.text_online);
         danmaku_btn = findViewById(R.id.danmaku_btn);
         loop_btn = findViewById(R.id.loop_btn);
         rotate_btn = findViewById(R.id.rotate_btn);
@@ -895,7 +895,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         runOnUiThread(() -> {
                             if (isLiveMode) {
                                 text_progress.setText(ToolsUtil.toTime(videonow / 1000));
-                                online_text.setText(online_number);
+                                text_online.setText(online_number);
                             } else progressBar.setProgress(videonow);
                         });
                         //progressBar上有一个onProgressChange的监听器，文字更改在那里
