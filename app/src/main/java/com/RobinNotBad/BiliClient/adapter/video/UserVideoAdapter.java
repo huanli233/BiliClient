@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.user.info.UserCollectionActivity;
+import com.RobinNotBad.BiliClient.activity.video.series.UserSeriesActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicHolder;
 import com.RobinNotBad.BiliClient.model.VideoCard;
@@ -51,9 +51,9 @@ public class UserVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (position == 0) {
             TextView textView = holder.itemView.findViewById(R.id.text);
-            textView.setText("合集列表");
+            textView.setText("视频系列");
             holder.itemView.setOnClickListener(view -> {
-                Intent intent = new Intent(context, UserCollectionActivity.class);
+                Intent intent = new Intent(context, UserSeriesActivity.class);
                 intent.putExtra("mid", mid);
                 context.startActivity(intent);
             });

@@ -61,9 +61,14 @@
             android:label="更新详情"
             android:screenOrientation="locked" />
         <activity
-            android:name=".activity.user.info.UserCollectionActivity"
+            android:name=".activity.video.series.SeriesInfoActivity"
+            android:exported="true"
+            android:label="系列详情"
+            android:screenOrientation="locked" />
+        <activity
+            android:name=".activity.video.series.UserSeriesActivity"
             android:exported="false"
-            android:label="投稿合集列表"
+            android:label="投稿的系列"
             android:screenOrientation="locked" />
         <activity
             android:name=".activity.EmoteActivity"

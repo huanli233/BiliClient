@@ -1,44 +1,50 @@
-package com.RobinNotBad.BiliClient.activity.user.info;
+package com.RobinNotBad.BiliClient.activity.video.series;
 
 import android.os.Bundle;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
-import com.RobinNotBad.BiliClient.adapter.video.SeasonCardAdapter;
-import com.RobinNotBad.BiliClient.api.UserInfoApi;
+import com.RobinNotBad.BiliClient.adapter.video.SeriesCardAdapter;
+import com.RobinNotBad.BiliClient.api.SeriesApi;
 import com.RobinNotBad.BiliClient.model.Collection;
+import com.RobinNotBad.BiliClient.model.Series;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//用户合集列表
+//用户的视频系列列表
 //2024-06-13
 
-public class UserCollectionActivity extends RefreshListActivity {
+//我宣布：
+//在此之后：series统一叫系列，collection统一叫合集
+//我看b站他们自己都没搞明白，全都叫合集，请允许我在此问候下他们的开发者……
+//2024-10-20
+
+public class UserSeriesActivity extends RefreshListActivity {
 
     private long mid;
-    private ArrayList<Collection> seasonList;
-    private SeasonCardAdapter adapter;
+    private ArrayList<Series> seriesList;
+    private SeriesCardAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setPageName("投稿合集列表");
+        setPageName("投稿的系列");
 
-        seasonList = new ArrayList<>();
+        seriesList = new ArrayList<>();
         mid = getIntent().getLongExtra("mid", 0);
 
         setOnLoadMoreListener(this::continueLoading);
 
         CenterThreadPool.run(() -> {
             try {
-                bottom = (UserInfoApi.getUserSeasons(mid, page, seasonList) == 1);
+                bottom = (SeriesApi.getUserSeries(mid, page, seriesList) == 1);
                 setRefreshing(false);
-                adapter = new SeasonCardAdapter(this, seasonList);
+                adapter = new SeriesCardAdapter(this, seriesList);
                 setAdapter(adapter);
-                if (bottom && seasonList.isEmpty()) showEmptyView();
+                if (bottom && seriesList.isEmpty()) showEmptyView();
             } catch (Exception e) {
                 loadFail(e);
             }
@@ -48,14 +54,11 @@ public class UserCollectionActivity extends RefreshListActivity {
     private void continueLoading(int page) {
         CenterThreadPool.run(() -> {
             try {
-                List<Collection> list = new ArrayList<>();
-                int result = UserInfoApi.getUserSeasons(mid, page, list);
+                int last = seriesList.size();
+                int result = SeriesApi.getUserSeries(mid, page, seriesList);
                 if (result != -1) {
                     Log.e("debug", "下一页");
-                    runOnUiThread(() -> {
-                        seasonList.addAll(list);
-                        adapter.notifyItemRangeInserted(seasonList.size() - list.size(), list.size());
-                    });
+                    runOnUiThread(() -> adapter.notifyItemRangeInserted(last, seriesList.size() - last));
                     if (result == 1) {
                         Log.e("debug", "到底了");
                         bottom = true;

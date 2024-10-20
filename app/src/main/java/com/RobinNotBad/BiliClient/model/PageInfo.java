@@ -1,7 +1,8 @@
 package com.RobinNotBad.BiliClient.model;
 
-public class Page {
+public class PageInfo {
     public int page_num;
-    public int page_size;
+    public int require_ps;
     public int total;
+    public int return_ps;
 }

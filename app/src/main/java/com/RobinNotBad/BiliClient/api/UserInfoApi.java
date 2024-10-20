@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.api;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.model.ArticleCard;
-import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
@@ -189,35 +188,6 @@ public class UserInfoApi {
                 return 0;
             } else return 1;
         } else return -1;
-    }
-
-    public static int getUserSeasons(long mid, int page, List<Collection> seasonList) throws IOException, JSONException {
-        String url = "https://api.bilibili.com/x/polymer/web-space/seasons_series_list?";
-        url += "mid=" + mid + "&page_num=" + page + "&page_size=20";
-        Log.e("debug", url);
-        JSONObject all = NetWorkUtil.getJson(ConfInfoApi.signWBI(url), NetWorkUtil.webHeaders);
-        if (all.has("data") && !all.isNull("data")) {
-            JSONObject data = all.getJSONObject("data");
-            if (data.has("items_lists") && !data.isNull("items_lists")) {
-                JSONObject itemsLists = data.getJSONObject("items_lists");
-                boolean finished = false;
-                if (itemsLists.has("seasons_list")) {
-                    JSONArray seasons = itemsLists.getJSONArray("seasons_list");
-                    for (int i = 0; i < seasons.length(); i++)
-                        seasonList.add(CollectionApi.getSeasonByJson(seasons.getJSONObject(i)));
-                    if (seasons.length() > 0) finished = true;
-                }
-                if (itemsLists.has("series_list")) {
-                    JSONArray series = itemsLists.getJSONArray("series_list");
-                    for (int i = 0; i < series.length(); i++)
-                        seasonList.add(CollectionApi.getSeasonByJson(series.getJSONObject(i)));
-                    if (series.length() > 0) finished = true;
-                }
-                if (finished) return 0;
-                else return 1;
-            }
-        }
-        return -1;
     }
 
     public static int followUser(long mid, boolean isFollow) throws IOException, JSONException {

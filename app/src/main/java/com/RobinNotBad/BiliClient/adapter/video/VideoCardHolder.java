@@ -43,41 +43,37 @@ public class VideoCardHolder extends RecyclerView.ViewHolder {
             upName.setVisibility(View.GONE);
         } else upName.setText(upNameStr);
 
-        if (videoCard.collection != null) {
-            Collection collection = videoCard.collection;
-            SpannableString spannableString = new SpannableString("[合集]" + ToolsUtil.htmlToString(collection.title));
-            spannableString.setSpan(new ForegroundColorSpan(Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            title.setText(spannableString);
-            String playTimesStr = collection.view;
-            if (playTimesStr == null || playTimesStr.isEmpty()) {
-                viewCount.setVisibility(View.GONE);
-            } else viewCount.setText("共" + playTimesStr);
-            Glide.with(context).asDrawable().load(GlideUtil.url(collection.cover))
-                    .transition(GlideUtil.getTransitionOptions())
-                    .placeholder(R.mipmap.placeholder)
-                    .format(DecodeFormat.PREFER_RGB_565)
-                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))).sizeMultiplier(0.85f))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .into(cover);
-        } else {
-            String playTimesStr = videoCard.view;
-            if (playTimesStr == null || playTimesStr.isEmpty()) {
-                viewCount.setVisibility(View.GONE);
-            } else viewCount.setText(playTimesStr);
-            Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
-                    .transition(GlideUtil.getTransitionOptions())
-                    .placeholder(R.mipmap.placeholder)
-                    .format(DecodeFormat.PREFER_RGB_565)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))).sizeMultiplier(0.85f))
-                    .into(cover);
-            if (videoCard.type.equals("live")) {
-                SpannableString spannableString = new SpannableString("[直播]" + ToolsUtil.htmlToString(videoCard.title));
-                spannableString.setSpan(new ForegroundColorSpan(Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                title.setText(spannableString);
-            } else {
-                title.setText(ToolsUtil.htmlToString(videoCard.title));
-            }
+
+        String viewCountStr = videoCard.view;
+        if (viewCountStr == null || viewCountStr.isEmpty()) {
+            viewCount.setVisibility(View.GONE);
         }
+        else {
+            viewCount.setText(viewCountStr);
+        }
+
+        Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
+                .transition(GlideUtil.getTransitionOptions())
+                .placeholder(R.mipmap.placeholder)
+                .format(DecodeFormat.PREFER_RGB_565)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))).sizeMultiplier(0.85f))
+                .into(cover);
+
+        switch (videoCard.type){
+            case "live":
+                SpannableString sstr_live = new SpannableString("[直播]" + ToolsUtil.htmlToString(videoCard.title));
+                sstr_live.setSpan(new ForegroundColorSpan(Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                title.setText(sstr_live);
+                break;
+            case "series":
+                SpannableString sstr_series = new SpannableString("[系列]" + ToolsUtil.htmlToString(videoCard.title));
+                sstr_series.setSpan(new ForegroundColorSpan(Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                title.setText(sstr_series);
+                break;
+            default:
+                title.setText(ToolsUtil.htmlToString(videoCard.title));
+        }
+
     }
 }
