@@ -93,15 +93,16 @@ public class SearchActivity extends InstanceActivity {
                 }
             };
             viewPager.setAdapter(vpfAdapter);
-        /*
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                onScrolled(6);
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-            }
-        });
-         */
+
+
+            viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    if(position!=0) onScrolled(256);  //让搜索框隐藏
+                    super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                }
+            });
+
             searchBtn.setOnClickListener(view -> searchKeyword(keywordInput.getText().toString()));
             searchBtn.setOnLongClickListener(this::jumpToTargetId);
             keywordInput.setOnEditorActionListener((textView, actionId, event) -> {

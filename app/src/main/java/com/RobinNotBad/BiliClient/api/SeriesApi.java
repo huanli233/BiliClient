@@ -58,17 +58,33 @@ public class SeriesApi {
      * 获取合集信息
      *
      * @param mid       mid（或许可以为任意）
-     * @param season_id 合集id
+     * @param id 合集id
      * @param page      页数
      * @return Collection对象与分页信息
      */
-    public static PageInfo getSeriesInfo(long mid, int season_id, int page, ArrayList<VideoCard> videoList) throws JSONException, IOException {
-        String url = "https://api.bilibili.com/x/series/archives" + new NetWorkUtil.FormData()
-                .setUrlParam(true)
-                .put("mid", mid)
-                .put("series_id", season_id)
-                .put("pn", page)
-                .put("ps", 30);
+    public static PageInfo getSeriesInfo(String type, long mid, int id, int page, ArrayList<VideoCard> videoList) throws JSONException, IOException {
+        String url;
+        switch (type) {
+            case "series":
+                url = "https://api.bilibili.com/x/series/archives" + new NetWorkUtil.FormData()
+                    .setUrlParam(true)
+                    .put("mid", mid)
+                    .put("series_id", id)
+                    .put("pn", page)
+                    .put("ps", 30);
+                break;
+            case "season":
+                url = "https://api.bilibili.com/x/polymer/web-space/seasons_archives_list" + new NetWorkUtil.FormData()
+                        .setUrlParam(true)
+                        .put("mid", mid)
+                        .put("season_id", id)
+                        .put("page_num", page)
+                        .put("page_size", 30);
+                break;
+            default:
+                throw new JSONException("传入类型有误！");
+        }
+
         JSONObject result = NetWorkUtil.getJson(url);
 
         PageInfo pageInfo = new PageInfo();
@@ -77,9 +93,18 @@ public class SeriesApi {
         if (data != null) {
             JSONObject pageJson = data.optJSONObject("page");
             if (pageJson != null) {
-                pageInfo.page_num = pageJson.optInt("num", -1);
-                pageInfo.require_ps = pageJson.optInt("size", -1);
-                pageInfo.total = pageJson.optInt("total", -1);
+                switch (type){
+                    case "series":
+                        pageInfo.page_num = pageJson.optInt("num", -1);
+                        pageInfo.require_ps = pageJson.optInt("size", -1);
+                        pageInfo.total = pageJson.optInt("total", -1);
+                        break;
+                    case "season":
+                        pageInfo.page_num = pageJson.optInt("page_num", -1);
+                        pageInfo.require_ps = pageJson.optInt("page_size", -1);
+                        pageInfo.total = pageJson.optInt("total", -1);
+                        break;
+                }
             }
 
             JSONArray archives = data.optJSONArray("archives");
