@@ -60,6 +60,8 @@ public class UserInfoActivity extends BaseActivity {
             viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
 
             findViewById(R.id.loading).setVisibility(View.GONE);
+
+            TutorialHelper.showPagerTutorial(this,3);
         });
     }
 

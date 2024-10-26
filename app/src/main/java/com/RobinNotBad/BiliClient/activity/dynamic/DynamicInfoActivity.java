@@ -23,7 +23,6 @@ import com.RobinNotBad.BiliClient.util.AnimationUtils;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -78,12 +77,10 @@ public class DynamicInfoActivity extends BaseActivity {
                         if ((view = diFragment.getView()) != null) view.setVisibility(View.GONE);
                         if (seek_reply != -1) viewPager.setCurrentItem(1);
 
-                        if (SharedPreferencesUtil.getBoolean("first_dynamicinfo", true)) {
-                            MsgUtil.showMsg("下载完成", this);
-                            SharedPreferencesUtil.putBoolean("first_dynamicinfo", false);
-                        }
-
-                        diFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(findViewById(R.id.loading), diFragment.getView()));
+                        diFragment.setOnFinishLoad(() -> {
+                            AnimationUtils.crossFade(findViewById(R.id.loading), diFragment.getView());
+                            TutorialHelper.showPagerTutorial(this,2);
+                        });
                     });
 
                 } catch (Exception e) {

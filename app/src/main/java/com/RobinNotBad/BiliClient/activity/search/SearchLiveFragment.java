@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +40,7 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
     private boolean bottom = false;
     private int page = 0;
     private TextView emptyView;
+    private ImageView loadingView;
 
     public SearchLiveFragment() {
     }
@@ -64,6 +66,7 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
 
         recyclerView = view.findViewById(R.id.recyclerView);
         emptyView = view.findViewById(R.id.emptyTip);
+        loadingView = view.findViewById(R.id.loading);
         roomList = new ArrayList<>();
 
         recyclerView.setHasFixedSize(true);
@@ -115,17 +118,21 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
                     int lastSize = roomList.size();
                     roomList.addAll(list);
                     liveCardAdapter.notifyItemRangeInserted(lastSize + 1, roomList.size() - lastSize);
+                    loadingView.setVisibility(View.GONE);
                 });
             } else {
                 bottom = true;
-                if (isAdded() && !isFirstLoad) {
+                if (isFirstLoad) showEmptyView();
+                else if (isAdded()) {
                     requireActivity().runOnUiThread(() -> MsgUtil.showMsg("已经到底啦OwO", requireContext()));
                 }
-                if (isFirstLoad) showEmptyView();
             }
             isFirstLoad = false;
         } catch (Exception e) {
-            if (isAdded()) requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+            if (isAdded()) requireActivity().runOnUiThread(() -> {
+                MsgUtil.err(e, requireContext());
+                loadingView.setVisibility(View.GONE);
+            });
         }
         refreshing = false;
         if (bottom && roomList.isEmpty()) {
@@ -140,6 +147,7 @@ public class SearchLiveFragment extends Fragment implements SearchRefreshable {
         this.page = 0;
         this.keyword = keyword;
         CenterThreadPool.runOnUiThread(() -> {
+            loadingView.setVisibility(View.VISIBLE);
             if (this.liveCardAdapter == null)
                 this.liveCardAdapter = new LiveCardAdapter(this.requireContext(), this.roomList);
             int size_old = this.roomList.size();

@@ -93,6 +93,7 @@ public class VideoInfoActivity extends BaseActivity {
 
     protected void initVideoInfoView() {
         TutorialHelper.showTutorialList(this, R.array.tutorial_video, 1);
+        TutorialHelper.showPagerTutorial(this, 3);
 
         ViewPager viewPager = findViewById(R.id.viewPager);
         TextView pageName = findViewById(R.id.pageName);
@@ -132,10 +133,6 @@ public class VideoInfoActivity extends BaseActivity {
                     if ((view = fragmentList.get(0).getView()) != null)
                         view.setVisibility(View.GONE);
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
-                    if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
-                        MsgUtil.showMsgLong("提示：本页面可以左右滑动", this);
-                        SharedPreferencesUtil.putBoolean("first_videoinfo", false);
-                    }
                     AnimationUtils.crossFade(loading, fragmentList.get(0).getView());
                 });
                 //没啥好说的，教科书式的ViewPager使用方法

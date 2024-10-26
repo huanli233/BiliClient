@@ -337,12 +337,11 @@ public class VideoInfoFragment extends Fragment {
                         play();
                         return;
                     }
-                    Intent intent = new Intent();
-                    intent.setClass(view1.getContext(), ImageViewerActivity.class);
-                    ArrayList<String> imageList = new ArrayList<>();
-                    imageList.add(videoInfo.cover);
-                    intent.putExtra("imageList", imageList);
-                    view1.getContext().startActivity(intent);
+                    showCover();
+                });
+                if(clickCoverPlayEnable) cover.setOnLongClickListener(v -> {
+                    showCover();
+                    return true;
                 });
 
                 viewCount.setText(ToolsUtil.toWan(videoInfo.stats.view));
@@ -565,5 +564,16 @@ public class VideoInfoFragment extends Fragment {
             //避免重复获取的同时保证播放进度是新的，如果是-1会在解析页里再获取一次
         }
         play_clicked = true;
+    }
+
+    private void showCover(){
+        try {
+            Intent intent = new Intent();
+            intent.setClass(requireContext(), ImageViewerActivity.class);
+            ArrayList<String> imageList = new ArrayList<>();
+            imageList.add(videoInfo.cover);
+            intent.putExtra("imageList", imageList);
+            requireContext().startActivity(intent);
+        } catch (Exception ignored){}
     }
 }

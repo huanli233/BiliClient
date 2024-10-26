@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArticleInfoActivity extends BaseActivity {
-    private static final String TAG = "ArticleInfoActivity";
     private long cvid;
 
     private ReplyFragment replyFragment;
@@ -71,6 +70,8 @@ public class ArticleInfoActivity extends BaseActivity {
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
 
                     articleInfoFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(findViewById(R.id.loading), articleInfoFragment.getView()));
+
+                    TutorialHelper.showPagerTutorial(this,2);
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> {

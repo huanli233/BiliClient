@@ -55,7 +55,7 @@
         </item>
         <item>
             <type>0</type>
-            <text>哔哩终端暂不显示专栏的文本颜色</text>
+            <text>哔哩终端暂不显示专栏的文本颜色，部分专栏的排版也有可能出现问题</text>
             <style>none</style>
             <color>#ffffff</color>
         </item>

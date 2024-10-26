@@ -14,8 +14,11 @@
             <type>1</type>
         </item>
         <item>
+            <type>1</type>
+        </item>
+        <item>
             <type>0</type>
-            <text>这里只有一个要介绍的</text>
+            <text>这里只有一个要介绍的：长按私信列表中的卡片可以跳转到用户详情页</text>
             <style>none</style>
             <color>#ffffff</color>
         </item>
@@ -23,8 +26,11 @@
             <type>1</type>
         </item>
         <item>
+            <type>1</type>
+        </item>
+        <item>
             <type>0</type>
-            <text>长按私信列表中的卡片可以跳转到用户详情页</text>
+            <text>另外：终端可能无法显示某些点赞、评论通知的内容，后续版本大抵应该会修</text>
             <style>bold</style>
             <color>#ffffff</color>
         </item>

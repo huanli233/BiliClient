@@ -100,21 +100,16 @@
 
     //后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_space">
-        <item>xml/tutorial_space_3</item>
         <item>xml/tutorial_space_2</item>
         <item>xml/tutorial_space</item>
     </array>
     //后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_video">
-        <item>xml/tutorial_video_4</item>
-        <item>xml/tutorial_video_3</item>
         <item>xml/tutorial_video_2</item>
         <item>xml/tutorial_video</item>
     </array>
     //后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_search">
-        <item>xml/tutorial_search_3</item>
-        <item>xml/tutorial_search_2</item>
         <item>xml/tutorial_search</item>
     </array>
     //后来写新功能添加的教程请放在列表的第一个
@@ -154,4 +149,6 @@
         <item>dynamic_info</item>
         <item>article</item>
     </array>
+
+    <string name="tutorial_pager">提示\n\n←这个页面可以左右翻页喵→\n\n（共有NNN页，滑动一下不再显示）</string>
 </resources>
