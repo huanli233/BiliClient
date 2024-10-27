@@ -3,7 +3,7 @@ package com.RobinNotBad.BiliClient.activity.video;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,6 +16,7 @@ import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import java.io.File;
@@ -24,8 +25,10 @@ import java.io.File;
 //2023-07-17
 
 public class MultiPageActivity extends BaseActivity {
+    private static final String TAG = "MultiPageActivity";
 
     boolean play_clicked;
+    VideoInfo videoInfo;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -39,7 +42,12 @@ public class MultiPageActivity extends BaseActivity {
         textView.setText("请选择分页");
 
         Intent intent = getIntent();
-        VideoInfo videoInfo = intent.getParcelableExtra("videoInfo");
+        try {
+            videoInfo = TerminalContext.getInstance().getCurrentVideo();
+        } catch (TerminalContext.IllegalTerminalStateException e) {
+            Log.wtf(TAG, e);
+            MsgUtil.toast("找不到当前视频信息QAQ", this);
+        }
 
         PageChooseAdapter adapter = new PageChooseAdapter(this, videoInfo.pagenames);
 
@@ -49,7 +57,7 @@ public class MultiPageActivity extends BaseActivity {
                 File downPath = new File(rootPath, ToolsUtil.stringToFile(videoInfo.pagenames.get(position)));
                 if (downPath.exists()) MsgUtil.showMsg("已经缓存过了~", this);
                 else {
-                    startActivity(new Intent().putExtra("page", position).putExtra("videoInfo", (Parcelable) videoInfo).setClass(this, QualityChooserActivity.class));
+                    startActivity(new Intent().putExtra("page", position).setClass(this, QualityChooserActivity.class));
                 }
             });
         } else {        //普通播放模式

@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.activity.article;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +12,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.article.ArticleContentAdapter;
 import com.RobinNotBad.BiliClient.api.ArticleApi;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.ArticleLine;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.JsonUtil;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.*;
 
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -29,6 +28,7 @@ import org.jsoup.nodes.Element;
 import java.util.ArrayList;
 
 public class ArticleInfoFragment extends Fragment {
+    private static final String TAG = "ArticleInfoFragment";
     ArticleInfo articleInfo;
     long cvid;
     RecyclerView recyclerView;
@@ -47,12 +47,8 @@ public class ArticleInfoFragment extends Fragment {
         return fragment;
     }
 
-    public static ArticleInfoFragment newInstance(ArticleInfo articleInfo) {
-        ArticleInfoFragment fragment = new ArticleInfoFragment();
-        Bundle args = new Bundle();
-        args.putParcelable("article", articleInfo);
-        fragment.setArguments(args);
-        return fragment;
+    public static ArticleInfoFragment newInstance() {
+        return new ArticleInfoFragment();
     }
 
     public void setOnFinishLoad(Runnable onFinishLoad) {
@@ -64,7 +60,12 @@ public class ArticleInfoFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             cvid = getArguments().getLong("cvid");
-            articleInfo =  getArguments().getParcelable("article");
+            try {
+                articleInfo = TerminalContext.getInstance().getCurrentArticle();
+            }catch (TerminalContext.IllegalTerminalStateException e) {
+                Log.wtf(TAG, e);
+                MsgUtil.toast("找不到专栏信息QAQ", BiliTerminal.context);
+            }
         }
     }
 

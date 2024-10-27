@@ -25,6 +25,7 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
@@ -44,8 +45,12 @@ public class CollectionInfoActivity extends RefreshListActivity {
         super.onCreate(savedInstanceState);
 
         setPageName("合集详情");
-
-        Collection collection = getIntent().getParcelableExtra("collection");
+        Collection collection;
+        try {
+            collection = TerminalContext.getInstance().getCurrentVideo().collection;
+        }catch (TerminalContext.IllegalTerminalStateException ignored) {
+            collection = null;
+        }
         int season_id = getIntent().getIntExtra("season_id", -1);
         long mid = getIntent().getLongExtra("mid", -1);
         if (collection == null/* && (season_id == -1 || mid == -1)*/) {

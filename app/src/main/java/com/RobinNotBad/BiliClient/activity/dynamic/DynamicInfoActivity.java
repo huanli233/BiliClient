@@ -19,10 +19,7 @@ import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.Dynamic;
-import com.RobinNotBad.BiliClient.util.AnimationUtils;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.*;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -59,13 +56,12 @@ public class DynamicInfoActivity extends BaseActivity {
             CenterThreadPool.run(() -> {
                 try {
                     Dynamic dynamic = DynamicApi.getDynamic(id);
-
+                    TerminalContext.getInstance().enterDynamicDetailPage(dynamic);
                     List<Fragment> fragmentList = new ArrayList<>();
-                    DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance(dynamic);
+                    DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance();
                     fragmentList.add(diFragment);
                     rFragment = ReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type, seek_reply, dynamic.userInfo.mid);
                     rFragment.replyType = ReplyApi.REPLY_TYPE_DYNAMIC;
-                    rFragment.setSource(dynamic);
                     fragmentList.add(rFragment);
 
                     ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
@@ -103,4 +99,9 @@ public class DynamicInfoActivity extends BaseActivity {
         rFragment.notifyReplyInserted(event);
     }
 
+    @Override
+    protected void onDestroy() {
+        TerminalContext.getInstance().leaveDetailPage();
+        super.onDestroy();
+    }
 }

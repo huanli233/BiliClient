@@ -19,10 +19,7 @@ import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
-import com.RobinNotBad.BiliClient.util.AnimationUtils;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.*;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -115,11 +112,10 @@ public class VideoInfoActivity extends BaseActivity {
                     return;
                 }
                 videoInfo = VideoInfoApi.getInfoByJson(data);
-
+                TerminalContext.getInstance().enterVideoDetailPage(videoInfo);
                 fragmentList = new ArrayList<>(3);
-                fragmentList.add(VideoInfoFragment.newInstance(videoInfo));
+                fragmentList.add(VideoInfoFragment.newInstance());
                 replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1, seek_reply, videoInfo.staff.get(0).mid);
-                replyFragment.setSource(videoInfo);
                 fragmentList.add(replyFragment);
                 if (SharedPreferencesUtil.getBoolean("related_enable", true)) {
                     VideoRcmdFragment vrFragment = VideoRcmdFragment.newInstance(videoInfo.aid);
@@ -160,4 +156,9 @@ public class VideoInfoActivity extends BaseActivity {
         replyFragment.notifyReplyInserted(event);
     }
 
+    @Override
+    protected void onDestroy() {
+        TerminalContext.getInstance().leaveDetailPage();
+        super.onDestroy();
+    }
 }

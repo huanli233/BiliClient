@@ -23,6 +23,7 @@ import com.RobinNotBad.BiliClient.util.AnimationUtils;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -53,12 +54,12 @@ public class ArticleInfoActivity extends BaseActivity {
 
         CenterThreadPool.run(() -> {
             try {
-                ArticleInfo articleInfo;
+                ArticleInfo articleInfo = ArticleApi.getArticle(cvid);
+                TerminalContext.getInstance().enterArticleDetailPage(articleInfo);
                 List<Fragment> fragmentList = new ArrayList<>();
-                ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance(articleInfo = ArticleApi.getArticle(cvid));
+                ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance();
                 fragmentList.add(articleInfoFragment);
                 replyFragment = ReplyFragment.newInstance(cvid, ReplyApi.REPLY_TYPE_ARTICLE, seek_reply, articleInfo != null ? articleInfo.upInfo.mid : -1);
-                replyFragment.setSource(articleInfo);
                 fragmentList.add(replyFragment);
 
                 runOnUiThread(() -> {
@@ -90,5 +91,11 @@ public class ArticleInfoActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.ASYNC, sticky = true, priority = 1)
     public void onEvent(ReplyEvent event) {
         replyFragment.notifyReplyInserted(event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        TerminalContext.getInstance().leaveDetailPage();
+        super.onDestroy();
     }
 }

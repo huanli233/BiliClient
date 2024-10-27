@@ -1,6 +1,7 @@
 package com.RobinNotBad.BiliClient.activity.video;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,8 +25,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class QualityChooserActivity extends BaseActivity {
+    private static final String TAG = "QualityChooserActivity";
 
     List<Integer> qns = new LinkedList<>();
+    private VideoInfo videoInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,7 +43,12 @@ public class QualityChooserActivity extends BaseActivity {
 
         ((TextView) findViewById(R.id.pageName)).setText("请选择清晰度");
 
-        VideoInfo videoInfo = (VideoInfo) getIntent().getParcelableExtra("videoInfo");
+        try {
+            videoInfo = TerminalContext.getInstance().getCurrentVideo();
+        } catch (TerminalContext.IllegalTerminalStateException e) {
+            Log.wtf(TAG, e);
+            MsgUtil.toast("找不到视频信息QAQ", this);
+        }
         QualityChooseAdapter adapter = new QualityChooseAdapter(this);
         int page = getIntent().getIntExtra("page", 0);
         CenterThreadPool.run(() -> {
