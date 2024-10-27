@@ -81,7 +81,7 @@ public class JumpToPlayerActivity extends BaseActivity {
 
                 try {
                     SubtitleLink[] subtitleLinks = PlayerApi.getSubtitleLink(aid, cid);
-                    if(subtitleLinks.length==0 || subtitleLinks[0].isAI) {
+                    if(subtitleLinks.length==0 || (subtitleLinks.length==1 && subtitleLinks[0].isAI)) {
                         jump();
                     }
                     else {
