@@ -54,7 +54,7 @@ public class QualityChooserActivity extends BaseActivity {
         CenterThreadPool.run(() -> {
             // 我只知道它返回可用清晰度列表
             try {
-                String response = PlayerApi.getVideo(videoInfo.aid, videoInfo.bvid, videoInfo.cids.get(page), 16, true).second;
+                String response = PlayerApi.getVideo(videoInfo.aid, videoInfo.cids.get(page), 16, true).second;
                 JSONObject data = new JSONObject(response).getJSONObject("data");
                 JSONArray accept_description = data.getJSONArray("accept_description");
                 JSONArray accept_quality = data.getJSONArray("accept_quality");

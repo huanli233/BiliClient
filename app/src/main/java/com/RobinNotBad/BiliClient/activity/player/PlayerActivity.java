@@ -40,7 +40,9 @@ import androidx.annotation.NonNull;
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
+import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
+import com.RobinNotBad.BiliClient.model.Subtitle;
 import com.RobinNotBad.BiliClient.ui.widget.BatteryView;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -92,6 +94,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private SurfaceTexture mSurfaceTexture;
     private boolean firstSurfaceHolder = true;
 
+    private Subtitle[] subtitles;
+    private int subtitle_curr_index, subtitle_count;
+
     private IDanmakuView mDanmakuView;
     private DanmakuContext mContext;
 
@@ -102,12 +107,13 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private ImageButton control_btn, danmaku_btn, loop_btn, rotate_btn;
     private SeekBar progressBar, speed_seekbar;
     private TextView text_progress, text_online, text_volume, loading_text0, loading_text1, text_speed, text_newspeed;
-    public TextView text_title;
+    public TextView text_title, text_subtitle;
 
     private Timer progressTimer, autoHideTimer, volumeTimer, speedTimer, loadingTimer, onlineTimer, danmakuAdjustTimer;
     private String video_url, danmaku_url;
 
-    private boolean isPlaying, isPrepared, hasDanmaku, isOnlineVideo, isLiveMode, isSeeking, isDanmakuVisible, isPreviewMode;
+    private boolean isPlaying, isPrepared, hasDanmaku,
+            isOnlineVideo, isLiveMode, isSeeking, isDanmakuVisible, isPreviewMode;
 
     private int videoall, videonow, videonow_last;
     private long lastProgress;
@@ -341,6 +347,12 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             }
 
             runOnUiThread(() -> {
+                loading_text0.setText("获取字幕中");
+                loading_text1.setText("(≧∇≦)");
+            });
+            getSubtitle();
+
+            runOnUiThread(() -> {
                 loading_text0.setText("装填弹幕中");
                 loading_text1.setText("(≧∇≦)");
             });
@@ -381,6 +393,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         speed_seekbar = findViewById(R.id.seekbar_speed);
         text_newspeed = findViewById(R.id.text_newspeed);
         bottom_buttons = findViewById(R.id.bottom_buttons);
+
+        text_subtitle = findViewById(R.id.text_subtitle);
 
         top_control.setOnClickListener(view -> finish());
 
@@ -916,16 +930,18 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             public void run() {
                 if (isPrepared && isPlaying && !isSeeking) {
                     videonow = (int) ijkPlayer.getCurrentPosition();
+                    int curr_sec = videonow / 1000;
                     if (videonow_last != videonow) {               //检测进度是否在变动
                         videonow_last = videonow;
                         runOnUiThread(() -> {
                             if (isLiveMode) {
-                                text_progress.setText(ToolsUtil.toTime(videonow / 1000));
+                                text_progress.setText(ToolsUtil.toTime(curr_sec));
                                 text_online.setText(online_number);
                             } else progressBar.setProgress(videonow);
                         });
                         //progressBar上有一个onProgressChange的监听器，文字更改在那里
                     }
+                    if(subtitles!=null) showSubtitle(curr_sec);
                 }
             }
         };
@@ -957,6 +973,48 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             }
         };
         onlineTimer.schedule(task, 0, 5000);
+    }
+
+    private void getSubtitle(){
+        String subtitle_url = getIntent().getStringExtra("subtitle");
+        if (subtitle_url == null || subtitle_url.isEmpty()) return;
+        try {
+            subtitles = PlayerApi.getSubtitle(subtitle_url);
+            subtitle_count = subtitles.length;
+            subtitle_curr_index = 0;
+        } catch (Exception e){
+            MsgUtil.err(e,this);
+        }
+    }
+
+    private void showSubtitle(int curr_sec) {
+        Subtitle subtitle_curr = subtitles[subtitle_curr_index];
+
+        boolean need_change = true;
+        boolean need_show = true;
+
+        while (need_change) {
+            if (curr_sec < subtitle_curr.from) {
+                if (subtitle_curr_index != 0 && curr_sec < subtitles[subtitle_curr_index - 1].to) subtitle_curr_index--;
+                else {
+                    need_change = false;
+                    need_show = false;
+                }
+            } else if (curr_sec > subtitle_curr.to) {
+                if (subtitle_curr_index+1 < subtitle_count && curr_sec > subtitles[subtitle_curr_index + 1].from) subtitle_curr_index++;
+                else {
+                    need_change = false;
+                    need_show = false;
+                }
+            }
+            else need_change = false;
+        }
+
+        if(need_show) runOnUiThread(()->{
+            text_subtitle.setText(subtitles[subtitle_curr_index].content);
+            text_subtitle.setVisibility(View.VISIBLE);
+        });
+        else runOnUiThread(()->text_subtitle.setVisibility(View.GONE));
     }
 
     private void downdanmu() {

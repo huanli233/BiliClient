@@ -6,11 +6,11 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 public class Subtitle implements Parcelable {
-    String content;
-    float from;
-    float to;
+    public String content;
+    public double from;
+    public double to;
 
-    public Subtitle(String content, float from, float to) {
+    public Subtitle(String content, double from, double to) {
         this.content = content;
         this.from = from;
         this.to = to;
@@ -18,11 +18,11 @@ public class Subtitle implements Parcelable {
 
     protected Subtitle(Parcel in) {
         content = in.readString();
-        from = in.readFloat();
-        to = in.readFloat();
+        from = in.readDouble();
+        to = in.readDouble();
     }
 
-    public static final Creator<Subtitle> CREATOR = new Creator<Subtitle>() {
+    public static final Creator<Subtitle> CREATOR = new Creator<>() {
         @Override
         public Subtitle createFromParcel(Parcel in) {
             return new Subtitle(in);
@@ -42,7 +42,7 @@ public class Subtitle implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(content);
-        dest.writeFloat(from);
-        dest.writeFloat(to);
+        dest.writeDouble(from);
+        dest.writeDouble(to);
     }
 }

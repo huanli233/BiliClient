@@ -60,7 +60,7 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
             LocalVideo localVideo = localVideoList.get(position);
             if (localVideo.videoFileList.size() == 1) {
                 try {
-                    PlayerApi.jumpToPlayer(context, localVideo.videoFileList.get(0), localVideo.danmakuFileList.get(0), localVideo.title, true, 0, "", 0, 0, 0, false);
+                    PlayerApi.jumpToPlayer(context, localVideo.videoFileList.get(0), localVideo.danmakuFileList.get(0), "", localVideo.title, true, 0, "", 0, 0, 0, false);
                 } catch (ActivityNotFoundException e) {
                     MsgUtil.showMsg("跳转失败", context);
                     e.printStackTrace();
