@@ -31,13 +31,15 @@
 
         <TextView
             android:id="@+id/text_subtitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/text_progress"
+            android:layout_centerHorizontal="true"
             android:alpha="0.8"
-            android:background="#5000"
+            android:background="@drawable/background_grey_cardview"
             android:gravity="center"
-            android:paddingHorizontal="4dp"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="3dp"
             android:text="当你的天空突然下起了大雨~\n那是我在为你炸乌云~"
             android:textSize="11sp"
             android:visibility="gone" />
@@ -95,9 +97,9 @@
 
                 <com.RobinNotBad.BiliClient.ui.widget.BatteryView
                     android:id="@+id/battery"
-                    android:layout_width="15dp"
-                    android:layout_height="7dp"
-                    android:layout_marginTop="3dp" />
+                    android:layout_width="16dp"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="2dp" />
 
                 <com.RobinNotBad.BiliClient.ui.widget.TextClock
                     android:id="@+id/clock"
