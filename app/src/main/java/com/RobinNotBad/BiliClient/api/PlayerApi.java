@@ -14,6 +14,8 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.player.PlayerActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
+import com.RobinNotBad.BiliClient.model.Subtitle;
+import com.RobinNotBad.BiliClient.model.SubtitleLink;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -178,5 +180,32 @@ public class PlayerApi {
             values.put(MediaStore.Video.Media.DATA, path);
             return context.getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
         }
+    }
+
+    public static SubtitleLink[] getSubtitle(long aid, long cid) throws JSONException, IOException {
+        String url = "https://api.bilibili.com/x/player/wbi/v2?aid=" + aid
+                + "&cid=" + cid;
+        url = ConfInfoApi.signWBI(url);
+        JSONObject data = NetWorkUtil.getJson(url).getJSONObject("data");
+
+        JSONArray subtitles = data.getJSONObject("subtitle").getJSONArray("subtitles");
+
+        SubtitleLink[] links = new SubtitleLink[subtitles.length()];
+        for (int i = 0; i < subtitles.length(); i++) {
+            JSONObject subtitle = subtitles.getJSONObject(i);
+
+            long id = subtitle.getLong("id");
+            String lang = subtitle.getString("lan_doc");
+            String subtitle_url = "https:" + subtitle.getString("subtitle_url");
+
+            SubtitleLink link = new SubtitleLink(id,lang,subtitle_url);
+            links[i] = link;
+        }
+        return links;
+    }
+
+    public static Subtitle[] getSubtitle(String url) throws JSONException, IOException {
+        JSONObject data = NetWorkUtil.getJson(url).getJSONObject("data");
+        return null;
     }
 }
