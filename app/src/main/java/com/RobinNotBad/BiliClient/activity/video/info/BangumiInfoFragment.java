@@ -28,7 +28,6 @@ import com.RobinNotBad.BiliClient.api.BangumiApi;
 import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -71,15 +70,12 @@ public class BangumiInfoFragment extends Fragment {
         view.setVisibility(View.GONE);
         eposideRecyclerView = rootView.findViewById(R.id.rv_eposide_list);
         //拉数据
-        CenterThreadPool.run(() -> {
-            try {
-                bangumi = BangumiApi.getBangumi(mediaId);
-                if (isAdded()) requireActivity().runOnUiThread(this::initView);
-            } catch (Exception e) {
-                if (isAdded())
-                    requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
-            }
-        });
+        CenterThreadPool
+                .supplyAsyncWithLiveData(() -> BangumiApi.getBangumi(mediaId))
+                .observe(getViewLifecycleOwner(), (bangumi) -> {
+                    this.bangumi = bangumi;
+                    initView();
+                });
     }
 
     @SuppressLint("SetTextI18n")
@@ -202,7 +198,7 @@ public class BangumiInfoFragment extends Fragment {
     }
 
     private void refreshReplies() {
-        Activity activity = requireActivity();
+        Activity activity = getActivity();
         if (activity instanceof VideoInfoActivity) {
             ((VideoInfoActivity) activity).setCurrentAid(bangumi.sectionList.get(selectedSection).episodeList.get(selectedEpisode).aid);
         }
