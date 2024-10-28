@@ -80,6 +80,10 @@ public class JumpToPlayerActivity extends BaseActivity {
                 videourl = video.first;
 
                 try {
+                    if(download != 0) {
+                        jump();
+                        return;
+                    }
                     SubtitleLink[] subtitleLinks = PlayerApi.getSubtitleLink(aid, cid);
                     if(subtitleLinks.length==0 || (subtitleLinks.length==1 && subtitleLinks[0].isAI)) {
                         jump();
@@ -102,7 +106,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                         runOnUiThread(()->builder.create().show());
                     }
                 } catch (Exception e){
-                    MsgUtil.showMsg("没有获取到字幕", this);
+                    MsgUtil.showMsg("没有获取到字幕",this);
                     jump();
                     e.printStackTrace();
                 }

@@ -233,7 +233,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             findViewById(R.id.cl_1).setVisibility(View.GONE);
         }
 
-        if ((!SharedPreferencesUtil.getBoolean("show_online", true)))
+        if ((!SharedPreferencesUtil.getBoolean("show_online", true)) || aid==0 || cid==0)
             text_online.setVisibility(View.GONE);
 
         if (isPreviewMode) {
@@ -280,9 +280,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 runOnUiThread(() -> {
                     if (!isLiveMode)
                         text_progress.setText(ToolsUtil.toTime(position / 1000) + "/" + progress_all_str);
-                    if (!online_number.isEmpty())
-                        text_online.setText(online_number + "人在看");
-                    else text_online.setText("");
                 });
             }
 
@@ -842,7 +839,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if (SharedPreferencesUtil.getBoolean("player_from_last", true) && !isLiveMode) {
             if (lastProgress > 6 && ((videoall / 1000) - lastProgress) > 6) { //阈值
                 mediaPlayer.seekTo(lastProgress * 1000);
-                runOnUiThread(() -> MsgUtil.showMsg("已从上次的位置播放", this));
+                runOnUiThread(() -> MsgUtil.showMsg("已从上次的位置播放",this));
             }
         }
 
@@ -930,44 +927,49 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             public void run() {
                 if (isPrepared && isPlaying && !isSeeking) {
                     videonow = (int) ijkPlayer.getCurrentPosition();
-                    int curr_sec = videonow / 1000;
                     if (videonow_last != videonow) {               //检测进度是否在变动
                         videonow_last = videonow;
+                        int curr_sec = videonow / 1000;
                         runOnUiThread(() -> {
                             if (isLiveMode) {
                                 text_progress.setText(ToolsUtil.toTime(curr_sec));
                                 text_online.setText(online_number);
-                            } else progressBar.setProgress(videonow);
+                            }
+                            else {
+                                progressBar.setProgress(videonow);
+                                //progressBar上有一个onProgressChange的监听器，文字更改在那里
+                            }
                         });
-                        //progressBar上有一个onProgressChange的监听器，文字更改在那里
+                        if(subtitles!=null) showSubtitle(curr_sec);
                     }
-                    if(subtitles!=null) showSubtitle(curr_sec);
                 }
             }
         };
-        progressTimer.schedule(task, 0, 500);
+        progressTimer.schedule(task, 0, 250);
     }
 
     private void onlineChange() {
+        if(!SharedPreferencesUtil.getBoolean("show_online", true) || isLiveMode || aid==0 || cid==0) return;
+
         onlineTimer = new Timer();
         TimerTask task = new TimerTask() {
             @SuppressLint("SetTextI18n")
             @Override
             public void run() {
-                if (isLiveMode) onlineTimer.cancel();
-                if (ijkPlayer != null && !isSeeking) {
+                if (ijkPlayer != null) {
                     try {
-                        if ((aid == 0 && bvid == null) || cid == 0) online_number = "";
-                        else if (SharedPreferencesUtil.getBoolean("show_online", true)) {
-                            if (!isLiveMode) {
-                                if (bvid == null)
-                                    online_number = VideoInfoApi.getWatching(aid, cid);
-                                else online_number = VideoInfoApi.getWatching(bvid, cid);
-                            }
-                        }
+                        online_number = VideoInfoApi.getWatching(aid, cid);
+                        runOnUiThread(()->{
+                            if (!online_number.isEmpty())
+                                text_online.setText(online_number + "人在看");
+                            else text_online.setText("");
+                        });
                     } catch (Exception e) {
-                        runOnUiThread(() -> MsgUtil.err(e, PlayerActivity.this));
-                        online_number = "";
+                        runOnUiThread(() -> {
+                            MsgUtil.err(e,PlayerActivity.this);
+                            text_online.setVisibility(View.GONE);
+                        });
+                        this.cancel();
                     }
                 }
             }
@@ -1038,7 +1040,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             }
             streamdanmaku(danmakuFile.toString());
         } catch (Exception e) {
-            runOnUiThread(() -> MsgUtil.err(e, this));
+            runOnUiThread(() -> MsgUtil.err(e,this));
         }
     }
 
@@ -1318,7 +1320,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     HistoryApi.reportHistory(aid, cid, mid, videonow / 1000);
                 }
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.err(e, this));
+                runOnUiThread(() -> MsgUtil.err(e,this));
             }
         });
 
