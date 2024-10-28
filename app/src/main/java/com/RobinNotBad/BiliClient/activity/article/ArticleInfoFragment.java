@@ -60,12 +60,12 @@ public class ArticleInfoFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             cvid = getArguments().getLong("cvid");
-            try {
-                articleInfo = TerminalContext.getInstance().getCurrentArticle();
-            }catch (TerminalContext.IllegalTerminalStateException e) {
-                Log.wtf(TAG, e);
-                MsgUtil.toast("找不到专栏信息QAQ", BiliTerminal.context);
-            }
+        }
+        try {
+            articleInfo = TerminalContext.getInstance().getCurrentArticle();
+        }catch (TerminalContext.IllegalTerminalStateException e) {
+            Log.wtf(TAG, e);
+            MsgUtil.toast("找不到专栏信息QAQ", BiliTerminal.context);
         }
     }
 
