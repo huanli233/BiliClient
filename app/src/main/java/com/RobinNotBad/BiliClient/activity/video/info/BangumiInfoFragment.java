@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
@@ -28,6 +30,7 @@ import com.RobinNotBad.BiliClient.api.BangumiApi;
 import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -35,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BangumiInfoFragment extends Fragment {
+    private static final String TAG = "BangumiInfoFragment";
     private long mediaId;
     private int selectedSection = 0, selectedEpisode = 0;
     private Dialog dialog;
@@ -72,9 +76,14 @@ public class BangumiInfoFragment extends Fragment {
         //拉数据
         CenterThreadPool
                 .supplyAsyncWithLiveData(() -> BangumiApi.getBangumi(mediaId))
-                .observe(getViewLifecycleOwner(), (bangumi) -> {
-                    this.bangumi = bangumi;
-                    initView();
+                .observe(getViewLifecycleOwner(), (result) -> {
+                    result.onSuccess((bangumi) -> {
+                            this.bangumi = bangumi;
+                            initView();
+                    }).onFailure((error) -> {
+                        Log.wtf(TAG, error);
+                        MsgUtil.toast("碰到了些问题：" + error, BiliTerminal.context);
+                    });
                 });
     }
 

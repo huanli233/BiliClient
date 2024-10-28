@@ -9,10 +9,7 @@ import androidx.annotation.NonNull;
 import com.RobinNotBad.BiliClient.activity.base.RefreshListFragment;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.RecommendApi;
-import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-
-import java.util.ArrayList;
 
 //视频下推荐页面
 //2023-11-26
@@ -47,14 +44,12 @@ public class VideoRcmdFragment extends RefreshListFragment {
         Log.e("debug-av号", String.valueOf(aid));
 
         CenterThreadPool.supplyAsyncWithLiveData(() -> RecommendApi.getRelated(aid)
-        ).observe(getViewLifecycleOwner(), (ArrayList<VideoCard> videoList) -> {
-            try {
+        ).observe(getViewLifecycleOwner(), (result) -> {
+            result.onSuccess((videoList) -> {
                 VideoCardAdapter adapter = new VideoCardAdapter(requireContext(), videoList);
                 setAdapter(adapter);
                 setRefreshing(false);
-            } catch (Exception e) {
-                loadFail(e);
-            }
+            }).onFailure(this::loadFail);
         });
     }
 

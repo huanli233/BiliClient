@@ -10,19 +10,14 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
-import kotlinx.coroutines.BuildersKt;
-import kotlinx.coroutines.CoroutineScope;
-import kotlinx.coroutines.CoroutineScopeKt;
-import kotlinx.coroutines.CoroutineStart;
-import kotlinx.coroutines.Dispatchers;
+import kotlinx.coroutines.*;
 
 /**
  * @author silent碎月
@@ -32,11 +27,34 @@ import kotlinx.coroutines.Dispatchers;
 public class CenterThreadPool {
 
     private static final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+    private static CoroutineScope COROUTINE_SCOPE;
+    private static AtomicReference<ExecutorService> threadPool;
 
-    private CenterThreadPool() {
+    private static ExecutorService getThreadPoolInstance() {
+        if(threadPool == null) return null;
+        int bestThreadPoolSize = Runtime.getRuntime().availableProcessors();
+        while (threadPool.get() == null) {
+            threadPool.compareAndSet(null, new ThreadPoolExecutor(
+                    bestThreadPoolSize / 2,
+                    bestThreadPoolSize * 2,
+                    60,
+                    TimeUnit.SECONDS,
+                    new ArrayBlockingQueue<>(20)
+            ));
+        }
+        return threadPool.get();
     }
 
-    private static final CoroutineScope COROUTINE_SCOPE = CoroutineScopeKt.CoroutineScope((CoroutineContext) Dispatchers.getIO());
+    private CenterThreadPool() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            COROUTINE_SCOPE = null;
+            threadPool = new AtomicReference<>();
+        } else {
+            COROUTINE_SCOPE = CoroutineScopeKt.CoroutineScope((CoroutineContext) Dispatchers.getIO());
+            threadPool = null;
+        }
+    }
+
 
     /**
      * 在后台运行, 用于网络请求等耗时操作
@@ -44,15 +62,23 @@ public class CenterThreadPool {
      * @param runnable 要运行的任务
      */
     public static void run(Runnable runnable) {
-        if (Build.VERSION.SDK_INT < 17) {
+        try {
+            //能用协程用协程
+            if (COROUTINE_SCOPE != null) {
+                BuildersKt.launch(COROUTINE_SCOPE, EmptyCoroutineContext.INSTANCE, CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation<? super Unit> continuation) -> {
+                    runnable.run();
+                    return Unit.INSTANCE;
+                });
+                //协程不可用时尝试以原生线程池运行
+            } else if (getThreadPoolInstance() != null) {
+                getThreadPoolInstance().submit(runnable);
+            } else {
+                //都不可用再开线程
+                new Thread(runnable).start();
+            }
+        } catch (Throwable e) {
+            //最后再放手一博
             new Thread(runnable).start();
-        }
-        else{
-            //先将实现切换到协程上，在测试版看看，如果有崩溃，麻烦注释掉以下代码，并恢复原有线程池启动。
-            BuildersKt.launch(COROUTINE_SCOPE, EmptyCoroutineContext.INSTANCE, CoroutineStart.DEFAULT, (CoroutineScope scope, Continuation<? super Unit> continuation) -> {
-                runnable.run();
-                return Unit.INSTANCE;
-            });
         }
     }
 
@@ -64,13 +90,14 @@ public class CenterThreadPool {
      * @param <T>      返回值类型
      * @return LiveData包装的返回值
      */
-    public static <T> LiveData<T> supplyAsyncWithLiveData(Callable<T> supplier) {
-        MutableLiveData<T> retval = new MutableLiveData<>();
+    public static <T> LiveData<Result<T>> supplyAsyncWithLiveData(Callable<T> supplier) {
+        MutableLiveData<Result<T>> retval = new MutableLiveData<>();
         CenterThreadPool.run(() -> {
             try {
                 T res = supplier.call();
-                retval.postValue(res);
-            } catch (Exception e) {
+                retval.postValue(Result.success(res));
+            } catch (Throwable e) {
+                retval.postValue(Result.failure(e));
                 MsgUtil.err(e, BiliTerminal.context);
             }
         });
@@ -127,6 +154,10 @@ public class CenterThreadPool {
      */
     public static void runOnUiThread(Runnable runnable) {
         mainThreadHandler.post(runnable);
+    }
+    public static void runOnUIThreadAfter(Long time, TimeUnit unit, Runnable runnable) {
+        long millis = TimeUnit.MILLISECONDS.convert(time, unit);
+        mainThreadHandler.postDelayed(runnable, millis);
     }
 
 }

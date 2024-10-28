@@ -18,7 +18,6 @@ import com.RobinNotBad.BiliClient.api.ArticleApi;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
-import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.util.AnimationUtils;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -52,35 +51,29 @@ public class ArticleInfoActivity extends BaseActivity {
 
         ViewPager viewPager = findViewById(R.id.viewPager);
 
-        CenterThreadPool.run(() -> {
-            try {
-                ArticleInfo articleInfo = ArticleApi.getArticle(cvid);
-                TerminalContext.getInstance().enterArticleDetailPage(articleInfo);
-                List<Fragment> fragmentList = new ArrayList<>();
-                ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance();
-                fragmentList.add(articleInfoFragment);
-                replyFragment = ReplyFragment.newInstance(cvid, ReplyApi.REPLY_TYPE_ARTICLE, seek_reply, articleInfo != null ? articleInfo.upInfo.mid : -1);
-                fragmentList.add(replyFragment);
-
-                runOnUiThread(() -> {
+        CenterThreadPool
+            .supplyAsyncWithLiveData(() -> ArticleApi.getArticle(cvid))
+            .observe(this, (result) -> {
+                result.onSuccess((articleInfo)-> {
+                    TerminalContext.getInstance().enterArticleDetailPage(articleInfo);
+                    List<Fragment> fragmentList = new ArrayList<>();
+                    ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance();
+                    fragmentList.add(articleInfoFragment);
+                    replyFragment = ReplyFragment.newInstance(cvid, ReplyApi.REPLY_TYPE_ARTICLE, seek_reply, articleInfo != null ? articleInfo.upInfo.mid : -1);
+                    fragmentList.add(replyFragment);
                     ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
                     viewPager.setAdapter(vpfAdapter);
                     View view;
                     if ((view = articleInfoFragment.getView()) != null)
                         view.setVisibility(View.GONE);
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
-
                     articleInfoFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(findViewById(R.id.loading), articleInfoFragment.getView()));
-
                     TutorialHelper.showPagerTutorial(this,2);
-                });
-            } catch (Exception e) {
-                runOnUiThread(() -> {
+                }).onFailure((error) -> {
                     ((ImageView) findViewById(R.id.loading)).setImageResource(R.mipmap.loading_2233_error);
-                    MsgUtil.err(e, this);
+                    MsgUtil.err(error, this);
                 });
-            }
-        });
+            });
     }
 
     @Override
