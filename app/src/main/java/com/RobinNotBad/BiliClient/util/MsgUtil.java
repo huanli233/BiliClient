@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Looper;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -117,6 +118,7 @@ public class MsgUtil {
         snackbar.setBackgroundTint(Color.argb(0x85,0x80,0x80,0x80));
         snackbar.setTextColor(Color.rgb(0xeb,0xe0,0xe2));
         View snackBarView = snackbar.getView();
+        snackBarView.setOnTouchListener((v, event) -> false);
         snackBarView.setPadding(ToolsUtil.dp2px(6, view.getContext()), 0, 0, 0);
         SnackbarContentLayout contentLayout = ((SnackbarContentLayout) ((FrameLayout) snackBarView).getChildAt(0));
 
