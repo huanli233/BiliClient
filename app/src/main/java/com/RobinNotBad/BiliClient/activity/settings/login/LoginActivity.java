@@ -1,8 +1,11 @@
 package com.RobinNotBad.BiliClient.activity.settings.login;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.GridLayout;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -20,8 +23,6 @@ import java.util.List;
 
 public class LoginActivity extends BaseActivity {
 
-    private List<Fragment> fragmentList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,8 +30,13 @@ public class LoginActivity extends BaseActivity {
         Log.e("debug", "进入登录页面");
         setPageName("登录");
 
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            startActivity(new Intent(this, SpecialLoginActivity.class));
+            finish();
+        }
+
         ViewPager viewPager = findViewById(R.id.viewPager);
-        fragmentList = new ArrayList<>();
+        List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new QRLoginFragment());
 
         viewPager.setOffscreenPageLimit(fragmentList.size());

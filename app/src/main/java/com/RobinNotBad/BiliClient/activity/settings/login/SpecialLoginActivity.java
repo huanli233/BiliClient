@@ -41,16 +41,12 @@ public class SpecialLoginActivity extends BaseActivity {
         Intent intent = getIntent();
 
         if (intent.getBooleanExtra("login", true)) {
-            if(intent.getBooleanExtra("allow_refuse", false)) {
-                MaterialCardView refuse = findViewById(R.id.refuse);
-                refuse.setVisibility(View.VISIBLE);
-                refuse.setOnClickListener(v -> {
-                    if (!SharedPreferencesUtil.getBoolean("setup", false)) {
-                        SharedPreferencesUtil.putBoolean("setup", true);
-                        startActivity(new Intent(this,SplashActivity.class));
-                    }
-                });
-            }
+            MaterialCardView refuse = findViewById(R.id.refuse);
+            refuse.setOnClickListener(v -> {
+                if (intent.getBooleanExtra("from_setup", false))
+                    startActivity(new Intent(this, SplashActivity.class));
+                else finish();
+            });
 
             confirm.setOnClickListener(view -> {
                 String loginInfo = textInput.getText().toString();

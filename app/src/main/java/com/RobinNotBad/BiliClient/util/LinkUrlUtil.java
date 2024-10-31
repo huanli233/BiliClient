@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Pair;
-import android.util.Patterns;
 
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
@@ -153,7 +152,7 @@ public class LinkUrlUtil {
             return new Pair<>(matcher.group(), TYPE_UID);
         }
 
-        matcher = (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.STRICT_URL_MATCH, true) ? Pattern.compile("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]") : Patterns.WEB_URL).matcher(item);
+        matcher = Pattern.compile("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]").matcher(item);
         if (matcher.find()) {
             return new Pair<>(matcher.group(), TYPE_WEB_URL);
         }

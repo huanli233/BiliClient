@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
-import com.RobinNotBad.BiliClient.activity.settings.SetupUIActivity;
+import com.RobinNotBad.BiliClient.activity.settings.setup.SetupUIActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;

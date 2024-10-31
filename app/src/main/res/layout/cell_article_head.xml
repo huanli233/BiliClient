@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:paddingBottom="4dp"
     android:paddingHorizontal="@dimen/activity_padding_horizontal"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,7 +10,7 @@
 
     <ImageView
         android:id="@+id/cover"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:adjustViewBounds="true"
@@ -70,7 +71,7 @@
         android:id="@+id/like_coin_fav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/upInfo">
@@ -103,8 +104,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="13sp"
-                    android:text="点赞" />
+                    android:text="点赞"
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -128,8 +129,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="13sp"
-                    android:text="投币" />
+                    android:text="投币"
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -153,15 +154,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="13sp"
-                    android:text="收藏" />
+                    android:text="收藏"
+                    android:textSize="13sp" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
@@ -171,4 +172,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/like_coin_fav" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -21,8 +20,8 @@ import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.util.AnimationUtils;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-
 import com.RobinNotBad.BiliClient.util.TerminalContext;
+
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -35,6 +34,8 @@ public class ArticleInfoActivity extends BaseActivity {
     private ReplyFragment replyFragment;
     private long seek_reply;
 
+    private ImageView loadingView;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,8 @@ public class ArticleInfoActivity extends BaseActivity {
         cvid = intent.getLongExtra("cvid", 114514);
         this.seek_reply = getIntent().getLongExtra("seekReply", -1);
 
-        TextView pageName = findViewById(R.id.pageName);
-        pageName.setText("专栏详情");
+        setPageName("专栏详情");
+        loadingView = findViewById(R.id.loading);
 
         TutorialHelper.showTutorialList(this, R.array.tutorial_article, 7);
 
@@ -53,27 +54,25 @@ public class ArticleInfoActivity extends BaseActivity {
 
         CenterThreadPool
             .supplyAsyncWithLiveData(() -> ArticleApi.getArticle(cvid))
-            .observe(this, (result) -> {
-                result.onSuccess((articleInfo)-> {
-                    TerminalContext.getInstance().enterArticleDetailPage(articleInfo);
-                    List<Fragment> fragmentList = new ArrayList<>();
-                    ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance();
-                    fragmentList.add(articleInfoFragment);
-                    replyFragment = ReplyFragment.newInstance(cvid, ReplyApi.REPLY_TYPE_ARTICLE, seek_reply, articleInfo != null ? articleInfo.upInfo.mid : -1);
-                    fragmentList.add(replyFragment);
-                    ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
-                    viewPager.setAdapter(vpfAdapter);
-                    View view;
-                    if ((view = articleInfoFragment.getView()) != null)
-                        view.setVisibility(View.GONE);
-                    if (seek_reply != -1) viewPager.setCurrentItem(1);
-                    articleInfoFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(findViewById(R.id.loading), articleInfoFragment.getView()));
-                    TutorialHelper.showPagerTutorial(this,2);
-                }).onFailure((error) -> {
-                    ((ImageView) findViewById(R.id.loading)).setImageResource(R.mipmap.loading_2233_error);
-                    MsgUtil.err(error, this);
-                });
-            });
+            .observe(this, (result) -> result.onSuccess((articleInfo)-> {
+                TerminalContext.getInstance().enterArticleDetailPage(articleInfo);
+                List<Fragment> fragmentList = new ArrayList<>();
+                ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance();
+                fragmentList.add(articleInfoFragment);
+                replyFragment = ReplyFragment.newInstance(cvid, ReplyApi.REPLY_TYPE_ARTICLE, seek_reply, articleInfo != null ? articleInfo.upInfo.mid : -1);
+                fragmentList.add(replyFragment);
+                ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
+                viewPager.setAdapter(vpfAdapter);
+                View view;
+                if ((view = articleInfoFragment.getView()) != null)
+                    view.setVisibility(View.GONE);
+                if (seek_reply != -1) viewPager.setCurrentItem(1);
+                articleInfoFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(loadingView, articleInfoFragment.getView()));
+                TutorialHelper.showPagerTutorial(this,2);
+            }).onFailure((error) -> {
+                loadingView.setImageResource(R.mipmap.loading_2233_error);
+                MsgUtil.err(error, this);
+            }));
     }
 
     @Override

@@ -24,7 +24,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
-import android.util.Patterns;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -193,7 +192,7 @@ public class ToolsUtil {
             String text = textView.getText().toString();
             SpannableString spannableString = new SpannableString(textView.getText());
 
-            Pattern urlPattern = SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.STRICT_URL_MATCH, true) ? Pattern.compile("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]") : Patterns.WEB_URL;
+            Pattern urlPattern = Pattern.compile("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]");
             Matcher urlMatcher = urlPattern.matcher(text);
             while (urlMatcher.find()) {
                 int start = urlMatcher.start();

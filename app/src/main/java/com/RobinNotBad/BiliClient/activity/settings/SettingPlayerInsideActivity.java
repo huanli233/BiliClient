@@ -19,7 +19,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 public class SettingPlayerInsideActivity extends BaseActivity {
     private MaterialRadioButton SWtexture, SWsurface, SWhard, SWsoft, SWopensles, SWaudiotrack;
     private EditText DMmaxline, danmakusize, danmakuspeed, danmaku_transparency;
-    private SwitchMaterial fromLast, online_total, SWLClick, SWloop, ui_round, SWbackground, SWautolandscape, SWscale, SWdoublemove, danmaku_allowoverlap, danmaku_mergeduplicate, ui_showRotateBtn, ui_showDanmakuBtn, ui_showLoopBtn, danmaku_showSender, danmaku_forceR2L;
+    private SwitchMaterial fromLast, online_total, SWLClick, SWloop, SWbackground, SWautolandscape, SWscale, SWdoublemove, danmaku_allowoverlap, danmaku_mergeduplicate, ui_showRotateBtn, ui_showDanmakuBtn, ui_showLoopBtn, danmaku_showSender, danmaku_forceR2L;
 
     @SuppressLint({"SetTextI18n", "InflateParams"})
     @Override
@@ -34,7 +34,6 @@ public class SettingPlayerInsideActivity extends BaseActivity {
 
             SWLClick = findViewById(R.id.SWLClick);
             SWloop = findViewById(R.id.SWloop);
-            ui_round = findViewById(R.id.ui_round);
             SWbackground = findViewById(R.id.SWbackground);
             SWautolandscape = findViewById(R.id.SWautolandscape);
             SWscale = findViewById(R.id.SWscale);
@@ -65,7 +64,6 @@ public class SettingPlayerInsideActivity extends BaseActivity {
             SWaudiotrack.setChecked(!SharedPreferencesUtil.getBoolean("player_audio", false));
             SWLClick.setChecked(SharedPreferencesUtil.getBoolean("player_longclick", true));
             SWloop.setChecked(SharedPreferencesUtil.getBoolean("player_loop", false));
-            ui_round.setChecked(SharedPreferencesUtil.getBoolean("player_ui_round", false));
             SWbackground.setChecked(SharedPreferencesUtil.getBoolean("player_background", false));
             SWautolandscape.setChecked(SharedPreferencesUtil.getBoolean("player_autolandscape", false));
             SWscale.setChecked(SharedPreferencesUtil.getBoolean("player_scale", true));
@@ -133,7 +131,6 @@ public class SettingPlayerInsideActivity extends BaseActivity {
             SharedPreferencesUtil.putBoolean("player_danmaku_allowoverlap", danmaku_allowoverlap.isChecked());
             SharedPreferencesUtil.putBoolean("player_danmaku_mergeduplicate", danmaku_mergeduplicate.isChecked());
             SharedPreferencesUtil.putBoolean("player_danmaku_forceR2L", danmaku_forceR2L.isChecked());
-            SharedPreferencesUtil.putBoolean("player_ui_round", ui_round.isChecked());
             SharedPreferencesUtil.putBoolean("player_ui_showRotateBtn", ui_showRotateBtn.isChecked());
             SharedPreferencesUtil.putBoolean("player_ui_showDanmakuBtn", ui_showDanmakuBtn.isChecked());
             SharedPreferencesUtil.putBoolean("player_ui_showLoopBtn", ui_showLoopBtn.isChecked());

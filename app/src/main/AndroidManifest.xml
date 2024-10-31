@@ -220,12 +220,12 @@
             android:label="界面预览"
             android:screenOrientation="locked" />
         <activity
-            android:name=".activity.settings.SetupUIActivity"
+            android:name=".activity.settings.setup.SetupUIActivity"
             android:exported="false"
             android:label="初始设置"
             android:screenOrientation="locked" />
         <activity
-            android:name=".activity.settings.IntroductionActivity"
+            android:name=".activity.settings.setup.IntroductionActivity"
             android:exported="true"
             android:label="介绍"
             android:screenOrientation="locked" />
