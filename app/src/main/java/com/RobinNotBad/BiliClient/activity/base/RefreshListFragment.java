@@ -123,7 +123,7 @@ public class RefreshListFragment extends Fragment {
         return false;
     }
 
-    public void report(Exception e) {
+    public void report(Throwable e) {
         runOnUiThread(() -> MsgUtil.err(e, requireContext()));
     }
 
@@ -133,7 +133,7 @@ public class RefreshListFragment extends Fragment {
         setRefreshing(false);
     }
 
-    public void loadFail(Exception e) {
+    public void loadFail(Throwable e) {
         page--;
         report(e);
         setRefreshing(false);

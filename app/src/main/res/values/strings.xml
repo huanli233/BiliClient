@@ -78,43 +78,35 @@
 
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
-        <item>完善了内置播放器的直播适配</item>
-        <item>支持了直播弹幕(内置播放器特色功能)</item>
-        <item>添加了单独的“我的关注”按钮</item>
-        <item>新增了初步的横屏模式</item>
-        <item>新增了长按视频转发按钮复制完整链接的功能</item>
-        <item>新增了初步的经验值显示</item>
-        <item>新增了用户空间中直播状态的展示</item>
-        <item>实现了用户空间中提示信息的展示</item>
-        <item>实现了大会员状态的显示</item>
-        <item>实现了评论区中粉丝铭牌的显示</item>
-        <item>实现了等级标识的显示</item>
-        <item>实现了播放器的按键控制功能</item>
-        <item>实现了评论区数量的显示</item>
-        <item>修复了视频详情页崩溃的问题</item>
-        <item>修复了评论区排序问题</item>
-        <item>修复了部分情况下未安装对应播放器时闪退的问题</item>
-        <item>修复了捐赠列表内部分捐赠者不显示头像的问题</item>
+        <item>支持了安卓4.0系统</item>
+        <item>实现了播放器字幕</item>
+        <item>修复了视频详情页特殊情况下的崩溃问题</item>
+        <item>修复了因未区分合集类型导致获取不全的问题</item>
+        <item>修复了一些弹幕崩溃问题（但仍然有可能崩）</item>
+        <item>修复了部分设备上播放器横屏状态下退出后，屏幕反复旋转随后崩溃的问题</item>
+        <item>修复了播放器“在线人数”功能中前人留下的奇葩写法（同时修复了本地视频也获取在线人数导致报错的SB问题）</item>
+        <item>优化了播放器圆屏适配</item>
+        <item>优化了播放器右上角电池控件</item>
+        <item>优化了番剧页等处的系统默认弹窗，现在背景为灰色不会亮瞎眼了</item>
+        <item>优化了部分页面的布局方式以减少性能消耗</item>
+        <item>优化了教程使其更清晰且烦人程度略微降低</item>
+        <item>优化了部分代码和数据在页面间的传输方式</item>
+        <item>将某人列为主要开发者</item>
     </string-array>
 
 
     //后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_space">
-        <item>xml/tutorial_space_3</item>
         <item>xml/tutorial_space_2</item>
         <item>xml/tutorial_space</item>
     </array>
     //后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_video">
-        <item>xml/tutorial_video_4</item>
-        <item>xml/tutorial_video_3</item>
         <item>xml/tutorial_video_2</item>
         <item>xml/tutorial_video</item>
     </array>
     //后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_search">
-        <item>xml/tutorial_search_3</item>
-        <item>xml/tutorial_search_2</item>
         <item>xml/tutorial_search</item>
     </array>
     //后来写新功能添加的教程请放在列表的第一个
@@ -154,4 +146,6 @@
         <item>dynamic_info</item>
         <item>article</item>
     </array>
+
+    <string name="tutorial_pager">提示\n\n←这个页面可以左右翻页喵→\n\n（共有NNN页，滑动一下不再显示）</string>
 </resources>

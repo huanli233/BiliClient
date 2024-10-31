@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BangumiInfoFragment extends Fragment {
+    private static final String TAG = "BangumiInfoFragment";
     private long mediaId;
     private int selectedSection = 0, selectedEpisode = 0;
     private Dialog dialog;
@@ -71,15 +74,17 @@ public class BangumiInfoFragment extends Fragment {
         view.setVisibility(View.GONE);
         eposideRecyclerView = rootView.findViewById(R.id.rv_eposide_list);
         //拉数据
-        CenterThreadPool.run(() -> {
-            try {
-                bangumi = BangumiApi.getBangumi(mediaId);
-                if (isAdded()) requireActivity().runOnUiThread(this::initView);
-            } catch (Exception e) {
-                if (isAdded())
-                    requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
-            }
-        });
+        CenterThreadPool
+                .supplyAsyncWithLiveData(() -> BangumiApi.getBangumi(mediaId))
+                .observe(getViewLifecycleOwner(), (result) -> {
+                    result.onSuccess((bangumi) -> {
+                            this.bangumi = bangumi;
+                            initView();
+                    }).onFailure((error) -> {
+                        Log.wtf(TAG, error);
+                        MsgUtil.toast("碰到了些问题：" + error, BiliTerminal.context);
+                    });
+                });
     }
 
     @SuppressLint("SetTextI18n")
@@ -202,7 +207,7 @@ public class BangumiInfoFragment extends Fragment {
     }
 
     private void refreshReplies() {
-        Activity activity = requireActivity();
+        Activity activity = getActivity();
         if (activity instanceof VideoInfoActivity) {
             ((VideoInfoActivity) activity).setCurrentAid(bangumi.sectionList.get(selectedSection).episodeList.get(selectedEpisode).aid);
         }

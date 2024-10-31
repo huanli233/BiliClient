@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tutorial>
-    <name>视频详情页教程2</name>
+    <name>视频详情-零碎问题</name>
     <description>用于引导用户使用视频详情页</description>
     <type>0</type>
     <content>
@@ -14,8 +14,23 @@
             <type>1</type>
         </item>
         <item>
+            <type>1</type>
+        </item>
+        <item>
             <type>0</type>
-            <text>注意：内置播放器退出播放时会上传视频播放进度</text>
+            <text>另外：内置播放器退出播放时会上传视频播放进度</text>
+            <style>italic</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>0</type>
+            <text>另外的另外：长按“转发”按钮可以复制完整的视频链接（小声：应该没多少人会用到</text>
             <style>italic</style>
             <color>#ffffff</color>
         </item>

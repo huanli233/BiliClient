@@ -14,6 +14,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,11 +55,7 @@ import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.api.WatchLaterApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.GlideUtil;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.*;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -77,6 +74,7 @@ import java.util.regex.Pattern;
 //2023-07-17
 
 public class VideoInfoFragment extends Fragment {
+    private static final String TAG = "VideoInfoFragment";
     private VideoInfo videoInfo;
 
     private TextView description;
@@ -98,9 +96,9 @@ public class VideoInfoFragment extends Fragment {
         public void onActivityResult(ActivityResult o) {
             int code = o.getResultCode();
             if (code == RESULT_ADDED) {
-                fav.setBackgroundResource(R.drawable.icon_favourite_1);
+                fav.setImageResource(R.drawable.icon_favourite_1);
             } else if (code == RESULT_DELETED) {
-                fav.setBackgroundResource(R.drawable.icon_favourite_0);
+                fav.setImageResource(R.drawable.icon_favourite_0);
             }
         }
     });
@@ -147,20 +145,18 @@ public class VideoInfoFragment extends Fragment {
     }
 
 
-    public static VideoInfoFragment newInstance(VideoInfo videoInfo) {
+    public static VideoInfoFragment newInstance() {
         VideoInfoFragment fragment = new VideoInfoFragment();
-        Bundle args = new Bundle();
-        args.putParcelable("videoInfo", videoInfo);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
-        if (args != null) {
-            videoInfo = args.getParcelable("videoInfo");
+        try {
+            videoInfo = TerminalContext.getInstance().getCurrentVideo();
+        } catch (TerminalContext.IllegalTerminalStateException e) {
+            Log.wtf(TAG, e);
         }
     }
 
@@ -337,12 +333,11 @@ public class VideoInfoFragment extends Fragment {
                         play();
                         return;
                     }
-                    Intent intent = new Intent();
-                    intent.setClass(view1.getContext(), ImageViewerActivity.class);
-                    ArrayList<String> imageList = new ArrayList<>();
-                    imageList.add(videoInfo.cover);
-                    intent.putExtra("imageList", imageList);
-                    view1.getContext().startActivity(intent);
+                    showCover();
+                });
+                if(clickCoverPlayEnable) cover.setOnLongClickListener(v -> {
+                    showCover();
+                    return true;
                 });
 
                 viewCount.setText(ToolsUtil.toWan(videoInfo.stats.view));
@@ -502,7 +497,7 @@ public class VideoInfoFragment extends Fragment {
                 //转发
                 relay.setOnClickListener((view1) -> {
                     Intent intent = new Intent();
-                    intent.setClass(requireContext(), SendDynamicActivity.class).putExtra("video", (Parcelable) videoInfo);
+                    intent.setClass(requireContext(), SendDynamicActivity.class);
                     writeDynamicLauncher.launch(intent);
                 });
                 relay.setOnLongClickListener(v -> {
@@ -520,7 +515,6 @@ public class VideoInfoFragment extends Fragment {
                     collectionTitle.setText(String.format("合集 · %s", videoInfo.collection.title));
                     collectionCard.setOnClickListener((view1) ->
                             startActivity(new Intent(requireContext(), CollectionInfoActivity.class)
-                                    .putExtra("collection", (Parcelable) videoInfo.collection)
                                     .putExtra("fromVideo", videoInfo.aid)));
                 } else {
                     collectionCard.setVisibility(View.GONE);
@@ -555,7 +549,6 @@ public class VideoInfoFragment extends Fragment {
         if (videoInfo.pagenames.size() > 1) {
             Intent intent = new Intent()
                     .setClass(requireContext(), MultiPageActivity.class)
-                    .putExtra("videoInfo", (Parcelable) videoInfo)
                     .putExtra("progress_cid", progressPair.first)
                     .putExtra("progress", (play_clicked ? -1 : progressPair.second));
             //这里也会传过去，如果后面选择当页就不再获取直接传，选择其他页就传-1剩下的交给解析页
@@ -565,5 +558,16 @@ public class VideoInfoFragment extends Fragment {
             //避免重复获取的同时保证播放进度是新的，如果是-1会在解析页里再获取一次
         }
         play_clicked = true;
+    }
+
+    private void showCover(){
+        try {
+            Intent intent = new Intent();
+            intent.setClass(requireContext(), ImageViewerActivity.class);
+            ArrayList<String> imageList = new ArrayList<>();
+            imageList.add(videoInfo.cover);
+            intent.putExtra("imageList", imageList);
+            requireContext().startActivity(intent);
+        } catch (Exception ignored){}
     }
 }

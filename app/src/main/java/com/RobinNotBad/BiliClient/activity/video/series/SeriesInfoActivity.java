@@ -11,12 +11,12 @@ import com.RobinNotBad.BiliClient.api.SeriesApi;
 import com.RobinNotBad.BiliClient.model.PageInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import java.util.ArrayList;
 
 public class SeriesInfoActivity extends RefreshListActivity {
 
+    private String type;
     private long mid;
     private int sid;
     private ArrayList<VideoCard> videoList;
@@ -28,8 +28,7 @@ public class SeriesInfoActivity extends RefreshListActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        String type = intent.getStringExtra("type");
-        if(type.equals("season")) MsgUtil.showMsg("此类型暂不支持！",this);
+        type = intent.getStringExtra("type");
 
         mid = intent.getLongExtra("mid", 0);
         sid = intent.getIntExtra("sid", 0);
@@ -41,7 +40,7 @@ public class SeriesInfoActivity extends RefreshListActivity {
 
         CenterThreadPool.run(() -> {
             try {
-                PageInfo pageInfo = SeriesApi.getSeriesInfo(mid, sid, page, videoList);
+                PageInfo pageInfo = SeriesApi.getSeriesInfo(type, mid, sid, page, videoList);
                 if (pageInfo.return_ps != 0) {
                     videoCardAdapter = new VideoCardAdapter(this, videoList);
 
@@ -70,7 +69,7 @@ public class SeriesInfoActivity extends RefreshListActivity {
             try {
                 Log.e("debug", "下一页");
                 int lastSize = videoList.size();
-                PageInfo pageInfo = SeriesApi.getSeriesInfo(mid, sid, page, videoList);
+                PageInfo pageInfo = SeriesApi.getSeriesInfo(type, mid, sid, page, videoList);
                 runOnUiThread(() -> videoCardAdapter.notifyItemRangeInserted(lastSize, pageInfo.return_ps));
 
                 if (pageInfo.return_ps < pageInfo.require_ps || pageInfo.return_ps == 0) {

@@ -15,6 +15,7 @@ import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +100,7 @@ public class ReplyFragment extends RefreshListFragment {
             seek = getArguments().getLong("seek", -1);
             mid = getArguments().getLong("mid", -1);
         }
+        this.source = TerminalContext.getInstance().getSource();
     }
 
     @Override
@@ -121,6 +123,7 @@ public class ReplyFragment extends RefreshListFragment {
                     setRefreshing(false);
                     if (result != -1 && isAdded()) {
                         replyAdapter = createReplyAdapter();
+                        replyAdapter.source = TerminalContext.getInstance().getSource();
                         setOnSortSwitch();
                         setAdapter(replyAdapter);
 
@@ -134,11 +137,6 @@ public class ReplyFragment extends RefreshListFragment {
                 }
             });
         }
-    }
-
-    public void setSource(Object source) {
-        this.source = source;
-        if (replyAdapter != null) replyAdapter.source = source;
     }
 
     private ReplyAdapter createReplyAdapter() {

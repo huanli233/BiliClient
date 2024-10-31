@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -31,13 +32,7 @@ import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.EmoteUtil;
-import com.RobinNotBad.BiliClient.util.GlideUtil;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.*;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -86,8 +81,13 @@ public class SendDynamicActivity extends BaseActivity {
             MaterialCardView send = findViewById(R.id.send);
 
             ConstraintLayout extraCard = findViewById(R.id.extraCard);
-            Dynamic forward = (Dynamic) getIntent().getParcelableExtra("forward");
-            VideoInfo video = (VideoInfo) getIntent().getParcelableExtra("video");
+            VideoInfo video = null;
+            Dynamic forward = null;
+            if(TerminalContext.getInstance().getForwardContent() instanceof VideoInfo) {
+                video = (VideoInfo) TerminalContext.getInstance().getForwardContent();
+            } else {
+                forward = (Dynamic) TerminalContext.getInstance().getForwardContent();
+            }
             if (forward != null) {
                 View childCard = View.inflate(this, R.layout.cell_dynamic_child, extraCard);
                 showChildDyn(childCard, forward);

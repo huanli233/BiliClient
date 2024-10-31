@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tutorial>
-    <name>推荐页面教程</name>
+    <name>推荐页面-重要教程</name>
     <description>用于引导用户使用推荐页面和哔哩终端</description>
     <type>0</type>
     <img>mipmap/tutorial_recommend</img>
@@ -43,7 +43,31 @@
         </item>
         <item>
             <type>0</type>
-            <text>推荐列表划到顶部后可以继续下拉刷新</text>
+            <text>（小提示：整个顶栏都能点！不必一直费劲地点左上角哦~）</text>
+            <style>none</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>0</type>
+            <text>一些列表划到顶部后可以下拉刷新（如推荐和评论区）</text>
+            <style>none</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>0</type>
+            <text>你可能会在后续看到很多这样的教程弹窗，我们承认这可能有些烦人，但这是必要的！我们不希望你成为下一位来问我们“评论区怎么看”这类已有教程的问题的人！</text>
             <style>none</style>
             <color>#ffffff</color>
         </item>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tutorial>
-    <name>视频详情页教程</name>
+    <name>视频详情-主要教程</name>
     <description>用于引导用户使用视频详情页</description>
     <type>0</type>
     <img>mipmap/tutorial_video</img>
@@ -31,7 +31,7 @@
         </item>
         <item>
             <type>0</type>
-            <text>点击下方播放按钮播放视频，点击封面查看大图</text>
+            <text>点击下方播放按钮播放视频，点击封面查看大图（若你首次使用时直接点击了封面，以后点击封面也将会变成播放视频，而长按封面才会查看大图）</text>
             <style>none</style>
             <color>#ffffff</color>
         </item>
@@ -51,6 +51,18 @@
             <type>0</type>
             <text>直接跳转到搜索页</text>
             <style>bold</style>
+            <color>#ffffff</color>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>1</type>
+        </item>
+        <item>
+            <type>0</type>
+            <text>你可能会在后续看到很多这样的教程弹窗，我们承认这可能有些烦人，但这是必要的！我们不希望你成为下一位来问我们“评论区怎么看”这类已有教程的问题的人！</text>
+            <style>none</style>
             <color>#ffffff</color>
         </item>
     </content>

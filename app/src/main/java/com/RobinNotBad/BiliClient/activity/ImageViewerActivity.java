@@ -1,7 +1,11 @@
 package com.RobinNotBad.BiliClient.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
+
+import androidx.viewpager.widget.ViewPager;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
@@ -34,6 +38,7 @@ public class ImageViewerActivity extends BaseActivity {
         ArrayList<String> imageList = intent.getStringArrayListExtra("imageList");
 
         PhotoViewpager viewPager = findViewById(R.id.viewPager);
+        TextView textView = findViewById(R.id.text_page);
 
         List<PhotoView> photoViewList = new ArrayList<>();
 
@@ -74,6 +79,25 @@ public class ImageViewerActivity extends BaseActivity {
         ViewPagerImageAdapter vpiAdapter = new ViewPagerImageAdapter(photoViewList);
 
         viewPager.setAdapter(vpiAdapter);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if(positionOffset % 1 == 0)
+                    textView.setText("第" + (position + 1) + "/" + imageList.size() + "张");
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
 

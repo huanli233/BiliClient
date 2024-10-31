@@ -48,4 +48,15 @@
         android:src="@mipmap/loading_2233"
         android:layout_below="@id/top"/>
 
+    <TextView
+        android:id="@+id/text_tutorial_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/top"
+        android:visibility="gone"
+        android:background="#6000"
+        android:clickable="false"
+        android:gravity="center"
+        android:text="@string/tutorial_pager" />
+
 </RelativeLayout>

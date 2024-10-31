@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.reply.ReplyFragment;
@@ -18,11 +19,7 @@ import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
-import com.RobinNotBad.BiliClient.model.VideoInfo;
-import com.RobinNotBad.BiliClient.util.AnimationUtils;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.*;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -30,6 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 //视频详情页，但这只是个壳，瓤是VideoInfoFragment、VideoReplyFragment、VideoRcmdFragment
 
@@ -93,6 +91,7 @@ public class VideoInfoActivity extends BaseActivity {
 
     protected void initVideoInfoView() {
         TutorialHelper.showTutorialList(this, R.array.tutorial_video, 1);
+        TutorialHelper.showPagerTutorial(this, 3);
 
         ViewPager viewPager = findViewById(R.id.viewPager);
         TextView pageName = findViewById(R.id.pageName);
@@ -100,25 +99,20 @@ public class VideoInfoActivity extends BaseActivity {
         findViewById(R.id.top).setOnClickListener(view -> finish());
         loading.setVisibility(View.VISIBLE);
         pageName.setText("视频详情");
-
-        CenterThreadPool.run(() -> {
-            JSONObject data;
-            try {
-                VideoInfo videoInfo;
-                if (TextUtils.isEmpty(bvid)) data = VideoInfoApi.getJsonByAid(aid);
-                else data = VideoInfoApi.getJsonByBvid(bvid);
-                if (data == null) {
-                    loading.setImageResource(R.mipmap.loading_2233_error);
-                    runOnUiThread(() ->
-                            MsgUtil.showMsg("获取信息失败！\n可能是视频不存在？", this));
-                    return;
-                }
-                videoInfo = VideoInfoApi.getInfoByJson(data);
-
+        CenterThreadPool.supplyAsyncWithLiveData(() -> {
+           JSONObject data;
+            if (TextUtils.isEmpty(bvid)) data = VideoInfoApi.getJsonByAid(aid);
+            else data = VideoInfoApi.getJsonByBvid(bvid);
+            if (data == null) {
+                return null;
+            }
+            return VideoInfoApi.getInfoByJson(data);
+        }).observe(this, (result) -> {
+            result.onSuccess((videoInfo) -> {
+                TerminalContext.getInstance().enterVideoDetailPage(videoInfo);
                 fragmentList = new ArrayList<>(3);
-                fragmentList.add(VideoInfoFragment.newInstance(videoInfo));
+                fragmentList.add(VideoInfoFragment.newInstance());
                 replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1, seek_reply, videoInfo.staff.get(0).mid);
-                replyFragment.setSource(videoInfo);
                 fragmentList.add(replyFragment);
                 if (SharedPreferencesUtil.getBoolean("related_enable", true)) {
                     VideoRcmdFragment vrFragment = VideoRcmdFragment.newInstance(videoInfo.aid);
@@ -126,26 +120,19 @@ public class VideoInfoActivity extends BaseActivity {
                 }
                 viewPager.setOffscreenPageLimit(fragmentList.size());
                 ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
-                runOnUiThread(() -> {
-                    viewPager.setAdapter(vpfAdapter);
-                    View view;
-                    if ((view = fragmentList.get(0).getView()) != null)
-                        view.setVisibility(View.GONE);
-                    if (seek_reply != -1) viewPager.setCurrentItem(1);
-                    if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
-                        MsgUtil.showMsgLong("提示：本页面可以左右滑动", this);
-                        SharedPreferencesUtil.putBoolean("first_videoinfo", false);
-                    }
-                    AnimationUtils.crossFade(loading, fragmentList.get(0).getView());
+                viewPager.setAdapter(vpfAdapter);
+                View view;
+                if ((view = fragmentList.get(0).getView()) != null)
+                    view.setVisibility(View.GONE);
+                if (seek_reply != -1) viewPager.setCurrentItem(1);
+                AnimationUtils.crossFade(loading, fragmentList.get(0).getView());
+            }).onFailure((error) -> {
+                loading.setImageResource(R.mipmap.loading_2233_error);
+                MsgUtil.showMsg("获取信息失败！\n可能是视频不存在？", BiliTerminal.context);
+                CenterThreadPool.runOnUIThreadAfter(5L, TimeUnit.SECONDS, ()-> {
+                    MsgUtil.err(error, BiliTerminal.context);
                 });
-                //没啥好说的，教科书式的ViewPager使用方法
-            } catch (Exception e) {
-                runOnUiThread(() -> {
-                    loading.setImageResource(R.mipmap.loading_2233_error);
-                    e.printStackTrace();
-                    MsgUtil.err(e, this);
-                });
-            }
+            });
         });
     }
 
@@ -163,4 +150,9 @@ public class VideoInfoActivity extends BaseActivity {
         replyFragment.notifyReplyInserted(event);
     }
 
+    @Override
+    protected void onDestroy() {
+        TerminalContext.getInstance().leaveDetailPage();
+        super.onDestroy();
+    }
 }

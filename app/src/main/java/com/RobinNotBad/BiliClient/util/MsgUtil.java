@@ -7,11 +7,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Looper;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -115,31 +114,30 @@ public class MsgUtil {
     @SuppressLint({"ClickableViewAccessibility", "RestrictedApi"})
     public static Snackbar createSnack(View view, CharSequence text, int duration, Action action) {
         Snackbar snackbar;
-        (snackbar = Snackbar.make(view, text, duration))
-                .setBackgroundTint(Color.parseColor("#85808080"));
-        if (action != null) snackbar.setAction(action.getText(), action.getOnClickListener());
-        else if (duration == Snackbar.LENGTH_INDEFINITE || duration >= 5000)
-            snackbar.setAction("x", (view1 -> snackbar.dismiss()));
+        snackbar = Snackbar.make(view, text, duration);
+        snackbar.setBackgroundTint(Color.argb(0x85,0x80,0x80,0x80));
+        snackbar.setTextColor(Color.rgb(0xeb,0xe0,0xe2));
         View snackBarView = snackbar.getView();
-        snackBarView.setOnTouchListener(((view12, motionEvent) -> false));
+        snackBarView.setOnTouchListener((v, event) -> false);
+        snackBarView.setPadding(ToolsUtil.dp2px(6, view.getContext()), 0, 0, 0);
         SnackbarContentLayout contentLayout = ((SnackbarContentLayout) ((FrameLayout) snackBarView).getChildAt(0));
-        Button actionView = contentLayout.getActionView();
-        //actionView.setTextSize(ToolsUtil.sp2px(13, view.getContext()));
-        actionView.setMinWidth(ToolsUtil.dp2px(30, view.getContext()));
-        actionView.setMinimumWidth(ToolsUtil.dp2px(30, view.getContext()));
-        actionView.setMaxWidth(ToolsUtil.dp2px(48, view.getContext()));
-        actionView.setPadding(0, 0, ToolsUtil.dp2px(4, view.getContext()), 0);
-        actionView.setPaddingRelative(0, 0, ToolsUtil.dp2px(4, view.getContext()), 0);
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) actionView.getLayoutParams();
-        layoutParams.setMarginStart(0);
-        layoutParams.setMargins(0, layoutParams.topMargin, layoutParams.rightMargin, layoutParams.bottomMargin);
+
+        if (action != null) snackbar.setAction(action.getText(), action.getOnClickListener());
+        else if (duration == Snackbar.LENGTH_INDEFINITE || duration >= 5000) {
+            snackbar.setAction("x", (view1 -> snackbar.dismiss()));
+            Button actionView = contentLayout.getActionView();
+            //actionView.setTextSize(ToolsUtil.sp2px(13, view.getContext()));
+            actionView.setMinWidth(ToolsUtil.dp2px(30, view.getContext()));
+            actionView.setMinimumWidth(ToolsUtil.dp2px(30, view.getContext()));
+            actionView.setMaxWidth(ToolsUtil.dp2px(48, view.getContext()));
+            actionView.setPadding(0, 0, ToolsUtil.dp2px(4, view.getContext()), 0);
+        }
+
         TextView msgView = contentLayout.getMessageView();
         msgView.setTextSize(13);
-        msgView.setTypeface(null, Typeface.BOLD);
+        msgView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         msgView.setPadding(0, 0, ToolsUtil.dp2px(4, view.getContext()), 0);
-        msgView.setPaddingRelative(0, 0, ToolsUtil.dp2px(4, view.getContext()), 0);
-        ((ViewGroup.MarginLayoutParams) msgView.getLayoutParams()).setMargins(0, 0, 0, 0);
-        snackBarView.setPadding(ToolsUtil.dp2px(6, view.getContext()), 0, 0, 0);
+
         return snackbar;
     }
 

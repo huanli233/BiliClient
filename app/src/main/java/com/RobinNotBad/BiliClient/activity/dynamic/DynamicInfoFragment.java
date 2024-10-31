@@ -10,16 +10,20 @@ import android.widget.ScrollView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicHolder;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 
 //真正的视频详情页
 //2023-07-17
 
 public class DynamicInfoFragment extends Fragment {
+    private static final String TAG = "DynamicInfoFragment";
 
     Dynamic dynamic;
     Runnable onFinishLoad;
@@ -28,19 +32,18 @@ public class DynamicInfoFragment extends Fragment {
     public DynamicInfoFragment() {
     }
 
-    public static DynamicInfoFragment newInstance(Dynamic dynamic) {
-        DynamicInfoFragment fragment = new DynamicInfoFragment();
-        Bundle args = new Bundle();
-        args.putParcelable("dynamic", dynamic);
-        fragment.setArguments(args);
-        return fragment;
+    public static DynamicInfoFragment newInstance() {
+        return new DynamicInfoFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            this.dynamic = (Dynamic) getArguments().getParcelable("dynamic");
+        try {
+            dynamic = TerminalContext.getInstance().getCurrentDynamic();
+        } catch (TerminalContext.IllegalTerminalStateException e) {
+            Log.wtf(TAG, e);
+            MsgUtil.toast("找不到动态信息QAQ", BiliTerminal.context);
         }
     }
 
