@@ -145,7 +145,7 @@ public class MsgUtil {
         Log.e("BiliClient", e.getMessage(), e);
         if (e instanceof IOException) showMsg("网络错误(＃°Д°)", context);
         else if (e instanceof JSONException) {
-            if (SharedPreferencesUtil.getBoolean("develop_error_detailed", false)) {
+            if (SharedPreferencesUtil.getBoolean("dev_jsonerr_detailed", false)) {
                 Writer writer = new StringWriter();
                 PrintWriter printWriter = new PrintWriter(writer);
                 e.printStackTrace(printWriter);

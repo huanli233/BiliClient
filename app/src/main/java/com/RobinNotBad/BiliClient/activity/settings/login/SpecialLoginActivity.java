@@ -36,12 +36,12 @@ public class SpecialLoginActivity extends BaseActivity {
 
         textInput = findViewById(R.id.loginInput);
         MaterialCardView confirm = findViewById(R.id.confirm);
+        MaterialCardView refuse = findViewById(R.id.refuse);
         TextView desc = findViewById(R.id.desc);
 
         Intent intent = getIntent();
 
         if (intent.getBooleanExtra("login", true)) {
-            MaterialCardView refuse = findViewById(R.id.refuse);
             refuse.setOnClickListener(v -> {
                 if (intent.getBooleanExtra("from_setup", false))
                     startActivity(new Intent(this, SplashActivity.class));
@@ -87,6 +87,7 @@ public class SpecialLoginActivity extends BaseActivity {
             }
             textInput.setText(jsonObject.toString());
             textInput.clearFocus();
+            refuse.setVisibility(View.GONE);
             confirm.setOnClickListener((view) -> {
                 ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clipData = ClipData.newPlainText("label", textInput.getText());

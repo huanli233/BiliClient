@@ -1,14 +1,10 @@
 package com.RobinNotBad.BiliClient.activity.video.local;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -17,7 +13,6 @@ import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.video.LocalVideoAdapter;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.model.LocalVideo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
@@ -62,11 +57,11 @@ public class LocalListActivity extends InstanceActivity {
 
         CenterThreadPool.run(() -> {
             runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
-            scan(ConfInfoApi.getDownloadPath(this));
+            scan(BiliTerminal.getDownloadPath(this));
             adapter = new LocalVideoAdapter(this, videoList);
             adapter.setOnLongClickListener(position -> {
                 if (longClickPosition == position) {
-                    File file = new File(ConfInfoApi.getDownloadPath(this), videoList.get(position).title);
+                    File file = new File(BiliTerminal.getDownloadPath(this), videoList.get(position).title);
                     CenterThreadPool.run(() -> FileUtil.deleteFolder(file));
                     MsgUtil.showMsg("删除成功", this);
                     videoList.remove(position);
@@ -148,7 +143,7 @@ public class LocalListActivity extends InstanceActivity {
             runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
             int oldSize = videoList.size();
             videoList.clear();
-            scan(ConfInfoApi.getDownloadPath(this));
+            scan(BiliTerminal.getDownloadPath(this));
             runOnUiThread(() -> {
                 adapter.notifyItemRangeChanged(0, oldSize);
                 swipeRefreshLayout.setRefreshing(false);

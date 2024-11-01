@@ -1,8 +1,6 @@
 package com.RobinNotBad.BiliClient.api;
 
-import android.content.Context;
 import android.net.Uri;
-import android.os.Environment;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -12,7 +10,6 @@ import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -32,9 +29,6 @@ import okhttp3.HttpUrl;
  */
 
 public class ConfInfoApi {
-    public static File getDownloadPath(Context context) {
-        return new File(Environment.getExternalStorageDirectory() + "/Android/media/" + context.getPackageName() + "/");
-    }
 
 
     /*

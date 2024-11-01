@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 
 import androidx.annotation.Nullable;
@@ -22,6 +23,7 @@ import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 
 public class BiliTerminal extends Application {
@@ -123,5 +125,9 @@ public class BiliTerminal extends Application {
 
     public static int getSystemSdk(){
         return Build.VERSION.SDK_INT;
+    }
+
+    public static File getDownloadPath(Context context) {
+        return new File(SharedPreferencesUtil.getString("save_path_video",Environment.getExternalStorageDirectory() + "/Android/media/" + context.getPackageName() + "/"));
     }
 }

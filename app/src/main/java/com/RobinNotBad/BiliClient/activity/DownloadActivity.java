@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -91,7 +91,7 @@ public class DownloadActivity extends BaseActivity {
                 downFile = new File(rootPath, title);
                 download(link, downFile, "下载文件中", true);
             } else {
-                rootPath = ConfInfoApi.getDownloadPath(this);
+                rootPath = BiliTerminal.getDownloadPath(this);
 
                 if (type == 1) {
                     downPath = new File(rootPath, title);

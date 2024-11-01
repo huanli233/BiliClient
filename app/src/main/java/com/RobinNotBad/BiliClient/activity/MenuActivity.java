@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -185,6 +186,12 @@ public class MenuActivity extends BaseActivity {
             add("local");
             add("settings");
         }};
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_MENU) finish();
+        return super.onKeyDown(keyCode, event);
     }
 }
 

@@ -46,7 +46,6 @@ import com.RobinNotBad.BiliClient.activity.video.QualityChooserActivity;
 import com.RobinNotBad.BiliClient.activity.video.collection.CollectionInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.user.UpListAdapter;
 import com.RobinNotBad.BiliClient.api.BangumiApi;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.LikeCoinFavApi;
@@ -146,8 +145,7 @@ public class VideoInfoFragment extends Fragment {
 
 
     public static VideoInfoFragment newInstance() {
-        VideoInfoFragment fragment = new VideoInfoFragment();
-        return fragment;
+        return new VideoInfoFragment();
     }
 
     @Override
@@ -476,7 +474,7 @@ public class VideoInfoFragment extends Fragment {
                     if (!BiliTerminal.checkStoragePermission()) {
                         BiliTerminal.requestStoragePermission(requireActivity());
                     } else {
-                        File downPath = new File(ConfInfoApi.getDownloadPath(requireContext()), ToolsUtil.stringToFile(videoInfo.title));
+                        File downPath = new File(BiliTerminal.getDownloadPath(requireContext()), ToolsUtil.stringToFile(videoInfo.title));
 
                         if (downPath.exists() && videoInfo.pagenames.size() == 1)
                             MsgUtil.showMsg("已经缓存过了~", requireContext());

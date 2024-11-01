@@ -9,10 +9,10 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.video.PageChooseAdapter;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -53,7 +53,7 @@ public class MultiPageActivity extends BaseActivity {
 
         if (intent.getIntExtra("download", 0) == 1) {    //下载模式
             adapter.setOnItemClickListener(position -> {
-                File rootPath = new File(ConfInfoApi.getDownloadPath(this), ToolsUtil.stringToFile(videoInfo.title));
+                File rootPath = new File(BiliTerminal.getDownloadPath(this), ToolsUtil.stringToFile(videoInfo.title));
                 File downPath = new File(rootPath, ToolsUtil.stringToFile(videoInfo.pagenames.get(position)));
                 if (downPath.exists()) MsgUtil.showMsg("已经缓存过了~", this);
                 else {
