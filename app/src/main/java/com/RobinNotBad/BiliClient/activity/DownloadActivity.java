@@ -8,14 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -28,8 +26,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.zip.Inflater;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 import okio.BufferedSink;
 import okio.Okio;
@@ -86,12 +82,12 @@ public class DownloadActivity extends BaseActivity {
         timer.schedule(showText, 100, 100);
         CenterThreadPool.run(() -> {
             if (type == 0) {
-                rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "BiliClient");
+                rootPath = FileUtil.getDownloadPicturePath(this);
                 if (!rootPath.exists()) rootPath.mkdirs();
                 downFile = new File(rootPath, title);
                 download(link, downFile, "下载文件中", true);
             } else {
-                rootPath = BiliTerminal.getDownloadPath(this);
+                rootPath = FileUtil.getDownloadPath(this);
 
                 if (type == 1) {
                     downPath = new File(rootPath, title);
@@ -120,15 +116,8 @@ public class DownloadActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     private void download(String url, File file, String desc, boolean exitOnFinish) {
         dldText = desc;
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder().url(url)
-                .addHeader("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""))
-                .addHeader("Connection", "Keep-Alive")
-                .addHeader("User-Agent", NetWorkUtil.USER_AGENT_WEB)
-                .addHeader("Referer", "https://www.bilibili.com/")
-                .build();
         try {
-            Response response = okHttpClient.newCall(request).execute();
+            Response response = NetWorkUtil.get(url);
             if (!file.exists()) file.createNewFile();
             InputStream inputStream = Objects.requireNonNull(response.body()).byteStream();
             FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -162,15 +151,8 @@ public class DownloadActivity extends BaseActivity {
 
 
     private void downdanmu(String danmaku, File danmakuFile) {
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder().url(danmaku)
-                .addHeader("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""))
-                .addHeader("Connection", "Keep-Alive")
-                .addHeader("User-Agent", NetWorkUtil.USER_AGENT_WEB)
-                .addHeader("Referer", "https://www.bilibili.com/")
-                .build();
         try {
-            Response response = okHttpClient.newCall(request).execute();
+            Response response = NetWorkUtil.get(danmaku);
             BufferedSink bufferedSink = null;
             try {
                 if (!danmakuFile.exists()) danmakuFile.createNewFile();

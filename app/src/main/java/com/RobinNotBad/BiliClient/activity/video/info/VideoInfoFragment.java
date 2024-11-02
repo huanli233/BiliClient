@@ -34,7 +34,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
@@ -471,10 +470,10 @@ public class VideoInfoFragment extends Fragment {
                 });
 
                 download.setOnClickListener(view1 -> {
-                    if (!BiliTerminal.checkStoragePermission()) {
-                        BiliTerminal.requestStoragePermission(requireActivity());
+                    if (!FileUtil.checkStoragePermission()) {
+                        FileUtil.requestStoragePermission(requireActivity());
                     } else {
-                        File downPath = new File(BiliTerminal.getDownloadPath(requireContext()), ToolsUtil.stringToFile(videoInfo.title));
+                        File downPath = new File(FileUtil.getDownloadPath(requireContext()), ToolsUtil.stringToFile(videoInfo.title));
 
                         if (downPath.exists() && videoInfo.pagenames.size() == 1)
                             MsgUtil.showMsg("已经缓存过了~", requireContext());

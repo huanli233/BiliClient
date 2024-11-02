@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.video.LocalVideoAdapter;
@@ -51,17 +50,17 @@ public class LocalListActivity extends InstanceActivity {
         TextView pageName = findViewById(R.id.pageName);
         pageName.setText("缓存");
 
-        if (!BiliTerminal.checkStoragePermission()) {
-            BiliTerminal.requestStoragePermission(this);
+        if (!FileUtil.checkStoragePermission()) {
+            FileUtil.requestStoragePermission(this);
         }
 
         CenterThreadPool.run(() -> {
             runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
-            scan(BiliTerminal.getDownloadPath(this));
+            scan(FileUtil.getDownloadPath(this));
             adapter = new LocalVideoAdapter(this, videoList);
             adapter.setOnLongClickListener(position -> {
                 if (longClickPosition == position) {
-                    File file = new File(BiliTerminal.getDownloadPath(this), videoList.get(position).title);
+                    File file = new File(FileUtil.getDownloadPath(this), videoList.get(position).title);
                     CenterThreadPool.run(() -> FileUtil.deleteFolder(file));
                     MsgUtil.showMsg("删除成功", this);
                     videoList.remove(position);
@@ -143,7 +142,7 @@ public class LocalListActivity extends InstanceActivity {
             runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
             int oldSize = videoList.size();
             videoList.clear();
-            scan(BiliTerminal.getDownloadPath(this));
+            scan(FileUtil.getDownloadPath(this));
             runOnUiThread(() -> {
                 adapter.notifyItemRangeChanged(0, oldSize);
                 swipeRefreshLayout.setRefreshing(false);

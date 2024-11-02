@@ -141,22 +141,25 @@ public class MsgUtil {
         return snackbar;
     }
 
-    public static void err(Throwable e, Context context) {
+    public static void err(Throwable e, Context context){
+        err("",e,context);
+    }
+    public static void err(String desc, Throwable e, Context context) {
         Log.e("BiliClient", e.getMessage(), e);
-        if (e instanceof IOException) showMsg("网络错误(＃°Д°)", context);
+        if (e instanceof IOException) showMsg(desc + "网络错误(＃°Д°)", context);
         else if (e instanceof JSONException) {
             if (SharedPreferencesUtil.getBoolean("dev_jsonerr_detailed", false)) {
                 Writer writer = new StringWriter();
                 PrintWriter printWriter = new PrintWriter(writer);
                 e.printStackTrace(printWriter);
-                showText(context, "数据解析错误", writer.toString());
+                showText(context, desc + "数据解析错误", writer.toString());
             } else if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                showMsgLong("解析错误，可登陆后再次尝试", context);
+                showMsgLong(desc + "解析错误，可登陆后再次尝试", context);
             } else if (e.toString().replace("org.json.JSONException:", "").contains("-352"))
-                showMsgLong("账号疑似被风控", context);
+                showMsgLong(desc + "账号疑似被风控", context);
             else
-                showMsgLong("数据解析错误：\n" + e.toString().replace("org.json.JSONException:", ""), context);
-        } else showMsgLong("错误：" + e, context);
+                showMsgLong(desc + "数据解析错误：\n" + e.toString().replace("org.json.JSONException:", ""), context);
+        } else showMsgLong(desc + "错误：" + e, context);
     }
 
     public static void showText(Context context, String title, String text) {
