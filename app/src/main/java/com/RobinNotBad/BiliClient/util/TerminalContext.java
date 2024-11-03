@@ -18,7 +18,21 @@ import org.json.JSONObject;
 import java.util.Stack;
 import java.util.concurrent.Future;
 
+/**
+ * @author silent碎月
+ * @date 2024/11/03
+ * 哔哩终端的中央上下文，所有不方便传的
+ * 希望在任何地方都能拿得到，不想再额外建工具类的话
+ * 扔这里就好，这里是屎山的集中地
+ * 所有的工具类，也可以往这里扔一个实现
+ */
 public class TerminalContext {
+
+    /**
+     * 详情页的中央上下文
+     */
+
+    // 详情页的类型
     enum DetailType {
         None,
         Video,
@@ -27,20 +41,26 @@ public class TerminalContext {
         Live,
     }
 
+    //当前的详情页类型以及数据源
     private DetailType currentDetailType = DetailType.None;
     private LiveData<Result<Object>> source;
+
+    //要转发的东西的数据源
     private Object forwardContent;
+
     /**
      * 详情页以及对应数据对象的存储， 每进入一个页面，例如动态，动态点击进入视频， 视频下面有个专栏
      * 然后再返回，此时的逻辑就是像栈一样。
      */
     private final Stack<Pair<DetailType, LiveData<Result<Object>>>> stateStack;
 
+
     private TerminalContext() {
         source = null;
         stateStack = new Stack<>();
     }
 
+    // ------------------------转发功能数据源上下文 start-------------------------------
     public void setForwardContent(Object forwardContent) {
         this.forwardContent = forwardContent;
     }
@@ -48,7 +68,9 @@ public class TerminalContext {
     public Object getForwardContent() {
         return forwardContent;
     }
+    //-------------------------转发功能数据源上下文 end ----------------------------------
 
+    // --------------------------详情页跳转功能 start  ----------------------------------
     // 视频详情页跳转
     public void enterVideoDetailPage(Context context, long aid){
         enterVideoDetailPage(context, aid, null, "video", -1);
@@ -125,6 +147,7 @@ public class TerminalContext {
         intent.putExtra("seekReply", seekReply);
         context.startActivity(intent);
     }
+
     /*
      * 由于动态有可删除的特性，部分页面依赖动态页面activity的result实现页面更新，这里加入额外的一个兼容方法
      */
@@ -139,6 +162,11 @@ public class TerminalContext {
         activity.startActivityForResult(intent, requestId);
     }
 
+    /**
+     * 进行一个直播详情页的启动
+     * @param context Android上下文对象
+     * @param roomId 直播房间号
+     */
     public void enterLiveDetailPage(Context context, long roomId) {
         LiveData<Result<Object>> liveInfo = CenterThreadPool.supplyAsyncWithLiveData(() -> {
             //同时下载UserInfo跟LivePlayInfo
@@ -161,7 +189,11 @@ public class TerminalContext {
         intent.putExtra("room_id", roomId);
         context.startActivity(intent);
     }
+    // ---------------------------详情页跳转功能 end---------------------------------------
 
+    /**
+     * 退出详情页的调用，所有启动详情页的Activity中需要再onDestroy的回调中调用该方法，释放自己的上下文对象
+     */
     public void leaveDetailPage() {
         if (stateStack.isEmpty()) {
            currentDetailType = DetailType.None;
@@ -178,6 +210,7 @@ public class TerminalContext {
             this.source = previousState.second;
         }
     }
+    // ----------------------------详情页数据源上下文 ----------------------------------------
     public LiveData<Result<VideoInfo>> getCurrentVideoLiveData() {
         if(currentDetailType != DetailType.Video || source == null) {
             return new MutableLiveData<>(Result.failure(new IllegalTerminalStateException()));
@@ -239,7 +272,13 @@ public class TerminalContext {
         }
         return resultSafeUnPack(source.getValue(), Object.class);
     }
+    // -------------------------详情页数据源上下文 end ------------------------------------
 
+
+
+
+
+    //----------------------------------私有函数区----------------------------------------
     private static final class InstanceHolder {
         static final TerminalContext INSTANCE = new TerminalContext();
     }
