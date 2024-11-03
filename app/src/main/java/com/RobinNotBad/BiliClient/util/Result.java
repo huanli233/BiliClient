@@ -4,7 +4,7 @@ package com.RobinNotBad.BiliClient.util;
 import androidx.core.util.Consumer;
 
 public class Result<T> {
-    private Object realResult;
+    private final Object realResult;
     private boolean isSuccess;
     private Result (T val) {
         realResult = new Success<T>(val);
@@ -57,9 +57,9 @@ public class Result<T> {
 
     public static <T> Result<T> success(T value) {
         if (value != null) {
-            return new Result<T>(value);
+            return new Result<>(value);
         } else {
-            return new Result<T>(new NullPointerException());
+            return new Result<>(new NullPointerException());
         }
     }
 

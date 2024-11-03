@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.video.series.UserSeriesActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicHolder;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 
 import java.util.List;
 
@@ -63,13 +63,7 @@ public class UserVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             VideoCard videoCard = videoCardList.get(realPosition);
             videoCardHolder.showVideoCard(videoCard, context);    //此函数在VideoCardHolder里
 
-            holder.itemView.setOnClickListener(view -> {
-                Intent intent = new Intent();
-                intent.setClass(context, VideoInfoActivity.class);
-                intent.putExtra("bvid", videoCard.bvid);
-                intent.putExtra("aid", videoCard.aid);
-                context.startActivity(intent);
-            });
+            holder.itemView.setOnClickListener(view -> TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, videoCard.bvid));
         }
     }
 

@@ -155,7 +155,7 @@ public class CenterThreadPool {
     public static void runOnUiThread(Runnable runnable) {
         mainThreadHandler.post(runnable);
     }
-    public static void runOnUIThreadAfter(Long time, TimeUnit unit, Runnable runnable) {
+    public static void runOnUIThreadAfter(long time, TimeUnit unit, Runnable runnable) {
         long millis = TimeUnit.MILLISECONDS.convert(time, unit);
         mainThreadHandler.postDelayed(runnable, millis);
     }

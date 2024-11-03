@@ -35,9 +35,7 @@ import androidx.core.content.res.ResourcesCompat;
 import com.RobinNotBad.BiliClient.BuildConfig;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.CopyTextActivity;
-import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.model.At;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 
@@ -304,13 +302,13 @@ public class ToolsUtil {
                     LinkUrlUtil.handleWebURL(widget.getContext(), text);
                     break;
                 case TYPE_BVID:
-                    widget.getContext().startActivity(new Intent(widget.getContext(), VideoInfoActivity.class).putExtra("bvid", text));
+                    TerminalContext.getInstance().enterVideoDetailPage(widget.getContext(), text);
                     break;
                 case TYPE_AVID:
-                    widget.getContext().startActivity(new Intent(widget.getContext(), VideoInfoActivity.class).putExtra("aid", Long.parseLong(text.replace("av", ""))));
+                    TerminalContext.getInstance().enterVideoDetailPage(widget.getContext(), Long.parseLong(text.replace("av", "")));
                     break;
                 case TYPE_CVID:
-                    widget.getContext().startActivity(new Intent(widget.getContext(), ArticleInfoActivity.class).putExtra("cvid", Long.parseLong(text.replace("cv", ""))));
+                    TerminalContext.getInstance().enterArticleDetailPage(widget.getContext(), Long.parseLong(text.replace("cv", "")));
                     break;
             }
         }

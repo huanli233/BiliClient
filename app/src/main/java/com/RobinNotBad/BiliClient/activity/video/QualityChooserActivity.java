@@ -44,7 +44,7 @@ public class QualityChooserActivity extends BaseActivity {
         ((TextView) findViewById(R.id.pageName)).setText("请选择清晰度");
 
         try {
-            videoInfo = TerminalContext.getInstance().getCurrentVideo();
+            videoInfo = TerminalContext.getInstance().getCurrentVideoInfo();
         } catch (TerminalContext.IllegalTerminalStateException e) {
             Log.wtf(TAG, e);
             MsgUtil.toast("找不到视频信息QAQ", this);

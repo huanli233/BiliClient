@@ -20,15 +20,12 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
-import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
-import com.RobinNotBad.BiliClient.activity.live.LiveInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.article.ArticleCardHolder;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.api.DynamicApi;
@@ -275,14 +272,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                 VideoCardHolder video_holder = new VideoCardHolder(cell_dynamic_video);
                 video_holder.showVideoCard(childVideoCard, context);
                 boolean finalIsPgc = isPgc;
-                cell_dynamic_video.setOnClickListener(view -> {
-                    Intent intent = new Intent();
-                    intent.setClass(context, VideoInfoActivity.class);
-                    if (finalIsPgc) intent.putExtra("type", "media");
-                    intent.putExtra("bvid", "");
-                    intent.putExtra("aid", childVideoCard.aid);
-                    context.startActivity(intent);
-                });
+                cell_dynamic_video.setOnClickListener(view -> TerminalContext.getInstance().enterVideoDetailPage(context, childVideoCard.aid, "", finalIsPgc ? "media": null));
                 cell_dynamic_video.setVisibility(View.VISIBLE);
                 break;
 
@@ -298,11 +288,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
 
                 VideoCardHolder card_holder = new VideoCardHolder(cell_dynamic_video);
                 card_holder.showVideoCard(childLiveCard, context);
-                cell_dynamic_video.setOnClickListener(view -> {
-                    Intent intent = new Intent(context, LiveInfoActivity.class);
-                    intent.putExtra("room_id", liveRoom.roomid);
-                    context.startActivity(intent);
-                });
+                cell_dynamic_video.setOnClickListener(view -> TerminalContext.getInstance().enterLiveDetailPage(context, liveRoom.roomid));
                 cell_dynamic_video.setVisibility(View.VISIBLE);
                 break;
 
@@ -310,12 +296,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                 ArticleCard articleCard = (ArticleCard) dynamic.major_object;
                 ArticleCardHolder article_holder = new ArticleCardHolder(cell_dynamic_article);
                 article_holder.showArticleCard(articleCard, context);
-                cell_dynamic_article.setOnClickListener(view -> {
-                    Intent intent = new Intent();
-                    intent.setClass(context, ArticleInfoActivity.class);
-                    intent.putExtra("cvid", articleCard.id);
-                    context.startActivity(intent);
-                });
+                cell_dynamic_article.setOnClickListener(view -> TerminalContext.getInstance().enterArticleDetailPage(context, articleCard.id));
                 cell_dynamic_article.setVisibility(View.VISIBLE);
                 break;
 
@@ -328,7 +309,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                 }
                 View imageCard = cell_dynamic_image;
                 ImageView imageView = imageCard.findViewById(R.id.imageView);
-                if(pictureList.size() > 0) {
+                if(!pictureList.isEmpty()) {
                     Glide.with(context).asDrawable().load(GlideUtil.url(pictureList.get(0)))
                             .transition(GlideUtil.getTransitionOptions())
                             .placeholder(R.mipmap.placeholder)
@@ -354,14 +335,10 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
             content.setMaxLines(5);
             if (dynamic.dynamicId != 0) {
                 (isChild ? itemView.findViewById(R.id.dynamic_child) : itemView).setOnClickListener(view -> {
-                    Intent intent = new Intent();
-                    intent.setClass(context, DynamicInfoActivity.class);
-                    intent.putExtra("id", dynamic.dynamicId);
-                    intent.putExtra("position", getAdapterPosition());
-                    if (context instanceof Activity) {
-                        ((Activity) context).startActivityForResult(intent, GO_TO_INFO_REQUEST);
+                    if(context instanceof Activity) {
+                        TerminalContext.getInstance().enterDynamicDetailPageForResult((Activity) context, dynamic.dynamicId, getAdapterPosition(), GO_TO_INFO_REQUEST);
                     } else {
-                        context.startActivity(intent);
+                        TerminalContext.getInstance().enterDynamicDetailPage(context, dynamic.dynamicId, getAdapterPosition());
                     }
                 });
                 content.setOnClickListener(view -> {
@@ -424,7 +401,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                         } else
                             ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("点赞失败", context));
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        MsgUtil.err(e, BiliTerminal.context);
                     }
                 } else {
                     try {

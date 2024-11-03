@@ -23,18 +23,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.activity.live.LiveInfoActivity;
 import com.RobinNotBad.BiliClient.activity.message.PrivateMsgActivity;
 import com.RobinNotBad.BiliClient.activity.user.FollowUsersActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.GlideUtil;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.*;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -164,11 +159,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (userInfo.live_room != null) {
                 userInfoHolder.liveRoom.setVisibility(View.VISIBLE);
                 userInfoHolder.liveRoomLabel.setText(userInfo.live_room.title);
-                userInfoHolder.liveRoom.setOnClickListener(view -> {
-                    Intent intent = new Intent(context, LiveInfoActivity.class);
-                    intent.putExtra("room_id", userInfo.live_room.roomid);
-                    context.startActivity(intent);
-                });
+                userInfoHolder.liveRoom.setOnClickListener(view -> TerminalContext.getInstance().enterLiveDetailPage(context, userInfo.live_room.roomid));
             } else userInfoHolder.liveRoom.setVisibility(View.GONE);
 
             if ((userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0)) || (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) || (userInfo.mid == 0))

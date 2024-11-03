@@ -21,13 +21,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.CopyTextActivity;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -184,11 +184,7 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                         try {
                             long aid = msg.content.getLong("id");
                             String bvid = VideoInfoApi.getJsonByAid(aid).getString("bvid");
-                            Intent intent = new Intent(context, VideoInfoActivity.class);
-                            intent.putExtra("aid", aid);
-                            intent.putExtra("bvid", bvid);
-                            intent.putExtra("type", "video");
-                            context.startActivity(intent);
+                            TerminalContext.getInstance().enterVideoDetailPage(context, aid, bvid, "video");
                         } catch (IOException err) {
                             Log.e("", err.toString());
                         } catch (JSONException err) {

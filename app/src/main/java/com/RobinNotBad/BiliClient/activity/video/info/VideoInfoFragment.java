@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 import static android.app.Activity.RESULT_OK;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -151,7 +152,7 @@ public class VideoInfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            videoInfo = TerminalContext.getInstance().getCurrentVideo();
+            videoInfo = TerminalContext.getInstance().getCurrentVideoInfo();
         } catch (TerminalContext.IllegalTerminalStateException e) {
             Log.wtf(TAG, e);
         }
@@ -194,13 +195,17 @@ public class VideoInfoFragment extends Fragment {
 
         if (videoInfo.epid != -1) { //不是空的的话就应该跳转到番剧页面了
             CenterThreadPool.run(() -> {
-                Intent intent = new Intent(requireContext(), VideoInfoActivity.class);
-                intent.putExtra("type", "media");
-                intent.putExtra("aid", BangumiApi.getMdidFromEpid(videoInfo.epid));
-                requireActivity().runOnUiThread(() -> {
-                    startActivity(intent);
-                    requireActivity().finish();
-                });
+                Context context = getContext();
+                if(context == null) {
+                    return;
+                }
+                TerminalContext.getInstance()
+                        .enterVideoDetailPage(context, BangumiApi.getMdidFromEpid(videoInfo.epid), null, "media");
+                Activity activity = getActivity();
+                if(activity == null) {
+                    return;
+                }
+                CenterThreadPool.runOnUiThread(activity::finish);
             });
         }
 

@@ -43,7 +43,7 @@ public class MultiPageActivity extends BaseActivity {
 
         Intent intent = getIntent();
         try {
-            videoInfo = TerminalContext.getInstance().getCurrentVideo();
+            videoInfo = TerminalContext.getInstance().getCurrentVideoInfo();
         } catch (TerminalContext.IllegalTerminalStateException e) {
             Log.wtf(TAG, e);
             MsgUtil.toast("找不到当前视频信息QAQ", this);

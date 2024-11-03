@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.VideoCard;
@@ -47,7 +46,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
         setPageName("合集详情");
         Collection collection;
         try {
-            collection = TerminalContext.getInstance().getCurrentVideo().collection;
+            collection = TerminalContext.getInstance().getCurrentVideoInfo().collection;
         }catch (TerminalContext.IllegalTerminalStateException ignored) {
             collection = null;
         }
@@ -122,7 +121,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 position--;
                 VideoCardHolder videoCardHolder = (VideoCardHolder) holder;
                 VideoCard videoCard = data.get(position);
-                videoCardHolder.itemView.setOnClickListener((view) -> context.startActivity(new Intent(context, VideoInfoActivity.class).putExtra("aid", videoCard.aid).putExtra("bvid", videoCard.bvid)));
+                videoCardHolder.itemView.setOnClickListener((view) -> TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, videoCard.bvid));
                 videoCardHolder.showVideoCard(videoCard, context);
             } else if (holder instanceof CollectionInfoHolder) {
                 CollectionInfoHolder collectionInfoHolder = (CollectionInfoHolder) holder;
@@ -241,7 +240,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 VideoCardHolder videoCardHolder = (VideoCardHolder) holder;
                 VideoInfo videoInfo = data.get(getSectionPos(position)).episodes.get(getEpisodePos(position)).arc;
                 VideoCard videoCard = new VideoCard(videoInfo.title, "", ToolsUtil.toWan(videoInfo.stats.view), videoInfo.cover, videoInfo.aid, videoInfo.bvid);
-                videoCardHolder.itemView.setOnClickListener((view) -> context.startActivity(new Intent(context, VideoInfoActivity.class).putExtra("aid", videoInfo.aid).putExtra("bvid", videoInfo.bvid)));
+                videoCardHolder.itemView.setOnClickListener((view) -> TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, videoCard.bvid));
                 videoCardHolder.showVideoCard(videoCard, context);
             } else if (holder instanceof CollectionInfoHolder) {
                 CollectionInfoHolder collectionInfoHolder = (CollectionInfoHolder) holder;

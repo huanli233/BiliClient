@@ -12,11 +12,10 @@ import android.util.DisplayMetrics;
 import androidx.annotation.Nullable;
 import androidx.multidex.MultiDex;
 
-import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 
 import java.lang.ref.WeakReference;
 
@@ -77,26 +76,15 @@ public class BiliTerminal extends Application {
     }
 
     public static void jumpToVideo(Context context, long aid) {
-        Intent intent = new Intent();
-        intent.setClass(context, VideoInfoActivity.class);
-        intent.putExtra("aid", aid);
-        intent.putExtra("bvid", "");
-        context.startActivity(intent);
+        TerminalContext.getInstance().enterVideoDetailPage(context, aid);
     }
 
     public static void jumpToVideo(Context context, String bvid) {
-        Intent intent = new Intent();
-        intent.setClass(context, VideoInfoActivity.class);
-        intent.putExtra("aid", 0);
-        intent.putExtra("bvid", bvid);
-        context.startActivity(intent);
+        TerminalContext.getInstance().enterVideoDetailPage(context, bvid);
     }
 
     public static void jumpToArticle(Context context, long cvid) {
-        Intent intent = new Intent();
-        intent.setClass(context, ArticleInfoActivity.class);
-        intent.putExtra("cvid", cvid);
-        context.startActivity(intent);
+        TerminalContext.getInstance().enterArticleDetailPage(context, cvid);
     }
 
     public static void jumpToUser(Context context, long mid) {

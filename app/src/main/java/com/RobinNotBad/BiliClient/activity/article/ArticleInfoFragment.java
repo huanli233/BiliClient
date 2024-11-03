@@ -62,7 +62,7 @@ public class ArticleInfoFragment extends Fragment {
             cvid = getArguments().getLong("cvid");
         }
         try {
-            articleInfo = TerminalContext.getInstance().getCurrentArticle();
+            articleInfo = TerminalContext.getInstance().getCurrentArticleInfo();
         }catch (TerminalContext.IllegalTerminalStateException e) {
             Log.wtf(TAG, e);
             MsgUtil.toast("找不到专栏信息QAQ", BiliTerminal.context);

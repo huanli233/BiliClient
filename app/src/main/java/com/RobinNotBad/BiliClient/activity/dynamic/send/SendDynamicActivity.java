@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -22,10 +21,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.EmoteActivity;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
-import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.article.ArticleCardHolder;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
@@ -53,7 +50,7 @@ public class SendDynamicActivity extends BaseActivity {
 
     EditText editText;
 
-    private ActivityResultLauncher<Intent> emoteLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
+    private final ActivityResultLauncher<Intent> emoteLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
         int code = result.getResultCode();
         Intent data = result.getData();
         if (code == RESULT_OK && data != null && data.hasExtra("text")) {
@@ -179,14 +176,7 @@ public class SendDynamicActivity extends BaseActivity {
                 VideoCardHolder video_holder = new VideoCardHolder(cell_dynamic_video);
                 video_holder.showVideoCard(childVideoCard, this);
                 boolean finalIsPgc = isPgc;
-                cell_dynamic_video.setOnClickListener(view -> {
-                    Intent intent = new Intent();
-                    intent.setClass(this, VideoInfoActivity.class);
-                    if (finalIsPgc) intent.putExtra("type", "media");
-                    intent.putExtra("bvid", "");
-                    intent.putExtra("aid", childVideoCard.aid);
-                    startActivity(intent);
-                });
+                cell_dynamic_video.setOnClickListener(view -> TerminalContext.getInstance().enterVideoDetailPage(this, childVideoCard.aid, "", finalIsPgc ? "media": null));
                 cell_dynamic_video.setVisibility(View.VISIBLE);
                 break;
 
@@ -194,12 +184,7 @@ public class SendDynamicActivity extends BaseActivity {
                 ArticleCard articleCard = (ArticleCard) dynamic.major_object;
                 ArticleCardHolder article_holder = new ArticleCardHolder(cell_dynamic_article);
                 article_holder.showArticleCard(articleCard, this);
-                cell_dynamic_article.setOnClickListener(view -> {
-                    Intent intent = new Intent();
-                    intent.setClass(this, ArticleInfoActivity.class);
-                    intent.putExtra("cvid", articleCard.id);
-                    startActivity(intent);
-                });
+                cell_dynamic_article.setOnClickListener(view -> TerminalContext.getInstance().enterArticleDetailPage(this, articleCard.id));
                 cell_dynamic_article.setVisibility(View.VISIBLE);
                 break;
 
@@ -259,4 +244,9 @@ public class SendDynamicActivity extends BaseActivity {
                 .into(cover);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        TerminalContext.getInstance().setForwardContent(null);
+    }
 }

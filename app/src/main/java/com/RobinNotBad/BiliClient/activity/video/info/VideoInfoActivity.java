@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,14 +15,12 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.reply.ReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerFragmentAdapter;
-import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.util.*;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 public class VideoInfoActivity extends BaseActivity {
 
     private long aid;
-    private String bvid;
 
     private List<Fragment> fragmentList;
     ReplyFragment replyFragment;
@@ -50,7 +46,6 @@ public class VideoInfoActivity extends BaseActivity {
         String type = intent.getStringExtra("type");
         if (type == null) type = "video";
         this.aid = intent.getLongExtra("aid", 114514);
-        this.bvid = intent.getStringExtra("bvid");
         this.seek_reply = intent.getLongExtra("seekReply", -1);
         setContentView(R.layout.activity_loading);
 
@@ -99,41 +94,30 @@ public class VideoInfoActivity extends BaseActivity {
         findViewById(R.id.top).setOnClickListener(view -> finish());
         loading.setVisibility(View.VISIBLE);
         pageName.setText("视频详情");
-        CenterThreadPool.supplyAsyncWithLiveData(() -> {
-           JSONObject data;
-            if (TextUtils.isEmpty(bvid)) data = VideoInfoApi.getJsonByAid(aid);
-            else data = VideoInfoApi.getJsonByBvid(bvid);
-            if (data == null) {
-                return null;
+        TerminalContext.getInstance().getCurrentVideoLiveData().observe(this, (result) -> result.onSuccess((videoInfo) -> {
+            fragmentList = new ArrayList<>(3);
+            fragmentList.add(VideoInfoFragment.newInstance());
+            replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1, seek_reply, videoInfo.staff.get(0).mid);
+            fragmentList.add(replyFragment);
+            if (SharedPreferencesUtil.getBoolean("related_enable", true)) {
+                VideoRcmdFragment vrFragment = VideoRcmdFragment.newInstance(videoInfo.aid);
+                fragmentList.add(vrFragment);
             }
-            return VideoInfoApi.getInfoByJson(data);
-        }).observe(this, (result) -> {
-            result.onSuccess((videoInfo) -> {
-                TerminalContext.getInstance().enterVideoDetailPage(videoInfo);
-                fragmentList = new ArrayList<>(3);
-                fragmentList.add(VideoInfoFragment.newInstance());
-                replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1, seek_reply, videoInfo.staff.get(0).mid);
-                fragmentList.add(replyFragment);
-                if (SharedPreferencesUtil.getBoolean("related_enable", true)) {
-                    VideoRcmdFragment vrFragment = VideoRcmdFragment.newInstance(videoInfo.aid);
-                    fragmentList.add(vrFragment);
-                }
-                viewPager.setOffscreenPageLimit(fragmentList.size());
-                ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
-                viewPager.setAdapter(vpfAdapter);
-                View view;
-                if ((view = fragmentList.get(0).getView()) != null)
-                    view.setVisibility(View.GONE);
-                if (seek_reply != -1) viewPager.setCurrentItem(1);
-                AnimationUtils.crossFade(loading, fragmentList.get(0).getView());
-            }).onFailure((error) -> {
-                loading.setImageResource(R.mipmap.loading_2233_error);
-                MsgUtil.showMsg("获取信息失败！\n可能是视频不存在？", BiliTerminal.context);
-                CenterThreadPool.runOnUIThreadAfter(5L, TimeUnit.SECONDS, ()-> {
-                    MsgUtil.err(error, BiliTerminal.context);
-                });
+            viewPager.setOffscreenPageLimit(fragmentList.size());
+            ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
+            viewPager.setAdapter(vpfAdapter);
+            View view;
+            if ((view = fragmentList.get(0).getView()) != null)
+                view.setVisibility(View.GONE);
+            if (seek_reply != -1) viewPager.setCurrentItem(1);
+            AnimationUtils.crossFade(loading, fragmentList.get(0).getView());
+        }).onFailure((error) -> {
+            loading.setImageResource(R.mipmap.loading_2233_error);
+            MsgUtil.showMsg("获取信息失败！\n可能是视频不存在？", BiliTerminal.context);
+            CenterThreadPool.runOnUIThreadAfter(5L, TimeUnit.SECONDS, ()-> {
+                MsgUtil.err(error, BiliTerminal.context);
             });
-        });
+        }));
     }
 
     public void setCurrentAid(long aid) {

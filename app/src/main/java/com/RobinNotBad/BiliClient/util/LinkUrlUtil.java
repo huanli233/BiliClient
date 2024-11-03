@@ -6,9 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Pair;
 
-import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,13 +59,13 @@ public class LinkUrlUtil {
                         int type = parse.second;
                         switch (type) {
                             case TYPE_BVID:
-                                context.startActivity(new Intent(context, VideoInfoActivity.class).putExtra("bvid", val));
+                                TerminalContext.getInstance().enterVideoDetailPage(context, val);
                                 return;
                             case TYPE_AVID:
-                                context.startActivity(new Intent(context, VideoInfoActivity.class).putExtra("aid", Long.parseLong(val.replace("av", ""))));
+                                TerminalContext.getInstance().enterVideoDetailPage(context, Long.parseLong(val.replace("av", "")));
                                 return;
                             case TYPE_CVID:
-                                context.startActivity(new Intent(context, ArticleInfoActivity.class).putExtra("cvid", Long.parseLong(val.replace("cv", ""))));
+                                TerminalContext.getInstance().enterArticleDetailPage(context, Long.parseLong(val.replace("cv", "")));
                                 return;
                             case TYPE_UID:
                                 context.startActivity(new Intent(context, UserInfoActivity.class).putExtra("mid", Long.parseLong(val.replaceFirst("(?i)^uid", ""))));
@@ -76,7 +75,7 @@ public class LinkUrlUtil {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            MsgUtil.err(e, BiliTerminal.context);
         }
         try {
             context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(text)));
@@ -94,13 +93,13 @@ public class LinkUrlUtil {
             int type = parse.second;
             switch (type) {
                 case TYPE_BVID:
-                    context.startActivity(new Intent(context, VideoInfoActivity.class).putExtra("bvid", val));
+                    TerminalContext.getInstance().enterVideoDetailPage(context, val);
                     break;
                 case TYPE_AVID:
-                    context.startActivity(new Intent(context, VideoInfoActivity.class).putExtra("aid", Long.parseLong(val.replace("av", ""))));
+                    TerminalContext.getInstance().enterVideoDetailPage(context, Long.parseLong(val.replace("av", "")));
                     break;
                 case TYPE_CVID:
-                    context.startActivity(new Intent(context, ArticleInfoActivity.class).putExtra("cvid", Long.parseLong(val.replace("cv", ""))));
+                    TerminalContext.getInstance().enterArticleDetailPage(context, Long.parseLong(val.replace("cv", "")));
                     break;
                 case TYPE_UID:
                     context.startActivity(new Intent(context, UserInfoActivity.class).putExtra("mid", Long.parseLong(val.replaceFirst("(?i)^uid", ""))));

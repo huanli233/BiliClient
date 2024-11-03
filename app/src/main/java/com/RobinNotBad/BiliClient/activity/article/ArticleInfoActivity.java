@@ -13,12 +13,10 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.reply.ReplyFragment;
 import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerFragmentAdapter;
-import com.RobinNotBad.BiliClient.api.ArticleApi;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.util.AnimationUtils;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
 
@@ -52,10 +50,8 @@ public class ArticleInfoActivity extends BaseActivity {
 
         ViewPager viewPager = findViewById(R.id.viewPager);
 
-        CenterThreadPool
-            .supplyAsyncWithLiveData(() -> ArticleApi.getArticle(cvid))
+        TerminalContext.getInstance().getCurrentArticleLiveData()
             .observe(this, (result) -> result.onSuccess((articleInfo)-> {
-                TerminalContext.getInstance().enterArticleDetailPage(articleInfo);
                 List<Fragment> fragmentList = new ArrayList<>();
                 ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance();
                 fragmentList.add(articleInfoFragment);

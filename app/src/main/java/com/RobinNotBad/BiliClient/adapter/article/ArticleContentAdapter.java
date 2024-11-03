@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
@@ -57,9 +58,6 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
     public ArticleLineHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {    //-1=头，0=文本，1=图片
-            default:
-                view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_textview, parent, false);
-                break;
             case 1:
                 view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_image, parent, false);
                 break;
@@ -68,6 +66,9 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 break;
             case -2:
                 view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_end, parent, false);
+                break;
+            default:
+                view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_textview, parent, false);
                 break;
         }
         return new ArticleLineHolder(view);
@@ -78,24 +79,6 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
     public void onBindViewHolder(@NonNull ArticleLineHolder holder, int position) {
         int realPosition = position - 1;
         switch (getItemViewType(position)) {
-            default:
-                TextView textView = holder.itemView.findViewById(R.id.textView);  //文本
-                textView.setText(article.get(realPosition).content);
-                switch (article.get(realPosition).extra) {
-                    default:
-                        textView.setAlpha(0.85f);
-                        break;
-                    case "strong":
-                        textView.setAlpha(0.92f);
-                        break;
-                    case "br":
-                        textView.setHeight(ToolsUtil.dp2px(6f, context));
-                        break;
-                }
-                ToolsUtil.setCopy(textView);
-                ToolsUtil.setLink(textView);
-                break;
-
             case 1:
                 ImageFilterView imageView = (ImageFilterView) holder.itemView;  //图片
 
@@ -199,9 +182,8 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                                 });
                             } else {
                                 String msg = "投币失败：" + result;
-                                switch (result) {
-                                    case 34002:
-                                        msg = "不能给自己投币哦！";
+                                if (result == 34002) {
+                                    msg = "不能给自己投币哦！";
                                 }
                                 String finalMsg = msg;
                                 context.runOnUiThread(() -> MsgUtil.showMsg(finalMsg, context));
@@ -270,6 +252,24 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 timeText.setText(sdf.format(articleInfo.ctime * 1000));
                 break;
+            default:
+                TextView textView = holder.itemView.findViewById(R.id.textView);  //文本
+                textView.setText(article.get(realPosition).content);
+                switch (article.get(realPosition).extra) {
+                    case "strong":
+                        textView.setAlpha(0.92f);
+                        break;
+                    case "br":
+                        textView.setHeight(ToolsUtil.dp2px(6f, context));
+                        break;
+                    default:
+                        textView.setAlpha(0.85f);
+                        break;
+                }
+                ToolsUtil.setCopy(textView);
+                ToolsUtil.setLink(textView);
+                break;
+
         }
     }
 
