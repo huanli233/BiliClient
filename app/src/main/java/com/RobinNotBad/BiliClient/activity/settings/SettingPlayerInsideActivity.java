@@ -1,142 +1,64 @@
 package com.RobinNotBad.BiliClient.activity.settings;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.EditText;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.activity.player.PlayerActivity;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.google.android.material.radiobutton.MaterialRadioButton;
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
+import com.RobinNotBad.BiliClient.adapter.SettingsAdapter;
+import com.RobinNotBad.BiliClient.model.SettingSection;
 
-public class SettingPlayerInsideActivity extends BaseActivity {
-    private MaterialRadioButton SWtexture, SWsurface, SWhard, SWsoft, SWopensles, SWaudiotrack;
-    private EditText DMmaxline, danmakusize, danmakuspeed, danmaku_transparency;
-    private SwitchMaterial fromLast, online_total, SWLClick, SWloop, SWbackground, SWautolandscape, SWscale, SWdoublemove, danmaku_allowoverlap, danmaku_mergeduplicate, ui_showRotateBtn, ui_showDanmakuBtn, ui_showLoopBtn, danmaku_showSender, danmaku_forceR2L;
+import java.util.ArrayList;
+import java.util.List;
 
-    @SuppressLint({"SetTextI18n", "InflateParams"})
+public class SettingPlayerInsideActivity extends RefreshListActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
+        setPageName("内置播放器设置");
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_insideplayer, null, (layoutView, resId, parent) -> {
-            setContentView(layoutView);
-            setTopbarExit();
-            Log.e("debug", "设置内置播放器");
+        final List<SettingSection> sectionList = new ArrayList<>() {{
+            add(new SettingSection("switch", "长按倍速", "player_longclick", "", "true"));
+            add(new SettingSection("switch", "洗脑循环", "player_loop", "", "false"));
+            add(new SettingSection("switch", "熄屏继续播放", "player_background", "", "false"));
+            add(new SettingSection("switch", "默认横屏", "player_autolandscape", "", "false"));
+            add(new SettingSection("switch", "从历史位置播放", "player_from_last", getString(R.string.desc_fromlast), "true"));
+            add(new SettingSection("switch", "显示实时人数", "show_online", getString(R.string.desc_showonline), "false"));
+            add(new SettingSection("switch", "视频可缩放", "player_scale", getString(R.string.desc_scale), "true"));
+            add(new SettingSection("switch", "缩放时可移动", "player_doublemove", getString(R.string.desc_doublemove), "true"));
 
-            SWLClick = findViewById(R.id.SWLClick);
-            SWloop = findViewById(R.id.SWloop);
-            SWbackground = findViewById(R.id.SWbackground);
-            SWautolandscape = findViewById(R.id.SWautolandscape);
-            SWscale = findViewById(R.id.SWscale);
-            SWdoublemove = findViewById(R.id.SWdoublemove);
-            online_total = findViewById(R.id.online_total);
-            fromLast = findViewById(R.id.fromLast);
+            add(new SettingSection("divider", "", "", "", ""));
 
-            SWtexture = findViewById(R.id.SWtexture);
-            SWsurface = findViewById(R.id.SWsurface);
-            SWhard = findViewById(R.id.SWhard);
-            SWsoft = findViewById(R.id.SWsoft);
-            SWopensles = findViewById(R.id.SWopensles);
-            SWaudiotrack = findViewById(R.id.SWaudiotrack);
+            add(new SettingSection("choose", "显示方式", "player_display", getString(R.string.desc_display), String.valueOf(BiliTerminal.getSystemSdk() > 19), new String[]{"SurfaceView", "TextureView"}));
+            add(new SettingSection("choose", "解码方式", "player_codec", getString(R.string.desc_videocodec), "true",new String[]{"硬件解码","软件解码"}));
+            add(new SettingSection("choose", "音频输出", "player_audio", getString(R.string.desc_audiocodec), "false",new String[]{"OpenSles","AudioTrack"}));
 
-            DMmaxline = findViewById(R.id.DMmaxline);
-            danmakusize = findViewById(R.id.danmakusize);
-            danmakuspeed = findViewById(R.id.danmakuspeed);
-            danmaku_transparency = findViewById(R.id.danmaku_transparency);
-            danmaku_allowoverlap = findViewById(R.id.danmaku_allowoverlap);
-            danmaku_mergeduplicate = findViewById(R.id.danmaku_mergeduplicate);
-            danmaku_showSender = findViewById(R.id.danmaku_showSender);
-            danmaku_forceR2L = findViewById(R.id.danmaku_forceR2L);
-            ui_showRotateBtn = findViewById(R.id.ui_showRotateBtn);
-            ui_showDanmakuBtn = findViewById(R.id.ui_showDanmakuBtn);
-            ui_showLoopBtn = findViewById(R.id.ui_showLoopBtn);
-            fromLast = findViewById(R.id.fromLast);
+            add(new SettingSection("divider", "", "", "", ""));
 
-            SWaudiotrack.setChecked(!SharedPreferencesUtil.getBoolean("player_audio", false));
-            SWLClick.setChecked(SharedPreferencesUtil.getBoolean("player_longclick", true));
-            SWloop.setChecked(SharedPreferencesUtil.getBoolean("player_loop", false));
-            SWbackground.setChecked(SharedPreferencesUtil.getBoolean("player_background", false));
-            SWautolandscape.setChecked(SharedPreferencesUtil.getBoolean("player_autolandscape", false));
-            SWscale.setChecked(SharedPreferencesUtil.getBoolean("player_scale", true));
-            SWdoublemove.setChecked(SharedPreferencesUtil.getBoolean("player_doublemove", true));
-            online_total.setChecked(SharedPreferencesUtil.getBoolean("show_online", true));
-            fromLast.setChecked(SharedPreferencesUtil.getBoolean("player_from_last", true));
+            add(new SettingSection("switch", "弹幕允许重叠", "player_danmaku_allowoverlap", "", "true"));
+            add(new SettingSection("switch", "合并重复弹幕", "player_danmaku_mergeduplicate", "", "false"));
+            add(new SettingSection("switch", "强制为滚动弹幕", "player_danmaku_forceR2L", getString(R.string.desc_danmaku_force_r2l), "false"));
+            add(new SettingSection("switch", "显示直播弹幕发送者", "player_danmaku_showsender", getString(R.string.desc_danmaku_showsender), "true"));
+            add(new SettingSection("input_int", "弹幕最大行数", "player_danmaku_maxline", "", "10"));
+            add(new SettingSection("input_float", "弹幕字号大小", "player_danmaku_size", "", "0.7"));
+            add(new SettingSection("input_float", "弹幕不透明度", "player_danmaku_transparency", "", "0.5"));
+            add(new SettingSection("input_float", "弹幕速度", "player_danmaku_speed", "", "1.0"));
 
-            SWtexture.setChecked(SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT <= 19));
-            SWsurface.setChecked(!SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT <= 19));
-            SWhard.setChecked(SharedPreferencesUtil.getBoolean("player_codec", true));
-            SWsoft.setChecked(!SharedPreferencesUtil.getBoolean("player_codec", true));
-            SWopensles.setChecked(SharedPreferencesUtil.getBoolean("player_audio", false));
+            add(new SettingSection("divider", "", "", "", ""));
 
-            DMmaxline.setText(SharedPreferencesUtil.getInt("player_danmaku_maxline", 15) + "");
-            danmakusize.setText((SharedPreferencesUtil.getFloat("player_danmaku_size", 0.7f)) + "");
-            danmakuspeed.setText((SharedPreferencesUtil.getFloat("player_danmaku_speed", 1.0f)) + "");
-            danmaku_transparency.setText((SharedPreferencesUtil.getFloat("player_danmaku_transparency", 0.5f) * 100) + "");
-            danmaku_allowoverlap.setChecked(SharedPreferencesUtil.getBoolean("player_danmaku_allowoverlap", true));
-            danmaku_mergeduplicate.setChecked(SharedPreferencesUtil.getBoolean("player_danmaku_mergeduplicate", false));
-            danmaku_showSender.setChecked(SharedPreferencesUtil.getBoolean("player_danmaku_showsender", true));
-            danmaku_forceR2L.setChecked(SharedPreferencesUtil.getBoolean("player_danmaku_forceR2L", false));
-            ui_showRotateBtn.setChecked(SharedPreferencesUtil.getBoolean("player_ui_showRotateBtn", true));
-            ui_showDanmakuBtn.setChecked(SharedPreferencesUtil.getBoolean("player_ui_showDanmakuBtn", true));
-            ui_showLoopBtn.setChecked(SharedPreferencesUtil.getBoolean("player_ui_showLoopBtn", true));
+            add(new SettingSection("switch", "显示旋转按钮", "player_ui_showRotateBtn", "", "true"));
+            add(new SettingSection("switch", "显示弹幕按钮", "player_ui_showDanmakuBtn", "", "true"));
+            add(new SettingSection("switch", "显示循环按钮", "player_ui_showLoopBtn", "", "true"));
+        }};
 
-            findViewById(R.id.preview).setOnClickListener(view -> {
-                Intent intent = new Intent();
-                intent.setClass(this, PlayerActivity.class);
-                intent.putExtra("mode", -1);
-                intent.putExtra("title", "页面预览");
-                startActivity(intent);
-            });
-        });
+        recyclerView.setHasFixedSize(true);
+
+        SettingsAdapter adapter = new SettingsAdapter(this, sectionList);
+        setAdapter(adapter);
+
+        setRefreshing(false);
+
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        try {
-            SharedPreferencesUtil.putBoolean("player_display", SWtexture.isChecked());
-            SharedPreferencesUtil.putBoolean("player_codec", SWhard.isChecked());
-            SharedPreferencesUtil.putBoolean("player_audio", SWopensles.isChecked());
-            SharedPreferencesUtil.putBoolean("player_longclick", SWLClick.isChecked());
-            SharedPreferencesUtil.putBoolean("player_loop", SWloop.isChecked());
-            SharedPreferencesUtil.putBoolean("player_background", SWbackground.isChecked());
-            SharedPreferencesUtil.putBoolean("player_autolandscape", SWautolandscape.isChecked());
-            SharedPreferencesUtil.putBoolean("player_scale", SWscale.isChecked());
-            SharedPreferencesUtil.putBoolean("player_doublemove", SWdoublemove.isChecked());
-            SharedPreferencesUtil.putBoolean("show_online", online_total.isChecked());
-            SharedPreferencesUtil.putBoolean("player_from_last", fromLast.isChecked());
-
-            String newline = DMmaxline.getText().toString();
-            String newtextsize = danmakusize.getText().toString();
-            String newspeed = danmakuspeed.getText().toString();
-            String newtransparency = danmaku_transparency.getText().toString();
-            if (newspeed.length() <= 0) newspeed = "1.0";
-            if (newtextsize.length() <= 0) newtextsize = "1.0";
-            if (newtransparency.length() <= 0) newtransparency = "50";
-            if (newline.length() <= 0) newline = "0";
-            SharedPreferencesUtil.putInt("player_danmaku_maxline", Integer.parseInt(newline));
-            SharedPreferencesUtil.putFloat("player_danmaku_size", Float.parseFloat(newtextsize));
-            SharedPreferencesUtil.putFloat("player_danmaku_speed", Float.parseFloat(newspeed));
-            SharedPreferencesUtil.putFloat("player_danmaku_transparency", Float.parseFloat(newtransparency) / 100f);
-            SharedPreferencesUtil.putBoolean("player_danmaku_showsender", danmaku_showSender.isChecked());
-            SharedPreferencesUtil.putBoolean("player_danmaku_allowoverlap", danmaku_allowoverlap.isChecked());
-            SharedPreferencesUtil.putBoolean("player_danmaku_mergeduplicate", danmaku_mergeduplicate.isChecked());
-            SharedPreferencesUtil.putBoolean("player_danmaku_forceR2L", danmaku_forceR2L.isChecked());
-            SharedPreferencesUtil.putBoolean("player_ui_showRotateBtn", ui_showRotateBtn.isChecked());
-            SharedPreferencesUtil.putBoolean("player_ui_showDanmakuBtn", ui_showDanmakuBtn.isChecked());
-            SharedPreferencesUtil.putBoolean("player_ui_showLoopBtn", ui_showLoopBtn.isChecked());
-
-            MsgUtil.showMsg("设置已保存喵~", this);
-        } catch (NullPointerException ignored) {
-        }
-    }
 }
