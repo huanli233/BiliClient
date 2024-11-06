@@ -109,7 +109,10 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         public void bind(SettingSection settingSection) {
             if(settingSection.desc==null || settingSection.desc.isEmpty()) desc.setVisibility(View.GONE);
-            else desc.setText(settingSection.desc);
+            else {
+                desc.setText(settingSection.desc);
+                desc.setVisibility(View.VISIBLE);
+            }
             switchMaterial.setText(settingSection.name);
             switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) ->
                     SharedPreferencesUtil.putBoolean(settingSection.id, isChecked));
@@ -133,7 +136,10 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         public void bind(SettingSection settingSection) {
             if(settingSection.desc==null || settingSection.desc.isEmpty()) desc.setVisibility(View.GONE);
-            else desc.setText(settingSection.desc);
+            else {
+                desc.setText(settingSection.desc);
+                desc.setVisibility(View.VISIBLE);
+            }
             name.setText(settingSection.name);
             String[] strings = (String[]) settingSection.extra;
             chocola.setText(strings[0]);
@@ -160,7 +166,10 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         public void bind(SettingSection settingSection) {
             if(settingSection.desc==null || settingSection.desc.isEmpty()) desc.setVisibility(View.GONE);
-            else desc.setText(settingSection.desc);
+            else {
+                desc.setText(settingSection.desc);
+                desc.setVisibility(View.VISIBLE);
+            }
             name.setText(settingSection.name);
             switch (settingSection.type){
                 case "input_int":
