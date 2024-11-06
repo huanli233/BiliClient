@@ -929,10 +929,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     videonow = (int) ijkPlayer.getCurrentPosition();
                     if (videonow_last != videonow) {               //检测进度是否在变动
                         videonow_last = videonow;
-                        int curr_sec = videonow / 1000;
+                        float curr_sec = videonow / 1000f;
                         runOnUiThread(() -> {
                             if (isLiveMode) {
-                                text_progress.setText(ToolsUtil.toTime(curr_sec));
+                                text_progress.setText(ToolsUtil.toTime((int) curr_sec));
                                 text_online.setText(online_number);
                             }
                             else {
@@ -989,7 +989,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
     }
 
-    private void showSubtitle(int curr_sec) {
+    private void showSubtitle(float curr_sec) {
         Subtitle subtitle_curr = subtitles[subtitle_curr_index];
 
         boolean need_change = true;
