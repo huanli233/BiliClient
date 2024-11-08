@@ -144,11 +144,13 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String[] strings = (String[]) settingSection.extra;
             chocola.setText(strings[0]);
             vanilla.setText(strings[1]);
-            chocola.setOnCheckedChangeListener((buttonView, isChecked) ->
-                    SharedPreferencesUtil.putBoolean(settingSection.id, isChecked));
+
             boolean value = SharedPreferencesUtil.getBoolean(settingSection.id, Boolean.parseBoolean(settingSection.defaultValue));
             chocola.setChecked(value);
             vanilla.setChecked(!value);
+
+            chocola.setOnCheckedChangeListener((buttonView, isChecked) ->
+                    SharedPreferencesUtil.putBoolean(settingSection.id, isChecked));  //有些选项的true和false不能改了，所以交换
         }
     }
 

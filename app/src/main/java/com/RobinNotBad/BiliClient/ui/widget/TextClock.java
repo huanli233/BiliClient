@@ -18,6 +18,7 @@ package com.RobinNotBad.BiliClient.ui.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.AttributeSet;
@@ -32,15 +33,20 @@ import java.text.SimpleDateFormat;
 @SuppressLint("AppCompatCustomView")
 public class TextClock extends TextView {
     @SuppressLint("SimpleDateFormat")
-    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
     private Runnable mTicker;
     private Handler mHandler;
 
     private boolean mTickerStopped = false;
 
-    private static long delta;
+    private static final long delta = System.currentTimeMillis() - SystemClock.uptimeMillis();
 
+    @Override
+    public void onScreenStateChanged(int screenState) {
+        if(screenState == SCREEN_STATE_ON) startTick();    //既然没法保活，那就检测屏幕亮起
+        super.onScreenStateChanged(screenState);
+    }
 
     public TextClock(Context context) {
         super(context);
@@ -53,7 +59,7 @@ public class TextClock extends TextView {
     }
 
     public void init(){
-        delta = System.currentTimeMillis() - SystemClock.uptimeMillis();
+        setTypeface(Typeface.DEFAULT_BOLD);
         //Log.i("debug-clock","init,delta=" + delta);
     }
 
@@ -62,7 +68,11 @@ public class TextClock extends TextView {
         mTickerStopped = false;
         super.onAttachedToWindow();
 
-        mHandler = new Handler();
+        startTick();
+    }
+
+    public void startTick(){
+        if(mHandler==null) mHandler = new Handler();
 
         mTicker = () -> {
             if (mTickerStopped) return;

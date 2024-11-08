@@ -27,7 +27,6 @@ public class SettingMainActivity extends InstanceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
 
         asyncInflate(R.layout.activity_setting_main, ((layoutView, id) -> {
             Log.e("debug", "进入设置页");

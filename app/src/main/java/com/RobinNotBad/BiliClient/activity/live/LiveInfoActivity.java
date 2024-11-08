@@ -51,8 +51,6 @@ public class LiveInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
-
         room_id = getIntent().getLongExtra("room_id", 0);
         if (room_id == 0) {
             finish();
@@ -120,35 +118,33 @@ public class LiveInfoActivity extends BaseActivity {
                     else description.setMaxLines(512);
                     desc_expand = !desc_expand;
                 });
-                play.setOnClickListener(view -> {
-                    CenterThreadPool.run(() -> {
-                        try {
-                            LivePlayInfo.Codec codec;
-                            if (playInfo != null) {
-                                codec = playInfo.playUrl.stream.get(0).format.get(0).codec.get(0);
-                                LivePlayInfo.UrlInfo urlInfo = codec.url_info.get(selectedHost);
-                                String play_url = urlInfo.host + codec.base_url + urlInfo.extra;
-                                runOnUiThread(() -> {
+                play.setOnClickListener(view -> CenterThreadPool.run(() -> {
+                    try {
+                        LivePlayInfo.Codec codec;
+                        if (playInfo != null) {
+                            codec = playInfo.playUrl.stream.get(0).format.get(0).codec.get(0);
+                            LivePlayInfo.UrlInfo urlInfo = codec.url_info.get(selectedHost);
+                            String play_url = urlInfo.host + codec.base_url + urlInfo.extra;
+                            runOnUiThread(() -> {
+                                try {
+                                    long mid;
                                     try {
-                                        long mid;
-                                        try {
-                                            mid = SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
-                                        } catch (Throwable ignored) {
-                                            mid = 0;
-                                        }
-                                        PlayerApi.jumpToPlayer(this, play_url, "","", "直播·" + room.title, false, room_id, "", 0, mid, 0, true);
-                                    } catch (ActivityNotFoundException e) {
-                                        MsgUtil.showMsg("没有找到播放器，请检查是否安装", this);
-                                    } catch (Exception e) {
-                                        MsgUtil.err(e, this);
+                                        mid = SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
+                                    } catch (Throwable ignored) {
+                                        mid = 0;
                                     }
-                                });
-                            }
-                        } catch (Exception e) {
-                            runOnUiThread(() -> MsgUtil.err(e, this));
+                                    PlayerApi.jumpToPlayer(this, play_url, "","", "直播·" + room.title, false, room_id, "", 0, mid, 0, true);
+                                } catch (ActivityNotFoundException e) {
+                                    MsgUtil.showMsg("没有找到播放器，请检查是否安装", this);
+                                } catch (Exception e) {
+                                    MsgUtil.err(e, this);
+                                }
+                            });
                         }
-                    });
-                });
+                    } catch (Exception e) {
+                        runOnUiThread(() -> MsgUtil.err(e, this));
+                    }
+                }));
                 play.setOnLongClickListener(view -> {
                     if (!SharedPreferencesUtil.getString("player", "null").equals("terminalPlayer"))
                         MsgUtil.showMsgLong("若无法播放请更换为内置播放器", this);

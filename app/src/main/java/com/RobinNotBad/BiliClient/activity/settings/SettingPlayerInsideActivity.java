@@ -30,7 +30,7 @@ public class SettingPlayerInsideActivity extends RefreshListActivity {
 
             add(new SettingSection("divider", "", "", "", ""));
 
-            add(new SettingSection("choose", "显示方式", "player_display", getString(R.string.desc_display), String.valueOf(BiliTerminal.getSystemSdk() > 19), new String[]{"SurfaceView", "TextureView"}));
+            add(new SettingSection("choose", "显示方式", "player_display", getString(R.string.desc_display), String.valueOf(BiliTerminal.getSystemSdk() > 19), new String[]{"TextureView","SurfaceView"}));
             add(new SettingSection("choose", "解码方式", "player_codec", getString(R.string.desc_videocodec), "true",new String[]{"硬件解码","软件解码"}));
             add(new SettingSection("choose", "音频输出", "player_audio", getString(R.string.desc_audiocodec), "false",new String[]{"OpenSles","AudioTrack"}));
 
