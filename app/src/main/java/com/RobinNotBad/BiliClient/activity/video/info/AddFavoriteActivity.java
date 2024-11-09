@@ -34,7 +34,7 @@ public class AddFavoriteActivity extends RefreshListActivity {
         aid = intent.getLongExtra("aid", 0);
 
         if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-            MsgUtil.showMsg("还没有登录喵~", this);
+            MsgUtil.showMsg("还没有登录喵~");
             finish();
             return;
         }
@@ -70,8 +70,8 @@ public class AddFavoriteActivity extends RefreshListActivity {
     protected void onDestroy() {
         if (adapter != null) {
             if (SharedPreferencesUtil.getBoolean("fav_notice", false)) {
-                if (adapter.added) MsgUtil.showMsg("添加成功", this);
-                else if (adapter.changed) MsgUtil.showMsg("更改成功", this);
+                if (adapter.added) MsgUtil.showMsg("添加成功");
+                else if (adapter.changed) MsgUtil.showMsg("更改成功");
             }
         }
 

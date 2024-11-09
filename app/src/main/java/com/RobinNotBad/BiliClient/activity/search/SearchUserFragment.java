@@ -121,13 +121,13 @@ public class SearchUserFragment extends Fragment implements SearchRefreshable {
                 bottom = true;
                 if (isFirstLoad) showEmptyView();
                 else if (isAdded()) {
-                    requireActivity().runOnUiThread(() -> MsgUtil.showMsg("已经到底啦OwO", requireContext()));
+                    MsgUtil.showMsg("已经到底啦OwO");
                 }
             }
             isFirstLoad = false;
         } catch (Exception e) {
             if (isAdded()) requireActivity().runOnUiThread(() -> {
-                MsgUtil.err(e, requireContext());
+                MsgUtil.err(e);
                 loadingView.setVisibility(View.GONE);
             });
         }

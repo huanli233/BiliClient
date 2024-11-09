@@ -32,6 +32,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.BuildConfig;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.CopyTextActivity;
@@ -128,13 +129,13 @@ public class ToolsUtil {
         return str.replaceAll("\\\\(.)", "$1");
     }
 
-    public static int dp2px(float dpValue, Context context) {
-        final float scale = context.getResources().getDisplayMetrics().density;
+    public static int dp2px(float dpValue) {
+        final float scale = BiliTerminal.context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 
-    public static int sp2px(float spValue, Context context) {
-        final float fontScale = context.getResources()
+    public static int sp2px(float spValue) {
+        final float fontScale = BiliTerminal.context.getResources()
                 .getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }

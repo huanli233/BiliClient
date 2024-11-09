@@ -113,7 +113,7 @@ public class PreciousActivity extends InstanceActivity {
                 }
             });
         } catch (Exception e) {
-            runOnUiThread(() -> MsgUtil.err(e, this));
+            runOnUiThread(() -> MsgUtil.err(e));
         }
     }
 }

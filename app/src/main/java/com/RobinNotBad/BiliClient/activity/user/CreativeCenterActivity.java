@@ -34,11 +34,11 @@ public class CreativeCenterActivity extends BaseActivity {
                             setStatsText(R.id.totalReply_number, stats, "total_reply", "incr_reply");
                             setStatsText(R.id.totalDm_number, stats, "total_dm", "incr_dm");
                         } catch (Exception e) {
-                            runOnUiThread(() -> MsgUtil.err(e, this));
+                            runOnUiThread(() -> MsgUtil.err(e));
                         }
                     });
                 } catch (Exception e) {
-                    runOnUiThread(() -> MsgUtil.err(e, this));
+                    runOnUiThread(() -> MsgUtil.err(e));
                 }
 
             });

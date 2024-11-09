@@ -50,7 +50,7 @@ public class ArticleCardHolder extends RecyclerView.ViewHolder {
                 .placeholder(R.mipmap.placeholder)
                 .transition(GlideUtil.getTransitionOptions())
                 .format(DecodeFormat.PREFER_RGB_565)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(cover);
     }

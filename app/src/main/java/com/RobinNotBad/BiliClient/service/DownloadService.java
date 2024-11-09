@@ -62,7 +62,7 @@ public class DownloadService extends Service {
                     case "file":
                         File file = new File(FileUtil.getDownloadPicturePath(this), name);
                         if(!file.exists()) download(url, file);
-                        else MsgUtil.showMsg("文件已存在！",this);
+                        else MsgUtil.showMsg("文件已存在！");
                         break;
                     case "video_single":
                         File path_single = new File(FileUtil.getDownloadPath(this), name);
@@ -93,10 +93,10 @@ public class DownloadService extends Service {
                         break;
                 }
                 success = true;
-                MsgUtil.showMsg("下载成功",this);
+                MsgUtil.showMsg("下载成功");
                 stopSelf();
             } catch (Exception e){
-                MsgUtil.err("下载失败，",e,this);
+                MsgUtil.err("下载失败，",e);
                 stopSelf();
             }
         });
@@ -122,7 +122,7 @@ public class DownloadService extends Service {
             inputStream.close();
             fileOutputStream.close();
         } catch (Exception e) {
-            runOnUiThread(() -> MsgUtil.showMsg("下载失败", this));
+            runOnUiThread(() -> MsgUtil.showMsg("下载失败"));
             e.printStackTrace();
             stopSelf();
         }
@@ -141,7 +141,7 @@ public class DownloadService extends Service {
                 bufferedSink.write(decompressBytes);//将解压后数据写入文件（sink）中
                 bufferedSink.close();
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.showMsg("弹幕下载失败！", this));
+                runOnUiThread(() -> MsgUtil.showMsg("弹幕下载失败！"));
                 e.printStackTrace();
                 stopSelf();
             } finally {
@@ -150,7 +150,7 @@ public class DownloadService extends Service {
                 }
             }
         } catch (Exception e) {
-            runOnUiThread(() -> MsgUtil.showMsg("弹幕下载失败！", this));
+            runOnUiThread(() -> MsgUtil.showMsg("弹幕下载失败！"));
             e.printStackTrace();
             stopSelf();
         }

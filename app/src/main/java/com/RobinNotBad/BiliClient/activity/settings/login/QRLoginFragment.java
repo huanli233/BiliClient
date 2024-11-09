@@ -92,19 +92,19 @@ public class QRLoginFragment extends Fragment {
                     case 0:
                         guideline_left.setGuidelinePercent(0.00f);
                         guideline_right.setGuidelinePercent(1.00f);
-                        MsgUtil.showMsg("切换为大二维码", requireContext());
+                        MsgUtil.showMsg("切换为大二维码");
                         qrScale = 1;
                         break;
                     case 1:
                         guideline_left.setGuidelinePercent(0.30f);
                         guideline_right.setGuidelinePercent(0.70f);
-                        MsgUtil.showMsg("切换为小二维码", requireContext());
+                        MsgUtil.showMsg("切换为小二维码");
                         qrScale = 2;
                         break;
                     case 2:
                         guideline_left.setGuidelinePercent(0.15f);
                         guideline_right.setGuidelinePercent(0.85f);
-                        MsgUtil.showMsg("切换为默认大小", requireContext());
+                        MsgUtil.showMsg("切换为默认大小");
                         qrScale = 0;
                         break;
                 }
@@ -201,7 +201,7 @@ public class QRLoginFragment extends Fragment {
 
                             int activeResult = CookiesApi.activeCookieInfo();
                             if (activeResult != 0) {
-                                requireActivity().runOnUiThread(()->MsgUtil.showMsg("警告：激活Cookies失败",requireContext()));
+                                MsgUtil.showMsg("警告：激活Cookies失败");
                             }
                             LoginApi.requestSSOs();
                             if (loginJson.getJSONObject("data").has("url")) {
@@ -227,7 +227,7 @@ public class QRLoginFragment extends Fragment {
                     if (isAdded()) requireActivity().runOnUiThread(() -> {
                         qrImageView.setEnabled(true);
                         scanStat.setText("无法获取二维码信息，点击上方重试");
-                        MsgUtil.err(e, requireContext());
+                        MsgUtil.err(e);
                     });
                     this.cancel();
                 }

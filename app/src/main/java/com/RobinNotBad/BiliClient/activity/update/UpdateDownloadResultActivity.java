@@ -93,7 +93,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
                         installBySystemInstaller();
                         break;
                     default:
-                        MsgUtil.showMsg("未知的安装方式", this);
+                        MsgUtil.showMsg("未知的安装方式");
                 }
             }));
         }));
@@ -114,7 +114,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
     private void installBySystemInstaller() {
         try {
             if (!checkRequestInstallPermission()) {
-                MsgUtil.showMsg("没有授予请求安装应用权限", this);
+                MsgUtil.showMsg("没有授予请求安装应用权限");
                 return;
             }
             Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -137,7 +137,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
             }
         } catch (Throwable th) {
             Log.e("BiliClient", th.toString());
-            MsgUtil.showMsg("未知错误: " + th.getMessage(), this);
+            MsgUtil.showMsg("未知错误: " + th.getMessage());
         }
     }
 }

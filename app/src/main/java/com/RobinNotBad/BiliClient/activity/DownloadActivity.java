@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -132,7 +131,7 @@ public class DownloadActivity extends BaseActivity {
             inputStream.close();
             fileOutputStream.close();
             if (exitOnFinish) {
-                runOnUiThread(() -> MsgUtil.showMsg("下载完成", this));
+                runOnUiThread(() -> MsgUtil.showMsg("下载完成"));
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
@@ -143,7 +142,7 @@ public class DownloadActivity extends BaseActivity {
                 }, 200);
             }
         } catch (IOException e) {
-            runOnUiThread(() -> MsgUtil.showMsg("下载失败", this));
+            runOnUiThread(() -> MsgUtil.showMsg("下载失败"));
             e.printStackTrace();
             finish();
         }
@@ -170,7 +169,7 @@ public class DownloadActivity extends BaseActivity {
                 }
             }
         } catch (IOException e) {
-            runOnUiThread(() -> MsgUtil.showMsg("弹幕下载失败！", this));
+            runOnUiThread(() -> MsgUtil.showMsg("弹幕下载失败！"));
             finish();
             e.printStackTrace();
         }

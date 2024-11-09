@@ -62,7 +62,7 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
                 try {
                     PlayerApi.jumpToPlayer(context, localVideo.videoFileList.get(0), localVideo.danmakuFileList.get(0), "", localVideo.title, true, 0, "", 0, 0, 0, false);
                 } catch (ActivityNotFoundException e) {
-                    MsgUtil.showMsg("跳转失败", context);
+                    MsgUtil.showMsg("跳转失败");
                     e.printStackTrace();
                 }
             } else {
@@ -105,7 +105,7 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
 
             Glide.with(context).asDrawable().load(videoCard.cover)
                     .transition(GlideUtil.getTransitionOptions())
-                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))))
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(cover);
         }

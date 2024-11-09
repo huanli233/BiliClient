@@ -112,7 +112,7 @@ public class AboutActivity extends BaseActivity {
                 eggClick_authorWords++;
                 if (eggClick_authorWords == 7) {
                     eggClick_authorWords = 0;
-                    MsgUtil.showText(this, "作者的话", "无论当下的境遇如何，\n这片星空下永远有你的一片位置。\n抱抱屏幕前的你，\n真诚地祝愿你永远快乐幸福。\n让我们一起，迈入“下一个远方”。<extra_insert>{\"type\":\"video\",\"content\":\"BV1UC411B7Co\",\"title\":\"【原神新春会】下一个远方\"}");
+                    MsgUtil.showText("作者的话", "无论当下的境遇如何，\n这片星空下永远有你的一片位置。\n抱抱屏幕前的你，\n真诚地祝愿你永远快乐幸福。\n让我们一起，迈入“下一个远方”。<extra_insert>{\"type\":\"video\",\"content\":\"BV1UC411B7Co\",\"title\":\"【原神新春会】下一个远方\"}");
                 }
             });
 
@@ -120,7 +120,7 @@ public class AboutActivity extends BaseActivity {
                 eggClick_toUncle++;
                 if (eggClick_toUncle == 7) {
                     eggClick_toUncle = 0;
-                    MsgUtil.showText(this, "给叔叔", "\"你指尖跃动的电光，是我此生不灭的信仰。\"<extra_insert>{\"type\":\"video\",\"content\":\"BV157411v76Z\",\"title\":\"【B站入站曲】\"}");
+                    MsgUtil.showText("给叔叔", "\"你指尖跃动的电光，是我此生不灭的信仰。\"<extra_insert>{\"type\":\"video\",\"content\":\"BV157411v76Z\",\"title\":\"【B站入站曲】\"}");
                 }
             });
 
@@ -133,11 +133,11 @@ public class AboutActivity extends BaseActivity {
             else {
                 findViewById(R.id.version_code_card).setOnClickListener(view -> {
                     if(!SharedPreferencesUtil.getBoolean("developer", false)) eggClick_Dev++;
-                    else MsgUtil.showMsg("你已处于开发者模式，无需进行此操作", AboutActivity.this);
+                    else MsgUtil.showMsg("你已处于开发者模式，无需进行此操作");
 
                     if(eggClick_Dev == 7) {
                         SharedPreferencesUtil.putBoolean("developer", true);
-                        MsgUtil.showMsg("已启用开发者模式！", AboutActivity.this);
+                        MsgUtil.showMsg("已启用开发者模式！");
 
                     }
                 });

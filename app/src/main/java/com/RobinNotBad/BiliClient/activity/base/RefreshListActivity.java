@@ -108,7 +108,7 @@ public class RefreshListActivity extends BaseActivity {
 
     public void loadFail() {
         page--;
-        MsgUtil.showMsgLong("加载失败", this);
+        MsgUtil.showMsgLong("加载失败");
         setRefreshing(false);
     }
 

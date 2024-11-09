@@ -8,8 +8,6 @@ import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.RobinNotBad.BiliClient.BiliTerminal;
-
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -98,7 +96,7 @@ public class CenterThreadPool {
                 retval.postValue(Result.success(res));
             } catch (Throwable e) {
                 retval.postValue(Result.failure(e));
-                MsgUtil.err(e, BiliTerminal.context);
+                MsgUtil.err(e);
             }
         });
         return retval;

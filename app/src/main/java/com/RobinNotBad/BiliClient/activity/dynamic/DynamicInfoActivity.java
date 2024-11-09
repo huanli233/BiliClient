@@ -68,7 +68,7 @@ public class DynamicInfoActivity extends BaseActivity {
                     TutorialHelper.showPagerTutorial(this,2);
                 });
             }).onFailure((e) -> {
-                MsgUtil.err(e, this);
+                MsgUtil.err(e);
                 ((ImageView) findViewById(R.id.loading)).setImageResource(R.mipmap.loading_2233_error);
             }));
         });

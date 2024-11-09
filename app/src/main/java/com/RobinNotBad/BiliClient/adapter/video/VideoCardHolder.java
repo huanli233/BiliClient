@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -57,7 +56,7 @@ public class VideoCardHolder extends RecyclerView.ViewHolder {
                 .placeholder(R.mipmap.placeholder)
                 .format(DecodeFormat.PREFER_RGB_565)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))).sizeMultiplier(0.85f))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))).sizeMultiplier(0.85f))
                 .into(cover);
 
         switch (videoCard.type){

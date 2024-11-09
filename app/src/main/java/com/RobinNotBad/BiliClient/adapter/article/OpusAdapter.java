@@ -49,22 +49,22 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
         Glide.with(context).load(GlideUtil.url(opus.cover))
                 .transition(GlideUtil.getTransitionOptions())
                 .placeholder(R.mipmap.placeholder)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.coverView);
         if (opus.content.equals("内容失效")) {
-            holder.itemView.setOnClickListener(v -> MsgUtil.showMsg("内容失效，无法打开", context));
+            holder.itemView.setOnClickListener(v -> MsgUtil.showMsg("内容失效，无法打开"));
         } else {
             holder.itemView.setOnClickListener(v -> CenterThreadPool.run(() -> {
                 try {
                     parsedOpus = ArticleApi.opusId2cvid(opus.opusId);
                     cvid = parsedOpus.parsedId;
                 } catch (Exception e) {
-                    MsgUtil.err(e, context);
+                    MsgUtil.err(e);
                     cvid = -1;
                 }
                 if (cvid == -1)
-                    ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("打开失败", context));
+                    ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("打开失败"));
                 else {
                     if (parsedOpus.type == Opus.TYPE_ARTICLE) {
                         TerminalContext.getInstance().enterArticleDetailPage(context, cvid);

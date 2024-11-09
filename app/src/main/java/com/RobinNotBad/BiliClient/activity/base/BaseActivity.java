@@ -121,7 +121,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void report(Exception e) {
-        runOnUiThread(() -> MsgUtil.err(e, this));
+        runOnUiThread(() -> MsgUtil.err(e));
     }
 
     private boolean eventBusInit = false;

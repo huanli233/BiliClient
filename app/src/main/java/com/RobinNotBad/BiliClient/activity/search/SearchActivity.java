@@ -128,13 +128,13 @@ public class SearchActivity extends InstanceActivity {
             try {
                 searchHistory = JsonUtil.jsonToArrayList(new JSONArray(SharedPreferencesUtil.getString(SharedPreferencesUtil.search_history, "[]")), false);
             } catch (JSONException e) {
-                runOnUiThread(() -> MsgUtil.err(e, this));
+                runOnUiThread(() -> MsgUtil.err(e));
                 searchHistory = new ArrayList<>();
             }
             searchHistoryAdapter = new SearchHistoryAdapter(this, searchHistory);
             searchHistoryAdapter.setOnClickListener(position -> keywordInput.setText(searchHistory.get(position)));
             searchHistoryAdapter.setOnLongClickListener(position -> {
-                MsgUtil.showMsg("删除成功", this);
+                MsgUtil.showMsg("删除成功");
                 searchHistory.remove(position);
                 searchHistoryAdapter.notifyItemRemoved(position);
                 searchHistoryAdapter.notifyItemRangeChanged(position, searchHistory.size() - position);
@@ -147,7 +147,7 @@ public class SearchActivity extends InstanceActivity {
             if (getIntent().getStringExtra("keyword") != null) {
                 findViewById(R.id.top).setOnClickListener(view1 -> finish());
                 keywordInput.setText(getIntent().getStringExtra("keyword"));
-                MsgUtil.showMsg("可点击标题栏返回详情页", this);
+                MsgUtil.showMsg("可点击标题栏返回详情页");
             }
         });
     }
@@ -162,17 +162,17 @@ public class SearchActivity extends InstanceActivity {
     public void searchKeyword(String str) {
         if (str.contains("Robin") || str.contains("robin")) {
             if (str.contains("撅")) {
-                MsgUtil.showText(this, "特殊彩蛋", getString(R.string.egg_special));
+                MsgUtil.showText("特殊彩蛋", getString(R.string.egg_special));
                 return;
             }
             if (str.contains("纳西妲")) {
-                MsgUtil.showText(this, "特殊彩蛋", getString(R.string.egg_robin_nahida));
+                MsgUtil.showText("特殊彩蛋", getString(R.string.egg_robin_nahida));
                 return;
             }
         }
         for (String s:specialList) {
             if(str.contains(s)){
-                MsgUtil.showText(this, "特殊彩蛋", getString(R.string.egg_warmwords_warmworld));
+                MsgUtil.showText("特殊彩蛋", getString(R.string.egg_warmwords_warmworld));
                 break;
             }
         }
@@ -185,7 +185,7 @@ public class SearchActivity extends InstanceActivity {
             }
 
             if (str.isEmpty()) {
-                runOnUiThread(() -> MsgUtil.showMsg("还没输入内容喵~", this));
+                runOnUiThread(() -> MsgUtil.showMsg("还没输入内容喵~"));
             } else if (Objects.equals(lastKeyword, str)) {
                 runOnUiThread(() -> {
                     keywordInput.clearFocus();
@@ -211,7 +211,7 @@ public class SearchActivity extends InstanceActivity {
                             historyRecyclerview.scrollToPosition(0);
                         });
                     } catch (Exception e) {
-                        runOnUiThread(() -> MsgUtil.err(e, this));
+                        runOnUiThread(() -> MsgUtil.err(e));
                     }
                 } else {
                     try {
@@ -225,7 +225,7 @@ public class SearchActivity extends InstanceActivity {
                             historyRecyclerview.scrollToPosition(0);
                         });
                     } catch (Exception e) {
-                        runOnUiThread(() -> MsgUtil.err(e, this));
+                        runOnUiThread(() -> MsgUtil.err(e));
                     }
                 }
 
@@ -240,7 +240,7 @@ public class SearchActivity extends InstanceActivity {
                     refreshing = false;
                 } catch (Exception e) {
                     refreshing = false;
-                    runOnUiThread(() -> MsgUtil.err(e, this));
+                    runOnUiThread(() -> MsgUtil.err(e));
                 }
 
                 if(tutorial_show) {
@@ -255,7 +255,7 @@ public class SearchActivity extends InstanceActivity {
     }
 
     public void onScrolled(int dy) {
-        float height = searchBar.getHeight() + ToolsUtil.dp2px(2f, this);
+        float height = searchBar.getHeight() + ToolsUtil.dp2px(2f);
 
         if (System.currentTimeMillis() - animate_last > 200) {
             if (dy > 0 && searchBarVisible) {

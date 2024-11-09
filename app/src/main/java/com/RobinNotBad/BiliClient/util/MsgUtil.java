@@ -7,13 +7,13 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Looper;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.activity.DialogActivity;
 import com.RobinNotBad.BiliClient.activity.ShowTextActivity;
 import com.RobinNotBad.BiliClient.event.SnackEvent;
@@ -31,19 +31,19 @@ import java.io.Writer;
 public class MsgUtil {
     private static Toast toast;
 
-    public static void showMsg(String str, Context context) {
+    public static void showMsg(String str) {
         if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, false)) {
             EventBus.getDefault().postSticky(new SnackEvent(str));
         } else {
-            toast(str, context);
+            toast(str, BiliTerminal.context);
         }
     }
 
-    public static void showMsgLong(String str, Context context) {
+    public static void showMsgLong(String str) {
         if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, false)) {
             EventBus.getDefault().postSticky(new SnackEvent(str));
         } else {
-            toastLong(str, context);
+            toastLong(str, BiliTerminal.context);
         }
     }
 
@@ -119,50 +119,52 @@ public class MsgUtil {
         snackbar.setTextColor(Color.rgb(0xeb,0xe0,0xe2));
         View snackBarView = snackbar.getView();
         snackBarView.setOnTouchListener((v, event) -> false);
-        snackBarView.setPadding(ToolsUtil.dp2px(6, view.getContext()), 0, 0, 0);
+        snackBarView.setPadding(ToolsUtil.dp2px(6), 0, 0, 0);
         SnackbarContentLayout contentLayout = ((SnackbarContentLayout) ((FrameLayout) snackBarView).getChildAt(0));
 
         if (action != null) snackbar.setAction(action.getText(), action.getOnClickListener());
         else if (duration == Snackbar.LENGTH_INDEFINITE || duration >= 5000) {
             snackbar.setAction("x", (view1 -> snackbar.dismiss()));
             Button actionView = contentLayout.getActionView();
-            //actionView.setTextSize(ToolsUtil.sp2px(13, view.getContext()));
-            actionView.setMinWidth(ToolsUtil.dp2px(30, view.getContext()));
-            actionView.setMinimumWidth(ToolsUtil.dp2px(30, view.getContext()));
-            actionView.setMaxWidth(ToolsUtil.dp2px(48, view.getContext()));
-            actionView.setPadding(0, 0, ToolsUtil.dp2px(4, view.getContext()), 0);
+            //actionView.setTextSize(ToolsUtil.sp2px(13));
+            actionView.setMinWidth(ToolsUtil.dp2px(30));
+            actionView.setMinimumWidth(ToolsUtil.dp2px(30));
+            actionView.setMaxWidth(ToolsUtil.dp2px(48));
+            actionView.setPadding(0, 0, ToolsUtil.dp2px(4), 0);
         }
 
         TextView msgView = contentLayout.getMessageView();
         msgView.setTextSize(13);
         msgView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-        msgView.setPadding(0, 0, ToolsUtil.dp2px(4, view.getContext()), 0);
+        msgView.setPadding(0, 0, ToolsUtil.dp2px(4), 0);
 
         return snackbar;
     }
 
-    public static void err(Throwable e, Context context){
-        err("",e,context);
+    public static void err(Throwable e){
+        err("",e);
     }
-    public static void err(String desc, Throwable e, Context context) {
+    public static void err(String desc, Throwable e) {
         Log.e("BiliClient", e.getMessage(), e);
-        if (e instanceof IOException) showMsg(desc + "网络错误(＃°Д°)", context);
+        Context context = BiliTerminal.context;
+        if (e instanceof IOException) showMsg(desc + "网络错误(＃°Д°)");
         else if (e instanceof JSONException) {
             if (SharedPreferencesUtil.getBoolean("dev_jsonerr_detailed", false)) {
                 Writer writer = new StringWriter();
                 PrintWriter printWriter = new PrintWriter(writer);
                 e.printStackTrace(printWriter);
-                showText(context, desc + "数据解析错误", writer.toString());
+                showText(desc + "数据解析错误", writer.toString());
             } else if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                showMsgLong(desc + "解析错误，可登陆后再次尝试", context);
+                showMsgLong(desc + "解析错误，可登陆后再次尝试");
             } else if (e.toString().replace("org.json.JSONException:", "").contains("-352"))
-                showMsgLong(desc + "账号疑似被风控", context);
+                showMsgLong(desc + "账号疑似被风控");
             else
-                showMsgLong(desc + "数据解析错误：\n" + e.toString().replace("org.json.JSONException:", ""), context);
-        } else showMsgLong(desc + "错误：" + e, context);
+                showMsgLong(desc + "数据解析错误：\n" + e.toString().replace("org.json.JSONException:", ""));
+        } else showMsgLong(desc + "错误：" + e);
     }
 
-    public static void showText(Context context, String title, String text) {
+    public static void showText(String title, String text) {
+        Context context = BiliTerminal.context;
         Intent testIntent = new Intent()
                 .setClass(context, ShowTextActivity.class)
                 .putExtra("title", title)
@@ -170,14 +172,16 @@ public class MsgUtil {
         context.startActivity(testIntent);
     }
 
-    public static void showDialog(Context context, String title, String content) {
+    public static void showDialog(String title, String content) {
+        Context context = BiliTerminal.context;
         Intent intent = new Intent(context, DialogActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("content", content);
         context.startActivity(intent);
     }
 
-    public static void showDialog(Context context, String title, String content, int wait_time) {
+    public static void showDialog(String title, String content, int wait_time) {
+        Context context = BiliTerminal.context;
         Intent intent = new Intent(context, DialogActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("content", content);

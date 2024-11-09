@@ -65,7 +65,7 @@ public class ArticleInfoFragment extends Fragment {
             articleInfo = TerminalContext.getInstance().getCurrentArticleInfo();
         }catch (TerminalContext.IllegalTerminalStateException e) {
             Log.wtf(TAG, e);
-            MsgUtil.toast("找不到专栏信息QAQ", BiliTerminal.context);
+            MsgUtil.showMsg("找不到专栏信息QAQ");
         }
     }
 
@@ -89,10 +89,8 @@ public class ArticleInfoFragment extends Fragment {
                 if (articleInfo == null) articleInfo = ArticleApi.getArticle(cvid);
 
                 if (articleInfo == null) {
-                    if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0)
-                        requireActivity().runOnUiThread(() -> MsgUtil.showMsg("登录后再尝试", requireContext()));
-                    else
-                        requireActivity().runOnUiThread(() -> MsgUtil.showMsg("获取信息失败！\n可能是专栏不存在？", requireContext()));
+                    if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) MsgUtil.showMsg("登录后再尝试");
+                    else MsgUtil.showMsg("获取信息失败！\n可能是专栏不存在？");
                     requireActivity().finish();
                     return;
                 }
@@ -120,10 +118,7 @@ public class ArticleInfoFragment extends Fragment {
                     recyclerView.setAdapter(adapter);
                     if (onFinishLoad != null) onFinishLoad.run();
                 });
-            } catch (Exception e) {
-                if (isAdded())
-                    requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
-            }
+            } catch (Exception e) {MsgUtil.err(e);}
         });
     }
 

@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
@@ -80,7 +79,7 @@ public class LiveInfoActivity extends BaseActivity {
 
                 Glide.with(this).asDrawable().load(GlideUtil.url(room.user_cover)).placeholder(R.mipmap.placeholder)
                         .transition(GlideUtil.getTransitionOptions())
-                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, this))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(cover);
 
@@ -135,26 +134,26 @@ public class LiveInfoActivity extends BaseActivity {
                                     }
                                     PlayerApi.jumpToPlayer(this, play_url, "","", "直播·" + room.title, false, room_id, "", 0, mid, 0, true);
                                 } catch (ActivityNotFoundException e) {
-                                    MsgUtil.showMsg("没有找到播放器，请检查是否安装", this);
+                                    MsgUtil.showMsg("没有找到播放器，请检查是否安装");
                                 } catch (Exception e) {
-                                    MsgUtil.err(e, this);
+                                    MsgUtil.err(e);
                                 }
                             });
                         }
                     } catch (Exception e) {
-                        runOnUiThread(() -> MsgUtil.err(e, this));
+                        runOnUiThread(() -> MsgUtil.err(e));
                     }
                 }));
                 play.setOnLongClickListener(view -> {
                     if (!SharedPreferencesUtil.getString("player", "null").equals("terminalPlayer"))
-                        MsgUtil.showMsgLong("若无法播放请更换为内置播放器", this);
+                        MsgUtil.showMsgLong("若无法播放请更换为内置播放器");
                     Intent intent = new Intent();
                     intent.setClass(this, SettingPlayerChooseActivity.class);
                     startActivity(intent);
                     return true;
                 });
                 if (playInfo.playUrl == null) {
-                    MsgUtil.showMsg("直播已结束", this);
+                    MsgUtil.showMsg("直播已结束");
                     play.setVisibility(View.GONE);
                 } else {
                     //清晰度选择
@@ -171,7 +170,7 @@ public class LiveInfoActivity extends BaseActivity {
                                     play.setEnabled(true);
                                 });
                             } catch (Exception e) {
-                                runOnUiThread(() -> MsgUtil.err(e, this));
+                                runOnUiThread(() -> MsgUtil.err(e));
                             }
                         });
                     });
@@ -195,11 +194,11 @@ public class LiveInfoActivity extends BaseActivity {
                     refresh_host_list();
                 }
                 if (!SharedPreferencesUtil.getString("player", "null").equals("terminalPlayer"))
-                    MsgUtil.showMsgLong("直播可能只有内置播放器可以正常播放", this);
+                    MsgUtil.showMsgLong("直播可能只有内置播放器可以正常播放");
 
             }).onFailure((e) -> {
-                runOnUiThread(() -> MsgUtil.showMsg("直播不存在", this));
-                CenterThreadPool.runOnUIThreadAfter(1, TimeUnit.MINUTES, () -> MsgUtil.err(e, BiliTerminal.context));
+                runOnUiThread(() -> MsgUtil.showMsg("直播不存在"));
+                CenterThreadPool.runOnUIThreadAfter(1, TimeUnit.MINUTES, () -> MsgUtil.err(e));
                 finish();
             }));
         });

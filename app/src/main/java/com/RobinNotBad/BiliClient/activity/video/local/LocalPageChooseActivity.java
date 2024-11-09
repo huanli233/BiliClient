@@ -51,9 +51,9 @@ public class LocalPageChooseActivity extends BaseActivity {
             try {
                 PlayerApi.jumpToPlayer(LocalPageChooseActivity.this, videoFileList.get(position), danmakuFileList.get(position), "", pageList.get(position), true, 0, "", 0, 0, 0, false);
             } catch (ActivityNotFoundException e) {
-                MsgUtil.showMsg("没有找到播放器，请检查是否安装", this);
+                MsgUtil.showMsg("没有找到播放器，请检查是否安装");
             } catch (Exception e) {
-                MsgUtil.err(e, this);
+                MsgUtil.err(e);
             }
         });
         adapter.setOnItemLongClickListener(position -> {
@@ -72,13 +72,13 @@ public class LocalPageChooseActivity extends BaseActivity {
                     FileUtil.deleteFolder(videoPath);
                 }
 
-                MsgUtil.showMsg("删除成功", this);
+                MsgUtil.showMsg("删除成功");
                 longClickPosition = -1;
 
                 deleted = true;
             } else {
                 longClickPosition = position;
-                MsgUtil.showMsg("再次长按删除", this);
+                MsgUtil.showMsg("再次长按删除");
             }
         });
 

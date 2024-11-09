@@ -106,7 +106,7 @@ public class ReplyInfoActivity extends BaseActivity {
 
             } catch (Exception e) {
                 runOnUiThread(() -> {
-                    MsgUtil.err(e, this);
+                    MsgUtil.err(e);
                     refreshLayout.setRefreshing(false);
                 });
             }
@@ -135,7 +135,7 @@ public class ReplyInfoActivity extends BaseActivity {
             refreshing = false;
         } catch (Exception e) {
             runOnUiThread(() -> {
-                MsgUtil.err(e, this);
+                MsgUtil.err(e);
                 refreshLayout.setRefreshing(false);
             });
         }
@@ -173,7 +173,7 @@ public class ReplyInfoActivity extends BaseActivity {
                 }
             } catch (Exception e) {
                 runOnUiThread(() -> {
-                    MsgUtil.err(e, this);
+                    MsgUtil.err(e);
                     refreshLayout.setRefreshing(false);
                 });
             }

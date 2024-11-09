@@ -213,7 +213,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         screen_round = SharedPreferencesUtil.getBoolean("player_ui_round", false);
         if (screen_round) {
-            int padding = ToolsUtil.dp2px(8, this);
+            int padding = ToolsUtil.dp2px(8);
 
             LinearLayout.LayoutParams param_progress = (LinearLayout.LayoutParams) progressBar.getLayoutParams();
             param_progress.leftMargin = padding*4;
@@ -617,7 +617,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
         if(screen_round) {
             text_progress.setGravity(Gravity.NO_GRAVITY);
-            text_progress.setPadding(ToolsUtil.dp2px(24f,this),0,0,0);
+            text_progress.setPadding(ToolsUtil.dp2px(24f),0,0,0);
             text_online.setVisibility(View.VISIBLE);
         }
 
@@ -632,7 +632,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if (isPrepared) text_speed.setVisibility(View.GONE);
         if(screen_round) {
             text_progress.setGravity(Gravity.CENTER);
-            text_progress.setPadding(0,0,0,ToolsUtil.dp2px(8f,this));
+            text_progress.setPadding(0,0,0,ToolsUtil.dp2px(8f));
             text_online.setVisibility(View.GONE);
         }
     }
@@ -839,7 +839,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if (SharedPreferencesUtil.getBoolean("player_from_last", true) && !isLiveMode) {
             if (lastProgress > 6 && ((videoall / 1000) - lastProgress) > 6) { //阈值
                 mediaPlayer.seekTo(lastProgress * 1000);
-                runOnUiThread(() -> MsgUtil.showMsg("已从上次的位置播放",this));
+                runOnUiThread(() -> MsgUtil.showMsg("已从上次的位置播放"));
             }
         }
 
@@ -966,7 +966,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         });
                     } catch (Exception e) {
                         runOnUiThread(() -> {
-                            MsgUtil.err(e,PlayerActivity.this);
+                            MsgUtil.err(e);
                             text_online.setVisibility(View.GONE);
                         });
                         this.cancel();
@@ -985,7 +985,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             subtitle_count = subtitles.length;
             subtitle_curr_index = 0;
         } catch (Exception e){
-            MsgUtil.err(e,this);
+            MsgUtil.err(e);
         }
     }
 
@@ -1040,7 +1040,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             }
             streamdanmaku(danmakuFile.toString());
         } catch (Exception e) {
-            runOnUiThread(() -> MsgUtil.err(e,this));
+            runOnUiThread(() -> MsgUtil.err(e));
         }
     }
 
@@ -1320,7 +1320,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     HistoryApi.reportHistory(aid, cid, mid, videonow / 1000);
                 }
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.err(e,this));
+                runOnUiThread(() -> MsgUtil.err(e));
             }
         });
 
@@ -1371,7 +1371,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 liveWebSocket = okHttpClient.newWebSocket(request, listener);
 //                okHttpClient.dispatcher().executorService().shutdown();
             } catch (Exception e) {
-                MsgUtil.showMsg("直播弹幕连接失败",this);
+                MsgUtil.showMsg("直播弹幕连接失败");
                 e.printStackTrace();
             }
         });

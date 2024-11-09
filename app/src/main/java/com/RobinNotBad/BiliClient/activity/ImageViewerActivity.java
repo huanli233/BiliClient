@@ -52,13 +52,13 @@ public class ImageViewerActivity extends BaseActivity {
                         .into(photoView);
                 photoView.setMaximumScale(6.25f);
             } catch (OutOfMemoryError e) {
-                MsgUtil.showMsg("超出内存，加载失败", this);
+                MsgUtil.showMsg("超出内存，加载失败");
             }
 
             int id = i;
             photoView.setOnLongClickListener(view -> {
                 if (longClickPosition != id) {
-                    MsgUtil.showMsg("再次长按下载图片", this);
+                    MsgUtil.showMsg("再次长按下载图片");
                     longClickPosition = id;
                 } else {
                     Intent intent1 = new Intent()

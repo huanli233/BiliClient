@@ -130,7 +130,7 @@ public class SettingMainActivity extends InstanceActivity {
             //彩蛋
             String[] eggList = getResources().getStringArray(R.array.eggs);
             about.setOnLongClickListener(view -> {
-                MsgUtil.showText(this, "彩蛋", eggList[eggClick]);
+                MsgUtil.showText("彩蛋", eggList[eggClick]);
                 if (eggClick < eggList.length - 1) eggClick++;
                 return true;
             });
@@ -138,12 +138,12 @@ public class SettingMainActivity extends InstanceActivity {
             //检查更新
             MaterialCardView checkUpdate = findViewById(R.id.checkupdate);
             checkUpdate.setOnClickListener(view -> {
-                MsgUtil.showMsg("正在获取...", this);
+                MsgUtil.showMsg("正在获取...");
                 CenterThreadPool.run(() -> {
                     try {
                         AppInfoApi.checkUpdate(this, true);
                     } catch (Exception e) {
-                        runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误", this));
+                        runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误"));
                     }
                 });
             });
@@ -166,8 +166,8 @@ public class SettingMainActivity extends InstanceActivity {
                         SharedPreferencesUtil.removeValue("tutorial_ver_" + getResources().getStringArray(R.array.tutorial_list)[i]);
                     }
 
-                    MsgUtil.showMsg("教程进度已清除",this);
-                }else MsgUtil.showMsg("再点一次清除",this);
+                    MsgUtil.showMsg("教程进度已清除");
+                }else MsgUtil.showMsg("再点一次清除");
             });
 
             MaterialCardView test = findViewById(R.id.test);    //用于测试

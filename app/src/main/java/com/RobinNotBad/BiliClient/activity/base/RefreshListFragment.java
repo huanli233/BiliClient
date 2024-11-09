@@ -124,12 +124,12 @@ public class RefreshListFragment extends Fragment {
     }
 
     public void report(Throwable e) {
-        runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+        MsgUtil.err(e);
     }
 
     public void loadFail() {
         page--;
-        runOnUiThread(() -> MsgUtil.showMsgLong("加载失败", requireContext()));
+        MsgUtil.showMsgLong("加载失败");
         setRefreshing(false);
     }
 

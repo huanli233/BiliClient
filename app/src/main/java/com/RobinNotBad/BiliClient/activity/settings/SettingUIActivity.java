@@ -76,7 +76,7 @@ public class SettingUIActivity extends BaseActivity {
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 density_input.setText(displayMetrics.densityDpi + "(默认)");
                 round.setChecked(false);
-                MsgUtil.showMsg("恢复完成", this);
+                MsgUtil.showMsg("恢复完成");
             });
         });
     }

@@ -32,23 +32,23 @@ public class AppInfoApi {
             int version = BiliTerminal.getVersion();
             int curr = ConfInfoApi.getDateCurr();
 
-            checkAnnouncement(context);
+            checkAnnouncement();
 
             int last_ver = SharedPreferencesUtil.getInt("app_version_last", 0);
             if (last_ver < version) {
                 if (last_ver != 0) {
                     if (last_ver < 20240606)
-                        MsgUtil.showDialog(context, "提醒", "当前的新版本实现了对抗部分类型的风控，建议您重新登录账号以确保成功使用");
+                        MsgUtil.showDialog("提醒", "当前的新版本实现了对抗部分类型的风控，建议您重新登录账号以确保成功使用");
                     if (last_ver < 20240825)
-                        MsgUtil.showDialog(context, "提醒", "此版本修复了教程问题，建议前往设置中“清除教程进度”，以便补全在之前由于打包问题丢失而漏过的教程");
+                        MsgUtil.showDialog("提醒", "此版本修复了教程问题，建议前往设置中“清除教程进度”，以便补全在之前由于打包问题丢失而漏过的教程");
 
-                    MsgUtil.showDialog(context, "提醒", "欢迎更新到这个版本，这个版本增加了一些设置项，可前往设置中查看");
+                    MsgUtil.showDialog("提醒", "欢迎更新到这个版本，这个版本增加了一些设置项，可前往设置中查看");
                     if (!SharedPreferencesUtil.getString("player", "null").equals("terminalPlayer"))
-                        MsgUtil.showDialog(context, "小提醒", "现在的内置播放器已支持以下特色功能：\n·视频实时观看人数\n·显示直播弹幕\n·强制滚动显示弹幕\n\n欢迎在需要时切换到内置播放器使用哦");
+                        MsgUtil.showDialog("小提醒", "现在的内置播放器已支持以下特色功能：\n·视频实时观看人数\n·显示直播弹幕\n·强制滚动显示弹幕\n\n欢迎在需要时切换到内置播放器使用哦");
                 }
-                MsgUtil.showText(context, "更新公告", context.getResources().getString(R.string.update_tip) + "\n\n更新细节：\n" + ToolsUtil.getUpdateLog(context));
+                MsgUtil.showText("更新公告", context.getResources().getString(R.string.update_tip) + "\n\n更新细节：\n" + ToolsUtil.getUpdateLog(context));
                 if (ToolsUtil.isDebugBuild())
-                    MsgUtil.showDialog(context, "警告", "这个版本是测试版，仅在测试群中发布，禁止外传到如奇妙应用、小趣空间等平台或其他QQ群");
+                    MsgUtil.showDialog("警告", "这个版本是测试版，仅在测试群中发布，禁止外传到如奇妙应用、小趣空间等平台或其他QQ群");
                 SharedPreferencesUtil.putInt("app_version_last", version);
             }
 
@@ -60,7 +60,7 @@ public class AppInfoApi {
             }
         } catch (Exception e) {
             Log.e("BiliClient", e.toString());
-            CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误", context));
+            CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误"));
         }
     }
 
@@ -115,8 +115,8 @@ public class AppInfoApi {
         int version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
         if (latest > version) {
             if (debug_ver)
-                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("发现新的测试版！", context));
-            else CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("发现新版本！", context));
+                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("发现新的测试版！"));
+            else CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("发现新版本！"));
             context.startActivity(new Intent(context, UpdateInfoActivity.class)
                     .putExtra("versionName", version_name)
                     .putExtra("versionCode", latest)
@@ -127,8 +127,8 @@ public class AppInfoApi {
             return;
         } else if (need_toast && !(realIsDebug && !debug_ver)) {
             if (debug_ver)
-                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("没有新的测试版了！", context));
-            else CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("当前是最新版本！", context));
+                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("没有新的测试版了！"));
+            else CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("当前是最新版本！"));
         }
         if (realIsDebug && !debug_ver) {
             checkUpdate(context, need_toast, true);
@@ -149,7 +149,7 @@ public class AppInfoApi {
         return result.optString("data");
     }
 
-    public static void checkAnnouncement(Context context) throws Exception {
+    public static void checkAnnouncement() throws Exception {
         String url = "http://api.biliterminal.cn/terminal/announcement/get_list?from=" + SharedPreferencesUtil.getInt("app_announcement_last", -1);
         JSONObject result = NetWorkUtil.getJson(url, customHeaders);
 
@@ -164,7 +164,7 @@ public class AppInfoApi {
                 SharedPreferencesUtil.putInt("app_announcement_last", id);
             String title = item.getString("title");
             String content = item.getString("content");
-            MsgUtil.showText(context, title, content);
+            MsgUtil.showText(title, content);
         }
     }
 

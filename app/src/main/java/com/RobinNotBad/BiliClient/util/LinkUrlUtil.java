@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Pair;
 
-import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 
 import org.json.JSONException;
@@ -75,14 +74,14 @@ public class LinkUrlUtil {
                 }
             }
         } catch (Exception e) {
-            MsgUtil.err(e, BiliTerminal.context);
+            MsgUtil.err(e);
         }
         try {
             context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(text)));
         } catch (ActivityNotFoundException e) {
-            MsgUtil.showMsg("没有可处理此链接的应用！", context);
+            MsgUtil.showMsg("没有可处理此链接的应用！");
         } catch (Throwable th) {
-            MsgUtil.err(th, context);
+            MsgUtil.err(th);
         }
     }
 
@@ -119,11 +118,11 @@ public class LinkUrlUtil {
                 if (response.code() == 200 && (body = response.body()) != null) {
                     JSONObject json = new JSONObject(body.string());
                     if (json.has("code") && json.getInt("code") == -404) {
-                        CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("啥都木有~", context));
+                        CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("啥都木有~"));
                     }
                 }
             } catch (IOException | JSONException e) {
-                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("解析失败！", context));
+                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("解析失败！"));
             }
         });
     }

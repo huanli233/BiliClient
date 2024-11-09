@@ -54,7 +54,7 @@ public class GlideUtil {
                 .format(DecodeFormat.PREFER_RGB_565)
                 .transition(GlideUtil.getTransitionOptions())
                 .placeholder(placeholder)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(roundCorners, view.getContext()))))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(roundCorners))))
                 .into(view);
     }
 

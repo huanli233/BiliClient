@@ -71,7 +71,7 @@ public class SendDynamicActivity extends BaseActivity {
             if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
                 setResult(RESULT_CANCELED);
                 finish();
-                MsgUtil.showMsg("还没有登录喵~", this);
+                MsgUtil.showMsg("还没有登录喵~");
             }
 
             editText = findViewById(R.id.editText);
@@ -105,7 +105,7 @@ public class SendDynamicActivity extends BaseActivity {
                     setResult(RESULT_OK, result);
                     finish();
                 } else
-                    MsgUtil.showDialog(this, "无法发送", "上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作", -1);
+                    MsgUtil.showDialog("无法发送", "上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作", -1);
             });
 
             findViewById(R.id.emote).setOnClickListener(view -> emoteLauncher.launch(new Intent(this, EmoteActivity.class)));
@@ -239,7 +239,7 @@ public class SendDynamicActivity extends BaseActivity {
         Glide.with(this).load(GlideUtil.url(videoInfo.cover))
                 .transition(GlideUtil.getTransitionOptions())
                 .placeholder(R.mipmap.placeholder)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, this))))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(cover);
     }

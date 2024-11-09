@@ -314,7 +314,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             replyHolder.likeCount.setOnClickListener(view -> CenterThreadPool.run(() -> {
                 if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                    ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~", context));
+                    ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~"));
                     return;
                 }
                 if (!replyList.get(realPosition).liked) {
@@ -322,13 +322,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         if (ReplyApi.likeReply(oid, replyList.get(realPosition).rpid, true) == 0) {
                             replyList.get(realPosition).liked = true;
                             ((Activity) context).runOnUiThread(() -> {
-                                MsgUtil.showMsg("点赞成功", context);
+                                MsgUtil.showMsg("点赞成功");
                                 replyHolder.likeCount.setText(toWan(++replyList.get(realPosition).likeCount));
                                 replyHolder.likeCount.setTextColor(Color.rgb(0xfe, 0x67, 0x9a));
                                 replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_reply_like1), null, null, null);
                             });
                         } else
-                            ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("点赞失败", context));
+                            ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("点赞失败"));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
@@ -339,13 +339,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         if (ReplyApi.likeReply(oid, replyList.get(realPosition).rpid, false) == 0) {
                             replyList.get(realPosition).liked = false;
                             ((Activity) context).runOnUiThread(() -> {
-                                MsgUtil.showMsg("取消成功", context);
+                                MsgUtil.showMsg("取消成功");
                                 replyHolder.likeCount.setText(toWan(--replyList.get(realPosition).likeCount));
                                 replyHolder.likeCount.setTextColor(Color.rgb(0xff, 0xff, 0xff));
                                 replyHolder.likeCount.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.icon_reply_like0), null, null, null);
                             });
                         } else
-                            ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("取消失败", context));
+                            ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("取消失败"));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
@@ -354,7 +354,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             }));
 
-            View.OnClickListener onDeleteClick = view -> MsgUtil.showMsg("长按删除", context);
+            View.OnClickListener onDeleteClick = view -> MsgUtil.showMsg("长按删除");
             replyHolder.item_reply_delete.setOnClickListener(onDeleteClick);
             View.OnLongClickListener onDeleteLongClick = new View.OnLongClickListener() {
                 private int longClickPosition = -1;
@@ -373,7 +373,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                         notifyItemRemoved(position);
                                         notifyItemRangeChanged(position, replyList.size() - position);
                                         longClickPosition = -1;
-                                        MsgUtil.showMsg("删除成功~", context);
+                                        MsgUtil.showMsg("删除成功~");
                                         if (realPosition == 0 && isDetail) {
                                             ((Activity) context).finish();
                                         }
@@ -389,16 +389,16 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                             break;
                                     }
                                     String finalMsg = msg;
-                                    ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg(finalMsg, context));
+                                    ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg(finalMsg));
                                 }
                             } catch (Exception e) {
-                                ((Activity) context).runOnUiThread(() -> MsgUtil.err(e, context));
+                                ((Activity) context).runOnUiThread(() -> MsgUtil.err(e));
                             }
                         });
                     } else {
                         longClickPosition = realPosition;
                         longClickTime = currentTime;
-                        MsgUtil.showMsg("再次长按删除", context);
+                        MsgUtil.showMsg("再次长按删除");
                     }
                     return true;
                 }
@@ -429,7 +429,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         }
                     } catch (Exception e) {
                         if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) != 0)
-                            ((Activity) context).runOnUiThread(() -> MsgUtil.err(e, context));
+                            ((Activity) context).runOnUiThread(() -> MsgUtil.err(e));
                     }
                 });
             } else {

@@ -106,7 +106,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                         runOnUiThread(()->builder.create().show());
                     }
                 } catch (Exception e){
-                    MsgUtil.showMsg("没有获取到字幕",this);
+                    MsgUtil.showMsg("没有获取到字幕");
                     jump();
                     e.printStackTrace();
                 }

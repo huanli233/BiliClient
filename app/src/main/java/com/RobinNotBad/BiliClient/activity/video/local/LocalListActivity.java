@@ -62,7 +62,7 @@ public class LocalListActivity extends InstanceActivity {
                 if (longClickPosition == position) {
                     File file = new File(FileUtil.getDownloadPath(this), videoList.get(position).title);
                     CenterThreadPool.run(() -> FileUtil.deleteFolder(file));
-                    MsgUtil.showMsg("删除成功", this);
+                    MsgUtil.showMsg("删除成功");
                     videoList.remove(position);
                     adapter.notifyItemRemoved(position);
                     adapter.notifyItemRangeChanged(position, videoList.size() - position);
@@ -70,7 +70,7 @@ public class LocalListActivity extends InstanceActivity {
                     checkEmpty();
                 } else {
                     longClickPosition = position;
-                    MsgUtil.showMsg("再次长按删除", this);
+                    MsgUtil.showMsg("再次长按删除");
                 }
             });
             runOnUiThread(() -> {

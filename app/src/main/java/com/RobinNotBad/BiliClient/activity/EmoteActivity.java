@@ -103,7 +103,7 @@ public class EmoteActivity extends BaseActivity {
                     }
                 });
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.err(e, this));
+                runOnUiThread(() -> MsgUtil.err(e));
             }
         });
     }

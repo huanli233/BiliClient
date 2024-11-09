@@ -48,7 +48,7 @@ public class TestActivity extends BaseActivity {
 
                 runOnUiThread(()->{
                     output.setText("");
-                    MsgUtil.showMsg("发出请求！", this);
+                    MsgUtil.showMsg("发出请求！");
                 });
                 String result;
                 if(sw_post.isChecked()) {
@@ -61,12 +61,12 @@ public class TestActivity extends BaseActivity {
 
                 runOnUiThread(()->{
                     output.setText(result);
-                    MsgUtil.showMsg("请求成功！", this);
+                    MsgUtil.showMsg("请求成功！");
                 });
             }catch (Exception e){
                 runOnUiThread(()->{
                     output.setText(e.toString());
-                    MsgUtil.showMsg("请求失败！", this);
+                    MsgUtil.showMsg("请求失败！");
                 });
                 e.printStackTrace();
             }

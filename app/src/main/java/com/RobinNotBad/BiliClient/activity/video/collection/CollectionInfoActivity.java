@@ -53,7 +53,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
         int season_id = getIntent().getIntExtra("season_id", -1);
         long mid = getIntent().getLongExtra("mid", -1);
         if (collection == null/* && (season_id == -1 || mid == -1)*/) {
-            MsgUtil.showMsg("合集不存在", this);
+            MsgUtil.showMsg("合集不存在");
             finish();
             return; 
         }
@@ -132,7 +132,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                         .transition(GlideUtil.getTransitionOptions())
                         .placeholder(R.mipmap.placeholder)
                         .format(DecodeFormat.PREFER_RGB_565)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))).sizeMultiplier(0.85f).dontAnimate())
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))).sizeMultiplier(0.85f).dontAnimate())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(collectionInfoHolder.cover);
                 collectionInfoHolder.cover.setOnClickListener(view -> context.startActivity(new Intent(context, ImageViewerActivity.class).putExtra("imageList", new ArrayList<>(Collections.singletonList(collection.cover)))));
@@ -251,7 +251,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                         .transition(GlideUtil.getTransitionOptions())
                         .placeholder(R.mipmap.placeholder)
                         .format(DecodeFormat.PREFER_RGB_565)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))).sizeMultiplier(0.85f).dontAnimate())
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))).sizeMultiplier(0.85f).dontAnimate())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(collectionInfoHolder.cover);
                 collectionInfoHolder.cover.setOnClickListener(view -> context.startActivity(new Intent(context, ImageViewerActivity.class).putExtra("imageList", new ArrayList<>(Collections.singletonList(collection.cover)))));

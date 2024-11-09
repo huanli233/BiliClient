@@ -70,7 +70,7 @@ public class SetupUIActivity extends BaseActivity {
             uiPaddingH.setText("0");
             uiPaddingV.setText("0");
             round.setChecked(false);
-            MsgUtil.showMsg("恢复完成", this);
+            MsgUtil.showMsg("恢复完成");
         });
     }
 

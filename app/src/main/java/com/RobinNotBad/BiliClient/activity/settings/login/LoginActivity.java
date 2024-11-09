@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.GridLayout;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -45,7 +44,7 @@ public class LoginActivity extends BaseActivity {
 
         findViewById(R.id.loading).setVisibility(View.GONE);
         if (fragmentList.size() > 1 && SharedPreferencesUtil.getBoolean("first_" + LoginActivity.class.getSimpleName(), true)) {
-            MsgUtil.showMsgLong("提示：本页面可以左右滑动", this);
+            MsgUtil.showMsgLong("提示：本页面可以左右滑动");
             SharedPreferencesUtil.putBoolean("first_" + LoginActivity.class.getSimpleName(), false);
         }
     }

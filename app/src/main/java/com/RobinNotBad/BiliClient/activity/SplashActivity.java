@@ -128,7 +128,7 @@ public class SplashActivity extends Activity {
 
                 } catch (IOException e) {
                     runOnUiThread(() -> {
-                        MsgUtil.err(e, this);
+                        MsgUtil.err(e);
                         interruptSplash();
                         splashTextView.setText("网络错误");
                         if (SharedPreferencesUtil.getBoolean("setup", false)) {
@@ -141,7 +141,7 @@ public class SplashActivity extends Activity {
                         }
                     });
                 } catch (JSONException e) {
-                    runOnUiThread(() -> MsgUtil.err(e, this));
+                    runOnUiThread(() -> MsgUtil.err(e));
                     Intent intent = new Intent();
                     intent.setClass(SplashActivity.this, LocalListActivity.class);
                     startActivity(intent);
@@ -165,7 +165,7 @@ public class SplashActivity extends Activity {
             if (cookieInfo.getBoolean("refresh")) {
                 Log.e("Cookie", "需要刷新");
                 if (Objects.equals(SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), ""))
-                    runOnUiThread(() -> MsgUtil.showMsgLong("无法刷新Cookie，请重新登录！", this));
+                    runOnUiThread(() -> MsgUtil.showMsgLong("无法刷新Cookie，请重新登录！"));
                 else {
                     String correspondPath = CookieRefreshApi.getCorrespondPath(cookieInfo.getLong("timestamp"));
                     Log.e("CorrespondPath", correspondPath);
@@ -173,15 +173,15 @@ public class SplashActivity extends Activity {
                     Log.e("RefreshCsrf", refreshCsrf);
                     if (CookieRefreshApi.refreshCookie(refreshCsrf)) {
                         NetWorkUtil.refreshHeaders();
-                        runOnUiThread(() -> MsgUtil.showMsg("Cookie已刷新", this));
+                        runOnUiThread(() -> MsgUtil.showMsg("Cookie已刷新"));
                     } else {
-                        runOnUiThread(() -> MsgUtil.showMsgLong("登录信息过期，请重新登录！", this));
+                        runOnUiThread(() -> MsgUtil.showMsgLong("登录信息过期，请重新登录！"));
                         resetLogin();
                     }
                 }
             }
         } catch (JSONException e) {
-            runOnUiThread(() -> MsgUtil.showMsgLong("登录信息过期，请重新登录！", this));
+            runOnUiThread(() -> MsgUtil.showMsgLong("登录信息过期，请重新登录！"));
             resetLogin();
         }
     }

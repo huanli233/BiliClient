@@ -119,10 +119,10 @@ public class SettingPlayerChooseActivity extends BaseActivity {
         for (int i = 0; i < cardViewList.size(); i++) {
             if (position == i) {
                 cardViewList.get(i).setStrokeColor(getResources().getColor(R.color.pink));
-                cardViewList.get(i).setStrokeWidth(ToolsUtil.dp2px(1, this));
+                cardViewList.get(i).setStrokeWidth(ToolsUtil.dp2px(1));
             } else {
                 cardViewList.get(i).setStrokeColor(getResources().getColor(R.color.gray));
-                cardViewList.get(i).setStrokeWidth(ToolsUtil.dp2px(0.1f, this));
+                cardViewList.get(i).setStrokeWidth(ToolsUtil.dp2px(0.1f));
             }
         }
         if (!just_create) switch (playerList[checkPosition + 1]) {
@@ -135,12 +135,12 @@ public class SettingPlayerChooseActivity extends BaseActivity {
                 }
                 break;
             case "mtvPlayer":
-                MsgUtil.showDialog(this, "提醒", "不再推荐使用小电视播放器，许多功能已不再支持，推荐使用内置播放器", -1);
+                MsgUtil.showDialog("提醒", "不再推荐使用小电视播放器，许多功能已不再支持，推荐使用内置播放器", -1);
                 break;
 
             case "aliangPlayer":
                 if (Build.VERSION.SDK_INT <= 19)
-                    MsgUtil.showDialog(this, "提醒", "您的安卓版本过低，可能无法使用凉腕播放器，可以使用内置播放器（改版小电视不再推荐）", -1);
+                    MsgUtil.showDialog("提醒", "您的安卓版本过低，可能无法使用凉腕播放器，可以使用内置播放器（改版小电视不再推荐）", -1);
                 break;
 
             default:

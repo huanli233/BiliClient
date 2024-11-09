@@ -126,14 +126,14 @@ public class VideoInfoFragment extends Fragment {
                         dynId = DynamicApi.relayVideo(text, (atUids.isEmpty() ? null : atUids), videoInfo.aid);
                         if (dynId != -1) {
                             if (isAdded())
-                                requireActivity().runOnUiThread(() -> MsgUtil.showMsg("转发成功~", requireContext()));
+                                requireActivity().runOnUiThread(() -> MsgUtil.showMsg("转发成功~"));
                         } else {
                             if (isAdded())
-                                requireActivity().runOnUiThread(() -> MsgUtil.showMsg("转发失败", requireContext()));
+                                requireActivity().runOnUiThread(() -> MsgUtil.showMsg("转发失败"));
                         }
                     } catch (Exception e) {
                         if (isAdded())
-                            requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                            requireActivity().runOnUiThread(() -> MsgUtil.err(e));
                     }
                 });
             }
@@ -220,7 +220,7 @@ public class VideoInfoFragment extends Fragment {
                 //历史记录接口，如果没有记录过该视频，会返回历史记录的最后一项，神奇吧
             } catch (Exception e) {
                 if (isAdded())
-                    requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                    requireActivity().runOnUiThread(() -> MsgUtil.err(e));
                 progressPair = new Pair<>(0L,0);
             }
 
@@ -268,7 +268,7 @@ public class VideoInfoFragment extends Fragment {
                         });
                     } catch (Exception e) {
                         if (isAdded())
-                            requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                            requireActivity().runOnUiThread(() -> MsgUtil.err(e));
                     }
                 });
             } else tagsText.setVisibility(View.GONE);
@@ -289,7 +289,7 @@ public class VideoInfoFragment extends Fragment {
                     });
                 } catch (Exception e) {
                     if (isAdded())
-                        requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                        requireActivity().runOnUiThread(() -> MsgUtil.err(e));
                 }
             });
 
@@ -321,7 +321,7 @@ public class VideoInfoFragment extends Fragment {
 
                 Glide.with(requireContext()).asDrawable().load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
                         .transition(GlideUtil.getTransitionOptions())
-                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4, requireContext()))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(cover);
 
@@ -368,7 +368,7 @@ public class VideoInfoFragment extends Fragment {
                         return true;
                     }
                     ToolsUtil.copyText(context, videoInfo.bvid);
-                    MsgUtil.showMsg("BV号已复制", context);
+                    MsgUtil.showMsg("BV号已复制");
                     return true;
                 });
 
@@ -385,7 +385,7 @@ public class VideoInfoFragment extends Fragment {
 
                 like.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                        CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~", getContext()));
+                        CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~"));
                         return;
                     }
                     try {
@@ -393,7 +393,7 @@ public class VideoInfoFragment extends Fragment {
                         if (result == 0) {
                             videoInfo.stats.liked = !videoInfo.stats.liked;
                             if (isAdded()) CenterThreadPool.runOnUiThread(() -> {
-                                MsgUtil.showMsg((videoInfo.stats.liked ? "点赞成功" : "取消成功"), getContext());
+                                MsgUtil.showMsg(videoInfo.stats.liked ? "点赞成功" : "取消成功");
 
                                 if (videoInfo.stats.liked)
                                     likeLabel.setText(ToolsUtil.toWan(++videoInfo.stats.like));
@@ -406,17 +406,17 @@ public class VideoInfoFragment extends Fragment {
                                 msg = "当前请求触发B站风控";
                             }
                             String finalMsg = msg;
-                            CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg(finalMsg, getContext()));
+                            CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg(finalMsg));
                         }
                     } catch (Exception e) {
                         if (isAdded())
-                            CenterThreadPool.runOnUiThread(() -> MsgUtil.err(e, getContext()));
+                            CenterThreadPool.runOnUiThread(() -> MsgUtil.err(e));
                     }
                 }));
 
                 coin.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                        CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~", getContext()));
+                        CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~"));
                         return;
                     }
                     if (videoInfo.stats.coined < videoInfo.stats.allow_coin) {
@@ -425,7 +425,7 @@ public class VideoInfoFragment extends Fragment {
                             if (result == 0) {
                                 if (++coinAdd <= 2) videoInfo.stats.coined++;
                                 if (isAdded()) requireActivity().runOnUiThread(() -> {
-                                    MsgUtil.showMsg("投币成功", requireContext());
+                                    MsgUtil.showMsg("投币成功");
                                     coinLabel.setText(ToolsUtil.toWan(++videoInfo.stats.coin));
                                     coin.setImageResource(R.drawable.icon_coin_1);
                                 });
@@ -435,15 +435,15 @@ public class VideoInfoFragment extends Fragment {
                                     msg = "当前请求触发B站风控";
                                 }
                                 String finalMsg = msg;
-                                requireActivity().runOnUiThread(() -> MsgUtil.showMsg(finalMsg, requireContext()));
+                                requireActivity().runOnUiThread(() -> MsgUtil.showMsg(finalMsg));
                             }
                         } catch (Exception e) {
                             if (isAdded())
-                                requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
+                                requireActivity().runOnUiThread(() -> MsgUtil.err(e));
                         }
                     } else {
                         if (isAdded())
-                            requireActivity().runOnUiThread(() -> MsgUtil.showMsg("投币数量到达上限", requireContext()));
+                            requireActivity().runOnUiThread(() -> MsgUtil.showMsg("投币数量到达上限"));
                     }
                 }));
 
@@ -460,9 +460,9 @@ public class VideoInfoFragment extends Fragment {
                     try {
                         int result = WatchLaterApi.add(videoInfo.aid);
                         if (result == 0)
-                            requireActivity().runOnUiThread(() -> MsgUtil.showMsg("添加成功", requireContext()));
+                            requireActivity().runOnUiThread(() -> MsgUtil.showMsg("添加成功"));
                         else
-                            requireActivity().runOnUiThread(() -> MsgUtil.showMsg("添加失败，错误码：" + result, requireContext()));
+                            requireActivity().runOnUiThread(() -> MsgUtil.showMsg("添加失败，错误码：" + result));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -481,7 +481,7 @@ public class VideoInfoFragment extends Fragment {
                         File downPath = new File(FileUtil.getDownloadPath(requireContext()), ToolsUtil.stringToFile(videoInfo.title));
 
                         if (downPath.exists() && videoInfo.pagenames.size() == 1)
-                            MsgUtil.showMsg("已经缓存过了~", requireContext());
+                            MsgUtil.showMsg("已经缓存过了~");
                         else {
                             if (videoInfo.pagenames.size() > 1) {
                                 Intent intent = new Intent();
@@ -504,7 +504,7 @@ public class VideoInfoFragment extends Fragment {
                 });
                 relay.setOnLongClickListener(v -> {
                     ToolsUtil.copyText(requireContext(), "https://www.bilibili.com/" + videoInfo.bvid);
-                    MsgUtil.showMsg("视频完整链接已复制", requireContext());
+                    MsgUtil.showMsg("视频完整链接已复制");
                     return true;
                 });
 

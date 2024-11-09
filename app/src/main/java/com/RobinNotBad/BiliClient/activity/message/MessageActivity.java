@@ -97,11 +97,11 @@ public class MessageActivity extends InstanceActivity {
                             sessionsView.setLayoutManager(new LinearLayoutManager(this));
                             sessionsView.setAdapter(adapter);
                         } catch (Exception e) {
-                            MsgUtil.err(e, this);
+                            MsgUtil.err(e);
                         }
                     });
                 } catch (Exception e) {
-                    runOnUiThread(() -> MsgUtil.err(e, this));
+                    runOnUiThread(() -> MsgUtil.err(e));
                 }
             });
 

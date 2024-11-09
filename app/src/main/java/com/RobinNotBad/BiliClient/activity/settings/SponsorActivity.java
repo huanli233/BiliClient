@@ -39,7 +39,7 @@ public class SponsorActivity extends RefreshListActivity {
                 if (result == 1) setBottom(true);
             } catch (Exception e) {
                 report(e);
-                runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误", this));
+                runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误"));
                 setRefreshing(false);
             }
         });
@@ -55,7 +55,7 @@ public class SponsorActivity extends RefreshListActivity {
 
                 if (result == 1) setBottom(true);
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误", this));
+                runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误"));
                 loadFail(e);
             }
         });

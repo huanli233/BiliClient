@@ -67,7 +67,7 @@ public class ArticleInfoActivity extends BaseActivity {
                 TutorialHelper.showPagerTutorial(this,2);
             }).onFailure((error) -> {
                 loadingView.setImageResource(R.mipmap.loading_2233_error);
-                MsgUtil.err(error, this);
+                MsgUtil.err(error);
             }));
     }
 

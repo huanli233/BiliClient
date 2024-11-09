@@ -62,7 +62,7 @@ public class CatchActivity extends BaseActivity {
 
             findViewById(R.id.upload_btn).setOnClickListener(view -> {
                 if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, -1) == -1)
-                    MsgUtil.showMsg("不会对未登录时遇到的问题负责", this);
+                    MsgUtil.showMsg("不会对未登录时遇到的问题负责");
                 else {
                     CenterThreadPool.run(() -> {
                         String res = AppInfoApi.uploadStack(stack, this);

@@ -59,7 +59,7 @@ public class FollowUsersActivity extends RefreshListActivity {
             } catch (Exception e) {
                 if (e.getMessage() != null && (e.getMessage().startsWith("22115") || e.getMessage().startsWith("22118"))) {
                     finish();
-                    MsgUtil.showMsg(e.getMessage(), this);
+                    MsgUtil.showMsg(e.getMessage());
                 } else {
                     report(e);
                     setRefreshing(false);
@@ -87,7 +87,7 @@ public class FollowUsersActivity extends RefreshListActivity {
             } catch (Exception e) {
                 if (e.getMessage() != null && (e.getMessage().startsWith("22115") || e.getMessage().startsWith("22118"))) {
                     finish();
-                    MsgUtil.showMsg(e.getMessage(), this);
+                    MsgUtil.showMsg(e.getMessage());
                 } else {
                     report(e);
                     setRefreshing(false);

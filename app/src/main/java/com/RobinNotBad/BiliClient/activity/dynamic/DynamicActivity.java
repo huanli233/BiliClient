@@ -51,7 +51,7 @@ public class DynamicActivity extends RefreshMainActivity {
             String type = typeNameMap.get(data.getStringExtra("item"));
             if (type != null) {
                 if (isRefreshing) {
-                    MsgUtil.showMsg("还在加载中OvO", this);
+                    MsgUtil.showMsg("还在加载中OvO");
                 } else {
                     this.type = type;
                     setRefreshing(true);
@@ -85,7 +85,7 @@ public class DynamicActivity extends RefreshMainActivity {
                         dynId = DynamicApi.publishTextContent(text, atUids);
                     }
                     if (!(dynId == -1)) {
-                        runOnUiThread(() -> MsgUtil.showMsg("发送成功~", DynamicActivity.this));
+                        runOnUiThread(() -> MsgUtil.showMsg("发送成功~"));
                         CenterThreadPool.run(() -> {
                             try {
                                 Dynamic dynamic = DynamicApi.getDynamic(dynId);
@@ -97,14 +97,14 @@ public class DynamicActivity extends RefreshMainActivity {
                                     }
                                 });
                             } catch (Exception e) {
-                                MsgUtil.err(e, DynamicActivity.this);
+                                MsgUtil.err(e);
                             }
                         });
                     } else {
-                        runOnUiThread(() -> MsgUtil.showMsg("发送失败", DynamicActivity.this));
+                        runOnUiThread(() -> MsgUtil.showMsg("发送失败"));
                     }
                 } catch (Exception e) {
-                    runOnUiThread(() -> MsgUtil.err(e, DynamicActivity.this));
+                    runOnUiThread(() -> MsgUtil.err(e));
                 }
             });
         }
@@ -140,12 +140,12 @@ public class DynamicActivity extends RefreshMainActivity {
                         }
                         dynId = DynamicApi.relayDynamic(finalText, (atUids.isEmpty() ? null : atUids), dynamicId);
                         if (!(dynId == -1)) {
-                            activity.runOnUiThread(() -> MsgUtil.showMsg("转发成功~", activity));
+                            activity.runOnUiThread(() -> MsgUtil.showMsg("转发成功~"));
                         } else {
-                            activity.runOnUiThread(() -> MsgUtil.showMsg("转发失败", activity));
+                            activity.runOnUiThread(() -> MsgUtil.showMsg("转发失败"));
                         }
                     } catch (Exception e) {
-                        activity.runOnUiThread(() -> MsgUtil.err(e, activity));
+                        activity.runOnUiThread(() -> MsgUtil.err(e));
                     }
                 });
             }

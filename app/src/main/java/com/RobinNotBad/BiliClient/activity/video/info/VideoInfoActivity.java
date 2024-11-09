@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.reply.ReplyFragment;
@@ -79,7 +78,7 @@ public class VideoInfoActivity extends BaseActivity {
         if (seek_reply != -1) viewPager.setCurrentItem(1);
         bangumiInfoFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(loading, bangumiInfoFragment.getView()));
         if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
-            MsgUtil.showMsgLong("提示：本页面可以左右滑动", this);
+            MsgUtil.showMsgLong("提示：本页面可以左右滑动");
             SharedPreferencesUtil.putBoolean("first_videoinfo", false);
         }
     }
@@ -109,10 +108,10 @@ public class VideoInfoActivity extends BaseActivity {
         }).onFailure((error) -> {
             runOnUiThread(()-> {
                 loading.setImageResource(R.mipmap.loading_2233_error);
-                MsgUtil.showMsg("获取信息失败！\n可能是视频不存在？", this);
+                MsgUtil.showMsg("获取信息失败！\n可能是视频不存在？");
             });
             CenterThreadPool.runOnUIThreadAfter(5L, TimeUnit.SECONDS, ()->
-                    MsgUtil.err(error, BiliTerminal.context));
+                    MsgUtil.err(error));
         }));
     }
 

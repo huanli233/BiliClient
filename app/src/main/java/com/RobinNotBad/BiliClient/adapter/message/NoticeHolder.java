@@ -62,8 +62,8 @@ public class NoticeHolder extends RecyclerView.ViewHolder {
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .apply(RequestOptions.circleCropTransform())
                     .into(imageView);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(ToolsUtil.dp2px(32, context), ToolsUtil.dp2px(32, context)));
-            imageView.setLeft(ToolsUtil.dp2px(3, context));
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(ToolsUtil.dp2px(32), ToolsUtil.dp2px(32)));
+            imageView.setLeft(ToolsUtil.dp2px(3));
             int finalI = i;
             imageView.setOnClickListener(view1 -> {
                 Intent intent = new Intent();
@@ -75,7 +75,7 @@ public class NoticeHolder extends RecyclerView.ViewHolder {
 
             //这个View什么都没有，用来当间隔的
             View view = new View(context);
-            view.setLayoutParams(new ViewGroup.LayoutParams(ToolsUtil.dp2px(3, context), ToolsUtil.dp2px(32, context)));
+            view.setLayoutParams(new ViewGroup.LayoutParams(ToolsUtil.dp2px(3), ToolsUtil.dp2px(32)));
             avaterList.addView(view);
         }
 
@@ -126,13 +126,13 @@ public class NoticeHolder extends RecyclerView.ViewHolder {
                             long seekReply = message.rootId == 0 ? message.sourceId : message.rootId;
                             TerminalContext.getInstance().enterArticleDetailPage(context, message.subjectId, seekReply);
                         } else {
-                            MsgUtil.showMsg("此类型暂不支持跳转", context);
+                            MsgUtil.showMsg("此类型暂不支持跳转");
                         }
                     } else {
-                        MsgUtil.showMsg("此类型暂不支持跳转", context);
+                        MsgUtil.showMsg("此类型暂不支持跳转");
                     }
                 } catch (ActivityNotFoundException ignored) {
-                    MsgUtil.showMsg("此类型暂不支持跳转", context);
+                    MsgUtil.showMsg("此类型暂不支持跳转");
                 }
             });
         }
