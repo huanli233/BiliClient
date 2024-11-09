@@ -59,7 +59,7 @@ public class TextClock extends TextView {
     }
 
     public void init(){
-        setTypeface(Typeface.DEFAULT_BOLD);
+        //setTypeface(Typeface.DEFAULT_BOLD);
         //Log.i("debug-clock","init,delta=" + delta);
     }
 

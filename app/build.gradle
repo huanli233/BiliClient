@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
 }
 
-int betaVer = 3 //如果为0则是正式版
+int betaVer = 4 //如果为0则是正式版
 
 android {
 

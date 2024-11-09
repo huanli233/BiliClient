@@ -35,8 +35,9 @@ public class BiliTerminal extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (context == null && getApplicationContext() != null) {
-            context = getApplicationContext();
+        if (context == null) {
+            SharedPreferencesUtil.sharedPreferences = getSharedPreferences("default", Context.MODE_PRIVATE);
+            context = getFitDisplayContext(this);
             ErrorCatch errorCatch = ErrorCatch.getInstance();
             errorCatch.init(context);
         }

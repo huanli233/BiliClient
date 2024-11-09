@@ -11,6 +11,8 @@ import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import androidx.lifecycle.Lifecycle;
+
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
@@ -151,7 +153,7 @@ public class MenuActivity extends BaseActivity {
     private void killAndJump(String name) {
         if (btnNames.containsKey(name) && !Objects.equals(name, from)) {
             InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
-            if (instance != null && (Build.VERSION.SDK_INT < 17 || !instance.isDestroyed())) instance.finish();
+            if (instance != null && instance.getLifecycle().getCurrentState() == Lifecycle.State.DESTROYED) instance.finish();
 
             Intent intent = new Intent();
             intent.setClass(MenuActivity.this, Objects.requireNonNull(btnNames.get(name)).second);
@@ -161,7 +163,7 @@ public class MenuActivity extends BaseActivity {
             switch (name) {
                 case "exit": //退出按钮
                     InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
-                    if (instance != null && (Build.VERSION.SDK_INT < 17 || !instance.isDestroyed())) instance.finish();
+                    if (instance != null && instance.getLifecycle().getCurrentState() == Lifecycle.State.DESTROYED) instance.finish();
                     break;
                 case "login": //登录按钮
                     Intent intent = new Intent();

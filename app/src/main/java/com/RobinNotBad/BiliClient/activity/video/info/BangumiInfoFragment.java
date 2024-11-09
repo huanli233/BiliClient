@@ -48,6 +48,7 @@ public class BangumiInfoFragment extends Fragment {
     private TextView eposide_choose;
     private TextView indexShow;
     private Runnable onFinishLoad;
+    private boolean loadFinished;
     private Bangumi bangumi;
 
     public static BangumiInfoFragment newInstance(long mediaId) {
@@ -97,7 +98,10 @@ public class BangumiInfoFragment extends Fragment {
         eposide_choose = rootView.findViewById(R.id.eposide_choose);
         selectedSection = 0;
 
-        if (onFinishLoad != null) onFinishLoad.run();
+        if (onFinishLoad != null) {
+            loadFinished = true;
+            onFinishLoad.run();
+        }
 
         Glide.with(this)
                 .load(GlideUtil.url(bangumi.info.cover_horizontal))
@@ -214,6 +218,7 @@ public class BangumiInfoFragment extends Fragment {
     }
 
     public void setOnFinishLoad(Runnable onFinishLoad) {
-        this.onFinishLoad = onFinishLoad;
+        if(loadFinished) onFinishLoad.run();
+        else this.onFinishLoad = onFinishLoad;
     }
 }
