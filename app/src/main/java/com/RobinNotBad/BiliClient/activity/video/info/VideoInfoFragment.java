@@ -74,6 +74,9 @@ import java.util.regex.Pattern;
 
 public class VideoInfoFragment extends Fragment {
     private static final String TAG = "VideoInfoFragment";
+    private Runnable onFinishLoad;
+    private boolean loadFinished;
+
     private VideoInfo videoInfo;
 
     private TextView description;
@@ -192,6 +195,10 @@ public class VideoInfoFragment extends Fragment {
         MaterialCardView collectionCard = view.findViewById(R.id.collection);
         TextView collectionTitle = view.findViewById(R.id.collectionText);
         fav = view.findViewById(R.id.btn_fav);
+
+        view.setVisibility(View.GONE);
+        if (onFinishLoad != null) onFinishLoad.run();
+        else loadFinished = true;
 
         if (videoInfo.epid != -1) { //不是空的的话就应该跳转到番剧页面了
             CenterThreadPool.run(() -> {
@@ -571,5 +578,11 @@ public class VideoInfoFragment extends Fragment {
             intent.putExtra("imageList", imageList);
             requireContext().startActivity(intent);
         } catch (Exception ignored){}
+    }
+
+
+    public void setOnFinishLoad(Runnable onFinishLoad) {
+        if(loadFinished) onFinishLoad.run();
+        else this.onFinishLoad = onFinishLoad;
     }
 }

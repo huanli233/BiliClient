@@ -98,10 +98,9 @@ public class BangumiInfoFragment extends Fragment {
         eposide_choose = rootView.findViewById(R.id.eposide_choose);
         selectedSection = 0;
 
-        if (onFinishLoad != null) {
-            loadFinished = true;
-            onFinishLoad.run();
-        }
+        rootView.setVisibility(View.GONE);
+        if (onFinishLoad != null) onFinishLoad.run();
+        else loadFinished = true;
 
         Glide.with(this)
                 .load(GlideUtil.url(bangumi.info.cover_horizontal))

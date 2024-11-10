@@ -41,42 +41,43 @@ public class AnimationUtils {
     }
 
     public static void crossFade(final View view, final View view2) {
-        crossFade(view, view2, 100, 100);
+        crossFade(view, view2, 100);
     }
 
-    public static void crossFade(final View view, final View view2, final int duration1, final int duration2) {
-        if (view == null || view2 == null) return;
+    public static void crossFade(final View view, final View view2, final int duration) {
         runOnUiThread(() -> {
             if (!SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.LOAD_TRANSITION, true)) {
-                view.setVisibility(View.GONE);
-                view2.setVisibility(View.VISIBLE);
+                if(view!=null) view.setVisibility(View.GONE);
+                if(view2!=null) view2.setVisibility(View.VISIBLE);
                 return;
             }
-            ObjectAnimator fadeOut = ObjectAnimator.ofFloat(view, "alpha", 1f, 0f);
-            fadeOut.setDuration(duration1);
-            ObjectAnimator fadeIn = ObjectAnimator.ofFloat(view2, "alpha", 0f, 1f);
-            fadeIn.setDuration(duration2);
-            fadeOut.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(@NonNull Animator animation) {}
-                @Override
-                public void onAnimationEnd(@NonNull Animator animation) {
+            if(view != null) {
+                ObjectAnimator fadeOut = ObjectAnimator.ofFloat(view, "alpha", 1f, 0f);
+                fadeOut.setDuration(duration);
+                fadeOut.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(@NonNull Animator animation) {}
+                    @Override
+                    public void onAnimationEnd(@NonNull Animator animation) {
+                        view.setVisibility(View.GONE);
+                    }
+                    @Override
+                    public void onAnimationCancel(@NonNull Animator animation) {}
+                    @Override
+                    public void onAnimationRepeat(@NonNull Animator animation) {}
+                });
+                fadeOut.start();
+            }
 
-                    view.setVisibility(View.GONE);
-                }
-                @Override
-                public void onAnimationCancel(@NonNull Animator animation) {}
-                @Override
-                public void onAnimationRepeat(@NonNull Animator animation) {}
-            });
-            fadeOut.addUpdateListener(valueAnimator -> {
-                float fraction = valueAnimator.getAnimatedFraction();
-                if (fraction >= 0.5f && !fadeIn.isStarted()) {
+            if(view2 != null) {
+                ObjectAnimator fadeIn = ObjectAnimator.ofFloat(view2, "alpha", 0f, 1f);
+                fadeIn.setDuration(duration);
+                CenterThreadPool.runOnUIThreadAfter(duration, ()-> {
                     view2.setVisibility(View.VISIBLE);
                     fadeIn.start();
-                }
-            });
-            fadeOut.start();
+                });
+            }
+
         });
     }
 }

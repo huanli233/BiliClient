@@ -99,10 +99,8 @@ public class VideoInfoActivity extends BaseActivity {
             viewPager.setOffscreenPageLimit(fragmentList.size());
             ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
             viewPager.setAdapter(vpfAdapter);
-            View videoInfoView;
-            if ((videoInfoView = videoInfoFragment.getView()) != null) videoInfoView.setVisibility(View.GONE);
             if (seek_reply != -1) viewPager.setCurrentItem(1);
-            AnimationUtils.crossFade(loading, videoInfoView);
+            videoInfoFragment.setOnFinishLoad(()-> AnimationUtils.crossFade(loading, videoInfoFragment.getView()));
         }).onFailure((error) -> {
             loading.setImageResource(R.mipmap.loading_2233_error);
             MsgUtil.showMsg("获取信息失败！\n可能是视频不存在？");
