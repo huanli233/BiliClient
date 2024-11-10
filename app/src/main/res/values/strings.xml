@@ -151,13 +151,13 @@
     </array>
 
     <string name="tutorial_pager">提示\n\n←这个页面可以左右翻页喵→\n\n（共有NNN页，滑动一下不再显示）</string>
-    <string name="desc_fromlast">开启选项后，播放视频时如果有超过5秒的播放历史，将会自动从历史位置播放</string>
-    <string name="desc_showonline">开启选项后，播放视频时如果获取成功，右下角将会显示当前视频的实时观看人数，在直播中则为观看过的人数和进入直播间提醒\n如果观看视频中途崩溃可以尝试关闭此开关\n该功能为内置播放器专属</string>
-    <string name="desc_scale">开启选项后，播放视频时可使用像查看照片一样的手势来缩放和移动视频\n对于单点触控的设备，可以先点击一下屏幕，然后立刻按住并上下拖动来缩放\n！若无法缩放，请切换下面的“显示方式”！\n特别感谢：凉腕播放器</string>
+    <string name="desc_fromlast">播放视频时如果有超过5秒的播放历史，将会自动从历史位置播放</string>
+    <string name="desc_showonline">播放器右下角会显示当前视频的实时观看人数，在直播中则为观看过的人数和进入直播间提醒\n如果观看视频中途崩溃可以尝试关闭此开关\n该功能为内置播放器专属</string>
+    <string name="desc_scale">播放视频时可使用像查看照片一样的手势来缩放和移动视频，双击屏幕将恢复原大小\n对于单点触控的设备，可以双击屏幕并在第二次按下时不抬手，然后上下拖动来缩放\n！若无法缩放，请切换下面的“显示方式”！\n特别感谢：凉腕播放器</string>
     <string name="desc_doublemove">大屏幕设备上会更好用，手表上可能会造成操作不便</string>
     <string name="desc_display">！如果视频播放异常/闪退/未响应/无法缩放，请尝试切换该选项！\n已知：KidoX3只能Surface，小天才只能Texture，部分设备需要使用Texture才能进行缩放</string>
     <string name="desc_videocodec">硬件解码：使用GPU解码，速度快，性能消耗小\n软件解码：使用CPU硬算，兼容性好，暖手必备</string>
     <string name="desc_audiocodec">通常使用AudioTrack即可，声音延迟或无法播放请尝试切换</string>
-    <string name="desc_danmaku_force_r2l">开启此选项后，除了高级弹幕以外的弹幕都会被强制以滚动弹幕的形式展示。此项用于避免顶部弹幕和底部弹幕对画面的遮挡。</string>
-    <string name="desc_danmaku_showsender">播放直播时，将会显示聊天弹幕的发送者名称</string>
+    <string name="desc_danmaku_force_r2l">除了高级弹幕以外的弹幕都会被强制以滚动弹幕的形式展示，从而避免顶部弹幕和底部弹幕遮挡画面</string>
+    <string name="desc_danmaku_showsender">显示直播聊天弹幕的发送者名称</string>
 </resources>

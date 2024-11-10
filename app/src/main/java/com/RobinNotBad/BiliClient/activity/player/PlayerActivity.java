@@ -113,7 +113,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private String video_url, danmaku_url;
 
     private boolean isPlaying, isPrepared, hasDanmaku,
-            isOnlineVideo, isLiveMode, isSeeking, isDanmakuVisible, isPreviewMode;
+            isOnlineVideo, isLiveMode, isSeeking, isDanmakuVisible;
 
     private int videoall, videonow, videonow_last;
     private long lastProgress;
@@ -165,8 +165,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     private void getExtras() {
         Intent intent = getIntent();
-        isPreviewMode = intent.getBooleanExtra("preview",false);
-        if(isPreviewMode) return;
 
         video_url = intent.getStringExtra("url");//视频链接
         danmaku_url = intent.getStringExtra("danmaku");//弹幕链接
@@ -235,21 +233,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         if ((!SharedPreferencesUtil.getBoolean("show_online", true)) || aid==0 || cid==0)
             text_online.setVisibility(View.GONE);
-
-        if (isPreviewMode) {
-            loading_text0.setText("预览中");
-            loading_text1.setText("点击上方标题栏退出");
-            videoArea.setBackgroundColor(Color.argb(0x50, 0xff, 0xff, 0xff));
-            changeVideoSize(640, 360);
-            if (SharedPreferencesUtil.getBoolean("player_ui_showDanmakuBtn", true))
-                danmaku_btn.setVisibility(View.VISIBLE);
-            else danmaku_btn.setVisibility(View.GONE);
-            if (SharedPreferencesUtil.getBoolean("player_ui_showLoopBtn", true))
-                loop_btn.setVisibility(View.VISIBLE);
-            else loop_btn.setVisibility(View.GONE);
-            isPreviewMode = true;
-            return;
-        }
 
         IjkMediaPlayer.loadLibrariesOnce(null);
 
@@ -1171,7 +1154,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     @SuppressLint("SetTextI18n")
     public void changeVolume(Boolean add_or_cut) {
-        if (isPreviewMode) return;
         if (autoHideTimer != null) autoHideTimer.cancel();
         int volumeNow = audioManager.getStreamVolume(STREAM_MUSIC);
         int volumeMax = audioManager.getStreamMaxVolume(STREAM_MUSIC);
