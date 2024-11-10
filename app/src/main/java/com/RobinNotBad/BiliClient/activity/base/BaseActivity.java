@@ -1,5 +1,9 @@
 package com.RobinNotBad.BiliClient.activity.base;
 
+import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.ScrollView;
+import androidx.core.widget.NestedScrollView;
 import static com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity.getRelayDynamicLauncher;
 
 import android.content.Context;
@@ -29,6 +33,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.event.SnackEvent;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.RotaryUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -201,5 +206,27 @@ public class BaseActivity extends AppCompatActivity {
 
     public void setForceSingleColumn() {
         force_single_column = true;
+    }
+    
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        //自动适配表冠
+        ViewGroup rootView = (ViewGroup)this.getWindow().getDecorView();
+        setRotaryScroll(rootView);
+    }
+    private void setRotaryScroll(View view) {
+        if(view instanceof ViewGroup) {
+            ViewGroup vp = (ViewGroup) view;
+            for (int i = 0; i < vp.getChildCount(); i++) {
+                View viewchild = vp.getChildAt(i);
+                if(viewchild instanceof ScrollView||viewchild instanceof NestedScrollView||viewchild instanceof RecyclerView||viewchild instanceof ListView) {
+                    RotaryUtil.setRotaryEncoderScroll(viewchild);
+                    viewchild.requestFocus();
+                    break;
+                }
+                setRotaryScroll(viewchild);
+            }
+        } 
     }
 }
