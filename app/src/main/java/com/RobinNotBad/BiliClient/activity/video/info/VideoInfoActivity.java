@@ -54,11 +54,9 @@ public class VideoInfoActivity extends BaseActivity {
         this.aid = intent.getLongExtra("aid", 114514);
         this.seek_reply = intent.getLongExtra("seekReply", -1);
 
-        String finalType = type;
-
         viewPager = findViewById(R.id.viewPager);
         loading = findViewById(R.id.loading);
-        if (finalType.equals("media")) initMediaInfoView();
+        if (type.equals("media")) initMediaInfoView();
         else initVideoInfoView();
     }
 
@@ -90,7 +88,8 @@ public class VideoInfoActivity extends BaseActivity {
         setPageName("视频详情");
         TerminalContext.getInstance().getCurrentVideoLiveData().observe(this, (result) -> result.onSuccess((videoInfo) -> {
             fragmentList = new ArrayList<>(3);
-            fragmentList.add(VideoInfoFragment.newInstance());
+            VideoInfoFragment videoInfoFragment = VideoInfoFragment.newInstance();
+            fragmentList.add(videoInfoFragment);
             replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1, seek_reply, videoInfo.staff.get(0).mid);
             fragmentList.add(replyFragment);
             if (SharedPreferencesUtil.getBoolean("related_enable", true)) {
@@ -100,16 +99,13 @@ public class VideoInfoActivity extends BaseActivity {
             viewPager.setOffscreenPageLimit(fragmentList.size());
             ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
             viewPager.setAdapter(vpfAdapter);
-            View view;
-            if ((view = fragmentList.get(0).getView()) != null)
-                view.setVisibility(View.GONE);
+            View videoInfoView;
+            if ((videoInfoView = videoInfoFragment.getView()) != null) videoInfoView.setVisibility(View.GONE);
             if (seek_reply != -1) viewPager.setCurrentItem(1);
-            runOnUiThread(()->AnimationUtils.crossFade(loading, fragmentList.get(0).getView()));
+            AnimationUtils.crossFade(loading, videoInfoView);
         }).onFailure((error) -> {
-            runOnUiThread(()-> {
-                loading.setImageResource(R.mipmap.loading_2233_error);
-                MsgUtil.showMsg("获取信息失败！\n可能是视频不存在？");
-            });
+            loading.setImageResource(R.mipmap.loading_2233_error);
+            MsgUtil.showMsg("获取信息失败！\n可能是视频不存在？");
             CenterThreadPool.runOnUIThreadAfter(5L, TimeUnit.SECONDS, ()->
                     MsgUtil.err(error));
         }));
