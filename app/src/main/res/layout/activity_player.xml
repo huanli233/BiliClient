@@ -125,50 +125,49 @@
                 android:id="@+id/videoprogress"
                 style="@style/Widget.AppCompat.SeekBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_marginTop="2dp"
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
                 android:progressTint="#00A4DA"
-                android:thumb="@drawable/selector_progress"
+                android:secondaryProgressTint="@color/color_ripple"
+                android:thumb="@drawable/player_selector_progress"
                 android:thumbOffset="8dp" />
 
             <LinearLayout
                 android:id="@+id/bottom_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="3dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/button_sound_cut"
                     android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_height="37dp"
                     android:layout_marginEnd="6dp"
                     android:adjustViewBounds="true"
                     android:background="?android:attr/selectableItemBackground"
-                    android:scaleType="fitXY"
+                    android:scaleType="fitCenter"
                     android:src="@mipmap/soundcut" />
 
                 <ImageButton
                     android:id="@+id/button_video"
                     android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_height="37dp"
                     android:adjustViewBounds="true"
                     android:background="?android:attr/selectableItemBackground"
-                    android:scaleType="fitXY"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/btn_player_play" />
 
                 <ImageButton
                     android:id="@+id/button_sound_add"
                     android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_height="37dp"
                     android:layout_marginStart="6dp"
                     android:adjustViewBounds="true"
                     android:background="?android:attr/selectableItemBackground"
-                    android:scaleType="fitXY"
+                    android:scaleType="fitCenter"
                     android:src="@mipmap/soundadd" />
             </LinearLayout>
 

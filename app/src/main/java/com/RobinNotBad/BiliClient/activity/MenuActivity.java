@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,8 +20,8 @@ import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
 import com.RobinNotBad.BiliClient.activity.live.RecommendLiveActivity;
 import com.RobinNotBad.BiliClient.activity.message.MessageActivity;
 import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
-import com.RobinNotBad.BiliClient.activity.settings.login.LoginActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingMainActivity;
+import com.RobinNotBad.BiliClient.activity.settings.login.LoginActivity;
 import com.RobinNotBad.BiliClient.activity.user.MySpaceActivity;
 import com.RobinNotBad.BiliClient.activity.video.PopularActivity;
 import com.RobinNotBad.BiliClient.activity.video.PreciousActivity;
@@ -153,7 +152,7 @@ public class MenuActivity extends BaseActivity {
     private void killAndJump(String name) {
         if (btnNames.containsKey(name) && !Objects.equals(name, from)) {
             InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
-            if (instance != null && instance.getLifecycle().getCurrentState() == Lifecycle.State.DESTROYED) instance.finish();
+            if (instance != null && instance.getLifecycle().getCurrentState() != Lifecycle.State.DESTROYED) instance.finish();
 
             Intent intent = new Intent();
             intent.setClass(MenuActivity.this, Objects.requireNonNull(btnNames.get(name)).second);
@@ -163,7 +162,7 @@ public class MenuActivity extends BaseActivity {
             switch (name) {
                 case "exit": //退出按钮
                     InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
-                    if (instance != null && instance.getLifecycle().getCurrentState() == Lifecycle.State.DESTROYED) instance.finish();
+                    if (instance != null && instance.getLifecycle().getCurrentState() != Lifecycle.State.DESTROYED) instance.finish();
                     break;
                 case "login": //登录按钮
                     Intent intent = new Intent();

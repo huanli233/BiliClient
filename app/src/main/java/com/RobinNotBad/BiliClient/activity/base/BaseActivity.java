@@ -1,8 +1,13 @@
 package com.RobinNotBad.BiliClient.activity.base;
 
+import android.view.InputDevice;
+import android.view.MotionEvent;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ScrollView;
+
+import androidx.core.view.ViewConfigurationCompat;
 import androidx.core.widget.NestedScrollView;
 import static com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity.getRelayDynamicLauncher;
 
@@ -33,7 +38,6 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.event.SnackEvent;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.RotaryUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -70,7 +74,8 @@ public class BaseActivity extends AppCompatActivity {
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
-        display.getRealMetrics(metrics);
+        if(BiliTerminal.getSystemSdk() >= 17) display.getRealMetrics(metrics);
+        else display.getMetrics(metrics);
 
         int scrW = metrics.widthPixels;
         int scrH = metrics.heightPixels;
@@ -212,20 +217,49 @@ public class BaseActivity extends AppCompatActivity {
     public void onContentChanged() {
         super.onContentChanged();
         //自动适配表冠
-        ViewGroup rootView = (ViewGroup)this.getWindow().getDecorView();
-        setRotaryScroll(rootView);
+        if(BiliTerminal.getSystemSdk() >= Build.VERSION_CODES.O) {    //既然不支持，那低版本直接跳过
+            ViewGroup rootView = (ViewGroup) this.getWindow().getDecorView();
+            setRotaryScroll(rootView);
+        }
     }
+
     private void setRotaryScroll(View view) {
         if(view instanceof ViewGroup) {
             ViewGroup vp = (ViewGroup) view;
-            for (int i = 0; i < vp.getChildCount(); i++) {
-                View viewchild = vp.getChildAt(i);
-                if(viewchild instanceof ScrollView||viewchild instanceof NestedScrollView||viewchild instanceof RecyclerView||viewchild instanceof ListView) {
-                    RotaryUtil.setRotaryEncoderScroll(viewchild);
-                    viewchild.requestFocus();
-                    break;
+            try {
+                for (int i = 0; i < vp.getChildCount(); i++) {
+                    View viewChild = vp.getChildAt(i);
+
+                    viewChild.setOnGenericMotionListener((v, ev) -> {
+                        if (ev.getAction() == MotionEvent.ACTION_SCROLL && ev.getSource() == InputDevice.SOURCE_ROTARY_ENCODER) {
+                            float delta = -ev.getAxisValue(MotionEvent.AXIS_SCROLL)
+                                    * ViewConfigurationCompat.getScaledVerticalScrollFactor(
+                                    ViewConfiguration.get(BiliTerminal.context),
+                                    BiliTerminal.context) * 2;
+
+                            boolean set = true;
+                            if (viewChild instanceof ScrollView)
+                                ((ScrollView) viewChild).smoothScrollBy(0, Math.round(delta));
+                            else if (viewChild instanceof NestedScrollView)
+                                ((NestedScrollView) viewChild).smoothScrollBy(0, Math.round(delta));
+                            else if (viewChild instanceof RecyclerView)
+                                ((RecyclerView) viewChild).smoothScrollBy(0, Math.round(delta));
+                            else if (viewChild instanceof ListView)
+                                ((ListView) viewChild).smoothScrollBy(0, Math.round(delta));
+                            else set = false;
+
+                            if (set) viewChild.requestFocus();
+
+                            return true;
+                        }
+
+                        return false;
+                    });
+
+                    setRotaryScroll(viewChild);
                 }
-                setRotaryScroll(viewchild);
+            } catch (Exception e){
+                e.printStackTrace();
             }
         } 
     }
