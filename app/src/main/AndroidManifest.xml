@@ -32,8 +32,7 @@
         tools:targetApi="m">
         <service
             android:name=".service.DownloadService"
-            android:enabled="true"
-            android:exported="true"/>
+            android:enabled="true"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

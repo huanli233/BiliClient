@@ -60,6 +60,44 @@
             android:orientation="vertical"
             android:focusable="true"
             android:focusableInTouchMode="true">
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/download"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
+                    android:layout_marginHorizontal="8dp"
+                    android:gravity="center_vertical"
+                    android:text="下载服务测试"
+                    android:textAlignment="textEnd"
+                    android:textSize="13sp"
+                    android:visibility="visible"
+                    app:drawableEndCompat="@drawable/arrow_forward"
+                    tools:ignore="RtlCompat" />
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/download_clear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
+                    android:layout_marginHorizontal="8dp"
+                    android:gravity="center_vertical"
+                    android:text="清空下载列表"
+                    android:textAlignment="textEnd"
+                    android:textSize="13sp"
+                    android:visibility="visible"
+                    app:drawableEndCompat="@drawable/arrow_forward"
+                    tools:ignore="RtlCompat" />
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/desc"

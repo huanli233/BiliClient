@@ -37,6 +37,7 @@ public class MsgUtil {
         } else {
             toast(str, BiliTerminal.context);
         }
+        Log.d("debug-msg",str);
     }
 
     public static void showMsgLong(String str) {
@@ -45,6 +46,7 @@ public class MsgUtil {
         } else {
             toastLong(str, BiliTerminal.context);
         }
+        Log.d("debug-msg-long",str);
     }
 
     public static void toast(String str, Context context) {
@@ -146,7 +148,6 @@ public class MsgUtil {
     }
     public static void err(String desc, Throwable e) {
         Log.e("BiliClient", e.getMessage(), e);
-        Context context = BiliTerminal.context;
         if (e instanceof IOException) showMsg(desc + "网络错误(＃°Д°)");
         else if (e instanceof JSONException) {
             if (SharedPreferencesUtil.getBoolean("dev_jsonerr_detailed", false)) {
