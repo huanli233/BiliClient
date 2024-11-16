@@ -172,7 +172,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected boolean eventBusEnabled() {
-        return SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, false);
+        return SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, true);
     }
 
     public void setDensity(int targetDensityDpi) {

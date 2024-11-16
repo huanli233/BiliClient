@@ -1,5 +1,7 @@
 package com.RobinNotBad.BiliClient.util;
 
+import static com.RobinNotBad.BiliClient.BiliTerminal.context;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -35,7 +37,7 @@ public class MsgUtil {
         if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, false)) {
             EventBus.getDefault().postSticky(new SnackEvent(str));
         } else {
-            toast(str, BiliTerminal.context);
+            toast(str);
         }
         Log.d("debug-msg",str);
     }
@@ -44,12 +46,12 @@ public class MsgUtil {
         if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, false)) {
             EventBus.getDefault().postSticky(new SnackEvent(str));
         } else {
-            toastLong(str, BiliTerminal.context);
+            toastLong(str);
         }
         Log.d("debug-msg-long",str);
     }
 
-    public static void toast(String str, Context context) {
+    public static void toast(String str) {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             CenterThreadPool.runOnUiThread(() -> toastInternal(str, context));
         } else {
@@ -57,7 +59,7 @@ public class MsgUtil {
         }
     }
 
-    public static void toastLong(String str, Context context) {
+    public static void toastLong(String str) {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             CenterThreadPool.runOnUiThread(() -> toastLongInternal(str, context));
         } else {

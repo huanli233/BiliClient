@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Pair;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.player.PlayerActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
@@ -17,6 +18,7 @@ import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
 import com.RobinNotBad.BiliClient.model.Subtitle;
 import com.RobinNotBad.BiliClient.model.SubtitleLink;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
+import com.RobinNotBad.BiliClient.service.DownloadService;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -51,11 +53,9 @@ public class PlayerApi {
         context.startActivity(intent);
     }
 
-    public static void startDownloadingVideo(Context context, VideoInfo videoInfo, int page) {
-        startDownloadingVideo(context, videoInfo, page, -1);
-    }
-
-    public static void startDownloadingVideo(Context context, VideoInfo videoInfo, int page, int qn) {
+    public static void startDownloadingVideo(VideoInfo videoInfo, int page, int qn) {
+        Context context = BiliTerminal.context;
+        /*
         Intent intent = new Intent()
                 .putExtra("aid", videoInfo.aid)
                 .putExtra("bvid", videoInfo.bvid)
@@ -68,6 +68,19 @@ public class PlayerApi {
                 .putExtra("mid", videoInfo.staff.get(0).mid)
                 .setClass(context, JumpToPlayerActivity.class);
         context.startActivity(intent);
+         */
+
+        if(videoInfo.cids.size() == 1)
+            DownloadService.startDownload(videoInfo.title,
+                    videoInfo.aid, videoInfo.cids.get(0),
+                    ("https://comment.bilibili.com/" + videoInfo.cids.get(0) + ".xml"),
+                    videoInfo.cover,
+                    qn);
+        else DownloadService.startDownload(videoInfo.title, videoInfo.pagenames.get(page),
+                videoInfo.aid, videoInfo.cids.get(page),
+                ("https://comment.bilibili.com/" + videoInfo.cids.get(page) + ".xml"),
+                videoInfo.cover,
+                qn);
     }
 
     /**

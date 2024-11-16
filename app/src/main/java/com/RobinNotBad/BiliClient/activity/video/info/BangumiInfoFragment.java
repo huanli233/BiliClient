@@ -83,7 +83,7 @@ public class BangumiInfoFragment extends Fragment {
                             initView();
                     }).onFailure((error) -> {
                         Log.wtf(TAG, error);
-                        MsgUtil.toast("碰到了些问题：" + error, BiliTerminal.context);
+                        MsgUtil.showMsg("碰到了些问题：" + error);
                     });
                 });
     }

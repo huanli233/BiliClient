@@ -47,7 +47,7 @@ public class QualityChooserActivity extends BaseActivity {
             videoInfo = TerminalContext.getInstance().getCurrentVideoInfo();
         } catch (TerminalContext.IllegalTerminalStateException e) {
             Log.wtf(TAG, e);
-            MsgUtil.toast("找不到视频信息QAQ", this);
+            MsgUtil.showMsg("找不到视频信息QAQ");
         }
         QualityChooseAdapter adapter = new QualityChooseAdapter(this);
         int page = getIntent().getIntExtra("page", 0);
@@ -73,7 +73,7 @@ public class QualityChooserActivity extends BaseActivity {
         });
         adapter.setOnItemClickListener((position -> {
             int qn = qns.get(position);
-            PlayerApi.startDownloadingVideo(this, videoInfo, page, qn);
+            PlayerApi.startDownloadingVideo(videoInfo, page, qn);
             finish();
         }));
 

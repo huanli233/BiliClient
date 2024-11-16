@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
+import com.RobinNotBad.BiliClient.activity.settings.TestActivity;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
@@ -60,7 +62,10 @@ public class DownloadService extends Service {
     @SuppressLint("MutatingSharedPrefs")
     @Override
     public int onStartCommand(Intent serviceIntent, int flags, int startId) {
-        if(started) stopSelf();
+        if(started) {
+            stopSelf();
+            return super.onStartCommand(serviceIntent, flags, startId);
+        }
 
         started = true;
         MsgUtil.showMsg("下载服务已启动");
@@ -263,5 +268,60 @@ public class DownloadService extends Service {
         }
         decompresser.end();
         return output;
+    }
+
+
+
+
+    //以下为外部调用方法
+    @SuppressLint("MutatingSharedPrefs")
+    public static void startDownload(String title, long aid, long cid, String danmaku, String cover, int qn){
+        try {
+            JSONObject task = new JSONObject();
+            task.put("type", "video_single");
+            task.put("aid", aid);
+            task.put("cid", cid);
+            task.put("qn", qn);
+            task.put("name", title);
+            task.put("parent", "");
+            task.put("url_cover", cover);
+            task.put("url_dm", danmaku);
+
+            SharedPreferences downloadPrefs = BiliTerminal.context.getSharedPreferences("download", MODE_PRIVATE);
+            Set<String> set = downloadPrefs.getStringSet("list", new HashSet<>());
+            set.add(task.toString());
+            downloadPrefs.edit().putStringSet("list", set).apply();
+
+            Log.d("download",set.toString());
+
+            if(!started) BiliTerminal.context.startService(new Intent(BiliTerminal.context,DownloadService.class));
+        } catch (Exception e){
+            MsgUtil.err("启动下载时发生错误",e);
+        }
+    }
+    @SuppressLint("MutatingSharedPrefs")
+    public static void startDownload(String parent, String child, long aid, long cid, String danmaku, String cover, int qn){
+        try {
+            JSONObject task = new JSONObject();
+            task.put("type", "video_multi");
+            task.put("aid", aid);
+            task.put("cid", cid);
+            task.put("qn", qn);
+            task.put("name", child);
+            task.put("parent", parent);
+            task.put("url_cover", cover);
+            task.put("url_dm", danmaku);
+
+            SharedPreferences downloadPrefs = BiliTerminal.context.getSharedPreferences("download", MODE_PRIVATE);
+            Set<String> set = downloadPrefs.getStringSet("list", new HashSet<>());
+            set.add(task.toString());
+            downloadPrefs.edit().putStringSet("list", set).apply();
+
+            Log.d("download",set.toString());
+
+            if(!started) BiliTerminal.context.startService(new Intent(BiliTerminal.context,DownloadService.class));
+        } catch (Exception e){
+            MsgUtil.err("启动下载时发生错误",e);
+        }
     }
 }

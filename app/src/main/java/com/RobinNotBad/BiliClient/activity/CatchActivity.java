@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
+import com.RobinNotBad.BiliClient.service.DownloadService;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -75,6 +76,7 @@ public class CatchActivity extends BaseActivity {
 
         findViewById(R.id.restart_btn).setOnClickListener(view -> {
             finish();
+            stopService(new Intent(this, DownloadService.class));
             startActivity(new Intent(this, SplashActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             Process.killProcess(Process.myPid());
         });

@@ -43,7 +43,7 @@ public class DynamicInfoFragment extends Fragment {
             dynamic = TerminalContext.getInstance().getCurrentDynamic();
         } catch (TerminalContext.IllegalTerminalStateException e) {
             Log.wtf(TAG, e);
-            MsgUtil.toast("找不到动态信息QAQ", BiliTerminal.context);
+            MsgUtil.showMsg("找不到动态信息QAQ");
         }
     }
 

@@ -46,7 +46,7 @@ public class MultiPageActivity extends BaseActivity {
             videoInfo = TerminalContext.getInstance().getCurrentVideoInfo();
         } catch (TerminalContext.IllegalTerminalStateException e) {
             Log.wtf(TAG, e);
-            MsgUtil.toast("找不到当前视频信息QAQ", this);
+            MsgUtil.showMsg("找不到当前视频信息QAQ");
         }
 
         PageChooseAdapter adapter = new PageChooseAdapter(this, videoInfo.pagenames);

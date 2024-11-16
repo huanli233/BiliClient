@@ -39,9 +39,11 @@ import androidx.annotation.NonNull;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
+import com.RobinNotBad.BiliClient.event.SnackEvent;
 import com.RobinNotBad.BiliClient.model.Subtitle;
 import com.RobinNotBad.BiliClient.ui.widget.BatteryView;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -51,6 +53,9 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -1281,6 +1286,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     @Override
     protected void onDestroy() {
         Log.e("debug", "结束");
+        if (eventBusInit) {
+            EventBus.getDefault().unregister(this);
+            eventBusInit = false;
+        }
         destroyed = true;
         if (isPlaying) playerPause();
         if (ijkPlayer != null) ijkPlayer.release();
@@ -1384,5 +1393,28 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 break;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean eventBusInit = false;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (eventBusEnabled() && !eventBusInit) {
+            EventBus.getDefault().register(this);
+            Log.d("debug-event","register");
+            eventBusInit = true;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEvent(SnackEvent event) {
+        if (isFinishing()) return;
+        Log.d("debug-event","onEvent");
+        MsgUtil.toast(event.getMessage());  //由于Theme.Black不支持，只能这样用了
+    }
+
+    protected boolean eventBusEnabled() {
+        return SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, true);
     }
 }
