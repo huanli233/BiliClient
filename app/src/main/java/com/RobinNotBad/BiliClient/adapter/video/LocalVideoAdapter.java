@@ -48,7 +48,7 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
     @NonNull
     @Override
     public LocalVideoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_local_video, parent, false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_video_local, parent, false);
         return new LocalVideoHolder(view);
     }
 

@@ -60,6 +60,11 @@
             android:label="更新详情"
             android:screenOrientation="locked" />
         <activity
+            android:name=".activity.video.local.DownloadListActivity"
+            android:exported="true"
+            android:label="下载列表"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".activity.video.series.SeriesInfoActivity"
             android:exported="true"
             android:label="系列详情"

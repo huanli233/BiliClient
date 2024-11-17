@@ -8,7 +8,8 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
-import com.RobinNotBad.BiliClient.activity.settings.TestActivity;
+import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
+import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
@@ -47,6 +48,7 @@ public class DownloadService extends Service {
     private final TimerTask timerTask = new TimerTask() {
         @Override
         public void run() {
+            if(name_short == null)return;
             MsgUtil.showMsg(name_short + "\n下载进度："+ (percent * 100) + "%");
         }
     };
@@ -70,7 +72,7 @@ public class DownloadService extends Service {
         started = true;
         MsgUtil.showMsg("下载服务已启动");
         toastTimer = new Timer();
-        toastTimer.schedule(timerTask,10000,10000);
+        toastTimer.schedule(timerTask,5000,5000);
         downloadPrefs = getSharedPreferences("download",MODE_PRIVATE);
 
         CenterThreadPool.run(()->{
@@ -173,6 +175,10 @@ public class DownloadService extends Service {
 
                     set.remove(section);
                     downloadPrefs.edit().putStringSet("list",set).apply();
+
+                    InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
+                    if (instance instanceof LocalListActivity && !instance.isDestroyed())
+                        ((LocalListActivity) (instance)).refresh();
                 } catch (JSONException e){
                     MsgUtil.err("下载项格式错误：",e);
                     set.remove(section);
@@ -221,6 +227,10 @@ public class DownloadService extends Service {
             BufferedSink bufferedSink = null;
             try {
                 if (!danmakuFile.exists()) danmakuFile.createNewFile();
+                else {
+                    danmakuFile.delete();
+                    danmakuFile.createNewFile();
+                }
                 Sink sink = Okio.sink(danmakuFile);
                 byte[] decompressBytes = decompress(Objects.requireNonNull(response.body()).bytes());//调用解压函数进行解压，返回包含解压后数据的byte数组
                 bufferedSink = Okio.buffer(sink);

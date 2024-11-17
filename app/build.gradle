@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
 }
 
-int betaVer = 5 //如果为0则是正式版
+int betaVer = 6 //如果为0则是正式版
 
 android {
 
@@ -21,7 +21,7 @@ android {
         minSdk 14
         //noinspection ExpiredTargetSdkVersion
         targetSdk 26
-        versionCode 20241027
+        versionCode 20241117
         versionName "2.6.3"
 
         if (betaVer) {

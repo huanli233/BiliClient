@@ -29,6 +29,7 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -262,5 +263,10 @@ public class BaseActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         } 
+    }
+
+    @Override
+    public boolean isDestroyed(){
+        return getLifecycle().getCurrentState().equals(Lifecycle.State.DESTROYED);
     }
 }
