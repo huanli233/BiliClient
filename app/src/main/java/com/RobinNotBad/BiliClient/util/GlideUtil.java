@@ -16,9 +16,9 @@ import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 public class GlideUtil {
     public static final int QUALITY_HIGH = 80;
     public static final int QUALITY_LOW = 15;
-    public static final int MAX_H_HIGH = 1024;
-    public static final int MAX_W_HIGH = 2048;
-    public static final int MAX_H_LOW = 512;
+    public static final int MAX_H_HIGH = 4096;
+    public static final int MAX_W_HIGH = 4096;
+    public static final int MAX_H_LOW = 1024;
     public static final int MAX_W_LOW = 1024;
 
     public static String url(String url) {
@@ -27,14 +27,14 @@ public class GlideUtil {
             if (url.endsWith("jpeg") || url.endsWith("jpg")) return url;
             return url + "@0e_"
                     + QUALITY_LOW + "q_"
-                    + MAX_H_LOW + "h_"
+                    //+ MAX_H_LOW + "h_"
                     + MAX_W_LOW + "w.jpeg";
         }
         else {
             if (url.endsWith("webp")) return url;
             return url + "@0e_"
                     + QUALITY_LOW + "q_"
-                    + MAX_H_LOW + "h_"
+                    //+ MAX_H_LOW + "h_"
                     + MAX_W_LOW + "w.webp";
         }
     }
@@ -45,14 +45,14 @@ public class GlideUtil {
             if (url.endsWith("jpeg") || url.endsWith("jpg")) return url;
             return url + "@0e_"
                     + QUALITY_HIGH + "q_"
-                    + MAX_H_HIGH + "h_"
+                    //+ MAX_H_HIGH + "h_"
                     + MAX_W_HIGH + "w.jpeg";
         }
         else {
             if (url.endsWith("webp")) return url;
             return url + "@0e_"
                     + QUALITY_HIGH + "q_"
-                    + MAX_H_HIGH + "h_"
+                    //+ MAX_H_HIGH + "h_"
                     + MAX_W_HIGH + "w.webp";
         }
     }

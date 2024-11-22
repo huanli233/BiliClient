@@ -138,6 +138,7 @@ public class MsgUtil {
         }
 
         TextView msgView = contentLayout.getMessageView();
+        msgView.setMaxLines(16);
         msgView.setTextSize(13);
         msgView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         msgView.setPadding(0, 0, ToolsUtil.dp2px(4), 0);

@@ -43,13 +43,14 @@ public class DownloadService extends Service {
     public static String name;
     public static String name_short;
     public static boolean started;
+    public static short count_finish;
     private SharedPreferences downloadPrefs;
     private Timer toastTimer;
     private final TimerTask timerTask = new TimerTask() {
         @Override
         public void run() {
             if(name_short == null)return;
-            MsgUtil.showMsg(name_short + "\n下载进度："+ (percent * 100) + "%");
+            MsgUtil.showMsg("下载进度："+ (percent * 100) + "%\n" + name_short);
         }
     };
 
@@ -70,6 +71,7 @@ public class DownloadService extends Service {
         }
 
         started = true;
+        count_finish = 0;
         MsgUtil.showMsg("下载服务已启动");
         toastTimer = new Timer();
         toastTimer.schedule(timerTask,5000,5000);
@@ -122,7 +124,7 @@ public class DownloadService extends Service {
                             case "video_single":  //单集视频
                                 name_short = name.substring(0, Math.min(6, name.length()))
                                         + (name.length() > 5 ? "..." : "");
-                                MsgUtil.showMsg(name_short + "开始下载");
+                                MsgUtil.showMsg("开始下载：\n" + name_short);
 
                                 File path_single = new File(FileUtil.getDownloadPath(this), name);
                                 if (!path_single.exists()) path_single.mkdirs();
@@ -135,7 +137,7 @@ public class DownloadService extends Service {
 
                                 download(url, new File(path_single, "video.mp4"));
 
-                                MsgUtil.showMsg(name_short + "下载成功");
+                                MsgUtil.showMsg("下载成功：\n" + name_short);
                                 break;
                             case "video_multi":  //多集视频
                                 String parent = task.getString("parent");
@@ -145,7 +147,7 @@ public class DownloadService extends Service {
                                         + "-"
                                         + name.substring(0, Math.min(6, name.length()))
                                         + (name.length() > 5 ? "..." : "");
-                                MsgUtil.showMsg(name_short + "开始下载");
+                                MsgUtil.showMsg("开始下载：\n" + name_short);
 
                                 File path_parent = new File(FileUtil.getDownloadPath(this), parent);
                                 if(!path_parent.exists()) path_parent.mkdirs();
@@ -162,7 +164,8 @@ public class DownloadService extends Service {
 
                                 download(url, new File(path_page, "video.mp4"));
 
-                                MsgUtil.showMsg(name_short + "下载成功");
+                                MsgUtil.showMsg("下载成功：\n" + name_short);
+                                count_finish++;
                                 break;
                         }
                     } catch (RuntimeException e){
@@ -188,7 +191,7 @@ public class DownloadService extends Service {
                     stopSelf();
                 }
             }
-            MsgUtil.showMsg("全部下载完成");
+            if(count_finish != 0) MsgUtil.showMsg("全部下载完成");
             stopSelf();
         });
 

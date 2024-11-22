@@ -22,6 +22,8 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -33,18 +35,23 @@ import java.text.SimpleDateFormat;
 @SuppressLint("AppCompatCustomView")
 public class TextClock extends TextView {
     @SuppressLint("SimpleDateFormat")
-    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
     private Runnable mTicker;
     private Handler mHandler;
-
-    private boolean mTickerStopped = false;
 
     private static final long delta = System.currentTimeMillis() - SystemClock.uptimeMillis();
 
     @Override
     public void onScreenStateChanged(int screenState) {
-        if(screenState == SCREEN_STATE_ON) startTick();    //既然没法保活，那就检测屏幕亮起
+        if(screenState == SCREEN_STATE_ON)
+            startTick();    //既然没法保活，那就检测屏幕亮起
+
+        if(screenState == SCREEN_STATE_OFF && mTicker!=null && mHandler != null) {
+            mHandler.removeCallbacks(mTicker);
+            mHandler = null;
+            mTicker = null;
+        }
         super.onScreenStateChanged(screenState);
     }
 
@@ -65,34 +72,36 @@ public class TextClock extends TextView {
 
     @Override
     protected void onAttachedToWindow() {
-        mTickerStopped = false;
         super.onAttachedToWindow();
 
         startTick();
     }
 
     public void startTick(){
-        if(mHandler==null) mHandler = new Handler();
+        mHandler = new Handler();
 
         mTicker = () -> {
-            if (mTickerStopped) return;
             long now = System.currentTimeMillis();
             setText(dateFormat.format(now));
             invalidate();
             long next = now + (60000 - now % 60000) - delta;
             mHandler.postAtTime(mTicker, next);
-            //Log.i("debug-clock","tick");
+            //Log.i("debug-clock-tick","now:" + SystemClock.uptimeMillis() + " | next:" + next);
             //这样的方式非常巧妙，计算好下一时刻然后postAtTime
             //原先是一秒一次，我改成了一分钟一次
             //由于基准是systemclock（开机时间），如果开机时不是整分钟，可能会有误差几十秒。经过修改，增加了偏差值计算，避免了这个问题（但其实没啥必要的说
         };
-        mTicker.run();
+        mHandler.post(mTicker);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mTickerStopped = true;
+        if(mTicker!=null && mHandler != null) {
+            mHandler.removeCallbacks(mTicker);
+            mHandler = null;
+            mTicker = null;
+        }
     }
 
 }
