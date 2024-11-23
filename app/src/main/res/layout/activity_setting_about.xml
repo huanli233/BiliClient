@@ -543,7 +543,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
+                            <TextView
                                 android:id="@+id/dadaName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -556,7 +556,7 @@
                                 app:layout_constraintStart_toEndOf="@id/dadaAvatar"
                                 app:layout_constraintTop_toTopOf="@id/dadaAvatar" />
 
-                            <TextView
+                            <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                                 android:id="@+id/dadaDesc"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
