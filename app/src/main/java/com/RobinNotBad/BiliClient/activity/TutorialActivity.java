@@ -38,7 +38,7 @@ public class TutorialActivity extends BaseActivity {
 
             Tutorial tutorial = Objects.requireNonNull(TutorialHelper.loadTutorial(getResources().getXml(intent.getIntExtra("xml_id", R.xml.tutorial_recommend))));
 
-            ((TextView) findViewById(R.id.title)).setText(tutorial.name);
+            ((TextView) findViewById(R.id.text_title)).setText(tutorial.name);
             ((TextView) findViewById(R.id.content)).setText(TutorialHelper.loadText(tutorial.content));
 
             try {

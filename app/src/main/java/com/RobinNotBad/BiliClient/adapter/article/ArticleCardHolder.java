@@ -26,9 +26,9 @@ public class ArticleCardHolder extends RecyclerView.ViewHolder {
     public ArticleCardHolder(@NonNull View itemView) {
         super(itemView);
         title = itemView.findViewById(R.id.listArticleTitle);
-        upName = itemView.findViewById(R.id.listUpName);
+        upName = itemView.findViewById(R.id.text_upname);
         readTimes = itemView.findViewById(R.id.listReadTimes);
-        cover = itemView.findViewById(R.id.listCover);
+        cover = itemView.findViewById(R.id.img_cover);
         readIcon = itemView.findViewById(R.id.imageView3);
         upIcon = itemView.findViewById(R.id.avatarIcon);
     }

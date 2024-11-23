@@ -89,8 +89,8 @@ public class SendDynamicActivity extends BaseActivity {
                 View childCard = View.inflate(this, R.layout.cell_dynamic_child, extraCard);
                 showChildDyn(childCard, forward);
             } else if (video != null) {
-                View view = LayoutInflater.from(this).inflate(R.layout.cell_video_list, extraCard);
-                showVideo(view, video);
+                VideoCardHolder holder = new VideoCardHolder(LayoutInflater.from(this).inflate(R.layout.cell_video_list, extraCard));
+                holder.showVideoCard(video.toCard(),this);
             }
 
             send.setOnClickListener(view -> {
@@ -210,38 +210,6 @@ public class SendDynamicActivity extends BaseActivity {
         }
         content.setMaxLines(999);
         content.setEllipsize(TextUtils.TruncateAt.END);
-    }
-
-    private void showVideo(View itemView, VideoInfo videoInfo) {
-        TextView title, upName, playTimes;
-        ImageView cover, playIcon, upIcon;
-        title = itemView.findViewById(R.id.listVideoTitle);
-        upName = itemView.findViewById(R.id.listUpName);
-        playTimes = itemView.findViewById(R.id.listPlayTimes);
-        cover = itemView.findViewById(R.id.listCover);
-        playIcon = itemView.findViewById(R.id.imageView3);
-        upIcon = itemView.findViewById(R.id.avatarIcon);
-
-        title.setText(ToolsUtil.htmlToString(videoInfo.title));
-        String upNameStr = videoInfo.staff.get(0).name;
-        if (upNameStr.isEmpty()) {
-            upName.setVisibility(View.GONE);
-            upIcon.setVisibility(View.GONE);
-        } else upName.setText(upNameStr);
-
-        // 很抽象的方法名
-        String playTimesStr = toWan(videoInfo.stats.view);
-        if (playTimesStr.isEmpty()) {
-            playIcon.setVisibility(View.GONE);
-            playTimes.setVisibility(View.GONE);
-        } else playTimes.setText(playTimesStr);
-
-        Glide.with(this).load(GlideUtil.url(videoInfo.cover))
-                .transition(GlideUtil.getTransitionOptions())
-                .placeholder(R.mipmap.placeholder)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(cover);
     }
 
     @Override

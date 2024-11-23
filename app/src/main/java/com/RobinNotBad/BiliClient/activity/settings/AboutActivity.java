@@ -72,7 +72,7 @@ public class AboutActivity extends BaseActivity {
                 add(-1);
                 add(R.mipmap.avatar_moye);
                 add(R.mipmap.avatar_silent);
-                add(R.mipmap.avatar_huanli);
+                add(R.mipmap.akari);
             }};
             List<MaterialCardView> developerCardList = new ArrayList<>() {{
                 add(findViewById(R.id.robin_card));

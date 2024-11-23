@@ -96,9 +96,9 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
 
         public FavoriteHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.title);
-            count = itemView.findViewById(R.id.itemCount);
-            cover = itemView.findViewById(R.id.cover);
+            name = itemView.findViewById(R.id.text_title);
+            count = itemView.findViewById(R.id.text_itemcount);
+            cover = itemView.findViewById(R.id.img_cover);
         }
     }
 }

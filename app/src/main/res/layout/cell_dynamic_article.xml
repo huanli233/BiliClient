@@ -15,14 +15,14 @@
         android:paddingBottom="8dp">
 
         <ImageView
-            android:id="@+id/listCover"
+            android:id="@+id/img_cover"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="5dp"
             android:adjustViewBounds="true"
-            app:layout_constraintBottom_toTopOf="@id/listUpName"
+            app:layout_constraintBottom_toTopOf="@id/text_upname"
             app:layout_constraintDimensionRatio="16:11"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintHorizontal_bias="0.0"
@@ -46,7 +46,7 @@
             android:adjustViewBounds="true"
             android:alpha="0.5"
             app:layout_constraintBottom_toBottomOf="@+id/listReadTimes"
-            app:layout_constraintStart_toStartOf="@+id/listCover"
+            app:layout_constraintStart_toStartOf="@+id/img_cover"
             app:layout_constraintTop_toTopOf="@+id/listReadTimes"
             app:layout_constraintVertical_bias="0.5"
             android:src="@drawable/icon_cv" />
@@ -60,9 +60,9 @@
             android:layout_marginBottom="1dp"
             android:adjustViewBounds="true"
             android:alpha="0.5"
-            app:layout_constraintBottom_toBottomOf="@+id/listUpName"
+            app:layout_constraintBottom_toBottomOf="@+id/text_upname"
             app:layout_constraintStart_toEndOf="@+id/listReadTimes"
-            app:layout_constraintTop_toTopOf="@+id/listUpName"
+            app:layout_constraintTop_toTopOf="@+id/text_upname"
             android:src="@drawable/icon_person" />
 
         <TextView
@@ -74,11 +74,11 @@
             android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
-            app:layout_constraintTop_toBottomOf="@+id/listCover"
+            app:layout_constraintTop_toBottomOf="@+id/img_cover"
             app:layout_constraintVertical_bias="0.0" />
 
         <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
-            android:id="@+id/listUpName"
+            android:id="@+id/text_upname"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:alpha="0.5"
@@ -100,7 +100,7 @@
             android:maxLines="2"
             android:text="标题标题标题标题标题标题标题标题标题标题标题标题"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/listCover"
+            app:layout_constraintBottom_toBottomOf="@+id/img_cover"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toTopOf="parent" />

@@ -156,7 +156,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 super(itemView);
                 this.name = itemView.findViewById(R.id.name);
                 this.desc = itemView.findViewById(R.id.desc);
-                this.cover = itemView.findViewById(R.id.cover);
+                this.cover = itemView.findViewById(R.id.img_cover);
                 this.playTimes = itemView.findViewById(R.id.playTimes);
             }
         }
@@ -288,7 +288,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 super(itemView);
                 this.name = itemView.findViewById(R.id.name);
                 this.desc = itemView.findViewById(R.id.desc);
-                this.cover = itemView.findViewById(R.id.cover);
+                this.cover = itemView.findViewById(R.id.img_cover);
                 this.playTimes = itemView.findViewById(R.id.playTimes);
             }
         }

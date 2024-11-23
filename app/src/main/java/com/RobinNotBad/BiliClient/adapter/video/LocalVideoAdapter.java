@@ -96,8 +96,8 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
 
         public LocalVideoHolder(@NonNull View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.listVideoTitle);
-            cover = itemView.findViewById(R.id.listCover);
+            title = itemView.findViewById(R.id.text_title);
+            cover = itemView.findViewById(R.id.img_cover);
         }
 
         public void showLocalVideo(LocalVideo videoCard, Context context) {

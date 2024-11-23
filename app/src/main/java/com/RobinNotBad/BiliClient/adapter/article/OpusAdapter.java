@@ -92,9 +92,9 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
 
         public OpusHolder(View itemView) {
             super(itemView);
-            coverView = itemView.findViewById(R.id.listCover);
-            favTimeText = itemView.findViewById(R.id.favTime);
-            titleText = itemView.findViewById(R.id.listOpusTitle);
+            coverView = itemView.findViewById(R.id.img_cover);
+            favTimeText = itemView.findViewById(R.id.text_favTime);
+            titleText = itemView.findViewById(R.id.text_title);
         }
 
     }

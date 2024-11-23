@@ -59,8 +59,8 @@ public class LiveInfoActivity extends BaseActivity {
         asyncInflate(R.layout.activity_live_info, (layoutView, id) -> {
             ImageView loading = findViewById(R.id.loading);
             View scrollView = findViewById(R.id.scrollView);
-            ImageView cover = findViewById(R.id.cover);
-            TextView title = findViewById(R.id.title);
+            ImageView cover = findViewById(R.id.img_cover);
+            TextView title = findViewById(R.id.text_title);
             RecyclerView up_recyclerView = findViewById(R.id.up_recyclerView);
             TextView viewsCount = findViewById(R.id.viewsCount);
             MaterialButton play = findViewById(R.id.play);

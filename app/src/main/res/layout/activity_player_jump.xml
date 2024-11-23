@@ -7,7 +7,7 @@
     tools:context=".activity.video.JumpToPlayerActivity">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/text_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

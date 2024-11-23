@@ -171,8 +171,8 @@ public class VideoInfoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ImageView cover = view.findViewById(R.id.cover);
-        TextView title = view.findViewById(R.id.title);
+        ImageView cover = view.findViewById(R.id.img_cover);
+        TextView title = view.findViewById(R.id.text_title);
         description = view.findViewById(R.id.description);
         tagsText = view.findViewById(R.id.tags);
         MaterialCardView exclusiveTip = view.findViewById(R.id.exclusiveTip);

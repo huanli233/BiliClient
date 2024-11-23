@@ -35,7 +35,7 @@
         tools:ignore="TouchTargetSizeCheck" />
 
     <ImageView
-        android:id="@+id/cover"
+        android:id="@+id/img_cover"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -57,7 +57,7 @@
         android:adjustViewBounds="true"
         android:alpha="0.5"
         app:layout_constraintBottom_toBottomOf="@id/playTimes"
-        app:layout_constraintStart_toStartOf="@id/cover"
+        app:layout_constraintStart_toStartOf="@id/img_cover"
         app:layout_constraintTop_toTopOf="@id/playTimes"
         app:layout_constraintVertical_bias="0.5"
         android:src="@drawable/icon_play_12" />
@@ -72,7 +72,7 @@
         android:text=""
         android:textSize="11sp"
         app:layout_constraintStart_toEndOf="@id/playView"
-        app:layout_constraintTop_toBottomOf="@+id/cover" />
+        app:layout_constraintTop_toBottomOf="@+id/img_cover" />
 
     <View
         android:id="@+id/divider"

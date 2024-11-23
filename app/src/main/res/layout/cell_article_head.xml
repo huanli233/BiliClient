@@ -9,7 +9,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
-        android:id="@+id/cover"
+        android:id="@+id/img_cover"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
@@ -29,7 +29,7 @@
         android:layout_marginTop="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cover">
+        app:layout_constraintTop_toBottomOf="@+id/img_cover">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -157,7 +157,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/text_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

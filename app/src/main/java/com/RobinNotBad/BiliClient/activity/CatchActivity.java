@@ -37,10 +37,7 @@ public class CatchActivity extends BaseActivity {
         Intent intent = getIntent();
         String stack = intent.getStringExtra("stack");
 
-        SpannableString stack_str = new SpannableString("错误堆栈：\n" + stack);
-        stack_str.setSpan(new StyleSpan(Typeface.BOLD), 0, 5, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        stack_str.setSpan(new RelativeSizeSpan(0.85f), 5, stack_str.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-        stack_view.setText(stack_str);
+        stack_view.setText(stack);
 
         findViewById(R.id.exit_btn).setOnClickListener(view -> System.exit(-1));
 
@@ -51,7 +48,7 @@ public class CatchActivity extends BaseActivity {
             findViewById(R.id.upload_btn).setEnabled(false);
 
             if (stack.contains("java.lang.NumberFormatException"))
-                reason_str = new SpannableString("可能的崩溃原因：\n请正确输入数值");
+                reason_str = new SpannableString("可能的崩溃原因：\n数值转换出错");
             else if (stack.contains("java.lang.UnsatisfiedLinkError"))
                 reason_str = new SpannableString("可能的崩溃原因：\n请不要乱删外部库");
             else if (stack.contains("org.json.JSONException"))
@@ -63,7 +60,7 @@ public class CatchActivity extends BaseActivity {
 
             findViewById(R.id.upload_btn).setOnClickListener(view -> {
                 if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, -1) == -1)
-                    MsgUtil.showMsg("不会对未登录时遇到的问题负责");
+                    MsgUtil.showMsg("我们不对未登录时遇到的问题负责");
                 else {
                     CenterThreadPool.run(() -> {
                         String res = AppInfoApi.uploadStack(stack, this);

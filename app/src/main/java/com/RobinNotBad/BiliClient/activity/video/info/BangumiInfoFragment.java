@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
@@ -92,7 +91,7 @@ public class BangumiInfoFragment extends Fragment {
     private void initView() {
         //init data.
         ImageView imageMediaCover = rootView.findViewById(R.id.image_media_cover);
-        TextView title = rootView.findViewById(R.id.title);
+        TextView title = rootView.findViewById(R.id.text_title);
         section_choose = rootView.findViewById(R.id.section_choose);
         Button playButton = rootView.findViewById(R.id.btn_play);
         eposide_choose = rootView.findViewById(R.id.eposide_choose);

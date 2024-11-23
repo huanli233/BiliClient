@@ -25,20 +25,20 @@
             android:src="@mipmap/placeholder"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintDimensionRatio="16:11"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintEnd_toStartOf="@+id/gl_v_48"
             android:layout_marginTop="2dp"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toTopOf="@id/favTime"
+            app:layout_constraintBottom_toTopOf="@id/text_favTime"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/listCover" />
+            android:id="@+id/img_cover" />
 
         <androidx.constraintlayout.widget.Guideline
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.48"
-            android:id="@+id/guideline2" />
+            android:id="@+id/gl_v_48" />
 
         <ImageView
             android:layout_height="0dp"
@@ -47,10 +47,10 @@
             android:adjustViewBounds="true"
             android:src="@drawable/icon_time"
             android:alpha="0.5"
-            app:layout_constraintTop_toTopOf="@+id/favTime"
-            app:layout_constraintStart_toStartOf="@+id/listCover"
+            app:layout_constraintTop_toTopOf="@+id/text_favTime"
+            app:layout_constraintStart_toStartOf="@+id/img_cover"
             android:layout_marginTop="1dp"
-            app:layout_constraintBottom_toBottomOf="@+id/favTime"
+            app:layout_constraintBottom_toBottomOf="@+id/text_favTime"
             app:layout_constraintVertical_bias="0.5"
             android:id="@+id/imageView3" />
 
@@ -64,8 +64,8 @@
             android:layout_marginTop="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintTop_toBottomOf="@+id/listCover"
-            android:id="@+id/favTime" />
+            app:layout_constraintTop_toBottomOf="@+id/img_cover"
+            android:id="@+id/text_favTime" />
 
         <TextView
             android:layout_height="wrap_content"
@@ -74,14 +74,14 @@
             android:ellipsize="end"
             android:textSize="12sp"
             android:textColor="#fff"
-            app:layout_constraintBottom_toBottomOf="@+id/listCover"
+            app:layout_constraintBottom_toBottomOf="@+id/img_cover"
             android:layout_marginStart="8dp"
             android:gravity="center_vertical"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="@+id/gl_v_48"
             app:layout_constraintEnd_toEndOf="parent"
             android:maxLines="2"
-            android:id="@+id/listOpusTitle"
+            android:id="@+id/text_title"
             android:text="标题标题标题标题标题标题标题标题标题标题标题标题" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

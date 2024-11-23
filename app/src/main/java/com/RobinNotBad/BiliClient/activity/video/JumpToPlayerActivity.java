@@ -47,7 +47,7 @@ public class JumpToPlayerActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_jump);
 
-        textView = findViewById(R.id.title);
+        textView = findViewById(R.id.text_title);
 
         Intent intent = getIntent();
         Log.e("debug-哔哩终端-跳转页", "已接收数据");

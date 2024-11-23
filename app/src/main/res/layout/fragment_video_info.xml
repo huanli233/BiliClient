@@ -19,7 +19,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/cover"
+                android:id="@+id/img_cover"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -33,8 +33,8 @@
                 android:id="@+id/durationText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@id/cover"
-                android:layout_alignBottom="@id/cover"
+                android:layout_alignEnd="@id/img_cover"
+                android:layout_alignBottom="@id/img_cover"
                 android:alpha="0.9"
                 android:lines="1"
                 android:paddingEnd="4dp"
@@ -50,7 +50,7 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/text_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -67,7 +67,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title">
+            app:layout_constraintTop_toBottomOf="@id/text_title">
 
             <TextView
                 android:id="@+id/exclusiveTipLabel"

@@ -98,8 +98,8 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 break;
 
             case -1:
-                TextView title = holder.itemView.findViewById(R.id.title);
-                ImageView cover = holder.itemView.findViewById(R.id.cover);
+                TextView title = holder.itemView.findViewById(R.id.text_title);
+                ImageView cover = holder.itemView.findViewById(R.id.img_cover);
                 ImageView upIcon = holder.itemView.findViewById(R.id.upInfo_Icon);  //头
                 TextView upName = holder.itemView.findViewById(R.id.upInfo_Name);
                 MaterialCardView upCard = holder.itemView.findViewById(R.id.upInfo);

@@ -66,10 +66,10 @@
             app:layout_constraintTop_toBottomOf="@id/child_content">
 
             <include
+                android:id="@+id/dynamic_video_child"
                 layout="@layout/cell_dynamic_video"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/dynamic_video_child"
                 android:visibility="gone" />
 
             <include

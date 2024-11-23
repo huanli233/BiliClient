@@ -61,7 +61,7 @@
             android:paddingBottom="4dp">
 
             <ImageView
-                android:id="@+id/cover"
+                android:id="@+id/img_cover"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -75,7 +75,7 @@
                 tools:ignore="ImageContrastCheck,SpeakableTextPresentCheck" />
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/text_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
@@ -83,7 +83,7 @@
                 android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cover" />
+                app:layout_constraintTop_toBottomOf="@id/img_cover" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/up_recyclerView"
@@ -92,7 +92,7 @@
                 android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintTop_toBottomOf="@id/text_title"
                 tools:itemCount="1"
                 tools:listitem="@layout/cell_up_list" />
 

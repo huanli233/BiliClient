@@ -29,26 +29,26 @@ public class VideoCardHolder extends RecyclerView.ViewHolder {
 
     public VideoCardHolder(@NonNull View itemView) {
         super(itemView);
-        title = itemView.findViewById(R.id.listVideoTitle);
-        upName = itemView.findViewById(R.id.listUpName);
-        viewCount = itemView.findViewById(R.id.listPlayTimes);
-        cover = itemView.findViewById(R.id.listCover);
+        title = itemView.findViewById(R.id.text_title);
+        upName = itemView.findViewById(R.id.text_upname);
+        viewCount = itemView.findViewById(R.id.text_viewcount);
+        cover = itemView.findViewById(R.id.img_cover);
     }
 
     @SuppressLint("SetTextI18n")
     public void showVideoCard(VideoCard videoCard, Context context) {
-        String upNameStr = videoCard.upName;
-        if (upNameStr == null || upNameStr.isEmpty()) {
+        String str_upName = videoCard.upName;
+        if (str_upName == null || str_upName.isEmpty()) {
             upName.setVisibility(View.GONE);
-        } else upName.setText(upNameStr);
+        } else upName.setText(str_upName);
 
 
-        String viewCountStr = videoCard.view;
-        if (viewCountStr == null || viewCountStr.isEmpty()) {
+        String str_viewCount = videoCard.view;
+        if (str_viewCount == null || str_viewCount.isEmpty()) {
             viewCount.setVisibility(View.GONE);
         }
         else {
-            viewCount.setText(viewCountStr);
+            viewCount.setText(str_viewCount);
         }
 
         Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
