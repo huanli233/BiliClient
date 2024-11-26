@@ -43,7 +43,7 @@ public class CenterThreadPool {
         return threadPool.get();
     }
 
-    private CenterThreadPool() {
+    static {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
             COROUTINE_SCOPE = null;
             threadPool = new AtomicReference<>();
