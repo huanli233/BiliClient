@@ -622,7 +622,7 @@
                                 android:layout_marginBottom="2dp"
                                 android:alpha="0.7"
                                 android:singleLine="true"
-                                android:text="*此联合开发者的个人行为和道德品质存在争议，尽管他确实为终端做出过不少贡献"
+                                android:text="与你的日常，就是奇迹"
                                 android:textSize="11sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/huanliAvatar"
                                 app:layout_constraintEnd_toEndOf="parent"
