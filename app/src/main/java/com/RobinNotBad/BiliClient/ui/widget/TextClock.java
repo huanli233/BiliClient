@@ -37,8 +37,19 @@ public class TextClock extends TextView {
     @SuppressLint("SimpleDateFormat")
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
-    private Runnable mTicker;
     private Handler mHandler;
+
+    private Runnable mTicker = () -> {
+        long now = System.currentTimeMillis();
+        setText(dateFormat.format(now));
+        invalidate();
+        long next = now + (60000 - now % 60000) - delta;
+        mHandler.postAtTime(this.mTicker, next);
+        //Log.i("debug-clock-tick","now:" + SystemClock.uptimeMillis() + " | next:" + next);
+        //这样的方式非常巧妙，计算好下一时刻然后postAtTime
+        //原先是一秒一次，我改成了一分钟一次
+        //由于基准是systemclock（开机时间），如果开机时不是整分钟，可能会有误差几十秒。经过修改，增加了偏差值计算，避免了这个问题（但其实没啥必要的说
+    };
 
     private static final long delta = System.currentTimeMillis() - SystemClock.uptimeMillis();
 
@@ -80,17 +91,6 @@ public class TextClock extends TextView {
     public void startTick(){
         mHandler = new Handler();
 
-        mTicker = () -> {
-            long now = System.currentTimeMillis();
-            setText(dateFormat.format(now));
-            invalidate();
-            long next = now + (60000 - now % 60000) - delta;
-            mHandler.postAtTime(mTicker, next);
-            //Log.i("debug-clock-tick","now:" + SystemClock.uptimeMillis() + " | next:" + next);
-            //这样的方式非常巧妙，计算好下一时刻然后postAtTime
-            //原先是一秒一次，我改成了一分钟一次
-            //由于基准是systemclock（开机时间），如果开机时不是整分钟，可能会有误差几十秒。经过修改，增加了偏差值计算，避免了这个问题（但其实没啥必要的说
-        };
         mHandler.post(mTicker);
     }
 
