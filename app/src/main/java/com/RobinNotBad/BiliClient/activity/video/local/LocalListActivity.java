@@ -58,14 +58,15 @@ public class LocalListActivity extends InstanceActivity {
             runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
             scan(FileUtil.getDownloadPath(this));
             adapter = new LocalVideoAdapter(this, videoList);
+
             adapter.setOnLongClickListener(position -> {
                 if (longClickPosition == position) {
                     File file = new File(FileUtil.getDownloadPath(this), videoList.get(position).title);
                     CenterThreadPool.run(() -> FileUtil.deleteFolder(file));
                     MsgUtil.showMsg("删除成功");
                     videoList.remove(position);
-                    adapter.notifyItemRemoved(position);
-                    adapter.notifyItemRangeChanged(position, videoList.size() - position);
+                    adapter.notifyItemRemoved(position+1);
+                    adapter.notifyItemRangeChanged(position+1, videoList.size() - position);
                     longClickPosition = -1;
                     checkEmpty();
                 } else {
@@ -86,8 +87,10 @@ public class LocalListActivity extends InstanceActivity {
         if (files != null) {
             for (File video : files) {
                 if (video.isDirectory()) {
+
                     LocalVideo localVideo = new LocalVideo();
                     localVideo.title = video.getName();
+
                     localVideo.cover = (new File(video, "cover.png")).toString();
 
                     localVideo.pageList = new ArrayList<>();
@@ -96,7 +99,11 @@ public class LocalListActivity extends InstanceActivity {
 
                     File videoFile = new File(video, "video.mp4");
                     File danmakuFile = new File(video, "danmaku.xml");
+
                     if (videoFile.exists() && danmakuFile.exists()) {
+                        File mark = new File(video,".DOWNLOADING");
+                        if(mark.exists()) continue;
+
                         localVideo.videoFileList.add(videoFile.toString());
                         localVideo.danmakuFileList.add(danmakuFile.toString());    //单集视频
                         videoList.add(localVideo);
@@ -105,6 +112,9 @@ public class LocalListActivity extends InstanceActivity {
                         if (pages != null) {
                             for (File page : pages) {
                                 if (page.isDirectory()) {
+                                    File mark = new File(page,".DOWNLOADING");
+                                    if(mark.exists()) continue;
+
                                     File pageVideoFile = new File(page, "video.mp4");
                                     File pageDanmakuFile = new File(page, "danmaku.xml");
                                     if (pageVideoFile.exists() && pageDanmakuFile.exists()) {
@@ -126,13 +136,11 @@ public class LocalListActivity extends InstanceActivity {
     private void checkEmpty() {
         runOnUiThread(() -> {
             if (videoList.isEmpty() && emptyTip != null) {
-                recyclerView.setVisibility(View.GONE);
                 emptyTip.setVisibility(View.VISIBLE);
             } else {
                 if (emptyTip != null) {
                     emptyTip.setVisibility(View.GONE);
                 }
-                recyclerView.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -144,7 +152,7 @@ public class LocalListActivity extends InstanceActivity {
             videoList.clear();
             scan(FileUtil.getDownloadPath(this));
             runOnUiThread(() -> {
-                adapter.notifyItemRangeChanged(0, oldSize);
+                adapter.notifyItemRangeChanged(1, oldSize);
                 swipeRefreshLayout.setRefreshing(false);
             });
         });

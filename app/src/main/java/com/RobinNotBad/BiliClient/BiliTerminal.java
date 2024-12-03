@@ -36,7 +36,8 @@ public class BiliTerminal extends Application {
     public void onCreate() {
         super.onCreate();
         if (context == null) {
-            SharedPreferencesUtil.sharedPreferences = getSharedPreferences("default", Context.MODE_PRIVATE);
+            SharedPreferencesUtil.sharedPreferences = getSharedPreferences("default", MODE_PRIVATE);
+            SharedPreferencesUtil.downloadPrefs = getSharedPreferences("download", MODE_PRIVATE);
             context = getFitDisplayContext(this);
             ErrorCatch errorCatch = ErrorCatch.getInstance();
             errorCatch.init(context);

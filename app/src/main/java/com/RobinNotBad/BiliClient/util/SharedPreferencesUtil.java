@@ -38,6 +38,7 @@ public class SharedPreferencesUtil {
 
 
     public static SharedPreferences sharedPreferences;
+    public static SharedPreferences downloadPrefs;
 
     public static SharedPreferences getSharedPreferences() {
         return sharedPreferences;

@@ -796,15 +796,19 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             },30000,30000);
         }
         if (SharedPreferencesUtil.getBoolean("player_ui_showDanmakuBtn", true)) {
-            danmaku_btn.setImageResource(R.mipmap.danmakuon);
-            isDanmakuVisible = true;
+            isDanmakuVisible = !SharedPreferencesUtil.getBoolean("pref_switch_danmaku",true);
+            //这里设置值是反的，因为下面直接调用监听器点击按钮
 
-            danmaku_btn.setOnClickListener(view -> {
+            View.OnClickListener onClickListener = view -> {
                 if (isDanmakuVisible) mDanmakuView.hide();
                 else mDanmakuView.show();
                 danmaku_btn.setImageResource((isDanmakuVisible ? R.mipmap.danmakuoff : R.mipmap.danmakuon));
                 isDanmakuVisible = !isDanmakuVisible;
-            });
+                SharedPreferencesUtil.putBoolean("pref_switch_danmaku",isDanmakuVisible);
+            };
+            onClickListener.onClick(danmaku_btn);
+            danmaku_btn.setOnClickListener(onClickListener);
+
             danmaku_btn.setVisibility(View.VISIBLE);
         } else danmaku_btn.setVisibility(View.GONE);
         //原作者居然把旋转按钮命名为danmaku_btn，也是没谁了...我改过来了  ----RobinNotBad

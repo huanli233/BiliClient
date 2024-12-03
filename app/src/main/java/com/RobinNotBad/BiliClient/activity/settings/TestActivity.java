@@ -11,6 +11,7 @@ import android.widget.EditText;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.settings.login.SpecialLoginActivity;
+import com.RobinNotBad.BiliClient.activity.video.local.DownloadListActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
 import com.RobinNotBad.BiliClient.service.DownloadService;
@@ -32,7 +33,7 @@ public class TestActivity extends BaseActivity {
 
     SwitchMaterial sw_wbi, sw_post;
     EditText input_link, input_data, output;
-    MaterialCardView btn_request, btn_cookies, btn_download, btn_download_clear;
+    MaterialCardView btn_request, btn_cookies, btn_start, btn_download, btn_download_goto, btn_download_clear;
 
     @SuppressLint("MutatingSharedPrefs")
     @Override
@@ -45,7 +46,9 @@ public class TestActivity extends BaseActivity {
         input_link = findViewById(R.id.input_link);
         input_data = findViewById(R.id.input_data);
         output = findViewById(R.id.output_json);
+        btn_start = findViewById(R.id.start);
         btn_download = findViewById(R.id.download);
+        btn_download_goto = findViewById(R.id.download_goto);
         btn_download_clear = findViewById(R.id.download_clear);
 
         sw_post.setOnCheckedChangeListener((compoundButton, checked) ->
@@ -93,6 +96,8 @@ public class TestActivity extends BaseActivity {
             startActivity(intent);
         });
 
+        btn_start.setOnClickListener(v -> startService(new Intent(this,DownloadService.class)));
+
         btn_download.setOnClickListener(v -> {
             try {
                 JSONObject task = new JSONObject();
@@ -105,29 +110,24 @@ public class TestActivity extends BaseActivity {
                 task.put("url_cover","http://i0.hdslb.com/bfs/archive/0ae3d490a8688772ff28da9e8aa24120107d55dc.jpg");
                 task.put("url_dm","https://comment.bilibili.com/971247999.xml");
 
-                JSONObject task2 = new JSONObject();
-                task2.put("type","video_multi");
-                task2.put("aid", 693018306L);
-                task2.put("cid",971247999L);
-                task2.put("qn",16);
-                task2.put("name","我不曾忘记-致旅行中的你");
-                task2.put("parent","大慈树王");
-                task2.put("url_cover","http://i0.hdslb.com/bfs/archive/0ae3d490a8688772ff28da9e8aa24120107d55dc.jpg");
-                task2.put("url_dm","https://comment.bilibili.com/971247999.xml");
-
                 SharedPreferences downloadPrefs = getSharedPreferences("download", MODE_PRIVATE);
                 Set<String> set = downloadPrefs.getStringSet("list", new HashSet<>());
                 set.add(task.toString());
-                set.add(task2.toString());
                 downloadPrefs.edit().putStringSet("list", set).apply();
 
                 Log.d("download",set.toString());
 
-                startService(new Intent(TestActivity.this,DownloadService.class));
+                //startService(new Intent(TestActivity.this,DownloadService.class));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         });
+
+        btn_download_goto.setOnClickListener(view -> {
+            Intent intent = new Intent(this, DownloadListActivity.class);
+            startActivity(intent);
+        });
+
         btn_download_clear.setOnClickListener(v -> {
             SharedPreferences downloadPrefs = getSharedPreferences("download", MODE_PRIVATE);
             LinkedHashSet<String> set = new LinkedHashSet<>();

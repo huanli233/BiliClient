@@ -8,6 +8,7 @@ public class LocalVideo {
     public ArrayList<String> pageList;
     public ArrayList<String> videoFileList;
     public ArrayList<String> danmakuFileList;
+    public int size;
 
 
     public LocalVideo() {

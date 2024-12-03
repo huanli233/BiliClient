@@ -111,6 +111,7 @@ public class MenuActivity extends BaseActivity {
 
         if (!SharedPreferencesUtil.getBoolean("menu_popular", true)) btnList.remove("popular");
         if (!SharedPreferencesUtil.getBoolean("menu_precious", false)) btnList.remove("precious");
+        if (!SharedPreferencesUtil.getBoolean("menu_live", false)) btnList.remove("live");
 
         btnList.add("exit"); //如果你希望用户手动把退出按钮排到第一个（
 

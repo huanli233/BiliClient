@@ -66,11 +66,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/menu_popular"
                         android:layout_width="match_parent"
@@ -78,14 +73,6 @@
                         android:background="#00000000"
                         android:text="显示“热门”" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="6dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="打开此选项，在菜单页面中显示热门按钮"
-                        android:textSize="11sp" />
-                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
 
@@ -93,10 +80,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/menu_live"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:background="#00000000"
+                    android:text="显示“直播”" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/menu_precious"
@@ -105,14 +101,6 @@
                         android:background="#00000000"
                         android:text="显示“入站必刷”" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="6dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="打开此选项，在菜单页面中显示入站必刷按钮"
-                        android:textSize="11sp" />
-                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.button.MaterialButton

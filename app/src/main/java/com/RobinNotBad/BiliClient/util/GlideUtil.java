@@ -22,7 +22,7 @@ public class GlideUtil {
     public static final int MAX_W_LOW = 1024;
 
     public static String url(String url) {
-        if(url.isEmpty() || url.endsWith("gif") || url.contains("@") || url.contains("afdiancdn.com")) return url;
+        if(!url.startsWith("http") || url.endsWith("gif") || url.contains("@") || url.contains("afdiancdn.com")) return url;
         if(SharedPreferencesUtil.getBoolean("image_request_jpg",false)){
             if (url.endsWith("jpeg") || url.endsWith("jpg")) return url;
             return url + "@0e_"
@@ -40,7 +40,7 @@ public class GlideUtil {
     }
 
     public static String url_hq(String url) {
-        if(url.isEmpty() || url.endsWith("gif") || url.contains("@") || url.contains("afdiancdn.com")) return url;
+        if(!url.startsWith("http") || url.endsWith("gif") || url.contains("@") || url.contains("afdiancdn.com")) return url;
         if(SharedPreferencesUtil.getBoolean("image_request_jpg",false)){
             if (url.endsWith("jpeg") || url.endsWith("jpg")) return url;
             return url + "@0e_"

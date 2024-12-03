@@ -174,13 +174,13 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             int result = UserInfoApi.followUser(userInfo.mid, !(userInfo.followed));
                             if (result == 0) {
                                 userInfo.followed = !(userInfo.followed);
-                                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("操作成功"));
+                                MsgUtil.showMsg("操作成功");
                             } else {
-                                userInfoHolder.setFollowed(userInfo.followed);
-                                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("操作失败：" + result));
+                                MsgUtil.showMsg("操作失败：" + result);
+                                CenterThreadPool.runOnUiThread(() -> userInfoHolder.setFollowed(userInfo.followed));
                             }
                         } catch (Exception e) {
-                            CenterThreadPool.runOnUiThread(() -> MsgUtil.err(e));
+                            MsgUtil.err(e);
                         }
                         follow_onprocess = false;
                     });
