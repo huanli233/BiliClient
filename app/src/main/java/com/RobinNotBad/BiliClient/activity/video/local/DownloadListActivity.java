@@ -1,25 +1,18 @@
 package com.RobinNotBad.BiliClient.activity.video.local;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.RobinNotBad.BiliClient.activity.DownloadActivity;
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
 import com.RobinNotBad.BiliClient.adapter.video.DownloadAdapter;
-import com.RobinNotBad.BiliClient.listener.OnItemClickListener;
-import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.DownloadSection;
 import com.RobinNotBad.BiliClient.service.DownloadService;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -46,7 +39,6 @@ public class DownloadListActivity extends RefreshListActivity {
             started = true;
             refreshList();
 
-            /*
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -54,7 +46,6 @@ public class DownloadListActivity extends RefreshListActivity {
                     if(DownloadService.started) runOnUiThread(()->adapter.notifyItemChanged(0));
                 }
             },300,500);
-             */
         });
 
 
