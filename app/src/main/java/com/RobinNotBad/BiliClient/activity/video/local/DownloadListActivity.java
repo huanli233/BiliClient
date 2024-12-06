@@ -46,14 +46,15 @@ public class DownloadListActivity extends RefreshListActivity {
             started = true;
             refreshList();
 
+            /*
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if(DownloadService.started)
-                        runOnUiThread(()->adapter.notifyItemRangeChanged(0,1));
+                    if(DownloadService.started) runOnUiThread(()->adapter.notifyItemChanged(0));
                 }
             },300,500);
+             */
         });
 
 
@@ -64,9 +65,9 @@ public class DownloadListActivity extends RefreshListActivity {
         if(this.isDestroyed() || !started) return;
         Log.d("debug","刷新下载列表");
 
-        sections = DownloadService.getAll();
+        sections = DownloadService.getAllExceptDownloading();
 
-        if (sections == null) {
+        if (sections == null && DownloadService.downloadingSection == null) {
             if(!emptyTipShown) {
                 MsgUtil.showMsg("下载列表为空");
                 showEmptyView();
@@ -80,7 +81,7 @@ public class DownloadListActivity extends RefreshListActivity {
             }
 
             if(firstRefresh){
-                adapter = new DownloadAdapter(this,sections);
+                adapter = new DownloadAdapter(DownloadListActivity.this,sections);
                 adapter.setOnClickListener(position -> {
                     if(DownloadService.started) {
                         if (position == -1) {
@@ -98,7 +99,10 @@ public class DownloadListActivity extends RefreshListActivity {
                 setAdapter(adapter);
                 firstRefresh = false;
             }
-            else runOnUiThread(()->adapter.notifyItemRangeChanged(DownloadService.started ? 1 : 0, sections.size()));
+            else {
+                adapter.downloadList = sections;
+                runOnUiThread(()->adapter.notifyDataSetChanged());
+            }
         }
 
     }

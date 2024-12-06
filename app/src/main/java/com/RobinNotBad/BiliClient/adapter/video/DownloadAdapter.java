@@ -15,7 +15,6 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.listener.OnItemClickListener;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.DownloadSection;
-import com.RobinNotBad.BiliClient.model.LocalVideo;
 import com.RobinNotBad.BiliClient.service.DownloadService;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -25,17 +24,15 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 //下载列表Adapter
 //2024-11-24
 
 public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.DownloadHolder> {
 
-    final Context context;
-    final ArrayList<DownloadSection> downloadList;
+    Context context;
+    public ArrayList<DownloadSection> downloadList;
     OnItemLongClickListener longClickListener;
     OnItemClickListener clickListener;
 
@@ -94,7 +91,11 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
 
     @Override
     public int getItemCount() {
-        if(DownloadService.started) return downloadList.size()+1;
+        if(DownloadService.started){
+            if(downloadList == null) return 1;
+            else return downloadList.size()+1;
+        }
+        else if(downloadList==null) return 0;
         else return downloadList.size();
     }
 

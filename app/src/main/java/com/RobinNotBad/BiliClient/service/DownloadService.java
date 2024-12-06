@@ -1,16 +1,11 @@
 package com.RobinNotBad.BiliClient.service;
 
-import static com.RobinNotBad.BiliClient.util.SharedPreferencesUtil.downloadPrefs;
-
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
@@ -25,7 +20,6 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -33,10 +27,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.zip.Inflater;
@@ -81,7 +73,7 @@ public class DownloadService extends Service {
         count_finish = 0;
         MsgUtil.showMsg("下载服务已启动");
         toastTimer = new Timer();
-        //toastTimer.schedule(timerTask,5000,5000);
+        toastTimer.schedule(timerTask,5000,5000);
 
         CenterThreadPool.run(()->{
             while (true) {
@@ -90,16 +82,16 @@ public class DownloadService extends Service {
 
                 try {
 
-                    /*
+
                     String url;
                     try{
                         url = PlayerApi.getVideo(downloadingSection.aid, downloadingSection.cid, downloadingSection.qn, true).first;
                     } catch (JSONException e){
                         MsgUtil.showMsg("下载链接获取失败");
-                        setError(str_section,true);
+                        setState(downloadingSection.id,"error");
                         continue;
                     }
-                     */
+
 
                     try {
                         setState(downloadingSection.id,"downloading");
@@ -107,7 +99,6 @@ public class DownloadService extends Service {
 
                         MsgUtil.showMsg("开始下载：\n" + downloadingSection.name_short);
 
-                        /*
                         File file_sign = null;
                         switch (downloadingSection.type) {
                             case "video_single":  //单集视频
@@ -154,26 +145,21 @@ public class DownloadService extends Service {
 
                         if(file_sign!=null && file_sign.exists()) file_sign.delete();
 
-                         */
-
-                        Thread.sleep(3000);
-
                         deleteSection(downloadingSection.id);
+
+                        downloadingSection = null;
                         refreshLocalList();
                         count_finish++;
                     } catch (RuntimeException e){
                         MsgUtil.showMsg("下载失败："+e.getMessage());
                         e.printStackTrace();
                         setState(downloadingSection.id,"error");
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
 
-                } /* catch (IOException e) {
+                } catch (IOException e) {
                     MsgUtil.showMsg("下载失败，网络错误\n请手动前往缓存页面重新下载");
                     stopSelf();
-                }
-                */ catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -329,7 +315,7 @@ public class DownloadService extends Service {
             return list;
         } catch (Exception e){
             MsgUtil.err(e);
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -349,7 +335,7 @@ public class DownloadService extends Service {
             return list;
         } catch (Exception e){
             MsgUtil.err(e);
-            return null;
+            return new ArrayList<>();
         }
     }
 
