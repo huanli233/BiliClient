@@ -5,6 +5,8 @@ import static com.RobinNotBad.BiliClient.BiliTerminal.context;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Looper;
@@ -150,8 +152,11 @@ public class MsgUtil {
         err("",e);
     }
     public static void err(String desc, Throwable e) {
-        Log.e("BiliClient", e.getMessage(), e);
-        if (e instanceof IOException) showMsg(desc + "网络错误(＃°Д°)");
+        Log.e("debug-ERROR", e.getMessage(), e);
+
+        StringBuilder output = new StringBuilder(desc);
+
+        if (e instanceof IOException) output.append("网络错误(＃°Д°)");
         else if (e instanceof JSONException) {
             if (SharedPreferencesUtil.getBoolean("dev_jsonerr_detailed", false)) {
                 Writer writer = new StringWriter();
@@ -159,12 +164,18 @@ public class MsgUtil {
                 e.printStackTrace(printWriter);
                 showText(desc + "数据解析错误", writer.toString());
             } else if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                showMsgLong(desc + "解析错误，可登陆后再次尝试");
-            } else if (e.toString().replace("org.json.JSONException:", "").contains("-352"))
-                showMsgLong(desc + "账号疑似被风控");
-            else
-                showMsgLong(desc + "数据解析错误：\n" + e.toString().replace("org.json.JSONException:", ""));
-        } else showMsgLong(desc + "错误：" + e);
+                output.append("数据解析错误\n建议登陆后再尝试");
+            } else if (e.toString().contains("-352"))
+                output.append("账号疑似被风控（访问被拦截）");
+            else {
+                output.append("数据解析错误：\n");
+                output.append(e.toString().replace("org.json.JSONException:", ""));
+            }
+        }
+        else if(e instanceof SQLException) output.append("数据库读写错误\n请清理空间或清除软件数据");
+        else output.append("错误：");
+
+        showMsgLong(output.toString());
     }
 
     public static void showText(String title, String text) {

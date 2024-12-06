@@ -20,11 +20,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import java.text.SimpleDateFormat;
 
@@ -39,18 +42,6 @@ public class TextClock extends TextView {
 
     private Handler mHandler;
 
-    private Runnable mTicker = () -> {
-        long now = System.currentTimeMillis();
-        setText(dateFormat.format(now));
-        invalidate();
-        long next = now + (60000 - now % 60000) - delta;
-        mHandler.postAtTime(this.mTicker, next);
-        //Log.i("debug-clock-tick","now:" + SystemClock.uptimeMillis() + " | next:" + next);
-        //这样的方式非常巧妙，计算好下一时刻然后postAtTime
-        //原先是一秒一次，我改成了一分钟一次
-        //由于基准是systemclock（开机时间），如果开机时不是整分钟，可能会有误差几十秒。经过修改，增加了偏差值计算，避免了这个问题（但其实没啥必要的说
-    };
-
     private static final long delta = System.currentTimeMillis() - SystemClock.uptimeMillis();
 
     @Override
@@ -58,10 +49,9 @@ public class TextClock extends TextView {
         if(screenState == SCREEN_STATE_ON)
             startTick();    //既然没法保活，那就检测屏幕亮起
 
-        if(screenState == SCREEN_STATE_OFF && mTicker!=null && mHandler != null) {
-            mHandler.removeCallbacks(mTicker);
+        if(screenState == SCREEN_STATE_OFF && mHandler != null) {
+            mHandler.removeMessages(0);
             mHandler = null;
-            mTicker = null;
         }
         super.onScreenStateChanged(screenState);
     }
@@ -89,18 +79,31 @@ public class TextClock extends TextView {
     }
 
     public void startTick(){
-        mHandler = new Handler();
-
-        mHandler.post(mTicker);
+        mHandler = new Handler(msg -> {
+            if(mHandler==null) {
+                this.startTick();
+                return false;
+            }
+            long now = System.currentTimeMillis();
+            setText(dateFormat.format(now));
+            invalidate();
+            long next = now + (60000 - now % 60000) - delta;
+            mHandler.sendEmptyMessageAtTime(0,next);
+            //Log.i("debug-clock-tick","now:" + SystemClock.uptimeMillis() + " | next:" + next);
+            //这样的方式非常巧妙，计算好下一时刻然后postAtTime
+            //原先是一秒一次，我改成了一分钟一次
+            //由于基准是systemclock（开机时间），如果开机时不是整分钟，可能会有误差几十秒。经过修改，增加了偏差值计算，避免了这个问题（但其实没啥必要的说
+            return true;
+        });
+        mHandler.sendEmptyMessage(0);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if(mTicker!=null && mHandler != null) {
-            mHandler.removeCallbacks(mTicker);
+        if(mHandler != null) {
+            mHandler.removeMessages(0);
             mHandler = null;
-            mTicker = null;
         }
     }
 

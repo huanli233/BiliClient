@@ -99,28 +99,20 @@ public class TestActivity extends BaseActivity {
         btn_start.setOnClickListener(v -> startService(new Intent(this,DownloadService.class)));
 
         btn_download.setOnClickListener(v -> {
-            try {
-                JSONObject task = new JSONObject();
-                task.put("type","video_single");
-                task.put("aid", 693018306L);
-                task.put("cid",971247999L);
-                task.put("qn",16);
-                task.put("name","我不曾忘记-致旅行中的你");
-                task.put("parent","大慈树王");
-                task.put("url_cover","http://i0.hdslb.com/bfs/archive/0ae3d490a8688772ff28da9e8aa24120107d55dc.jpg");
-                task.put("url_dm","https://comment.bilibili.com/971247999.xml");
+            DownloadService.startDownload("雀魂","早春赏樱",501590258L,294292444L,
+                    "https://comment.bilibili.com/294292444.xml",
+                    "http://i1.hdslb.com/bfs/archive/321b2291b55f1effc0f0646f593cf47b78ea0e9b.png",16);
 
-                SharedPreferences downloadPrefs = getSharedPreferences("download", MODE_PRIVATE);
-                Set<String> set = downloadPrefs.getStringSet("list", new HashSet<>());
-                set.add(task.toString());
-                downloadPrefs.edit().putStringSet("list", set).apply();
+            DownloadService.startDownload("雀魂","曲水流觞",501590258L,294370880L,
+                    "https://comment.bilibili.com/294370880.xml",
+                    "http://i1.hdslb.com/bfs/archive/321b2291b55f1effc0f0646f593cf47b78ea0e9b.png",16);
 
-                Log.d("download",set.toString());
+            DownloadService.startDownload("雀魂","锦绣梦",501590258L,493168287L,
+                    "https://comment.bilibili.com/493168287.xml",
+                    "http://i1.hdslb.com/bfs/archive/321b2291b55f1effc0f0646f593cf47b78ea0e9b.png",16);
 
-                //startService(new Intent(TestActivity.this,DownloadService.class));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
+            //startService(new Intent(TestActivity.this,DownloadService.class));
         });
 
         btn_download_goto.setOnClickListener(view -> {
@@ -128,10 +120,6 @@ public class TestActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        btn_download_clear.setOnClickListener(v -> {
-            SharedPreferences downloadPrefs = getSharedPreferences("download", MODE_PRIVATE);
-            LinkedHashSet<String> set = new LinkedHashSet<>();
-            downloadPrefs.edit().putStringSet("list", set).apply();
-        });
+        btn_download_clear.setOnClickListener(v -> DownloadService.clear());
     }
 }

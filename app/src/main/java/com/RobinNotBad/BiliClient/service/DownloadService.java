@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
@@ -49,7 +50,6 @@ public class DownloadService extends Service {
     public static float percent;
     public static boolean started;
     public static DownloadSection downloadingSection;
-    public static String str_section;
     public static short count_finish;
 
     private Timer toastTimer;
@@ -85,23 +85,12 @@ public class DownloadService extends Service {
 
         CenterThreadPool.run(()->{
             while (true) {
-                String[] array = getArray();
-                if (array==null) {
-                    MsgUtil.showMsg("下载列表为空");
-                    break;
-                }
-
-                int i = 0;
-                for (; i < array.length; i++) {
-                    if(!array[i].contains("\"state\":\"error\"")) break;  //遍历列表，如果失败就跳过
-                }
-                if(i >= array.length) break;
-                str_section = array[i];
-                Log.d("debug-download",str_section);
+                downloadingSection = getFirst();
+                if(downloadingSection==null) break;
 
                 try {
-                    downloadingSection = new DownloadSection(new JSONObject(str_section));
 
+                    /*
                     String url;
                     try{
                         url = PlayerApi.getVideo(downloadingSection.aid, downloadingSection.cid, downloadingSection.qn, true).first;
@@ -110,18 +99,18 @@ public class DownloadService extends Service {
                         setError(str_section,true);
                         continue;
                     }
+                     */
 
                     try {
-                        setDownloading(str_section,true);
-                        refreshActivities();
+                        setState(downloadingSection.id,"downloading");
+                        refreshDownloadList();
 
                         MsgUtil.showMsg("开始下载：\n" + downloadingSection.name_short);
 
+                        /*
                         File file_sign = null;
                         switch (downloadingSection.type) {
                             case "video_single":  //单集视频
-                                MsgUtil.showMsg("开始下载：\n" + downloadingSection.name_short);
-
                                 File path_single = new File(FileUtil.getDownloadPath(this), downloadingSection.name);
                                 if (!path_single.exists()) path_single.mkdirs();
 
@@ -140,9 +129,6 @@ public class DownloadService extends Service {
                                 break;
                             case "video_multi":  //多集视频
                                 String parent = downloadingSection.parent;
-
-                                MsgUtil.showMsg("开始下载：\n" + downloadingSection.name_short);
-
                                 File path_parent = new File(FileUtil.getDownloadPath(this), parent);
                                 if(!path_parent.exists()) path_parent.mkdirs();
 
@@ -168,24 +154,32 @@ public class DownloadService extends Service {
 
                         if(file_sign!=null && file_sign.exists()) file_sign.delete();
 
-                        deleteSection(str_section);
+                         */
+
+                        Thread.sleep(3000);
+
+                        deleteSection(downloadingSection.id);
+                        refreshLocalList();
+                        count_finish++;
                     } catch (RuntimeException e){
                         MsgUtil.showMsg("下载失败："+e.getMessage());
                         e.printStackTrace();
-                        setError(str_section,true);
+                        setState(downloadingSection.id,"error");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
 
-                } catch (JSONException e){
-                    MsgUtil.err("下载项格式错误：",e);
-                    deleteSection(str_section);
-                } catch (IOException e) {
+                } /* catch (IOException e) {
                     MsgUtil.showMsg("下载失败，网络错误\n请手动前往缓存页面重新下载");
                     stopSelf();
+                }
+                */ catch (Exception e) {
+                    e.printStackTrace();
                 }
 
             }
 
-            refreshActivities();
+            refreshDownloadList();
             if(count_finish != 0) MsgUtil.showMsg("全部下载完成");
             stopSelf();
         });
@@ -193,68 +187,16 @@ public class DownloadService extends Service {
         return super.onStartCommand(serviceIntent, flags, startId);
     }
 
-    private void refreshActivities(){
-        InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
-        if (instance instanceof LocalListActivity && !instance.isDestroyed())
-            ((LocalListActivity) (instance)).refresh();
-
+    private void refreshDownloadList(){
         if(DownloadListActivity.weakRef != null) {
             DownloadListActivity.weakRef.get().refreshList();
         }
     }
 
-
-    public static String[] getArray(){
-        Set<String> set = downloadPrefs.getStringSet("list", new HashSet<>());
-        if(set.size() == 0) {
-            return null;
-        }
-
-        String[] array = set.toArray(new String[0]);
-        if (array.length == 0) {
-            return null;
-        }
-
-        return array;
-    }
-
-    @SuppressLint({"MutatingSharedPrefs", "ApplySharedPref"})
-    public static void deleteSection(String section){
-        Set<String> set = downloadPrefs.getStringSet("list", new HashSet<>());
-        set.remove(section);
-        downloadPrefs.edit().putStringSet("list",set).commit();
-    }
-
-    @SuppressLint({"MutatingSharedPrefs", "ApplySharedPref"})
-    public static void setError(String section, boolean bool){
-        try {
-            Set<String> set = downloadPrefs.getStringSet("list", new HashSet<>());
-            JSONObject task = new JSONObject(section);
-            task.put("state", bool ? "error" : "none");
-            set.remove(section);
-            set.add(task.toString());    //链接获取失败后标记为失败且不下载此项
-            section = task.toString();    //原来传入的section也必须被更改
-            downloadPrefs.edit().putStringSet("list", set).commit();
-        }catch (JSONException e){
-            MsgUtil.showMsg("下载项错误，该项已删除");
-            deleteSection(section);
-        }
-    }
-
-    @SuppressLint("MutatingSharedPrefs")
-    public static void setDownloading(String section, boolean bool){
-        try {
-            Set<String> set = downloadPrefs.getStringSet("list", new HashSet<>());
-            JSONObject task = new JSONObject(section);
-            task.put("state", bool ? "downloading" : "none");
-            set.remove(section);
-            set.add(task.toString());    //链接获取失败后标记为失败且不下载此项
-            section = task.toString();
-            downloadPrefs.edit().putStringSet("list", set).apply();
-        }catch (JSONException e){
-            MsgUtil.showMsg("下载项错误，该项已删除");
-            deleteSection(section);
-        }
+    private void refreshLocalList(){
+        InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
+        if (instance instanceof LocalListActivity && !instance.isDestroyed())
+            ((LocalListActivity) (instance)).refresh();
     }
 
     private void download(String url, File file) throws IOException {
@@ -311,13 +253,14 @@ public class DownloadService extends Service {
     @Override
     public void onDestroy() {
         if(downloadingSection!=null) {
-            setDownloading(str_section, false);
+            CenterThreadPool.run(()->{
+                setState(downloadingSection.id, "none");
+                downloadingSection = null;
+            });
         }
         started = false;
         if(toastTimer!=null) toastTimer.cancel();
         percent = 0;
-        downloadingSection = null;
-        str_section = null;
         count_finish = 0;
         super.onDestroy();
     }
@@ -350,61 +293,126 @@ public class DownloadService extends Service {
     }
 
 
+    //以下为数据库操作方法
+
+    public static DownloadSection getFirst(){
+        try {
+            DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
+            SQLiteDatabase database = helper.getReadableDatabase();
+            Cursor cursor = database.rawQuery("select * from download where state!=? limit 1",new String[]{"error"});
+            if(cursor == null || cursor.getCount() == 0)return null;
+
+            cursor.moveToFirst();
+            DownloadSection downloadSection = new DownloadSection(cursor);
+            cursor.close();
+            database.close();
+            return downloadSection;
+        } catch (Exception e){
+            MsgUtil.err(e);
+            return null;
+        }
+    }
+
+    public static ArrayList<DownloadSection> getAll(){
+        try {
+            DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
+            SQLiteDatabase database = helper.getReadableDatabase();
+            Cursor cursor = database.rawQuery("select * from download",null);
+            if(cursor == null || cursor.getCount() == 0)return null;
+
+            ArrayList<DownloadSection> list = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                list.add(new DownloadSection(cursor));
+            }
+            cursor.close();
+            database.close();
+            return list;
+        } catch (Exception e){
+            MsgUtil.err(e);
+            return null;
+        }
+    }
+
+    public static ArrayList<DownloadSection> getAllExceptDownloading(){
+        try {
+            DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
+            SQLiteDatabase database = helper.getReadableDatabase();
+            Cursor cursor = database.rawQuery("select * from download where state!=?",new String[]{"downloading"});
+            if(cursor == null || cursor.getCount() == 0)return null;
+
+            ArrayList<DownloadSection> list = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                list.add(new DownloadSection(cursor));
+            }
+            cursor.close();
+            database.close();
+            return list;
+        } catch (Exception e){
+            MsgUtil.err(e);
+            return null;
+        }
+    }
+
+    public static void deleteSection(long id){
+        try {
+            DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
+            SQLiteDatabase database = helper.getWritableDatabase();
+            database.execSQL("delete from download where id=?", new Object[]{id});
+            database.close();
+        } catch (Exception e){
+            MsgUtil.err(e);
+        }
+    }
+
+    public static void clear(){
+        try {
+            DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
+            SQLiteDatabase database = helper.getWritableDatabase();
+            database.execSQL("delete from download", new Object[]{});
+            database.close();
+        } catch (Exception e){
+            MsgUtil.err(e);
+        }
+    }
+
+    public static void setState(long id, String state){
+        try {
+            DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
+            SQLiteDatabase database = helper.getWritableDatabase();
+            database.execSQL("update download set state=? where id=?", new Object[]{state,id});
+            database.close();
+        } catch (Exception e){
+            MsgUtil.err(e);
+        }
+    }
 
     //以下为外部调用方法
-    @SuppressLint({"MutatingSharedPrefs", "ApplySharedPref"})
     public static void startDownload(String title, long aid, long cid, String danmaku, String cover, int qn){
         CenterThreadPool.run(()->{
             try {
-                JSONObject task = new JSONObject();
-                task.put("type", "video_single");
-                task.put("aid", aid);
-                task.put("cid", cid);
-                task.put("qn", qn);
-                task.put("name", title);
-                task.put("parent", "");
-                task.put("url_cover", cover);
-                task.put("url_dm", danmaku);
-
-                SharedPreferences downloadPrefs = BiliTerminal.context.getSharedPreferences("download", MODE_PRIVATE);
-                Set<String> set = downloadPrefs.getStringSet("list", new HashSet<>());
-                set.add(task.toString());
-                downloadPrefs.edit().putStringSet("list", set).commit();
-
-                Log.d("download",set.toString());
-
+                DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
+                SQLiteDatabase database = helper.getWritableDatabase();
+                database.execSQL("insert into download(type,state,aid,cid,qn,name,parent,cover,danmaku) values(?,?,?,?,?,?,?,?,?)",
+                        new Object[]{"video_single","none", aid, cid, qn, title, "", cover, danmaku});
+                database.close();
                 MsgUtil.showMsg("已添加下载");
-
-                if(!started) BiliTerminal.context.startService(new Intent(BiliTerminal.context,DownloadService.class));
             } catch (Exception e){
-                MsgUtil.err("启动下载时发生错误",e);
+                MsgUtil.err(e);
             }
         });
     }
-    @SuppressLint({"MutatingSharedPrefs", "ApplySharedPref"})
+
     public static void startDownload(String parent, String child, long aid, long cid, String danmaku, String cover, int qn){
         CenterThreadPool.run(()-> {
             try {
-                JSONObject task = new JSONObject();
-                task.put("type", "video_multi");
-                task.put("aid", aid);
-                task.put("cid", cid);
-                task.put("qn", qn);
-                task.put("name", child);
-                task.put("parent", parent);
-                task.put("url_cover", cover);
-                task.put("url_dm", danmaku);
-
-                SharedPreferences downloadPrefs = BiliTerminal.context.getSharedPreferences("download", MODE_PRIVATE);
-                Set<String> set = downloadPrefs.getStringSet("list", new HashSet<>());
-                set.add(task.toString());
-                downloadPrefs.edit().putStringSet("list", set).commit();
-
+                DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
+                SQLiteDatabase database = helper.getWritableDatabase();
+                database.execSQL("insert into download(type,state,aid,cid,qn,name,parent,cover,danmaku) values(?,?,?,?,?,?,?,?,?)",
+                        new Object[]{"video_multi", "none", aid, cid, qn, child, parent, cover, danmaku});
+                database.close();
                 MsgUtil.showMsg("已添加下载");
-
-                if(!started) BiliTerminal.context.startService(new Intent(BiliTerminal.context,DownloadService.class));
-            } catch (Exception e) {
-                MsgUtil.err("启动下载时发生错误", e);
+            } catch (Exception e){
+                MsgUtil.err(e);
             }
         });
     }

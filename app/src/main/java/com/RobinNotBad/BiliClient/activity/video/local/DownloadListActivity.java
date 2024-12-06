@@ -28,11 +28,12 @@ import java.util.TimerTask;
 
 public class DownloadListActivity extends RefreshListActivity {
     public static WeakReference<DownloadListActivity> weakRef;
-    String[] str_array;
     DownloadAdapter adapter;
     Timer timer;
     boolean emptyTipShown;
     boolean firstRefresh = true;
+    boolean started;
+    ArrayList<DownloadSection> sections;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class DownloadListActivity extends RefreshListActivity {
         weakRef = new WeakReference<>(this);
 
         CenterThreadPool.run(()->{
+            started = true;
             refreshList();
 
             timer = new Timer();
@@ -59,11 +61,12 @@ public class DownloadListActivity extends RefreshListActivity {
 
     @SuppressLint("NotifyDataSetChanged")
     public void refreshList() {
-        if(this.isDestroyed()) return;
+        if(this.isDestroyed() || !started) return;
+        Log.d("debug","刷新下载列表");
 
-        str_array = DownloadService.getArray();
+        sections = DownloadService.getAll();
 
-        if (str_array == null) {
+        if (sections == null) {
             if(!emptyTipShown) {
                 MsgUtil.showMsg("下载列表为空");
                 showEmptyView();
@@ -74,19 +77,6 @@ public class DownloadListActivity extends RefreshListActivity {
             if(emptyTipShown) {
                 emptyTipShown = false;
                 hideEmptyView();
-            }
-
-            ArrayList<DownloadSection> sections = new ArrayList<>();
-
-            for (String str : str_array) {
-                try {
-                    Log.d("debug-download",str);
-                    DownloadSection section = new DownloadSection(new JSONObject(str));
-                    if (!section.state.equals("downloading")) sections.add(section);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    DownloadService.deleteSection(str);
-                }
             }
 
             if(firstRefresh){
@@ -108,7 +98,7 @@ public class DownloadListActivity extends RefreshListActivity {
                 setAdapter(adapter);
                 firstRefresh = false;
             }
-            else runOnUiThread(()->adapter.notifyDataSetChanged());
+            else runOnUiThread(()->adapter.notifyItemRangeChanged(DownloadService.started ? 1 : 0, sections.size()));
         }
 
     }
