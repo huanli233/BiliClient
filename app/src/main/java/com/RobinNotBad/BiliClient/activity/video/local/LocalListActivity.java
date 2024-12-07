@@ -84,50 +84,51 @@ public class LocalListActivity extends InstanceActivity {
 
     private void scan(File folder) {
         File[] files = folder.listFiles();
-        if (files != null) {
-            for (File video : files) {
-                if (video.isDirectory()) {
+        if(files==null) return;
 
-                    LocalVideo localVideo = new LocalVideo();
-                    localVideo.title = video.getName();
+        for (File video : files) {
+            if (video.isDirectory()) {
+                LocalVideo localVideo = new LocalVideo();
+                localVideo.title = video.getName();
 
-                    localVideo.cover = (new File(video, "cover.png")).toString();
+                localVideo.cover = (new File(video, "cover.png")).toString();
 
-                    localVideo.pageList = new ArrayList<>();
-                    localVideo.danmakuFileList = new ArrayList<>();
-                    localVideo.videoFileList = new ArrayList<>();
+                localVideo.pageList = new ArrayList<>();
+                localVideo.danmakuFileList = new ArrayList<>();
+                localVideo.videoFileList = new ArrayList<>();
 
-                    File videoFile = new File(video, "video.mp4");
-                    File danmakuFile = new File(video, "danmaku.xml");
+                File videoFile = new File(video, "video.mp4");
+                File danmakuFile = new File(video, "danmaku.xml");
 
-                    if (videoFile.exists() && danmakuFile.exists()) {
-                        File mark = new File(video,".DOWNLOADING");
-                        if(mark.exists()) continue;
+                if (videoFile.exists() && danmakuFile.exists()) {
+                    File mark = new File(video,".DOWNLOADING");
+                    if(mark.exists()) continue;
 
-                        localVideo.videoFileList.add(videoFile.toString());
-                        localVideo.danmakuFileList.add(danmakuFile.toString());    //单集视频
-                        videoList.add(localVideo);
-                    } else {
-                        File[] pages = video.listFiles();      //分页视频
-                        if (pages != null) {
-                            for (File page : pages) {
-                                if (page.isDirectory()) {
-                                    File mark = new File(page,".DOWNLOADING");
-                                    if(mark.exists()) continue;
+                    localVideo.videoFileList.add(videoFile.toString());
+                    localVideo.danmakuFileList.add(danmakuFile.toString());    //单集视频
+                    videoList.add(localVideo);
+                }
+                else {
+                    File[] pages = video.listFiles();      //分页视频
+                    if (pages != null) {
+                        for (File page : pages) {
+                            if (page.isDirectory()) {
+                                File mark = new File(page,".DOWNLOADING");
+                                if(mark.exists()) continue;
 
-                                    File pageVideoFile = new File(page, "video.mp4");
-                                    File pageDanmakuFile = new File(page, "danmaku.xml");
-                                    if (pageVideoFile.exists() && pageDanmakuFile.exists()) {
-                                        localVideo.pageList.add(page.getName());
-                                        localVideo.videoFileList.add(pageVideoFile.toString());
-                                        localVideo.danmakuFileList.add(pageDanmakuFile.toString());
-                                    }
+                                File pageVideoFile = new File(page, "video.mp4");
+                                File pageDanmakuFile = new File(page, "danmaku.xml");
+                                if (pageVideoFile.exists() && pageDanmakuFile.exists()) {
+                                    localVideo.pageList.add(page.getName());
+                                    localVideo.videoFileList.add(pageVideoFile.toString());
+                                    localVideo.danmakuFileList.add(pageDanmakuFile.toString());
                                 }
                             }
-                            videoList.add(localVideo);
                         }
+                        if(localVideo.videoFileList.size() > 0) videoList.add(localVideo);
                     }
                 }
+
             }
         }
         checkEmpty();

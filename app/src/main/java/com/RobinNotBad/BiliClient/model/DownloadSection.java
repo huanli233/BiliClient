@@ -1,12 +1,15 @@
 package com.RobinNotBad.BiliClient.model;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
+import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
 
 public class DownloadSection {
     public long id;
@@ -72,6 +75,26 @@ public class DownloadSection {
                         + "-"
                         + name.substring(0, Math.min(8, name.length()))
                         + (name.length() > 7 ? "..." : "");
+        }
+    }
+
+    public File getPath() {
+        switch (type) {
+            case "video_single":  //单集视频
+                File path_single = new File(FileUtil.getDownloadPath(BiliTerminal.context), name);
+                if (!path_single.exists()) path_single.mkdirs();
+                return path_single;
+
+            case "video_multi":  //多集视频
+                File path_multi = new File(FileUtil.getDownloadPath(BiliTerminal.context), parent);
+                if (!path_multi.exists()) path_multi.mkdirs();
+
+                File path_page = new File(path_multi, name);
+                if (!path_page.exists()) path_page.mkdirs();
+                return path_page;
+
+            default:
+                return null;
         }
     }
 }

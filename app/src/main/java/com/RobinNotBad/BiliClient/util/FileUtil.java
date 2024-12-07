@@ -34,6 +34,10 @@ public class FileUtil {
     }
 
     public static void deleteFolder(File folder) {
+        if(folder.isFile()) {
+            folder.delete();
+            return;
+        }
         File[] templist = folder.listFiles();
         assert templist != null;
         for (File file : templist) {

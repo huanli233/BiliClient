@@ -55,7 +55,10 @@ public class MultiPageActivity extends BaseActivity {
             adapter.setOnItemClickListener(position -> {
                 File rootPath = new File(FileUtil.getDownloadPath(this), ToolsUtil.stringToFile(videoInfo.title));
                 File downPath = new File(rootPath, ToolsUtil.stringToFile(videoInfo.pagenames.get(position)));
-                if (downPath.exists()) MsgUtil.showMsg("已经缓存过了~");
+                if (downPath.exists()) {
+                    File file_sign = new File(downPath,".DOWNLOADING");
+                    MsgUtil.showMsg(file_sign.exists() ? "已在下载队列" : "已下载完成");
+                }
                 else {
                     startActivity(new Intent().putExtra("page", position).setClass(this, QualityChooserActivity.class));
                 }

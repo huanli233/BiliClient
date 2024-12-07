@@ -22,6 +22,7 @@ public class SettingLaboratoryActivity extends RefreshListActivity {
         setPageName("实验室");
 
         final List<SettingSection> sectionList = new ArrayList<>() {{
+            add(new SettingSection("switch", "使用旧版下载器", "dev_download_old", "2.6.3之后的版本增加了后台下载服务，若后台下载在你的设备上有问题，请打开此选项以换回旧版的前台下载器！", "false"));
             add(new SettingSection("switch", "横屏模式", "ui_landscape", getString(R.string.setting_lab_ui_landscape), "false"));
             add(new SettingSection("input_string","开屏文字","ui_splashtext", "顾名思义，可以更改开屏文字，支持换行。开屏文字在网络请求完成后就会被打断。","欢迎使用\n哔哩终端"));
             add(new SettingSection("input_string","缓存路径","save_path_video","缓存的视频将会保存到这个位置，若文件夹不存在会自动创建。之前缓存的视频请用文件管理器手动移动到新文件夹内。\n不保证会不会出现奇怪的问题。", FileUtil.getDownloadPath(SettingLaboratoryActivity.this).toString()));

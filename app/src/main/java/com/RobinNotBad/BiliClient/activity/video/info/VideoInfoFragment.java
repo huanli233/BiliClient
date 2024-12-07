@@ -487,14 +487,15 @@ public class VideoInfoFragment extends Fragment {
                     } else {
                         File downPath = new File(FileUtil.getDownloadPath(requireContext()), ToolsUtil.stringToFile(videoInfo.title));
 
-                        if (downPath.exists() && videoInfo.pagenames.size() == 1)
-                            MsgUtil.showMsg("已经缓存过了~");
+                        if (downPath.exists() && videoInfo.pagenames.size() == 1){
+                            File file_sign = new File(downPath,".DOWNLOADING");
+                            MsgUtil.showMsg(file_sign.exists() ? "已在下载队列" : "已下载完成");
+                        }
                         else {
                             if (videoInfo.pagenames.size() > 1) {
                                 Intent intent = new Intent();
                                 intent.setClass(requireContext(), MultiPageActivity.class);
                                 intent.putExtra("download", 1);
-                                intent.putExtra("videoInfo", (Parcelable) videoInfo);
                                 startActivity(intent);
                             } else {
                                 startActivity(new Intent().putExtra("videoInfo", (Parcelable) videoInfo).putExtra("page", 0).setClass(requireContext(), QualityChooserActivity.class));

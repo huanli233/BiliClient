@@ -43,6 +43,7 @@ public class DownloadService extends Service {
     public static boolean started;
     public static DownloadSection downloadingSection;
     public static short count_finish;
+    private static int firstDown;
 
     private Timer toastTimer;
     private final TimerTask timerTask = new TimerTask() {
@@ -75,14 +76,14 @@ public class DownloadService extends Service {
         toastTimer = new Timer();
         toastTimer.schedule(timerTask,5000,5000);
 
+        firstDown = serviceIntent.getIntExtra("first",-1);
+
         CenterThreadPool.run(()->{
             while (true) {
                 downloadingSection = getFirst();
                 if(downloadingSection==null) break;
 
                 try {
-
-
                     String url;
                     try{
                         url = PlayerApi.getVideo(downloadingSection.aid, downloadingSection.cid, downloadingSection.qn, true).first;
@@ -123,15 +124,15 @@ public class DownloadService extends Service {
                                 File path_parent = new File(FileUtil.getDownloadPath(this), parent);
                                 if(!path_parent.exists()) path_parent.mkdirs();
 
-                                String url_cover_multi = downloadingSection.url_cover;
-                                File cover_multi = new File(path_parent, "cover.png");
-                                if (!cover_multi.exists()) download(url_cover_multi, cover_multi);
-
                                 File path_page = new File(path_parent, downloadingSection.name);
                                 if(!path_page.exists()) path_page.mkdirs();
 
                                 file_sign = new File(path_page,".DOWNLOADING");
                                 if(!file_sign.exists())file_sign.createNewFile();
+
+                                String url_cover_multi = downloadingSection.url_cover;
+                                File cover_multi = new File(path_parent, "cover.png");
+                                if (!cover_multi.exists()) download(url_cover_multi, cover_multi);
 
                                 String url_dm_page = downloadingSection.url_dm;
                                 downdanmu(url_dm_page, new File(path_page, "danmaku.xml"));
@@ -157,7 +158,7 @@ public class DownloadService extends Service {
                     }
 
                 } catch (IOException e) {
-                    MsgUtil.showMsg("下载失败，网络错误\n请手动前往缓存页面重新下载");
+                    MsgUtil.showMsg("下载失败，网络错误\n请手动前往下载列表页重启下载");
                     stopSelf();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -285,7 +286,14 @@ public class DownloadService extends Service {
         try {
             DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
             SQLiteDatabase database = helper.getReadableDatabase();
-            Cursor cursor = database.rawQuery("select * from download where state!=? limit 1",new String[]{"error"});
+
+            Cursor cursor = null;
+
+            if(firstDown>=0) cursor = database.rawQuery("select * from download where id==? limit 1",new String[]{String.valueOf(firstDown)});
+            if(cursor==null) cursor = database.rawQuery("select * from download where state!=? limit 1",new String[]{"error"});
+
+            firstDown = -1;
+
             if(cursor == null || cursor.getCount() == 0)return null;
 
             cursor.moveToFirst();
@@ -381,6 +389,13 @@ public class DownloadService extends Service {
                 database.execSQL("insert into download(type,state,aid,cid,qn,name,parent,cover,danmaku) values(?,?,?,?,?,?,?,?,?)",
                         new Object[]{"video_single","none", aid, cid, qn, title, "", cover, danmaku});
                 database.close();
+
+                File path_single = new File(FileUtil.getDownloadPath(BiliTerminal.context), title);
+                if (!path_single.exists()) path_single.mkdirs();
+
+                File file_sign = new File(path_single,".DOWNLOADING");
+                if(!file_sign.exists())file_sign.createNewFile();
+
                 MsgUtil.showMsg("已添加下载");
             } catch (Exception e){
                 MsgUtil.err(e);
@@ -396,13 +411,21 @@ public class DownloadService extends Service {
                 database.execSQL("insert into download(type,state,aid,cid,qn,name,parent,cover,danmaku) values(?,?,?,?,?,?,?,?,?)",
                         new Object[]{"video_multi", "none", aid, cid, qn, child, parent, cover, danmaku});
                 database.close();
+
+                File path_parent = new File(FileUtil.getDownloadPath(BiliTerminal.context), parent);
+                if(!path_parent.exists()) path_parent.mkdirs();
+
+                File path_page = new File(path_parent, child);
+                if(!path_page.exists()) path_page.mkdirs();
+
+                File file_sign = new File(path_page,".DOWNLOADING");
+                if(!file_sign.exists())file_sign.createNewFile();
+
                 MsgUtil.showMsg("已添加下载");
             } catch (Exception e){
                 MsgUtil.err(e);
             }
         });
     }
-
-
 
 }

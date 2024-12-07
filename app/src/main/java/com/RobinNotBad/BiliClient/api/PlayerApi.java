@@ -53,22 +53,24 @@ public class PlayerApi {
         context.startActivity(intent);
     }
 
-    public static void startDownloadingVideo(VideoInfo videoInfo, int page, int qn) {
-        Context context = BiliTerminal.context;
-        /*
-        Intent intent = new Intent()
-                .putExtra("aid", videoInfo.aid)
-                .putExtra("bvid", videoInfo.bvid)
-                .putExtra("cid", videoInfo.cids.get(page))
-                .putExtra("title", (videoInfo.pagenames.size() == 1 ? videoInfo.title : videoInfo.pagenames.get(page)))
-                .putExtra("download", (videoInfo.pagenames.size() == 1 ? 1 : 2))  //1：单页  2：分页
-                .putExtra("cover", videoInfo.cover)
-                .putExtra("parent_title", videoInfo.title)
-                .putExtra("qn", qn)
-                .putExtra("mid", videoInfo.staff.get(0).mid)
-                .setClass(context, JumpToPlayerActivity.class);
-        context.startActivity(intent);
-         */
+    public static void startDownloading(VideoInfo videoInfo, int page, int qn) {
+        if(SharedPreferencesUtil.getBoolean("dev_download_old",false)) {
+            Context context = BiliTerminal.context;
+
+            Intent intent = new Intent()
+                    .putExtra("aid", videoInfo.aid)
+                    .putExtra("bvid", videoInfo.bvid)
+                    .putExtra("cid", videoInfo.cids.get(page))
+                    .putExtra("title", (videoInfo.pagenames.size() == 1 ? videoInfo.title : videoInfo.pagenames.get(page)))
+                    .putExtra("download", (videoInfo.pagenames.size() == 1 ? 1 : 2))  //1：单页  2：分页
+                    .putExtra("cover", videoInfo.cover)
+                    .putExtra("parent_title", videoInfo.title)
+                    .putExtra("qn", qn)
+                    .putExtra("mid", videoInfo.staff.get(0).mid)
+                    .setClass(context, JumpToPlayerActivity.class);
+            context.startActivity(intent);
+            return;
+        }
 
         if(videoInfo.cids.size() == 1)
             DownloadService.startDownload(videoInfo.title,
