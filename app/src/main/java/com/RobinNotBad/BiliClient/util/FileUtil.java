@@ -83,11 +83,18 @@ public class FileUtil {
         ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
     }
 
-    public static File getDownloadPath(Context context) {
-        return new File(SharedPreferencesUtil.getString("save_path_video", Environment.getExternalStorageDirectory() + "/Android/media/" + context.getPackageName() + "/"));
+    public static File getDownloadPath() {
+        File path = new File(SharedPreferencesUtil.getString("save_path_video", Environment.getExternalStorageDirectory() + "/Android/media/" + BiliTerminal.context.getPackageName() + "/"));
+        try {
+            File nomedia = new File(path, ".nomedia");    //为了防止系统扫描
+            if (!nomedia.exists()) nomedia.createNewFile();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return path;
     }
 
-    public static File getDownloadPicturePath(Context context) {
+    public static File getDownloadPicturePath() {
         return new File(SharedPreferencesUtil.getString("save_path_pictures", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/哔哩终端/"));
     }
 }

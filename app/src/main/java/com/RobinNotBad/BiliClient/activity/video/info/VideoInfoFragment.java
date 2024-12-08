@@ -496,7 +496,7 @@ public class VideoInfoFragment extends Fragment {
                     if (!FileUtil.checkStoragePermission()) {
                         FileUtil.requestStoragePermission(requireActivity());
                     } else {
-                        File downPath = new File(FileUtil.getDownloadPath(requireContext()), ToolsUtil.stringToFile(videoInfo.title));
+                        File downPath = new File(FileUtil.getDownloadPath(),ToolsUtil.stringToFile(videoInfo.title));
 
                         if (downPath.exists() && videoInfo.pagenames.size() == 1){
                             File file_sign = new File(downPath,".DOWNLOADING");

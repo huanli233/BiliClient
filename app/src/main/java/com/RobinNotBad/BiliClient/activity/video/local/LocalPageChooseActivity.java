@@ -58,7 +58,7 @@ public class LocalPageChooseActivity extends BaseActivity {
         });
         adapter.setOnItemLongClickListener(position -> {
             if (longClickPosition == position) {
-                File workPath = FileUtil.getDownloadPath(this);
+                File workPath = FileUtil.getDownloadPath();
                 File videoPath = new File(workPath, title);
                 File pagePath = new File(videoPath, pageList.get(position));
 

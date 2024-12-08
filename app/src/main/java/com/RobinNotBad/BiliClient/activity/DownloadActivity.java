@@ -81,12 +81,12 @@ public class DownloadActivity extends BaseActivity {
         timer.schedule(showText, 100, 100);
         CenterThreadPool.run(() -> {
             if (type == 0) {
-                rootPath = FileUtil.getDownloadPicturePath(this);
+                rootPath = FileUtil.getDownloadPicturePath();
                 if (!rootPath.exists()) rootPath.mkdirs();
                 downFile = new File(rootPath, title);
                 download(link, downFile, "下载文件中", true);
             } else {
-                rootPath = FileUtil.getDownloadPath(this);
+                rootPath = FileUtil.getDownloadPath();
 
                 if (type == 1) {
                     downPath = new File(rootPath, title);
@@ -141,6 +141,8 @@ public class DownloadActivity extends BaseActivity {
                     }
                 }, 200);
             }
+            response.body().close();
+            response.close();
         } catch (IOException e) {
             runOnUiThread(() -> MsgUtil.showMsg("下载失败"));
             e.printStackTrace();
@@ -168,6 +170,8 @@ public class DownloadActivity extends BaseActivity {
                     bufferedSink.close();
                 }
             }
+            if(response.body()!=null) response.body().close();
+            response.close();
         } catch (IOException e) {
             runOnUiThread(() -> MsgUtil.showMsg("弹幕下载失败！"));
             finish();

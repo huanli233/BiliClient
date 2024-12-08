@@ -78,7 +78,7 @@ public class DownloadService extends Service {
         toastTimer = new Timer();
         toastTimer.schedule(timerTask,5000,5000);
 
-        firstDown = serviceIntent.getLongExtra("first",-1);
+        if(serviceIntent!=null) firstDown = serviceIntent.getLongExtra("first",-1);
 
         CenterThreadPool.run(()->{
             while (true) {
@@ -105,7 +105,7 @@ public class DownloadService extends Service {
                         File file_sign = null;
                         switch (downloadingSection.type) {
                             case "video_single":  //单集视频
-                                File path_single = new File(FileUtil.getDownloadPath(this), downloadingSection.name);
+                                File path_single = new File(FileUtil.getDownloadPath(), downloadingSection.name);
                                 if (!path_single.exists()) path_single.mkdirs();
 
                                 file_sign = new File(path_single,".DOWNLOADING");
@@ -123,7 +123,7 @@ public class DownloadService extends Service {
                                 break;
                             case "video_multi":  //多集视频
                                 String parent = downloadingSection.parent;
-                                File path_parent = new File(FileUtil.getDownloadPath(this), parent);
+                                File path_parent = new File(FileUtil.getDownloadPath(), parent);
                                 if(!path_parent.exists()) path_parent.mkdirs();
 
                                 File path_page = new File(path_parent, downloadingSection.name);
@@ -190,14 +190,16 @@ public class DownloadService extends Service {
 
     private void download(String url, File file) throws IOException {
         Response response = NetWorkUtil.get(url);
+        InputStream inputStream = null;
+        FileOutputStream fileOutputStream = null;
         try {
             if (!file.exists()) file.createNewFile();
             else {
                 file.delete();
                 file.createNewFile();
             }
-            InputStream inputStream = Objects.requireNonNull(response.body()).byteStream();
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            inputStream = Objects.requireNonNull(response.body()).byteStream();
+            fileOutputStream = new FileOutputStream(file);
             int len;
             byte[] bytes = new byte[1024 * 10];
             long TotalFileSize = Objects.requireNonNull(response.body()).contentLength();
@@ -206,35 +208,38 @@ public class DownloadService extends Service {
                 long CompleteFileSize = file.length();
                 percent = 1.0f * CompleteFileSize / TotalFileSize;
             }
-            inputStream.close();
-            fileOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("文件错误");
+        } finally {
+            if(inputStream!=null) inputStream.close();
+            if(fileOutputStream!=null) fileOutputStream.close();
+            if (response.body() != null) response.body().close();
+            response.close();
         }
     }
 
-    private void downdanmu(String danmaku, File danmakuFile) throws IOException{
-            Response response = NetWorkUtil.get(danmaku);
-            BufferedSink bufferedSink = null;
-            try {
-                if (!danmakuFile.exists()) danmakuFile.createNewFile();
-                else {
-                    danmakuFile.delete();
-                    danmakuFile.createNewFile();
-                }
-                Sink sink = Okio.sink(danmakuFile);
-                byte[] decompressBytes = decompress(Objects.requireNonNull(response.body()).bytes());//调用解压函数进行解压，返回包含解压后数据的byte数组
-                bufferedSink = Okio.buffer(sink);
-                bufferedSink.write(decompressBytes);//将解压后数据写入文件（sink）中
-                bufferedSink.close();
-            } catch (IOException e) {
-                throw new RuntimeException("文件错误");
-            } finally {
-                if (bufferedSink != null) {
-                    bufferedSink.close();
-                }
+    private void downdanmu(String danmaku, File danmakuFile) throws IOException {
+        Response response = NetWorkUtil.get(danmaku);
+        BufferedSink bufferedSink = null;
+        try {
+            if (!danmakuFile.exists()) danmakuFile.createNewFile();
+            else {
+                danmakuFile.delete();
+                danmakuFile.createNewFile();
             }
+            Sink sink = Okio.sink(danmakuFile);
+            byte[] decompressBytes = decompress(Objects.requireNonNull(response.body()).bytes());//调用解压函数进行解压，返回包含解压后数据的byte数组
+            bufferedSink = Okio.buffer(sink);
+            bufferedSink.write(decompressBytes);//将解压后数据写入文件（sink）中
+            bufferedSink.close();
+        } catch (IOException e) {
+            throw new RuntimeException("文件错误");
+        } finally {
+            if (bufferedSink != null) bufferedSink.close();
+            if(response.body()!=null) response.body().close();
+            response.close();
+        }
     }
 
 
@@ -273,48 +278,75 @@ public class DownloadService extends Service {
         } finally {
             try {
                 o.close();
-            } catch (IOException e) {
+                decompresser.end();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        decompresser.end();
         return output;
     }
 
 
     //以下为数据库操作方法
 
-    public static DownloadSection getFirst(){
+    public static DownloadSection getFirst() {
+        Cursor cursor = null;
+        SQLiteDatabase database = null;
         try {
             DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
-            SQLiteDatabase database = helper.getReadableDatabase();
+            database = helper.getReadableDatabase();
 
-            Cursor cursor = null;
-
-            if(firstDown>=0) cursor = database.rawQuery("select * from download where id=? limit 1",new String[]{String.valueOf(firstDown)});
-            if(cursor==null) cursor = database.rawQuery("select * from download where state!=? limit 1",new String[]{"error"});
+            if (firstDown >= 0)
+                cursor = database.rawQuery("select * from download where id=? limit 1", new String[]{String.valueOf(firstDown)});
+            if (cursor == null)
+                cursor = database.rawQuery("select * from download where state!=? limit 1", new String[]{"error"});
 
             firstDown = -1;
 
-            if(cursor == null || cursor.getCount() == 0)return null;
+            if (cursor == null || cursor.getCount() == 0) return null;
 
             cursor.moveToFirst();
-            DownloadSection downloadSection = new DownloadSection(cursor);
-            cursor.close();
-            database.close();
-            return downloadSection;
-        } catch (Exception e){
+            return new DownloadSection(cursor);
+        } catch (Exception e) {
             MsgUtil.err(e);
             return null;
+        } finally {
+            if (cursor != null) cursor.close();
+            if (database != null) database.close();
         }
     }
 
-    public static ArrayList<DownloadSection> getAll(){
+    public static ArrayList<DownloadSection> getAll() {
+        Cursor cursor = null;
+        SQLiteDatabase database = null;
         try {
             DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
-            SQLiteDatabase database = helper.getReadableDatabase();
-            Cursor cursor = database.rawQuery("select * from download",null);
-            if(cursor == null || cursor.getCount() == 0)return null;
+            database = helper.getReadableDatabase();
+            cursor = database.rawQuery("select * from download", null);
+            if (cursor == null || cursor.getCount() == 0) return null;
+
+            ArrayList<DownloadSection> list = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                list.add(new DownloadSection(cursor));
+            }
+            return list;
+        } catch (Exception e) {
+            MsgUtil.err(e);
+            return new ArrayList<>();
+        } finally {
+            if (cursor != null) cursor.close();
+            if (database != null) database.close();
+        }
+    }
+
+    public static ArrayList<DownloadSection> getAllExceptDownloading() {
+        SQLiteDatabase database = null;
+        Cursor cursor = null;
+        try {
+            DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
+            database = helper.getReadableDatabase();
+            cursor = database.rawQuery("select * from download where state!=?", new String[]{"downloading"});
+            if (cursor == null || cursor.getCount() == 0) return null;
 
             ArrayList<DownloadSection> list = new ArrayList<>();
             while (cursor.moveToNext()) {
@@ -323,62 +355,54 @@ public class DownloadService extends Service {
             cursor.close();
             database.close();
             return list;
-        } catch (Exception e){
+        } catch (Exception e) {
             MsgUtil.err(e);
             return new ArrayList<>();
+        } finally {
+            if (cursor != null) cursor.close();
+            if (database != null) database.close();
         }
     }
 
-    public static ArrayList<DownloadSection> getAllExceptDownloading(){
+    public static void deleteSection(long id) {
+        SQLiteDatabase database = null;
         try {
             DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
-            SQLiteDatabase database = helper.getReadableDatabase();
-            Cursor cursor = database.rawQuery("select * from download where state!=?",new String[]{"downloading"});
-            if(cursor == null || cursor.getCount() == 0)return null;
-
-            ArrayList<DownloadSection> list = new ArrayList<>();
-            while (cursor.moveToNext()) {
-                list.add(new DownloadSection(cursor));
-            }
-            cursor.close();
-            database.close();
-            return list;
-        } catch (Exception e){
-            MsgUtil.err(e);
-            return new ArrayList<>();
-        }
-    }
-
-    public static void deleteSection(long id){
-        try {
-            DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
-            SQLiteDatabase database = helper.getWritableDatabase();
+            database = helper.getWritableDatabase();
             database.execSQL("delete from download where id=?", new Object[]{id});
             database.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             MsgUtil.err(e);
+        } finally {
+            if (database != null) database.close();
         }
     }
 
-    public static void clear(){
+    public static void clear() {
+        SQLiteDatabase database = null;
         try {
             DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
-            SQLiteDatabase database = helper.getWritableDatabase();
+            database = helper.getWritableDatabase();
             database.execSQL("delete from download", new Object[]{});
             database.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             MsgUtil.err(e);
+        } finally {
+            if (database != null) database.close();
         }
     }
 
-    public static void setState(long id, String state){
+    public static void setState(long id, String state) {
+        SQLiteDatabase database = null;
         try {
             DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
-            SQLiteDatabase database = helper.getWritableDatabase();
-            database.execSQL("update download set state=? where id=?", new Object[]{state,id});
+            database = helper.getWritableDatabase();
+            database.execSQL("update download set state=? where id=?", new Object[]{state, id});
             database.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             MsgUtil.err(e);
+        } finally {
+            if (database != null) database.close();
         }
     }
 
@@ -392,7 +416,7 @@ public class DownloadService extends Service {
                         new Object[]{"video_single","none", aid, cid, qn, title, "", cover, danmaku});
                 database.close();
 
-                File path_single = new File(FileUtil.getDownloadPath(BiliTerminal.context), title);
+                File path_single = new File(FileUtil.getDownloadPath(), title);
                 if (!path_single.exists()) path_single.mkdirs();
 
                 File file_sign = new File(path_single,".DOWNLOADING");
@@ -417,7 +441,7 @@ public class DownloadService extends Service {
                         new Object[]{"video_multi", "none", aid, cid, qn, child, parent, cover, danmaku});
                 database.close();
 
-                File path_parent = new File(FileUtil.getDownloadPath(BiliTerminal.context), parent);
+                File path_parent = new File(FileUtil.getDownloadPath(), parent);
                 if(!path_parent.exists()) path_parent.mkdirs();
 
                 File path_page = new File(path_parent, child);

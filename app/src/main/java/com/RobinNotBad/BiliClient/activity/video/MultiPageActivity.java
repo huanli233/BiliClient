@@ -53,7 +53,7 @@ public class MultiPageActivity extends BaseActivity {
 
         if (intent.getIntExtra("download", 0) == 1) {    //下载模式
             adapter.setOnItemClickListener(position -> {
-                File rootPath = new File(FileUtil.getDownloadPath(this), ToolsUtil.stringToFile(videoInfo.title));
+                File rootPath = new File(FileUtil.getDownloadPath(), ToolsUtil.stringToFile(videoInfo.title));
                 File downPath = new File(rootPath, ToolsUtil.stringToFile(videoInfo.pagenames.get(position)));
                 if (downPath.exists()) {
                     File file_sign = new File(downPath,".DOWNLOADING");

@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.model;
 
 import android.database.Cursor;
 
-import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
@@ -81,12 +80,12 @@ public class DownloadSection {
     public File getPath() {
         switch (type) {
             case "video_single":  //单集视频
-                File path_single = new File(FileUtil.getDownloadPath(BiliTerminal.context), name);
+                File path_single = new File(FileUtil.getDownloadPath(), name);
                 if (!path_single.exists()) path_single.mkdirs();
                 return path_single;
 
             case "video_multi":  //多集视频
-                File path_multi = new File(FileUtil.getDownloadPath(BiliTerminal.context), parent);
+                File path_multi = new File(FileUtil.getDownloadPath(), parent);
                 if (!path_multi.exists()) path_multi.mkdirs();
 
                 File path_page = new File(path_multi, name);
