@@ -93,12 +93,15 @@ public class AboutActivity extends BaseActivity {
 
             for (int i = 0; i < developerAvaterViews.size(); i++) {
                 int finalI = i;
-                if (developerAvaters.get(i) != -1) Glide.with(this).load(developerAvaters.get(i))
-                        .transition(GlideUtil.getTransitionOptions())
-                        .placeholder(R.mipmap.akari)
-                        .apply(RequestOptions.circleCropTransform())
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .into(developerAvaterViews.get(i));
+                if (developerAvaters.get(i) != -1) try {
+                    Glide.with(this).load(developerAvaters.get(i))
+                            .transition(GlideUtil.getTransitionOptions())
+                            .placeholder(R.mipmap.akari)
+                            .apply(RequestOptions.circleCropTransform())
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .into(developerAvaterViews.get(i));
+                } catch (Exception ignored){}
+
 
                 developerCardList.get(i).setOnClickListener(view -> {
                     Intent intent = new Intent()
@@ -112,7 +115,7 @@ public class AboutActivity extends BaseActivity {
                 eggClick_authorWords++;
                 if (eggClick_authorWords == 7) {
                     eggClick_authorWords = 0;
-                    MsgUtil.showText("作者的话", "无论当下的境遇如何，\n这片星空下永远有你的一片位置。\n抱抱屏幕前的你，\n真诚地祝愿你永远快乐幸福。\n让我们一起，迈入“下一个远方”。<extra_insert>{\"type\":\"video\",\"content\":\"BV1UC411B7Co\",\"title\":\"【原神新春会】下一个远方\"}");
+                    MsgUtil.showText("作者的话", "无论当下的境遇如何，\n这片星空下永远有你的一片位置。\n抱抱屏幕前的你，\n真诚地祝愿你永远快乐幸福。\n让我们一起，迈向“下一个远方”。<extra_insert>{\"type\":\"video\",\"content\":\"BV1UC411B7Co\",\"title\":\"【原神新春会】下一个远方\"}");
                 }
             });
 

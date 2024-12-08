@@ -57,7 +57,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
 
     @Override
     public void onBindViewHolder(@NonNull DownloadHolder holder, int position) {
-        boolean isDownloading = DownloadService.started && DownloadService.downloadingSection!=null;
+        boolean isDownloading = DownloadService.downloadingSection!=null;
 
         if(isDownloading){
             if(position==0){
@@ -122,6 +122,9 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
                     break;
                 case "none":
                     extra.setText("等待下载");
+                    break;
+                case "downloading":
+                    if(DownloadService.downloadingSection==null) extra.setText("下载中断");
                     break;
                 default:
                     extra.setText("未知状态？");

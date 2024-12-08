@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.service;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -43,13 +44,14 @@ public class DownloadService extends Service {
     public static boolean started;
     public static DownloadSection downloadingSection;
     public static short count_finish;
-    private static int firstDown;
+    private static long firstDown;
 
     private Timer toastTimer;
     private final TimerTask timerTask = new TimerTask() {
         @Override
         public void run() {
-            if(downloadingSection == null)this.cancel();
+            if(downloadingSection == null) return;
+            if(!started) this.cancel();
             MsgUtil.showMsg("下载进度："+ String.format(Locale.CHINA,"%.2f",percent * 100) + "%\n" + downloadingSection.name_short);
         }
     };
@@ -76,7 +78,7 @@ public class DownloadService extends Service {
         toastTimer = new Timer();
         toastTimer.schedule(timerTask,5000,5000);
 
-        firstDown = serviceIntent.getIntExtra("first",-1);
+        firstDown = serviceIntent.getLongExtra("first",-1);
 
         CenterThreadPool.run(()->{
             while (true) {
@@ -289,7 +291,7 @@ public class DownloadService extends Service {
 
             Cursor cursor = null;
 
-            if(firstDown>=0) cursor = database.rawQuery("select * from download where id==? limit 1",new String[]{String.valueOf(firstDown)});
+            if(firstDown>=0) cursor = database.rawQuery("select * from download where id=? limit 1",new String[]{String.valueOf(firstDown)});
             if(cursor==null) cursor = database.rawQuery("select * from download where state!=? limit 1",new String[]{"error"});
 
             firstDown = -1;
@@ -397,6 +399,9 @@ public class DownloadService extends Service {
                 if(!file_sign.exists())file_sign.createNewFile();
 
                 MsgUtil.showMsg("已添加下载");
+
+                Context context = BiliTerminal.context;
+                context.startService(new Intent(context, DownloadService.class));
             } catch (Exception e){
                 MsgUtil.err(e);
             }
@@ -422,6 +427,9 @@ public class DownloadService extends Service {
                 if(!file_sign.exists())file_sign.createNewFile();
 
                 MsgUtil.showMsg("已添加下载");
+
+                Context context = BiliTerminal.context;
+                context.startService(new Intent(context, DownloadService.class));
             } catch (Exception e){
                 MsgUtil.err(e);
             }

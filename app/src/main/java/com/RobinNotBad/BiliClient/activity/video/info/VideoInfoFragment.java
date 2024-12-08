@@ -37,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
+import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
 import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
@@ -200,6 +201,14 @@ public class VideoInfoFragment extends Fragment {
         if (onFinishLoad != null) onFinishLoad.run();
         else loadFinished = true;
 
+        if(videoInfo == null){
+            Activity activity = getActivity();
+            if(activity == null) {
+                return;
+            }
+            CenterThreadPool.runOnUiThread(activity::finish);
+        }
+
         if (videoInfo.epid != -1) { //不是空的的话就应该跳转到番剧页面了
             CenterThreadPool.run(() -> {
                 Context context = getContext();
@@ -320,10 +329,12 @@ public class VideoInfoFragment extends Fragment {
 
                 //封面
                 if (SharedPreferencesUtil.getBoolean("ui_landscape", false)) {
-                    ConstraintLayout.LayoutParams coverParams = (ConstraintLayout.LayoutParams) cover.getLayoutParams();
-                    coverParams.matchConstraintPercentWidth = 0.25f;
-                    coverParams.horizontalBias = 0;
-                    cover.setLayoutParams(coverParams);    //横屏改变封面大小并靠左
+                    BaseActivity activity = (BaseActivity) getActivity();
+                    if(activity!=null) {
+                        ViewGroup.LayoutParams params = cover.getLayoutParams();
+                        params.width = (int) (activity.window_width * 0.5);
+                        cover.setLayoutParams(params);
+                    }
                 }
 
                 Glide.with(requireContext()).asDrawable().load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
@@ -335,7 +346,7 @@ public class VideoInfoFragment extends Fragment {
                 cover.setOnClickListener(view1 -> {
                     if (SharedPreferencesUtil.getString("player", null) == null) {
                         SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cover_play_enable, true);
-                        Toast.makeText(requireContext(), "将播放视频, 如需变更点击行为请至设置->偏好设置喵", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "将播放视频！\n如需变更点击行为请至设置->偏好设置喵", Toast.LENGTH_SHORT).show();
                         clickCoverPlayEnable = true;
                     }
                     if (clickCoverPlayEnable) {

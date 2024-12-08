@@ -33,6 +33,8 @@ public class LocalListActivity extends InstanceActivity {
 
     private int longClickPosition = -1;
 
+    private boolean started;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,7 @@ public class LocalListActivity extends InstanceActivity {
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false);
+                started = true;
             });
         });
     }
@@ -147,7 +150,7 @@ public class LocalListActivity extends InstanceActivity {
     }
 
     public void refresh() {
-        CenterThreadPool.run(() -> {
+        if(started) CenterThreadPool.run(() -> {
             runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
             int oldSize = videoList.size();
             videoList.clear();

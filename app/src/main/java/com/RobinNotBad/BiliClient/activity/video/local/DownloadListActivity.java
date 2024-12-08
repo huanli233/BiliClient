@@ -15,6 +15,8 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -39,7 +41,6 @@ public class DownloadListActivity extends RefreshListActivity {
         MsgUtil.showMsg("提醒：能用就行\n此页面可能存在诸多问题");
 
         CenterThreadPool.run(()->{
-            started = true;
             refreshList();
 
             timer = new Timer();
@@ -59,7 +60,9 @@ public class DownloadListActivity extends RefreshListActivity {
         if(this.isDestroyed() || !started) return;
         Log.d("debug","刷新下载列表");
 
-        sections = DownloadService.getAllExceptDownloading();
+        boolean downloading = DownloadService.downloadingSection != null;
+
+        sections = downloading ? DownloadService.getAllExceptDownloading() : DownloadService.getAll();
 
         if (sections == null && DownloadService.downloadingSection == null) {
             if(!emptyTipShown) {
@@ -85,9 +88,22 @@ public class DownloadListActivity extends RefreshListActivity {
                         }
                     }
                     else{
-                        DownloadService.setState(sections.get(position).id,"none");
+                        DownloadSection section = sections.get(position);
+                        if(section.state.equals("downloading")) {
+                            try {
+                                File folder = section.getPath();
+                                FileUtil.deleteFolder(folder);
+                                folder.mkdirs();
+                                File sign = new File(folder,".DOWNLOADING");
+                                sign.createNewFile();
+                            } catch (IOException e) {
+                                MsgUtil.err("文件错误：",e);
+                            }
+                        }
+
+                        DownloadService.setState(section.id,"none");
                         Intent intent = new Intent(this, DownloadService.class);
-                        intent.putExtra("first",sections.get(position).id);
+                        intent.putExtra("first",section.id);
                         startService(intent);
                     }
                 }));
@@ -112,6 +128,7 @@ public class DownloadListActivity extends RefreshListActivity {
                 }));
 
                 setAdapter(adapter);
+                started = true;
                 firstRefresh = false;
             }
             else {
