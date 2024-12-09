@@ -152,7 +152,8 @@ public class MsgUtil {
         err("",e);
     }
     public static void err(String desc, Throwable e) {
-        Log.e("debug-ERROR", e.getMessage(), e);
+        Log.e("debug-error",desc);
+        e.printStackTrace();
 
         StringBuilder output = new StringBuilder(desc);
 

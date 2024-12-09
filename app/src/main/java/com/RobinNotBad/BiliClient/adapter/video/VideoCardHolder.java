@@ -51,13 +51,17 @@ public class VideoCardHolder extends RecyclerView.ViewHolder {
             viewCount.setText(str_viewCount);
         }
 
-        Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
-                .transition(GlideUtil.getTransitionOptions())
-                .placeholder(R.mipmap.placeholder)
-                .format(DecodeFormat.PREFER_RGB_565)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))).sizeMultiplier(0.85f))
-                .into(cover);
+        try {
+            Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
+                    .transition(GlideUtil.getTransitionOptions())
+                    .placeholder(R.mipmap.placeholder)
+                    .format(DecodeFormat.PREFER_RGB_565)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))).sizeMultiplier(0.85f))
+                    .into(cover);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         switch (videoCard.type){
             case "live":

@@ -114,7 +114,8 @@ public class ToolsUtil {
     }
 
     public static String stringToFile(String str) {
-        return str.replace("|", "｜")
+        return str.substring(0,Math.min(36,str.length()))    //防止长度溢出
+                .replace("|", "｜")
                 .replace(":", "：")
                 .replace("*", "﹡")
                 .replace("?", "？")

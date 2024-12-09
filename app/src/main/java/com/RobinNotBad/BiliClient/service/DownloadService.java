@@ -81,7 +81,8 @@ public class DownloadService extends Service {
         if(serviceIntent!=null) firstDown = serviceIntent.getLongExtra("first",-1);
 
         CenterThreadPool.run(()->{
-            while (true) {
+            boolean failed = false;
+            while (!failed) {
                 downloadingSection = getFirst();
                 if(downloadingSection==null) break;
 
@@ -98,6 +99,7 @@ public class DownloadService extends Service {
 
                     try {
                         setState(downloadingSection.id,"downloading");
+                        percent = 0;
                         refreshDownloadList();
 
                         MsgUtil.showMsg("开始下载：\n" + downloadingSection.name_short);
@@ -161,6 +163,7 @@ public class DownloadService extends Service {
 
                 } catch (IOException e) {
                     MsgUtil.showMsg("下载失败，网络错误\n请手动前往下载列表页重启下载");
+                    failed = true;
                     stopSelf();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -178,7 +181,7 @@ public class DownloadService extends Service {
 
     private void refreshDownloadList(){
         if(DownloadListActivity.weakRef != null) {
-            DownloadListActivity.weakRef.get().refreshList();
+            DownloadListActivity.weakRef.get().refreshList(true);
         }
     }
 

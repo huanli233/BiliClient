@@ -29,6 +29,7 @@ public class DownloadListActivity extends RefreshListActivity {
     boolean emptyTipShown;
     boolean firstRefresh = true;
     boolean started;
+    boolean created;
     ArrayList<DownloadSection> sections;
 
     @Override
@@ -41,13 +42,14 @@ public class DownloadListActivity extends RefreshListActivity {
         MsgUtil.showMsg("提醒：能用就行\n此页面可能存在诸多问题");
 
         CenterThreadPool.run(()->{
-            refreshList();
+            created = true;
+            refreshList(false);
 
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if(DownloadService.downloadingSection!=null) runOnUiThread(()->adapter.notifyItemChanged(0));
+                    if(DownloadService.downloadingSection!=null && started) runOnUiThread(()->adapter.notifyItemChanged(0));
                 }
             },300,500);
         });
@@ -56,8 +58,9 @@ public class DownloadListActivity extends RefreshListActivity {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void refreshList() {
-        if(this.isDestroyed() || !started) return;
+    public void refreshList(boolean fromOutside) {
+        if(this.isDestroyed() || !created) return;
+        if(fromOutside && !started) return;
         Log.d("debug","刷新下载列表");
 
         boolean downloading = DownloadService.downloadingSection != null;
@@ -71,7 +74,11 @@ public class DownloadListActivity extends RefreshListActivity {
                 emptyTipShown = true;
             }
         }
-        else {
+        else if(sections != null){
+            for (DownloadSection s:sections) {
+                Log.d("debug-download",s.name_short);
+            }
+
             if(emptyTipShown) {
                 emptyTipShown = false;
                 hideEmptyView();
@@ -120,7 +127,7 @@ public class DownloadListActivity extends RefreshListActivity {
                         FileUtil.deleteFolder(delete.getPath());
                         DownloadService.deleteSection(delete.id);
 
-                        refreshList();
+                        refreshList(false);
                         MsgUtil.showMsg("删除成功");
                     } catch (Exception e){
                         MsgUtil.err(e);

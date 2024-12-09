@@ -91,7 +91,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
 
     @Override
     public int getItemCount() {
-        if(DownloadService.started){
+        if(DownloadService.downloadingSection!=null){
             if(downloadList == null) return 1;
             else return downloadList.size()+1;
         }

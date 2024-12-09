@@ -13,7 +13,6 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.util.Pair;
@@ -30,7 +29,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -86,7 +84,7 @@ public class VideoInfoFragment extends Fragment {
     private Pair<Long, Integer> progressPair;
     private boolean play_clicked = false;
 
-    private Boolean clickCoverPlayEnable = SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cover_play_enable, false);
+    private Boolean coverPlayEnabled = SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cover_play_enable, false);
 
     final int RESULT_ADDED = 1;
     final int RESULT_DELETED = -1;
@@ -128,17 +126,11 @@ public class VideoInfoFragment extends Fragment {
                             }
                         }
                         dynId = DynamicApi.relayVideo(text, (atUids.isEmpty() ? null : atUids), videoInfo.aid);
-                        if (dynId != -1) {
-                            if (isAdded())
-                                requireActivity().runOnUiThread(() -> MsgUtil.showMsg("转发成功~"));
-                        } else {
-                            if (isAdded())
-                                requireActivity().runOnUiThread(() -> MsgUtil.showMsg("转发失败"));
-                        }
-                    } catch (Exception e) {
-                        if (isAdded())
-                            requireActivity().runOnUiThread(() -> MsgUtil.err(e));
-                    }
+
+                        if (dynId != -1) MsgUtil.showMsg("转发成功~");
+                        else MsgUtil.showMsg("转发失败");
+
+                    } catch (Exception e) {MsgUtil.err(e);}
                 });
             }
         }
@@ -169,35 +161,35 @@ public class VideoInfoFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(@NonNull View rootview, Bundle savedInstanceState) {
+        super.onViewCreated(rootview, savedInstanceState);
 
-        ImageView cover = view.findViewById(R.id.img_cover);
-        TextView title = view.findViewById(R.id.text_title);
-        description = view.findViewById(R.id.description);
-        tagsText = view.findViewById(R.id.tags);
-        MaterialCardView exclusiveTip = view.findViewById(R.id.exclusiveTip);
-        RecyclerView up_recyclerView = view.findViewById(R.id.up_recyclerView);
-        TextView exclusiveTipLabel = view.findViewById(R.id.exclusiveTipLabel);
-        TextView viewCount = view.findViewById(R.id.viewsCount);
-        TextView timeText = view.findViewById(R.id.timeText);
-        TextView durationText = view.findViewById(R.id.durationText);
-        MaterialButton play = view.findViewById(R.id.play);
-        MaterialButton addWatchlater = view.findViewById(R.id.addWatchlater);
-        MaterialButton download = view.findViewById(R.id.download);
-        MaterialButton relay = view.findViewById(R.id.relay);
-        TextView bvidText = view.findViewById(R.id.bvidText);
-        TextView danmakuCount = view.findViewById(R.id.danmakuCount);
-        ImageButton like = view.findViewById(R.id.btn_like);
-        ImageButton coin = view.findViewById(R.id.btn_coin);
-        TextView likeLabel = view.findViewById(R.id.like_label);
-        TextView coinLabel = view.findViewById(R.id.coin_label);
-        TextView favLabel = view.findViewById(R.id.fav_label);
-        MaterialCardView collectionCard = view.findViewById(R.id.collection);
-        TextView collectionTitle = view.findViewById(R.id.collectionText);
-        fav = view.findViewById(R.id.btn_fav);
+        ImageView cover = rootview.findViewById(R.id.img_cover);
+        TextView title = rootview.findViewById(R.id.text_title);
+        description = rootview.findViewById(R.id.description);
+        tagsText = rootview.findViewById(R.id.tags);
+        MaterialCardView exclusiveTip = rootview.findViewById(R.id.exclusiveTip);
+        RecyclerView up_recyclerView = rootview.findViewById(R.id.up_recyclerView);
+        TextView exclusiveTipLabel = rootview.findViewById(R.id.exclusiveTipLabel);
+        TextView viewCount = rootview.findViewById(R.id.viewsCount);
+        TextView timeText = rootview.findViewById(R.id.timeText);
+        TextView durationText = rootview.findViewById(R.id.durationText);
+        MaterialButton play = rootview.findViewById(R.id.play);
+        MaterialButton addWatchlater = rootview.findViewById(R.id.addWatchlater);
+        MaterialButton download = rootview.findViewById(R.id.download);
+        MaterialButton relay = rootview.findViewById(R.id.relay);
+        TextView bvidText = rootview.findViewById(R.id.bvidText);
+        TextView danmakuCount = rootview.findViewById(R.id.danmakuCount);
+        ImageButton like = rootview.findViewById(R.id.btn_like);
+        ImageButton coin = rootview.findViewById(R.id.btn_coin);
+        TextView likeLabel = rootview.findViewById(R.id.like_label);
+        TextView coinLabel = rootview.findViewById(R.id.coin_label);
+        TextView favLabel = rootview.findViewById(R.id.fav_label);
+        MaterialCardView collectionCard = rootview.findViewById(R.id.collection);
+        TextView collectionTitle = rootview.findViewById(R.id.collectionText);
+        fav = rootview.findViewById(R.id.btn_fav);
 
-        view.setVisibility(View.GONE);
+        rootview.setVisibility(View.GONE);
         if (onFinishLoad != null) onFinishLoad.run();
         else loadFinished = true;
 
@@ -225,8 +217,23 @@ public class VideoInfoFragment extends Fragment {
             });
         }
 
-        //历史上报
+        //标签隐藏
+        if (!SharedPreferencesUtil.getBoolean("tags_enable", true))
+            tagsText.setVisibility(View.GONE);
+
+        //横屏模式缩小封面
+        if (SharedPreferencesUtil.getBoolean("ui_landscape", false)) {
+            BaseActivity activity = (BaseActivity) getActivity();
+            if(activity!=null) {
+                ViewGroup.LayoutParams params = cover.getLayoutParams();
+                params.width = (int) (activity.window_width * 0.5);
+                cover.setLayoutParams(params);
+            }
+        }
+
+
         CenterThreadPool.run(() -> {
+            //历史上报
             try {
                 progressPair = VideoInfoApi.getWatchProgress(videoInfo.aid);
                 if (progressPair.first == null || !videoInfo.cids.contains(progressPair.first))
@@ -235,60 +242,35 @@ public class VideoInfoFragment extends Fragment {
                 HistoryApi.reportHistory(videoInfo.aid, progressPair.first, videoInfo.staff.get(0).mid, progressPair.second);
                 //历史记录接口，如果没有记录过该视频，会返回历史记录的最后一项，神奇吧
             } catch (Exception e) {
-                if (isAdded())
-                    requireActivity().runOnUiThread(() -> MsgUtil.err(e));
+                MsgUtil.err(e);
                 progressPair = new Pair<>(0L,0);
             }
 
-            //标签
+            //标签显示
             if (SharedPreferencesUtil.getBoolean("tags_enable", true)) {
                 CenterThreadPool.run(() -> {
                     try {
-                        String tags;
-                        if (videoInfo.bvid == null || videoInfo.bvid.isEmpty())
-                            tags = VideoInfoApi.getTagsByAid(videoInfo.aid);
-                        else tags = VideoInfoApi.getTagsByBvid(videoInfo.bvid);
-                        if (isAdded()) requireActivity().runOnUiThread(() -> {
-                            SpannableStringBuilder tag_str = new SpannableStringBuilder("标签：");
-                            for (String str : tags.split("/")) {
-                                int old_len = tag_str.length();
-                                tag_str.append(str).append("/");
-                                tag_str.setSpan(new ClickableSpan() {
-                                    @Override
-                                    public void onClick(View arg0) {
-                                        Intent intent = new Intent(requireContext(), SearchActivity.class);
-                                        intent.putExtra("keyword", str);
-                                        requireContext().startActivity(intent);
-                                    }
+                        SpannableStringBuilder tags_spannable
+                                = getDescSpan(VideoInfoApi.getTagsByAid(videoInfo.aid));
 
-                                    @Override
-                                    public void updateDrawState(TextPaint ds) {
-                                        super.updateDrawState(ds);
-                                        ds.setUnderlineText(false);
-                                        ds.setColor(Color.parseColor("#03a9f4"));
-                                    }
-                                }, old_len, tag_str.length() - 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                            }
-                            tagsText.setMovementMethod(LinkMovementMethod.getInstance());
-                            tagsText.setText("标签：" + tags);
+                        if (isAdded()) requireActivity().runOnUiThread(() -> {
+                            tagsText.setText(tags_spannable.toString());
                             tagsText.setOnClickListener(view1 -> {
                                 if (tags_expand) {
                                     tagsText.setMaxLines(1);
-                                    tagsText.setText("标签：" + tags);
+                                    tagsText.setText(tags_spannable.toString());
                                 } else {
                                     tagsText.setMaxLines(233);
-                                    tagsText.setText(tag_str);
+                                    tagsText.setText(tags_spannable);
                                 }
                                 tags_expand = !tags_expand;
                             });
                         });
-                    } catch (Exception e) {
-                        if (isAdded())
-                            requireActivity().runOnUiThread(() -> MsgUtil.err(e));
-                    }
+                    } catch (Exception e) {MsgUtil.err(e);}
                 });
-            } else tagsText.setVisibility(View.GONE);
+            }
 
+            //点赞投币收藏
             CenterThreadPool.run(() -> {
                 try {
                     videoInfo.stats.coined = LikeCoinFavApi.getCoined(videoInfo.aid);
@@ -303,59 +285,47 @@ public class VideoInfoFragment extends Fragment {
                         if (videoInfo.stats.favoured)
                             fav.setImageResource(R.drawable.icon_favourite_1);
                     });
-                } catch (Exception e) {
-                    if (isAdded())
-                        requireActivity().runOnUiThread(() -> MsgUtil.err(e));
-                }
+                } catch (Exception e) {MsgUtil.err(e);}
             });
 
             if(isAdded()) requireActivity().runOnUiThread(()-> {
 
+                //标题
+                title.setText(getTitleSpan());
                 ToolsUtil.setCopy(title, videoInfo.title);
 
+                //争议信息
                 if (!videoInfo.argueMsg.isEmpty()) {
                     exclusiveTipLabel.setText(videoInfo.argueMsg);
                     exclusiveTip.setVisibility(View.VISIBLE);
                 }
 
-                if (isAdded()) {
-                    UpListAdapter adapter = new UpListAdapter(requireContext(), videoInfo.staff);
-                    up_recyclerView.setHasFixedSize(true);
-                    up_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                    up_recyclerView.setAdapter(adapter);
-                } //加载UP主
+                //UP主列表
+                UpListAdapter adapter = new UpListAdapter(requireContext(), videoInfo.staff);
+                up_recyclerView.setHasFixedSize(true);
+                up_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                up_recyclerView.setAdapter(adapter);
 
-                title.setText(getTitleSpan());
 
                 //封面
-                if (SharedPreferencesUtil.getBoolean("ui_landscape", false)) {
-                    BaseActivity activity = (BaseActivity) getActivity();
-                    if(activity!=null) {
-                        ViewGroup.LayoutParams params = cover.getLayoutParams();
-                        params.width = (int) (activity.window_width * 0.5);
-                        cover.setLayoutParams(params);
-                    }
-                }
-
                 Glide.with(requireContext()).asDrawable().load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
                         .transition(GlideUtil.getTransitionOptions())
                         .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(cover);
-
                 cover.setOnClickListener(view1 -> {
                     if (SharedPreferencesUtil.getString("player", null) == null) {
                         SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cover_play_enable, true);
                         Toast.makeText(requireContext(), "将播放视频！\n如需变更点击行为请至设置->偏好设置喵", Toast.LENGTH_SHORT).show();
-                        clickCoverPlayEnable = true;
+                        coverPlayEnabled = true;
                     }
-                    if (clickCoverPlayEnable) {
-                        play();
+                    if (coverPlayEnabled) {
+                        playClick();
                         return;
                     }
                     showCover();
                 });
-                if(clickCoverPlayEnable) cover.setOnLongClickListener(v -> {
+                if(coverPlayEnabled) cover.setOnLongClickListener(v -> {
                     showCover();
                     return true;
                 });
@@ -378,8 +348,8 @@ public class VideoInfoFragment extends Fragment {
                 });
                 ToolsUtil.setLink(description);
                 ToolsUtil.setAtLink(videoInfo.descAts, description);
-
                 ToolsUtil.setCopy(description);
+
                 bvidText.setOnLongClickListener(v -> {
                     Context context = getContext();
                     if (context == null) {
@@ -390,7 +360,8 @@ public class VideoInfoFragment extends Fragment {
                     return true;
                 });
 
-                play.setOnClickListener(view1 -> play());
+                //播放
+                play.setOnClickListener(view1 -> playClick());
                 play.setOnLongClickListener(view1 -> {
                     Intent intent = new Intent();
                     Context context = getContext();
@@ -401,9 +372,10 @@ public class VideoInfoFragment extends Fragment {
                     return true;
                 });
 
+                //点赞
                 like.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                        CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~"));
+                        MsgUtil.showMsg("还没有登录喵~");
                         return;
                     }
                     try {
@@ -424,17 +396,15 @@ public class VideoInfoFragment extends Fragment {
                                 msg = "当前请求触发B站风控";
                             }
                             String finalMsg = msg;
-                            CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg(finalMsg));
+                            MsgUtil.showMsg(finalMsg);
                         }
-                    } catch (Exception e) {
-                        if (isAdded())
-                            CenterThreadPool.runOnUiThread(() -> MsgUtil.err(e));
-                    }
+                    } catch (Exception e) {MsgUtil.err(e);}
                 }));
 
+                //投币
                 coin.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                        CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~"));
+                        MsgUtil.showMsg("还没有登录喵~");
                         return;
                     }
                     if (videoInfo.stats.coined < videoInfo.stats.allow_coin) {
@@ -453,18 +423,14 @@ public class VideoInfoFragment extends Fragment {
                                     msg = "当前请求触发B站风控";
                                 }
                                 String finalMsg = msg;
-                                requireActivity().runOnUiThread(() -> MsgUtil.showMsg(finalMsg));
+                                MsgUtil.showMsg(finalMsg);
                             }
-                        } catch (Exception e) {
-                            if (isAdded())
-                                requireActivity().runOnUiThread(() -> MsgUtil.err(e));
-                        }
-                    } else {
-                        if (isAdded())
-                            requireActivity().runOnUiThread(() -> MsgUtil.showMsg("投币数量到达上限"));
+                        } catch (Exception e) {MsgUtil.err(e);}
                     }
+                    else {MsgUtil.showMsg("投币数量到达上限");}
                 }));
 
+                //收藏
                 fav.setOnClickListener(view1 -> {
                     Intent intent = new Intent();
                     intent.setClass(requireContext(), AddFavoriteActivity.class);
@@ -473,14 +439,12 @@ public class VideoInfoFragment extends Fragment {
                     favLauncher.launch(intent);
                 });
 
-
+                //稍后再看
                 addWatchlater.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     try {
                         int result = WatchLaterApi.add(videoInfo.aid);
-                        if (result == 0)
-                            requireActivity().runOnUiThread(() -> MsgUtil.showMsg("添加成功"));
-                        else
-                            requireActivity().runOnUiThread(() -> MsgUtil.showMsg("添加失败，错误码：" + result));
+                        if (result == 0) MsgUtil.showMsg("添加成功");
+                        else MsgUtil.showMsg("添加失败，错误码：" + result);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -492,27 +456,15 @@ public class VideoInfoFragment extends Fragment {
                     return true;
                 });
 
-                download.setOnClickListener(view1 -> {
-                    if (!FileUtil.checkStoragePermission()) {
-                        FileUtil.requestStoragePermission(requireActivity());
-                    } else {
-                        File downPath = new File(FileUtil.getDownloadPath(),ToolsUtil.stringToFile(videoInfo.title));
-
-                        if (downPath.exists() && videoInfo.pagenames.size() == 1){
-                            File file_sign = new File(downPath,".DOWNLOADING");
-                            MsgUtil.showMsg(file_sign.exists() ? "已在下载队列" : "已下载完成");
-                        }
-                        else {
-                            if (videoInfo.pagenames.size() > 1) {
-                                Intent intent = new Intent();
-                                intent.setClass(requireContext(), MultiPageActivity.class);
-                                intent.putExtra("download", 1);
-                                startActivity(intent);
-                            } else {
-                                startActivity(new Intent().putExtra("videoInfo", (Parcelable) videoInfo).putExtra("page", 0).setClass(requireContext(), QualityChooserActivity.class));
-                            }
-                        }
-                    }
+                //下载
+                download.setOnClickListener(view1 -> downloadClick());
+                download.setOnLongClickListener(v -> {
+                    CenterThreadPool.run(()->{
+                        File downPath = FileUtil.getDownloadPath(videoInfo.title, null);
+                        FileUtil.deleteFolder(downPath);
+                        MsgUtil.showMsg("已清除此视频的缓存文件夹");
+                    });
+                    return true;
                 });
 
                 //转发
@@ -527,17 +479,20 @@ public class VideoInfoFragment extends Fragment {
                     return true;
                 });
 
+                //未登录隐藏按钮
                 if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
                     addWatchlater.setVisibility(View.GONE);
                     relay.setVisibility(View.GONE);
                 }
 
+                //合集按钮
                 if (videoInfo.collection != null) {
                     collectionTitle.setText(String.format("合集 · %s", videoInfo.collection.title));
                     collectionCard.setOnClickListener((view1) ->
                             startActivity(new Intent(requireContext(), CollectionInfoActivity.class)
                                     .putExtra("fromVideo", videoInfo.aid)));
-                } else {
+                }
+                else {
                     collectionCard.setVisibility(View.GONE);
                 }
 
@@ -563,7 +518,31 @@ public class VideoInfoFragment extends Fragment {
         return titleStr;
     }
 
-    private void play() {
+    private SpannableStringBuilder getDescSpan(String tags){
+        SpannableStringBuilder tag_str = new SpannableStringBuilder("标签：");
+        for (String str : tags.split("/")) {
+            int old_len = tag_str.length();
+            tag_str.append(str).append("/");
+            tag_str.setSpan(new ClickableSpan() {
+                @Override
+                public void onClick(View arg0) {
+                    Intent intent = new Intent(requireContext(), SearchActivity.class);
+                    intent.putExtra("keyword", str);
+                    requireContext().startActivity(intent);
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(false);
+                    ds.setColor(Color.parseColor("#03a9f4"));
+                }
+            }, old_len, tag_str.length() - 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
+        return tag_str;
+    }
+
+    private void playClick() {
         Glide.get(requireContext()).clearMemory();
         //在播放前清除内存缓存，因为手表内存太小了，播放完回来经常把Activity全释放掉
         //...经过测试，还是会释放，但会好很多
@@ -579,6 +558,31 @@ public class VideoInfoFragment extends Fragment {
             //避免重复获取的同时保证播放进度是新的，如果是-1会在解析页里再获取一次
         }
         play_clicked = true;
+    }
+
+    private void downloadClick(){
+        if (!FileUtil.checkStoragePermission()) {
+            FileUtil.requestStoragePermission(requireActivity());
+        } else {
+            File downPath = FileUtil.getDownloadPath(videoInfo.title,null);
+
+            if (downPath.exists() && videoInfo.pagenames.size() == 1){
+                File file_sign = new File(downPath,".DOWNLOADING");
+                MsgUtil.showMsg(file_sign.exists() ? "已在下载队列" : "已下载完成");
+            }
+            else {
+                if (videoInfo.pagenames.size() > 1) {
+                    Intent intent = new Intent();
+                    intent.setClass(requireContext(), MultiPageActivity.class);
+                    intent.putExtra("download", 1);
+                    startActivity(intent);
+                }
+                else {
+                    startActivity(new Intent(requireContext(),QualityChooserActivity.class)
+                            .putExtra("page", 0));
+                }
+            }
+        }
     }
 
     private void showCover(){

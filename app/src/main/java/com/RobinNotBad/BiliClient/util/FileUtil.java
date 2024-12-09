@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.Objects;
@@ -34,10 +33,13 @@ public class FileUtil {
     }
 
     public static void deleteFolder(File folder) {
+        if(!folder.exists()) return;
+
         if(folder.isFile()) {
             folder.delete();
             return;
         }
+
         File[] templist = folder.listFiles();
         assert templist != null;
         for (File file : templist) {
@@ -94,7 +96,17 @@ public class FileUtil {
         return path;
     }
 
+    public static File getDownloadPath(String title, String child){
+        File parentFolder = new File(getDownloadPath(), ToolsUtil.stringToFile(title));
+        if(child==null || child.isEmpty()) return parentFolder;
+        return new File(parentFolder, ToolsUtil.stringToFile(child));
+    }
+
     public static File getDownloadPicturePath() {
         return new File(SharedPreferencesUtil.getString("save_path_pictures", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/哔哩终端/"));
+    }
+
+    public static void requireTFCardPermission(){
+
     }
 }
