@@ -37,7 +37,7 @@ public class MsgUtil {
 
     public static void showMsg(String str) {
         if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, false)) {
-            EventBus.getDefault().postSticky(new SnackEvent(str));
+            CenterThreadPool.runOnUiThread(() -> EventBus.getDefault().postSticky(new SnackEvent(str)));
         } else {
             toast(str);
         }
@@ -46,7 +46,7 @@ public class MsgUtil {
 
     public static void showMsgLong(String str) {
         if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, false)) {
-            EventBus.getDefault().postSticky(new SnackEvent(str));
+            CenterThreadPool.runOnUiThread(() -> EventBus.getDefault().postSticky(new SnackEvent(str)));
         } else {
             toastLong(str);
         }
@@ -54,19 +54,11 @@ public class MsgUtil {
     }
 
     public static void toast(String str) {
-        if (Looper.myLooper() != Looper.getMainLooper()) {
-            CenterThreadPool.runOnUiThread(() -> toastInternal(str, context));
-        } else {
-            toastInternal(str, context);
-        }
+        CenterThreadPool.runOnUiThread(() -> toastInternal(str, context));
     }
 
     public static void toastLong(String str) {
-        if (Looper.myLooper() != Looper.getMainLooper()) {
-            CenterThreadPool.runOnUiThread(() -> toastLongInternal(str, context));
-        } else {
-            toastLongInternal(str, context);
-        }
+        CenterThreadPool.runOnUiThread(() -> toastLongInternal(str, context));
     }
 
     private static void toastInternal(String str, Context context) {
@@ -152,10 +144,10 @@ public class MsgUtil {
         err("",e);
     }
     public static void err(String desc, Throwable e) {
-        Log.e("debug-error",desc);
+        if(desc!=null) Log.e("debug-error",desc);
         e.printStackTrace();
 
-        StringBuilder output = new StringBuilder(desc);
+        StringBuilder output = new StringBuilder(desc == null ? "" : desc);
 
         if (e instanceof IOException) output.append("网络错误(＃°Д°)");
         else if (e instanceof JSONException) {

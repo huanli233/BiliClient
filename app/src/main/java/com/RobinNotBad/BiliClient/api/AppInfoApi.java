@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -58,9 +59,12 @@ public class AppInfoApi {
 
                 checkUpdate(context, false);
             }
+        } catch (IOException | JSONException e){
+            Log.e("debug-terminal", e.toString());
+            MsgUtil.err(e);
         } catch (Exception e) {
-            Log.e("BiliClient", e.toString());
-            CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("连接到哔哩终端接口时发生错误"));
+            Log.e("debug-terminal", e.toString());
+            MsgUtil.showMsg(e.getMessage());
         }
     }
 
@@ -97,41 +101,43 @@ public class AppInfoApi {
     }};
 
     private static void checkUpdate(Context context, boolean need_toast, boolean debug_ver) throws Exception {
-        boolean realIsDebug = ToolsUtil.isDebugBuild();
-        String url = "http://api.biliterminal.cn/terminal/version/get_last";
-        if (debug_ver) url += "?debug";
-        JSONObject result = NetWorkUtil.getJson(url, customHeaders);
+        try {
+            boolean realIsDebug = ToolsUtil.isDebugBuild();
+            String url = "http://api.biliterminal.cn/terminal/version/get_last";
+            if (debug_ver) url += "?debug";
+            JSONObject result = NetWorkUtil.getJson(url, customHeaders);
 
-        if (result.getInt("code") != 0) throw new Exception(result.getString("msg"));
-        JSONObject data = result.getJSONObject("data");
+            if (result.getInt("code") != 0) throw new Exception(result.getString("msg"));
+            JSONObject data = result.getJSONObject("data");
 
-        String version_name = data.getString("version_name");
-        String update_log = data.getString("update_log");
-        int latest = data.getInt("version_code");
-        long ctime = data.optLong("ctime", -1);
-        int can_download = data.optInt("can_download", 0);
-        int is_release = data.optInt("is_release", 0);
+            String version_name = data.getString("version_name");
+            String update_log = data.getString("update_log");
+            int latest = data.getInt("version_code");
+            long ctime = data.optLong("ctime", -1);
+            int can_download = data.optInt("can_download", 0);
+            int is_release = data.optInt("is_release", 0);
 
-        int version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
-        if (latest > version) {
-            if (debug_ver)
-                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("发现新的测试版！"));
-            else CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("发现新版本！"));
-            context.startActivity(new Intent(context, UpdateInfoActivity.class)
-                    .putExtra("versionName", version_name)
-                    .putExtra("versionCode", latest)
-                    .putExtra("updateLog", update_log)
-                    .putExtra("ctime", ctime)
-                    .putExtra("isRelease", is_release)
-                    .putExtra("canDownload", can_download));
-            return;
-        } else if (need_toast && !(realIsDebug && !debug_ver)) {
-            if (debug_ver)
-                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("没有新的测试版了！"));
-            else CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("当前是最新版本！"));
-        }
-        if (realIsDebug && !debug_ver) {
-            checkUpdate(context, need_toast, true);
+            int version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+            if (latest > version) {
+                MsgUtil.showMsg(debug_ver ? "发现新的测试版！" : "发现新版本！");
+                context.startActivity(new Intent(context, UpdateInfoActivity.class)
+                        .putExtra("versionName", version_name)
+                        .putExtra("versionCode", latest)
+                        .putExtra("updateLog", update_log)
+                        .putExtra("ctime", ctime)
+                        .putExtra("isRelease", is_release)
+                        .putExtra("canDownload", can_download));
+                return;
+            } else if (need_toast && !(realIsDebug && !debug_ver)) {
+                MsgUtil.showMsg(debug_ver ? "没有新的测试版了！" : "当前是最新版本！");
+            }
+            if (realIsDebug && !debug_ver) {
+                checkUpdate(context, need_toast, true);
+            }
+        } catch (IOException | JSONException e){
+            MsgUtil.err("检查更新：",e);
+        } catch (Exception e){
+            MsgUtil.showMsg(e.getMessage());
         }
     }
 
