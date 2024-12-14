@@ -74,8 +74,8 @@ public class DownloadListActivity extends RefreshListActivity {
                 emptyTipShown = true;
             }
         }
-        else if(sections != null){
-            for (DownloadSection s:sections) {
+        else {
+            if(sections != null) for (DownloadSection s:sections) {
                 Log.d("debug-download",s.name_short);
             }
 
@@ -141,6 +141,7 @@ public class DownloadListActivity extends RefreshListActivity {
             else {
                 adapter.downloadList = sections;
                 runOnUiThread(()->adapter.notifyDataSetChanged());
+                Log.d("debug-adapter",String.valueOf(adapter.getItemCount()));
             }
         }
 
