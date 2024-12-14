@@ -193,6 +193,7 @@ public class MsgUtil {
         Intent intent = new Intent(context, DialogActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("content", content);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -202,6 +203,7 @@ public class MsgUtil {
         intent.putExtra("title", title);
         intent.putExtra("content", content);
         intent.putExtra("wait_time", wait_time);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

@@ -57,7 +57,7 @@ public class PlayerApi {
         if(SharedPreferencesUtil.getBoolean("dev_download_old",false)) {
             Context context = BiliTerminal.context;
 
-            Intent intent = new Intent()
+            Intent intent = new Intent(context, JumpToPlayerActivity.class)
                     .putExtra("aid", videoInfo.aid)
                     .putExtra("bvid", videoInfo.bvid)
                     .putExtra("cid", videoInfo.cids.get(page))
@@ -67,7 +67,7 @@ public class PlayerApi {
                     .putExtra("parent_title", videoInfo.title)
                     .putExtra("qn", qn)
                     .putExtra("mid", videoInfo.staff.get(0).mid)
-                    .setClass(context, JumpToPlayerActivity.class);
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
             return;
         }
