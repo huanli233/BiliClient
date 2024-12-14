@@ -176,7 +176,8 @@ public class MsgUtil {
         Intent testIntent = new Intent()
                 .setClass(context, ShowTextActivity.class)
                 .putExtra("title", title)
-                .putExtra("content", text);
+                .putExtra("content", text)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(testIntent);
     }
 
