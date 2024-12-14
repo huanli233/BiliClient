@@ -27,7 +27,9 @@
         <item name="android:windowBackground">@drawable/splash_text</item>
     </style>
 
-    <style name="Theme.NoSwipe" parent="android:Theme.Black.NoTitleBar">
+    <style name="Theme.NoSwipe" parent="android:Theme.Black">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
         <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@color/bgblack</item>
