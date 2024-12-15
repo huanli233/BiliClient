@@ -173,8 +173,12 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             UserInfo sender = replyList.get(realPosition).sender;
             SpannableStringBuilder name_str = new SpannableStringBuilder(replyList.get(realPosition).sender.name);
-            if (sender.vip_role > 0 && !SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.NO_VIP_COLOR, false))
+
+            //大会员红字
+            if (!sender.vip_nickname_color.isEmpty() && !SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.NO_VIP_COLOR, false))
                 replyHolder.userName.setTextColor(Color.parseColor(sender.vip_nickname_color));
+
+            //up主标识
             if (sender.mid == up_mid) {
                 name_str = new SpannableStringBuilder(" UP " + replyList.get(realPosition).sender.name);
                 name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.round_small), Color.WHITE, Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
@@ -183,12 +187,15 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             int last_length = name_str.length();
             name_str.append(" ").append(String.valueOf(sender.level));
             name_str.setSpan(ToolsUtil.getLevelBadge(context, sender), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+            //等级
             if (!sender.medal_name.isEmpty()) {
                 last_length = name_str.length();
                 name_str.append("  ").append(sender.medal_name).append("Lv").append(String.valueOf(sender.medal_level)).append(" ");
                 name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.round_small), Color.WHITE, Color.argb(140, 158, 186, 232)), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 name_str.setSpan(new RelativeSizeSpan(0.8f), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
+
             replyHolder.userName.setText(name_str);
 
             if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.REPLY_MARQUEE_NAME, false)) {
