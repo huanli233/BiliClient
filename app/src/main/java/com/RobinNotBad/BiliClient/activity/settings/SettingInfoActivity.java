@@ -24,6 +24,7 @@ public class SettingInfoActivity extends RefreshListActivity {
         final List<SettingSection> sectionList = new ArrayList<>() {{
             add(new SettingSection("switch", "收藏夹单选", "fav_single", getString(R.string.desc_fav_single), "false"));
             add(new SettingSection("switch", "收藏成功提示", "fav_notice", getString(R.string.desc_fav_notice), "false"));
+            add(new SettingSection("switch", "允许仅AI字幕", "subtitle_ai_allowed", getString(R.string.desc_subtitle_ai_allowed), "false"));
             add(new SettingSection("switch", "显示视频标签", "tags_enable", getString(R.string.desc_tags_enable), "true"));
             add(new SettingSection("switch", "视频相关推荐", "related_enable", getString(R.string.desc_related_enable), "true"));
             add(new SettingSection("switch", "点击封面播放", "cover_play_enable", getString(R.string.desc_cover_play_enable), "false"));

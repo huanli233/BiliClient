@@ -61,6 +61,7 @@
     <string name="desc_fav_single">打开此选项，添加收藏后即退出收藏页面，取消收藏不自动退出。</string>
     <string name="desc_fav_notice">打开此选项，退出收藏页面会提示收藏成功。\n但其实在你框选了收藏夹的时候就已经收藏了，这个选项只是为了看上去放心（</string>
     <string name="desc_tags_enable">打开此选项，视频详情页会显示形如“原神UP主激励计划/原神/纳西妲/手机游戏”的视频标签</string>
+    <string name="desc_subtitle_ai_allowed">打开此选项，如果视频只有一个中文AI字幕，播放时仍然会让你选择。\n可能比较烦人，谨慎开启。</string>
     <string name="desc_new_rcmd_param_enable">打开此选项，会使用新版首页推荐API，基本与网页版完全一致，请自行测试体验后决定是否开启</string>
     <string name="desc_related_enable">打开此选项，视频详情页的评论区右侧会有相关视频推荐</string>
     <string name="desc_creative_enable">打开此选项，在“我的”页面会显示创作中心（可查看投稿视频的数据变化情况）</string>
@@ -82,13 +83,15 @@
     //新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
         <item>支持了安卓4.0系统</item>
-        <item>实现了播放器字幕</item>
+        <item>实现了播放器字幕（默认仅在有非AI字幕时提醒）</item>
         <item>在界面设置里加入了一键适配圆屏的开关</item>
         <item>修复了视频详情页特殊情况下的崩溃问题</item>
         <item>修复了因未区分合集类型导致获取不全的问题</item>
         <item>修复了一些弹幕崩溃问题（但仍然有可能崩）</item>
         <item>修复了部分设备上播放器横屏状态下退出后，屏幕反复旋转随后崩溃的问题</item>
         <item>修复了播放器“在线人数”功能中前人留下的奇葩写法（同时修复了本地视频也获取在线人数导致报错的SB问题）</item>
+        <item>修复了评论区的大会员ID颜色解析报错</item>
+        <item>修复了消息页面可能出现的数据解析错误</item>
         <item>优化了播放器圆屏适配</item>
         <item>优化了播放器右上角电池控件</item>
         <item>优化了番剧页等处的系统默认弹窗，现在背景为灰色不会亮瞎眼了</item>
