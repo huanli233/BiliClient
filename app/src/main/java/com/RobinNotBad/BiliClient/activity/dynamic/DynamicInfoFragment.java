@@ -32,16 +32,21 @@ public class DynamicInfoFragment extends Fragment {
     public DynamicInfoFragment() {
     }
 
-    public static DynamicInfoFragment newInstance() {
-        return new DynamicInfoFragment();
+    public static DynamicInfoFragment newInstance(long id) {
+        DynamicInfoFragment fragment = new DynamicInfoFragment();
+        Bundle args = new Bundle();
+        args.putLong("id", id);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            dynamic = TerminalContext.getInstance().getCurrentDynamic();
-        } catch (TerminalContext.IllegalTerminalStateException e) {
+            long id = getArguments().getLong("id", 0);
+            dynamic = TerminalContext.getInstance().getDynamicById(id).getValue().getOrThrow();
+        } catch (Exception e) {
             Log.wtf(TAG, e);
             MsgUtil.showMsg("找不到动态信息QAQ");
         }

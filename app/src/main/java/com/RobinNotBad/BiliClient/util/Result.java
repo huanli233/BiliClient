@@ -5,13 +5,13 @@ import androidx.core.util.Consumer;
 
 public class Result<T> {
     private final Object realResult;
-    private boolean isSuccess;
+    private boolean isSuccess = false;
     private Result (T val) {
         realResult = new Success<T>(val);
         isSuccess = true;
     }
 
-    private Result (Throwable e) {
+    private Result (Exception e) {
         realResult = new Failure(e);
     }
 
@@ -19,12 +19,13 @@ public class Result<T> {
         return isSuccess;
     }
 
-    public T getOrThrow() throws Throwable {
+    public T getOrThrow() throws Exception {
         if (isSuccess() && realResult instanceof Success) {
             Success<T> success = (Success<T>) realResult;
             if (success.value == null) {
                 throw new Exception("value is null");
             }
+            return success.value;
         }
         throw ((Failure)realResult).error;
     }
@@ -63,7 +64,7 @@ public class Result<T> {
         }
     }
 
-    public static <T> Result<T> failure(Throwable error) {
+    public static <T> Result<T> failure(Exception error) {
         return new Result<>(error);
     }
 
@@ -75,8 +76,8 @@ public class Result<T> {
 
     }
     private static class Failure {
-        Throwable error;
-        private Failure(Throwable error) {
+        Exception error;
+        private Failure(Exception error) {
             this.error = error;
         }
     }

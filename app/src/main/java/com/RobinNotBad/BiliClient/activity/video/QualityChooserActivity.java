@@ -44,8 +44,10 @@ public class QualityChooserActivity extends BaseActivity {
         ((TextView) findViewById(R.id.pageName)).setText("请选择清晰度");
 
         try {
-            videoInfo = TerminalContext.getInstance().getCurrentVideoInfo();
-        } catch (TerminalContext.IllegalTerminalStateException e) {
+            long aid = getIntent().getLongExtra("aid", 0);
+            String bvid = getIntent().getStringExtra("bvid");
+            videoInfo = TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).getValue().getOrThrow();
+        } catch (Exception e) {
             Log.wtf(TAG, e);
             MsgUtil.showMsg("找不到视频信息QAQ");
         }

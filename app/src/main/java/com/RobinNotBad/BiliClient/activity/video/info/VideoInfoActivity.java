@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 public class VideoInfoActivity extends BaseActivity {
 
     private long aid;
+    private String bvid;
 
     private List<Fragment> fragmentList;
     ReplyFragment replyFragment;
@@ -52,6 +53,7 @@ public class VideoInfoActivity extends BaseActivity {
         String type = intent.getStringExtra("type");
         if (type == null) type = "video";
         this.aid = intent.getLongExtra("aid", 114514);
+        this.bvid = intent.getStringExtra("bvid");
         this.seek_reply = intent.getLongExtra("seekReply", -1);
 
         viewPager = findViewById(R.id.viewPager);
@@ -68,6 +70,7 @@ public class VideoInfoActivity extends BaseActivity {
         BangumiInfoFragment bangumiInfoFragment = BangumiInfoFragment.newInstance(aid);
         fragmentList.add(bangumiInfoFragment);
         replyFragment = ReplyFragment.newInstance(aid, 1, seek_reply == -1, seek_reply);
+        TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).observe(this, (videoInfo) -> replyFragment.setSource(videoInfo));
         fragmentList.add(replyFragment);
 
         viewPager.setOffscreenPageLimit(fragmentList.size());
@@ -86,11 +89,12 @@ public class VideoInfoActivity extends BaseActivity {
         TutorialHelper.showPagerTutorial(this, 3);
 
         setPageName("视频详情");
-        TerminalContext.getInstance().getCurrentVideoLiveData().observe(this, (result) -> result.onSuccess((videoInfo) -> {
+        TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).observe(this, (result) -> result.onSuccess((videoInfo) -> {
             fragmentList = new ArrayList<>(3);
-            VideoInfoFragment videoInfoFragment = VideoInfoFragment.newInstance();
+            VideoInfoFragment videoInfoFragment = VideoInfoFragment.newInstance(aid, bvid);
             fragmentList.add(videoInfoFragment);
             replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1, seek_reply, videoInfo.staff.get(0).mid);
+            replyFragment.setSource(videoInfo);
             fragmentList.add(replyFragment);
             if (SharedPreferencesUtil.getBoolean("related_enable", true)) {
                 VideoRcmdFragment vrFragment = VideoRcmdFragment.newInstance(videoInfo.aid);

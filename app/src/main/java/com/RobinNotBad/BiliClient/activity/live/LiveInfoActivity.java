@@ -72,7 +72,7 @@ public class LiveInfoActivity extends BaseActivity {
             RecyclerView quality_list = findViewById(R.id.quality_list);
 
             AnimationUtils.crossFade(loading, scrollView);
-            TerminalContext.getInstance().getCurrentLiveInfoLiveData().observe(this, (liveInfoResult)-> liveInfoResult.onSuccess((liveInfo) -> {
+            TerminalContext.getInstance().getLiveInfoByRoomId(room_id).observe(this, (liveInfoResult)-> liveInfoResult.onSuccess((liveInfo) -> {
                 room = liveInfo.getLiveRoom();
                 UserInfo userInfo = liveInfo.getUserInfo();
                 playInfo = liveInfo.getLivePlayInfo();

@@ -57,6 +57,7 @@ public class ReplyFragment extends RefreshListFragment {
         return fragment;
     }
 
+
     public static ReplyFragment newInstance(long aid, int type, long seek_rpid) {
         ReplyFragment fragment = new ReplyFragment();
         Bundle args = new Bundle();
@@ -100,7 +101,6 @@ public class ReplyFragment extends RefreshListFragment {
             seek = getArguments().getLong("seek", -1);
             mid = getArguments().getLong("mid", -1);
         }
-        this.source = TerminalContext.getInstance().getSource();
     }
 
     @Override
@@ -123,7 +123,7 @@ public class ReplyFragment extends RefreshListFragment {
                     setRefreshing(false);
                     if (result != -1 && isAdded()) {
                         replyAdapter = createReplyAdapter();
-                        replyAdapter.source = TerminalContext.getInstance().getSource();
+                        replyAdapter.source = source;
                         setOnSortSwitch();
                         setAdapter(replyAdapter);
 
@@ -136,6 +136,12 @@ public class ReplyFragment extends RefreshListFragment {
                     setRefreshing(false);
                 }
             });
+        }
+    }
+    public void setSource(Object source) {
+        this.source = source;
+        if (replyAdapter != null) {
+            replyAdapter.source = source;
         }
     }
 

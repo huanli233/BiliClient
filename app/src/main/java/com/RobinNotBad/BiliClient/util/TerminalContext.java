@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import androidx.annotation.Nullable;
+import androidx.collection.LruCache;
+import androidx.core.text.TextUtilsCompat;
 import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -13,7 +16,9 @@ import com.RobinNotBad.BiliClient.activity.live.LiveInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.api.*;
 import com.RobinNotBad.BiliClient.model.*;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.Stack;
 import java.util.concurrent.Future;
@@ -31,9 +36,8 @@ public class TerminalContext {
     /**
      * 详情页的中央上下文
      */
-
     // 详情页的类型
-    enum DetailType {
+    public static enum DetailType {
         None,
         Video,
         Article,
@@ -41,23 +45,20 @@ public class TerminalContext {
         Live,
     }
 
-    //当前的详情页类型以及数据源
-    private DetailType currentDetailType = DetailType.None;
-    private LiveData<Result<Object>> source;
-
     //要转发的东西的数据源
     private Object forwardContent;
-
     /**
      * 详情页以及对应数据对象的存储， 每进入一个页面，例如动态，动态点击进入视频， 视频下面有个专栏
      * 然后再返回，此时的逻辑就是像栈一样。
      */
-    private final Stack<Pair<DetailType, LiveData<Result<Object>>>> stateStack;
-
+    private final LruCache<String, Object> detailLruCache;
+    private final MutableLiveData<Result<VideoInfo>> videoInfoLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Result<Dynamic>> dynamicInfoLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Result<ArticleInfo>> articleInfoLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Result<LiveInfo>> liveInfoLiveData = new MutableLiveData<>();
 
     private TerminalContext() {
-        source = null;
-        stateStack = new Stack<>();
+        detailLruCache = new LruCache<>(10);
     }
 
     // ------------------------转发功能数据源上下文 start-------------------------------
@@ -85,21 +86,6 @@ public class TerminalContext {
         enterVideoDetailPage(context, aid, bvid, type, -1);
     }
     public void enterVideoDetailPage(Context context, long aid, String bvid, String type, long seekReply) {
-        // 拉取视频信息
-        LiveData<Result<Object>> videoInfo = CenterThreadPool.supplyAsyncWithLiveData(() -> {
-            JSONObject data;
-            if (TextUtils.isEmpty(bvid)) data = VideoInfoApi.getJsonByAid(aid);
-            else data = VideoInfoApi.getJsonByBvid(bvid);
-            if (data == null) {
-                return null;
-            }
-            return VideoInfoApi.getInfoByJson(data);
-        });
-        //放入数据源缓冲区
-        currentDetailType = DetailType.Video;
-        this.source = videoInfo;
-        stateStack.push(new Pair<>(currentDetailType, source));
-
         //创建intent并填充信息
         Intent intent = new Intent(context, VideoInfoActivity.class);
         intent.putExtra("aid", aid);
@@ -113,20 +99,74 @@ public class TerminalContext {
         //启动activity
         context.startActivity(intent);
     }
+    private Result<VideoInfo> fetchVideoInfoByAid(long aid, boolean saveToCache) {
+        JSONObject object;
+        try {
+            object = VideoInfoApi.getJsonByAid(aid);
+        } catch (Exception t) {
+           return Result.failure(t);
+        }
+        if (object != null) {
+            try {
+                VideoInfo info = VideoInfoApi.getInfoByJson(object);
+                if (saveToCache) {
+                    detailLruCache.put(DetailType.Video + "_" + aid, info);
+                }
+                return Result.success(info);
+            } catch (Exception e) {
+                return Result.failure(e);
+            }
+        }
+        return Result.failure(new IllegalTerminalStateException("video object is null"));
+    }
+    private Result<VideoInfo> fetchVideoInfoByBvId(String bvid, boolean saveToCache) {
+        JSONObject object;
+        try {
+            object = VideoInfoApi.getJsonByBvid(bvid);
+        } catch (Exception t) {
+            return Result.failure(t);
+        }
+        if (object != null) {
+            try {
+                VideoInfo info = VideoInfoApi.getInfoByJson(object);
+                if (saveToCache) {
+                    detailLruCache.put(DetailType.Video + "_" + bvid, info);
+                }
+                return Result.success(info);
+            } catch (Exception t) {
+                return Result.failure(t);
+            }
+        }
+        return Result.failure(new IllegalTerminalStateException("video object is null"));
+    }
+    private Result<VideoInfo> fetchVideoInfoByAidOrBvId(long aid, String bvid, boolean saveToCache) {
+        if (TextUtils.isEmpty(bvid)) {
+            return fetchVideoInfoByAid(aid, saveToCache);
+        } else {
+            return fetchVideoInfoByBvId(bvid, saveToCache);
+        }
+    }
 
     //专栏详情页跳转
     public void enterArticleDetailPage(Context context, long cvid) {
         enterArticleDetailPage(context, cvid, -1);
     }
     public void enterArticleDetailPage(Context context, long cvid, long seekReply) {
-        LiveData<Result<Object>> articleInfo = CenterThreadPool.supplyAsyncWithLiveData(() -> ArticleApi.getArticle(cvid));
-        currentDetailType = DetailType.Article;
-        this.source = articleInfo;
-        stateStack.push(new Pair<>(currentDetailType, source));
         Intent intent= new Intent(context, ArticleInfoActivity.class);
         intent.putExtra("cvid", cvid);
         intent.putExtra("seekReply", seekReply);
         context.startActivity(intent);
+    }
+    private Result<ArticleInfo> fetchArticleInfo(long cvid, boolean saveToCache) {
+        try {
+            ArticleInfo article = ArticleApi.getArticle(cvid);
+            if (article != null && saveToCache) {
+                detailLruCache.put(DetailType.Article + "_" + cvid, article);
+            }
+            return Result.success(article);
+        } catch (Exception t) {
+            return Result.failure(t);
+        }
     }
 
     // 动态详情页跳转
@@ -137,10 +177,6 @@ public class TerminalContext {
         enterDynamicDetailPage(context, id, position, -1);
     }
     public void enterDynamicDetailPage(Context context, long id, int position, long seekReply) {
-        LiveData<Result<Object>> dynamicInfo = CenterThreadPool.supplyAsyncWithLiveData(() -> DynamicApi.getDynamic(id));
-        currentDetailType = DetailType.Dynamic;
-        this.source = dynamicInfo;
-        stateStack.push(new Pair<>(currentDetailType, source));
         Intent intent = new Intent(context, DynamicInfoActivity.class);
         intent.putExtra("position", position);
         intent.putExtra("id", id);
@@ -152,14 +188,22 @@ public class TerminalContext {
      * 由于动态有可删除的特性，部分页面依赖动态页面activity的result实现页面更新，这里加入额外的一个兼容方法
      */
     public void enterDynamicDetailPageForResult(Activity activity, long id, int position, int requestId) {
-        LiveData<Result<Object>> dynamicInfo = CenterThreadPool.supplyAsyncWithLiveData(() -> DynamicApi.getDynamic(id));
-        currentDetailType = DetailType.Dynamic;
-        source = dynamicInfo;
-        stateStack.push(new Pair<>(currentDetailType, dynamicInfo));
         Intent intent = new Intent(activity, DynamicInfoActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("position", position);
         activity.startActivityForResult(intent, requestId);
+    }
+
+    private Result<Dynamic> fetchDynamic(long id, boolean saveToCache) {
+        try {
+            Dynamic dynamic = DynamicApi.getDynamic(id);
+            if (saveToCache) {
+                detailLruCache.put(DetailType.Dynamic + "_" + id, dynamic);
+            }
+            return Result.success(dynamic);
+        } catch (Exception t) {
+            return Result.failure(t);
+        }
     }
 
     /**
@@ -168,26 +212,29 @@ public class TerminalContext {
      * @param roomId 直播房间号
      */
     public void enterLiveDetailPage(Context context, long roomId) {
-        LiveData<Result<Object>> liveInfo = CenterThreadPool.supplyAsyncWithLiveData(() -> {
-            //同时下载UserInfo跟LivePlayInfo
-            Future<LivePlayInfo> livePlayInfoFuture = CenterThreadPool.supplyAsyncWithFuture(()-> LiveApi.getRoomPlayInfo(roomId, 80));
-            //利用future的特性让UserInfo在后面慢慢下着，同时开始下载LiveRoom，这里要等待LiveRoom下载完成。
+        Intent intent = new Intent(context, LiveInfoActivity.class);
+        intent.putExtra("room_id", roomId);
+        context.startActivity(intent);
+    }
+    private Result<LiveInfo> fetchLiveInfo(long roomId, boolean saveToCache) {
+        Future<LivePlayInfo> livePlayInfoFuture = CenterThreadPool.supplyAsyncWithFuture(()-> LiveApi.getRoomPlayInfo(roomId, 80));
+        //利用future的特性让UserInfo在后面慢慢下着，同时开始下载LiveRoom，这里要等待LiveRoom下载完成。
+        try {
             LiveRoom liveRoom = LiveApi.getRoomInfo(roomId);
-            if(liveRoom == null) {
-                return null;
+            if (liveRoom == null) {
+                return Result.failure(new IllegalTerminalStateException("liveRoom is null"));
             }
             //LiveRoom下载完成后下UserInfo
             UserInfo userInfo = UserInfoApi.getUserInfo(liveRoom.uid);
             LivePlayInfo playInfo = livePlayInfoFuture.get();
-            return new LiveInfo(userInfo, liveRoom, playInfo);
-        });
-        currentDetailType = DetailType.Live;
-        source = liveInfo;
-        stateStack.push(new Pair<>(currentDetailType, liveInfo));
-
-        Intent intent = new Intent(context, LiveInfoActivity.class);
-        intent.putExtra("room_id", roomId);
-        context.startActivity(intent);
+            LiveInfo liveInfo = new LiveInfo(userInfo, liveRoom, playInfo);
+            if (saveToCache) {
+                detailLruCache.put(DetailType.Live + "_" + roomId, liveInfo);
+            }
+            return Result.success(liveInfo);
+        }catch (Exception t) {
+            return Result.failure(t);
+        }
     }
     // ---------------------------详情页跳转功能 end---------------------------------------
 
@@ -195,85 +242,71 @@ public class TerminalContext {
      * 退出详情页的调用，所有启动详情页的Activity中需要再onDestroy的回调中调用该方法，释放自己的上下文对象
      */
     public void leaveDetailPage() {
-        if (stateStack.isEmpty()) {
-           currentDetailType = DetailType.None;
-           source = null;
-           return;
-        }
-        stateStack.pop();
-        if(stateStack.isEmpty()) {
-            currentDetailType = DetailType.None;
-            source = null;
-        } else {
-            Pair<DetailType, LiveData<Result<Object>>> previousState = stateStack.peek();
-            currentDetailType = previousState.first;
-            this.source = previousState.second;
-        }
     }
     // ----------------------------详情页数据源上下文 ----------------------------------------
-    public LiveData<Result<VideoInfo>> getCurrentVideoLiveData() {
-        if(currentDetailType != DetailType.Video || source == null) {
-            return new MutableLiveData<>(Result.failure(new IllegalTerminalStateException()));
+    public LiveData<Result<VideoInfo>> getVideoInfoByAidOrBvId(long aid, String bvid) {
+        String key;
+        if (TextUtils.isEmpty(bvid)) {
+            key = DetailType.Video + "_" + aid;
+        } else {
+            key = DetailType.Video + "_" + bvid;
         }
-        return (LiveData) source;
+        Object obj = detailLruCache.get(key);
+        if (!(obj instanceof VideoInfo)) {
+            return CenterThreadPool.supplyAsyncWithLiveData(() -> fetchVideoInfoByAidOrBvId(aid, bvid, true).getOrThrow());
+        } else {
+            return new MutableLiveData<>(Result.success((VideoInfo)obj));
+        }
     }
 
-    public VideoInfo getCurrentVideoInfo() throws IllegalTerminalStateException {
-        if (currentDetailType != DetailType.Video || source == null) {
-            throw new IllegalTerminalStateException();
+    public LiveData<Result<ArticleInfo>> getArticleInfoByCvId(long cvid) {
+        String key = DetailType.Article + "_" + cvid;
+        Object obj = detailLruCache.get(key);
+        if (!(obj instanceof ArticleInfo)) {
+            return CenterThreadPool.supplyAsyncWithLiveData(() -> fetchArticleInfo(cvid, true).getOrThrow());
+        } else {
+            return new MutableLiveData<>(Result.success((ArticleInfo)obj));
         }
-        return resultSafeUnPack(source.getValue(), VideoInfo.class);
     }
 
-    public LiveData<Result<ArticleInfo>> getCurrentArticleLiveData() {
-        if (currentDetailType != DetailType.Article || source == null) {
-            return new MutableLiveData<>(Result.failure(new IllegalTerminalStateException()));
+    public LiveData<Result<Dynamic>> getDynamicById(long id) {
+        String key = DetailType.Dynamic + "_" + id;
+        Object obj = detailLruCache.get(key);
+        if (!(obj instanceof Dynamic)) {
+            return CenterThreadPool.supplyAsyncWithLiveData(() -> fetchDynamic(id, true).getOrThrow());
+        } else {
+            return new MutableLiveData<>(Result.success((Dynamic)obj));
         }
-        return (LiveData) source;
-    }
-    public ArticleInfo getCurrentArticleInfo() throws  IllegalTerminalStateException {
-        if (currentDetailType != DetailType.Article || source == null) {
-            throw new IllegalTerminalStateException();
-        }
-        return resultSafeUnPack(source.getValue(), ArticleInfo.class);
     }
 
-    public LiveData<Result<Dynamic>> getCurrentDynamicLiveData() {
-        if (currentDetailType != DetailType.Dynamic || source == null) {
-            return new MutableLiveData<>(Result.failure(new IllegalTerminalStateException()));
+    public LiveData<Result<LiveInfo>> getLiveInfoByRoomId(long roomId) {
+        String key = DetailType.Live + "_" + roomId;
+        Object obj = detailLruCache.get(key);
+        if (!(obj instanceof LiveInfo)) {
+            return CenterThreadPool.supplyAsyncWithLiveData(() -> fetchLiveInfo(roomId, true).getOrThrow());
+        } else {
+            return new MutableLiveData<>(Result.success((LiveInfo)obj));
         }
-        return (LiveData) source;
     }
 
-    public Dynamic getCurrentDynamic() throws  IllegalTerminalStateException {
-        if(currentDetailType != DetailType.Dynamic || source == null) {
-            throw new IllegalTerminalStateException();
+    public String getTerminalKey(Object item) {
+        if (item instanceof VideoInfo) {
+            VideoInfo videoInfo = (VideoInfo) item;
+            if (TextUtils.isEmpty(videoInfo.bvid)) {
+                return DetailType.Video + "_" + ((VideoInfo) videoInfo).aid;
+            } else {
+                return DetailType.Video + "_" + ((VideoInfo) item).bvid;
+            }
+        } else if (item instanceof ArticleInfo) {
+            return DetailType.Article + "_" + ((ArticleInfo) item).id;
+        } else if (item instanceof Dynamic) {
+            return DetailType.Dynamic + "_" + ((Dynamic) item).dynamicId;
+        } else if (item instanceof LiveInfo) {
+            return DetailType.Live + "_" + ((LiveInfo) item).getLiveRoom().roomid;
         }
-        return resultSafeUnPack(source.getValue(), Dynamic.class);
-    }
-
-    public LiveData<Result<LiveInfo>> getCurrentLiveInfoLiveData() {
-        if (currentDetailType != DetailType.Live || source == null) {
-            return new MutableLiveData<>(Result.failure(new IllegalTerminalStateException()));
-        }
-        return (LiveData) source;
-    }
-
-    public LiveInfo getCurrentLiveInfo() throws IllegalTerminalStateException {
-        if(currentDetailType != DetailType.Live || source == null) {
-            throw new IllegalTerminalStateException();
-        }
-        return resultSafeUnPack(source.getValue(), LiveInfo.class);
-    }
-
-    public Object getSource() {
-        if (currentDetailType == DetailType.None) {
-            return null;
-        }
-        return resultSafeUnPack(source.getValue(), Object.class);
+        return null;
     }
     // -------------------------详情页数据源上下文 end ------------------------------------
-
 
 
 
@@ -305,6 +338,27 @@ public class TerminalContext {
         }
     }
     public static class IllegalTerminalStateException extends Exception {
+        private final String description;
+        public IllegalTerminalStateException ()
+        {
+           description = "";
+        }
+        public IllegalTerminalStateException (String description) {
+            this.description = description;
+        }
 
+        @Nullable
+        @org.jetbrains.annotations.Nullable
+        @Override
+        public String getMessage() {
+            return this.description;
+        }
+
+        @Nullable
+        @org.jetbrains.annotations.Nullable
+        @Override
+        public String getLocalizedMessage() {
+            return this.description;
+        }
     }
 }

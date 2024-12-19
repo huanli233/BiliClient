@@ -43,8 +43,10 @@ public class MultiPageActivity extends BaseActivity {
 
         Intent intent = getIntent();
         try {
-            videoInfo = TerminalContext.getInstance().getCurrentVideoInfo();
-        } catch (TerminalContext.IllegalTerminalStateException e) {
+            long aid = intent.getLongExtra("aid", 0);
+            String bvid = intent.getStringExtra("bvid");
+            videoInfo = TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).getValue().getOrThrow();
+        } catch (Exception e) {
             Log.wtf(TAG, e);
             MsgUtil.showMsg("找不到当前视频信息QAQ");
         }
@@ -60,7 +62,13 @@ public class MultiPageActivity extends BaseActivity {
                     MsgUtil.showMsg(file_sign.exists() ? "已在下载队列" : "已下载完成");
                 }
                 else {
-                    startActivity(new Intent().putExtra("page", position).setClass(this, QualityChooserActivity.class));
+                    startActivity(
+                            new Intent()
+                                    .putExtra("page", position)
+                                    .setClass(this, QualityChooserActivity.class)
+                                    .putExtra("aid", videoInfo.aid)
+                                    .putExtra("bvid", videoInfo.bvid)
+                    );
                 }
             });
         } else {        //普通播放模式

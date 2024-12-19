@@ -50,12 +50,13 @@ public class ArticleInfoActivity extends BaseActivity {
 
         ViewPager viewPager = findViewById(R.id.viewPager);
 
-        TerminalContext.getInstance().getCurrentArticleLiveData()
+        TerminalContext.getInstance().getArticleInfoByCvId(cvid)
             .observe(this, (result) -> result.onSuccess((articleInfo)-> {
                 List<Fragment> fragmentList = new ArrayList<>();
                 ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance();
                 fragmentList.add(articleInfoFragment);
                 replyFragment = ReplyFragment.newInstance(cvid, ReplyApi.REPLY_TYPE_ARTICLE, seek_reply, articleInfo != null ? articleInfo.upInfo.mid : -1);
+                replyFragment.setSource(articleInfo);
                 fragmentList.add(replyFragment);
                 ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
                 viewPager.setAdapter(vpfAdapter);

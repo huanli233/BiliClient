@@ -43,11 +43,12 @@ public class CollectionInfoActivity extends RefreshListActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        long from_aid = getIntent().getLongExtra("fromVideo", -1);
         setPageName("合集详情");
         Collection collection;
         try {
-            collection = TerminalContext.getInstance().getCurrentVideoInfo().collection;
-        }catch (TerminalContext.IllegalTerminalStateException ignored) {
+            collection = TerminalContext.getInstance().getVideoInfoByAidOrBvId(from_aid, null).getValue().getOrThrow().collection;
+        }catch (Exception ignored) {
             collection = null;
         }
         int season_id = getIntent().getIntExtra("season_id", -1);
@@ -57,7 +58,6 @@ public class CollectionInfoActivity extends RefreshListActivity {
             finish();
             return; 
         }
-        long from_aid = getIntent().getLongExtra("fromVideo", -1);
 
         RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
         if (collection.sections == null && collection.cards != null) {

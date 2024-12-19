@@ -94,7 +94,7 @@ public class CenterThreadPool {
             try {
                 T res = supplier.call();
                 retval.postValue(Result.success(res));
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 retval.postValue(Result.failure(e));
                 MsgUtil.err(e);
             }

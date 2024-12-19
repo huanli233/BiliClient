@@ -50,11 +50,13 @@ public class DynamicInfoActivity extends BaseActivity {
             pageName.setText("动态详情");
 
             TutorialHelper.showTutorialList(this, R.array.tutorial_dynamic_info, 6);
-            TerminalContext.getInstance().getCurrentDynamicLiveData().observe(this, (dynamicResult) -> dynamicResult.onSuccess((dynamic) -> {
+            TerminalContext.getInstance().getDynamicById(id)
+                    .observe(this, (dynamicResult) -> dynamicResult.onSuccess((dynamic) -> {
                 List<Fragment> fragmentList = new ArrayList<>();
-                DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance();
+                DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance(id);
                 fragmentList.add(diFragment);
                 rFragment = ReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type, seek_reply, dynamic.userInfo.mid);
+                rFragment.setSource(dynamic);
                 rFragment.replyType = ReplyApi.REPLY_TYPE_DYNAMIC;
                 fragmentList.add(rFragment);
                 ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);

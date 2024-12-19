@@ -140,16 +140,23 @@ public class VideoInfoFragment extends Fragment {
     }
 
 
-    public static VideoInfoFragment newInstance() {
-        return new VideoInfoFragment();
+    public static VideoInfoFragment newInstance(long aid, String bvid) {
+        Bundle args = new Bundle();
+        args.putLong("aid", aid);
+        args.putString("bvid", bvid);
+        VideoInfoFragment fragment = new VideoInfoFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            videoInfo = TerminalContext.getInstance().getCurrentVideoInfo();
-        } catch (TerminalContext.IllegalTerminalStateException e) {
+            long aid = getArguments().getLong("aid");
+            String bvid = getArguments().getString("bvid");
+            videoInfo = TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).getValue().getOrNull();
+        } catch (Exception e) {
             Log.wtf(TAG, e);
         }
     }
@@ -550,7 +557,9 @@ public class VideoInfoFragment extends Fragment {
             Intent intent = new Intent()
                     .setClass(requireContext(), MultiPageActivity.class)
                     .putExtra("progress_cid", progressPair.first)
-                    .putExtra("progress", (play_clicked ? -1 : progressPair.second));
+                    .putExtra("progress", (play_clicked ? -1 : progressPair.second))
+                    .putExtra("aid", videoInfo.aid)
+                    .putExtra("bvid", videoInfo.bvid);
             //这里也会传过去，如果后面选择当页就不再获取直接传，选择其他页就传-1剩下的交给解析页
             startActivity(intent);
         } else {
@@ -573,13 +582,18 @@ public class VideoInfoFragment extends Fragment {
             else {
                 if (videoInfo.pagenames.size() > 1) {
                     Intent intent = new Intent();
-                    intent.setClass(requireContext(), MultiPageActivity.class);
-                    intent.putExtra("download", 1);
+                    intent.setClass(requireContext(), MultiPageActivity.class)
+                            .putExtra("download", 1)
+                            .putExtra("aid", videoInfo.aid)
+                            .putExtra("bvid", videoInfo.bvid);
                     startActivity(intent);
                 }
                 else {
                     startActivity(new Intent(requireContext(),QualityChooserActivity.class)
-                            .putExtra("page", 0));
+                            .putExtra("page", 0)
+                            .putExtra("aid", videoInfo.aid)
+                            .putExtra("bvid", videoInfo.bvid)
+                    );
                 }
             }
         }
