@@ -29,8 +29,8 @@ import androidx.annotation.RequiresApi;
 import java.text.SimpleDateFormat;
 
 /**
- * 从安卓自带的DigitalClock（被TextClock替代而废弃）复制来的，进行了一些修改
- * 这样的方式貌似要好一些？
+ * 为了兼容安卓4.0，必须自己实现TextClock
+ * 参考了安卓官方TextClock和DigitalClock的写法
  */
 @SuppressLint("AppCompatCustomView")
 public class TextClock extends TextView {

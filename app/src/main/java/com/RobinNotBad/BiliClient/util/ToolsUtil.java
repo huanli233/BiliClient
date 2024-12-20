@@ -113,19 +113,6 @@ public class ToolsUtil {
         return Jsoup.parse(html).text();
     }
 
-    public static String stringToFile(String str) {
-        return str.substring(0,Math.min(36,str.length()))    //防止长度溢出
-                .replace("|", "｜")
-                .replace(":", "：")
-                .replace("*", "﹡")
-                .replace("?", "？")
-                .replace("\"", "”")
-                .replace("<", "＜")
-                .replace(">", "＞")
-                .replace("/", "／")
-                .replace("\\", "＼");    //文件名里不能包含非法字符
-    }
-
     public static String unEscape(String str) {
         return str.replaceAll("\\\\(.)", "$1");
     }
@@ -139,25 +126,6 @@ public class ToolsUtil {
         final float fontScale = BiliTerminal.context.getResources()
                 .getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
-    }
-
-    public static String getFileNameFromLink(String link) {
-        int length = link.length();
-        for (int i = length - 1; i > 0; i--) {
-            if (link.charAt(i) == '/') {
-                return link.substring(i + 1);
-            }
-        }
-        return "fail";
-    }
-
-    public static String getFileFirstName(String file) {
-        for (int i = 0; i < file.length(); i++) {
-            if (file.charAt(i) == '.') {
-                return file.substring(0, i);
-            }
-        }
-        return "fail";
     }
 
     public static void setCopy(TextView textView, String customText) {

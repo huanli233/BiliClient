@@ -86,7 +86,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                     }
                     SubtitleLink[] subtitleLinks = PlayerApi.getSubtitleLink(aid, cid);
 
-                    if(subtitleLinks.length==0 || (SharedPreferencesUtil.getBoolean("subtitle_ai_allowed", false) && subtitleLinks.length==1 && subtitleLinks[0].isAI)) {
+                    if(subtitleLinks.length==0 || (!SharedPreferencesUtil.getBoolean("subtitle_ai_allowed", false) && subtitleLinks.length==1 && subtitleLinks[0].isAI)) {
                         jump();
                     }
 

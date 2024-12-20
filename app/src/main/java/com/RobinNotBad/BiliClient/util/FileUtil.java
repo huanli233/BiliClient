@@ -96,10 +96,14 @@ public class FileUtil {
         return path;
     }
 
+    public static File getDownloadPath(String title){
+        return getDownloadPath(title,null);
+    }
+
     public static File getDownloadPath(String title, String child){
-        File parentFolder = new File(getDownloadPath(), ToolsUtil.stringToFile(title));
+        File parentFolder = new File(getDownloadPath(), stringToFile(title));
         if(child==null || child.isEmpty()) return parentFolder;
-        return new File(parentFolder, ToolsUtil.stringToFile(child));
+        return new File(parentFolder, stringToFile(child));
     }
 
     public static File getDownloadPicturePath() {
@@ -108,5 +112,37 @@ public class FileUtil {
 
     public static void requireTFCardPermission(){
 
+    }
+
+    public static String stringToFile(String str) {
+        return str.substring(0,Math.min(85,str.length()))    //防止长度溢出
+                .replace("|", "｜")
+                .replace(":", "：")
+                .replace("*", "﹡")
+                .replace("?", "？")
+                .replace("\"", "”")
+                .replace("<", "＜")
+                .replace(">", "＞")
+                .replace("/", "／")
+                .replace("\\", "＼");    //文件名里不能包含非法字符
+    }
+
+    public static String getFileNameFromLink(String link) {
+        int length = link.length();
+        for (int i = length - 1; i > 0; i--) {
+            if (link.charAt(i) == '/') {
+                return link.substring(i + 1);
+            }
+        }
+        return "fail";
+    }
+
+    public static String getFileFirstName(String file) {
+        for (int i = 0; i < file.length(); i++) {
+            if (file.charAt(i) == '.') {
+                return file.substring(0, i);
+            }
+        }
+        return "fail";
     }
 }

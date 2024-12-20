@@ -294,7 +294,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     text_newspeed.setText(speed_strs[position]);
                     text_speed.setText(speed_strs[position]);
                     ijkPlayer.setSpeed(speed_values[position]);
-                    DrawHandler.setSpeed(speed_values[position]);
+                    mDanmakuView.setSpeed(speed_values[position]);
                 }
             }
 
@@ -506,7 +506,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         if (onLongClick) {
                             onLongClick = false;
                             ijkPlayer.setSpeed(speed_values[speed_seekbar.getProgress()]);
-                            DrawHandler.setSpeed(speed_values[speed_seekbar.getProgress()]);
+                            mDanmakuView.setSpeed(speed_values[speed_seekbar.getProgress()]);
                             text_speed.setText(speed_strs[speed_seekbar.getProgress()]);
                         }
                         if (gesture_moved) {
@@ -527,7 +527,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP && onLongClick) {
                     onLongClick = false;
                     ijkPlayer.setSpeed(speed_values[speed_seekbar.getProgress()]);
-                    DrawHandler.setSpeed(speed_values[speed_seekbar.getProgress()]);
+                    mDanmakuView.setSpeed(speed_values[speed_seekbar.getProgress()]);
                     text_speed.setText(speed_strs[speed_seekbar.getProgress()]);
                 }
                 return false;
@@ -545,7 +545,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 if (!onLongClick && !gesture_moved && !gesture_scaled) {
                     hidecon();
                     ijkPlayer.setSpeed(3.0F);
-                    DrawHandler.setSpeed(3.0f);
+                    mDanmakuView.setSpeed(3.0f);
                     text_speed.setText("x 3.0");
                     onLongClick = true;
                     Log.e("debug-gesture", "longclick_down");
@@ -791,7 +791,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             danmakuAdjustTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if(isPlaying) mDanmakuView.start(mediaPlayer.getCurrentPosition());
+                    if(isPlaying) {
+                        mDanmakuView.start(mediaPlayer.getCurrentPosition());
+                    }
                 }
             },30000,30000);
         }
@@ -887,11 +889,11 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             if (endhi1 <= screen_height && endwi1 <= screen_width) {
                 video_height = endhi1;
                 video_width = endwi1;
-                Log.e("debug-choosed", "case1");
+                Log.e("debug-chosen", "case1");
             } else {
                 video_height = endhi2;
                 video_width = endwi2;
-                Log.e("debug-choosed", "case2");
+                Log.e("debug-chosen", "case2");
             }
         }
 
@@ -901,8 +903,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             video_origX = (screen_width - video_width) / 2;
             video_origY = (screen_height - video_height) / 2;
 
-            Handler handler = new Handler();
-            handler.postDelayed(() -> {
+            videoArea.postDelayed(() -> {
                 videoArea.setX(video_origX);
                 videoArea.setY(video_origY);
                 Log.e("debug-改变视频位置", ((screen_width - video_width) / 2) + "," + ((screen_height - video_height) / 2));
@@ -1297,7 +1298,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         destroyed = true;
         if (isPlaying) playerPause();
         if (ijkPlayer != null) ijkPlayer.release();
-        DrawHandler.setSpeed(1.0f);
         if (mDanmakuView != null) mDanmakuView.release();
 
         if (autoHideTimer != null) autoHideTimer.cancel();

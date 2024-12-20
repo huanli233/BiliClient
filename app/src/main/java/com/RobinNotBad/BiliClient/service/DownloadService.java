@@ -14,7 +14,7 @@ import com.RobinNotBad.BiliClient.activity.video.local.DownloadListActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.model.DownloadSection;
-import com.RobinNotBad.BiliClient.sql.DownloadSqlHelper;
+import com.RobinNotBad.BiliClient.helper.sql.DownloadSqlHelper;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -107,8 +107,7 @@ public class DownloadService extends Service {
                         File file_sign = null;
                         switch (downloadingSection.type) {
                             case "video_single":  //单集视频
-                                File path_single = new File(FileUtil.getDownloadPath(), downloadingSection.name);
-                                if (!path_single.exists()) path_single.mkdirs();
+                                File path_single = downloadingSection.getPath();
 
                                 file_sign = new File(path_single,".DOWNLOADING");
                                 if(!file_sign.exists())file_sign.createNewFile();
@@ -124,11 +123,9 @@ public class DownloadService extends Service {
                                 MsgUtil.showMsg("下载成功：\n" + downloadingSection.name_short);
                                 break;
                             case "video_multi":  //多集视频
-                                String parent = downloadingSection.parent;
-                                File path_parent = new File(FileUtil.getDownloadPath(), parent);
-                                if(!path_parent.exists()) path_parent.mkdirs();
+                                File path_page = downloadingSection.getPath();
+                                File path_parent = path_page.getParentFile();
 
-                                File path_page = new File(path_parent, downloadingSection.name);
                                 if(!path_page.exists()) path_page.mkdirs();
 
                                 file_sign = new File(path_page,".DOWNLOADING");
@@ -415,12 +412,11 @@ public class DownloadService extends Service {
             try {
                 DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
                 SQLiteDatabase database = helper.getWritableDatabase();
-                database.execSQL("insert into download(type,state,aid,cid,qn,name,parent,cover,danmaku) values(?,?,?,?,?,?,?,?,?)",
+                database.execSQL("insert into download(type,state,aid,cid,qn,title,child,cover,danmaku) values(?,?,?,?,?,?,?,?,?)",
                         new Object[]{"video_single","none", aid, cid, qn, title, "", cover, danmaku});
                 database.close();
 
-                File path_single = new File(FileUtil.getDownloadPath(), title);
-                if (!path_single.exists()) path_single.mkdirs();
+                File path_single = FileUtil.getDownloadPath(title,null);
 
                 File file_sign = new File(path_single,".DOWNLOADING");
                 if(!file_sign.exists())file_sign.createNewFile();
@@ -440,15 +436,12 @@ public class DownloadService extends Service {
             try {
                 DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
                 SQLiteDatabase database = helper.getWritableDatabase();
-                database.execSQL("insert into download(type,state,aid,cid,qn,name,parent,cover,danmaku) values(?,?,?,?,?,?,?,?,?)",
-                        new Object[]{"video_multi", "none", aid, cid, qn, child, parent, cover, danmaku});
+                database.execSQL("insert into download(type,state,aid,cid,qn,title,child,cover,danmaku) values(?,?,?,?,?,?,?,?,?)",
+                        new Object[]{"video_multi", "none", aid, cid, qn, parent, child, cover, danmaku});
                 database.close();
 
-                File path_parent = new File(FileUtil.getDownloadPath(), parent);
-                if(!path_parent.exists()) path_parent.mkdirs();
 
-                File path_page = new File(path_parent, child);
-                if(!path_page.exists()) path_page.mkdirs();
+                File path_page = FileUtil.getDownloadPath(parent,child);
 
                 File file_sign = new File(path_page,".DOWNLOADING");
                 if(!file_sign.exists())file_sign.createNewFile();

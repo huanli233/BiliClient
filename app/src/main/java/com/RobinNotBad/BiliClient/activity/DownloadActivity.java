@@ -13,7 +13,6 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -69,7 +68,6 @@ public class DownloadActivity extends BaseActivity {
         Intent intent = getIntent();
 
         type = intent.getIntExtra("type", 0);  //0=单个文件，1=视频，2=分页视频
-        String title = ToolsUtil.stringToFile(intent.getStringExtra("title"));
         link = intent.getStringExtra("link");
 
 
@@ -83,9 +81,11 @@ public class DownloadActivity extends BaseActivity {
             if (type == 0) {
                 rootPath = FileUtil.getDownloadPicturePath();
                 if (!rootPath.exists()) rootPath.mkdirs();
-                downFile = new File(rootPath, title);
+                downFile = new File(rootPath, FileUtil.getFileNameFromLink(link));
                 download(link, downFile, "下载文件中", true);
             } else {
+                String title = FileUtil.stringToFile(intent.getStringExtra("title"));
+
                 rootPath = FileUtil.getDownloadPath();
 
                 if (type == 1) {
@@ -93,7 +93,7 @@ public class DownloadActivity extends BaseActivity {
                     rootPath = downPath;
                 }
                 if (type == 2) {
-                    rootPath = new File(rootPath, ToolsUtil.stringToFile(intent.getStringExtra("parent_title")));
+                    rootPath = new File(rootPath, FileUtil.stringToFile(intent.getStringExtra("parent_title")));
                     downPath = new File(rootPath, title);
                 }
 

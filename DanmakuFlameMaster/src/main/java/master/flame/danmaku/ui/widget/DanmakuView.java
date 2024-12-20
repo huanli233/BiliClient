@@ -50,7 +50,7 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
 
     private HandlerThread mHandlerThread;
 
-    private DrawHandler handler;
+    public DrawHandler handler;
     
     private boolean isSurfaceCreated;
 
@@ -138,6 +138,10 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
         if (handler != null) {
             handler.setCallback(callback);
         }
+    }
+
+    public DrawHandler getHandler(){
+        return handler;
     }
 
     @Override
@@ -418,6 +422,19 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
             handler.seekTo(ms);
         }
     }
+
+    public void setSpeed(float speed){
+        if(handler != null){
+            handler.setSpeed(speed);
+        }
+    }
+
+    public void adjust(){
+        if(handler != null){
+            handler.syncTimerIfNeeded();
+        }
+    }
+
 
 
     public void enableDanmakuDrawingCache(boolean enable) {

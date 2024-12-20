@@ -13,7 +13,6 @@ import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerImageAdapter;
 import com.RobinNotBad.BiliClient.ui.widget.PhotoViewpager;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
@@ -65,8 +64,7 @@ public class ImageViewerActivity extends BaseActivity {
                     Intent intent1 = new Intent()
                             .setClass(ImageViewerActivity.this, DownloadActivity.class)
                             .putExtra("link", imageList.get(id))
-                            .putExtra("type", 0)
-                            .putExtra("title", ToolsUtil.getFileNameFromLink(imageList.get(id)));
+                            .putExtra("type", 0);
                     startActivity(intent1);
                     longClickPosition = -1;
                 }
