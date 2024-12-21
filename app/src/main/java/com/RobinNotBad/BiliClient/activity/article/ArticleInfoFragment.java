@@ -57,12 +57,16 @@ public class ArticleInfoFragment extends Fragment {
         if (getArguments() != null) {
             cvid = getArguments().getLong("cvid");
         }
-        try {
-            articleInfo = TerminalContext.getInstance().getArticleInfoByCvId(cvid).getValue().getOrThrow();
-        }catch (Exception e) {
-            Log.wtf(TAG, e);
-            MsgUtil.showMsg("找不到专栏信息QAQ");
+        Result<ArticleInfo> articleInfoResult = TerminalContext.getInstance().getArticleInfoByCvId(cvid).getValue();
+        if (articleInfoResult == null) {
+            articleInfoResult = Result.failure(new TerminalContext.IllegalTerminalStateException("articleInfoResult is null"));
         }
+        articleInfoResult
+                .onSuccess((articleInfo) -> this.articleInfo = articleInfo)
+                .onFailure((e) -> {
+                    Log.wtf(TAG, e);
+                    MsgUtil.showMsg("找不到专栏信息QAQ");
+                });
     }
 
     @Override
