@@ -16,6 +16,7 @@ import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
+import com.RobinNotBad.BiliClient.util.Result;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,14 +44,18 @@ public class QualityChooserActivity extends BaseActivity {
 
         ((TextView) findViewById(R.id.pageName)).setText("请选择清晰度");
 
-        try {
-            long aid = getIntent().getLongExtra("aid", 0);
-            String bvid = getIntent().getStringExtra("bvid");
-            videoInfo = TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).getValue().getOrThrow();
-        } catch (Exception e) {
+        long aid = getIntent().getLongExtra("aid", 0);
+        String bvid = getIntent().getStringExtra("bvid");
+        Result<VideoInfo> videoInfoResult = TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).getValue();
+        if (videoInfoResult == null) {
+            videoInfoResult = Result.failure(new TerminalContext.IllegalTerminalStateException("video object is null"));
+        }
+        videoInfoResult.onSuccess((videoInfo) -> {
+            this.videoInfo = videoInfo;
+        }).onFailure((e) -> {
             Log.wtf(TAG, e);
             MsgUtil.showMsg("找不到视频信息QAQ");
-        }
+        });
         QualityChooseAdapter adapter = new QualityChooseAdapter(this);
         int page = getIntent().getIntExtra("page", 0);
         CenterThreadPool.run(() -> {

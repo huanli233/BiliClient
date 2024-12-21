@@ -16,6 +16,7 @@ import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.Result;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
 
 import java.io.File;
@@ -41,14 +42,18 @@ public class MultiPageActivity extends BaseActivity {
         textView.setText("请选择分页");
 
         Intent intent = getIntent();
-        try {
-            long aid = intent.getLongExtra("aid", 0);
-            String bvid = intent.getStringExtra("bvid");
-            videoInfo = TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).getValue().getOrThrow();
-        } catch (Exception e) {
+        long aid = intent.getLongExtra("aid", 0);
+        String bvid = intent.getStringExtra("bvid");
+        Result<VideoInfo> videoInfoResult = TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).getValue();
+        if (videoInfoResult == null) {
+            videoInfoResult = Result.failure(new TerminalContext.IllegalTerminalStateException("videoInfoResult is null"));
+        }
+        videoInfoResult.onSuccess((videoInfo) -> {
+            this.videoInfo = videoInfo;
+        }).onFailure((e) -> {
             Log.wtf(TAG, e);
             MsgUtil.showMsg("找不到当前视频信息QAQ");
-        }
+        });
 
         PageChooseAdapter adapter = new PageChooseAdapter(this, videoInfo.pagenames);
 

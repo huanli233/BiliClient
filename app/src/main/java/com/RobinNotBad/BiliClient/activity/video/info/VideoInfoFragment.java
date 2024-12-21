@@ -52,13 +52,7 @@ import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.api.WatchLaterApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.FileUtil;
-import com.RobinNotBad.BiliClient.util.GlideUtil;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.TerminalContext;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.*;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -157,13 +151,14 @@ public class VideoInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {
-            long aid = getArguments().getLong("aid");
-            String bvid = getArguments().getString("bvid");
-            videoInfo = TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).getValue().getOrNull();
-        } catch (Exception e) {
-            Log.wtf(TAG, e);
+        long aid = getArguments().getLong("aid");
+        String bvid = getArguments().getString("bvid");
+        Result<VideoInfo> videoInfoResult = TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).getValue();
+        if (videoInfoResult == null) {
+            videoInfoResult = Result.failure(new TerminalContext.IllegalTerminalStateException("video object is null"));
         }
+        videoInfoResult.onSuccess((videoInfo) -> this.videoInfo = videoInfo)
+                .onFailure(e -> Log.wtf(TAG, e));
     }
 
     @Override

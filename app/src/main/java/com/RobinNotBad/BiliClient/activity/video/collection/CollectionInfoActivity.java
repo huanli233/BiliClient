@@ -22,10 +22,7 @@ import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
-import com.RobinNotBad.BiliClient.util.GlideUtil;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.TerminalContext;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.*;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -38,25 +35,28 @@ import java.util.List;
 import java.util.Objects;
 
 public class CollectionInfoActivity extends RefreshListActivity {
+    private Collection collection = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         long from_aid = getIntent().getLongExtra("fromVideo", -1);
-        setPageName("合集详情");
-        Collection collection;
-        try {
-            collection = TerminalContext.getInstance().getVideoInfoByAidOrBvId(from_aid, null).getValue().getOrThrow().collection;
-        }catch (Exception ignored) {
-            collection = null;
-        }
         int season_id = getIntent().getIntExtra("season_id", -1);
         long mid = getIntent().getLongExtra("mid", -1);
-        if (collection == null/* && (season_id == -1 || mid == -1)*/) {
+        setPageName("合集详情");
+        Result<VideoInfo> videoInfoResult = TerminalContext.getInstance().getVideoInfoByAidOrBvId(from_aid, null).getValue();
+        if (videoInfoResult == null) {
+            videoInfoResult = Result.failure(new TerminalContext.IllegalTerminalStateException("collectionResult is null"));
+        }
+        videoInfoResult.onSuccess(videoInfo -> {
+            collection = videoInfo.collection;
+        }).onFailure(e -> {
             MsgUtil.showMsg("合集不存在");
             finish();
-            return; 
+        });
+        if (!videoInfoResult.isSuccess()) {
+            return;
         }
 
         RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
