@@ -47,10 +47,6 @@ public class ArticleInfoFragment extends Fragment {
         return fragment;
     }
 
-    public static ArticleInfoFragment newInstance() {
-        return new ArticleInfoFragment();
-    }
-
     public void setOnFinishLoad(Runnable onFinishLoad) {
         this.onFinishLoad = onFinishLoad;
     }

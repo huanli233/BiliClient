@@ -53,7 +53,7 @@ public class ArticleInfoActivity extends BaseActivity {
         TerminalContext.getInstance().getArticleInfoByCvId(cvid)
             .observe(this, (result) -> result.onSuccess((articleInfo)-> {
                 List<Fragment> fragmentList = new ArrayList<>();
-                ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance();
+                ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance(cvid);
                 fragmentList.add(articleInfoFragment);
                 replyFragment = ReplyFragment.newInstance(cvid, ReplyApi.REPLY_TYPE_ARTICLE, seek_reply, articleInfo != null ? articleInfo.upInfo.mid : -1);
                 replyFragment.setSource(articleInfo);
