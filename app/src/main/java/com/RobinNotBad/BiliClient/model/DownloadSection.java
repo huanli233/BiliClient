@@ -49,7 +49,7 @@ public class DownloadSection {
     public File getPath() {
         if(type.contains("video")) {
             File path = FileUtil.getDownloadPath(title,child);
-            path.mkdirs();
+            if(!path.exists()) path.mkdirs();
             return path;
         }
         else return FileUtil.getDownloadPicturePath();

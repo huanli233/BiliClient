@@ -417,6 +417,7 @@ public class DownloadService extends Service {
                 database.close();
 
                 File path_single = FileUtil.getDownloadPath(title,null);
+                path_single.mkdirs();
 
                 File file_sign = new File(path_single,".DOWNLOADING");
                 if(!file_sign.exists())file_sign.createNewFile();
@@ -442,6 +443,7 @@ public class DownloadService extends Service {
 
 
                 File path_page = FileUtil.getDownloadPath(parent,child);
+                path_page.mkdirs();
 
                 File file_sign = new File(path_page,".DOWNLOADING");
                 if(!file_sign.exists())file_sign.createNewFile();
