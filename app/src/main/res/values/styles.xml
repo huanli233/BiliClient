@@ -43,4 +43,9 @@
         <item name="android:descendantFocusability">afterDescendants</item>
     </style>
 
+    <style name="TextViewSytle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">14sp</item>
+        #设置默认字体大小，某些设备的默认字体偏大
+    </style>
+
 </resources>

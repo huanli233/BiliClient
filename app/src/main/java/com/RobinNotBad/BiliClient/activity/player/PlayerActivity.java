@@ -384,7 +384,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         top_control.setOnClickListener(view -> finish());
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT <= 19)) {
+        if (SharedPreferencesUtil.getBoolean("player_display", BiliTerminal.getSystemSdk() > 19)) {
             textureView = new TextureView(this);
             textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
                 @Override
@@ -606,7 +606,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if(screen_round) {
             text_progress.setGravity(Gravity.NO_GRAVITY);
             text_progress.setPadding(ToolsUtil.dp2px(24f),0,0,0);
-            text_online.setVisibility(View.VISIBLE);
+            if(onlineTimer != null) text_online.setVisibility(View.VISIBLE);
         }
 
         autohide();
@@ -621,7 +621,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if(screen_round) {
             text_progress.setGravity(Gravity.CENTER);
             text_progress.setPadding(0,0,0,ToolsUtil.dp2px(8f));
-            text_online.setVisibility(View.GONE);
+            if(onlineTimer != null) text_online.setVisibility(View.GONE);
         }
     }
 

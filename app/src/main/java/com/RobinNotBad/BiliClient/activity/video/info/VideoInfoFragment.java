@@ -12,6 +12,7 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.util.Pair;
@@ -262,6 +263,7 @@ public class VideoInfoFragment extends Fragment {
                                 = getDescSpan(VideoInfoApi.getTagsByAid(videoInfo.aid));
 
                         if (isAdded()) requireActivity().runOnUiThread(() -> {
+                            tagsText.setMovementMethod(LinkMovementMethod.getInstance());
                             tagsText.setText(tags_spannable.toString());
                             tagsText.setOnClickListener(view1 -> {
                                 if (tags_expand) {
