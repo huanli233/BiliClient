@@ -1192,7 +1192,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
             @Override
             public void updateTimer(DanmakuTimer timer) {
-                if(isPlaying) timer.update(ijkPlayer.getCurrentPosition()); //实时同步弹幕和播放器时间
+                // 不需要if(isPlaying)，因为本来就为了让弹幕跟随ijkPlayer的时间停止而停止
+                timer.update(ijkPlayer.getCurrentPosition()); //实时同步弹幕和播放器时间
             }
 
             @Override
@@ -1351,7 +1352,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private void playerPause() {
         isPlaying = false;
         if (ijkPlayer != null && isPrepared) ijkPlayer.pause();
-        if (hasDanmaku) mDanmakuView.pause();
+        // 这里不需要pause()，实时同步弹幕时间之后，暂停视频弹幕会自行停住不动，pause()反而会导致弹幕卡住，无法通过start()重新滚动
+        // if (hasDanmaku) mDanmakuView.pause();
         if (control_btn != null) control_btn.setImageResource(R.drawable.btn_player_play);
     }
 
@@ -1359,7 +1361,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         isPlaying = true;
         if (ijkPlayer != null && isPrepared) {
             ijkPlayer.start();
-            if (hasDanmaku) mDanmakuView.start(ijkPlayer.getCurrentPosition());
+        //    if (hasDanmaku) mDanmakuView.start(ijkPlayer.getCurrentPosition());
         }
         if (control_btn != null) control_btn.setImageResource(R.drawable.btn_player_pause);
     }
