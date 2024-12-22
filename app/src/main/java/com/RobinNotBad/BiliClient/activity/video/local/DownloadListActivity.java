@@ -95,23 +95,25 @@ public class DownloadListActivity extends RefreshListActivity {
                         }
                     }
                     else{
-                        DownloadSection section = sections.get(position);
-                        if(section.state.equals("downloading")) {
-                            try {
-                                File folder = section.getPath();
-                                FileUtil.deleteFolder(folder);
-                                folder.mkdirs();
-                                File sign = new File(folder,".DOWNLOADING");
-                                sign.createNewFile();
-                            } catch (IOException e) {
-                                MsgUtil.err("文件错误：",e);
+                        if(position < sections.size()){
+                            DownloadSection section = sections.get(position);
+                            if(section.state.equals("downloading")) {
+                                try {
+                                    File folder = section.getPath();
+                                    FileUtil.deleteFolder(folder);
+                                    folder.mkdirs();
+                                    File sign = new File(folder,".DOWNLOADING");
+                                    sign.createNewFile();
+                                } catch (IOException e) {
+                                    MsgUtil.err("文件错误：",e);
+                                }
                             }
-                        }
 
-                        DownloadService.setState(section.id,"none");
-                        Intent intent = new Intent(this, DownloadService.class);
-                        intent.putExtra("first",section.id);
-                        startService(intent);
+                            DownloadService.setState(section.id,"none");
+                            Intent intent = new Intent(this, DownloadService.class);
+                            intent.putExtra("first",section.id);
+                            startService(intent);
+                        }
                     }
                 }));
 

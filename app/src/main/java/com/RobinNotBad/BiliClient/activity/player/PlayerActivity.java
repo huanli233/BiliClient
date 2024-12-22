@@ -106,7 +106,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private SurfaceTexture mSurfaceTexture;
     private boolean firstSurfaceHolder = true;
 
-    private Subtitle[] subtitles;
+    private Subtitle[] subtitles = null;
     private int subtitle_curr_index, subtitle_count;
 
     private IDanmakuView mDanmakuView;
@@ -348,7 +348,13 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 downdanmu();
                 if(!SharedPreferencesUtil.getBoolean("player_ui_notShowSubtitle", false)) downsubtitle(false);
             }
-            else streamdanmaku(danmaku_url);
+            else {
+                streamdanmaku(danmaku_url);
+                runOnUiThread(() -> {
+                    findViewById(R.id.subtitle_card_bg).setVisibility(View.GONE);
+                    subtitle_btn.setVisibility(View.GONE);
+                });
+            }
 
             if(!destroyed) setDisplay();
         }), 60);
