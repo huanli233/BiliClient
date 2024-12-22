@@ -37,13 +37,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.video.MediaEpisodeAdapter;
 import com.RobinNotBad.BiliClient.api.DanmakuApi;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
@@ -60,11 +58,11 @@ import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
+import com.google.android.material.card.MaterialCardView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -114,16 +112,17 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private IDanmakuView mDanmakuView;
     private DanmakuContext mContext;
 
-    private RelativeLayout control_layout, top_control, videoArea;
-    private LinearLayout bottom_control, speed_layout, right_control, loading_info, bottom_buttons;
+    private RelativeLayout control_layout, top_control, videoArea, card_bg;
+    private LinearLayout bottom_control, layout_speed, right_control, right_second, loading_info, bottom_buttons;
 
     private ImageView circle_loading;
     private ImageButton control_btn, danmaku_btn, loop_btn, rotate_btn, menu_btn, subtitle_btn, danmaku_send_btn;
     private SeekBar progressBar, speed_seekbar;
     private TextView text_progress, text_online, text_volume, loading_text0, loading_text1, text_speed, text_newspeed;
     public TextView text_title, text_subtitle;
+    private MaterialCardView card_subtitle, card_danmaku_send;
 
-    private Timer progressTimer, autoHideTimer, volumeTimer, speedTimer, loadingTimer, onlineTimer, danmakuAdjustTimer;
+    private Timer progressTimer, autoHideTimer, volumeTimer, speedTimer, loadingTimer, onlineTimer;
     private String video_url, danmaku_url;
 
     private boolean isPlaying, isPrepared, hasDanmaku,
@@ -320,7 +319,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 TimerTask timerTask = new TimerTask() {
                     @Override
                     public void run() {
-                        runOnUiThread(() -> speed_layout.setVisibility(View.GONE));
+                        runOnUiThread(() -> layout_speed.setVisibility(View.GONE));
                     }
                 };
                 speedTimer.schedule(timerTask, 200);
@@ -367,6 +366,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         top_control = findViewById(R.id.top);
         bottom_control = findViewById(R.id.bottom_control);
         right_control = findViewById(R.id.right_control);
+        right_second = findViewById(R.id.right_second);
+        card_bg = findViewById(R.id.card_bg);
+        card_subtitle = findViewById(R.id.subtitle_card);
+        card_danmaku_send = findViewById(R.id.danmaku_send_card);
 
         loading_info = findViewById(R.id.loading_info);
 
@@ -390,7 +393,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         batteryView = findViewById(R.id.battery);
 
         text_speed = findViewById(R.id.text_speed);
-        speed_layout = findViewById(R.id.layout_speed);
+        layout_speed = findViewById(R.id.layout_speed);
         speed_seekbar = findViewById(R.id.seekbar_speed);
         text_newspeed = findViewById(R.id.text_newspeed);
         bottom_buttons = findViewById(R.id.bottom_buttons);
@@ -429,25 +432,29 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         rotate_btn.setOnClickListener(view -> rotate());
 
-        ImageButton sound_add = findViewById(R.id.button_sound_add);
-        ImageButton sound_cut = findViewById(R.id.button_sound_cut);
-        sound_add.setOnClickListener(view -> changeVolume(true));
-        sound_cut.setOnClickListener(view -> changeVolume(false));
+        findViewById(R.id.button_sound_add).setOnClickListener(view -> changeVolume(true));
+        findViewById(R.id.button_sound_cut).setOnClickListener(view -> changeVolume(false));
 
         menu_btn.setOnClickListener(view -> {
-            if(menu_open) findViewById(R.id.right_second).setVisibility(View.GONE);
-            else findViewById(R.id.right_second).setVisibility(View.VISIBLE);
+            if(menu_open) {
+                right_second.setVisibility(View.GONE);
+                menu_btn.setImageResource(R.mipmap.morehide);
+            }
+            else {
+                right_second.setVisibility(View.VISIBLE);
+                menu_btn.setImageResource(R.mipmap.moreshow);
+            }
             menu_open = !menu_open;
         });
 
-        findViewById(R.id.card_bg).setOnClickListener(view -> {
-            findViewById(R.id.card_bg).setVisibility(View.GONE);
-            findViewById(R.id.subtitle_card).setVisibility(View.GONE);
-            findViewById(R.id.danmaku_send_card).setVisibility(View.GONE);
+        card_bg.setOnClickListener(view -> {
+            card_bg.setVisibility(View.GONE);
+            card_subtitle.setVisibility(View.GONE);
+            card_danmaku_send.setVisibility(View.GONE);
         });
         danmaku_send_btn.setOnClickListener(view -> {
-            findViewById(R.id.card_bg).setVisibility(View.VISIBLE);
-            findViewById(R.id.danmaku_send_card).setVisibility(View.VISIBLE);
+            card_bg.setVisibility(View.VISIBLE);
+            card_danmaku_send.setVisibility(View.VISIBLE);
         });
         findViewById(R.id.danmaku_send).setOnClickListener(view1 -> {
             EditText editText = findViewById(R.id.danmaku_send_edit);
@@ -456,15 +463,13 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             } else {
                 CenterThreadPool.run(() -> {
                     try {
-                        int result;
-                        if(aid != 0) result = DanmakuApi.sendVideoDanmakuByAid(cid, editText.getText().toString(), aid, videonow, ToolsUtil.getRgb888(Color.WHITE), 1);
-                        else result = DanmakuApi.sendVideoDanmakuByBvid(cid, editText.getText().toString(), bvid, videonow, ToolsUtil.getRgb888(Color.WHITE), 1);
+                        int result = DanmakuApi.sendVideoDanmakuByAid(cid, editText.getText().toString(), aid, videonow, ToolsUtil.getRgb888(Color.WHITE), 1);
 
                         if(result == 0){
                             runOnUiThread(() -> {
                                 adddanmaku(editText.getText().toString(), Color.WHITE);
-                                findViewById(R.id.card_bg).setVisibility(View.GONE);
-                                findViewById(R.id.danmaku_send_card).setVisibility(View.GONE);
+                                card_bg.setVisibility(View.GONE);
+                                card_danmaku_send.setVisibility(View.GONE);
                             });
                         } else MsgUtil.showMsg("发送失败：" + result);
                     }catch (Exception e){
@@ -679,6 +684,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             text_progress.setPadding(0,0,0,ToolsUtil.dp2px(8f));
             if(onlineTimer != null) text_online.setVisibility(View.GONE);
         }
+        if(menu_open) menu_btn.performClick();
     }
 
 
@@ -845,16 +851,14 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if (SharedPreferencesUtil.getBoolean("player_ui_showDanmakuBtn", true)) {
             isDanmakuVisible = !SharedPreferencesUtil.getBoolean("pref_switch_danmaku",true);
             //这里设置值是反的，因为下面直接调用监听器点击按钮
-
-            View.OnClickListener onClickListener = view -> {
+            danmaku_btn.setOnClickListener(view -> {
                 if (isDanmakuVisible) mDanmakuView.hide();
                 else mDanmakuView.show();
                 danmaku_btn.setImageResource((isDanmakuVisible ? R.mipmap.danmakuoff : R.mipmap.danmakuon));
                 isDanmakuVisible = !isDanmakuVisible;
                 SharedPreferencesUtil.putBoolean("pref_switch_danmaku",isDanmakuVisible);
-            };
-            onClickListener.onClick(danmaku_btn);
-            danmaku_btn.setOnClickListener(onClickListener);
+            });
+            danmaku_btn.performClick();
 
             danmaku_btn.setVisibility(View.VISIBLE);
         } else danmaku_btn.setVisibility(View.GONE);
@@ -888,8 +892,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         text_speed.setVisibility(top_control.getVisibility());
         if (isLiveMode) text_speed.setVisibility(View.GONE);
-        text_speed.setOnClickListener(view -> speed_layout.setVisibility(View.VISIBLE));
-        speed_layout.setOnClickListener(view -> speed_layout.setVisibility(View.GONE));
+        text_speed.setOnClickListener(view -> layout_speed.setVisibility(View.VISIBLE));
+        layout_speed.setOnClickListener(view -> layout_speed.setVisibility(View.GONE));
 
         progressChange();
         onlineChange();
@@ -1082,24 +1086,21 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 if(select_subtitle_id == -1) select_subtitle_id = subtitleLinks.length;
 
                 runOnUiThread(()->{
-                    findViewById(R.id.card_bg).setVisibility(View.VISIBLE);
-                    findViewById(R.id.subtitle_card).setVisibility(View.VISIBLE);
+                    card_bg.setVisibility(View.VISIBLE);
+                    card_subtitle.setVisibility(View.VISIBLE);
                     RecyclerView eposideRecyclerView = findViewById(R.id.subtitle_list);
                     MediaEpisodeAdapter adapter = new MediaEpisodeAdapter();
                     adapter.setData(episodeList);
                     adapter.setSelectedItemIndex(select_subtitle_id);
                     adapter.setOnItemClickListener(index -> {
-                        findViewById(R.id.card_bg).setVisibility(View.GONE);
-                        findViewById(R.id.subtitle_card).setVisibility(View.GONE);
+                        card_bg.setVisibility(View.GONE);
+                        card_subtitle.setVisibility(View.GONE);
                         select_subtitle_id = index;
-                        if(episodeList.get(index).id == -1) {
+                        
+                        if(episodeList.get(index).id == -1) 
                             subtitles = null;
-                            text_subtitle.setVisibility(View.GONE);
-                        }
-                        else{
+                        else 
                             CenterThreadPool.run(() -> getSubtitle(subtitleLinks[(int) episodeList.get(index).id].url));
-                            text_subtitle.setVisibility(View.VISIBLE);
-                        }
                     });
                     eposideRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                     eposideRecyclerView.setAdapter(adapter);
@@ -1408,7 +1409,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if (progressTimer != null) progressTimer.cancel();
         if (onlineTimer != null) onlineTimer.cancel();
         if (loadingTimer != null) loadingTimer.cancel();
-        if (danmakuAdjustTimer != null) danmakuAdjustTimer.cancel();
 
         if (danmakuFile != null && danmakuFile.exists()) danmakuFile.delete();
 

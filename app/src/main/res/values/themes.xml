@@ -9,6 +9,7 @@
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowSwipeToDismiss" tools:ignore="NewApi">true</item>
 
+        <item name="android:textViewStyle">@style/TextViewSytle</item>
         <item name="editTextStyle">@style/EditTextStyle</item>
         <item name="materialCardViewStyle">@style/CardStyle</item>
         <item name="materialButtonStyle">@style/ButtonStyle</item>
