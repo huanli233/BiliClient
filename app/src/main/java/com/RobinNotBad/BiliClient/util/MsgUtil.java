@@ -6,10 +6,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,7 +34,7 @@ public class MsgUtil {
     private static Toast toast;
 
     public static void showMsg(String str) {
-        if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, false)) {
+        if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, true)) {
             CenterThreadPool.runOnUiThread(() -> EventBus.getDefault().postSticky(new SnackEvent(str)));
         } else {
             toast(str);
@@ -45,7 +43,7 @@ public class MsgUtil {
     }
 
     public static void showMsgLong(String str) {
-        if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, false)) {
+        if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, true)) {
             CenterThreadPool.runOnUiThread(() -> EventBus.getDefault().postSticky(new SnackEvent(str)));
         } else {
             toastLong(str);

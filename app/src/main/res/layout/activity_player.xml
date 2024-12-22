@@ -409,92 +409,81 @@
         android:background="#70000000"
         android:visibility="gone">
 
-        <com.google.android.material.card.MaterialCardView
+
+        <LinearLayout
             android:id="@+id/subtitle_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginHorizontal="6dp"
-            android:visibility="gone"
-            app:cardBackgroundColor="#e6262626"
-            app:strokeColor="#e6383838"
-            app:strokeWidth="2dp">
+            android:background="@drawable/background_card"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/subtitle_card_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginTop="4dp"
+                android:paddingHorizontal="3dp"
+                android:text="选择字幕"
+                android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/subtitle_card_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginTop="4dp"
-                    android:paddingHorizontal="3dp"
-                    android:text="选择字幕"
-                    android:textSize="14sp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/subtitle_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/cell_episode" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/subtitle_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/cell_episode" />
+        </LinearLayout>
 
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:id="@+id/danmaku_send_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginHorizontal="6dp"
-            android:visibility="gone"
-            app:cardBackgroundColor="#E6262626"
-            app:strokeColor="#e6383838"
-            app:strokeWidth="2dp">
+            android:background="@drawable/background_card"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginTop="4dp"
+                android:paddingHorizontal="3dp"
+                android:text="发送弹幕"
+                android:textSize="14sp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginTop="4dp"
-                    android:paddingHorizontal="3dp"
-                    android:text="发送弹幕"
-                    android:textSize="14sp" />
+            <EditText
+                android:id="@+id/danmaku_send_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:hint="发个友善的弹幕见证当下"
+                android:maxLength="100"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/textwhite"
+                android:textColorHint="#88ffffff" />
 
-                <EditText
-                    android:id="@+id/danmaku_send_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:hint="发个友善的弹幕见证当下"
-                    android:maxLength="100"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textColor="@color/textwhite"
-                    android:textColorHint="#88ffffff" />
+            <Button
+                android:id="@+id/danmaku_send"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/background_card_borderless"
+                android:gravity="center"
+                android:text="发送" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/danmaku_send"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginHorizontal="6dp"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:text="发送" />
-
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
 
     </RelativeLayout>
 

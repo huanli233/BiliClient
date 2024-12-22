@@ -266,14 +266,14 @@ public class VideoInfoFragment extends Fragment {
                             tagsText.setMovementMethod(LinkMovementMethod.getInstance());
                             tagsText.setText(tags_spannable.toString());
                             tagsText.setOnClickListener(view1 -> {
+                                tags_expand = !tags_expand;
                                 if (tags_expand) {
-                                    tagsText.setMaxLines(1);
-                                    tagsText.setText(tags_spannable.toString());
-                                } else {
                                     tagsText.setMaxLines(233);
                                     tagsText.setText(tags_spannable);
+                                } else {
+                                    tagsText.setMaxLines(1);
+                                    tagsText.setText(tags_spannable.toString());
                                 }
-                                tags_expand = !tags_expand;
                             });
                         });
                     } catch (Exception e) {MsgUtil.err(e);}
@@ -323,6 +323,7 @@ public class VideoInfoFragment extends Fragment {
                         .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(cover);
+                cover.requestFocus();
                 cover.setOnClickListener(view1 -> {
                     if (SharedPreferencesUtil.getString("player", null) == null) {
                         SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cover_play_enable, true);

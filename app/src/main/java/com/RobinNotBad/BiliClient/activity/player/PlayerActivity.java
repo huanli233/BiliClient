@@ -114,13 +114,13 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     private RelativeLayout control_layout, top_control, videoArea, card_bg;
     private LinearLayout bottom_control, layout_speed, right_control, right_second, loading_info, bottom_buttons;
+    private LinearLayout card_subtitle, card_danmaku_send;
 
     private ImageView circle_loading;
     private ImageButton control_btn, danmaku_btn, loop_btn, rotate_btn, menu_btn, subtitle_btn, danmaku_send_btn;
     private SeekBar progressBar, speed_seekbar;
     private TextView text_progress, text_online, text_volume, loading_text0, loading_text1, text_speed, text_newspeed;
     public TextView text_title, text_subtitle;
-    private MaterialCardView card_subtitle, card_danmaku_send;
 
     private Timer progressTimer, autoHideTimer, volumeTimer, speedTimer, loadingTimer, onlineTimer;
     private String video_url, danmaku_url;
@@ -178,16 +178,19 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         super.attachBaseContext(BiliTerminal.getFitDisplayContext(newBase));
     }
 
-    private void getExtras() {
+    private boolean getExtras() {
         Intent intent = getIntent();
+        if(intent == null) return false;
 
         video_url = intent.getStringExtra("url");//视频链接
         danmaku_url = intent.getStringExtra("danmaku");//弹幕链接
         String title = intent.getStringExtra("title");//视频标题
-        if (danmaku_url != null) Log.e("弹幕", danmaku_url);
-        if (video_url != null) Log.e("视频", video_url);
-        if (title != null) Log.e("标题", title);
-        if (title != null) text_title.setText(title);
+
+        if(video_url == null) return false;
+        if(danmaku_url != null) Log.d("弹幕", danmaku_url);
+        Log.d("视频", video_url);
+        Log.d("标题", title);
+        text_title.setText(title);
 
         bvid = intent.getStringExtra("bvid");
         aid = intent.getLongExtra("aid", 0);
@@ -199,6 +202,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         isLiveMode = intent.getBooleanExtra("live_mode", false);
         isOnlineVideo = video_url.contains("http");
         hasDanmaku = !danmaku_url.equals("");
+        return true;
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -212,7 +216,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         setContentView(R.layout.activity_player);
         findview();
-        getExtras();
+        if(!getExtras()) {
+            finish();
+            return;
+        }
 
         WindowManager windowManager = this.getWindowManager();
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -347,13 +354,11 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             });
             if(isOnlineVideo) {
                 downdanmu();
-                if(!SharedPreferencesUtil.getBoolean("player_ui_notShowSubtitle", false)) downsubtitle(false);
+                if(!SharedPreferencesUtil.getBoolean("player_subtitle_autoshow", false)) downsubtitle(false);
             }
             else {
+                runOnUiThread(() -> subtitle_btn.setVisibility(View.GONE));
                 streamdanmaku(danmaku_url);
-                runOnUiThread(() -> {
-                    subtitle_btn.setVisibility(View.GONE);
-                });
             }
 
             if(!destroyed) setDisplay();
@@ -865,7 +870,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         //原作者居然把旋转按钮命名为danmaku_btn，也是没谁了...我改过来了  ----RobinNotBad
         //他大抵是觉得能用就行
 
-        if (SharedPreferencesUtil.getBoolean("player_ui_showLoopBtn", true) && !isLiveMode) {
+        if (!isLiveMode) {
             if (loop) loop_btn.setImageResource(R.mipmap.loopon);
             else loop_btn.setImageResource(R.mipmap.loopoff);
             loop_btn.setOnClickListener(view -> {
@@ -1067,7 +1072,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         try {
             SubtitleLink[] subtitleLinks = PlayerApi.getSubtitleLink(aid, cid);
 
-            if(subtitleLinks.length > 1 || (SharedPreferencesUtil.getBoolean("subtitle_ai_allowed", false) && subtitleLinks.length == 1 && subtitleLinks[0].isAI) || (subtitleLinks.length == 1 && !subtitleLinks[0].isAI)) {
+            if(subtitleLinks.length > 1 || (SharedPreferencesUtil.getBoolean("player_subtitle_ai_allowed", true) && subtitleLinks.length == 1 && subtitleLinks[0].isAI)) {
                 ArrayList<Bangumi.Episode> episodeList = new ArrayList<>();
                 for (int i = 0; i < subtitleLinks.length; i++) {
                     Bangumi.Episode episode = new Bangumi.Episode();
@@ -1105,7 +1110,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     eposideRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                     eposideRecyclerView.setAdapter(adapter);
                 });
-            } else if(msg) MsgUtil.showMsg("无字幕可供选择");
+            }
+            else if(msg) MsgUtil.showMsg("无字幕可供选择");
         }catch (Exception e){
             e.printStackTrace();
             MsgUtil.err(e);
@@ -1186,7 +1192,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
             @Override
             public void updateTimer(DanmakuTimer timer) {
-                timer.update(ijkPlayer.getCurrentPosition()); //实时同步弹幕和播放器时间
+                if(isPlaying) timer.update(ijkPlayer.getCurrentPosition()); //实时同步弹幕和播放器时间
             }
 
             @Override
@@ -1345,8 +1351,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private void playerPause() {
         isPlaying = false;
         if (ijkPlayer != null && isPrepared) ijkPlayer.pause();
-        // 事实上现在不需要手动暂停弹幕了（
-        // if (hasDanmaku) mDanmakuView.pause();
+        if (hasDanmaku) mDanmakuView.pause();
         if (control_btn != null) control_btn.setImageResource(R.drawable.btn_player_play);
     }
 
@@ -1354,9 +1359,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         isPlaying = true;
         if (ijkPlayer != null && isPrepared) {
             ijkPlayer.start();
-            // 事实上现在不需要手动暂停弹幕了（
-            //if (hasDanmaku)
-            //    mDanmakuView.start(ijkPlayer.getCurrentPosition());
+            if (hasDanmaku) mDanmakuView.start(ijkPlayer.getCurrentPosition());
         }
         if (control_btn != null) control_btn.setImageResource(R.drawable.btn_player_pause);
     }

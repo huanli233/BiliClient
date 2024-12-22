@@ -47,11 +47,13 @@ public class SettingPlayerInsideActivity extends RefreshListActivity {
 
             add(new SettingSection("divider", "", "", "", ""));
 
+            add(new SettingSection("switch", "自动弹出字幕选择", "player_subtitle_autoshow", getString(R.string.desc_subtitle_autoshow), "false"));
+            add(new SettingSection("switch", "允许仅AI字幕", "player_subtitle_ai_allowed", getString(R.string.desc_subtitle_ai_allowed), "true"));
+
+            add(new SettingSection("divider", "", "", "", ""));
+
             add(new SettingSection("switch", "显示旋转按钮", "player_ui_showRotateBtn", "", "true"));
             add(new SettingSection("switch", "显示弹幕按钮", "player_ui_showDanmakuBtn", "", "true"));
-            add(new SettingSection("switch", "显示循环按钮", "player_ui_showLoopBtn", "", "true"));
-
-            add(new SettingSection("switch", "不弹出字幕选择", "player_ui_notShowSubtitle", getString(R.string.desc_ui_notShowSubtitle), "false"));
         }};
 
         recyclerView.setHasFixedSize(true);

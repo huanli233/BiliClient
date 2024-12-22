@@ -61,7 +61,6 @@
     <string name="desc_fav_single">打开此选项，添加收藏后即退出收藏页面，取消收藏不自动退出。</string>
     <string name="desc_fav_notice">打开此选项，退出收藏页面会提示收藏成功。\n但其实在你框选了收藏夹的时候就已经收藏了，这个选项只是为了看上去放心（</string>
     <string name="desc_tags_enable">打开此选项，视频详情页会显示形如“原神UP主激励计划/原神/纳西妲/手机游戏”的视频标签</string>
-    <string name="desc_subtitle_ai_allowed">打开此选项，如果视频只有一个中文AI字幕，播放时仍然会让你选择。\n可能比较烦人，谨慎开启。</string>
     <string name="desc_new_rcmd_param_enable">打开此选项，会使用新版首页推荐API，基本与网页版完全一致，请自行测试体验后决定是否开启</string>
     <string name="desc_related_enable">打开此选项，视频详情页的评论区右侧会有相关视频推荐</string>
     <string name="desc_creative_enable">打开此选项，在“我的”页面会显示创作中心（可查看投稿视频的数据变化情况）</string>
@@ -70,25 +69,37 @@
     <string name="desc_img_no_load_onscroll">打开此选项，翻动列表时将不会加载图片，松手后再加载，观感可能有影响，可能增加流畅度。</string>
     <string name="desc_img_request_jpg">部分杂牌手表和安卓版本极低的设备不支持webp格式，可能导致大量图片无法显示。打开此选项，将会请求jpg格式的图片以解决此问题，可能会略微延长加载时间。</string>
     <string name="desc_link_enable">打开此选项，会识别部分文本中的链接/BV号/AV号/CV号并标记为链接，点击可打开。</string>
-    <string name="desc_async_inflate_enable">打开此选项，会对部分页面进行异步加载（显示一个加载中动画，加载完成后显示页面）\n* 请注意，异步加载的开启可能会触发一些崩溃问题，但关闭会导致一些页面在打开期间会阻塞UI无法操作，体验不佳。请自行判断！</string>
+    <string name="desc_async_inflate_enable">打开此选项，会对部分页面进行异步加载（显示一个加载中动画，加载完成后显示页面）\n* 请注意，异步加载的开启可能会触发一些崩溃问题，但关闭会导致一些页面在打开期间看上去像卡死了一样，体验不佳。请自行判断！</string>
     <string name="desc_load_transition">打开此选项，图片和部分页面加载完成时会有渐入/渐出动画。</string>
     <string name="desc_strict_url_match">打开此选项，会在识别链接时（不包含编号，如AV/BV/CV等）使用更严格的匹配规则以避免整段被识别为链接。</string>
-
-    <string name="update_tip">此版本的内置播放器支持了CC字幕与弹幕发送\n\n如果无法加载图片，请到“偏好设置”中开启“请求JPG格式图片”\n如果图片变扁请尝试前往偏好设置关闭“加载渐入渐出动画”\n\n视频播放出现问题（如不够清晰、黑屏）请尝试切换显示模式\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
+    <string name="tutorial_pager">提示\n\n←这个页面可以左右翻页喵→\n\n（共有NNN页，滑动一下不再显示）</string>
+    <string name="desc_fromlast">播放视频时如果有超过5秒的播放历史，将会自动从历史位置播放</string>
+    <string name="desc_showonline">播放器右下角会显示当前视频的实时观看人数，在直播中则为观看过的人数和进入直播间提醒\n如果观看视频中途崩溃可以尝试关闭此开关\n该功能为内置播放器专属</string>
+    <string name="desc_scale">播放视频时可使用像查看照片一样的手势来缩放和移动视频，双击屏幕将恢复原大小\n对于单点触控的设备，可以双击屏幕并在第二次按下时不抬手，然后上下拖动来缩放\n！若无法缩放，请切换下面的“显示方式”！\n特别感谢：凉腕播放器</string>
+    <string name="desc_doublemove">大屏幕设备上会更好用，手表上可能会造成操作不便</string>
+    <string name="desc_display">！如果视频播放异常/闪退/未响应/无法缩放，请尝试切换该选项！\n已知：KidoX3只能Surface，小天才只能Texture，部分设备需要使用Texture才能进行缩放</string>
+    <string name="desc_videocodec">硬件解码：使用GPU解码，速度快，性能消耗小\n软件解码：使用CPU硬算，兼容性好，暖手必备</string>
+    <string name="desc_audiocodec">通常使用AudioTrack即可，声音延迟或无法播放请尝试切换</string>
+    <string name="desc_danmaku_force_r2l">除了高级弹幕以外的弹幕都会被强制以滚动弹幕的形式展示，从而避免顶部弹幕和底部弹幕遮挡画面</string>
+    <string name="desc_danmaku_showsender">显示直播聊天弹幕的发送者名称</string>
+    <string name="desc_subtitle_autoshow">开启后，播放存在字幕的视频时，将会自动弹出字幕选择对话框。</string>
+    <string name="desc_subtitle_ai_allowed">打开此选项，如果视频只有一个中文AI字幕，播放时仍然会让你选择。\n可能比较烦人，谨慎开启。</string>
     <string name="desc_no_vip_color">开启此选项后，将不会在评论区为大会员用户显示专属的红色名称</string>
     <string name="desc_no_medal">开启此选项后，将不会在评论区显示用户的粉丝铭牌</string>
     <string name="desc_reply_marquee_name">开启此选项后，评论区的用户名称将会以跑马灯的形式展现，而不是换行</string>
     <string name="desc_live_by_guest">开启此选项后，进入直播间时将会使用游客身份\n\n注意：开启后的漏弹幕情况将会更加严重</string>
 
-    //新增功能放到上面，修复问题放下面，方便用户看见
+    <string name="update_tip">此版本的内置播放器支持了CC字幕与弹幕发送\n\n如果无法加载图片，请到“偏好设置”中开启“请求JPG格式图片”\n如果图片变扁请尝试前往偏好设置关闭“加载渐入渐出动画”\n\n视频播放出现问题（如不够清晰、黑屏）请尝试切换显示模式\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
+
+    #新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
         <item>支持了安卓4.0</item>
-        <item>支持了播放器的CC字幕（仅内置播放器）（可在播放器页面选择，默认不显示AI字幕，可自行启用）</item>
-        <item>支持了视频后台下载功能</item>
-        <item>支持了发送滚动弹幕（仅内置播放器）</item>
-        <item>支持了硬核会员（Lv6+）的显示</item>
-        <item>界面设置中新增了一键适配圆屏</item>
-        <item>新增了解决部分设备无法加载webp图片的对抗方案</item>
+        <item>新增了播放器的CC字幕（仅内置播放器，可在播放器页面右侧菜单选择）</item>
+        <item>新增了视频后台下载功能（若出现问题，可在设置中切换回旧版下载器）</item>
+        <item>新增了发送滚动弹幕（仅内置播放器）</item>
+        <item>新增了硬核会员（Lv6+）的显示</item>
+        <item>新增了一键适配圆屏的开关</item>
+        <item>新增了请求JPG格式的选项，解决部分设备无法加载webp图片的问题</item>
         <item>初步适配了表冠</item>
 
         <item>可能修复了弹幕不同步的问题</item>
@@ -109,9 +120,9 @@
         <item>更换了终端的API地址</item>
 
         <item>优化了播放器的电量显示</item>
+        <item>优化了播放器圆屏适配</item>
         <item>优化了番剧页等处的系统默认弹窗，不会亮瞎眼了</item>
         <item>优化了使用教程</item>
-        <item>优化了播放器圆屏适配</item>
         <item>优化了部分性能</item>
 
         <item>修改开发团队成员头衔</item>
@@ -171,15 +182,4 @@
         <item>article</item>
     </array>
 
-    <string name="tutorial_pager">提示\n\n←这个页面可以左右翻页喵→\n\n（共有NNN页，滑动一下不再显示）</string>
-    <string name="desc_fromlast">播放视频时如果有超过5秒的播放历史，将会自动从历史位置播放</string>
-    <string name="desc_showonline">播放器右下角会显示当前视频的实时观看人数，在直播中则为观看过的人数和进入直播间提醒\n如果观看视频中途崩溃可以尝试关闭此开关\n该功能为内置播放器专属</string>
-    <string name="desc_scale">播放视频时可使用像查看照片一样的手势来缩放和移动视频，双击屏幕将恢复原大小\n对于单点触控的设备，可以双击屏幕并在第二次按下时不抬手，然后上下拖动来缩放\n！若无法缩放，请切换下面的“显示方式”！\n特别感谢：凉腕播放器</string>
-    <string name="desc_doublemove">大屏幕设备上会更好用，手表上可能会造成操作不便</string>
-    <string name="desc_display">！如果视频播放异常/闪退/未响应/无法缩放，请尝试切换该选项！\n已知：KidoX3只能Surface，小天才只能Texture，部分设备需要使用Texture才能进行缩放</string>
-    <string name="desc_videocodec">硬件解码：使用GPU解码，速度快，性能消耗小\n软件解码：使用CPU硬算，兼容性好，暖手必备</string>
-    <string name="desc_audiocodec">通常使用AudioTrack即可，声音延迟或无法播放请尝试切换</string>
-    <string name="desc_danmaku_force_r2l">除了高级弹幕以外的弹幕都会被强制以滚动弹幕的形式展示，从而避免顶部弹幕和底部弹幕遮挡画面</string>
-    <string name="desc_danmaku_showsender">显示直播聊天弹幕的发送者名称</string>
-    <string name="desc_ui_notShowSubtitle">开启后，播放存在字幕的视频时，将不会默认弹出字幕选择对话框。</string>
 </resources>
