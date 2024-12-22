@@ -52,7 +52,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
         videoInfoResult.onSuccess(videoInfo -> {
             collection = videoInfo.collection;
         }).onFailure(e -> {
-            MsgUtil.showMsg("合集不存在");
+            MsgUtil.showMsg("合集不存在，可尝试重新点开");
             finish();
         });
         if (!videoInfoResult.isSuccess()) {

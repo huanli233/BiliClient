@@ -74,7 +74,7 @@
     <string name="desc_load_transition">打开此选项，图片和部分页面加载完成时会有渐入/渐出动画。</string>
     <string name="desc_strict_url_match">打开此选项，会在识别链接时（不包含编号，如AV/BV/CV等）使用更严格的匹配规则以避免整段被识别为链接。</string>
 
-    <string name="update_tip">如果图片变扁请尝试前往偏好设置关闭“加载渐入渐出动画”\n\n视频播放出现问题（如不够清晰、黑屏）请尝试切换显示模式\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
+    <string name="update_tip">此版本的内置播放器支持了CC字幕与弹幕发送\n\n如果无法加载图片，请到“偏好设置”中开启“请求JPG格式图片”\n如果图片变扁请尝试前往偏好设置关闭“加载渐入渐出动画”\n\n视频播放出现问题（如不够清晰、黑屏）请尝试切换显示模式\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
     <string name="desc_no_vip_color">开启此选项后，将不会在评论区为大会员用户显示专属的红色名称</string>
     <string name="desc_no_medal">开启此选项后，将不会在评论区显示用户的粉丝铭牌</string>
     <string name="desc_reply_marquee_name">开启此选项后，评论区的用户名称将会以跑马灯的形式展现，而不是换行</string>
@@ -103,8 +103,10 @@
         <item>修复了部分设备上播放器横屏状态下退出后，屏幕反复旋转随后崩溃的问题</item>
         <item>修复了播放器“在线人数”导致的一些问题</item>
         <item>修复了评论区的大会员ID颜色解析问题</item>
+        <item>修复了其他一些已知问题</item>
 
         <item>整理了设置页面</item>
+        <item>更换了终端的API地址</item>
 
         <item>优化了播放器的电量显示</item>
         <item>优化了番剧页等处的系统默认弹窗，不会亮瞎眼了</item>

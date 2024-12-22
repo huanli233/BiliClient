@@ -103,7 +103,7 @@ public class AppInfoApi {
     private static void checkUpdate(Context context, boolean need_toast, boolean debug_ver) throws Exception {
         try {
             boolean realIsDebug = ToolsUtil.isDebugBuild();
-            String url = "http://api.biliterminal.cn/terminal/version/get_last";
+            String url = "http://api.biliterminal.sineworld.cn/terminal/version/get_last";
             if (debug_ver) url += "?debug";
             JSONObject result = NetWorkUtil.getJson(url, customHeaders);
 
@@ -146,7 +146,7 @@ public class AppInfoApi {
     }
 
     public static String getDownloadUrl(int versionCode) throws Exception {
-        String url = "https://api.biliterminal.cn/terminal/version/get_download_url" + new NetWorkUtil.FormData().setUrlParam(true)
+        String url = "https://api.biliterminal.sineworld.cn/terminal/version/get_download_url" + new NetWorkUtil.FormData().setUrlParam(true)
                 .put("version_code", versionCode);
         JSONObject result = NetWorkUtil.getJson(url, customHeaders);
 
@@ -156,7 +156,7 @@ public class AppInfoApi {
     }
 
     public static void checkAnnouncement() throws Exception {
-        String url = "http://api.biliterminal.cn/terminal/announcement/get_list?from=" + SharedPreferencesUtil.getInt("app_announcement_last", -1);
+        String url = "http://api.biliterminal.sineworld.cn/terminal/announcement/get_list?from=" + SharedPreferencesUtil.getInt("app_announcement_last", -1);
         JSONObject result = NetWorkUtil.getJson(url, customHeaders);
 
         if (result.getInt("code") != 0) throw new Exception("错误：" + result.getString("msg"));
@@ -175,7 +175,7 @@ public class AppInfoApi {
     }
 
     public static ArrayList<Announcement> getAnnouncementList() throws Exception {
-        String url = "http://api.biliterminal.cn/terminal/announcement/get_list";
+        String url = "http://api.biliterminal.sineworld.cn/terminal/announcement/get_list";
         JSONObject result = NetWorkUtil.getJson(url, customHeaders);
 
         if (result.getInt("code") != 0) throw new Exception("错误：" + result.getString("msg"));
@@ -199,7 +199,7 @@ public class AppInfoApi {
     public static String uploadStack(String stack, Context context) {
         //上传崩溃堆栈
         try {
-            String url = "http://api.biliterminal.cn/terminal/upload/stack";
+            String url = "http://api.biliterminal.sineworld.cn/terminal/upload/stack";
 
             JSONObject post_data = new JSONObject();
             post_data.put("stack", stack);
@@ -218,7 +218,7 @@ public class AppInfoApi {
     }
 
     public static int getSponsors(ArrayList<UserInfo> list, int page) throws Exception {
-        String url = "http://api.biliterminal.cn/terminal/afdian/get_sponsor?page=" + page;
+        String url = "http://api.biliterminal.sineworld.cn/terminal/afdian/get_sponsor?page=" + page;
         JSONObject result = NetWorkUtil.getJson(url, customHeaders);
 
         if (result.getInt("code") != 200) throw new Exception("获取失败");
