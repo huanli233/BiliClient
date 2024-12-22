@@ -786,17 +786,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         changeVideoSize(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight());
 
         if(isLiveMode || hasDanmaku) mDanmakuView.start();
-        if(!isLiveMode && hasDanmaku) {
-            danmakuAdjustTimer = new Timer();
-            danmakuAdjustTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if(isPlaying) {
-                        mDanmakuView.start(mediaPlayer.getCurrentPosition());
-                    }
-                }
-            },30000,30000);
-        }
         if (SharedPreferencesUtil.getBoolean("player_ui_showDanmakuBtn", true)) {
             isDanmakuVisible = !SharedPreferencesUtil.getBoolean("pref_switch_danmaku",true);
             //这里设置值是反的，因为下面直接调用监听器点击按钮
@@ -1086,6 +1075,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
             @Override
             public void updateTimer(DanmakuTimer timer) {
+                timer.update(ijkPlayer.getCurrentPosition()); //实时同步弹幕和播放器时间
             }
 
             @Override
@@ -1150,12 +1140,13 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             if (autoHideTimer != null) autoHideTimer.cancel();
         } else {
             isPlaying = true;
+            // 因为弹幕实时同步，不需要自行设置弹幕时间了
             if (videonow >= videoall - 250) {     //别问为啥有个>=，问就是这TM都能有误差，视频停止时并不是播放到最后一帧,可以多或者少出来几十甚至上百个毫秒...  ----RobinNotBad
                 ijkPlayer.seekTo(0);
-                mDanmakuView.seekTo(0L);
+                // mDanmakuView.seekTo(0L);
                 mDanmakuView.resume();
                 Log.e("debug", "播完重播");
-            } else mDanmakuView.start(ijkPlayer.getCurrentPosition());
+            } // else mDanmakuView.start(ijkPlayer.getCurrentPosition());
             ijkPlayer.start();
             control_btn.setImageResource(R.drawable.btn_player_pause);
         }
@@ -1243,7 +1234,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private void playerPause() {
         isPlaying = false;
         if (ijkPlayer != null && isPrepared) ijkPlayer.pause();
-        if (hasDanmaku) mDanmakuView.pause();
+        // 事实上现在不需要手动暂停弹幕了（
+        // if (hasDanmaku) mDanmakuView.pause();
         if (control_btn != null) control_btn.setImageResource(R.drawable.btn_player_play);
     }
 
@@ -1251,8 +1243,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         isPlaying = true;
         if (ijkPlayer != null && isPrepared) {
             ijkPlayer.start();
-            if (hasDanmaku)
-                mDanmakuView.start(ijkPlayer.getCurrentPosition());
+            // 事实上现在不需要手动暂停弹幕了（
+            //if (hasDanmaku)
+            //    mDanmakuView.start(ijkPlayer.getCurrentPosition());
         }
         if (control_btn != null) control_btn.setImageResource(R.drawable.btn_player_pause);
     }
