@@ -36,15 +36,21 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
+import com.RobinNotBad.BiliClient.adapter.video.MediaEpisodeAdapter;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.event.SnackEvent;
+import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.model.Subtitle;
+import com.RobinNotBad.BiliClient.model.SubtitleLink;
 import com.RobinNotBad.BiliClient.ui.widget.BatteryView;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -56,6 +62,7 @@ import com.bumptech.glide.Glide;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -109,7 +116,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private LinearLayout bottom_control, speed_layout, right_control, loading_info, bottom_buttons;
 
     private ImageView circle_loading;
-    private ImageButton control_btn, danmaku_btn, loop_btn, rotate_btn;
+    private ImageButton control_btn, danmaku_btn, loop_btn, rotate_btn, menu_btn, subtitle_btn;
     private SeekBar progressBar, speed_seekbar;
     private TextView text_progress, text_online, text_volume, loading_text0, loading_text1, text_speed, text_newspeed;
     public TextView text_title, text_subtitle;
@@ -157,6 +164,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private String bvid;
 
     private boolean destroyed = false;
+
+    private boolean menu_open = false;
 
     @Override
     public void onBackPressed() {
@@ -332,16 +341,13 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             }
 
             runOnUiThread(() -> {
-                loading_text0.setText("获取字幕中");
-                loading_text1.setText("(≧∇≦)");
-            });
-            getSubtitle();
-
-            runOnUiThread(() -> {
                 loading_text0.setText("装填弹幕中");
                 loading_text1.setText("(≧∇≦)");
             });
-            if(isOnlineVideo) downdanmu();
+            if(isOnlineVideo) {
+                downdanmu();
+                if(!SharedPreferencesUtil.getBoolean("player_ui_notShowSubtitle", false)) downsubtitle(false);
+            }
             else streamdanmaku(danmaku_url);
 
             if(!destroyed) setDisplay();
@@ -363,6 +369,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         danmaku_btn = findViewById(R.id.danmaku_btn);
         loop_btn = findViewById(R.id.loop_btn);
         rotate_btn = findViewById(R.id.rotate_btn);
+        menu_btn = findViewById(R.id.menu_btn);
+        subtitle_btn = findViewById(R.id.subtitle_btn);
         control_btn = findViewById(R.id.button_video);
         progressBar = findViewById(R.id.videoprogress);
         loading_text0 = findViewById(R.id.loading_text0);
@@ -384,7 +392,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         top_control.setOnClickListener(view -> finish());
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        if (SharedPreferencesUtil.getBoolean("player_display", BiliTerminal.getSystemSdk() > 19)) {
+        if (SharedPreferencesUtil.getBoolean("player_display", BiliTerminal.getSystemSdk() < 19)) {
             textureView = new TextureView(this);
             textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
                 @Override
@@ -418,6 +426,11 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         sound_add.setOnClickListener(view -> changeVolume(true));
         sound_cut.setOnClickListener(view -> changeVolume(false));
 
+        menu_btn.setOnClickListener(view -> {
+            if(menu_open) findViewById(R.id.right_second).setVisibility(View.GONE);
+            else findViewById(R.id.right_second).setVisibility(View.VISIBLE);
+            menu_open = !menu_open;
+        });
     }
 
 
@@ -654,7 +667,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
 
         Log.e("debug", "准备设置显示");
-        if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT <= 19)) {            //Texture
+        if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT < 19)) {            //Texture
             Log.e("debug", "使用texture模式");
             Timer textureTimer = new Timer();
             textureTimer.schedule(new TimerTask() {
@@ -841,6 +854,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         mediaPlayer.start();
 
         control_btn.setOnClickListener(view -> controlVideo());
+        subtitle_btn.setOnClickListener(view -> CenterThreadPool.run(() -> downsubtitle(true)));
     }
 
     private void showLoadingSpeed() {
@@ -922,7 +936,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                                 //progressBar上有一个onProgressChange的监听器，文字更改在那里
                             }
                         });
-                        if(subtitles!=null) showSubtitle(curr_sec);
+                        if(subtitles != null) showSubtitle(curr_sec);
+                        else runOnUiThread(()->text_subtitle.setVisibility(View.GONE));
                     }
                 }
             }
@@ -959,8 +974,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         onlineTimer.schedule(task, 0, 5000);
     }
 
-    private void getSubtitle(){
-        String subtitle_url = getIntent().getStringExtra("subtitle");
+    private void getSubtitle(String subtitle_url){
         if (subtitle_url == null || subtitle_url.isEmpty()) return;
         try {
             subtitles = PlayerApi.getSubtitle(subtitle_url);
@@ -999,6 +1013,58 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             text_subtitle.setVisibility(View.VISIBLE);
         });
         else runOnUiThread(()->text_subtitle.setVisibility(View.GONE));
+    }
+
+    private int select_subtitle_id = -1;
+    private void downsubtitle(boolean msg){
+        try {
+            SubtitleLink[] subtitleLinks = PlayerApi.getSubtitleLink(aid, cid);
+
+            if(subtitleLinks.length > 1 || (SharedPreferencesUtil.getBoolean("subtitle_ai_allowed", false) && subtitleLinks.length == 1 && subtitleLinks[0].isAI) || (subtitleLinks.length == 1 && !subtitleLinks[0].isAI)) {
+                ArrayList<Bangumi.Episode> episodeList = new ArrayList<>();
+                for (int i = 0; i < subtitleLinks.length; i++) {
+                    Bangumi.Episode episode = new Bangumi.Episode();
+                    episode.id = i;
+                    episode.title = subtitleLinks[i].lang;
+
+                    episodeList.add(episode);
+
+                    if(i == subtitleLinks.length - 1){
+                        Bangumi.Episode episode2 = new Bangumi.Episode();
+                        episode2.id = -1;
+                        episode2.title = "不显示字幕";
+                        episodeList.add(episode2);
+                    }
+                }
+                if(select_subtitle_id == -1) select_subtitle_id = subtitleLinks.length;
+
+                runOnUiThread(()->{
+                    findViewById(R.id.subtitle_card_bg).setVisibility(View.VISIBLE);
+                    findViewById(R.id.subtitle_card_bg).setOnClickListener(view -> findViewById(R.id.subtitle_card_bg).setVisibility(View.GONE));
+                    RecyclerView eposideRecyclerView = findViewById(R.id.subtitle_list);
+                    MediaEpisodeAdapter adapter = new MediaEpisodeAdapter();
+                    adapter.setData(episodeList);
+                    adapter.setSelectedItemIndex(select_subtitle_id);
+                    adapter.setOnItemClickListener(index -> {
+                        findViewById(R.id.subtitle_card_bg).setVisibility(View.GONE);
+                        select_subtitle_id = index;
+                        if(episodeList.get(index).id == -1) {
+                            subtitles = null;
+                            text_subtitle.setVisibility(View.GONE);
+                        }
+                        else{
+                            CenterThreadPool.run(() -> getSubtitle(subtitleLinks[(int) episodeList.get(index).id].url));
+                            text_subtitle.setVisibility(View.VISIBLE);
+                        }
+                    });
+                    eposideRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                    eposideRecyclerView.setAdapter(adapter);
+                });
+            } else if(msg) MsgUtil.showMsg("无字幕可供选择");
+        }catch (Exception e){
+            e.printStackTrace();
+            MsgUtil.err(e);
+        }
     }
 
     private void downdanmu() {

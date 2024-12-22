@@ -85,17 +85,16 @@ public class MediaEpisodeAdapter extends RecyclerView.Adapter<MediaEpisodeAdapte
             if (isSelected) {
                 button.setTextColor(0xcc262626);
                 ViewCompat.setBackgroundTintList(button, AppCompatResources.getColorStateList(itemView.getContext(), R.color.background_button_selected));
-                button.setOnClickListener(null);
             } else {
                 button.setTextColor(0xffebe0e2);
                 ViewCompat.setBackgroundTintList(button, AppCompatResources.getColorStateList(itemView.getContext(), R.color.background_button));
-                button.setOnClickListener(v -> {
-                    setSelectedItemIndex(currentIndex);
-                    if (listener != null) {
-                        listener.onItemClick(currentIndex);
-                    }
-                });
             }
+            button.setOnClickListener(v -> {
+                setSelectedItemIndex(currentIndex);
+                if (listener != null) {
+                    listener.onItemClick(currentIndex);
+                }
+            });
         }
     }
 }

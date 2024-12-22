@@ -164,4 +164,5 @@
     <string name="desc_audiocodec">通常使用AudioTrack即可，声音延迟或无法播放请尝试切换</string>
     <string name="desc_danmaku_force_r2l">除了高级弹幕以外的弹幕都会被强制以滚动弹幕的形式展示，从而避免顶部弹幕和底部弹幕遮挡画面</string>
     <string name="desc_danmaku_showsender">显示直播聊天弹幕的发送者名称</string>
+    <string name="desc_ui_notShowSubtitle">开启后，播放存在字幕的视频时，将不会默认弹出字幕选择对话框。</string>
 </resources>

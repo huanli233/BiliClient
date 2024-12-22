@@ -50,6 +50,8 @@ public class SettingPlayerInsideActivity extends RefreshListActivity {
             add(new SettingSection("switch", "显示旋转按钮", "player_ui_showRotateBtn", "", "true"));
             add(new SettingSection("switch", "显示弹幕按钮", "player_ui_showDanmakuBtn", "", "true"));
             add(new SettingSection("switch", "显示循环按钮", "player_ui_showLoopBtn", "", "true"));
+
+            add(new SettingSection("switch", "不弹出字幕选择", "player_ui_notShowSubtitle", getString(R.string.desc_ui_notShowSubtitle), "false"));
         }};
 
         recyclerView.setHasFixedSize(true);

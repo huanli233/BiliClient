@@ -84,29 +84,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                         jump();
                         return;
                     }
-                    SubtitleLink[] subtitleLinks = PlayerApi.getSubtitleLink(aid, cid);
-
-                    if(subtitleLinks.length==0 || (!SharedPreferencesUtil.getBoolean("subtitle_ai_allowed", false) && subtitleLinks.length==1 && subtitleLinks[0].isAI)) {
-                        jump();
-                    }
-
-                    else {
-                        String[] choices = new String[subtitleLinks.length+1];
-                        int i = 0;
-                        for (; i < subtitleLinks.length; i++) {
-                            choices[i] = subtitleLinks[i].lang;
-                        }
-                        choices[i] = "不显示字幕";
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle("请选择字幕");
-                        builder.setCancelable(false);
-                        builder.setSingleChoiceItems(choices, 0, (dialog, which) -> {
-                            if(which < subtitleLinks.length) subtitleurl = subtitleLinks[which].url;
-                            jump();
-                            dialog.dismiss();
-                        });
-                        runOnUiThread(()->builder.create().show());
-                    }
+                    jump();
                 } catch (Exception e){
                     MsgUtil.showMsg("没有获取到字幕");
                     jump();
