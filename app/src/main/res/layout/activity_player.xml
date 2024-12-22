@@ -210,6 +210,15 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/icon_subtitle" />
 
+                <ImageButton
+                    android:id="@+id/danmaku_send_btn"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:adjustViewBounds="true"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/send" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -390,15 +399,18 @@
         android:visibility="gone" />
 
     <RelativeLayout
-        android:id="@+id/subtitle_card_bg"
+        android:id="@+id/card_bg"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#70000000">
+
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/subtitle_card"
             app:cardBackgroundColor="#E6262626"
             app:strokeColor="#57FFFFFF"
             app:strokeWidth="2dp"
+            android:visibility="gone"
             android:layout_marginHorizontal="6dp"
             android:layout_centerInParent="true"
             android:layout_width="match_parent"
@@ -435,6 +447,55 @@
                     tools:listitem="@layout/cell_episode" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/danmaku_send_card"
+            app:cardBackgroundColor="#E6262626"
+            app:strokeColor="#57FFFFFF"
+            app:strokeWidth="2dp"
+            android:visibility="gone"
+            android:layout_marginHorizontal="6dp"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="4dp"
+                    android:paddingHorizontal="3dp"
+                    android:text="发送弹幕"
+                    android:textSize="14sp"/>
+
+                <EditText
+                    android:id="@+id/danmaku_send_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:textColorHint="#88ffffff"
+                    android:hint="发个友善的弹幕见证当下"
+                    android:maxLength="100"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/textwhite" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/danmaku_send"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:layout_marginHorizontal="6dp"
+                    android:text="发送" />
+
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
     </RelativeLayout>

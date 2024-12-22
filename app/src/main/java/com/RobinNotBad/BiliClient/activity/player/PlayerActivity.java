@@ -28,6 +28,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,6 +45,7 @@ import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.video.MediaEpisodeAdapter;
+import com.RobinNotBad.BiliClient.api.DanmakuApi;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
@@ -116,7 +118,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private LinearLayout bottom_control, speed_layout, right_control, loading_info, bottom_buttons;
 
     private ImageView circle_loading;
-    private ImageButton control_btn, danmaku_btn, loop_btn, rotate_btn, menu_btn, subtitle_btn;
+    private ImageButton control_btn, danmaku_btn, loop_btn, rotate_btn, menu_btn, subtitle_btn, danmaku_send_btn;
     private SeekBar progressBar, speed_seekbar;
     private TextView text_progress, text_online, text_volume, loading_text0, loading_text1, text_speed, text_newspeed;
     public TextView text_title, text_subtitle;
@@ -375,6 +377,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         loop_btn = findViewById(R.id.loop_btn);
         rotate_btn = findViewById(R.id.rotate_btn);
         menu_btn = findViewById(R.id.menu_btn);
+        danmaku_send_btn = findViewById(R.id.danmaku_send_btn);
         subtitle_btn = findViewById(R.id.subtitle_btn);
         control_btn = findViewById(R.id.button_video);
         progressBar = findViewById(R.id.videoprogress);
@@ -435,6 +438,41 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             if(menu_open) findViewById(R.id.right_second).setVisibility(View.GONE);
             else findViewById(R.id.right_second).setVisibility(View.VISIBLE);
             menu_open = !menu_open;
+        });
+
+        findViewById(R.id.card_bg).setOnClickListener(view -> {
+            findViewById(R.id.card_bg).setVisibility(View.GONE);
+            findViewById(R.id.subtitle_card).setVisibility(View.GONE);
+            findViewById(R.id.danmaku_send_card).setVisibility(View.GONE);
+        });
+        danmaku_send_btn.setOnClickListener(view -> {
+            findViewById(R.id.card_bg).setVisibility(View.VISIBLE);
+            findViewById(R.id.danmaku_send_card).setVisibility(View.VISIBLE);
+        });
+        findViewById(R.id.danmaku_send).setOnClickListener(view1 -> {
+            EditText editText = findViewById(R.id.danmaku_send_edit);
+            if(editText.getText().toString().isEmpty()){
+                MsgUtil.showMsg("不能发送空弹幕");
+            } else {
+                CenterThreadPool.run(() -> {
+                    try {
+                        int result;
+                        if(aid != 0) result = DanmakuApi.sendVideoDanmakuByAid(cid, editText.getText().toString(), aid, videonow, ToolsUtil.getRgb888(Color.WHITE), 1);
+                        else result = DanmakuApi.sendVideoDanmakuByBvid(cid, editText.getText().toString(), bvid, videonow, ToolsUtil.getRgb888(Color.WHITE), 1);
+
+                        if(result == 0){
+                            runOnUiThread(() -> {
+                                adddanmaku(editText.getText().toString(), Color.WHITE);
+                                findViewById(R.id.card_bg).setVisibility(View.GONE);
+                                findViewById(R.id.danmaku_send_card).setVisibility(View.GONE);
+                            });
+                        } else MsgUtil.showMsg("发送失败：" + result);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        MsgUtil.err(e);
+                    }
+                });
+            }
         });
     }
 
@@ -1044,14 +1082,15 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 if(select_subtitle_id == -1) select_subtitle_id = subtitleLinks.length;
 
                 runOnUiThread(()->{
-                    findViewById(R.id.subtitle_card_bg).setVisibility(View.VISIBLE);
-                    findViewById(R.id.subtitle_card_bg).setOnClickListener(view -> findViewById(R.id.subtitle_card_bg).setVisibility(View.GONE));
+                    findViewById(R.id.card_bg).setVisibility(View.VISIBLE);
+                    findViewById(R.id.subtitle_card).setVisibility(View.VISIBLE);
                     RecyclerView eposideRecyclerView = findViewById(R.id.subtitle_list);
                     MediaEpisodeAdapter adapter = new MediaEpisodeAdapter();
                     adapter.setData(episodeList);
                     adapter.setSelectedItemIndex(select_subtitle_id);
                     adapter.setOnItemClickListener(index -> {
-                        findViewById(R.id.subtitle_card_bg).setVisibility(View.GONE);
+                        findViewById(R.id.card_bg).setVisibility(View.GONE);
+                        findViewById(R.id.subtitle_card).setVisibility(View.GONE);
                         select_subtitle_id = index;
                         if(episodeList.get(index).id == -1) {
                             subtitles = null;

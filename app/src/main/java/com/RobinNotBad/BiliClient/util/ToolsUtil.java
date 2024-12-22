@@ -24,6 +24,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -378,5 +379,14 @@ public class ToolsUtil {
         paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, context.getResources().getDisplayMetrics()));
         Paint.FontMetrics fontMetrics = paint.getFontMetrics();
         return fontMetrics.descent - fontMetrics.ascent;
+    }
+
+    public static int getRgb888(int color){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append((color >> 16) & 0xff);
+        stringBuilder.append((color >> 8) & 0xff);
+        stringBuilder.append((color) & 0xff);
+        Log.e("颜色", stringBuilder.toString());
+        return Integer.parseInt(stringBuilder.toString());
     }
 }
