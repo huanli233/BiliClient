@@ -33,7 +33,9 @@ public class UserInfo implements Parcelable, Serializable {
 
     public LiveRoom live_room = null;
 
-    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc) {
+    public int is_senior_member = 0;
+
+    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, int is_senior_member) {
         this.mid = mid;
         this.name = name;
         this.avatar = avatar;
@@ -45,9 +47,10 @@ public class UserInfo implements Parcelable, Serializable {
         this.notice = notice;
         this.official = official;
         this.officialDesc = officialDesc;
+        this.is_senior_member = is_senior_member;
     }
 
-    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, String sys_notice, LiveRoom live_room) {
+    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, String sys_notice, LiveRoom live_room, int is_senior_member) {
         this.mid = mid;
         this.name = name;
         this.avatar = avatar;
@@ -61,9 +64,10 @@ public class UserInfo implements Parcelable, Serializable {
         this.officialDesc = officialDesc;
         this.sys_notice = sys_notice;
         this.live_room = live_room;
+        this.is_senior_member = is_senior_member;
     }
 
-    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, long current_exp, long next_exp) {
+    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, long current_exp, long next_exp, int is_senior_member) {
         this.mid = mid;
         this.name = name;
         this.avatar = avatar;
@@ -77,9 +81,10 @@ public class UserInfo implements Parcelable, Serializable {
         this.officialDesc = officialDesc;
         this.current_exp = current_exp;
         this.next_exp = next_exp;
+        this.is_senior_member = is_senior_member;
     }
 
-    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, int vip_role, String sys_notice, LiveRoom live_room) {
+    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, int vip_role, String sys_notice, LiveRoom live_room, int is_senior_member) {
         this.mid = mid;
         this.name = name;
         this.avatar = avatar;
@@ -94,9 +99,10 @@ public class UserInfo implements Parcelable, Serializable {
         this.vip_role = vip_role;
         this.sys_notice = sys_notice;
         this.live_room = live_room;
+        this.is_senior_member = is_senior_member;
     }
 
-    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, long mtime) {
+    public UserInfo(long mid, String name, String avatar, String sign, int fans, int following, int level, boolean followed, String notice, int official, String officialDesc, long mtime, int is_senior_member) {
         this.mid = mid;
         this.name = name;
         this.avatar = avatar;
@@ -109,6 +115,7 @@ public class UserInfo implements Parcelable, Serializable {
         this.official = official;
         this.officialDesc = officialDesc;
         this.mtime = mtime;
+        this.is_senior_member = is_senior_member;
     }
 
     public UserInfo() {
@@ -135,6 +142,7 @@ public class UserInfo implements Parcelable, Serializable {
         medal_level = in.readInt();
         sys_notice = in.readString();
         live_room = in.readParcelable(LiveRoom.class.getClassLoader());
+        is_senior_member = in.readInt();
     }
 
     @Override
@@ -159,6 +167,7 @@ public class UserInfo implements Parcelable, Serializable {
         dest.writeInt(medal_level);
         dest.writeString(sys_notice);
         dest.writeParcelable(live_room, flags);
+        dest.writeInt(is_senior_member);
     }
 
     @Override

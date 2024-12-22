@@ -73,11 +73,11 @@ public class UserInfoApi {
 
             JSONObject vip = card.getJSONObject("vip");
             if (vip.getInt("status") == 1) {
-                UserInfo result = new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, vip.getInt("role"), sys_notice, liveroom);
+                UserInfo result = new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, vip.getInt("role"), sys_notice, liveroom, card.getInt("is_senior_member"));
                 result.vip_nickname_color = vip.optString("nickname_color", "");
                 return result;
             } else
-                return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, sys_notice, liveroom);
+                return new UserInfo(mid, name, avatar, sign, fans, attention, level, followed, notice, official, officialDesc, sys_notice, liveroom, card.getInt("is_senior_member"));
         } else return null;
     }
 
@@ -111,8 +111,8 @@ public class UserInfoApi {
             long current_exp = level_exp.getLong("current_exp");
             long next_exp = level_exp.getLong("next_exp");
 
-            return new UserInfo(mid, name, avatar, sign, fans, 0, level, false, "", official, officialDesc, current_exp, next_exp);
-        } else return new UserInfo(0, "加载失败", "", "", 0, 0, 0, false, "", 0, "");
+            return new UserInfo(mid, name, avatar, sign, fans, 0, level, false, "", official, officialDesc, current_exp, next_exp, data.getInt("is_senior_member"));
+        } else return new UserInfo(0, "加载失败", "", "", 0, 0, 0, false, "", 0, "", 0);
     }
 
     public static int getCurrentUserCoin() {

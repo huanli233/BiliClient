@@ -363,9 +363,12 @@ public class ToolsUtil {
             drawable = ResourcesCompat.getDrawable(context.getResources(), levelBadges[userInfo.level], context.getTheme());
         else drawable = ResourcesCompat.getDrawable(context.getResources(), levelBadges[0], context.getTheme());
 
+        if(userInfo.is_senior_member == 1) drawable = ResourcesCompat.getDrawable(context.getResources(), levelBadges[7], context.getTheme());
+
         float lineHeight = ToolsUtil.getTextHeightWithSize(context, 11);
         float lineWidth = lineHeight * 1.56f;
         assert drawable != null;
+        if(userInfo.is_senior_member == 1) lineWidth = lineHeight * 1.96f;
         drawable.setBounds(0, 0, (int) lineWidth, (int) lineHeight);
         return new ImageSpan(drawable);
     }

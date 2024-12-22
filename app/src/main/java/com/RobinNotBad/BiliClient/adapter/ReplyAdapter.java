@@ -186,6 +186,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
             int last_length = name_str.length();
             name_str.append(" ").append(String.valueOf(sender.level));
+            if(sender.is_senior_member == 1) name_str.append("+");
             name_str.setSpan(ToolsUtil.getLevelBadge(context, sender), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
             //等级

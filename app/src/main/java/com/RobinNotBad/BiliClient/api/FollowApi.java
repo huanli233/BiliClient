@@ -30,7 +30,7 @@ public class FollowApi {
                 long uid = userInfo.getLong("mid");
                 String avatar = userInfo.getString("face");
                 String sign = userInfo.getString("sign");
-                userList.add(new UserInfo(uid, name, avatar, sign, 0, 0, 0, true, "", 0, "", userInfo.optLong("mtime", 0)));
+                userList.add(new UserInfo(uid, name, avatar, sign, 0, 0, 0, true, "", 0, "", userInfo.optLong("mtime", 0), 0));
             }
             return 0;
         }
@@ -51,7 +51,7 @@ public class FollowApi {
                 long uid = userInfo.getLong("mid");
                 String avatar = userInfo.getString("face");
                 String sign = userInfo.getString("sign");
-                userList.add(new UserInfo(uid, name, avatar, sign, 0, 0, 0, true, "", 0, "", userInfo.optLong("mtime", 0)));
+                userList.add(new UserInfo(uid, name, avatar, sign, 0, 0, 0, true, "", 0, "", userInfo.optLong("mtime", 0), 0));
             }
             return 0;
         }

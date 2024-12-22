@@ -149,6 +149,7 @@ public class ReplyApi {
         userInfo.mid = mid;
         userInfo.name = uname;
         userInfo.avatar = avatar;
+        userInfo.is_senior_member = member.getInt("is_senior_member");
         JSONObject vip = member.getJSONObject("vip");
         userInfo.vip_role = vip.getInt("vipStatus");
         userInfo.vip_nickname_color = vip.getString("nickname_color");

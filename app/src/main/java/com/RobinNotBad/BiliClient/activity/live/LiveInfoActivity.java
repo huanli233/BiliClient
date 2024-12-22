@@ -89,7 +89,7 @@ public class LiveInfoActivity extends BaseActivity {
 
                 ArrayList<UserInfo> upList = new ArrayList<>();
                 if (userInfo != null) {
-                    UserInfo displayUserInfo = new UserInfo(userInfo.mid, userInfo.name, userInfo.avatar, "主播", 0, 0, 6, false, "", 0, "");
+                    UserInfo displayUserInfo = new UserInfo(userInfo.mid, userInfo.name, userInfo.avatar, "主播", 0, 0, 6, false, "", 0, "", 0);
 //                            displayUserInfo.vip_nickname_color = userInfo.vip_nickname_color;
                     upList.add(displayUserInfo);
                 }

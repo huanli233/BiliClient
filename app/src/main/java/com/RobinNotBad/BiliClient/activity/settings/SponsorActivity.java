@@ -26,7 +26,7 @@ public class SponsorActivity extends RefreshListActivity {
         userList = new ArrayList<>();
         userList.add(new UserInfo(-1, getString(R.string.donate_title), "",
                 getString(R.string.donate_desc),
-                -1, -1, 6, true, "", 0, ""));
+                -1, -1, 6, true, "", 0, "", 0));
 
         CenterThreadPool.run(() -> {
             try {
