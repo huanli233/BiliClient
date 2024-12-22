@@ -47,6 +47,7 @@ public class SettingMenuActivity extends BaseActivity {
     private void save() {
         SharedPreferencesUtil.putBoolean("menu_popular", menu_popular.isChecked());
         SharedPreferencesUtil.putBoolean("menu_precious", menu_precious.isChecked());
+        SharedPreferencesUtil.putBoolean("menu_live", menu_live.isChecked());
     }
 
     @Override

@@ -351,7 +351,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             else {
                 streamdanmaku(danmaku_url);
                 runOnUiThread(() -> {
-                    findViewById(R.id.subtitle_card_bg).setVisibility(View.GONE);
                     subtitle_btn.setVisibility(View.GONE);
                 });
             }
