@@ -357,7 +357,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 if(!SharedPreferencesUtil.getBoolean("player_subtitle_autoshow", false)) downsubtitle(false);
             }
             else {
-                runOnUiThread(() -> subtitle_btn.setVisibility(View.GONE));
+                runOnUiThread(() -> {
+                    subtitle_btn.setVisibility(View.GONE);
+                    danmaku_send_btn.setVisibility(View.GONE);
+                });
                 streamdanmaku(danmaku_url);
             }
 
