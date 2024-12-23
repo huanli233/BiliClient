@@ -50,43 +50,42 @@ public class MultiPageActivity extends BaseActivity {
         }
         videoInfoResult.onSuccess((videoInfo) -> {
             this.videoInfo = videoInfo;
+            PageChooseAdapter adapter = new PageChooseAdapter(this, videoInfo.pagenames);
+
+            if (intent.getIntExtra("download", 0) == 1) {    //下载模式
+                adapter.setOnItemClickListener(position -> {
+                    File rootPath = new File(FileUtil.getDownloadPath(), FileUtil.stringToFile(videoInfo.title));
+                    File downPath = new File(rootPath, FileUtil.stringToFile(videoInfo.pagenames.get(position)));
+                    if (downPath.exists()) {
+                        File file_sign = new File(downPath,".DOWNLOADING");
+                        MsgUtil.showMsg(file_sign.exists() ? "已在下载队列" : "已下载完成");
+                    }
+                    else {
+                        startActivity(
+                                new Intent()
+                                        .putExtra("page", position)
+                                        .setClass(this, QualityChooserActivity.class)
+                                        .putExtra("aid", videoInfo.aid)
+                                        .putExtra("bvid", videoInfo.bvid)
+                        );
+                    }
+                });
+            } else {        //普通播放模式
+                int progress = intent.getIntExtra("progress", -1);
+                long progress_cid = intent.getLongExtra("progress_cid", 0);
+                adapter.setOnItemClickListener(position -> {
+                    long cid = videoInfo.cids.get(position);
+                    PlayerApi.startGettingUrl(this, videoInfo, position, (progress_cid == cid && !play_clicked) ? progress : -1);
+                    play_clicked = true;
+                });
+            }
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapter);
         }).onFailure((e) -> {
             Log.wtf(TAG, e);
             MsgUtil.showMsg("找不到当前视频信息QAQ");
         });
-
-        PageChooseAdapter adapter = new PageChooseAdapter(this, videoInfo.pagenames);
-
-        if (intent.getIntExtra("download", 0) == 1) {    //下载模式
-            adapter.setOnItemClickListener(position -> {
-                File rootPath = new File(FileUtil.getDownloadPath(), FileUtil.stringToFile(videoInfo.title));
-                File downPath = new File(rootPath, FileUtil.stringToFile(videoInfo.pagenames.get(position)));
-                if (downPath.exists()) {
-                    File file_sign = new File(downPath,".DOWNLOADING");
-                    MsgUtil.showMsg(file_sign.exists() ? "已在下载队列" : "已下载完成");
-                }
-                else {
-                    startActivity(
-                            new Intent()
-                                    .putExtra("page", position)
-                                    .setClass(this, QualityChooserActivity.class)
-                                    .putExtra("aid", videoInfo.aid)
-                                    .putExtra("bvid", videoInfo.bvid)
-                    );
-                }
-            });
-        } else {        //普通播放模式
-            int progress = intent.getIntExtra("progress", -1);
-            long progress_cid = intent.getLongExtra("progress_cid", 0);
-            adapter.setOnItemClickListener(position -> {
-                long cid = videoInfo.cids.get(position);
-                PlayerApi.startGettingUrl(this, videoInfo, position, (progress_cid == cid && !play_clicked) ? progress : -1);
-                play_clicked = true;
-            });
-        }
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
     }
 
 }
