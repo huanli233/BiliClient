@@ -198,7 +198,7 @@ public class PlayerApi {
         }
     }
 
-    public static SubtitleLink[] getSubtitleLink(long aid, long cid) throws JSONException, IOException {
+    public static SubtitleLink[] getSubtitleLinks(long aid, long cid) throws JSONException, IOException {
         String url = "https://api.bilibili.com/x/player/wbi/v2?aid=" + aid
                 + "&cid=" + cid;
         url = ConfInfoApi.signWBI(url);
@@ -207,7 +207,7 @@ public class PlayerApi {
         JSONArray subtitles = data.getJSONObject("subtitle").getJSONArray("subtitles");
         Log.d("debug-subtitle",subtitles.toString());
 
-        SubtitleLink[] links = new SubtitleLink[subtitles.length()];
+        SubtitleLink[] links = new SubtitleLink[subtitles.length() + 1];
         for (int i = 0; i < subtitles.length(); i++) {
             JSONObject subtitle = subtitles.getJSONObject(i);
 
@@ -219,6 +219,7 @@ public class PlayerApi {
             SubtitleLink link = new SubtitleLink(id,lang,subtitle_url,isAI);
             links[i] = link;
         }
+        links[subtitles.length()] = new SubtitleLink(-1,"不显示字幕","null",false);
         return links;
     }
 

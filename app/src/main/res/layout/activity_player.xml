@@ -418,14 +418,14 @@
             android:layout_marginHorizontal="6dp"
             android:background="@drawable/background_card"
             android:orientation="vertical"
+            android:paddingHorizontal="4dp"
+            android:paddingVertical="4dp"
             android:visibility="gone">
 
             <TextView
                 android:id="@+id/subtitle_card_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="4dp"
-                android:layout_marginTop="4dp"
                 android:paddingHorizontal="3dp"
                 android:text="选择字幕"
                 android:textSize="14sp" />
@@ -434,10 +434,10 @@
                 android:id="@+id/subtitle_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="4dp"
+                android:layout_marginVertical="3dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/cell_episode" />
+                tools:listitem="@layout/cell_subtitle" />
 
         </LinearLayout>
 

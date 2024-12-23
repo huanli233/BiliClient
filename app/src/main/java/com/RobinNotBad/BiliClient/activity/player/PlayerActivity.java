@@ -42,13 +42,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.adapter.video.MediaEpisodeAdapter;
 import com.RobinNotBad.BiliClient.api.DanmakuApi;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.event.SnackEvent;
-import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.model.Subtitle;
 import com.RobinNotBad.BiliClient.model.SubtitleLink;
 import com.RobinNotBad.BiliClient.ui.widget.BatteryView;
@@ -58,7 +56,6 @@ import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
-import com.google.android.material.card.MaterialCardView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -106,6 +103,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private SurfaceTexture mSurfaceTexture;
     private boolean firstSurfaceHolder = true;
 
+    private SubtitleLink[] subtitleLinks = null;
     private Subtitle[] subtitles = null;
     private int subtitle_curr_index, subtitle_count;
 
@@ -162,7 +160,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private String progress_all_str;
 
     private long aid, cid, mid;
-    private String bvid;
 
     private boolean destroyed = false;
 
@@ -192,7 +189,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         Log.d("标题", title);
         text_title.setText(title);
 
-        bvid = intent.getStringExtra("bvid");
         aid = intent.getLongExtra("aid", 0);
         cid = intent.getLongExtra("cid", 0);
         mid = intent.getLongExtra("mid", 0);
@@ -1035,6 +1031,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             subtitles = PlayerApi.getSubtitle(subtitle_url);
             subtitle_count = subtitles.length;
             subtitle_curr_index = 0;
+            runOnUiThread(()-> subtitle_btn.setImageResource(R.mipmap.subtitle_on));
         } catch (Exception e){
             MsgUtil.err(e);
         }
@@ -1070,47 +1067,36 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         else runOnUiThread(()->text_subtitle.setVisibility(View.GONE));
     }
 
-    private int select_subtitle_id = -1;
+    private int subtitle_selected = -1;
     private void downsubtitle(boolean msg){
+        runOnUiThread(()->{
+            card_bg.setVisibility(View.VISIBLE);
+            card_subtitle.setVisibility(View.VISIBLE);
+        });
         try {
-            SubtitleLink[] subtitleLinks = PlayerApi.getSubtitleLink(aid, cid);
+            if(subtitleLinks == null) subtitleLinks = PlayerApi.getSubtitleLinks(aid, cid);
 
-            if(subtitleLinks.length > 1 || (SharedPreferencesUtil.getBoolean("player_subtitle_ai_allowed", true) && subtitleLinks.length == 1 && subtitleLinks[0].isAI)) {
-                ArrayList<Bangumi.Episode> episodeList = new ArrayList<>();
-                for (int i = 0; i < subtitleLinks.length; i++) {
-                    Bangumi.Episode episode = new Bangumi.Episode();
-                    episode.id = i;
-                    episode.title = subtitleLinks[i].lang;
-
-                    episodeList.add(episode);
-
-                    if(i == subtitleLinks.length - 1){
-                        Bangumi.Episode episode2 = new Bangumi.Episode();
-                        episode2.id = -1;
-                        episode2.title = "不显示字幕";
-                        episodeList.add(episode2);
-                    }
-                }
-                if(select_subtitle_id == -1) select_subtitle_id = subtitleLinks.length;
+            if(subtitleLinks.length > 2 || (SharedPreferencesUtil.getBoolean("player_subtitle_ai_allowed", true) && subtitleLinks.length == 2 && subtitleLinks[0].isAI)) {
+                if(subtitle_selected == -1) subtitle_selected = subtitleLinks.length;
 
                 runOnUiThread(()->{
-                    card_bg.setVisibility(View.VISIBLE);
-                    card_subtitle.setVisibility(View.VISIBLE);
                     RecyclerView eposideRecyclerView = findViewById(R.id.subtitle_list);
-                    MediaEpisodeAdapter adapter = new MediaEpisodeAdapter();
-                    adapter.setData(episodeList);
-                    adapter.setSelectedItemIndex(select_subtitle_id);
+                    SubtitleAdapter adapter = new SubtitleAdapter();
+                    adapter.setData(subtitleLinks);
+                    adapter.setSelectedItemIndex(subtitle_selected);
                     adapter.setOnItemClickListener(index -> {
                         card_bg.setVisibility(View.GONE);
                         card_subtitle.setVisibility(View.GONE);
-                        select_subtitle_id = index;
+                        subtitle_selected = index;
                         
-                        if(episodeList.get(index).id == -1) 
+                        if(subtitleLinks[index].id == -1) {
                             subtitles = null;
-                        else 
-                            CenterThreadPool.run(() -> getSubtitle(subtitleLinks[(int) episodeList.get(index).id].url));
+                            subtitle_btn.setImageResource(R.mipmap.subtitle_off);
+                        }
+                        else CenterThreadPool.run(() -> getSubtitle(subtitleLinks[index].url));
                     });
                     eposideRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                    eposideRecyclerView.setHasFixedSize(true);
                     eposideRecyclerView.setAdapter(adapter);
                 });
             }
