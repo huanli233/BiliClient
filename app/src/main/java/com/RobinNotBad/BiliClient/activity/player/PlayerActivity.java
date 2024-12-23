@@ -354,7 +354,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             });
             if(isOnlineVideo) {
                 downdanmu();
-                if(!SharedPreferencesUtil.getBoolean("player_subtitle_autoshow", false)) downsubtitle(false);
+                if(SharedPreferencesUtil.getBoolean("player_subtitle_autoshow", false)) downsubtitle(false);
             }
             else {
                 runOnUiThread(() -> {
