@@ -57,33 +57,24 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
 
     @Override
     public void onBindViewHolder(@NonNull DownloadHolder holder, int position) {
-        boolean isDownloading = DownloadService.downloadingSection!=null;
+        if(position==0) {
+            holder.show(DownloadService.downloadingSection, context);    //第一项为正在下载的项（不存在就gone掉）
+            holder.showProgress(DownloadService.state, DownloadService.percent);
+        }
+        else {
+            holder.show(downloadList.get(position - 1), context);    //后续项为待下载的项
+            holder.showProgress(null,-1);
+        }
 
-        if(isDownloading){
-            if(position==0){
-                holder.show(DownloadService.downloadingSection,context);    //如果正在下载，那么第一项为正在下载的项
-                holder.progress.setVisibility(View.VISIBLE);
-                holder.showProgress(DownloadService.percent);
-            }
-            else {
-                holder.progress.setVisibility(View.GONE);
-                holder.show(downloadList.get(position-1),context);    //后续项为待下载的项
-            }
-        }
-        else{
-            holder.progress.setVisibility(View.GONE);
-            holder.show(downloadList.get(position),context);    //如果不是正在下载，那么所有项都是待下载项
-        }
         //holder.showLocalVideo(downloadList.get(position), context);
 
         holder.itemView.setOnClickListener(view -> {
-            if(clickListener!=null) clickListener.onItemClick(isDownloading ? position-1 : position);
-            //在activity端，position==-1即为正在下载的项
+            if(clickListener!=null) clickListener.onItemClick(position - 1);
         });
 
         holder.itemView.setOnLongClickListener(view -> {
             if (longClickListener != null) {
-                longClickListener.onItemLongClick(isDownloading ? position-1 : position);
+                longClickListener.onItemLongClick(position - 1);
                 return true;
             } else return false;
         });
@@ -91,12 +82,8 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
 
     @Override
     public int getItemCount() {
-        if(DownloadService.downloadingSection!=null){
-            if(downloadList == null) return 1;
-            else return downloadList.size()+1;
-        }
-        else if(downloadList==null) return 0;
-        else return downloadList.size();
+        if(downloadList==null) return 1;
+        else return downloadList.size() + 1;
     }
 
 
@@ -115,6 +102,12 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
         }
 
         public void show(DownloadSection section, Context context) {
+            if(section == null) {
+                title.setText("没有下载中的项");
+                extra.setText("点击下面继续下载喵？");
+                cover.setImageResource(R.mipmap.placeholder);
+                return;
+            }
             title.setText(section.name_short);
             switch (section.state){
                 case "error":
@@ -138,14 +131,15 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
         }
 
         @SuppressLint({"SetTextI18n"})
-        public void showProgress(float percent){
-            if(percent==-1) {
+        public void showProgress(String state, float percent){
+            if(state == null || percent==-1) {
                 progress.setVisibility(View.GONE);
+                extra.setText("未知状态");
                 return;
             }
             progress.setVisibility(View.VISIBLE);
             extra.setVisibility(View.VISIBLE);
-            extra.setText("下载中：" + String.format(Locale.CHINA,"%.2f", percent*100));
+            extra.setText(state + "：" + String.format(Locale.CHINA,"%.2f", percent*100));
             int width = (int) (itemView.getMeasuredWidth() * percent);
             ViewGroup.LayoutParams layoutParams = progress.getLayoutParams();
             layoutParams.width = width;

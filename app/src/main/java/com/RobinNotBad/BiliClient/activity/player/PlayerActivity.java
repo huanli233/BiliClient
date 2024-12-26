@@ -340,6 +340,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         Handler handler = new Handler();
         handler.postDelayed(() -> CenterThreadPool.run(() -> {    //等界面加载完成
             if(isLiveMode) {
+                runOnUiThread(()->{
+                    danmaku_send_btn.setVisibility(View.GONE);
+                    loop_btn.setVisibility(View.GONE);
+                });
                 setDisplay();
                 return;
             }
@@ -877,7 +881,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 loop = !loop;
             });
             loop_btn.setVisibility(View.VISIBLE);
-        } else loop_btn.setVisibility(View.GONE);
+        }
 
 
         progressBar.setMax(videoall);
@@ -1069,14 +1073,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     private int subtitle_selected = -1;
     private void downsubtitle(boolean msg){
-        runOnUiThread(()->{
-            card_bg.setVisibility(View.VISIBLE);
-            card_subtitle.setVisibility(View.VISIBLE);
-        });
         try {
             if(subtitleLinks == null) subtitleLinks = PlayerApi.getSubtitleLinks(aid, cid);
 
-            if(subtitleLinks.length > 2 || (SharedPreferencesUtil.getBoolean("player_subtitle_ai_allowed", true) && subtitleLinks.length == 2 && subtitleLinks[0].isAI)) {
+            if(subtitleLinks.length > 2 || (!msg && SharedPreferencesUtil.getBoolean("player_subtitle_ai_allowed", true) && subtitleLinks.length == 2 && subtitleLinks[0].isAI)) {
                 if(subtitle_selected == -1) subtitle_selected = subtitleLinks.length;
 
                 runOnUiThread(()->{
@@ -1098,6 +1098,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     eposideRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                     eposideRecyclerView.setHasFixedSize(true);
                     eposideRecyclerView.setAdapter(adapter);
+                    card_bg.setVisibility(View.VISIBLE);
+                    card_subtitle.setVisibility(View.VISIBLE);
                 });
             }
             else if(msg) MsgUtil.showMsg("无字幕可供选择");

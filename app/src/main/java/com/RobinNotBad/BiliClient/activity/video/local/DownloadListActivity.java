@@ -88,10 +88,13 @@ public class DownloadListActivity extends RefreshListActivity {
                 adapter = new DownloadAdapter(DownloadListActivity.this,sections);
                 adapter.setOnClickListener(position -> CenterThreadPool.run(()->{
                     Log.d("debug-download","click:"+position);
-                    if(DownloadService.downloadingSection!=null) {
-                        if (position == -1) {
+                    if (position == -1) {
+                        if(DownloadService.started) {
                             stopService(new Intent(this, DownloadService.class));
                             MsgUtil.showMsg("已结束下载服务");
+                        }
+                        else{
+                            startService(new Intent(this, DownloadService.class));
                         }
                     }
                     else{
@@ -120,11 +123,13 @@ public class DownloadListActivity extends RefreshListActivity {
                 adapter.setOnLongClickListener(position -> CenterThreadPool.run(()->{
                     try {
                         DownloadSection delete;
-                        if(position == -1 && DownloadService.downloadingSection != null){
+                        if(position == -1){
                             delete = DownloadService.downloadingSection;
                             stopService(new Intent(this, DownloadService.class));
                         }
                         else delete = sections.get(position);
+
+                        if(delete == null) return;
 
                         FileUtil.deleteFolder(delete.getPath());
                         DownloadService.deleteSection(delete.id);

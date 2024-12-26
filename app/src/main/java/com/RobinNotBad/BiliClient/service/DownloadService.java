@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.IBinder;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
@@ -48,14 +47,15 @@ import okio.Okio;
 import okio.Sink;
 
 public class DownloadService extends Service {
-    public static float percent;
+    public static float percent = -1;
+    public static String state;
     public static boolean started;
     public static DownloadSection downloadingSection;
     public static short count_finish;
     private static long firstDown;
 
     NotificationCompat.Builder builder;
-    NotificationManager manager;
+    NotificationManager notifyManager;
 
     private Timer toastTimer;
     private final TimerTask timerTask = new TimerTask() {
@@ -64,10 +64,12 @@ public class DownloadService extends Service {
             if(downloadingSection == null) return;
             if(!started) this.cancel();
 
-            builder.setContentText(downloadingSection.title + "\n下载进度："+ String.format(Locale.CHINA,"%.2f",percent * 100) + "%");
-            manager.notify(1, builder.build());
+            String percentStr = String.format(Locale.CHINA,"%.2f",percent * 100);
 
-            MsgUtil.showMsg("下载进度："+ String.format(Locale.CHINA,"%.2f",percent * 100) + "%\n" + downloadingSection.name_short);
+            builder.setContentText(downloadingSection.title + "\n" + state + "："+ percentStr + "%");
+            notifyManager.notify(1, builder.build());
+
+            MsgUtil.showMsg(state + "："+ percentStr + "%\n" + downloadingSection.name_short);
         }
     };
 
@@ -77,14 +79,14 @@ public class DownloadService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) manager = getSystemService(NotificationManager.class);
-        else manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) notifyManager = getSystemService(NotificationManager.class);
+        else notifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel("download_service", "下载服务", NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription("后台下载视频时的常驻通知");
 
-            manager.createNotificationChannel(channel);
+            notifyManager.createNotificationChannel(channel);
         }
 
         Intent intent = new Intent(this, DownloadListActivity.class);
@@ -117,7 +119,7 @@ public class DownloadService extends Service {
         toastTimer = new Timer();
         toastTimer.schedule(timerTask,5000,5000);
 
-        manager.notify(1, builder.build());
+        notifyManager.notify(1, builder.build());
 
         if(serviceIntent!=null) firstDown = serviceIntent.getLongExtra("first",-1);
 
@@ -136,7 +138,7 @@ public class DownloadService extends Service {
                         setState(downloadingSection.id,"error");
 
                         builder.setContentText("下载链接获取失败");
-                        manager.notify(1, builder.build());
+                        notifyManager.notify(1, builder.build());
 
                         continue;
                     }
@@ -150,7 +152,7 @@ public class DownloadService extends Service {
                         MsgUtil.showMsg("开始下载：\n" + downloadingSection.name_short);
 
                         builder.setContentText("准备下载：\n" + downloadingSection.title);
-                        manager.notify(1, builder.build());
+                        notifyManager.notify(1, builder.build());
 
                         File file_sign = null;
                         switch (downloadingSection.type) {
@@ -160,16 +162,19 @@ public class DownloadService extends Service {
                                 file_sign = new File(path_single,".DOWNLOADING");
                                 if(!file_sign.exists())file_sign.createNewFile();
 
+                                state = "下载弹幕";
                                 String url_dm_single = downloadingSection.url_dm;
                                 downdanmu(url_dm_single, new File(path_single, "danmaku.xml"));
 
+                                state = "下载封面";
                                 String url_cover_single = downloadingSection.url_cover;
                                 download(url_cover_single, new File(path_single, "cover.png"));
 
+                                state = "下载视频";
                                 download(url, new File(path_single, "video.mp4"));
 
                                 builder.setContentText("下载完成：\n" + downloadingSection.title);
-                                manager.notify(2, builder.setOngoing(false).build());
+                                notifyManager.notify(2, builder.setOngoing(false).build());
 
                                 MsgUtil.showMsg("下载成功：\n" + downloadingSection.name_short);
                                 break;
@@ -182,17 +187,20 @@ public class DownloadService extends Service {
                                 file_sign = new File(path_page,".DOWNLOADING");
                                 if(!file_sign.exists())file_sign.createNewFile();
 
+                                state = "下载封面";
                                 String url_cover_multi = downloadingSection.url_cover;
                                 File cover_multi = new File(path_parent, "cover.png");
                                 if (!cover_multi.exists()) download(url_cover_multi, cover_multi);
 
+                                state = "下载弹幕";
                                 String url_dm_page = downloadingSection.url_dm;
                                 downdanmu(url_dm_page, new File(path_page, "danmaku.xml"));
 
+                                state = "下载视频";
                                 download(url, new File(path_page, "video.mp4"));
 
                                 builder.setContentText("下载完成：\n" + downloadingSection.title);
-                                manager.notify(2, builder.setOngoing(false).build());
+                                notifyManager.notify(2, builder.setOngoing(false).build());
 
                                 MsgUtil.showMsg("下载成功：\n" + downloadingSection.name_short);
                                 count_finish++;
@@ -212,12 +220,12 @@ public class DownloadService extends Service {
                         setState(downloadingSection.id,"error");
 
                         builder.setContentText("下载失败：" + e.getMessage());
-                        manager.notify(2, builder.setOngoing(false).build());
+                        notifyManager.notify(2, builder.setOngoing(false).build());
                     }
 
                 } catch (IOException e) {
                     builder.setContentText("下载失败，网络错误\n请手动前往下载列表页重启下载");
-                    manager.notify(2, builder.setOngoing(false).build());
+                    notifyManager.notify(2, builder.setOngoing(false).build());
 
                     MsgUtil.showMsg("下载失败，网络错误\n请手动前往下载列表页重启下载");
                     failed = true;
@@ -232,7 +240,7 @@ public class DownloadService extends Service {
             if(count_finish != 0) MsgUtil.showMsg("全部下载完成");
 
             builder.setContentText("全部下载已完成");
-            manager.notify(2, builder.setOngoing(false).build());
+            notifyManager.notify(2, builder.setOngoing(false).build());
 
             stopSelf();
         });
@@ -318,10 +326,11 @@ public class DownloadService extends Service {
         }
         started = false;
         if(toastTimer!=null) toastTimer.cancel();
-        percent = 0;
+        percent = -1;
         count_finish = 0;
+        state = null;
 
-        manager.cancel(1);
+        notifyManager.cancel(1);
 
         super.onDestroy();
     }

@@ -51,38 +51,36 @@ public class CollectionInfoActivity extends RefreshListActivity {
         }
         videoInfoResult.onSuccess(videoInfo -> {
             collection = videoInfo.collection;
-        }).onFailure(e -> {
-            MsgUtil.showMsg("合集不存在，可尝试重新点开");
-            finish();
-        });
-        if (!videoInfoResult.isSuccess()) {
-            return;
-        }
 
-        RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
-        if (collection.sections == null && collection.cards != null) {
-            adapter = new CardAdapter(this, collection, recyclerView);
-        } else if (collection.sections != null) {
-            adapter = new SectionAdapter(this, collection, recyclerView);
-            List<Collection.Section> sections = collection.sections;
-            int pos = 1;
-            for (Collection.Section section : sections) {
-                pos++;
-                List<Collection.Episode> episodes = section.episodes;
-                for (Collection.Episode episode : episodes) {
+            RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
+            if (collection.sections == null && collection.cards != null) {
+                adapter = new CardAdapter(this, collection, recyclerView);
+            } else if (collection.sections != null) {
+                adapter = new SectionAdapter(this, collection, recyclerView);
+                List<Collection.Section> sections = collection.sections;
+                int pos = 1;
+                for (Collection.Section section : sections) {
                     pos++;
-                    if (episode.aid == from_aid) {
-                        Objects.requireNonNull(recyclerView.getLayoutManager()).scrollToPosition(--pos);
+                    List<Collection.Episode> episodes = section.episodes;
+                    for (Collection.Episode episode : episodes) {
+                        pos++;
+                        if (episode.aid == from_aid) {
+                            Objects.requireNonNull(recyclerView.getLayoutManager()).scrollToPosition(--pos);
+                        }
                     }
                 }
+            } else {
+                finish();
+                return;
             }
-        } else {
-            finish();
-            return;
-        }
 
-        setAdapter(adapter);
-        setRefreshing(false);
+            setAdapter(adapter);
+            setRefreshing(false);
+        }).onFailure(e -> {
+            MsgUtil.showMsg("合集不存在？");
+            finish();
+        });
+
     }
 
     static class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
