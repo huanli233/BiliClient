@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.activity.video;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,7 +15,6 @@ import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.Result;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
 
 import java.io.File;
@@ -44,11 +42,7 @@ public class MultiPageActivity extends BaseActivity {
         Intent intent = getIntent();
         long aid = intent.getLongExtra("aid", 0);
         String bvid = intent.getStringExtra("bvid");
-        Result<VideoInfo> videoInfoResult = TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).getValue();
-        if (videoInfoResult == null) {
-            videoInfoResult = Result.failure(new TerminalContext.IllegalTerminalStateException("videoInfoResult is null"));
-        }
-        videoInfoResult.onSuccess((videoInfo) -> {
+        TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid,bvid).observe(this, result -> result.onSuccess((videoInfo -> {
             this.videoInfo = videoInfo;
             PageChooseAdapter adapter = new PageChooseAdapter(this, videoInfo.pagenames);
 
@@ -82,10 +76,8 @@ public class MultiPageActivity extends BaseActivity {
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(adapter);
-        }).onFailure((e) -> {
-            Log.wtf(TAG, e);
-            MsgUtil.showMsg("找不到当前视频信息QAQ");
-        });
+        })));
+
     }
 
 }

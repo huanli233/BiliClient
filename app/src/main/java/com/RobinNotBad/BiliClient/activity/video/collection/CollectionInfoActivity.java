@@ -45,16 +45,13 @@ public class CollectionInfoActivity extends RefreshListActivity {
         int season_id = getIntent().getIntExtra("season_id", -1);
         long mid = getIntent().getLongExtra("mid", -1);
         setPageName("合集详情");
-        Result<VideoInfo> videoInfoResult = TerminalContext.getInstance().getVideoInfoByAidOrBvId(from_aid, null).getValue();
-        if (videoInfoResult == null) {
-            videoInfoResult = Result.failure(new TerminalContext.IllegalTerminalStateException("collectionResult is null"));
-        }
-        videoInfoResult.onSuccess(videoInfo -> {
+
+        TerminalContext.getInstance().getVideoInfoByAidOrBvId(from_aid,null).observe(this, result -> result.onSuccess((videoInfo -> {
             collection = videoInfo.collection;
 
             RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
             if (collection.sections == null && collection.cards != null) {
-                adapter = new CardAdapter(this, collection, recyclerView);
+                adapter = new CardAdapter(this, collection);
             } else if (collection.sections != null) {
                 adapter = new SectionAdapter(this, collection, recyclerView);
                 List<Collection.Section> sections = collection.sections;
@@ -76,11 +73,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
 
             setAdapter(adapter);
             setRefreshing(false);
-        }).onFailure(e -> {
-            MsgUtil.showMsg("合集不存在？");
-            finish();
-        });
-
+        })));
     }
 
     static class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -89,7 +82,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
         final Context context;
         final List<VideoCard> data;
 
-        public CardAdapter(Context context, Collection collection, RecyclerView recyclerView) {
+        public CardAdapter(Context context, Collection collection) {
             this.context = context;
             this.data = collection.cards;
             this.collection = collection;

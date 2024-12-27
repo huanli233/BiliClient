@@ -15,7 +15,6 @@ import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.TerminalContext;
 
 import java.util.ArrayList;
 import java.util.List;

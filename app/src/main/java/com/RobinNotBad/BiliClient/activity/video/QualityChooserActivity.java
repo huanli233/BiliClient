@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.video;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -12,12 +11,10 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.QualityChooseAdapter;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
-import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-
-import com.RobinNotBad.BiliClient.util.Result;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,7 +26,6 @@ public class QualityChooserActivity extends BaseActivity {
     private static final String TAG = "QualityChooserActivity";
 
     List<Integer> qns = new LinkedList<>();
-    private VideoInfo videoInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,12 +42,8 @@ public class QualityChooserActivity extends BaseActivity {
 
         long aid = getIntent().getLongExtra("aid", 0);
         String bvid = getIntent().getStringExtra("bvid");
-        Result<VideoInfo> videoInfoResult = TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).getValue();
-        if (videoInfoResult == null) {
-            videoInfoResult = Result.failure(new TerminalContext.IllegalTerminalStateException("video object is null"));
-        }
-        videoInfoResult.onSuccess((videoInfo) -> {
-            this.videoInfo = videoInfo;
+
+        TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid,bvid).observe(this,result -> result.onSuccess((videoInfo -> {
 
             QualityChooseAdapter adapter = new QualityChooseAdapter(this);
             int page = getIntent().getIntExtra("page", 0);
@@ -83,10 +75,7 @@ public class QualityChooserActivity extends BaseActivity {
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(adapter);
-        }).onFailure((e) -> {
-            Log.wtf(TAG, e);
-            MsgUtil.showMsg("找不到视频信息QAQ");
-        });
+        })));
 
     }
 }

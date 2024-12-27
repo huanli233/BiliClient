@@ -7,7 +7,7 @@ public class Result<T> {
     private final Object realResult;
     private boolean isSuccess = false;
     private Result (T val) {
-        realResult = new Success<T>(val);
+        realResult = new Success<>(val);
         isSuccess = true;
     }
 
