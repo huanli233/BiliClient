@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.settings.login;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -152,6 +153,7 @@ public class QRLoginFragment extends Fragment {
     public void startLoginDetect() {
         timer = new Timer();
         timer.schedule(new TimerTask() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void run() {
                 try {
@@ -226,7 +228,7 @@ public class QRLoginFragment extends Fragment {
                 } catch (Exception e) {
                     if (isAdded()) requireActivity().runOnUiThread(() -> {
                         qrImageView.setEnabled(true);
-                        scanStat.setText("无法获取二维码信息，点击上方重试");
+                        scanStat.setText("无法获取二维码信息，点击上方重试\n" + e.getMessage());
                         MsgUtil.err(e);
                     });
                     this.cancel();

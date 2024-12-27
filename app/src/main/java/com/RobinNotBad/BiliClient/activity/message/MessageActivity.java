@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
@@ -39,6 +40,9 @@ public class MessageActivity extends InstanceActivity {
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_message, null, (layoutView, id, parent) -> {
             setContentView(layoutView);
             setMenuClick();
+            SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+            swipeRefreshLayout.setEnabled(false);
+            swipeRefreshLayout.setRefreshing(true);
 
             MaterialCardView reply = findViewById(R.id.reply);
             reply.setOnClickListener(view -> {
@@ -90,6 +94,7 @@ public class MessageActivity extends InstanceActivity {
                     HashMap<Long, UserInfo> userMap = PrivateMsgApi.getUsersInfo(uidList);
                     PrivateMsgSessionsAdapter adapter = new PrivateMsgSessionsAdapter(this, sessionsList, userMap);
                     runOnUiThread(() -> {
+                        swipeRefreshLayout.setRefreshing(false);
                         try {
                             ((TextView) findViewById(R.id.reply_text)).setText("回复我的" + ((stats.getInt("reply") > 0) ? ("(" + stats.getInt("reply") + "未读)") : ""));
                             ((TextView) findViewById(R.id.like_text)).setText("收到的赞" + ((stats.getInt("like") > 0) ? ("(" + stats.getInt("like") + "未读)") : ""));
