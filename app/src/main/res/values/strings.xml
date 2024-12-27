@@ -99,7 +99,7 @@
         <item>新增了发送滚动弹幕（仅内置播放器）</item>
         <item>新增了硬核会员（Lv6+）的显示</item>
         <item>新增了一键适配圆屏的开关</item>
-        <item>新增了请求JPG格式的选项，解决部分设备无法加载webp图片的问题</item>
+        <item>新增了请求JPG格式的选项，可解决部分设备无法加载webp图片的问题</item>
         <item>初步适配了表冠</item>
 
         <item>可能修复了弹幕不同步的问题</item>
@@ -116,16 +116,17 @@
         <item>修复了评论区的大会员ID颜色解析问题</item>
         <item>修复了其他一些已知问题</item>
 
-        <item>整理了设置页面</item>
-        <item>更换了终端的API地址</item>
-
         <item>优化了播放器的电量显示</item>
         <item>优化了播放器圆屏适配</item>
         <item>优化了番剧页等处的系统默认弹窗，不会亮瞎眼了</item>
         <item>优化了使用教程</item>
         <item>优化了部分性能</item>
 
+        <item>整理了设置页面</item>
+        <item>更换了终端的API地址</item>
+
         <item>修改开发团队成员头衔</item>
+        <item>新增了一些bug和屎山代码</item>
 
     </string-array>
 
