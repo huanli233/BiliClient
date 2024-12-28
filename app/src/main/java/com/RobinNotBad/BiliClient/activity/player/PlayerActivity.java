@@ -1041,7 +1041,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private void showSubtitle(float curr_sec) {
         Subtitle subtitle_curr = subtitles[subtitle_curr_index];
 
-        int subtitle_prev_index = subtitle_curr_index;
         boolean need_adjust = true;
         boolean need_show = true;
 
@@ -1049,8 +1048,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             if (curr_sec < subtitle_curr.from) {  //进度在当前字幕的起始位置之前
                 //如果不是第一条字幕，且进度在上一条字幕的结束位置之前，那么字幕前移一位
                 //否则字幕不显示且退出校准（当前进度在两条字幕之间）
-                if (subtitle_curr_index != 0 && curr_sec < subtitles[subtitle_curr_index - 1].to)
+                if (subtitle_curr_index != 0 && curr_sec < subtitles[subtitle_curr_index - 1].to) {
                     subtitle_curr_index--;
+                }
                 else {
                     need_adjust = false;
                     need_show = false;
@@ -1059,8 +1059,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             else if (curr_sec > subtitle_curr.to) {  //在当前字幕的结束位置之后
                 //如果不是最后一条字幕，且进度在下一条字幕的开始位置之后，那么字幕后移一位
                 //否则字幕不显示且退出校准（当前进度在两条字幕之间）
-                if (subtitle_curr_index+1 < subtitle_count && curr_sec > subtitles[subtitle_curr_index + 1].from)
+                if (subtitle_curr_index+1 < subtitle_count && curr_sec > subtitles[subtitle_curr_index + 1].from) {
                     subtitle_curr_index++;
+                }
                 else {
                     need_adjust = false;
                     need_show = false;
@@ -1068,8 +1069,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             }
             else need_adjust = false;  //在当前字幕的时间段内，则退出校准
         }
-
-        if(subtitle_prev_index == subtitle_curr_index) return;  //如果没有变动就不更新字幕，防止刷新ui
 
         if(need_show) runOnUiThread(()->{
             text_subtitle.setText(subtitles[subtitle_curr_index].content);
