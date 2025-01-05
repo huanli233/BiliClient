@@ -1,14 +1,12 @@
 package com.RobinNotBad.BiliClient.api;
 
-import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Pair;
+
+import androidx.core.content.FileProvider;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
@@ -26,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -157,10 +156,10 @@ public class PlayerApi {
                 intent.putExtra("name", title);
                 intent.putExtra("danmaku", danmakuurl);
                 intent.putExtra("live_mode", live_mode);
-                if (local) {
-                    intent.setData(getVideoUri(context, videourl));
-                } else {
-                    intent.setData(Uri.parse(videourl));
+
+                intent.setData(Uri.parse(videourl));
+
+                if (!local) {
                     Map<String, String> headers = new HashMap<>();
                     headers.put("Cookie", SharedPreferencesUtil.getString("cookies", ""));
                     headers.put("Referer", "https://www.bilibili.com/");
@@ -168,7 +167,6 @@ public class PlayerApi {
                     intent.putExtra("agent", NetWorkUtil.USER_AGENT_WEB);
                     intent.putExtra("progress", progress * 1000L);
                 }
-                Log.e("uri", intent.getData().toString());
                 intent.setAction(Intent.ACTION_VIEW);
 
                 break;
@@ -181,6 +179,11 @@ public class PlayerApi {
     }
 
     public static Uri getVideoUri(Context context, String path) {
+        File file = new File(path);
+        return FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
+
+        //因为在文件夹里放了.nomedia标识，现在不能用这个了
+        /*
         Cursor cursor = context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Video.Media._ID},
                 MediaStore.Video.Media.DATA + "=? ",
@@ -196,6 +199,7 @@ public class PlayerApi {
             values.put(MediaStore.Video.Media.DATA, path);
             return context.getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
         }
+         */
     }
 
     public static SubtitleLink[] getSubtitleLinks(long aid, long cid) throws JSONException, IOException {

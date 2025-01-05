@@ -29,7 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BiliClient"
         android:usesCleartextTraffic="true"
-        tools:ignore="LockedOrientationActivity"
+        tools:ignore="LockedOrientationActivity,RtlEnabled"
         tools:targetApi="m">
         <service
             android:name=".service.DownloadService"
@@ -37,7 +37,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.RobinNotBad.BiliClient.FileProvider"
+            android:authorities="com.RobinNotBad.BiliClient.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
