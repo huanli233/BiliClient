@@ -26,6 +26,7 @@ import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.LinkedList;
 import java.util.Locale;
@@ -549,4 +550,13 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
         return mOnDanmakuClickListener;
     }
 
+    @Override
+    public ViewGroup.LayoutParams getLayoutParams() {
+        return super.getLayoutParams();
+    }
+
+    @Override
+    public void setLayoutParams(ViewGroup.LayoutParams params) {
+        super.setLayoutParams(params);
+    }
 }

@@ -237,12 +237,16 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             text_online.setPadding(0,0,padding*3,0);
             text_progress.setPadding(padding*3,0,0,0);
 
-            layout_top.setPadding(padding*5, padding*2, padding*5, 0);
+            layout_top.setPadding((int) (padding*5.5f), padding*2, (int) (padding*5.5f), 0);
             text_title.setGravity(Gravity.CENTER);
 
             bottom_buttons.setPadding(padding, 0, padding, padding);
 
             right_control.setPadding(0, 0, padding, 0);
+
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mDanmakuView.getLayoutParams();
+            params.setMargins(0,padding * 3,0,padding * 3);
+            mDanmakuView.setLayoutParams(params);
 
             findViewById(R.id.cl_1).setVisibility(View.GONE);
         }

@@ -2,6 +2,7 @@
 package master.flame.danmaku.controller;
 
 import android.view.View;
+import android.view.ViewGroup;
 
 import master.flame.danmaku.controller.DrawHandler.Callback;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
@@ -134,4 +135,6 @@ public interface IDanmakuView {
     public void setOnDanmakuClickListener(OnDanmakuClickListener listener);
     public OnDanmakuClickListener getOnDanmakuClickListener();
 
+    public ViewGroup.LayoutParams getLayoutParams();
+    public void setLayoutParams(ViewGroup.LayoutParams params);
 }
