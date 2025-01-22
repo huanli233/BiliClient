@@ -270,7 +270,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="#0000"
-                        android:src="@drawable/icon_favourite_0" />
+                        android:src="@drawable/icon_fav_0" />
 
                     <TextView
                         android:id="@+id/fav_label"

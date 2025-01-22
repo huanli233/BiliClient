@@ -198,12 +198,12 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                     try {
                         if (articleInfo.stats.favoured) {
                             if (ArticleApi.delFavorite(articleInfo.id) == 0) {
-                                context.runOnUiThread(() -> fav.setImageResource(R.drawable.icon_favourite_0));
+                                context.runOnUiThread(() -> fav.setImageResource(R.drawable.icon_fav_0));
                                 articleInfo.stats.favorite--;
                             }
                         } else {
                             if (ArticleApi.favorite(articleInfo.id) == 0) {
-                                context.runOnUiThread(() -> fav.setImageResource(R.drawable.icon_favourite_1));
+                                context.runOnUiThread(() -> fav.setImageResource(R.drawable.icon_fav_1));
                                 articleInfo.stats.favorite++;
                             }
                         }
@@ -229,7 +229,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                                 if (articleInfo.stats.liked)
                                     like.setImageResource(R.drawable.icon_like_1);
                                 if (articleInfo.stats.favoured)
-                                    fav.setImageResource(R.drawable.icon_favourite_1);
+                                    fav.setImageResource(R.drawable.icon_fav_1);
                             });
                         }
                     } catch (Exception e) {

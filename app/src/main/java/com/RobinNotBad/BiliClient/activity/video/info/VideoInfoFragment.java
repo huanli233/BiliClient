@@ -97,9 +97,9 @@ public class VideoInfoFragment extends Fragment {
         public void onActivityResult(ActivityResult o) {
             int code = o.getResultCode();
             if (code == RESULT_ADDED) {
-                fav.setImageResource(R.drawable.icon_favourite_1);
+                fav.setImageResource(R.drawable.icon_fav_1);
             } else if (code == RESULT_DELETED) {
-                fav.setImageResource(R.drawable.icon_favourite_0);
+                fav.setImageResource(R.drawable.icon_fav_0);
             }
         }
     });
@@ -293,7 +293,7 @@ public class VideoInfoFragment extends Fragment {
                         if (videoInfo.stats.liked)
                             like.setImageResource(R.drawable.icon_like_1);
                         if (videoInfo.stats.favoured)
-                            fav.setImageResource(R.drawable.icon_favourite_1);
+                            fav.setImageResource(R.drawable.icon_fav_1);
                     });
                 } catch (Exception e) {MsgUtil.err(e);}
             });
