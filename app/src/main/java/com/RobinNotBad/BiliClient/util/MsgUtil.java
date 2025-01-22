@@ -147,6 +147,8 @@ public class MsgUtil {
 
         StringBuilder output = new StringBuilder(desc == null ? "" : desc);
 
+        String str = e.toString();
+
         if (e instanceof IOException) output.append("网络错误(＃°Д°)");
         else if (e instanceof JSONException) {
             if (SharedPreferencesUtil.getBoolean("dev_jsonerr_detailed", false)) {
@@ -156,11 +158,11 @@ public class MsgUtil {
                 showText(desc + "数据解析错误", writer.toString());
             } else if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
                 output.append("数据解析错误\n建议登陆后再尝试");
-            } else if (e.toString().contains("-352"))
-                output.append("账号疑似被风控（访问被拦截）");
+            } else if (str.contains("-352") || str.contains("22015"))
+                output.append("被B站风控系统拦截了\n（无法解决）");
             else {
                 output.append("数据解析错误：\n");
-                output.append(e.toString().replace("org.json.JSONException:", ""));
+                output.append(str.replace("org.json.JSONException:", ""));
             }
         }
         else if(e instanceof SQLException) output.append("数据库读写错误\n请清理空间或清除软件数据");

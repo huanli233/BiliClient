@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.text.SpannableString;
@@ -30,6 +31,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -359,22 +361,20 @@ public class ToolsUtil {
 
     public static ImageSpan getLevelBadge(Context context, UserInfo userInfo) {
         int level = userInfo.level;
-        Drawable drawable;
-        if(level > -1 && level < 7)
-            drawable = ResourcesCompat.getDrawable(context.getResources(), levelBadges[userInfo.level], context.getTheme());
-        else drawable = ResourcesCompat.getDrawable(context.getResources(), levelBadges[0], context.getTheme());
 
-        if(userInfo.is_senior_member == 1) drawable = ResourcesCompat.getDrawable(context.getResources(), levelBadges[7], context.getTheme());
+        if(level <= -1 || level >= 7) level = 0;
+        if(userInfo.is_senior_member == 1) level = 7;
 
-        float lineHeight = ToolsUtil.getTextHeightWithSize(context, 11);
+        Drawable drawable = ToolsUtil.getDrawable(context, levelBadges[level]);
+
+        float lineHeight = ToolsUtil.getTextHeightWithSize(context);
         float lineWidth = lineHeight * 1.56f;
-        assert drawable != null;
         if(userInfo.is_senior_member == 1) lineWidth = lineHeight * 1.96f;
         drawable.setBounds(0, 0, (int) lineWidth, (int) lineHeight);
         return new ImageSpan(drawable);
     }
 
-    public static float getTextHeightWithSize(Context context, int sizeSp) {
+    public static float getTextHeightWithSize(Context context) {
         Paint paint = new Paint();
         paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, context.getResources().getDisplayMetrics()));
         Paint.FontMetrics fontMetrics = paint.getFontMetrics();
@@ -388,5 +388,11 @@ public class ToolsUtil {
         stringBuilder.append((color) & 0xff);
         Log.e("颜色", stringBuilder.toString());
         return Integer.parseInt(stringBuilder.toString());
+    }
+
+    public static Drawable getDrawable(Context context, @DrawableRes int res) {
+        Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), res, context.getTheme());
+        if (drawable != null) return drawable;
+        else return new BitmapDrawable();
     }
 }

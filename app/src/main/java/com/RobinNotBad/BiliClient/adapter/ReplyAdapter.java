@@ -258,7 +258,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         String senderName = reply.sender.name;
                         SpannableString content = new SpannableString(senderName + (reply.sender.mid == up_mid ? up_tip : "") + "：" + reply.message);
                         if (reply.sender.mid == up_mid) {
-                            float lineHeight = ToolsUtil.getTextHeightWithSize(context, 12);
+                            float lineHeight = ToolsUtil.getTextHeightWithSize(context);
                             content.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95), (int) (lineHeight)), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                             content.setSpan(new RelativeSizeSpan(0.8f), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                         }

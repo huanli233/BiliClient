@@ -55,7 +55,7 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
             holder.name.setText("图文收藏夹");
             holder.count.setText("");
             Glide.with(context).asDrawable()
-                    .load(ResourcesCompat.getDrawable(context.getResources(), R.drawable.article_fav_cover, context.getTheme()))
+                    .load(ToolsUtil.getDrawable(context, R.drawable.article_fav_cover))
                     .transition(GlideUtil.getTransitionOptions())
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)

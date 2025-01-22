@@ -29,7 +29,12 @@ import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
-import com.RobinNotBad.BiliClient.util.*;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -150,7 +155,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (!userInfo.sys_notice.isEmpty()) {
                 userInfoHolder.exclusiveTip.setVisibility(View.VISIBLE);
                 SpannableString spannableString = new SpannableString("!:" + userInfo.sys_notice);
-                Drawable drawable = context.getResources().getDrawable(R.drawable.icon_warning);
+                Drawable drawable = ToolsUtil.getDrawable(context, R.drawable.icon_warning);
                 drawable.setBounds(0, 0, 30, 30);
                 spannableString.setSpan(new ImageSpan(drawable), 0, 2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 userInfoHolder.exclusiveTipLabel.setText(spannableString);
