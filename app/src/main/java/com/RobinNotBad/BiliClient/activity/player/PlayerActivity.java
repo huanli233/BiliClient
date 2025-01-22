@@ -468,17 +468,22 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         findViewById(R.id.danmaku_send).setOnClickListener(view1 -> {
             EditText editText = findViewById(R.id.danmaku_send_edit);
             if(editText.getText().toString().isEmpty()){
-                MsgUtil.showMsg("不能发送空弹幕");
+                MsgUtil.showMsg("不能发送空弹幕喵");
             } else {
+                layout_card_bg.setVisibility(View.GONE);
+                card_danmaku_send.setVisibility(View.GONE);
+
                 CenterThreadPool.run(() -> {
                     try {
+                        MsgUtil.showMsg("正在发送~");
+
                         int result = DanmakuApi.sendVideoDanmakuByAid(cid, editText.getText().toString(), aid, video_now, ToolsUtil.getRgb888(Color.WHITE), 1);
 
                         if(result == 0){
+                            MsgUtil.showMsg("发送成功喵~");
                             runOnUiThread(() -> {
                                 adddanmaku(editText.getText().toString(), Color.WHITE);
-                                layout_card_bg.setVisibility(View.GONE);
-                                card_danmaku_send.setVisibility(View.GONE);
+                                editText.setText("");
                             });
                         } else MsgUtil.showMsg("发送失败：" + result);
                     }catch (Exception e){

@@ -89,6 +89,9 @@
     <string name="desc_reply_marquee_name">开启此选项后，评论区的用户名称将会以跑马灯的形式展现，而不是换行</string>
     <string name="desc_live_by_guest">开启此选项后，进入直播间时将会使用游客身份\n\n注意：开启后的漏弹幕情况将会更加严重</string>
 
+
+    <string name="err_rejected">被B站风控系统拦截了\n（无法解决）</string>
+
     <string name="update_tip">此版本的内置播放器支持了CC字幕与弹幕发送\n\n如果无法加载图片，请到“偏好设置”中开启“请求JPG格式图片”\n如果图片变扁请尝试前往偏好设置关闭“加载渐入渐出动画”\n\n视频播放出现问题（如不够清晰、黑屏）请尝试切换显示模式\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
 
     #新增功能放到上面，修复问题放下面，方便用户看见

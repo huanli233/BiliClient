@@ -177,13 +177,16 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     CenterThreadPool.run(() -> {
                         try {
                             int result = UserInfoApi.followUser(userInfo.mid, !(userInfo.followed));
+                            String msg;
                             if (result == 0) {
                                 userInfo.followed = !(userInfo.followed);
-                                MsgUtil.showMsg("操作成功");
+                                msg = "操作成功喵~";
                             } else {
-                                MsgUtil.showMsg("操作失败：" + result);
                                 CenterThreadPool.runOnUiThread(() -> userInfoHolder.setFollowed(userInfo.followed));
+                                if(result == 25056) msg = "被B站风控系统拦截了\n（无法解决）";
+                                else msg = "操作失败（原因未知）：" + result;
                             }
+                            MsgUtil.showMsg(msg);
                         } catch (Exception e) {
                             MsgUtil.err(e);
                         }

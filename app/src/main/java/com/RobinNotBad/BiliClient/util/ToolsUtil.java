@@ -290,7 +290,7 @@ public class ToolsUtil {
         public void updateDrawState(@NonNull TextPaint ds) {
             super.updateDrawState(ds);
             ds.setUnderlineText(false);
-            ds.setColor(Color.parseColor("#03a9f4"));
+            ds.setColor(Color.rgb(0x66,0xcc,0xff));
         }
     }
 

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
+import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.DialogActivity;
 import com.RobinNotBad.BiliClient.activity.ShowTextActivity;
 import com.RobinNotBad.BiliClient.event.SnackEvent;
@@ -158,8 +159,8 @@ public class MsgUtil {
                 showText(desc + "数据解析错误", writer.toString());
             } else if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
                 output.append("数据解析错误\n建议登陆后再尝试");
-            } else if (str.contains("-352") || str.contains("22015"))
-                output.append("被B站风控系统拦截了\n（无法解决）");
+            } else if (str.contains("-352") || str.contains("22015") || str.contains("65056"))
+                output.append(context.getString(R.string.err_rejected));
             else {
                 output.append("数据解析错误：\n");
                 output.append(str.replace("org.json.JSONException:", ""));

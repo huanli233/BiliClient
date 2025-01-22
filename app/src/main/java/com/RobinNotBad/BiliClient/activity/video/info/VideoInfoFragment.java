@@ -190,12 +190,12 @@ public class VideoInfoFragment extends Fragment {
         TextView danmakuCount = rootview.findViewById(R.id.danmakuCount);
         ImageButton like = rootview.findViewById(R.id.btn_like);
         ImageButton coin = rootview.findViewById(R.id.btn_coin);
+        fav = rootview.findViewById(R.id.btn_fav);
         TextView likeLabel = rootview.findViewById(R.id.like_label);
         TextView coinLabel = rootview.findViewById(R.id.coin_label);
         TextView favLabel = rootview.findViewById(R.id.fav_label);
         MaterialCardView collectionCard = rootview.findViewById(R.id.collection);
-        TextView collectionTitle = rootview.findViewById(R.id.collectionText);
-        fav = rootview.findViewById(R.id.btn_fav);
+
 
         rootview.setVisibility(View.GONE);
         if (onFinishLoad != null) onFinishLoad.run();
@@ -384,7 +384,7 @@ public class VideoInfoFragment extends Fragment {
                 });
 
                 //点赞
-                like.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
+                rootview.findViewById(R.id.layout_like).setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
                         MsgUtil.showMsg("还没有登录喵~");
                         return;
@@ -413,7 +413,7 @@ public class VideoInfoFragment extends Fragment {
                 }));
 
                 //投币
-                coin.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
+                rootview.findViewById(R.id.layout_coin).setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
                         MsgUtil.showMsg("还没有登录喵~");
                         return;
@@ -442,7 +442,7 @@ public class VideoInfoFragment extends Fragment {
                 }));
 
                 //收藏
-                fav.setOnClickListener(view1 -> {
+                rootview.findViewById(R.id.layout_fav).setOnClickListener(view1 -> {
                     Intent intent = new Intent();
                     intent.setClass(requireContext(), AddFavoriteActivity.class);
                     intent.putExtra("aid", videoInfo.aid);
@@ -498,6 +498,7 @@ public class VideoInfoFragment extends Fragment {
 
                 //合集按钮
                 if (videoInfo.collection != null) {
+                    TextView collectionTitle = rootview.findViewById(R.id.collectionText);
                     collectionTitle.setText(String.format("合集 · %s", videoInfo.collection.title));
                     collectionCard.setOnClickListener((view1) ->
                             startActivity(new Intent(requireContext(), CollectionInfoActivity.class)
