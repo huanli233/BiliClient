@@ -64,7 +64,7 @@ public class SettingPlayerChooseActivity extends BaseActivity {
             setOnClick();
             terminalPlayer.setOnLongClickListener(view -> {
                 Intent intent = new Intent();
-                intent.setClass(this, SettingPlayerInsideActivity.class);
+                intent.setClass(this, SettingTerminalPlayerActivity.class);
                 startActivity(intent);
                 return true;
             });
@@ -130,7 +130,7 @@ public class SettingPlayerChooseActivity extends BaseActivity {
                 if (SharedPreferencesUtil.getBoolean("player_inside_firstchoose", true)) {
                     SharedPreferencesUtil.putBoolean("player_inside_firstchoose", false);
                     Intent intent = new Intent();
-                    intent.setClass(this, SettingPlayerInsideActivity.class);
+                    intent.setClass(this, SettingTerminalPlayerActivity.class);
                     startActivity(intent);
                 }
                 break;

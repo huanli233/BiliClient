@@ -94,9 +94,11 @@
 
     <string name="update_tip">此版本的内置播放器支持了CC字幕与弹幕发送\n\n如果无法加载图片，请到“偏好设置”中开启“请求JPG格式图片”\n如果图片变扁请尝试前往偏好设置关闭“加载渐入渐出动画”\n\n视频播放出现问题（如不够清晰、黑屏）请尝试切换显示模式\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
 
-    <string name="desc_icon_license">以下是已知的部分图标的来源和开源许可证信息</string>
+    <string name="desc_icon_license">以下是已知的开源图标的开源许可证信息</string>
     <string-array name="icon_license">
-        <item></item>
+        <item>我的主页、界面设置: Newicons, MIT License</item>
+        <item>番剧: hicon, MIT License</item>
+        <item>退出登录: scarlab, MIT License</item>
     </string-array>
 
     #新增功能放到上面，修复问题放下面，方便用户看见

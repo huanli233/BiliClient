@@ -113,7 +113,7 @@ public class SettingUIActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        save();
+        if(uiScaleInput != null) save();
         super.onDestroy();
     }
 }

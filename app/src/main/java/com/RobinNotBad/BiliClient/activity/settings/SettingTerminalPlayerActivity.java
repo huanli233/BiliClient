@@ -11,7 +11,7 @@ import com.RobinNotBad.BiliClient.model.SettingSection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingPlayerInsideActivity extends RefreshListActivity {
+public class SettingTerminalPlayerActivity extends RefreshListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

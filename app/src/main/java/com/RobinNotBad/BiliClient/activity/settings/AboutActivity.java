@@ -127,6 +127,15 @@ public class AboutActivity extends BaseActivity {
                 }
             });
 
+            findViewById(R.id.icon_license_list).setOnClickListener(v -> {
+                StringBuilder str = new StringBuilder(getString(R.string.desc_icon_license));
+
+                String[] logItems = getResources().getStringArray(R.array.icon_license);
+                for (int i = 0; i < logItems.length; i++)
+                    str.append('\n').append((i + 1)).append('.').append(logItems[i]);
+                MsgUtil.showText("开源图标的信息",str.toString());
+            });
+
             findViewById(R.id.sponsor_list).setOnClickListener(view -> {
                 Intent intent = new Intent(this, SponsorActivity.class);
                 startActivity(intent);

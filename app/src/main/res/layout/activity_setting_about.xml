@@ -727,6 +727,24 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/icon_license_list"
+                android:layout_marginTop="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
+                    android:layout_marginHorizontal="8dp"
+                    android:gravity="center_vertical"
+                    android:text="开源图标的信息"
+                    android:textAlignment="textStart"
+                    android:textSize="13sp"
+                    tools:ignore="RtlCompat"
+                    app:drawableEndCompat="@drawable/arrow_forward" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:id="@+id/toUncle"

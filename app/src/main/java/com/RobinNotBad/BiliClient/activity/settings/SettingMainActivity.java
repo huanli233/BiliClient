@@ -67,10 +67,10 @@ public class SettingMainActivity extends InstanceActivity {
 
 
             //内置播放器设置
-            MaterialCardView clientPlayerSetting = findViewById(R.id.clientPlayerSetting);
+            MaterialCardView clientPlayerSetting = findViewById(R.id.terminalPlayerSetting);
             clientPlayerSetting.setOnClickListener(view -> {
                 Intent intent = new Intent();
-                intent.setClass(this, SettingPlayerInsideActivity.class);
+                intent.setClass(this, SettingTerminalPlayerActivity.class);
                 startActivity(intent);
             });
 
