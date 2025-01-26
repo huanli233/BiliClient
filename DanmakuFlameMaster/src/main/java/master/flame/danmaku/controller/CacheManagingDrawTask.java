@@ -507,11 +507,11 @@ public class CacheManagingDrawTask extends DrawTask {
                         break;
                     case BUILD_CACHES:
                         removeMessages(BUILD_CACHES);
-                        boolean repositioned = ((mTaskListener != null && mReadyState == false) || mSeekedFlag);
+                        boolean repositioned = ((mTaskListener != null && !mReadyState) || mSeekedFlag);
                         prepareCaches(repositioned);
                         if (repositioned)
                             mSeekedFlag = false;
-                        if (mTaskListener != null && mReadyState == false) {
+                        if (mTaskListener != null && !mReadyState) {
                             mTaskListener.ready();
                             mReadyState = true;
                         }
@@ -680,7 +680,7 @@ public class CacheManagingDrawTask extends DrawTask {
                 }
                 long deltaTime = first.time - mTimer.currMillisecond;
                 long sleepTime = 30 + 10 * deltaTime / mContext.mDanmakuFactory.MAX_DANMAKU_DURATION;
-                sleepTime = Math.min(100, sleepTime);
+                sleepTime = Math.max(0,Math.min(100, sleepTime));
                 if (repositioned) {
                     sleepTime = 0;
                 }
