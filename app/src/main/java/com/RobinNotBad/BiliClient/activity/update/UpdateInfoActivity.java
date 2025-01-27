@@ -1,29 +1,22 @@
 package com.RobinNotBad.BiliClient.activity.update;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.google.android.material.button.MaterialButton;
@@ -42,8 +35,6 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class UpdateInfoActivity extends BaseActivity {
-
-    private static final int PERMISSION_REQUEST_CODE = 1;
 
     TextView versionNameTv;
     TextView versionCodeTv;
@@ -105,8 +96,9 @@ public class UpdateInfoActivity extends BaseActivity {
                     lastClickTime = time;
                     return;
                 }
-                if (!checkAndRequestPermissions()) {
-                    MsgUtil.showMsg("没有写入存储空间权限");
+                if (!FileUtil.checkStoragePermission()) {
+                    MsgUtil.showMsg("请授权存储空间权限");
+                    FileUtil.requestStoragePermission(this);
                     return;
                 }
                 CenterThreadPool.run(() -> {
@@ -131,7 +123,7 @@ public class UpdateInfoActivity extends BaseActivity {
                                 }
 
                                 @Override
-                                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                                public void onResponse(@NonNull Call call, @NonNull Response response) {
                                     if (!response.isSuccessful()) {
                                         runOnUiThread(() -> MsgUtil.showMsg("下载失败！"));
                                     } else {
@@ -176,8 +168,7 @@ public class UpdateInfoActivity extends BaseActivity {
                                                 downloading = false;
                                             }
                                         } catch (Throwable th) {
-                                            Log.e("BiliClient", th.toString());
-                                            runOnUiThread(() -> MsgUtil.showMsg("下载时发生了错误"));
+                                            MsgUtil.err("下载出错：",th);
                                             downloading = false;
                                         }
                                     }
@@ -193,39 +184,6 @@ public class UpdateInfoActivity extends BaseActivity {
                 });
             });
         }));
-    }
-
-    private boolean checkAndRequestPermissions() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        PERMISSION_REQUEST_CODE);
-                return false;
-            }
-        } else {
-            if (!Environment.isExternalStorageManager()) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                intent.setData(uri);
-                startActivity(intent);
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                MsgUtil.showMsg("拒绝了存储权限");
-            }
-        }
     }
 
     @Override

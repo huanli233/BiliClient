@@ -12,7 +12,6 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.update.UpdateInfoActivity;
 import com.RobinNotBad.BiliClient.model.Announcement;
 import com.RobinNotBad.BiliClient.model.UserInfo;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -68,7 +67,7 @@ public class AppInfoApi {
         }
     }
 
-    private static final ArrayList<String> customHeaders = new ArrayList<>() {{
+    public static final ArrayList<String> customHeaders = new ArrayList<>() {{
         add("User-Agent");
         add(NetWorkUtil.USER_AGENT_WEB);    //防止携带b站cookies导致可能存在的开发者盗号问题（
         add("App-Info");
@@ -82,7 +81,7 @@ public class AppInfoApi {
                     .put("debugEnabled", BuildConfig.DEBUG)
                     .toString());
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            MsgUtil.showMsg("版本信息json生成出错\n无影响，正常情况下你应该不会遇到");
         }
         add("Device-Info");
         try {
@@ -96,11 +95,11 @@ public class AppInfoApi {
                     .put("id", Build.ID)
                     .toString());
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            MsgUtil.showMsg("设备信息json生成出错\n无影响，正常情况下你应该不会遇到");
         }
     }};
 
-    private static void checkUpdate(Context context, boolean need_toast, boolean debug_ver) throws Exception {
+    private static void checkUpdate(Context context, boolean need_toast, boolean debug_ver) {
         try {
             boolean realIsDebug = ToolsUtil.isDebugBuild();
             String url = "http://api.biliterminal.sineworld.cn/terminal/version/get_last";
@@ -141,7 +140,7 @@ public class AppInfoApi {
         }
     }
 
-    public static void checkUpdate(Context context, boolean need_toast) throws Exception {
+    public static void checkUpdate(Context context, boolean need_toast) {
         checkUpdate(context, need_toast, false);
     }
 

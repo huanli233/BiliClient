@@ -70,7 +70,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
             installBtn = findViewById(R.id.install);
             installWayList = findViewById(R.id.install_way_list);
 
-            pathTv.setText(String.format("下载的APK保存在: \n%s\n\n你可以另外使用自己的安装方法安装，或在下方选择一个安装方案进行安装", path));
+            pathTv.setText(String.format("下载的APK保存在: \n%s\n\n你可以使用pm install或其他自己的安装方法安装，或在下方选择一个安装器进行安装", path));
             ToolsUtil.setCopy(pathTv, path);
             installWayList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
             List<Bangumi.Episode> episodeList = new ArrayList<>();
@@ -88,12 +88,10 @@ public class UpdateDownloadResultActivity extends BaseActivity {
             selectedInstallWay = 0;
             installBtn.setOnClickListener((view1 -> {
                 String str = installWays.get(selectedInstallWay);
-                switch (str) {
-                    case "system":
-                        installBySystemInstaller();
-                        break;
-                    default:
-                        MsgUtil.showMsg("未知的安装方式");
+                if ("system".equals(str)) {
+                    installBySystemInstaller();
+                } else {
+                    MsgUtil.showMsg("未知的安装方式");
                 }
             }));
         }));
