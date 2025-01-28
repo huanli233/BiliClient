@@ -21,6 +21,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.video.MediaEpisodeAdapter;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.Bangumi;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -72,7 +73,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
 
             pathTv.setText(String.format("下载的APK保存在: \n%s\n\n你可以使用pm install或其他自己的安装方法安装，或在下方选择一个安装器进行安装", path));
             ToolsUtil.setCopy(pathTv, path);
-            installWayList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            installWayList.setLayoutManager(new CustomLinearManager(this, LinearLayoutManager.VERTICAL, false));
             List<Bangumi.Episode> episodeList = new ArrayList<>();
             for (int i = 0; i < installWays.size(); i++) {
                 Bangumi.Episode episode = new Bangumi.Episode();

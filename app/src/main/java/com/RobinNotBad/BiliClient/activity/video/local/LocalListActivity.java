@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -77,7 +76,7 @@ public class LocalListActivity extends InstanceActivity {
                 }
             });
             runOnUiThread(() -> {
-                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                recyclerView.setLayoutManager(getLayoutManager());
                 recyclerView.setAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false);
                 started = true;

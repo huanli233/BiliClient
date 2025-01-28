@@ -27,6 +27,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.EmoteApi;
 import com.RobinNotBad.BiliClient.model.Emote;
 import com.RobinNotBad.BiliClient.model.EmotePackage;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomGridManager;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -169,7 +170,7 @@ public class EmoteActivity extends BaseActivity {
             super.onViewCreated(view, savedInstanceState);
 
             this.recyclerView = view.findViewById(R.id.recyclerView);
-            GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false);
+            CustomGridManager layoutManager = new CustomGridManager(getContext(), 4, RecyclerView.VERTICAL, false);
             layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {

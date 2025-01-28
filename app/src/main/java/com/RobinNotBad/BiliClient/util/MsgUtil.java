@@ -166,6 +166,7 @@ public class MsgUtil {
                 output.append(str.replace("org.json.JSONException:", ""));
             }
         }
+        else if(e instanceof IndexOutOfBoundsException) output.append("Adapter错误无需上报，\n除非你在某个界面经常遇到");
         else if(e instanceof SQLException) output.append("数据库读写错误\n请清理空间或清除软件数据");
         else output.append("错误：");
 

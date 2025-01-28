@@ -27,6 +27,7 @@ import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
 import com.RobinNotBad.BiliClient.adapter.video.MediaEpisodeAdapter;
 import com.RobinNotBad.BiliClient.api.BangumiApi;
 import com.RobinNotBad.BiliClient.model.Bangumi;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -126,7 +127,7 @@ public class BangumiInfoFragment extends Fragment {
             eposide_choose.setOnClickListener(v -> getEposideChooseDialog().show());
 
             adapter.setData(bangumi.sectionList.get(0).episodeList);
-            eposideRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+            eposideRecyclerView.setLayoutManager(new CustomLinearManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
             eposideRecyclerView.setAdapter(adapter);
         } else {
             section_choose.setText("敬请期待");

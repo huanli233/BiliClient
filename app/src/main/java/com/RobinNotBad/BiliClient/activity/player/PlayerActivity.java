@@ -50,6 +50,7 @@ import com.RobinNotBad.BiliClient.event.SnackEvent;
 import com.RobinNotBad.BiliClient.model.Subtitle;
 import com.RobinNotBad.BiliClient.model.SubtitleLink;
 import com.RobinNotBad.BiliClient.ui.widget.BatteryView;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -1113,7 +1114,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         }
                         else CenterThreadPool.run(() -> getSubtitle(subtitleLinks[index].url));
                     });
-                    eposideRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                    eposideRecyclerView.setLayoutManager(new CustomLinearManager(this, LinearLayoutManager.HORIZONTAL, false));
                     eposideRecyclerView.setHasFixedSize(true);
                     eposideRecyclerView.setAdapter(adapter);
                     layout_card_bg.setVisibility(View.VISIBLE);

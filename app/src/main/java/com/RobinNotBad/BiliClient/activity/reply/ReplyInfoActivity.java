@@ -16,6 +16,7 @@ import com.RobinNotBad.BiliClient.adapter.ReplyAdapter;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.model.Reply;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
@@ -75,7 +76,7 @@ public class ReplyInfoActivity extends BaseActivity {
                     replyAdapter.isDetail = true;
                     setOnSortSwitch();
                     runOnUiThread(() -> {
-                        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                        recyclerView.setLayoutManager(new CustomLinearManager(this));
                         recyclerView.setAdapter(replyAdapter);
                         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                             @Override

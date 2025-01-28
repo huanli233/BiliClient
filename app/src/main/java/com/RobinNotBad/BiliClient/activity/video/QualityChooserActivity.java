@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.QualityChooseAdapter;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class QualityChooserActivity extends BaseActivity {
-    private static final String TAG = "QualityChooserActivity";
 
     List<Integer> qns = new LinkedList<>();
 
@@ -73,7 +72,7 @@ public class QualityChooserActivity extends BaseActivity {
                 finish();
             }));
 
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setLayoutManager(new CustomLinearManager(this));
             recyclerView.setAdapter(adapter);
         })));
 

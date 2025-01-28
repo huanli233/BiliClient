@@ -9,16 +9,20 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.article.ArticleContentAdapter;
 import com.RobinNotBad.BiliClient.api.ArticleApi;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.ArticleLine;
-import com.RobinNotBad.BiliClient.util.*;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.JsonUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.Result;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -114,7 +118,7 @@ public class ArticleInfoFragment extends Fragment {
                 }
                 if (isAdded()) requireActivity().runOnUiThread(() -> {
                     ArticleContentAdapter adapter = new ArticleContentAdapter(requireActivity(), articleInfo, lineList);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                    recyclerView.setLayoutManager(new CustomLinearManager(requireContext()));
                     recyclerView.setAdapter(adapter);
                     if (onFinishLoad != null) onFinishLoad.run();
                 });

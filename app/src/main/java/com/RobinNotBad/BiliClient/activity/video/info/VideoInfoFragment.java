@@ -30,7 +30,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
@@ -53,7 +52,15 @@ import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.api.WatchLaterApi;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
-import com.RobinNotBad.BiliClient.util.*;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.FileUtil;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.Result;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -152,8 +159,13 @@ public class VideoInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        long aid = getArguments().getLong("aid");
-        String bvid = getArguments().getString("bvid");
+        Bundle bundle = getArguments();
+        if(bundle == null) {
+            MsgUtil.showMsg("视频详情页：数据为空");
+            return;
+        }
+        long aid = bundle.getLong("aid");
+        String bvid = bundle.getString("bvid");
         Result<VideoInfo> videoInfoResult = TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).getValue();
         if (videoInfoResult == null) {
             videoInfoResult = Result.failure(new TerminalContext.IllegalTerminalStateException("video object is null"));
@@ -313,7 +325,7 @@ public class VideoInfoFragment extends Fragment {
                 //UP主列表
                 UpListAdapter adapter = new UpListAdapter(requireContext(), videoInfo.staff);
                 up_recyclerView.setHasFixedSize(true);
-                up_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                up_recyclerView.setLayoutManager(new CustomLinearManager(getContext()));
                 up_recyclerView.setAdapter(adapter);
 
 

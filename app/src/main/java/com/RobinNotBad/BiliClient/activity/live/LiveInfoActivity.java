@@ -24,6 +24,7 @@ import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.model.LivePlayInfo;
 import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.model.UserInfo;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.*;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -95,7 +96,7 @@ public class LiveInfoActivity extends BaseActivity {
                 }
                 UpListAdapter upListAdapter = new UpListAdapter(this, upList);
                 up_recyclerView.setHasFixedSize(true);
-                up_recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                up_recyclerView.setLayoutManager(new CustomLinearManager(this));
                 up_recyclerView.setAdapter(upListAdapter);
 
                 viewsCount.setText(ToolsUtil.toWan(room.online) + "人观看");
@@ -181,7 +182,7 @@ public class LiveInfoActivity extends BaseActivity {
                         qualityList.add(episode);
                     }
                     qualityAdapter.setData(qualityList);
-                    quality_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                    quality_list.setLayoutManager(new CustomLinearManager(this, LinearLayoutManager.HORIZONTAL, false));
                     quality_list.setAdapter(qualityAdapter);
                     qualityAdapter.setSelectedItemIndex(0);
 
@@ -189,7 +190,7 @@ public class LiveInfoActivity extends BaseActivity {
                     hostAdapter = new MediaEpisodeAdapter();
                     hostAdapter.setOnItemClickListener(i -> selectedHost = i);
                     hostAdapter.setData(new ArrayList<>());
-                    host_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                    host_list.setLayoutManager(new CustomLinearManager(this, LinearLayoutManager.HORIZONTAL, false));
                     runOnUiThread(() -> host_list.setAdapter(hostAdapter));
                     refresh_host_list();
                 }

@@ -20,6 +20,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.message.PrivateMsgAdapter;
 import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -72,7 +73,7 @@ public class PrivateMsgActivity extends BaseActivity {
                 emoteArray = PrivateMsgApi.getEmoteJsonArray(allMsg);
                 adapter = new PrivateMsgAdapter(list, emoteArray, this);
                 runOnUiThread(() -> {
-                    msgView.setLayoutManager(new LinearLayoutManager(this));
+                    msgView.setLayoutManager(new CustomLinearManager(this));
                     msgView.setAdapter(adapter);
                     ((LinearLayoutManager) Objects.requireNonNull(msgView.getLayoutManager())).scrollToPositionWithOffset(list.size() - 1, 0);
                     msgView.addOnScrollListener(new RecyclerView.OnScrollListener() {

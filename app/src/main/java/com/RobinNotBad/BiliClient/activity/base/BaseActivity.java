@@ -1,14 +1,5 @@
 package com.RobinNotBad.BiliClient.activity.base;
 
-import android.view.InputDevice;
-import android.view.MotionEvent;
-import android.view.ViewConfiguration;
-import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.ScrollView;
-
-import androidx.core.view.ViewConfigurationCompat;
-import androidx.core.widget.NestedScrollView;
 import static com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity.getRelayDynamicLauncher;
 
 import android.content.Context;
@@ -21,22 +12,30 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.InputDevice;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewConfigurationCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Lifecycle;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.event.SnackEvent;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomGridManager;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -206,8 +205,8 @@ public class BaseActivity extends AppCompatActivity {
 
     public RecyclerView.LayoutManager getLayoutManager() {
         return SharedPreferencesUtil.getBoolean("ui_landscape", false) && !force_single_column
-                ? new GridLayoutManager(this, 3)
-                : new LinearLayoutManager(this);
+                ? new CustomGridManager(this, 3)
+                : new CustomLinearManager(this);
     }
 
     public void setForceSingleColumn() {

@@ -8,13 +8,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.listener.OnLoadMoreListener;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomGridManager;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.view.ImageAutoLoadScrollListener;
@@ -141,8 +142,8 @@ public class RefreshListFragment extends Fragment {
 
     public RecyclerView.LayoutManager getLayoutManager() {
         return SharedPreferencesUtil.getBoolean("ui_landscape", false) && !force_single_column
-                ? new GridLayoutManager(requireContext(), 3)
-                : new LinearLayoutManager(requireContext());
+                ? new CustomGridManager(requireContext(), 3)
+                : new CustomLinearManager(requireContext());
     }
 
     public void setForceSingleColumn() {
