@@ -230,6 +230,15 @@ public class BaseActivity extends AppCompatActivity {
                 for (int i = 0; i < vp.getChildCount(); i++) {
                     View viewChild = vp.getChildAt(i);
 
+                    float multiple = -114;
+                    if (viewChild instanceof ScrollView || viewChild instanceof NestedScrollView) multiple=SharedPreferencesUtil.getFloat("ui_rotatory_scroll",0);
+                    if (viewChild instanceof RecyclerView) multiple=SharedPreferencesUtil.getFloat("ui_rotatory_recycler",0);
+                    if (viewChild instanceof ListView) multiple=SharedPreferencesUtil.getFloat("ui_rotatory_list",0);
+
+                    if(multiple==-114) setRotaryScroll(viewChild);  //不符合上面的情况说明不是可滑动列表
+                    if(multiple<=0) return;    //负值和0都不执行
+
+                    float finalMultiple = multiple;
                     viewChild.setOnGenericMotionListener((v, ev) -> {
                         if (ev.getAction() == MotionEvent.ACTION_SCROLL && ev.getSource() == InputDevice.SOURCE_ROTARY_ENCODER) {
                             float delta = -ev.getAxisValue(MotionEvent.AXIS_SCROLL)
@@ -237,26 +246,21 @@ public class BaseActivity extends AppCompatActivity {
                                     ViewConfiguration.get(BiliTerminal.context),
                                     BiliTerminal.context) * 2;
 
-                            boolean set = true;
                             if (viewChild instanceof ScrollView)
-                                ((ScrollView) viewChild).smoothScrollBy(0, Math.round(delta));
+                                ((ScrollView) viewChild).smoothScrollBy(0, Math.round(delta * finalMultiple));
                             else if (viewChild instanceof NestedScrollView)
-                                ((NestedScrollView) viewChild).smoothScrollBy(0, Math.round(delta));
+                                ((NestedScrollView) viewChild).smoothScrollBy(0, Math.round(delta * finalMultiple));
                             else if (viewChild instanceof RecyclerView)
-                                ((RecyclerView) viewChild).smoothScrollBy(0, Math.round(delta));
-                            else if (viewChild instanceof ListView)
-                                ((ListView) viewChild).smoothScrollBy(0, Math.round(delta));
-                            else set = false;
+                                ((RecyclerView) viewChild).smoothScrollBy(0, Math.round(delta * finalMultiple));
+                            else ((ListView) viewChild).smoothScrollBy(0, Math.round(delta * finalMultiple));
 
-                            if (set) viewChild.requestFocus();
+                            viewChild.requestFocus();
 
                             return true;
                         }
 
                         return false;
                     });
-
-                    setRotaryScroll(viewChild);
                 }
             } catch (Exception e){
                 e.printStackTrace();

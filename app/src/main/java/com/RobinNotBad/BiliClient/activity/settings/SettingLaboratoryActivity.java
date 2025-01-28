@@ -22,12 +22,16 @@ public class SettingLaboratoryActivity extends RefreshListActivity {
         setPageName("实验室");
 
         final List<SettingSection> sectionList = new ArrayList<>() {{
-            add(new SettingSection("switch", "使用旧版下载器", "dev_download_old", "2.6.3之后的版本增加了后台下载服务，若后台下载在你的设备上有问题，请打开此选项以换回旧版的前台下载器！", "false"));
+            add(new SettingSection("switch", "使用旧版下载器", "dev_download_old", getString(R.string.setting_lab_download_old), "false"));
             add(new SettingSection("switch", "横屏模式", "ui_landscape", getString(R.string.setting_lab_ui_landscape), "false"));
-            add(new SettingSection("input_string","开屏文字","ui_splashtext", "顾名思义，可以更改开屏文字，支持换行。开屏文字在网络请求完成后就会被打断。","欢迎使用\n哔哩终端"));
-            add(new SettingSection("input_string","缓存路径","save_path_video","缓存的视频将会保存到这个位置，若文件夹不存在会自动创建。之前缓存的视频请用文件管理器手动移动到新文件夹内。\n不保证会不会出现奇怪的问题。", FileUtil.getDownloadPath().toString()));
-            add(new SettingSection("switch","详细显示数据解析报错","dev_jsonerr_detailed","如果你遇到了某些接口问题，开发者可能会需要你打开这个以提供更详细的报错信息。\n——当然开发者调试的时候也可能会用到这个。","false"));
-            add(new SettingSection("switch","详细显示列表报错","dev_recyclererr_detailed","由于开发者技术稀烂（？），软件中的各种列表可能会偶尔出现报错且难以避免。\n虽然是偶尔出现，但很烦人很恶心。\n所以被逼疯的开发者把这个报错catch掉了，只留下一个“此错误无需上报”的提示框和这个用于调试的开关。","false"));
+            add(new SettingSection("input_string","开屏文字","ui_splashtext", getString(R.string.setting_lab_splashtext),"欢迎使用\n哔哩终端"));
+            add(new SettingSection("input_string","缓存路径","save_path_video",getString(R.string.setting_lab_path_video), FileUtil.getDownloadPath().toString()));
+            add(new SettingSection("input_string","缓存路径","save_path_pictures",getString(R.string.setting_lab_path_pictures), FileUtil.getDownloadPicturePath().toString()));
+            add(new SettingSection("input_float","表冠适配灵敏度（Recycler）","ui_rotatory_recycler", getString(R.string.setting_lab_ui_rotatory),"0"));
+            add(new SettingSection("input_float","表冠适配灵敏度（Scroll）","ui_rotatory_scroll", getString(R.string.setting_lab_ui_rotatory),"0"));
+            add(new SettingSection("input_float","表冠适配灵敏度（List）","ui_rotatory_scroll", getString(R.string.setting_lab_ui_rotatory),"0"));
+            add(new SettingSection("switch","详细显示数据解析报错","dev_jsonerr_detailed",getString(R.string.setting_lab_jsonerr_detailed),"false"));
+            add(new SettingSection("switch","详细显示列表报错","dev_recyclererr_detailed",getString(R.string.setting_lab_recyclererr_detailed),"false"));
             //add(new SettingSection("input_int","test_int","test_int", "这是描述描述描述","123"));
             //add(new SettingSection("input_float","test_float","test_float_2", "这是描述描述描述","1.1"));
             //add(new SettingSection("switch", "圆屏模式", "ui_round", getString(R.string.setting_lab_ui_round), "false"));

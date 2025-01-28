@@ -157,6 +157,7 @@ public class MsgUtil {
                 PrintWriter printWriter = new PrintWriter(writer);
                 e.printStackTrace(printWriter);
                 showText(desc + "数据解析错误", writer.toString());
+                return;
             } else if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
                 output.append("数据解析错误\n建议登陆后再尝试");
             } else if (str.contains("-352") || str.contains("22015") || str.contains("65056"))
@@ -166,7 +167,17 @@ public class MsgUtil {
                 output.append(str.replace("org.json.JSONException:", ""));
             }
         }
-        else if(e instanceof IndexOutOfBoundsException) output.append("Adapter错误无需上报，\n除非你在某个界面经常遇到");
+        else if(e instanceof IndexOutOfBoundsException) {
+            if (SharedPreferencesUtil.getBoolean("dev_recyclererr_detailed", false)) {
+                Writer writer = new StringWriter();
+                PrintWriter printWriter = new PrintWriter(writer);
+                e.printStackTrace(printWriter);
+                showText(desc + "Adapter错误", writer.toString());
+                return;
+            } else{
+                output.append("Adapter错误无需上报，\n除非你在某个界面经常遇到");
+            }
+        }
         else if(e instanceof SQLException) output.append("数据库读写错误\n请清理空间或清除软件数据");
         else output.append("错误：");
 

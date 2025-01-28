@@ -24,7 +24,13 @@
     <string name="special_login_export">以下是你的登录信息，可用于在其他设备上特殊登录，点击最下面的按钮可以复制。\n登录信息具有一定的时效性，请即取即用，导入完成请将此设备的哔哩终端清除数据。（不要点退出登录！）\n请勿将此页面的信息传给别人，以防盗号！</string>
 
     <string name="setting_lab_ui_landscape">！此功能将不再继续进行改进，除非开发者有时间！\n开启选项后，软件将会变为横屏，部分列表会变为三列，更适合平板等默认横屏的设备\n*注意：部分页面仍为单列式，可能有一些页面适配不佳，电视请移步官方电视版本或使用其他第三方软件。</string>
-    <string name="setting_lab_ui_round">！此功能尚未完工！\n开启选项后，软件的部分页面将会尽量适配圆形屏幕，如边距增大、左上角标题移至中央等。\n*注意：无法保证好用，但应该能用。打开后将无视边距设置。</string>
+    <string name="setting_lab_ui_rotatory">为0则不使用适配方案，非0则滚动距离会乘以此值\n请从1.0开始上下调节，直至你自己满意为止。打开新页面才能生效。</string>
+    <string name="setting_lab_path_video">缓存的视频将会保存到这个位置，若文件夹不存在会自动创建。之前缓存的视频请用文件管理器手动移动到新文件夹内。\n不保证会不会出现奇怪的问题。</string>
+    <string name="setting_lab_path_pictures">下载的图片将会保存到这个位置，若文件夹不存在会自动创建。之前下载的图片请用文件管理器手动移动到新文件夹内。\n不保证会不会出现奇怪的问题。</string>
+    <string name="setting_lab_download_old">2.7.0及以后的版本增加了后台下载服务，若后台下载在你的设备上有问题，请打开此选项以换回旧版的前台下载器！</string>
+    <string name="setting_lab_splashtext">顾名思义，可以更改开屏文字，支持换行。开屏文字在网络请求完成后就会被打断。</string>
+    <string name="setting_lab_jsonerr_detailed">如果你遇到了某些接口问题，开发者可能会需要你打开这个以提供更详细的报错信息。\n——当然开发者调试的时候也可能会用到这个。</string>
+    <string name="setting_lab_recyclererr_detailed">由于开发者技术稀烂（？），软件中的各种列表可能会偶尔出现报错且难以避免。\n虽然是偶尔出现，但很烦人很恶心。\n所以被逼疯的开发者把这个报错catch掉了，只留下一个“此错误无需上报”的提示框和这个用于调试的开关。</string>
 
     <string name="donate_title">温馨提醒</string>
     <string name="donate_desc">感谢以下捐赠者对本项目的支持！\n若有捐赠意向请访问https://afdian.com/a/bili-terminal\n捐赠为纯自愿行为，收到的捐款仅用于维护服务器，未成年人请征求父母意见\n你可以尽管放心，终端不会设置任何付费功能，并且无论是否捐赠，你所提出的意见和建议都会被同等考虑（难以实现或没有必要的功能我们也有权拒绝）\n捐赠者信息来自于爱发电，我们不对列表内的信息内容负责</string>
