@@ -42,6 +42,7 @@ public class SearchActivity extends InstanceActivity {
     private String lastKeyword = "≠~`";
     private RecyclerView historyRecyclerview;
     SearchHistoryAdapter searchHistoryAdapter;
+    ViewPager2 viewPager;
     EditText keywordInput;
     private ConstraintLayout searchBar;
     private boolean searchBarVisible = true;
@@ -73,7 +74,7 @@ public class SearchActivity extends InstanceActivity {
 
             handler = new Handler();
 
-            ViewPager2 viewPager = findViewById(R.id.viewPager);
+            viewPager = findViewById(R.id.viewPager);
 
             View searchBtn = findViewById(R.id.search);
             keywordInput = findViewById(R.id.keywordInput);
@@ -83,7 +84,6 @@ public class SearchActivity extends InstanceActivity {
             keywordInput.setOnFocusChangeListener((view, b) -> historyRecyclerview.setVisibility(b ? View.VISIBLE : View.GONE));
             historyRecyclerview.setVisibility(View.VISIBLE);
             FragmentStateAdapter vpfAdapter = new FragmentStateAdapter(this) {
-
                 @Override
                 public int getItemCount() {
                     return 4;
@@ -111,6 +111,11 @@ public class SearchActivity extends InstanceActivity {
                             findViewById(R.id.text_tutorial_pager).setVisibility(View.GONE);
                             SharedPreferencesUtil.putBoolean("tutorial_pager_"+ classname, false);
                         }
+                    }
+
+                    Fragment fragmentCurr = getSupportFragmentManager().findFragmentByTag("f" + viewPager.getCurrentItem());
+                    if (fragmentCurr != null) {
+                        ((SearchFragment) fragmentCurr).refresh();  //在fragment里已做判断
                     }
                     super.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
@@ -231,17 +236,16 @@ public class SearchActivity extends InstanceActivity {
 
                 try {
                     for (int i = 0; i < 4; i++) {
-                        //从viewpager中拿真正added的fragment的方法: tag = "f{position}", 得到的fragment将会是真实存在的
                         Fragment fragmentById = getSupportFragmentManager().findFragmentByTag("f" + i);
-                        if (fragmentById != null) {
-                            ((SearchRefreshable) fragmentById).refresh(str);
-                        }
+                        if (fragmentById != null)
+                            ((SearchFragment) fragmentById).update(str);
                     }
-                    refreshing = false;
-                } catch (Exception e) {
-                    refreshing = false;
-                    runOnUiThread(() -> MsgUtil.err(e));
-                }
+                    Fragment fragmentCurr = getSupportFragmentManager().findFragmentByTag("f" + viewPager.getCurrentItem());
+                    if (fragmentCurr != null) {
+                        ((SearchFragment) fragmentCurr).refresh();
+                    }
+                } catch (Exception e) {report(e);}
+                refreshing = false;
 
                 if(tutorial_show) {
                     runOnUiThread(() -> {

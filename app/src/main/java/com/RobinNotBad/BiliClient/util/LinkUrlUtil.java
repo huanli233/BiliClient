@@ -118,11 +118,11 @@ public class LinkUrlUtil {
                 if (response.code() == 200 && (body = response.body()) != null) {
                     JSONObject json = new JSONObject(body.string());
                     if (json.has("code") && json.getInt("code") == -404) {
-                        CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("啥都木有~"));
+                        MsgUtil.showMsg("啥都木有~");
                     }
                 }
             } catch (IOException | JSONException e) {
-                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("解析失败！"));
+                MsgUtil.showMsg("解析失败！");
             }
         });
     }
