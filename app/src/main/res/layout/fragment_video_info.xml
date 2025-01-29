@@ -218,7 +218,7 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/btn_like"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -241,7 +241,7 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/btn_coin"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -265,7 +265,7 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/btn_fav"
                         android:layout_width="30dp"
                         android:layout_height="30dp"

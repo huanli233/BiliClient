@@ -19,7 +19,6 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -87,7 +86,7 @@ public class VideoInfoFragment extends Fragment {
 
     private TextView description;
     private TextView tagsText;
-    private ImageButton fav;
+    private ImageView fav;
     private Pair<Long, Integer> progressPair;
     private boolean play_clicked = false;
 
@@ -200,8 +199,8 @@ public class VideoInfoFragment extends Fragment {
         MaterialButton relay = rootview.findViewById(R.id.relay);
         TextView bvidText = rootview.findViewById(R.id.bvidText);
         TextView danmakuCount = rootview.findViewById(R.id.danmakuCount);
-        ImageButton like = rootview.findViewById(R.id.btn_like);
-        ImageButton coin = rootview.findViewById(R.id.btn_coin);
+        ImageView like = rootview.findViewById(R.id.btn_like);
+        ImageView coin = rootview.findViewById(R.id.btn_coin);
         fav = rootview.findViewById(R.id.btn_fav);
         TextView likeLabel = rootview.findViewById(R.id.like_label);
         TextView coinLabel = rootview.findViewById(R.id.coin_label);
