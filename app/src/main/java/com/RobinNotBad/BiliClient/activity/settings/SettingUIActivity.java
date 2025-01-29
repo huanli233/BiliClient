@@ -7,6 +7,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
@@ -83,9 +84,11 @@ public class SettingUIActivity extends BaseActivity {
 
     private void save() {
         if (!uiScaleInput.getText().toString().isEmpty()) {
-            float dpiTimes = Float.parseFloat(uiScaleInput.getText().toString());
-            if (dpiTimes >= 0.25F && dpiTimes <= 5.0F)
-                SharedPreferencesUtil.putFloat("dpi", dpiTimes);
+            float dpiScale = Float.parseFloat(uiScaleInput.getText().toString());
+            if (dpiScale >= 0.25F && dpiScale <= 5.0F) {
+                SharedPreferencesUtil.putFloat("dpi", dpiScale);
+                BiliTerminal.DPI_FORCE_CHANGE = true;
+            }
             Log.e("dpi", uiScaleInput.getText().toString());
         }
 
