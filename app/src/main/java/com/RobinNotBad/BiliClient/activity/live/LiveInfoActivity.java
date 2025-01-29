@@ -133,7 +133,8 @@ public class LiveInfoActivity extends BaseActivity {
                                     } catch (Throwable ignored) {
                                         mid = 0;
                                     }
-                                    PlayerApi.jumpToPlayer(this, play_url, "","", "直播·" + room.title, false, room_id, "", 0, mid, 0, true);
+                                    Intent player = PlayerApi.jumpToPlayer(this, play_url, "","", "直播·" + room.title, false, room_id, "", 0, mid, 0, true);
+                                    startActivity(player);
                                 } catch (ActivityNotFoundException e) {
                                     MsgUtil.showMsg("没有找到播放器，请检查是否安装");
                                 } catch (Exception e) {

@@ -26,7 +26,7 @@ public class SettingLaboratoryActivity extends RefreshListActivity {
             add(new SettingSection("switch", "横屏模式", "ui_landscape", getString(R.string.setting_lab_ui_landscape), "false"));
             add(new SettingSection("input_string","开屏文字","ui_splashtext", getString(R.string.setting_lab_splashtext),"欢迎使用\n哔哩终端"));
             add(new SettingSection("input_string","缓存路径","save_path_video",getString(R.string.setting_lab_path_video), FileUtil.getDownloadPath().toString()));
-            add(new SettingSection("input_string","缓存路径","save_path_pictures",getString(R.string.setting_lab_path_pictures), FileUtil.getDownloadPicturePath().toString()));
+            add(new SettingSection("input_string","图片下载路径","save_path_pictures",getString(R.string.setting_lab_path_pictures), FileUtil.getDownloadPicturePath().toString()));
             add(new SettingSection("input_float","表冠适配灵敏度（Recycler）","ui_rotatory_recycler", getString(R.string.setting_lab_ui_rotatory),"0"));
             add(new SettingSection("input_float","表冠适配灵敏度（Scroll）","ui_rotatory_scroll", getString(R.string.setting_lab_ui_rotatory),"0"));
             add(new SettingSection("input_float","表冠适配灵敏度（List）","ui_rotatory_scroll", getString(R.string.setting_lab_ui_rotatory),"0"));

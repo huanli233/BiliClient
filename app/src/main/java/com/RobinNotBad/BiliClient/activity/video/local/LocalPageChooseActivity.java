@@ -49,7 +49,8 @@ public class LocalPageChooseActivity extends BaseActivity {
         PageChooseAdapter adapter = new PageChooseAdapter(this, pageList);
         adapter.setOnItemClickListener(position -> {
             try {
-                PlayerApi.jumpToPlayer(LocalPageChooseActivity.this, videoFileList.get(position), danmakuFileList.get(position), "", pageList.get(position), true, 0, "", 0, 0, 0, false);
+                Intent player = PlayerApi.jumpToPlayer(LocalPageChooseActivity.this, videoFileList.get(position), danmakuFileList.get(position), "", pageList.get(position), true, 0, "", 0, 0, 0, false);
+                startActivity(player);
             } catch (ActivityNotFoundException e) {
                 MsgUtil.showMsg("没有找到播放器，请检查是否安装");
             } catch (Exception e) {

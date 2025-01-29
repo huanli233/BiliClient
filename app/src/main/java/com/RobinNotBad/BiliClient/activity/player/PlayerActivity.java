@@ -1427,16 +1427,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         if (danmakuFile != null && danmakuFile.exists()) danmakuFile.delete();
 
-        CenterThreadPool.run(() -> {
-            try {
-                if (mid != 0 && aid != 0 && !isLiveMode) {
-                    HistoryApi.reportHistory(aid, cid, mid, video_now / 1000);
-                }
-            } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.err(e));
-            }
-        });
-
         if (liveWebSocket != null) liveWebSocket.close(1000, "");
 
         setRequestedOrientation(SharedPreferencesUtil.getBoolean("ui_landscape", false) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -1538,5 +1528,16 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     protected boolean eventBusEnabled() {
         return SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, true);
+    }
+
+    @Override
+    public void finish() {
+        if(video_now!=0) {
+            Intent result = new Intent();
+            result.putExtra("progress", video_now);
+            setResult(RESULT_OK, result);
+        }
+        else setResult(RESULT_CANCELED);
+        super.finish();
     }
 }

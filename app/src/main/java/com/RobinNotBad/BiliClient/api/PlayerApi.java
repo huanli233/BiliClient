@@ -117,7 +117,7 @@ public class PlayerApi {
         return new Pair<>(videourl, body);
     }
 
-    public static void jumpToPlayer(Context context, String videourl, String danmakuurl, String subtitleurl, String title, boolean local, long aid, String bvid, long cid, long mid, int progress, boolean live_mode) {
+    public static Intent jumpToPlayer(Context context, String videourl, String danmakuurl, String subtitleurl, String title, boolean local, long aid, String bvid, long cid, long mid, int progress, boolean live_mode) {
         Log.e("debug-准备跳转", "--------");
         Log.e("debug-视频标题", title);
         Log.e("debug-视频地址", videourl);
@@ -175,7 +175,7 @@ public class PlayerApi {
                 intent.setClass(context, SettingPlayerChooseActivity.class);
                 break;
         }
-        context.startActivity(intent);
+        return intent;
     }
 
     public static Uri getVideoUri(Context context, String path) {
