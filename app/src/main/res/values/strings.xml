@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">哔哩终端</string>
     <string name="about_description">轻量的第三方B站客户端</string>
-    <string name="about_say">软件名来自原神中的“虚空终端”\n最低兼容安卓4.2\n愿你在这一方小小的屏幕中，找到属于自己的小小的快乐\n提示：长按设置中的“关于”按钮有彩蛋哦！</string>
+    <string name="about_say">软件名来自原神中的“虚空终端”\n最低兼容安卓4.0\n愿你在这一方小小的屏幕中，找到属于自己的小小的快乐\n提示：长按设置中的“关于”按钮有彩蛋哦！</string>
     <string name="about_group_tip">哔哩终端开发团队不会对个别用户出现的个别问题进行针对性修复，不会对特殊情况下才触发的问题进行及时修复，不会保证实现不必要或难以实现的功能。\n\n另外，如果你有能力修复问题，欢迎fork终端仓库提交pr</string>
     <string name="about_group">官网域名：biliterminal.cn\n短链接：bil.asia\n交流群：482091687\n备用群：656364457\n测试组：745414928</string>
     <string name="about_wearbili">注意：本软件仅使用了WearBili的旧版页面布局，与WearBili不存在任何关系！\n另：如果你使用的是手表且性能足够，欢迎前往使用Re:WearBili以获得更好的体验！</string>
