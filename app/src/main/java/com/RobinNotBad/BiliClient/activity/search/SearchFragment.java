@@ -115,7 +115,7 @@ public class SearchFragment extends Fragment {
     public void setBottom(boolean bool) {
         bottom = bool;
         if (page == 1) showEmptyView(bool);
-        else if (isAdded()) {
+        else if (bool && isAdded()) {
             MsgUtil.showMsg("已经到底啦OwO");
         }
     }
@@ -160,6 +160,7 @@ public class SearchFragment extends Fragment {
     public void update(String keyword){
         this.page = 1;
         this.keyword = keyword;
+        this.refreshable = true;
         setBottom(false);
     }
 
