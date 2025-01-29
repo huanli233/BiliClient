@@ -11,7 +11,6 @@ import com.RobinNotBad.BiliClient.adapter.user.UserListAdapter;
 import com.RobinNotBad.BiliClient.api.SearchApi;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import org.json.JSONArray;
 
@@ -58,18 +57,14 @@ public class SearchUserFragment extends SearchFragment {
                     if (page == 1) showEmptyView(false);
                     List<UserInfo> list = new ArrayList<>();
                     SearchApi.getUsersFromSearchResult(result, list);
+                    if(list.size()==0) setBottom(true);
                     CenterThreadPool.runOnUiThread(() -> {
                         int lastSize = userInfoList.size();
                         userInfoList.addAll(list);
                         userInfoAdapter.notifyItemRangeInserted(lastSize + 1, userInfoList.size() - lastSize);
                     });
-                } else {
-                    bottom = true;
-                    if (page == 1) showEmptyView(true);
-                    else if (isAdded()) {
-                        MsgUtil.showMsg("已经到底啦OwO");
-                    }
                 }
+                else setBottom(true);
             } catch (Exception e) {
                 loadFail(e);
             }

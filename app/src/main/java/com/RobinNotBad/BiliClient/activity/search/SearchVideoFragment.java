@@ -54,18 +54,14 @@ public class SearchVideoFragment extends SearchFragment {
                     ArrayList<VideoCard> list = new ArrayList<>();
                     SearchApi.getVideosFromSearchResult(result, list, page == 1);
                     Log.d("debug-size", String.valueOf(list.size()));
-                    CenterThreadPool.runOnUiThread(() -> {
+                    if(list.size()==0) setBottom(true);
+                    else CenterThreadPool.runOnUiThread(() -> {
                         int lastSize = videoCardList.size();
                         videoCardList.addAll(list);
                         videoCardAdapter.notifyItemRangeInserted(lastSize + 1, videoCardList.size() - lastSize);
                     });
-                } else {
-                    bottom = true;
-                    if (page==1) showEmptyView(true);
-                    else if (isAdded()) {
-                        MsgUtil.showMsg("已经到底啦OwO");
-                    }
                 }
+                else setBottom(true);
             } catch (Exception e) {
                 e.printStackTrace();
                 loadFail(e);

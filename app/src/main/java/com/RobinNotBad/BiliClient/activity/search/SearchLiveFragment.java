@@ -60,18 +60,14 @@ public class SearchLiveFragment extends SearchFragment {
                     JSONArray jsonArray = result.optJSONArray("live_room");
                     List<LiveRoom> list = new ArrayList<>();
                     if (jsonArray != null) list.addAll(LiveApi.analyzeLiveRooms(jsonArray));
-                    CenterThreadPool.runOnUiThread(() -> {
+                    if(list.size()==0) setBottom(true);
+                    else CenterThreadPool.runOnUiThread(() -> {
                         int lastSize = roomList.size();
                         roomList.addAll(list);
                         liveCardAdapter.notifyItemRangeInserted(lastSize + 1, roomList.size() - lastSize);
                     });
-                } else {
-                    bottom = true;
-                    if (page == 1) showEmptyView(true);
-                    else if (isAdded()) {
-                        MsgUtil.showMsg("已经到底啦OwO");
-                    }
                 }
+                else setBottom(true);
             } catch (Exception e) {
                 report(e);
             }

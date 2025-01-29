@@ -56,18 +56,14 @@ public class SearchArticleFragment extends SearchFragment {
                     if (page == 1) showEmptyView(false);
                     ArrayList<ArticleCard> list = new ArrayList<>();
                     SearchApi.getArticlesFromSearchResult(result, list);
+                    if(list.size()==0) setBottom(true);
                     CenterThreadPool.runOnUiThread(() -> {
                         int lastSize = articleCardList.size();
                         articleCardList.addAll(list);
                         articleCardAdapter.notifyItemRangeInserted(lastSize + 1, articleCardList.size() - lastSize);
                     });
-                } else {
-                    bottom = true;
-                    if (page == 1) showEmptyView(true);
-                    else if (isAdded()) {
-                        MsgUtil.showMsg("已经到底啦OwO");
-                    }
                 }
+                else setBottom(true);
             } catch (Exception e) {
                 report(e);
             }

@@ -51,7 +51,15 @@ public class SearchFragment extends Fragment {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (listener != null && !recyclerView.canScrollVertically(1) && !swipeRefreshLayout.isRefreshing() && newState == RecyclerView.SCROLL_STATE_DRAGGING && !bottom) {
+                if(newState != RecyclerView.SCROLL_STATE_DRAGGING) return;
+
+                if(!recyclerView.canScrollVertically(-1)) {
+                    if (requireActivity() instanceof SearchActivity) {
+                        SearchActivity activity = (SearchActivity) requireActivity();  //不能向上滚动了就显示搜索栏
+                        activity.onScrolled(-114);
+                    }
+                }
+                else if (listener != null && !recyclerView.canScrollVertically(1) && !swipeRefreshLayout.isRefreshing() && !bottom) {
                     goOnLoad();
                 }
             }
@@ -106,6 +114,10 @@ public class SearchFragment extends Fragment {
 
     public void setBottom(boolean bool) {
         bottom = bool;
+        if (page == 1) showEmptyView(bool);
+        else if (isAdded()) {
+            MsgUtil.showMsg("已经到底啦OwO");
+        }
     }
 
     public void runOnUiThread(Runnable runnable) {
@@ -114,10 +126,7 @@ public class SearchFragment extends Fragment {
 
     public void showEmptyView(boolean empty) {
         if (emptyView != null) {
-            runOnUiThread(() -> {
-                recyclerView.setVisibility(empty ? View.GONE : View.VISIBLE);
-                emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
-            });
+            runOnUiThread(() -> emptyView.setVisibility(empty ? View.VISIBLE : View.GONE));
         }
     }
 
@@ -151,7 +160,7 @@ public class SearchFragment extends Fragment {
     public void update(String keyword){
         this.page = 1;
         this.keyword = keyword;
-        this.refreshable = true;
+        setBottom(false);
     }
 
     public void refresh(){
