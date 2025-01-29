@@ -124,7 +124,7 @@ public class ReplyInfoActivity extends BaseActivity {
                 Log.e("debug", "下一页");
                 runOnUiThread(() -> {
                     replyList.addAll(list);
-                    replyAdapter.notifyItemRangeInserted(replyList.size() - list.size(), list.size());
+                    replyAdapter.notifyItemRangeInserted(replyList.size() - list.size() + 2, list.size());  //顶上有两个固定项
                     refreshLayout.setRefreshing(false);
                 });
                 if (result == 1) {
