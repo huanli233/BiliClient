@@ -43,7 +43,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.api.DanmakuApi;
-import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.event.SnackEvent;
@@ -123,7 +122,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private TextView text_progress, text_online, text_volume, loading_text0, loading_text1, text_speed, text_newspeed;
     public TextView text_title, text_subtitle;
 
-    private Timer progressTimer, autoHideTimer, volumeTimer, speedTimer, loadingTimer, onlineTimer;
+    private Timer progressTimer, autoHideTimer, volumeTimer, speedTimer, loadingTimer, onlineTimer, surfaceTimer;
     private String video_url, danmaku_url;
 
     private boolean isPlaying, isPrepared, hasDanmaku,
@@ -733,8 +732,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         Log.e("debug", "准备设置显示");
         if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT < 19)) {            //Texture
             Log.e("debug", "使用texture模式");
-            Timer textureTimer = new Timer();
-            textureTimer.schedule(new TimerTask() {
+            surfaceTimer = new Timer();
+            surfaceTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     Log.e("debug", "循环检测");
@@ -857,6 +856,11 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     @SuppressLint("SetTextI18n")
     @Override
     public void onPrepared(IMediaPlayer mediaPlayer) {
+        if(destroyed){
+            mediaPlayer.release();
+            return;
+        }
+
         isPrepared = true;
         video_all = (int) mediaPlayer.getDuration();
 
@@ -1416,22 +1420,54 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
         destroyed = true;
         if (isPlaying) playerPause();
-        if (ijkPlayer != null) ijkPlayer.release();
-        if (mDanmakuView != null) mDanmakuView.release();
+        if (ijkPlayer != null) {
+            ijkPlayer.release();
+            ijkPlayer = null;
+        }
+        if (mDanmakuView != null) {
+            mDanmakuView.release();
+            mDanmakuView = null;
+        }
 
-        if (autoHideTimer != null) autoHideTimer.cancel();
-        if (volumeTimer != null) volumeTimer.cancel();
-        if (progressTimer != null) progressTimer.cancel();
-        if (onlineTimer != null) onlineTimer.cancel();
-        if (loadingTimer != null) loadingTimer.cancel();
+        cancelAllTimers();
 
         if (danmakuFile != null && danmakuFile.exists()) danmakuFile.delete();
 
-        if (liveWebSocket != null) liveWebSocket.close(1000, "");
+        if (liveWebSocket != null) {
+            liveWebSocket.close(1000, "");
+            liveWebSocket = null;
+        }
 
         setRequestedOrientation(SharedPreferencesUtil.getBoolean("ui_landscape", false) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         super.onDestroy();
+    }
+
+    private void cancelAllTimers(){
+        if (surfaceTimer != null) {
+            surfaceTimer.cancel();
+            surfaceTimer = null;
+        }
+        if (autoHideTimer != null) {
+            autoHideTimer.cancel();
+            autoHideTimer = null;
+        }
+        if (volumeTimer != null) {
+            volumeTimer.cancel();
+            volumeTimer = null;
+        }
+        if (progressTimer != null) {
+            progressTimer.cancel();
+            progressTimer = null;
+        }
+        if (onlineTimer != null) {
+            onlineTimer.cancel();
+            onlineTimer = null;
+        }
+        if (loadingTimer != null) {
+            loadingTimer.cancel();
+            loadingTimer = null;
+        }
     }
 
     OkHttpClient okHttpClient;
