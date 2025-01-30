@@ -88,6 +88,7 @@ public class SettingUIActivity extends BaseActivity {
             if (dpiScale >= 0.25F && dpiScale <= 5.0F) {
                 SharedPreferencesUtil.putFloat("dpi", dpiScale);
                 BiliTerminal.DPI_FORCE_CHANGE = true;
+                BiliTerminal.context = BiliTerminal.getFitDisplayContext(BiliTerminal.context);
             }
             Log.e("dpi", uiScaleInput.getText().toString());
         }
