@@ -72,7 +72,7 @@ public class MySpaceActivity extends InstanceActivity {
                                 .into(userAvatar);
                         userName.setText(userInfo.name);
                         userFans.setText(ToolsUtil.toWan(userInfo.fans) + "粉丝 " + userCoin + "硬币");
-                        userExp.setText("当前成长" + userInfo.current_exp + (userInfo.level >= 6 ? "" : ",距离Lv" + (userInfo.level + 1) + "还需" + (userInfo.next_exp - userInfo.current_exp)));
+                        userExp.setText("EXP:" + userInfo.current_exp + (userInfo.level >= 6 ? "" : "/" + userInfo.next_exp));
 
                         myInfo.setOnClickListener(view -> {
                             Intent intent = new Intent();

@@ -342,9 +342,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         Handler handler = new Handler();
         handler.postDelayed(() -> CenterThreadPool.run(() -> {    //等界面加载完成
             if(isLiveMode) {
-                runOnUiThread(()->{
-                    btn_menu.setVisibility(View.GONE);
-                });
+                runOnUiThread(()-> btn_menu.setVisibility(View.GONE));
                 setDisplay();
                 return;
             }
@@ -355,7 +353,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             });
             if(isOnlineVideo) {
                 downdanmu();
-                if(SharedPreferencesUtil.getBoolean("player_subtitle_autoshow", false)) downsubtitle(false);
+                if(SharedPreferencesUtil.getBoolean("player_subtitle_autoshow", true)) downsubtitle(false);
             }
             else {
                 runOnUiThread(() -> {
@@ -1097,7 +1095,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             if(subtitleLinks == null) subtitleLinks = PlayerApi.getSubtitleLinks(aid, cid);
 
             boolean ai_not_only = subtitleLinks.length > 2 || (subtitleLinks.length == 2 && !subtitleLinks[0].isAI);
-            boolean ai_allowed = from_btn || SharedPreferencesUtil.getBoolean("player_subtitle_ai_allowed", true);
+            boolean ai_allowed = from_btn || SharedPreferencesUtil.getBoolean("player_subtitle_ai_allowed", false);
 
             if(ai_not_only || ai_allowed) {
                 if(subtitle_selected == -1) subtitle_selected = subtitleLinks.length;
@@ -1419,17 +1417,20 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             eventBusInit = false;
         }
         destroyed = true;
+
         if (isPlaying) playerPause();
-        if (ijkPlayer != null) {
-            ijkPlayer.release();
-            ijkPlayer = null;
-        }
+
+        cancelAllTimers();
+
         if (mDanmakuView != null) {
             mDanmakuView.release();
             mDanmakuView = null;
         }
+        if (ijkPlayer != null) {
+            ijkPlayer.release();
+            ijkPlayer = null;
+        }
 
-        cancelAllTimers();
 
         if (danmakuFile != null && danmakuFile.exists()) danmakuFile.delete();
 

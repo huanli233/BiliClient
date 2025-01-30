@@ -47,8 +47,8 @@ public class SettingTerminalPlayerActivity extends RefreshListActivity {
 
             add(new SettingSection("divider", "", "", "", ""));
 
-            add(new SettingSection("switch", "自动弹出字幕选择", "player_subtitle_autoshow", getString(R.string.desc_subtitle_autoshow), "false"));
-            add(new SettingSection("switch", "允许仅AI字幕", "player_subtitle_ai_allowed", getString(R.string.desc_subtitle_ai_allowed), "true"));
+            add(new SettingSection("switch", "自动弹出字幕选择", "player_subtitle_autoshow", getString(R.string.desc_subtitle_autoshow), "true"));
+            add(new SettingSection("switch", "允许仅AI字幕", "player_subtitle_ai_allowed", getString(R.string.desc_subtitle_ai_allowed), "false"));
 
             add(new SettingSection("divider", "", "", "", ""));
 

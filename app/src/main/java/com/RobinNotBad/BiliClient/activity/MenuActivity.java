@@ -75,6 +75,10 @@ public class MenuActivity extends BaseActivity {
 
         Intent intent = getIntent();
         from = intent.getStringExtra("from");
+        if(from!=null){
+            Log.d("debug-menu",from);
+            if(btnNames.containsKey(from)) setPageName(Objects.requireNonNull(btnNames.get(from)).first);
+        }
 
         findViewById(R.id.top).setOnClickListener(view -> finish());
 

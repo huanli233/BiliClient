@@ -80,7 +80,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/text_itemcount"
             app:layout_constraintStart_toStartOf="@+id/text_title"
             app:layout_constraintTop_toTopOf="@+id/text_itemcount"
-            android:src="@drawable/video_library" />
+            android:src="@drawable/icon_folder" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

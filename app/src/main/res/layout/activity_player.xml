@@ -130,7 +130,7 @@
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
                 android:progressTint="#00A4DA"
-                android:secondaryProgressTint="@color/color_ripple"
+                android:secondaryProgressTint="#eeFEFEFE"
                 android:thumb="@drawable/player_selector_progress"
                 android:thumbOffset="8dp" />
 
