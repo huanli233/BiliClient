@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
+import android.util.Pair;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.BuildConfig;
@@ -195,7 +196,7 @@ public class AppInfoApi {
         return list;
     }
 
-    public static String uploadStack(String stack, Context context) {
+    public static Pair<Integer, String> uploadStack(String stack, Context context) {
         //上传崩溃堆栈
         try {
             String url = "http://api.biliterminal.sineworld.cn/terminal/upload/stack";
@@ -208,11 +209,12 @@ public class AppInfoApi {
             post_data.put("device_brand", Build.BRAND);
 
             JSONObject res = new JSONObject(Objects.requireNonNull(NetWorkUtil.postJson(url, post_data.toString(), customHeaders).body()).string());
-            if (res.getInt("code") == 200) return "上传成功";
-            else return res.getString("msg");
+            String msg = (res.getInt("code") == 200) ? "上传成功" : res.getString("msg");
+            int id = res.optInt("id",-114);
+            return new Pair<>(id, msg);
         } catch (Throwable e) {
             e.printStackTrace();
-            return "上传失败";
+            return new Pair<>(-1,"上传失败");
         }
     }
 

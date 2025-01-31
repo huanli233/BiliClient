@@ -71,9 +71,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="点击展开错误堆栈"
                 android:alpha="0.7"
                 android:gravity="center"
+                android:text="点击上方展开错误堆栈"
                 android:textSize="11sp" />
 
             <TextView
@@ -82,7 +82,7 @@
                 android:layout_marginTop="3dp"
                 android:alpha="0.85"
                 android:gravity="center"
-                android:text="建议将以上错误信息展开后全部截图扔给开发者，如果不好截图的话请正对屏幕拍照保证文字清晰。顺便请带上你的设备信息和进行的操作，谢谢！\n上传堆栈实际上可能没有什么用，根本没人去看（"
+                android:text="建议将以上错误信息展开后全部截图扔给开发者，如果不好截图的话请正对屏幕拍照保证文字清晰。顺便请带上你的设备信息和进行的操作，谢谢！\n上传堆栈截至此版本发布时仍是摆设，如果截图不方便再使用，上传完也请把按钮上显示的时间或者ID提供给开发者"
                 android:textSize="12sp" />
 
             <com.google.android.material.button.MaterialButton
