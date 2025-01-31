@@ -64,7 +64,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setRequestedOrientation(SharedPreferencesUtil.getBoolean("ui_landscape", false)
-                ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
                 : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         super.onCreate(savedInstanceState);

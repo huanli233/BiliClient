@@ -206,7 +206,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         super.onCreate(savedInstanceState);
 
         screen_landscape = SharedPreferencesUtil.getBoolean("player_autolandscape", false) || SharedPreferencesUtil.getBoolean("ui_landscape", false);
-        setRequestedOrientation(screen_landscape ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(screen_landscape ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setContentView(R.layout.activity_player);
         findview();
@@ -1317,7 +1317,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     public void rotate() {
         Log.e("debug", "点击旋转按钮");
         screen_landscape = !screen_landscape;
-        setRequestedOrientation(screen_landscape ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(screen_landscape ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override
@@ -1439,7 +1439,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             liveWebSocket = null;
         }
 
-        setRequestedOrientation(SharedPreferencesUtil.getBoolean("ui_landscape", false) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(SharedPreferencesUtil.getBoolean("ui_landscape", false) ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         super.onDestroy();
     }
