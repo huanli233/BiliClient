@@ -153,7 +153,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private boolean loop_enabled;
 
     private BatteryView batteryView;
-    private BatteryManager manager;
+    private BatteryManager batteryManager;
 
     private File danmakuFile;
 
@@ -259,8 +259,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         ijkPlayer = new IjkMediaPlayer();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            manager = (BatteryManager) getSystemService(BATTERY_SERVICE);
-            batteryView.setPower(manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
+            batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
+            batteryView.setPower(batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
         } else batteryView.setVisibility(View.GONE);
 
         loop_enabled = SharedPreferencesUtil.getBoolean("player_loop", false);
@@ -415,21 +415,26 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
                 @Override
                 public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
+                    Log.d("debug-surfacetexture","available");
                     mSurfaceTexture = surfaceTexture;
+                    if(isPrepared && ijkPlayer!=null) ijkPlayer.setSurface(new Surface(surfaceTexture));
                 }
 
                 @Override
                 public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
+                    Log.d("debug-surfacetexture","sizechanged");
                 }
 
                 @Override
                 public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
-                    return false;
+                    Log.d("debug-surfacetexture","destroyed");
+                    mSurfaceTexture = null;
+                    if(ijkPlayer != null) ijkPlayer.setSurface(null);
+                    return true;
                 }
 
                 @Override
-                public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {
-                }
+                public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {}
             });
             layout_video.addView(textureView, params);
         } else {
@@ -674,7 +679,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         seekbar_progress.setVisibility(View.VISIBLE);
         if (isPrepared && !isLiveMode) text_speed.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            batteryView.setPower(manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
+            batteryView.setPower(batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
         }
         if(screen_round) {
             text_progress.setGravity(Gravity.NO_GRAVITY);
@@ -716,13 +721,15 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "analyzeduration", 100);
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", 1);
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1);
-        ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "packet-buffering", 1);
+
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "fflags", "flush_packets");
         ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "reconnect", 1);
-        ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "max-buffer-size", 15 * 1000 * 1000);
+
         //这个坑死我！请允许我为解决此问题而大大地兴奋一下ohhhhhhhhhhhhhhhhhhhhhhhhhhhh
         //ijkplayer是自带一个useragent的，要把默认的改掉才能用！
         if (isOnlineVideo) {
+            ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "packet-buffering", 1);
+            ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "max-buffer-size", 15 * 1000 * 1000);
             ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "user_agent", USER_AGENT_WEB);
             Log.e("debug", "设置ua");
         }
@@ -748,8 +755,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             Log.e("debug", "使用surface模式");
             Log.e("debug", "获取surfaceHolder");
             SurfaceHolder surfaceHolder = surfaceView.getHolder();       //Surface
-            Timer textureTimer = new Timer();
-            textureTimer.schedule(new TimerTask() {
+            surfaceTimer = new Timer();
+            surfaceTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     Log.e("debug", "循环检测");
@@ -763,10 +770,12 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
                             @Override
                             public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-                                ijkPlayer.setDisplay(surfaceHolder);
-                                if (isPrepared) {
-                                    Log.e("debug", "重新设置Holder");
-                                    ijkPlayer.seekTo(seekbar_progress.getProgress());
+                                if(!destroyed) {
+                                    Log.d("debug-surface", "重新设置Holder");
+                                    ijkPlayer.setDisplay(surfaceHolder);
+                                    if (isPrepared) {
+                                        ijkPlayer.seekTo(seekbar_progress.getProgress());
+                                    }
                                 }
                             }
 
@@ -776,8 +785,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
                             @Override
                             public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
-                                Log.e("debug", "Holder没了");
-                                ijkPlayer.setDisplay(null);
+                                Log.d("debug-surface", "Holder没了");
+                                if(isPrepared && !destroyed) ijkPlayer.setDisplay(null);
                             }
                         });
                         MPPrepare(video_url);
@@ -826,8 +835,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         ijkPlayer.setOnBufferingUpdateListener((mp, percent) -> seekbar_progress.setSecondaryProgress(percent * video_all / 100));
 
-        //if(mode==0)
-        ijkPlayer.setOnInfoListener((mp, what, extra) -> {
+        if(isOnlineVideo || isLiveMode) ijkPlayer.setOnInfoListener((mp, what, extra) -> {
             if (what == IMediaPlayer.MEDIA_INFO_BUFFERING_START) {
                 runOnUiThread(() -> {
                     loading_info.setVisibility(View.VISIBLE);
