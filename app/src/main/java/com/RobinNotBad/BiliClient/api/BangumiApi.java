@@ -38,7 +38,7 @@ public class BangumiApi {
             card.aid = bangumi.getLong("media_id");
             card.title = bangumi.getString("title");
             card.cover = bangumi.getString("cover");
-            card.view = ToolsUtil.toWan(bangumi.getJSONObject("stat").getLong("view"));
+            card.view = ToolsUtil.toWan(bangumi.getJSONObject("stat").optInt("view"));
 
             cardList.add(card);
         }

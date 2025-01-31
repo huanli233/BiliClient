@@ -46,8 +46,7 @@ public class FollowingBangumisActivity extends RefreshListActivity {
                 }
 
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
+                loadFail(e);
             }
         });
     }
@@ -70,9 +69,7 @@ public class FollowingBangumisActivity extends RefreshListActivity {
                 }
                 setRefreshing(false);
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
-                this.page--;
+                loadFail(e);
             }
         });
     }
