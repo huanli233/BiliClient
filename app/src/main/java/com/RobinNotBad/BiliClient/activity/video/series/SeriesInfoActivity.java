@@ -57,8 +57,7 @@ public class SeriesInfoActivity extends RefreshListActivity {
                 else showEmptyView();
                 setRefreshing(false);
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
+                loadFail(e);
             }
         });
     }
@@ -78,9 +77,7 @@ public class SeriesInfoActivity extends RefreshListActivity {
                 }
                 setRefreshing(false);
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
-                this.page--;
+                loadFail(e);
             }
         });
     }

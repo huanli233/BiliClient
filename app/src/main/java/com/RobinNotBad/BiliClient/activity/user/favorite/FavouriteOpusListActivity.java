@@ -45,9 +45,7 @@ public class FavouriteOpusListActivity extends RefreshListActivity {
                 runOnUiThread(() -> adapter.notifyItemRangeInserted(lastSize, list.size() - lastSize));
                 setRefreshing(false);
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
-                this.page--;
+                loadFail(e);
             }
 
         });

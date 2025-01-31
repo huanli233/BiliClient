@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BangumiInfoFragment extends Fragment {
-    private static final String TAG = "BangumiInfoFragment";
     private long mediaId;
     private int selectedSection = 0, selectedEpisode = 0;
     private Dialog dialog;

@@ -93,7 +93,7 @@ public class BaseActivity extends AppCompatActivity {
 
         // 随便加的
         int density;
-        if ((density = SharedPreferencesUtil.getInt("density", -1)) >= 72) {
+        if (BiliTerminal.getSystemSdk() >= 17 && (density = SharedPreferencesUtil.getInt("density", -1)) >= 72) {
             setDensity(density);
         }
     }
@@ -131,7 +131,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void report(Exception e) {
-        runOnUiThread(() -> MsgUtil.err(e));
+        runOnUiThread(() -> MsgUtil.err(getClassName(), e));
     }
 
     private boolean eventBusInit = false;
@@ -271,5 +271,9 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean isDestroyed(){
         return getLifecycle().getCurrentState().equals(Lifecycle.State.DESTROYED);
+    }
+
+    public String getClassName(){
+        return this.getClass().getSimpleName();
     }
 }

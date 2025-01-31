@@ -61,9 +61,7 @@ public class FollowUsersActivity extends RefreshListActivity {
                     finish();
                     MsgUtil.showMsg(e.getMessage());
                 } else {
-                    report(e);
-                    setRefreshing(false);
-                    this.page--;
+                    loadFail(e);
                 }
             }
         });
@@ -89,9 +87,7 @@ public class FollowUsersActivity extends RefreshListActivity {
                     finish();
                     MsgUtil.showMsg(e.getMessage());
                 } else {
-                    report(e);
-                    setRefreshing(false);
-                    this.page--;
+                    loadFail(e);
                 }
             }
         });

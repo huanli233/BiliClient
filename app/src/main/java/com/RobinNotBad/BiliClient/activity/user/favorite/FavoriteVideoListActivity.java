@@ -82,8 +82,7 @@ public class FavoriteVideoListActivity extends RefreshListActivity {
                 }
 
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
+                loadFail(e);
             }
         });
     }
@@ -104,9 +103,7 @@ public class FavoriteVideoListActivity extends RefreshListActivity {
                 }
                 setRefreshing(false);
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
-                this.page--;
+                loadFail(e);
             }
         });
     }

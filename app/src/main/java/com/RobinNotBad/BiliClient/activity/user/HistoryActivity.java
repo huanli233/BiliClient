@@ -47,8 +47,7 @@ public class HistoryActivity extends RefreshListActivity {
                 }
 
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
+                loadFail(e);
             }
         });
     }
@@ -71,9 +70,7 @@ public class HistoryActivity extends RefreshListActivity {
                 }
                 setRefreshing(false);
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
-                this.page--;
+                loadFail(e);
             }
         });
     }
