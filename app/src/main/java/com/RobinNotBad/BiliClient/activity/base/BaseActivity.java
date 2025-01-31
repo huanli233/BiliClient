@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -39,6 +40,7 @@ import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -74,7 +76,7 @@ public class BaseActivity extends AppCompatActivity {
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
-        if(BiliTerminal.getSystemSdk() >= 17) display.getRealMetrics(metrics);
+        if(Build.VERSION.SDK_INT >= 17) display.getRealMetrics(metrics);
         else display.getMetrics(metrics);
 
         int scrW = metrics.widthPixels;
@@ -93,7 +95,7 @@ public class BaseActivity extends AppCompatActivity {
 
         // 随便加的
         int density;
-        if (BiliTerminal.getSystemSdk() >= 17 && (density = SharedPreferencesUtil.getInt("density", -1)) >= 72) {
+        if ((density = SharedPreferencesUtil.getInt("density", -1)) >= 72) {
             setDensity(density);
         }
     }
@@ -105,10 +107,31 @@ public class BaseActivity extends AppCompatActivity {
 
     public void setPageName(String name) {
         TextView textView = findViewById(R.id.pageName);
-        if (textView != null) textView.setText(name);
+        if (textView != null) {
+            textView.setText(name);
+            textView.setMaxLines(1);
+        }
     }
 
     public void setTopbarExit() {
+        /*
+        //圆屏适配
+        if(SharedPreferencesUtil.getBoolean("player_ui_round",false)){
+            TextView pagename = findViewById(R.id.pageName);
+            if(pagename != null) {
+                ViewGroup.LayoutParams params = pagename.getLayoutParams();
+                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                int paddings = ToolsUtil.dp2px(16);
+                Log.d("debug-round","ok");
+                pagename.setPadding(paddings,paddings,paddings,0);
+                pagename.setLayoutParams(params);
+                pagename.setGravity(Gravity.CENTER);
+            }
+        }
+
+         */
+
         View view = findViewById(R.id.top);
         if(view==null) return;
         if(Build.VERSION.SDK_INT > 17 && view.hasOnClickListeners()) return;
@@ -176,6 +199,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void setDensity(int targetDensityDpi) {
+        if(Build.VERSION.SDK_INT < 17) return;
         Resources resources = getResources();
 
         if (resources.getConfiguration().densityDpi == targetDensityDpi) return;
@@ -217,7 +241,7 @@ public class BaseActivity extends AppCompatActivity {
     public void onContentChanged() {
         super.onContentChanged();
         //自动适配表冠
-        if(BiliTerminal.getSystemSdk() >= Build.VERSION_CODES.O) {    //既然不支持，那低版本直接跳过
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {    //既然不支持，那低版本直接跳过
             ViewGroup rootView = (ViewGroup) this.getWindow().getDecorView();
             setRotaryScroll(rootView);
         }

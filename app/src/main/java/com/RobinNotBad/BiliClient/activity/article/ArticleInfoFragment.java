@@ -1,11 +1,16 @@
 package com.RobinNotBad.BiliClient.activity.article;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -84,6 +89,16 @@ public class ArticleInfoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.recyclerView);
+
+        if(SharedPreferencesUtil.getBoolean("ui_landscape",false)) {
+            WindowManager windowManager = (WindowManager) view.getContext().getSystemService(Context.WINDOW_SERVICE);
+            Display display = windowManager.getDefaultDisplay();
+            DisplayMetrics metrics = new DisplayMetrics();
+            if(Build.VERSION.SDK_INT >= 17) display.getRealMetrics(metrics);
+            else display.getMetrics(metrics);
+            int paddings = metrics.widthPixels / 6;
+            recyclerView.setPadding(paddings,0,paddings,0);
+        }
 
         //开始解析内容
         lineList = new ArrayList<>();

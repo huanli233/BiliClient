@@ -98,8 +98,4 @@ public class BiliTerminal extends Application {
         context.startActivity(intent);
     }
 
-    public static int getSystemSdk(){
-        return Build.VERSION.SDK_INT;
-    }
-
 }

@@ -1,9 +1,14 @@
 package com.RobinNotBad.BiliClient.activity.reply;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +24,7 @@ import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -63,6 +69,16 @@ public class ReplyInfoActivity extends BaseActivity {
         refreshLayout.setOnRefreshListener(this::refresh);
 
         setPageName("评论详情");
+
+        if(SharedPreferencesUtil.getBoolean("ui_landscape",false)) {
+            WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+            Display display = windowManager.getDefaultDisplay();
+            DisplayMetrics metrics = new DisplayMetrics();
+            if(Build.VERSION.SDK_INT >= 17) display.getRealMetrics(metrics);
+            else display.getMetrics(metrics);
+            int paddings = metrics.widthPixels / 6;
+            recyclerView.setPadding(paddings,0,paddings,0);
+        }
 
         replyList = new ArrayList<>();
 

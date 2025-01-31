@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -14,11 +15,14 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +37,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
-import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
 import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
@@ -183,6 +186,16 @@ public class VideoInfoFragment extends Fragment {
     public void onViewCreated(@NonNull View rootview, Bundle savedInstanceState) {
         super.onViewCreated(rootview, savedInstanceState);
 
+        if(SharedPreferencesUtil.getBoolean("ui_landscape",false)) {
+            WindowManager windowManager = (WindowManager) rootview.getContext().getSystemService(Context.WINDOW_SERVICE);
+            Display display = windowManager.getDefaultDisplay();
+            DisplayMetrics metrics = new DisplayMetrics();
+            if(Build.VERSION.SDK_INT >= 17) display.getRealMetrics(metrics);
+            else display.getMetrics(metrics);
+            int paddings = metrics.widthPixels / 6;
+            rootview.setPadding(paddings,0,paddings,0);
+        }
+
         ImageView cover = rootview.findViewById(R.id.img_cover);
         TextView title = rootview.findViewById(R.id.text_title);
         description = rootview.findViewById(R.id.description);
@@ -240,17 +253,6 @@ public class VideoInfoFragment extends Fragment {
         //标签隐藏
         if (!SharedPreferencesUtil.getBoolean("tags_enable", true))
             tagsText.setVisibility(View.GONE);
-
-        //横屏模式缩小封面
-        if (SharedPreferencesUtil.getBoolean("ui_landscape", false)) {
-            BaseActivity activity = (BaseActivity) getActivity();
-            if(activity!=null) {
-                ViewGroup.LayoutParams params = cover.getLayoutParams();
-                params.width = (int) (activity.window_width * 0.5);
-                cover.setLayoutParams(params);
-            }
-        }
-
 
         CenterThreadPool.run(() -> {
             //历史上报

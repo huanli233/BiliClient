@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
@@ -75,7 +76,7 @@ public class FileUtil {
     }
 
     public static boolean checkStoragePermission(){
-        int sdk = BiliTerminal.getSystemSdk();
+        int sdk = Build.VERSION.SDK_INT;
         if(sdk < 17) return true;
         return ContextCompat.checkSelfPermission(BiliTerminal.context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(BiliTerminal.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
