@@ -69,7 +69,6 @@ public class VideoInfoActivity extends BaseActivity {
         BangumiInfoFragment bangumiInfoFragment = BangumiInfoFragment.newInstance(aid);
         fragmentList.add(bangumiInfoFragment);
         replyFragment = ReplyFragment.newInstance(aid, 1, seek_reply == -1, seek_reply);
-        TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).observe(this, (videoInfo) -> replyFragment.setSource(videoInfo));
         fragmentList.add(replyFragment);
 
         viewPager.setOffscreenPageLimit(fragmentList.size());

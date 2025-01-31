@@ -43,10 +43,9 @@ public class BangumiInfoFragment extends Fragment {
     private int selectedSection = 0, selectedEpisode = 0;
     private Dialog dialog;
     private View rootView;
-    private RecyclerView eposideRecyclerView;
+    private RecyclerView episodeRecyclerView;
     private Button section_choose;
-    private TextView eposide_choose;
-    private TextView indexShow;
+    private TextView episode_choose;
     private Runnable onFinishLoad;
     private boolean loadFinished;
     private Bangumi bangumi;
@@ -73,29 +72,24 @@ public class BangumiInfoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         view.setVisibility(View.GONE);
-        eposideRecyclerView = rootView.findViewById(R.id.rv_eposide_list);
+        episodeRecyclerView = rootView.findViewById(R.id.rv_episode_list);
         //拉数据
         CenterThreadPool
                 .supplyAsyncWithLiveData(() -> BangumiApi.getBangumi(mediaId))
-                .observe(getViewLifecycleOwner(), (result) -> {
-                    result.onSuccess((bangumi) -> {
-                            this.bangumi = bangumi;
-                            initView();
-                    }).onFailure((error) -> {
-                        Log.wtf(TAG, error);
-                        MsgUtil.showMsg("碰到了些问题：" + error);
-                    });
-                });
+                .observe(getViewLifecycleOwner(), (result) -> result.onSuccess((bangumi) -> {
+                        this.bangumi = bangumi;
+                        initView();
+                }).onFailure((error) -> MsgUtil.err("番剧详情：", error)));
     }
 
     @SuppressLint("SetTextI18n")
     private void initView() {
         //init data.
         ImageView imageMediaCover = rootView.findViewById(R.id.image_media_cover);
+        Button playButton = rootView.findViewById(R.id.btn_play);
         TextView title = rootView.findViewById(R.id.text_title);
         section_choose = rootView.findViewById(R.id.section_choose);
-        Button playButton = rootView.findViewById(R.id.btn_play);
-        eposide_choose = rootView.findViewById(R.id.eposide_choose);
+        episode_choose = rootView.findViewById(R.id.episode_choose);
         selectedSection = 0;
 
         rootView.setVisibility(View.GONE);
@@ -118,22 +112,27 @@ public class BangumiInfoFragment extends Fragment {
             refreshReplies();
         });
 
-        indexShow = rootView.findViewById(R.id.indexShow);
+        TextView indexShow = rootView.findViewById(R.id.indexShow);
         indexShow.setText(bangumi.info.indexShow);
 
-        if (!bangumi.sectionList.isEmpty()) {
-            section_choose.setText(bangumi.sectionList.get(0).title + " 点击切换");
-            section_choose.setOnClickListener(v -> getSectionChooseDialog().show());
-            eposide_choose.setOnClickListener(v -> getEposideChooseDialog().show());
-
-            adapter.setData(bangumi.sectionList.get(0).episodeList);
-            eposideRecyclerView.setLayoutManager(new CustomLinearManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-            eposideRecyclerView.setAdapter(adapter);
-        } else {
+        if (bangumi.sectionList.isEmpty()) {
             section_choose.setText("敬请期待");
             playButton.setVisibility(View.GONE);
-            eposideRecyclerView.setVisibility(View.GONE);
+            rootView.findViewById(R.id.episodes).setVisibility(View.GONE);    //未上线的番剧Activity activity = getActivity();
+            Activity activity = requireActivity();
+            if (activity instanceof VideoInfoActivity) {
+                ((VideoInfoActivity) activity).replyFragment.setRefreshing(false);
+            }
+            return;
         }
+
+        section_choose.setText(bangumi.sectionList.get(0).title + " 点击切换");
+        section_choose.setOnClickListener(v -> getSectionChooseDialog().show());
+        episode_choose.setOnClickListener(v -> getEposideChooseDialog().show());
+
+        adapter.setData(bangumi.sectionList.get(0).episodeList);
+        episodeRecyclerView.setLayoutManager(new CustomLinearManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        episodeRecyclerView.setAdapter(adapter);
 
         //play button setting
         playButton.setOnClickListener(v -> {
@@ -170,12 +169,12 @@ public class BangumiInfoFragment extends Fragment {
             refreshReplies();
             Bangumi.Section section = bangumi.sectionList.get(which);
             section_choose.setText(section.title + " 点击切换");
-            MediaEpisodeAdapter adapter = (MediaEpisodeAdapter) eposideRecyclerView.getAdapter();
+            MediaEpisodeAdapter adapter = (MediaEpisodeAdapter) episodeRecyclerView.getAdapter();
             if (adapter != null) {
                 adapter.setData(bangumi.sectionList.get(which).episodeList);
-                eposideRecyclerView.scrollToPosition(0);
+                episodeRecyclerView.scrollToPosition(0);
             }
-            eposide_choose.setOnClickListener(v -> getEposideChooseDialog().show());
+            episode_choose.setOnClickListener(v -> getEposideChooseDialog().show());
             dialog.dismiss();
         });
         dialog = builder.create();
@@ -197,10 +196,10 @@ public class BangumiInfoFragment extends Fragment {
             selectedEpisode = which;
             refreshReplies();
 
-            MediaEpisodeAdapter adapter = (MediaEpisodeAdapter) eposideRecyclerView.getAdapter();
+            MediaEpisodeAdapter adapter = (MediaEpisodeAdapter) episodeRecyclerView.getAdapter();
             if (adapter != null) {
                 adapter.setSelectedItemIndex(which);
-                eposideRecyclerView.scrollToPosition(which);
+                episodeRecyclerView.scrollToPosition(which);
             }
             dialog.dismiss();
         });
