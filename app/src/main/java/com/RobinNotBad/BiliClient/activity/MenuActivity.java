@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
@@ -167,7 +168,8 @@ public class MenuActivity extends BaseActivity {
             switch (name) {
                 case "exit": //退出按钮
                     InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
-                    if (instance != null && instance.getLifecycle().getCurrentState() != Lifecycle.State.DESTROYED) instance.finish();
+                    if (instance != null && !instance.isDestroyed()) instance.finish();
+                    Process.killProcess(Process.myPid());
                     break;
                 case "login": //登录按钮
                     Intent intent = new Intent();
