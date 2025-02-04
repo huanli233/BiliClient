@@ -445,6 +445,8 @@ public class VideoInfoFragment extends Fragment {
                                 String msg = "投币失败：" + result;
                                 if (result == -403) {
                                     msg = "当前请求触发B站风控";
+                                } else if (result == 34002) {
+                                    msg = "不能给自己投币哦";
                                 }
                                 String finalMsg = msg;
                                 MsgUtil.showMsg(finalMsg);
