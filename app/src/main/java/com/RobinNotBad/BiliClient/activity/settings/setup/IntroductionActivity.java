@@ -26,11 +26,11 @@ public class IntroductionActivity extends BaseActivity {
             SharedPreferencesUtil.putBoolean("setup", true);
 
             Intent intent = new Intent();
+            intent.putExtra("from_setup", true);
             if (Build.VERSION.SDK_INT >= 19) {
                 intent.setClass(IntroductionActivity.this, LoginActivity.class);   //去扫码登录页面
             } else {
                 intent.setClass(IntroductionActivity.this, SpecialLoginActivity.class);   //4.4以下系统去特殊登录页面
-                intent.putExtra("from_setup", true);
             }
             startActivity(intent);
             finish();

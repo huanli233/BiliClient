@@ -43,7 +43,7 @@ public class SpecialLoginActivity extends BaseActivity {
 
         if (intent.getBooleanExtra("login", true)) {
             refuse.setOnClickListener(v -> {
-                if (intent.getBooleanExtra("from_setup", false))
+                if (getIntent().getBooleanExtra("from_setup", false))
                     startActivity(new Intent(this, SplashActivity.class));
                 else finish();
             });

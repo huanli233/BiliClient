@@ -29,14 +29,16 @@ public class LoginActivity extends BaseActivity {
         Log.e("debug", "进入登录页面");
         setPageName("登录");
 
+        boolean from_setup = getIntent().getBooleanExtra("from_setup",false);
+
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            startActivity(new Intent(this, SpecialLoginActivity.class));
+            startActivity(new Intent(this, SpecialLoginActivity.class).putExtra("from_setup",from_setup));
             finish();
         }
 
         ViewPager viewPager = findViewById(R.id.viewPager);
         List<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new QRLoginFragment());
+        fragmentList.add(QRLoginFragment.newInstance(from_setup));
 
         viewPager.setOffscreenPageLimit(fragmentList.size());
         ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);

@@ -42,10 +42,27 @@ public class QRLoginFragment extends Fragment {
     private TextView scanStat;
     Bitmap QRImage;
     Timer timer;
-    final boolean need_refresh = false;
+    boolean need_refresh = false;
+    boolean from_setup = false;
     int qrScale = 0;
 
     public QRLoginFragment() {
+    }
+
+    public static QRLoginFragment newInstance(boolean from_setup) {
+        Bundle args = new Bundle();
+        args.putBoolean("from_setup", from_setup);
+        QRLoginFragment fragment = new QRLoginFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstance) {
+        super.onCreate(savedInstance);
+
+        Bundle bundle = getArguments();
+        if(bundle!=null) from_setup = bundle.getBoolean("from_setup",false);
     }
 
     @Override
@@ -62,20 +79,15 @@ public class QRLoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         MaterialCardView jump = view.findViewById(R.id.jump);
         jump.setOnClickListener(v -> {
-            if (!SharedPreferencesUtil.getBoolean("setup", false)) {
-                SharedPreferencesUtil.putBoolean("setup", true);
-                Intent intent = new Intent();
-                intent.setClass(requireContext(), SplashActivity.class);
-                startActivity(intent);
-            }
+            if (from_setup) startActivity(new Intent(requireContext(), SplashActivity.class));
             if (timer != null) timer.cancel();
             if (isAdded()) requireActivity().finish();
         });
 
         MaterialCardView special = view.findViewById(R.id.special);
         special.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setClass(requireContext(), SpecialLoginActivity.class);
+            Intent intent = new Intent(requireContext(), SpecialLoginActivity.class);
+            intent.putExtra("from_setup", from_setup);
             startActivity(intent);
             if (timer != null) timer.cancel();
             if (isAdded()) requireActivity().finish();
@@ -182,6 +194,7 @@ public class QRLoginFragment extends Fragment {
                             this.cancel();
                             break;
                         case 0:
+                            this.cancel();
                             requireActivity().runOnUiThread(()->scanStat.setText("正在处理登录……"));
                             String cookies = SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, "");
 
@@ -193,18 +206,13 @@ public class QRLoginFragment extends Fragment {
 
                             Log.e("refresh_token", SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""));
 
-                            if (SharedPreferencesUtil.getBoolean("setup", false)) {
-                                InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
-                                if (instance != null && !instance.isDestroyed()) instance.finish();
-                            } else
-                                SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup, true);
+                            InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
+                            if (instance != null && !instance.isDestroyed()) instance.finish();
 
                             NetWorkUtil.refreshHeaders();
 
                             int activeResult = CookiesApi.activeCookieInfo();
-                            if (activeResult != 0) {
-                                MsgUtil.showMsg("警告：激活Cookies失败");
-                            }
+                            if (activeResult != 0) MsgUtil.showMsg("警告：激活Cookies失败");
                             LoginApi.requestSSOs();
                             if (loginJson.getJSONObject("data").has("url")) {
                                 try {
@@ -213,12 +221,9 @@ public class QRLoginFragment extends Fragment {
                                 }
                             }
 
-                            Intent intent = new Intent();
-                            intent.setClass(requireContext(), SplashActivity.class);
-                            startActivity(intent);
+                            startActivity(new Intent(requireContext(), SplashActivity.class));
 
                             if (isAdded()) requireActivity().finish();
-                            this.cancel();
                             break;
                         default:
                             requireActivity().runOnUiThread(() -> scanStat.setText("二维码登录API可能变动，\n但你仍然可以尝试扫码登录。\n建议反馈给开发者"));
