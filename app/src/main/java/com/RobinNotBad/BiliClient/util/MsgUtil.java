@@ -175,7 +175,7 @@ public class MsgUtil {
                 showText(desc + "Adapter错误", writer.toString());
                 return;
             } else{
-                output.append("Adapter错误无需上报，\n除非你在某个界面经常遇到");
+                output.append("遇到Adapter错误：\n无需上报，除非你在某个界面经常遇到");
             }
         }
         else if(e instanceof SQLException) output.append("数据库读写错误\n请清理空间或清除软件数据");
