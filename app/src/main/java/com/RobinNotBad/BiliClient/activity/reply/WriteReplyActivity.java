@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.EmoteActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.api.EmoteApi;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.model.Reply;
@@ -115,6 +116,7 @@ public class WriteReplyActivity extends BaseActivity {
                 MsgUtil.showDialog("无法发送", "上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作", -1);
         });
 
-        findViewById(R.id.emote).setOnClickListener(view -> emoteLauncher.launch(new Intent(this, EmoteActivity.class)));
+        findViewById(R.id.emote).setOnClickListener(view ->
+                emoteLauncher.launch(new Intent(this, EmoteActivity.class).putExtra("from", EmoteApi.BUSINESS_REPLY)));
     }
 }
