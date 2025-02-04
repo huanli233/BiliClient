@@ -106,7 +106,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private SurfaceView surfaceView;
     private TextureView textureView;
     private SurfaceTexture mSurfaceTexture;
-    private boolean firstSurfaceHolder = true;
 
     private SubtitleLink[] subtitleLinks = null;
     private Subtitle[] subtitles = null;
@@ -741,32 +740,31 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             surfaceTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    Log.e("debug", "循环检测");
+                    Log.d("debug", "循环检测");
                     if (mSurfaceTexture != null) {
+                        this.cancel();
                         Surface surface = new Surface(mSurfaceTexture);
                         ijkPlayer.setSurface(surface);
                         MPPrepare(video_url);
-                        Log.e("debug", "设置surfaceTexture成功！");
-                        this.cancel();
+                        Log.d("debug", "设置surfaceTexture成功！");
                     }
                 }
             }, 0, 200);
-        } else {
+        }
+        else {
             Log.e("debug", "使用surface模式");
-            Log.e("debug", "获取surfaceHolder");
             SurfaceHolder surfaceHolder = surfaceView.getHolder();       //Surface
+            Log.e("debug", "获取surfaceHolder成功！");
             surfaceTimer = new Timer();
             surfaceTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    Log.e("debug", "循环检测");
+                    Log.d("debug", "循环检测");
                     if (!surfaceHolder.isCreating()) {
+                        this.cancel();
+                        Log.d("debug", "定时器结束！");
                         ijkPlayer.setDisplay(surfaceHolder);
-                        firstSurfaceHolder = false;
-                        Log.e("debug", "设置surfaceHolder成功！");
-                    }
-                    if (!firstSurfaceHolder) {
-                        Log.e("debug", "添加callback");
+                        Log.d("debug", "设置surfaceHolder成功！");
                         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
                             @Override
                             public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
@@ -789,9 +787,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                                 if(isPrepared && !destroyed) ijkPlayer.setDisplay(null);
                             }
                         });
+                        Log.d("debug", "添加callback成功！");
                         MPPrepare(video_url);
-                        Log.e("debug", "定时器结束！");
-                        this.cancel();
                     }
                 }
             }, 0, 200);
