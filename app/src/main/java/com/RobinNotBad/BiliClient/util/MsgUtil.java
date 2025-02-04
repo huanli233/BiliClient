@@ -140,7 +140,7 @@ public class MsgUtil {
     }
 
     public static void err(Throwable e){
-        err("",e);
+        err(null,e);
     }
     public static void err(String desc, Throwable e) {
         if(desc!=null) Log.e("debug-error",desc);
@@ -148,7 +148,7 @@ public class MsgUtil {
 
         StringBuilder output = new StringBuilder(desc == null ? "" : desc);
 
-        String str = e.toString();
+        String e_str = e.toString();
 
         if (e instanceof IOException) output.append("网络错误(＃°Д°)");
         else if (e instanceof JSONException) {
@@ -160,11 +160,11 @@ public class MsgUtil {
                 return;
             } else if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
                 output.append("数据解析错误\n建议登陆后再尝试");
-            } else if (str.contains("-352") || str.contains("22015") || str.contains("65056"))
+            } else if (e_str.contains("-352") || e_str.contains("22015") || e_str.contains("65056"))
                 output.append(context.getString(R.string.err_rejected));
             else {
                 output.append("数据解析错误：\n");
-                output.append(str.replace("org.json.JSONException:", ""));
+                output.append(e_str.replace("org.json.JSONException:", ""));
             }
         }
         else if(e instanceof IndexOutOfBoundsException) {
@@ -179,7 +179,10 @@ public class MsgUtil {
             }
         }
         else if(e instanceof SQLException) output.append("数据库读写错误\n请清理空间或清除软件数据");
-        else output.append("错误：");
+        else {
+            output.append("错误：");
+            output.append(e_str);
+        }
 
         showMsgLong(output.toString());
     }

@@ -12,7 +12,6 @@ import com.RobinNotBad.BiliClient.api.LiveApi;
 import com.RobinNotBad.BiliClient.api.SearchApi;
 import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -54,10 +53,13 @@ public class SearchLiveFragment extends SearchFragment {
         CenterThreadPool.run(()-> {
             Log.e("debug", "加载下一页");
             try {
-                JSONObject result = (JSONObject) SearchApi.searchType(keyword, page, "live");
+                Object result = SearchApi.searchType(keyword, page, "live");
                 if (result != null) {
                     if (page == 1) showEmptyView(false);
-                    JSONArray jsonArray = result.optJSONArray("live_room");
+                    JSONArray jsonArray = null;
+                    if(result instanceof JSONObject) jsonArray = ((JSONObject)result).optJSONArray("live_room");
+                    else if(result instanceof JSONArray) jsonArray = (JSONArray) result;
+
                     List<LiveRoom> list = new ArrayList<>();
                     if (jsonArray != null) list.addAll(LiveApi.analyzeLiveRooms(jsonArray));
                     if(list.size()==0) setBottom(true);
