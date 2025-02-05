@@ -2,18 +2,16 @@ package com.RobinNotBad.BiliClient.activity.settings;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.CatchActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.settings.login.SpecialLoginActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.DownloadListActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
-import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
 import com.RobinNotBad.BiliClient.service.DownloadService;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -21,19 +19,13 @@ import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.Set;
 
 public class TestActivity extends BaseActivity {
 
     SwitchMaterial sw_wbi, sw_post;
     EditText input_link, input_data, output;
-    MaterialCardView btn_request, btn_cookies, btn_start, btn_download, btn_download_goto, btn_download_clear;
+    MaterialCardView btn_crash,btn_request, btn_cookies, btn_start, btn_download, btn_download_goto, btn_download_clear;
 
     @SuppressLint("MutatingSharedPrefs")
     @Override
@@ -46,6 +38,7 @@ public class TestActivity extends BaseActivity {
         input_link = findViewById(R.id.input_link);
         input_data = findViewById(R.id.input_data);
         output = findViewById(R.id.output_json);
+        btn_crash = findViewById(R.id.crash);
         btn_start = findViewById(R.id.start);
         btn_download = findViewById(R.id.download);
         btn_download_goto = findViewById(R.id.download_goto);
@@ -121,5 +114,7 @@ public class TestActivity extends BaseActivity {
         });
 
         btn_download_clear.setOnClickListener(v -> DownloadService.clear());
+
+        btn_crash.setOnClickListener(v -> startActivity(new Intent(this, CatchActivity.class).putExtra("stack","com.mojang.FeatureException:\n这不是bug，这是特性。\n  at:114514")));
     }
 }
