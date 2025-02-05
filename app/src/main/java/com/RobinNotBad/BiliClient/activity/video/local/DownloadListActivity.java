@@ -122,16 +122,14 @@ public class DownloadListActivity extends RefreshListActivity {
 
                 adapter.setOnLongClickListener(position -> CenterThreadPool.run(()->{
                     try {
-                        DownloadSection delete;
+                        final DownloadSection delete;
                         if(position == -1){
                             delete = DownloadService.downloadingSection;
                             stopService(new Intent(this, DownloadService.class));
                         }
                         else delete = sections.get(position);
-
                         if(delete == null) return;
 
-                        FileUtil.deleteFolder(delete.getPath());
                         DownloadService.deleteSection(delete.id);
 
                         refreshList(false);

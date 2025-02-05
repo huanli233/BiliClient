@@ -318,17 +318,21 @@ public class DownloadService extends Service {
 
     @Override
     public void onDestroy() {
-        if(downloadingSection!=null) {
-            CenterThreadPool.run(()->{
-                setState(downloadingSection.id, "none");
-                downloadingSection = null;
-            });
-        }
-        started = false;
         if(toastTimer!=null) toastTimer.cancel();
+        started = false;
         percent = -1;
         count_finish = 0;
         state = null;
+        if(downloadingSection!=null) {
+            FileUtil.deleteFolder(downloadingSection.getPath());
+            CenterThreadPool.run(()-> {
+                if (downloadingSection != null) {
+                    setState(downloadingSection.id, "none");
+                    downloadingSection = null;
+                    refreshDownloadList();
+                }
+            });
+        }
 
         notifyManager.cancel(1);
 
