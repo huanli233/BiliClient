@@ -14,13 +14,13 @@
             android:id="@+id/pageName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_marginVertical="3dp"
+            android:layout_marginStart="8dp"
             android:text="测试页面"
             android:textStyle="bold"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            app:drawableStartCompat="@drawable/arrow_down" />
+            app:drawableStartCompat="@drawable/arrow_back" />
 
         <com.RobinNotBad.BiliClient.ui.widget.TextClock
             android:id="@+id/timeText"
@@ -61,19 +61,19 @@
                     android:layout_height="35sp"
                     android:layout_marginHorizontal="8dp"
                     android:gravity="center_vertical"
-                    android:text="崩溃测试"
+                    android:text="deepseek请求测试"
                     android:textAlignment="textEnd"
                     android:textSize="13sp"
                     android:visibility="visible"
-                    app:drawableEndCompat="@drawable/arrow_forward"
-                    />
+                    app:drawableEndCompat="@drawable/arrow_forward" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -84,15 +84,15 @@
                     android:textAlignment="textEnd"
                     android:textSize="13sp"
                     android:visibility="visible"
-                    app:drawableEndCompat="@drawable/arrow_forward"
-                    />
+                    app:drawableEndCompat="@drawable/arrow_forward" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/download"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -103,15 +103,15 @@
                     android:textAlignment="textEnd"
                     android:textSize="13sp"
                     android:visibility="visible"
-                    app:drawableEndCompat="@drawable/arrow_forward"
-                    />
+                    app:drawableEndCompat="@drawable/arrow_forward" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/download_goto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -122,8 +122,7 @@
                     android:textAlignment="textEnd"
                     android:textSize="13sp"
                     android:visibility="visible"
-                    app:drawableEndCompat="@drawable/arrow_forward"
-                    />
+                    app:drawableEndCompat="@drawable/arrow_forward" />
             </com.google.android.material.card.MaterialCardView>
 
 
@@ -132,7 +131,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp">
+                android:layout_marginBottom="4dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -143,8 +143,7 @@
                     android:textAlignment="textEnd"
                     android:textSize="13sp"
                     android:visibility="visible"
-                    app:drawableEndCompat="@drawable/arrow_forward"
-                    />
+                    app:drawableEndCompat="@drawable/arrow_forward" />
             </com.google.android.material.card.MaterialCardView>
 
             <TextView

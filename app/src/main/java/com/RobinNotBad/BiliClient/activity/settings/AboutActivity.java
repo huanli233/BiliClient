@@ -100,7 +100,8 @@ public class AboutActivity extends BaseActivity {
                             .apply(RequestOptions.circleCropTransform())
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(developerAvaterViews.get(i));
-                } catch (Exception ignored){}
+                } catch (Exception ignored) {
+                }
 
 
                 developerCardList.get(i).setOnClickListener(view -> {
@@ -133,7 +134,7 @@ public class AboutActivity extends BaseActivity {
                 String[] logItems = getResources().getStringArray(R.array.icon_license);
                 for (int i = 0; i < logItems.length; i++)
                     str.append('\n').append((i + 1)).append('.').append(logItems[i]);
-                MsgUtil.showText("开源图标的信息",str.toString());
+                MsgUtil.showText("开源图标的信息", str.toString());
             });
 
             findViewById(R.id.sponsor_list).setOnClickListener(view -> {
@@ -142,18 +143,21 @@ public class AboutActivity extends BaseActivity {
             });
 
             if (!ToolsUtil.isDebugBuild()) findViewById(R.id.debug_tip).setVisibility(View.GONE);
-            else {
-                findViewById(R.id.version_code_card).setOnClickListener(view -> {
-                    if(!SharedPreferencesUtil.getBoolean("developer", false)) eggClick_Dev++;
-                    else MsgUtil.showMsg("你已处于开发者模式，无需进行此操作");
-
-                    if(eggClick_Dev == 7) {
+            findViewById(R.id.version_code_card).setOnClickListener(view -> {
+                if (SharedPreferencesUtil.getBoolean("developer", false)) {
+                    MsgUtil.showMsg("已关闭开发者模式！");
+                    SharedPreferencesUtil.putBoolean("developer", false);
+                }
+                else {
+                    eggClick_Dev++;
+                    if (eggClick_Dev == 7) {
                         SharedPreferencesUtil.putBoolean("developer", true);
                         MsgUtil.showMsg("已启用开发者模式！");
-
+                        eggClick_Dev = 0;
                     }
-                });
-            }
+                }
+            });
+
         });
 
     }
