@@ -220,6 +220,8 @@ public class TestActivity extends BaseActivity {
                         }
                     }
 
+                    response.close();
+
                     String output_str = output.getText().toString();
                     if(!output_str.isEmpty()){
                         JSONObject output_json = new JSONObject();
