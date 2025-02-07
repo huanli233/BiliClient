@@ -11,6 +11,7 @@ import android.os.Parcelable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
@@ -174,7 +175,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             SpannableStringBuilder name_str = new SpannableStringBuilder(reply.sender.name);
 
             //大会员红字
-            if (!sender.vip_nickname_color.isEmpty() && !SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.NO_VIP_COLOR, false))
+            if (!TextUtils.isEmpty(sender.vip_nickname_color) && !SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.NO_VIP_COLOR, false))
                 replyHolder.userName.setTextColor(Color.parseColor(sender.vip_nickname_color));
 
             //up主标识
@@ -189,7 +190,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             name_str.setSpan(ToolsUtil.getLevelBadge(context, sender), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
             //等级
-            if (!sender.medal_name.isEmpty()) {
+            if (!TextUtils.isEmpty(sender.medal_name)) {
                 last_length = name_str.length();
                 name_str.append("  ").append(sender.medal_name).append("Lv").append(String.valueOf(sender.medal_level)).append(" ");
                 name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.round_small), Color.WHITE, Color.argb(140, 158, 186, 232)), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
@@ -475,7 +476,6 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         intent.putExtra("rpid", rpid);
         intent.putExtra("oid", oid);
         intent.putExtra("type", replyType);
-        intent.putExtra("origReply", (Parcelable) reply);
         intent.putExtra("up_mid", up_mid);
         if (source != null && source instanceof Serializable)
             intent.putExtra("source", (Serializable) source);

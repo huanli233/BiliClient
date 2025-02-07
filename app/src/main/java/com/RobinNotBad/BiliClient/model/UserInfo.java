@@ -2,6 +2,9 @@ package com.RobinNotBad.BiliClient.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 
@@ -119,6 +122,21 @@ public class UserInfo implements Parcelable, Serializable {
     }
 
     public UserInfo() {
+    }
+    public UserInfo(JSONObject userInfoJson) throws JSONException {
+        this.level = userInfoJson.getJSONObject("level_info").getInt("current_level");
+        this.mid = userInfoJson.getLong("mid");
+        this.name = userInfoJson.getString("uname");
+        this.avatar = userInfoJson.getString("avatar");
+        this.is_senior_member = userInfoJson.getInt("is_senior_member");
+        JSONObject vip = userInfoJson.getJSONObject("vip");
+        this.vip_role = vip.getInt("vipStatus");
+        this.vip_nickname_color = vip.getString("nickname_color");
+        if ((!userInfoJson.isNull("fans_detail")) && (!SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.NO_MEDAL, false))) {
+            JSONObject fans_detail = userInfoJson.getJSONObject("fans_detail");
+            this.medal_name = fans_detail.getString("medal_name");
+            this.medal_level = fans_detail.getInt("level");
+        }
     }
 
     protected UserInfo(Parcel in) {

@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 import androidx.annotation.Nullable;
 import androidx.collection.LruCache;
-import androidx.core.text.TextUtilsCompat;
-import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
@@ -16,11 +14,8 @@ import com.RobinNotBad.BiliClient.activity.live.LiveInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.api.*;
 import com.RobinNotBad.BiliClient.model.*;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.util.Stack;
 import java.util.concurrent.Future;
 
 /**
@@ -33,32 +28,16 @@ import java.util.concurrent.Future;
  */
 public class TerminalContext {
 
-    /**
-     * 详情页的中央上下文
-     */
-    // 详情页的类型
-    public static enum DetailType {
-        None,
-        Video,
-        Article,
-        Dynamic,
-        Live,
-    }
-
     //要转发的东西的数据源
     private Object forwardContent;
     /**
      * 详情页以及对应数据对象的存储， 每进入一个页面，例如动态，动态点击进入视频， 视频下面有个专栏
      * 然后再返回，此时的逻辑就是像栈一样。
      */
-    private final LruCache<String, Object> detailLruCache;
-    private final MutableLiveData<Result<VideoInfo>> videoInfoLiveData = new MutableLiveData<>();
-    private final MutableLiveData<Result<Dynamic>> dynamicInfoLiveData = new MutableLiveData<>();
-    private final MutableLiveData<Result<ArticleInfo>> articleInfoLiveData = new MutableLiveData<>();
-    private final MutableLiveData<Result<LiveInfo>> liveInfoLiveData = new MutableLiveData<>();
+    private final LruCache<String, Object> contentLruCache;
 
     private TerminalContext() {
-        detailLruCache = new LruCache<>(10);
+        contentLruCache = new LruCache<>(10);
     }
 
     // ------------------------转发功能数据源上下文 start-------------------------------
@@ -73,18 +52,22 @@ public class TerminalContext {
 
     // --------------------------详情页跳转功能 start  ----------------------------------
     // 视频详情页跳转
-    public void enterVideoDetailPage(Context context, long aid){
+    public void enterVideoDetailPage(Context context, long aid) {
         enterVideoDetailPage(context, aid, null, "video", -1);
     }
+
     public void enterVideoDetailPage(Context context, String bvid) {
         enterVideoDetailPage(context, -1, bvid, "video", -1);
     }
+
     public void enterVideoDetailPage(Context context, long aid, String bvid) {
         enterVideoDetailPage(context, aid, bvid, null, -1);
     }
+
     public void enterVideoDetailPage(Context context, long aid, String bvid, String type) {
         enterVideoDetailPage(context, aid, bvid, type, -1);
     }
+
     public void enterVideoDetailPage(Context context, long aid, String bvid, String type, long seekReply) {
         //创建intent并填充信息
         Intent intent = new Intent(context, VideoInfoActivity.class);
@@ -92,25 +75,26 @@ public class TerminalContext {
         if (!TextUtils.isEmpty(bvid)) {
             intent.putExtra("bvid", bvid);
         }
-        if(type != null) {
+        if (type != null) {
             intent.putExtra("type", type);
         }
         intent.putExtra("seekReply", seekReply);
         //启动activity
         context.startActivity(intent);
     }
+
     private Result<VideoInfo> fetchVideoInfoByAid(long aid, boolean saveToCache) {
         JSONObject object;
         try {
             object = VideoInfoApi.getJsonByAid(aid);
         } catch (Exception t) {
-           return Result.failure(t);
+            return Result.failure(t);
         }
         if (object != null) {
             try {
                 VideoInfo info = VideoInfoApi.getInfoByJson(object);
                 if (saveToCache) {
-                    detailLruCache.put(DetailType.Video + "_" + aid, info);
+                    contentLruCache.put(ContentType.Video.getTypeCode() + "_" + aid, info);
                 }
                 return Result.success(info);
             } catch (Exception e) {
@@ -119,6 +103,7 @@ public class TerminalContext {
         }
         return Result.failure(new IllegalTerminalStateException("video object is null"));
     }
+
     private Result<VideoInfo> fetchVideoInfoByBvId(String bvid, boolean saveToCache) {
         JSONObject object;
         try {
@@ -130,7 +115,7 @@ public class TerminalContext {
             try {
                 VideoInfo info = VideoInfoApi.getInfoByJson(object);
                 if (saveToCache) {
-                    detailLruCache.put(DetailType.Video + "_" + bvid, info);
+                    contentLruCache.put(ContentType.Video.getTypeCode() + "_" + bvid, info);
                 }
                 return Result.success(info);
             } catch (Exception t) {
@@ -139,6 +124,7 @@ public class TerminalContext {
         }
         return Result.failure(new IllegalTerminalStateException("video object is null"));
     }
+
     private Result<VideoInfo> fetchVideoInfoByAidOrBvId(long aid, String bvid, boolean saveToCache) {
         if (TextUtils.isEmpty(bvid)) {
             return fetchVideoInfoByAid(aid, saveToCache);
@@ -151,17 +137,19 @@ public class TerminalContext {
     public void enterArticleDetailPage(Context context, long cvid) {
         enterArticleDetailPage(context, cvid, -1);
     }
+
     public void enterArticleDetailPage(Context context, long cvid, long seekReply) {
-        Intent intent= new Intent(context, ArticleInfoActivity.class);
+        Intent intent = new Intent(context, ArticleInfoActivity.class);
         intent.putExtra("cvid", cvid);
         intent.putExtra("seekReply", seekReply);
         context.startActivity(intent);
     }
+
     private Result<ArticleInfo> fetchArticleInfo(long cvid, boolean saveToCache) {
         try {
             ArticleInfo article = ArticleApi.getArticle(cvid);
             if (article != null && saveToCache) {
-                detailLruCache.put(DetailType.Article + "_" + cvid, article);
+                contentLruCache.put(ContentType.Article.getTypeCode() + "_" + cvid, article);
             }
             return Result.success(article);
         } catch (Exception t) {
@@ -170,12 +158,14 @@ public class TerminalContext {
     }
 
     // 动态详情页跳转
-    public void enterDynamicDetailPage(Context context, long id){
+    public void enterDynamicDetailPage(Context context, long id) {
         enterDynamicDetailPage(context, id, 0, -1);
     }
+
     public void enterDynamicDetailPage(Context context, long id, int position) {
         enterDynamicDetailPage(context, id, position, -1);
     }
+
     public void enterDynamicDetailPage(Context context, long id, int position, long seekReply) {
         Intent intent = new Intent(context, DynamicInfoActivity.class);
         intent.putExtra("position", position);
@@ -198,7 +188,7 @@ public class TerminalContext {
         try {
             Dynamic dynamic = DynamicApi.getDynamic(id);
             if (saveToCache) {
-                detailLruCache.put(DetailType.Dynamic + "_" + id, dynamic);
+                contentLruCache.put(ContentType.Dynamic.getTypeCode() + "_" + id, dynamic);
             }
             return Result.success(dynamic);
         } catch (Exception t) {
@@ -208,16 +198,18 @@ public class TerminalContext {
 
     /**
      * 进行一个直播详情页的启动
+     *
      * @param context Android上下文对象
-     * @param roomId 直播房间号
+     * @param roomId  直播房间号
      */
     public void enterLiveDetailPage(Context context, long roomId) {
         Intent intent = new Intent(context, LiveInfoActivity.class);
         intent.putExtra("room_id", roomId);
         context.startActivity(intent);
     }
-    private Result<LiveInfo> fetchLiveInfo(long roomId, boolean saveToCache) {
-        Future<LivePlayInfo> livePlayInfoFuture = CenterThreadPool.supplyAsyncWithFuture(()-> LiveApi.getRoomPlayInfo(roomId, 80));
+
+    public Result<LiveInfo> fetchLiveInfo(long roomId, boolean saveToCache) {
+        Future<LivePlayInfo> livePlayInfoFuture = CenterThreadPool.supplyAsyncWithFuture(() -> LiveApi.getRoomPlayInfo(roomId, 80));
         //利用future的特性让UserInfo在后面慢慢下着，同时开始下载LiveRoom，这里要等待LiveRoom下载完成。
         try {
             LiveRoom liveRoom = LiveApi.getRoomInfo(roomId);
@@ -229,10 +221,10 @@ public class TerminalContext {
             LivePlayInfo playInfo = livePlayInfoFuture.get();
             LiveInfo liveInfo = new LiveInfo(userInfo, liveRoom, playInfo);
             if (saveToCache) {
-                detailLruCache.put(DetailType.Live + "_" + roomId, liveInfo);
+                contentLruCache.put(ContentType.Live.getTypeCode() + "_" + roomId, liveInfo);
             }
             return Result.success(liveInfo);
-        }catch (Exception t) {
+        } catch (Exception t) {
             return Result.failure(t);
         }
     }
@@ -243,72 +235,94 @@ public class TerminalContext {
      */
     public void leaveDetailPage() {
     }
-    // ----------------------------详情页数据源上下文 ----------------------------------------
+
+    public Result<Reply> fetchReply(ContentType contentType, long contentId, long replyId, boolean saveToCache) {
+        Result<Reply> replyResult = ReplyApi.getRootReply(contentType, contentId, replyId);
+        if (replyResult.isSuccess() && saveToCache) {
+            Reply reply = replyResult.getOrNull();
+            if (reply != null) {
+                contentLruCache.put(contentType.getTypeCode() + "_" + contentId + "_" + replyId, reply);
+            }
+        }
+        return replyResult;
+    }
+
+    // ---------------------------- 数据源上下文 ----------------------------------------
     public LiveData<Result<VideoInfo>> getVideoInfoByAidOrBvId(long aid, String bvid) {
         String key;
         if (TextUtils.isEmpty(bvid)) {
-            key = DetailType.Video + "_" + aid;
+            key = ContentType.Video.getTypeCode() + "_" + aid;
         } else {
-            key = DetailType.Video + "_" + bvid;
+            key = ContentType.Video.getTypeCode() + "_" + bvid;
         }
-        Object obj = detailLruCache.get(key);
+        Object obj = contentLruCache.get(key);
         if (!(obj instanceof VideoInfo)) {
             return CenterThreadPool.supplyAsyncWithLiveData(() -> fetchVideoInfoByAidOrBvId(aid, bvid, true).getOrThrow());
         } else {
-            return new MutableLiveData<>(Result.success((VideoInfo)obj));
+            return new MutableLiveData<>(Result.success((VideoInfo) obj));
         }
     }
 
     public LiveData<Result<ArticleInfo>> getArticleInfoByCvId(long cvid) {
-        String key = DetailType.Article + "_" + cvid;
-        Object obj = detailLruCache.get(key);
+        String key = ContentType.Article.getTypeCode() + "_" + cvid;
+        Object obj = contentLruCache.get(key);
         if (!(obj instanceof ArticleInfo)) {
             return CenterThreadPool.supplyAsyncWithLiveData(() -> fetchArticleInfo(cvid, true).getOrThrow());
         } else {
-            return new MutableLiveData<>(Result.success((ArticleInfo)obj));
+            return new MutableLiveData<>(Result.success((ArticleInfo) obj));
         }
     }
 
     public LiveData<Result<Dynamic>> getDynamicById(long id) {
-        String key = DetailType.Dynamic + "_" + id;
-        Object obj = detailLruCache.get(key);
+        String key = ContentType.Dynamic.getTypeCode() + "_" + id;
+        Object obj = contentLruCache.get(key);
         if (!(obj instanceof Dynamic)) {
             return CenterThreadPool.supplyAsyncWithLiveData(() -> fetchDynamic(id, true).getOrThrow());
         } else {
-            return new MutableLiveData<>(Result.success((Dynamic)obj));
+            return new MutableLiveData<>(Result.success((Dynamic) obj));
         }
     }
 
     public LiveData<Result<LiveInfo>> getLiveInfoByRoomId(long roomId) {
-        String key = DetailType.Live + "_" + roomId;
-        Object obj = detailLruCache.get(key);
+        String key = ContentType.Live.getTypeCode() + "_" + roomId;
+        Object obj = contentLruCache.get(key);
         if (!(obj instanceof LiveInfo)) {
             return CenterThreadPool.supplyAsyncWithLiveData(() -> fetchLiveInfo(roomId, true).getOrThrow());
         } else {
-            return new MutableLiveData<>(Result.success((LiveInfo)obj));
+            return new MutableLiveData<>(Result.success((LiveInfo) obj));
         }
     }
+    public LiveData<Result<Reply>> getReply(ContentType contentType, long contentId, long replyId) {
+        String key = contentType.getTypeCode() + "_" + contentId + "_" + replyId;
+        Object obj = contentLruCache.get(key);
+        if(obj instanceof Reply) {
+            return new MutableLiveData<>(Result.success((Reply) obj));
+        } else {
+            return CenterThreadPool.supplyAsyncWithLiveData(() -> fetchReply(contentType, contentId, replyId, true).getOrThrow());
+        }
+    }
+
 
     public String getTerminalKey(Object item) {
         if (item instanceof VideoInfo) {
             VideoInfo videoInfo = (VideoInfo) item;
             if (TextUtils.isEmpty(videoInfo.bvid)) {
-                return DetailType.Video + "_" + ((VideoInfo) videoInfo).aid;
+                return ContentType.Video.getTypeCode() + "_" + videoInfo.aid;
             } else {
-                return DetailType.Video + "_" + ((VideoInfo) item).bvid;
+                return ContentType.Video.getTypeCode() + "_" + videoInfo.bvid;
             }
         } else if (item instanceof ArticleInfo) {
-            return DetailType.Article + "_" + ((ArticleInfo) item).id;
+            return ContentType.Article.getTypeCode() + "_" + ((ArticleInfo) item).id;
         } else if (item instanceof Dynamic) {
-            return DetailType.Dynamic + "_" + ((Dynamic) item).dynamicId;
+            return ContentType.Dynamic.getTypeCode() + "_" + ((Dynamic) item).dynamicId;
         } else if (item instanceof LiveInfo) {
-            return DetailType.Live + "_" + ((LiveInfo) item).getLiveRoom().roomid;
+            return ContentType.Live.getTypeCode() + "_" + ((LiveInfo) item).getLiveRoom().roomid;
+        } else if (item instanceof Reply) {
+            Reply reply = (Reply) item;
         }
         return null;
     }
-    // -------------------------详情页数据源上下文 end ------------------------------------
-
-
+    // ------------------------- 数据源上下文 end ------------------------------------
 
 
     //----------------------------------私有函数区----------------------------------------
@@ -319,31 +333,15 @@ public class TerminalContext {
     public static TerminalContext getInstance() {
         return InstanceHolder.INSTANCE;
     }
-    private <T> T resultSafeUnPack(Result<Object> result, Class<T> type) {
-        if (result == null) {
-            return null;
-        }
-        Object value = result.getOrNull();
-        if (value == null){
-            return null;
-        }
-        try {
-            if(type.isInstance(value)) {
-                return (T) value;
-            } else {
-                return null;
-            }
-        }catch (Throwable e) {
-            return null;
-        }
-    }
+
     public static class IllegalTerminalStateException extends Exception {
         private final String description;
-        public IllegalTerminalStateException ()
-        {
-           description = "";
+
+        public IllegalTerminalStateException() {
+            description = "";
         }
-        public IllegalTerminalStateException (String description) {
+
+        public IllegalTerminalStateException(String description) {
             this.description = description;
         }
 

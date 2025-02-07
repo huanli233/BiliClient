@@ -9,29 +9,29 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.ReplyAdapter;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
+import com.RobinNotBad.BiliClient.model.ContentType;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Future;
 
 //评论详细信息
 //2023-07-22
@@ -41,12 +41,11 @@ public class ReplyInfoActivity extends BaseActivity {
     private long oid;
     private long rpid, mid;
     private int sort = 0;
-    private int type;
+    private ContentType type;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout refreshLayout;
     private ArrayList<Reply> replyList;
     private ReplyAdapter replyAdapter;
-    public Reply origReply;
     private boolean bottom = false;
     private int page = 1;
     private boolean refreshing = false;
@@ -60,9 +59,12 @@ public class ReplyInfoActivity extends BaseActivity {
         Intent intent = getIntent();
         rpid = intent.getLongExtra("rpid", 0);
         oid = intent.getLongExtra("oid", 0);
-        type = intent.getIntExtra("type", 1);
+        try {
+            type = ContentType.getContentType(intent.getIntExtra("type", 1));
+        } catch (ContentType.TerminalIllegalTypeCodeException e) {
+            throw new RuntimeException(e);
+        }
         mid = intent.getLongExtra("up_mid", -1);
-        origReply =  intent.getParcelableExtra("origReply");
 
         refreshLayout = findViewById(R.id.swipeRefreshLayout);
         recyclerView = findViewById(R.id.recyclerView);
@@ -70,28 +72,28 @@ public class ReplyInfoActivity extends BaseActivity {
 
         setPageName("评论详情");
 
-        if(SharedPreferencesUtil.getBoolean("ui_landscape",false)) {
+        if (SharedPreferencesUtil.getBoolean("ui_landscape", false)) {
             WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
             Display display = windowManager.getDefaultDisplay();
             DisplayMetrics metrics = new DisplayMetrics();
-            if(Build.VERSION.SDK_INT >= 17) display.getRealMetrics(metrics);
+            if (Build.VERSION.SDK_INT >= 17) display.getRealMetrics(metrics);
             else display.getMetrics(metrics);
             int paddings = metrics.widthPixels / 6;
-            recyclerView.setPadding(paddings,0,paddings,0);
+            recyclerView.setPadding(paddings, 0, paddings, 0);
         }
 
-        replyList = new ArrayList<>();
 
         refreshLayout.setRefreshing(true);
-        CenterThreadPool.run(() -> {
-            try {
-                int result = ReplyApi.getReplies(oid, rpid, page, type, sort, replyList);
-                if (result != -1) {
-                    replyList.add(0, origReply);
-                    replyAdapter = new ReplyAdapter(this, replyList, oid, rpid, type, sort, getIntent().getSerializableExtra("source"), mid);
-                    replyAdapter.isDetail = true;
-                    setOnSortSwitch();
-                    runOnUiThread(() -> {
+        TerminalContext.getInstance().getReply(type, oid, rpid).observe(this, (rootReplyResult) -> {
+            replyList = new ArrayList<>();
+            rootReplyResult.onSuccess((rootReply) -> {
+                Future<Integer> future = CenterThreadPool.supplyAsyncWithFuture(() -> ReplyApi.getReplies(oid, rpid, page, type, sort, replyList));
+                CenterThreadPool.observe(future, (result) -> {
+                    if (result != -1) {
+                        replyList.add(0, rootReply);
+                        replyAdapter = new ReplyAdapter(this, replyList, oid, rpid, type.getTypeCode(), sort, getIntent().getSerializableExtra("source"), mid);
+                        replyAdapter.isDetail = true;
+                        setOnSortSwitch();
                         recyclerView.setLayoutManager(new CustomLinearManager(this));
                         recyclerView.setAdapter(replyAdapter);
                         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -114,20 +116,21 @@ public class ReplyInfoActivity extends BaseActivity {
                             }
                         });
                         refreshLayout.setRefreshing(false);
-                    });
-                    if (result == 1) {
-                        Log.e("debug", "到底了");
-                        bottom = true;
+                        if (result == 1) {
+                            Log.e("debug", "到底了");
+                            bottom = true;
+                        }
                     }
-                }
-
-            } catch (Exception e) {
-                runOnUiThread(() -> {
-                    MsgUtil.err(e);
-                    refreshLayout.setRefreshing(false);
+                }, (error) -> {
+                    onPullDataFailed(new Exception(error));
                 });
-            }
+            }).onFailure((error) -> onPullDataFailed(new Exception(error)));
         });
+    }
+
+    private void onPullDataFailed(Exception e) {
+        MsgUtil.err(e);
+        refreshLayout.setRefreshing(false);
     }
 
     private void continueLoading() {
@@ -163,37 +166,37 @@ public class ReplyInfoActivity extends BaseActivity {
         page = 1;
         refreshLayout.setRefreshing(true);
 
-        CenterThreadPool.run(() -> {
-            try {
-                List<Reply> list = new ArrayList<>();
-                int result = ReplyApi.getReplies(oid, rpid, page, type, sort, list);
-
-                if (result != -1) {
-                    runOnUiThread(() -> {
-                        replyList.clear();
-                        replyList.add(0, origReply);
-                        replyList.addAll(list);
-                        if (replyAdapter == null) {
-                            replyAdapter = new ReplyAdapter(this, replyList, oid, rpid, type, sort, mid);
-                            replyAdapter.isDetail = true;
-                            setOnSortSwitch();
-                            recyclerView.setAdapter(replyAdapter);
-                        } else {
-                            replyAdapter.notifyDataSetChanged();
-                        }
-                        refreshLayout.setRefreshing(false);
-                    });
-                    if (result == 1) {
-                        Log.e("debug", "到底了");
-                        bottom = true;
-                    } else bottom = false;
-                }
-            } catch (Exception e) {
-                runOnUiThread(() -> {
-                    MsgUtil.err(e);
-                    refreshLayout.setRefreshing(false);
-                });
-            }
+        TerminalContext.getInstance().getReply(type, oid, rpid).observe(this, (rootReplyResult) -> {
+           rootReplyResult.onSuccess((rootReply) -> {
+               List<Reply> list = new ArrayList<>();
+               Future<Integer> future  = CenterThreadPool.supplyAsyncWithFuture(() -> ReplyApi.getReplies(oid, rpid, page, type, sort, list));
+               CenterThreadPool.observe(future, (result) -> {
+                   if (result != -1) {
+                       runOnUiThread(() -> {
+                           replyList.clear();
+                           replyList.add(0, rootReply);
+                           replyList.addAll(list);
+                           if (replyAdapter == null) {
+                               replyAdapter = new ReplyAdapter(this, replyList, oid, rpid, type.getTypeCode(), sort, mid);
+                               replyAdapter.isDetail = true;
+                               setOnSortSwitch();
+                               recyclerView.setAdapter(replyAdapter);
+                           } else {
+                               replyAdapter.notifyDataSetChanged();
+                           }
+                           refreshLayout.setRefreshing(false);
+                       });
+                       if (result == 1) {
+                           Log.e("debug", "到底了");
+                           bottom = true;
+                       } else bottom = false;
+                   }
+               }, (error) -> {
+                   this.onPullDataFailed(new Exception(error));
+               });
+           }).onFailure((error) -> {
+               this.onPullDataFailed(new Exception(error));
+           });
         });
     }
 
