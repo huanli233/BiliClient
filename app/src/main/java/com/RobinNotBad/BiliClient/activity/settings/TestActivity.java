@@ -188,6 +188,8 @@ public class TestActivity extends BaseActivity {
 
                     MsgUtil.showMsg("得到响应，请继续等待！");
 
+                    boolean reasoning = sw_wbi.isChecked();
+
                     while (!source.exhausted()) {
                         String line = source.readUtf8Line();
                         if (line == null) break;
@@ -199,7 +201,20 @@ public class TestActivity extends BaseActivity {
 
                             JSONObject data = new JSONObject(jsonData);
                             JSONArray choices = data.getJSONArray("choices");
-                            String deltaContent = choices.getJSONObject(0).getJSONObject("delta").optString("content", "");
+                            JSONObject delta = choices.getJSONObject(0).getJSONObject("delta");
+
+                            String deltaContent;
+                            if(!delta.isNull("reasoning_content")){
+                                deltaContent = delta.optString("reasoning_content");
+                            }
+                            else if(!delta.isNull("content")){
+                                if(reasoning) {
+                                    reasoning = false;
+                                    runOnUiThread(() -> output.append("\n\n*思考结束*\n\n"));
+                                }
+                                deltaContent = delta.optString("content");
+                            }
+                            else deltaContent = "";
 
                             runOnUiThread(() -> output.append(deltaContent));
                         }
