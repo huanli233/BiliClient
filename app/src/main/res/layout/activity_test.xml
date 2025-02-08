@@ -61,7 +61,7 @@
                     android:layout_height="35sp"
                     android:layout_marginHorizontal="8dp"
                     android:gravity="center_vertical"
-                    android:text="deepseek请求测试"
+                    android:text="deepseek猫娘请求测试"
                     android:textAlignment="textEnd"
                     android:textSize="13sp"
                     android:visibility="visible"
