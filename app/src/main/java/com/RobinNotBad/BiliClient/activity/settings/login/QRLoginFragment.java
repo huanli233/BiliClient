@@ -130,24 +130,24 @@ public class QRLoginFragment extends Fragment {
     public void refreshQrCode() {
         CenterThreadPool.run(() -> {
             try {
-                requireActivity().runOnUiThread(() -> scanStat.setText("正在获取二维码"));
+                CenterThreadPool.runOnUiThread(() -> scanStat.setText("正在获取二维码"));
                 QRImage = LoginApi.getLoginQR();
 
                 CookiesApi.activeCookieInfo();
 
-                requireActivity().runOnUiThread(() -> {
+                CenterThreadPool.runOnUiThread(() -> {
                     Log.e("debug-image", QRImage.getWidth() + "," + QRImage.getHeight());
                     qrImageView.setImageBitmap(QRImage);
                     startLoginDetect();
                 });
             } catch (IOException e) {
-                requireActivity().runOnUiThread(() -> {
+                CenterThreadPool.runOnUiThread(() -> {
                     qrImageView.setEnabled(true);
                     scanStat.setText("获取二维码失败，网络错误");
                 });
                 e.printStackTrace();
             } catch (JSONException e) {
-                requireActivity().runOnUiThread(() -> {
+                CenterThreadPool.runOnUiThread(() -> {
                     qrImageView.setEnabled(true);
                     scanStat.setText("登录接口可能失效，请找开发者");
                 });
@@ -181,13 +181,13 @@ public class QRLoginFragment extends Fragment {
                     int code = loginJson.getJSONObject("data").getInt("code");
                     switch (code) {
                         case 86090:
-                            requireActivity().runOnUiThread(() -> scanStat.setText("已扫描，请在手机上点击登录"));
+                            CenterThreadPool.runOnUiThread(() -> scanStat.setText("已扫描，请在手机上点击登录"));
                             break;
                         case 86101:
-                            requireActivity().runOnUiThread(() -> scanStat.setText("请使用官方手机端哔哩哔哩扫码登录\n点击二维码可以进行放大和缩小"));
+                            CenterThreadPool.runOnUiThread(() -> scanStat.setText("请使用官方手机端哔哩哔哩扫码登录\n点击二维码可以进行放大和缩小"));
                             break;
                         case 86038:
-                            requireActivity().runOnUiThread(() -> {
+                            CenterThreadPool.runOnUiThread(() -> {
                                 scanStat.setText("二维码已失效，点击上方重新获取");
                                 qrImageView.setEnabled(true);
                             });
@@ -195,7 +195,7 @@ public class QRLoginFragment extends Fragment {
                             break;
                         case 0:
                             this.cancel();
-                            requireActivity().runOnUiThread(()->scanStat.setText("正在处理登录……"));
+                            CenterThreadPool.runOnUiThread(()->scanStat.setText("正在处理登录……"));
                             String cookies = SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, "");
 
                             SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(NetWorkUtil.getInfoFromCookie("DedeUserID", cookies)));
@@ -204,7 +204,8 @@ public class QRLoginFragment extends Fragment {
 
                             SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cookie_refresh, true);
 
-                            Log.e("refresh_token", SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""));
+                            Log.d("debug-login-cookies", cookies);
+                            Log.e("debug-refresh-token", SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""));
 
                             InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
                             if (instance != null && !instance.isDestroyed()) instance.finish();
@@ -226,12 +227,12 @@ public class QRLoginFragment extends Fragment {
                             if (isAdded()) requireActivity().finish();
                             break;
                         default:
-                            requireActivity().runOnUiThread(() -> scanStat.setText("二维码登录API可能变动，\n但你仍然可以尝试扫码登录。\n建议反馈给开发者"));
+                            CenterThreadPool.runOnUiThread(() -> scanStat.setText("二维码登录API可能变动，\n但你仍然可以尝试扫码登录。\n建议反馈给开发者"));
                             break;
                     }
 
                 } catch (Exception e) {
-                    if (isAdded()) requireActivity().runOnUiThread(() -> {
+                    if (isAdded()) CenterThreadPool.runOnUiThread(() -> {
                         qrImageView.setEnabled(true);
                         scanStat.setText("无法获取二维码信息，点击上方重试\n" + e.getMessage());
                         MsgUtil.err(e);
