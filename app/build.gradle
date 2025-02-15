@@ -32,7 +32,7 @@ android {
 
         ndk {
             //noinspection ChromeOsAbiSupport
-            abiFilters 'armeabi-v7a','x86',"mips"
+            abiFilters 'armeabi-v7a','armeabi-v8a','x86',"mips"
         }
     }
 
