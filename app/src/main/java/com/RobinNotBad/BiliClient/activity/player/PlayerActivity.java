@@ -1015,7 +1015,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     }
 
     private void onlineChange() {
-        if(!SharedPreferencesUtil.getBoolean("show_online", true) || isLiveMode || aid==0 || cid==0) return;
+        if(!SharedPreferencesUtil.getBoolean("show_online", false) || isLiveMode || aid==0 || cid==0) return;
 
         onlineTimer = new Timer();
         TimerTask task = new TimerTask() {
@@ -1423,8 +1423,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
         destroyed = true;
 
-        if (isPlaying) playerPause();
-
         cancelAllTimers();
 
         if (mDanmakuView != null) {
@@ -1574,6 +1572,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     @Override
     public void finish() {
+        if(isPlaying) playerPause();
         if(video_now!=0) {
             Intent result = new Intent();
             result.putExtra("progress", video_now);
