@@ -247,6 +247,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             params.setMargins(0,padding * 3,0,padding * 3);
             mDanmakuView.setLayoutParams(params);
 
+            text_subtitle.setMaxWidth((int) (screen_width * 0.65));
+
             findViewById(R.id.cl_1).setVisibility(View.GONE);
         }
 
@@ -1099,8 +1101,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         try {
             if(subtitleLinks == null) subtitleLinks = PlayerApi.getSubtitleLinks(aid, cid);
 
-            boolean ai_not_only = subtitleLinks.length > 2 || (subtitleLinks.length == 2 && !subtitleLinks[0].isAI);
-            boolean ai_allowed = from_btn || SharedPreferencesUtil.getBoolean("player_subtitle_ai_allowed", false);
+            boolean ai_not_only = (subtitleLinks.length > 2 || (subtitleLinks.length == 2 && !subtitleLinks[0].isAI));
+            boolean ai_allowed = (from_btn || SharedPreferencesUtil.getBoolean("player_subtitle_ai_allowed", false));
 
             if(ai_not_only || ai_allowed) {
                 if(subtitle_selected == -1) subtitle_selected = subtitleLinks.length;
@@ -1128,7 +1130,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     card_subtitle.setVisibility(View.VISIBLE);
                 });
             }
-            else if(from_btn) MsgUtil.showMsg("无字幕可供选择");
         }catch (Exception e){
             e.printStackTrace();
             MsgUtil.err(e);
