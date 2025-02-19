@@ -112,7 +112,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private int subtitle_curr_index, subtitle_count;
 
     private RelativeLayout layout_control, layout_top, layout_video, layout_card_bg;
-    private LinearLayout bottom_control, layout_speed, right_control, right_second, loading_info, bottom_buttons;
+    private LinearLayout layout_speed, right_control, right_second, loading_info, bottom_buttons;
     private LinearLayout card_subtitle, card_danmaku_send;
 
     private ImageView img_loading;
@@ -372,7 +372,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private void findview() {
         layout_control = findViewById(R.id.control_layout);
         layout_top = findViewById(R.id.top);
-        bottom_control = findViewById(R.id.bottom_control);
         right_control = findViewById(R.id.right_control);
         right_second = findViewById(R.id.right_second);
         layout_card_bg = findViewById(R.id.card_bg);
@@ -514,7 +513,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 boolean singleTouch = pointerCount == 1;
                 boolean doubleTouch = pointerCount == 2;
 
-                Log.e("debug-gesture", event.getEventTime() + "");
+                //Log.e("debug-gesture", event.getEventTime() + "");
                 scaleGestureDetector.onTouchEvent(event);
                 gesture_scaling = scaleGestureListener.scaling;
 
@@ -528,14 +527,14 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     case MotionEvent.ACTION_MOVE:
                         if (singleTouch) {
                             if (gesture_scaling) {
-                                videoMoveTo(layout_video.getX(), layout_video.getY());    //防止单指缩放出框
+                                videoMoveBy(0, 0);    //防止单指缩放出框
                             } else if (!(gesture_scaled && !doublemove_enabled)) {
                                 float currentX = event.getX(0);  //单指移动
                                 float currentY = event.getY(0);
                                 float deltaX = currentX - previousX;
                                 float deltaY = currentY - previousY;
                                 if (deltaX != 0f || deltaY != 0f) {
-                                    videoMoveTo(layout_video.getX() + deltaX, layout_video.getY() + deltaY);
+                                    videoMoveBy(deltaX, deltaY);
                                     previousX = currentX;
                                     previousY = currentY;
                                 }
@@ -547,7 +546,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                             float deltaX = currentX - previousX;
                             float deltaY = currentY - previousY;
                             if (deltaX != 0f || deltaY != 0f) {
-                                videoMoveTo(layout_video.getX() + deltaX, layout_video.getY() + deltaY);
+                                videoMoveBy(deltaX, deltaY);
                                 previousX = currentX;
                                 previousY = currentY;
                             }
@@ -567,7 +566,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                             previousX = (event.getX(0) + event.getX(1)) / 2;
                             previousY = (event.getY(0) + event.getY(1)) / 2;
                             //Log.e("debug-gesture","double_touch");
-                            hidecon();
                         }
                         break;
 
@@ -597,7 +595,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         break;
                 }
 
-                if (!gesture_click_disabled && (gesture_moved || gesture_scaled)) gesture_click_disabled = true;
+                if (!gesture_click_disabled && (gesture_moved || gesture_scaled)) {
+                    gesture_click_disabled = true;
+                    hidecon();
+                }
 
                 return false;
             });
@@ -1343,7 +1344,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         Log.e("debug", "旋转屏幕结束");
     }
 
-    private void videoMoveTo(float x, float y) {
+    private void videoMoveBy(float dx, float dy) {
+        float x = dx + layout_video.getX();
+        float y = dy + layout_video.getY();
+
         float width_delta = 0.5f * video_width * (layout_video.getScaleX() - 1f);
         float height_delta = 0.5f * video_height * (layout_video.getScaleY() - 1f);
         float video_x_min = video_origX - width_delta;
@@ -1360,9 +1364,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             //Log.e("debug-gesture","moveto:" + x + "," + y);
             layout_video.setX(x);
             layout_video.setY(y);
-            if (!gesture_moved) {
+            if (!gesture_moved && Math.abs(dx) > 5f && Math.abs(dy) > 5f) {
                 gesture_moved = true;
-                hidecon();
             }
         }
     }
