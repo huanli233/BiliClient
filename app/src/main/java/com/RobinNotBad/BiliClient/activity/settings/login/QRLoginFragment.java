@@ -127,6 +127,7 @@ public class QRLoginFragment extends Fragment {
         if (isAdded()) refreshQrCode();
     }
 
+    @SuppressLint("SetTextI18n")
     public void refreshQrCode() {
         CenterThreadPool.run(() -> {
             try {
@@ -150,6 +151,12 @@ public class QRLoginFragment extends Fragment {
                 CenterThreadPool.runOnUiThread(() -> {
                     qrImageView.setEnabled(true);
                     scanStat.setText("登录接口可能失效，请找开发者");
+                });
+                e.printStackTrace();
+            } catch (Exception e){
+                CenterThreadPool.runOnUiThread(() -> {
+                    qrImageView.setEnabled(true);
+                    scanStat.setText("遇到其他错误：\n" + e.getMessage());
                 });
                 e.printStackTrace();
             }

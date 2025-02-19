@@ -31,10 +31,12 @@ public class LoginActivity extends BaseActivity {
 
         boolean from_setup = getIntent().getBooleanExtra("from_setup",false);
 
+        /*
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             startActivity(new Intent(this, SpecialLoginActivity.class).putExtra("from_setup",from_setup));
             finish();
         }
+         */
 
         ViewPager viewPager = findViewById(R.id.viewPager);
         List<Fragment> fragmentList = new ArrayList<>();
