@@ -24,6 +24,7 @@ public class SettingLaboratoryActivity extends RefreshListActivity {
         final List<SettingSection> sectionList = new ArrayList<>() {{
             add(new SettingSection("switch", "使用旧版下载器", "dev_download_old", getString(R.string.setting_lab_download_old), "false"));
             add(new SettingSection("switch", "横屏模式", "ui_landscape", getString(R.string.setting_lab_ui_landscape), "false"));
+            add(new SettingSection("switch", "播放器旋屏兼容方案", "dev_player_rotate_software", "在极少数手表上（如小米手表），系统旋屏存在显示不全的问题。打开此开关，播放器将会使用软件旋屏方法。", "false"));
             add(new SettingSection("input_string","开屏文字","ui_splashtext", getString(R.string.setting_lab_splashtext),"欢迎使用\n哔哩终端"));
             add(new SettingSection("input_string","缓存路径","save_path_video",getString(R.string.setting_lab_path_video), FileUtil.getDownloadPath().toString()));
             add(new SettingSection("input_string","图片下载路径","save_path_pictures",getString(R.string.setting_lab_path_pictures), FileUtil.getDownloadPicturePath().toString()));

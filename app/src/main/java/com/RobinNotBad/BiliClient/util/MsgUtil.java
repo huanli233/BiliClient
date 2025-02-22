@@ -45,7 +45,7 @@ public class MsgUtil {
 
     public static void showMsgLong(String str) {
         if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, true)) {
-            CenterThreadPool.runOnUiThread(() -> EventBus.getDefault().postSticky(new SnackEvent(str)));
+            CenterThreadPool.runOnUiThread(() -> EventBus.getDefault().postSticky(new SnackEvent(str,Snackbar.LENGTH_LONG)));
         } else {
             toastLong(str);
         }

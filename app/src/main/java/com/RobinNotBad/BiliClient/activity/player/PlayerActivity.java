@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.os.BatteryManager;
@@ -27,7 +28,6 @@ import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -121,7 +121,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private TextView text_progress, text_online, text_volume, loading_text0, loading_text1, text_speed, text_newspeed;
     public TextView text_title, text_subtitle;
 
-    private Timer progressTimer, autoHideTimer, volumeTimer, speedTimer, loadingTimer, onlineTimer, surfaceTimer;
+    private Timer progressTimer, speedTimer, loadingTimer, onlineTimer, surfaceTimer;
     private String video_url, danmaku_url;
 
     private boolean isPlaying, isPrepared, hasDanmaku,
@@ -132,7 +132,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private long progress_history;
     private String progress_str;
 
-    private float screen_width, screen_height;
+    private int screen_width, screen_height;
     private int video_width, video_height;
 
     private AudioManager audioManager;
@@ -140,7 +140,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private com.RobinNotBad.BiliClient.activity.player.ScaleGestureDetector scaleGestureDetector;
     private ViewScaleGestureListener scaleGestureListener;
     private float previousX, previousY;
-    private boolean gesture_moved, gesture_scaling, gesture_scaled, gesture_click_disabled;
+    private boolean gesture_moved, gesture_scaled, gesture_click_disabled;
     private float video_origX, video_origY;
     private long timestamp_click;
     private boolean onLongClick = false;
@@ -201,7 +201,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.e("加载", "加载");
+        Log.i("加载", "加载");
         super.onCreate(savedInstanceState);
 
         screen_landscape = SharedPreferencesUtil.getBoolean("player_autolandscape", false) || SharedPreferencesUtil.getBoolean("ui_landscape", false);
@@ -214,9 +214,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             return;
         }
 
-        WindowManager windowManager = this.getWindowManager();
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screen_width = displayMetrics.widthPixels;//获取屏宽
         screen_height = displayMetrics.heightPixels;//获取屏高
 
@@ -274,7 +273,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         setVideoGestures();
-        autohide();
+        autohideReset();
 
 
         seekbar_progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -289,17 +288,19 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
+                if(System.currentTimeMillis() - timestamp_click < 250) return;  //防止误触
                 isSeeking = true;
-                if (autoHideTimer != null) autoHideTimer.cancel();
+                layout_control.removeCallbacks(hidecon);
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if (isPrepared) {
+                if(!isSeeking) return;
+                isSeeking = false;
+                if (isPrepared && !destroyed) {
                     ijkPlayer.seekTo(seekbar_progress.getProgress());
-                    isSeeking = false;
+                    autohideReset();
                 }
-                autohide();
             }
         });
 
@@ -336,7 +337,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             btn_control.setVisibility(View.INVISIBLE); //暂停的话可能会出一些bug，那就别暂停了，卡住就退出重进吧（
             seekbar_progress.setVisibility(View.GONE);
             seekbar_progress.setEnabled(false);
-            streamdanmaku(null); //用来初始化一下弹幕层
+            streamDanmaku(null); //用来初始化一下弹幕层
             danmuSocketConnect();
         }
 
@@ -354,14 +355,14 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             });
             if(isOnlineVideo) {
                 downdanmu();
-                if(SharedPreferencesUtil.getBoolean("player_subtitle_autoshow", true)) downsubtitle(false);
+                if(SharedPreferencesUtil.getBoolean("player_subtitle_autoshow", true)) downSubtitle(false);
             }
             else {
                 runOnUiThread(() -> {
                     btn_subtitle.setVisibility(View.GONE);
                     btn_danmaku_send.setVisibility(View.GONE);
                 });
-                streamdanmaku(danmaku_url);
+                streamDanmaku(danmaku_url);
             }
 
             if(!destroyed) setDisplay();
@@ -442,7 +443,12 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             layout_video.addView(surfaceView, params);
         }
 
-        btn_rotate.setOnClickListener(view -> rotate());
+        btn_rotate.setOnClickListener(view -> {
+            Log.i("debug", "点击旋转按钮");
+            screen_landscape = !screen_landscape;
+            if(SharedPreferencesUtil.getBoolean("dev_player_rotate_software",false)) softwareRotate();
+            else setRequestedOrientation(screen_landscape ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        });
 
         findViewById(R.id.button_sound_add).setOnClickListener(view -> changeVolume(true));
         findViewById(R.id.button_sound_cut).setOnClickListener(view -> changeVolume(false));
@@ -485,7 +491,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         if(result == 0){
                             MsgUtil.showMsg("发送成功喵~");
                             runOnUiThread(() -> {
-                                adddanmaku(editText.getText().toString(), Color.WHITE);
+                                addDanmaku(editText.getText().toString(), Color.WHITE);
                                 editText.setText("");
                             });
                         } else MsgUtil.showMsg("发送失败：" + result);
@@ -513,15 +519,13 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 boolean singleTouch = pointerCount == 1;
                 boolean doubleTouch = pointerCount == 2;
 
-                //Log.e("debug-gesture", event.getEventTime() + "");
+                //Log.i("debug-gesture", event.getEventTime() + "");
                 scaleGestureDetector.onTouchEvent(event);
-                gesture_scaling = scaleGestureListener.scaling;
+                boolean gesture_scaling = scaleGestureListener.scaling;
 
-                if (!gesture_scaled && gesture_scaling) {
-                    gesture_scaled = true;
-                }
+                if (!gesture_scaled && gesture_scaling) gesture_scaled = true;
 
-                //Log.e("debug-gesture", (scaling ? "scaled-yes" : "scaled-no"));
+                //Log.i("debug-gesture", (scaling ? "scaled-yes" : "scaled-no"));
 
                 switch (action) {
                     case MotionEvent.ACTION_MOVE:
@@ -557,7 +561,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         if (singleTouch) {  //如果是单指按下，设置起始位置为当前手指位置
                             previousX = event.getX(0);
                             previousY = event.getY(0);
-                            //Log.e("debug-gesture", "touch_start:" + previousX + "," + previousY);
+                            //Log.i("debug-gesture", "touch_start:" + previousX + "," + previousY);
                         }
                         break;
 
@@ -565,7 +569,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         if (doubleTouch) {  //如果是双指按下，设置起始位置为两指连线的中心点
                             previousX = (event.getX(0) + event.getX(1)) / 2;
                             previousY = (event.getY(0) + event.getY(1)) / 2;
-                            //Log.e("debug-gesture","double_touch");
+                            //Log.i("debug-gesture","double_touch");
                         }
                         break;
 
@@ -574,30 +578,26 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                             int index = event.getActionIndex();  //actionIndex是抬起来的手指位置
                             previousX = event.getX((index == 0 ? 1 : 0));
                             previousY = event.getY((index == 0 ? 1 : 0));
-                            //Log.e("debug-gesture","single_touch");
+                            //Log.i("debug-gesture","single_touch");
                         }
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        //Log.e("debug-gesture","touch_stop");
+                        //Log.i("debug-gesture","touch_stop");
                         if (onLongClick) {
                             onLongClick = false;
                             ijkPlayer.setSpeed(speed_values[seekbar_speed.getProgress()]);
                             mDanmakuView.setSpeed(speed_values[seekbar_speed.getProgress()]);
                             text_speed.setText(speed_strs[seekbar_speed.getProgress()]);
                         }
-                        if (gesture_moved) {
-                            gesture_moved = false;
-                        }
-                        if (gesture_scaled) {
-                            gesture_scaled = false;
-                        }
+                        if (gesture_moved) gesture_moved = false;
+                        if (gesture_scaled) gesture_scaled = false;
                         break;
                 }
 
                 if (!gesture_click_disabled && (gesture_moved || gesture_scaled)) {
                     gesture_click_disabled = true;
-                    hidecon();
+                    hidecon.run();
                 }
 
                 return false;
@@ -622,13 +622,13 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         //这个管长按开始
         layout_control.setOnLongClickListener(view -> {
             if (SharedPreferencesUtil.getBoolean("player_longclick", true) && ijkPlayer != null && (isPlaying) && (!isLiveMode)) {
-                if (!onLongClick && !gesture_moved && !gesture_scaled) {
-                    hidecon();
+                if (!onLongClick && !gesture_click_disabled) {
+                    hidecon.run();
                     ijkPlayer.setSpeed(3.0F);
                     mDanmakuView.setSpeed(3.0f);
                     text_speed.setText("x 3.0");
                     onLongClick = true;
-                    Log.e("debug-gesture", "longclick_down");
+                    Log.i("debug-gesture", "longclick_down");
                     return true;
                 }
                 return false;
@@ -639,17 +639,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     }
 
 
-    private void autohide() {
-        if (autoHideTimer != null) autoHideTimer.cancel();
-        autoHideTimer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(() -> hidecon());
-                this.cancel();
-            }
-        };
-        autoHideTimer.schedule(timerTask, 4000);
+    private void autohideReset() {
+        layout_control.removeCallbacks(hidecon);
+        layout_control.postDelayed(hidecon,4000);
     }
 
     private void clickUI() {
@@ -669,7 +661,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         } else {
             timestamp_click = now_timestamp;
             if ((layout_top.getVisibility()) == View.GONE) showcon();
-            else hidecon();
+            else hidecon.run();
         }
     }
 
@@ -689,10 +681,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             if(onlineTimer != null) text_online.setVisibility(View.VISIBLE);
         }
 
-        autohide();
+        autohideReset();
     }
 
-    private void hidecon() {
+    private final Runnable hidecon = () -> {
         right_control.setVisibility(View.GONE);
         layout_top.setVisibility(View.GONE);
         bottom_buttons.setVisibility(View.GONE);
@@ -704,12 +696,12 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             if(onlineTimer != null) text_online.setVisibility(View.GONE);
         }
         if(menu_opened) btn_menu.performClick();
-    }
+    };
 
 
     private void setDisplay() {
-        Log.e("debug", "创建播放器");
-        Log.e("debug-url", video_url);
+        Log.i("debug", "创建播放器");
+        Log.i("debug-url", video_url);
 
 
         runOnUiThread(() -> loading_text0.setText("初始化播放"));
@@ -733,12 +725,12 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "packet-buffering", 1);
             ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "max-buffer-size", 15 * 1000 * 1000);
             ijkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "user_agent", USER_AGENT_WEB);
-            Log.e("debug", "设置ua");
+            Log.i("debug", "设置ua");
         }
 
-        Log.e("debug", "准备设置显示");
+        Log.i("debug", "准备设置显示");
         if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT < 19)) {            //Texture
-            Log.e("debug", "使用texture模式");
+            Log.i("debug", "使用texture模式");
             surfaceTimer = new Timer();
             surfaceTimer.schedule(new TimerTask() {
                 @Override
@@ -755,9 +747,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             }, 0, 200);
         }
         else {
-            Log.e("debug", "使用surface模式");
+            Log.i("debug", "使用surface模式");
             SurfaceHolder surfaceHolder = surfaceView.getHolder();       //Surface
-            Log.e("debug", "获取surfaceHolder成功！");
+            Log.i("debug", "获取surfaceHolder成功！");
             surfaceTimer = new Timer();
             surfaceTimer.schedule(new TimerTask() {
                 @Override
@@ -828,7 +820,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         ijkPlayer.setOnErrorListener((iMediaPlayer, what, extra) -> {
             String EReport = "播放器可能遇到错误！\n错误码：" + what + "\n附加：" + extra;
-            Log.e("ERROR", EReport);
+            Log.e("player-ijk-err", EReport);
             //Toast.makeText(PlayerActivity.this, EReport, Toast.LENGTH_LONG).show();
             return false;
         });
@@ -856,7 +848,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         ijkPlayer.setScreenOnWhilePlaying(true);
         ijkPlayer.prepareAsync();
-        Log.e("debug", "开始准备");
+        Log.i("debug", "开始准备");
     }
 
     @SuppressLint("SetTextI18n")
@@ -870,7 +862,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         isPrepared = true;
         video_all = (int) mediaPlayer.getDuration();
 
-        changeVideoSize(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight());
+        changeVideoSize();
 
         if(isLiveMode || hasDanmaku) mDanmakuView.start();
         if (SharedPreferencesUtil.getBoolean("player_ui_showDanmakuBtn", true)) {
@@ -926,7 +918,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         mediaPlayer.start();
 
         btn_control.setOnClickListener(view -> controlVideo());
-        btn_subtitle.setOnClickListener(view -> CenterThreadPool.run(() -> downsubtitle(true)));
+        btn_subtitle.setOnClickListener(view -> CenterThreadPool.run(() -> downSubtitle(true)));
     }
 
     private void showLoadingSpeed() {
@@ -940,48 +932,42 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }, 0, 500);
     }
 
-    private void changeVideoSize(int width, int height) {
-        Log.e("debug-改变视频区域大小", "开始");
-        Log.e("debug-screen", screen_width + "x" + screen_height);
-        Log.e("debug-video", width + "x" + height);
+    private void changeVideoSize() {
+        if(!isPrepared || ijkPlayer == null) return;
+        int width = ijkPlayer.getVideoWidth();
+        int height = ijkPlayer.getVideoHeight();
+        Log.i("debug-改变视频区域大小", "开始");
+        Log.i("debug-screen", screen_width + "x" + screen_height);
+        Log.i("debug-video", width + "x" + height);
 
         if (SharedPreferencesUtil.getBoolean("player_ui_round", false)) {
             float video_mul = (float) height / (float) width;
-            double sqrt = Math.sqrt(((double) screen_width * (double) screen_width) / ((((double) height * (double) height) / ((double) width * (double) width)) + 1));
+            double sqrt = Math.sqrt(screen_width * screen_width / ((double)(height * height) / (width * width) + 1));
             video_height = (int) (sqrt * video_mul + 0.5);
             video_width = (int) (sqrt + 0.5);
         } else {
-            float multiplewidth = screen_width / width;
-            float multipleheight = screen_height / height;
-            int endhi1 = (int) (height * multipleheight);
-            int endwi1 = (int) (width * multipleheight);
-            int endhi2 = (int) (height * multiplewidth);
-            int endwi2 = (int) (width * multiplewidth);//这句之前是multipleheight，其实算出来结果是不对的
-            //但是这个bug神奇般的在原来的ui布局中无法显现出来，直到我换成ConstraintLayout。。。
-            //越发对小电视作者心生敬意（
-            Log.e("debug-case1", endwi1 + "x" + endhi1);
-            Log.e("debug-case2", endwi2 + "x" + endhi2);
-            if (endhi1 <= screen_height && endwi1 <= screen_width) {
-                video_height = endhi1;
-                video_width = endwi1;
-                Log.e("debug-chosen", "case1");
+            int width_case1 = width * screen_height / height;
+            int height_case2 = height * screen_width / width;
+
+            if (width_case1 <= screen_width) {
+                video_width = width_case1;
+                video_height = screen_height;
             } else {
-                video_height = endhi2;
-                video_width = endwi2;
-                Log.e("debug-chosen", "case2");
+                video_width = screen_width;
+                video_height = height_case2;
             }
         }
 
         runOnUiThread(() -> {
             layout_video.setLayoutParams(new RelativeLayout.LayoutParams(video_width, video_height));
-            Log.e("debug-改变视频区域大小", video_width + "x" + video_height);
-            video_origX = (screen_width - video_width) / 2;
-            video_origY = (screen_height - video_height) / 2;
+            Log.i("debug-改变视频区域大小", video_width + "x" + video_height);
+            video_origX = (screen_width - video_width) / 2f;
+            video_origY = (screen_height - video_height) / 2f;
 
             layout_video.postDelayed(() -> {
                 layout_video.setX(video_origX);
                 layout_video.setY(video_origY);
-                Log.e("debug-改变视频位置", ((screen_width - video_width) / 2) + "," + ((screen_height - video_height) / 2));
+                Log.i("debug-改变视频位置", ((screen_width - video_width) / 2) + "," + ((screen_height - video_height) / 2));
             }, 60);  //别问为什么，问就是必须这么写，要等上面的绘制完成
         });
     }
@@ -1098,7 +1084,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     }
 
     private int subtitle_selected = -1;
-    private void downsubtitle(boolean from_btn){
+    private void downSubtitle(boolean from_btn){
         try {
             if(subtitleLinks == null) subtitleLinks = PlayerApi.getSubtitleLinks(aid, cid);
 
@@ -1156,7 +1142,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     bufferedSink.close();
                 }
             }
-            streamdanmaku(danmakuFile.toString());
+            streamDanmaku(danmakuFile.toString());
         } catch (Exception e) {
             runOnUiThread(() -> MsgUtil.err(e));
         }
@@ -1183,8 +1169,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         return parser;
     }
 
-    private void streamdanmaku(String danmakuPath) {
-        Log.e("debug", "streamdanmaku");
+    private void streamDanmaku(String danmakuPath) {
+        Log.i("debug", "streamDanmaku");
 
         mContext = DanmakuContext.create();
         HashMap<Integer, Integer> maxLinesPair = new HashMap<>();
@@ -1205,8 +1191,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         mDanmakuView.setCallback(new DrawHandler.Callback() {
             @Override
             public void prepared() {
-                Log.e("debug","danmaku_prepared");
-                adddanmaku("弹幕君准备完毕～(*≧ω≦)", Color.WHITE);
+                Log.i("debug","danmaku_prepared");
+                addDanmaku("弹幕君准备完毕～(*≧ω≦)", Color.WHITE);
             }
 
             @Override
@@ -1227,11 +1213,11 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         mDanmakuView.prepare(mParser, mContext);
     }
 
-    public void adddanmaku(String text, int color) {
-        adddanmaku(text, color, 25, 1, 0);
+    public void addDanmaku(String text, int color) {
+        addDanmaku(text, color, 25, 1, 0);
     }
 
-    public void adddanmaku(String text, int color, int textSize, int type, int backgroundColor) {
+    public void addDanmaku(String text, int color, int textSize, int type, int backgroundColor) {
         BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(type);
         if (text == null || danmaku == null || ijkPlayer == null) return;
         danmaku.text = text;
@@ -1274,7 +1260,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     public void controlVideo() {
         if (isPlaying) {
             playerPause();
-            if (autoHideTimer != null) autoHideTimer.cancel();
         } else {
             isPlaying = true;
             // 因为弹幕实时同步，不需要自行设置弹幕时间了
@@ -1282,17 +1267,16 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 ijkPlayer.seekTo(0);
                 // mDanmakuView.seekTo(0L);
                 mDanmakuView.resume();
-                Log.e("debug", "播完重播");
+                Log.i("debug", "播完重播");
             } // else mDanmakuView.start(ijkPlayer.getCurrentPosition());
             ijkPlayer.start();
             btn_control.setImageResource(R.drawable.btn_player_pause);
         }
-        autohide();
+        autohideReset();
     }
 
     @SuppressLint("SetTextI18n")
     public void changeVolume(Boolean add_or_cut) {
-        if (autoHideTimer != null) autoHideTimer.cancel();
         int volumeNow = audioManager.getStreamVolume(STREAM_MUSIC);
         int volumeMax = audioManager.getStreamMaxVolume(STREAM_MUSIC);
         int volumeNew = volumeNow + (add_or_cut ? 1 : -1);
@@ -1305,44 +1289,49 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         text_volume.setVisibility(View.VISIBLE);
         text_volume.setText("音量：" + show + "%");
 
-        hideVolume();
-        autohide();
+        text_volume.removeCallbacks(hideVolume);
+        text_volume.postDelayed(hideVolume, 3000);
+        autohideReset();
     }
 
-    private void hideVolume() {
-        if (volumeTimer != null) volumeTimer.cancel();
-        volumeTimer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(() -> text_volume.setVisibility(View.GONE));
-            }
-        };
-        volumeTimer.schedule(timerTask, 3000);
-    }
+    private final Runnable hideVolume = () -> text_volume.setVisibility(View.GONE);
 
-    public void rotate() {
-        Log.e("debug", "点击旋转按钮");
-        screen_landscape = !screen_landscape;
-        setRequestedOrientation(screen_landscape ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-    }
 
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Log.e("debug", "开始旋转屏幕");
-
-        WindowManager windowManager = this.getWindowManager();
+    /**
+     * 软件旋屏，给某些特殊设备用的。
+     * 终端屎山又增高啦
+     */
+    private void softwareRotate(){
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-        screen_width = displayMetrics.widthPixels;//获取屏宽
-        screen_height = displayMetrics.heightPixels;//获取屏高
-        if (isPrepared) {
-            changeVideoSize(ijkPlayer.getVideoWidth(), ijkPlayer.getVideoHeight());
-        }
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screen_width = screen_landscape ? displayMetrics.heightPixels : displayMetrics.widthPixels;
+        screen_height = screen_landscape ? displayMetrics.widthPixels : displayMetrics.heightPixels;
 
-        Log.e("debug", "旋转屏幕结束");
+        ViewGroup root_layout = findViewById(R.id.root_layout);
+        ViewGroup.LayoutParams params = root_layout.getLayoutParams();
+        params.width = screen_width;
+        params.height = screen_height;
+
+        if(isPrepared && !destroyed) runOnUiThread(()->{
+            root_layout.setLayoutParams(params);
+            root_layout.setRotation(screen_landscape ? 90 : 0);
+            root_layout.setX(screen_landscape ? screen_width * -0.25f : 0);
+            root_layout.setY(screen_landscape ? screen_height * 0.5f : 0);
+            if(SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT < 19)){
+                if(textureView != null){
+                    Matrix matrix = new Matrix();
+                    textureView.getTransform(matrix);
+                    matrix.postRotate(0);
+                    textureView.setTransform(matrix);
+                }
+            }
+            else{
+                MsgUtil.showMsg("请切换为TextureView才能支持软件旋屏！");
+            }
+        });
+        changeVideoSize();
     }
+
 
     private void videoMoveBy(float dx, float dy) {
         float x = dx + layout_video.getX();
@@ -1361,10 +1350,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if (y > video_y_max) y = video_y_max;
 
         if (layout_video.getX() != x || layout_video.getY() != y) {
-            //Log.e("debug-gesture","moveto:" + x + "," + y);
+            //Log.i("debug-gesture","moveto:" + x + "," + y);
             layout_video.setX(x);
             layout_video.setY(y);
-            if (!gesture_moved && Math.abs(dx) > 5f && Math.abs(dy) > 5f) {
+            if (!gesture_moved && (Math.abs(video_origX - x) > 5f || Math.abs(video_origY - y) > 5f)) {
                 gesture_moved = true;
             }
         }
@@ -1387,17 +1376,32 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         if (btn_control != null) btn_control.setImageResource(R.drawable.btn_player_pause);
     }
 
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.i("debug", "开始旋转屏幕");
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screen_width = displayMetrics.widthPixels;//获取屏宽
+        screen_height = displayMetrics.heightPixels;//获取屏高
+        changeVideoSize();
+
+        Log.i("debug", "旋转屏幕结束");
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.e("debug", "onNewIntent");
+        Log.i("debug", "onNewIntent");
         finish();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e("debug", "onPause");
+        Log.i("debug", "onPause");
         if (!SharedPreferencesUtil.getBoolean("player_background", false)) {
             playerPause();
         }
@@ -1406,13 +1410,13 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e("debug", "onResume");
+        Log.i("debug", "onResume");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.e("debug", "onStop");
+        Log.i("debug", "onStop");
     }
 
 
@@ -1420,7 +1424,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     @Override
     protected void onDestroy() {
-        Log.e("debug", "结束");
+        Log.i("debug", "结束");
         if (eventBusInit) {
             EventBus.getDefault().unregister(this);
             eventBusInit = false;
@@ -1456,14 +1460,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             surfaceTimer.cancel();
             surfaceTimer = null;
         }
-        if (autoHideTimer != null) {
-            autoHideTimer.cancel();
-            autoHideTimer = null;
-        }
-        if (volumeTimer != null) {
-            volumeTimer.cancel();
-            volumeTimer = null;
-        }
         if (progressTimer != null) {
             progressTimer.cancel();
             progressTimer = null;
@@ -1476,6 +1472,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             loadingTimer.cancel();
             loadingTimer = null;
         }
+        layout_control.removeCallbacks(hidecon);
+        text_volume.removeCallbacks(hideVolume);
     }
 
     OkHttpClient okHttpClient;
@@ -1499,7 +1497,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 JSONObject host = data.getJSONArray("host_list").getJSONObject(0);
 
                 url = "wss://" + host.getString("host") + ":" + host.getInt("wss_port") + "/sub";
-                Log.e("debug", "连接WebSocket：" + url);
+                Log.i("debug", "连接WebSocket：" + url);
 
                 okHttpClient = new OkHttpClient();
                 Request request = new Request.Builder()

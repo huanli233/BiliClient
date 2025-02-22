@@ -173,7 +173,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
      * Default library loader
      * Load them by yourself, if your libraries are not installed at default place.
      */
-    private static final IjkLibLoader sLocalLibLoader = libName -> System.loadLibrary(libName);
+    private static final IjkLibLoader sLocalLibLoader = System::loadLibrary;
 
     private static volatile boolean mIsLibLoaded = false;
     public static void loadLibrariesOnce(IjkLibLoader libLoader) {
@@ -1141,7 +1141,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
     @CalledByNative
     private static boolean onNativeInvoke(Object weakThiz, int what, Bundle args) {
         DebugLog.ifmt(TAG, "onNativeInvoke %d", what);
-        if (weakThiz == null || !(weakThiz instanceof WeakReference<?>))
+        if (!(weakThiz instanceof WeakReference<?>))
             throw new IllegalStateException("<null weakThiz>.onNativeInvoke()");
 
         @SuppressWarnings("unchecked")
@@ -1195,7 +1195,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
 
     @CalledByNative
     private static String onSelectCodec(Object weakThiz, String mimeType, int profile, int level) {
-        if (weakThiz == null || !(weakThiz instanceof WeakReference<?>))
+        if (!(weakThiz instanceof WeakReference<?>))
             return null;
 
         @SuppressWarnings("unchecked")
