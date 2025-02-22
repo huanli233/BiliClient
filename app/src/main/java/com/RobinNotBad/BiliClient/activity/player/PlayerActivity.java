@@ -288,14 +288,11 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                if(System.currentTimeMillis() - timestamp_click < 250) return;  //防止误触
                 isSeeking = true;
-                layout_control.removeCallbacks(hidecon);
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if(!isSeeking) return;
                 isSeeking = false;
                 if (isPrepared && !destroyed) {
                     ijkPlayer.seekTo(seekbar_progress.getProgress());
@@ -671,6 +668,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         layout_top.setVisibility(View.VISIBLE);
         bottom_buttons.setVisibility(View.VISIBLE);
         seekbar_progress.setVisibility(View.VISIBLE);
+        seekbar_progress.setEnabled(false);
+        seekbar_progress.postDelayed(progressbarEnable,200);
         if (isPrepared && !isLiveMode) text_speed.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             batteryView.setPower(batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
@@ -683,6 +682,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         autohideReset();
     }
+
+    private final Runnable progressbarEnable = () -> seekbar_progress.setEnabled(true);
 
     private final Runnable hidecon = () -> {
         right_control.setVisibility(View.GONE);
@@ -1474,6 +1475,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
         layout_control.removeCallbacks(hidecon);
         text_volume.removeCallbacks(hideVolume);
+        seekbar_progress.removeCallbacks(progressbarEnable);
     }
 
     OkHttpClient okHttpClient;

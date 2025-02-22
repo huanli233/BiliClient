@@ -129,7 +129,7 @@
                 android:layout_marginTop="2dp"
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
-                android:progressTint="#00A4DA"
+                android:progressTint="#aa44aaff"
                 android:secondaryProgressTint="#eeFEFEFE"
                 android:thumb="@drawable/player_selector_progress"
                 android:thumbOffset="8dp" />
