@@ -25,10 +25,17 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Objects;
 
 public class AppInfoApi {
     public static void check(Context context) {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        if(hour >= 23 || hour <= 3){
+            MsgUtil.showDialog("温馨提醒", "夜深了，要注意休息呐~", 3);    //早茶光提供的彩蛋（实际上并不能算作彩蛋，太容易触发了？
+        }
+
         try {
             int version = BiliTerminal.getVersion();
             int curr = ConfInfoApi.getDateCurr();
@@ -40,8 +47,6 @@ public class AppInfoApi {
                 if (last_ver != 0) {
                     if (last_ver < 20240606)
                         MsgUtil.showDialog("提醒", "当前的新版本实现了对抗部分类型的风控，建议您重新登录账号以确保成功使用");
-                    if (last_ver < 20240825)
-                        MsgUtil.showDialog("提醒", "此版本修复了教程问题，建议前往设置中“清除教程进度”，以便补全在之前由于打包问题丢失而漏过的教程");
 
                     MsgUtil.showDialog("提醒", "欢迎更新到这个版本，这个版本增加了一些设置项，可前往设置中查看");
                     if (!SharedPreferencesUtil.getString("player", "null").equals("terminalPlayer"))
