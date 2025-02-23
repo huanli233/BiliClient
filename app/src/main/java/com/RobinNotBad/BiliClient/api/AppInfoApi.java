@@ -65,12 +65,11 @@ public class AppInfoApi {
 
                 checkUpdate(context, false);
             }
-        } catch (IOException | JSONException e){
-            Log.e("debug-terminal", e.toString());
-            MsgUtil.err(e);
+        } catch (IOException e){
+            MsgUtil.showMsg("无法连接到终端公告接口\n也许是服务器宕机了？\n（对软件内容无影响）");
         } catch (Exception e) {
             Log.e("debug-terminal", e.toString());
-            MsgUtil.showMsg(e.getMessage());
+            MsgUtil.err("终端接口出现问题（不影响软件内容）", e);
         }
     }
 
