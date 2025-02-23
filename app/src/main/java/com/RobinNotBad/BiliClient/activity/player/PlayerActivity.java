@@ -251,7 +251,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             findViewById(R.id.cl_1).setVisibility(View.GONE);
         }
 
-        if ((!SharedPreferencesUtil.getBoolean("show_online", true)) || aid==0 || cid==0)
+        if ((!SharedPreferencesUtil.getBoolean("player_show_online", false)) || aid==0 || cid==0)
             text_online.setVisibility(View.GONE);
 
         IjkMediaPlayer.loadLibrariesOnce(null);
@@ -1005,7 +1005,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     }
 
     private void onlineChange() {
-        if(!SharedPreferencesUtil.getBoolean("show_online", false) || isLiveMode || aid==0 || cid==0) return;
+        if(!SharedPreferencesUtil.getBoolean("player_show_online", false) || isLiveMode || aid==0 || cid==0) return;
 
         onlineTimer = new Timer();
         TimerTask task = new TimerTask() {

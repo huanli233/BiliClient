@@ -44,13 +44,14 @@ public class AppInfoApi {
 
             int last_ver = SharedPreferencesUtil.getInt("app_version_last", 0);
             if (last_ver < version) {
+                MsgUtil.showDialog("提醒", "终端的每个版本都可能会新增一些兼容性相关的设置项\n如果你遇到了某些奇葩问题，请先在设置里找一找相关的兼容性选项，视频放不了、无法加载图片的问题都有可能解决哦~",5);
+
                 if (last_ver != 0) {
                     if (last_ver < 20240606)
                         MsgUtil.showDialog("提醒", "当前的新版本实现了对抗部分类型的风控，建议您重新登录账号以确保成功使用");
 
-                    MsgUtil.showDialog("提醒", "欢迎更新到这个版本，这个版本增加了一些设置项，可前往设置中查看");
                     if (!SharedPreferencesUtil.getString("player", "null").equals("terminalPlayer"))
-                        MsgUtil.showDialog("小提醒", "现在的内置播放器已支持以下特色功能：\n·视频实时观看人数\n·显示直播弹幕\n·强制滚动显示弹幕\n\n欢迎在需要时切换到内置播放器使用哦");
+                        MsgUtil.showDialog("提醒", "现在的内置播放器已支持以下特色功能：\n·视频实时观看人数\n·显示直播弹幕\n·强制滚动显示弹幕\n\n欢迎在需要时切换到内置播放器使用哦");
                 }
                 MsgUtil.showText("更新公告", context.getResources().getString(R.string.update_tip) + "\n\n更新细节：\n" + ToolsUtil.getUpdateLog(context));
                 if (ToolsUtil.isDebugBuild())

@@ -24,7 +24,7 @@ public class SettingTerminalPlayerActivity extends RefreshListActivity {
             add(new SettingSection("switch", "熄屏继续播放", "player_background", "", "false"));
             add(new SettingSection("switch", "默认横屏", "player_autolandscape", "", "false"));
             add(new SettingSection("switch", "从历史位置播放", "player_from_last", getString(R.string.desc_fromlast), "true"));
-            add(new SettingSection("switch", "显示实时人数", "show_online", getString(R.string.desc_showonline), "false"));
+            add(new SettingSection("switch", "显示实时人数", "player_show_online", getString(R.string.desc_showonline), "false"));
             add(new SettingSection("switch", "视频可缩放", "player_scale", getString(R.string.desc_scale), "true"));
             add(new SettingSection("switch", "缩放时可移动", "player_doublemove", getString(R.string.desc_doublemove), "true"));
 
