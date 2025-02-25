@@ -1315,9 +1315,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         if(isPrepared && !destroyed) runOnUiThread(()->{
             root_layout.setLayoutParams(params);
+            root_layout.setPivotX(0);
+            root_layout.setPivotY(0);
+            root_layout.setX(screen_landscape ? screen_height : 0);
             root_layout.setRotation(screen_landscape ? 90 : 0);
-            root_layout.setX(screen_landscape ? screen_width * -0.25f : 0);
-            root_layout.setY(screen_landscape ? screen_height * 0.5f : 0);
             if(SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT < 19)){
                 if(textureView != null){
                     Matrix matrix = new Matrix();
