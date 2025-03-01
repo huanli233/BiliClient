@@ -18,6 +18,7 @@ import com.RobinNotBad.BiliClient.activity.video.local.LocalPageChooseActivity;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.LocalVideo;
+import com.RobinNotBad.BiliClient.model.PlayerData;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -68,8 +69,14 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.itemView.setOnClickListener(view -> {
                 LocalVideo localVideo = localVideoList.get(realPosition);
                 if (localVideo.videoFileList.size() == 1) {
+                    PlayerData playerData = new PlayerData();
+                    playerData.local = true;
+                    playerData.videoUrl = localVideo.videoFileList.get(0);
+                    playerData.danmakuUrl = localVideo.danmakuFileList.get(0);
+                    playerData.title = localVideo.title;
+
                     try {
-                        Intent player = PlayerApi.jumpToPlayer(context, localVideo.videoFileList.get(0), localVideo.danmakuFileList.get(0), "", localVideo.title, true, 0, "", 0, 0, 0, false);
+                        Intent player = PlayerApi.jumpToPlayer(playerData);
                         context.startActivity(player);
                     } catch (ActivityNotFoundException e) {
                         MsgUtil.showMsg("跳转失败");

@@ -23,8 +23,6 @@ import java.io.File;
 //2023-07-17
 
 public class MultiPageActivity extends BaseActivity {
-    private static final String TAG = "MultiPageActivity";
-
     boolean play_clicked;
     VideoInfo videoInfo;
 
@@ -69,7 +67,7 @@ public class MultiPageActivity extends BaseActivity {
                 long progress_cid = intent.getLongExtra("progress_cid", 0);
                 adapter.setOnItemClickListener(position -> {
                     long cid = videoInfo.cids.get(position);
-                    PlayerApi.startGettingUrl(this, videoInfo, position, (progress_cid == cid && !play_clicked) ? progress : -1);
+                    PlayerApi.startGettingUrl(videoInfo, position, (progress_cid == cid && !play_clicked) ? progress : -1);
                     play_clicked = true;
                 });
             }

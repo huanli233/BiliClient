@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
-import android.util.Pair;
 
 import androidx.core.content.FileProvider;
 
@@ -13,6 +12,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.player.PlayerActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingPlayerChooseActivity;
 import com.RobinNotBad.BiliClient.activity.video.JumpToPlayerActivity;
+import com.RobinNotBad.BiliClient.model.PlayerData;
 import com.RobinNotBad.BiliClient.model.Subtitle;
 import com.RobinNotBad.BiliClient.model.SubtitleLink;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
@@ -29,26 +29,18 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-
-import okhttp3.Response;
 
 public class PlayerApi {
-    public static void startGettingUrl(Context context, VideoInfo videoInfo, int page, int progress) {
-        long mid;
-        try {
-            mid = SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
-        } catch (Throwable ignored) {
-            mid = 0;
-        }
+    public static void startGettingUrl(VideoInfo videoInfo, int page, int progress) {
+        Context context = BiliTerminal.context;
+
+        PlayerData playerData = videoInfo.toPlayerData(page);
+        playerData.progress = progress;
+
         Intent intent = new Intent()
                 .setClass(context, JumpToPlayerActivity.class)
-                .putExtra("title", (videoInfo.pagenames.size() == 1 ? videoInfo.title : videoInfo.pagenames.get(page)))
-                .putExtra("bvid", videoInfo.bvid)
-                .putExtra("aid", videoInfo.aid)
-                .putExtra("cid", videoInfo.cids.get(page))
-                .putExtra("mid", mid)
-                .putExtra("progress", progress);
+                .putExtra("data", playerData)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -57,15 +49,11 @@ public class PlayerApi {
             Context context = BiliTerminal.context;
 
             Intent intent = new Intent(context, JumpToPlayerActivity.class)
-                    .putExtra("aid", videoInfo.aid)
-                    .putExtra("bvid", videoInfo.bvid)
-                    .putExtra("cid", videoInfo.cids.get(page))
-                    .putExtra("title", (videoInfo.pagenames.size() == 1 ? videoInfo.title : videoInfo.pagenames.get(page)))
+                    .putExtra("data", videoInfo.toPlayerData(page))
                     .putExtra("download", (videoInfo.pagenames.size() == 1 ? 1 : 2))  //1：单页  2：分页
                     .putExtra("cover", videoInfo.cover)
                     .putExtra("parent_title", videoInfo.title)
                     .putExtra("qn", qn)
-                    .putExtra("mid", videoInfo.staff.get(0).mid)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
             return;
@@ -85,87 +73,96 @@ public class PlayerApi {
     }
 
     /**
-     * 解析视频，从JumpToPlayerActivity弄出来的，懒得改很多所以搞了个莫名其妙的Pair
+     * 解析视频
      *
-     * @param aid      aid
-     * @param cid      cid
-     * @param qn       qn
+     * @param playerData 传入aid、cid、qn等必要数据
      * @param download 是否下载
-     * @return 视频url与完整返回信息
      */
-    public static Pair<String, String> getVideo(long aid, long cid, int qn, boolean download) throws JSONException, IOException {
+    public static void getVideo(PlayerData playerData, boolean download) throws JSONException, IOException {
+
         boolean html5 = !download && SharedPreferencesUtil.getString("player", "").equals("mtvPlayer");
         //html5方式现在已经仅对小电视播放器保留了
 
         String url = "https://api.bilibili.com/x/player/wbi/playurl?"
-                + "avid=" + aid
-                + "&cid=" + cid
-                + (html5 ? "&high_quality=1&qn=" + qn : "&qn=" + qn)
+                + "avid=" + playerData.aid
+                + "&cid=" + playerData.cid
+                + (html5 ? "&high_quality=1" : "")
+                + "&qn=" + playerData.qn
+                + "&fnval=1&fnver=0"
                 + "&platform=" + (html5 ? "html5" : "pc");
 
         url = ConfInfoApi.signWBI(url);
 
-        Response response = NetWorkUtil.get(url, NetWorkUtil.webHeaders);
-
-        String body = Objects.requireNonNull(response.body()).string();
-        Log.e("debug-body", body);
-        JSONObject body1 = new JSONObject(body);
-        JSONObject data = body1.getJSONObject("data");
+        JSONObject body = NetWorkUtil.getJson(url, NetWorkUtil.webHeaders);
+        JSONObject data = body.getJSONObject("data");
         JSONArray durl = data.getJSONArray("durl");
         JSONObject video_url = durl.getJSONObject(0);
-        String videourl = video_url.getString("url");
-        return new Pair<>(videourl, body);
+        playerData.videoUrl = video_url.getString("url");
+
+        playerData.danmakuUrl = "https://comment.bilibili.com/" + playerData.cid + ".xml";
+
+        JSONArray accept_description = data.getJSONArray("accept_description");
+        JSONArray accept_quality = data.getJSONArray("accept_quality");
+        String[] qnStrList = new String[accept_description.length()];
+        int[] qnValueList = new int[accept_description.length()];
+        for (int i = 0; i < qnStrList.length; i++) {
+            qnStrList[i] = accept_description.optString(i);
+            qnValueList[i] = accept_quality.optInt(i);
+        }
+        playerData.qnStrList = qnStrList;
+        playerData.qnValueList = qnValueList;
     }
 
-    public static Intent jumpToPlayer(Context context, String videourl, String danmakuurl, String subtitleurl, String title, boolean local, long aid, String bvid, long cid, long mid, int progress, boolean live_mode) {
-        Log.e("debug-准备跳转", "--------");
-        Log.e("debug-视频标题", title);
-        Log.e("debug-视频地址", videourl);
-        Log.e("debug-弹幕地址", danmakuurl);
-        Log.e("debug-字幕地址", subtitleurl);
-        Log.e("debug-准备跳转", "--------");
+
+
+    public static Intent jumpToPlayer(PlayerData playerData) {
+        Context context = BiliTerminal.context;
+        Log.i("debug-准备跳转", "--------");
+        Log.i("debug-视频标题", playerData.title);
+        Log.i("debug-视频地址", playerData.videoUrl);
+        Log.i("debug-弹幕地址", playerData.danmakuUrl);
+        Log.i("debug-准备跳转", "--------");
 
         Intent intent = new Intent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         switch (SharedPreferencesUtil.getString("player", "null")) {
             case "terminalPlayer":
                 intent.setClass(context, PlayerActivity.class);
-                intent.putExtra("url", videourl);
-                intent.putExtra("danmaku", danmakuurl);
-                intent.putExtra("subtitle", subtitleurl);
-                intent.putExtra("title", title);
-                intent.putExtra("aid", aid);
-                intent.putExtra("bvid", bvid);
-                intent.putExtra("cid", cid);
-                intent.putExtra("mid", mid);
-                intent.putExtra("progress", progress);
-                intent.putExtra("live_mode", live_mode);
+                intent.putExtra("url", playerData.videoUrl);
+                intent.putExtra("danmaku", playerData.danmakuUrl);
+                intent.putExtra("title", playerData.title);
+                intent.putExtra("aid", playerData.aid);
+                intent.putExtra("cid", playerData.cid);
+                intent.putExtra("mid", playerData.mid);
+                intent.putExtra("progress", playerData.progress);
+                intent.putExtra("live_mode", playerData.live);
                 break;
 
             case "mtvPlayer":
                 intent.setClassName(context.getString(R.string.player_mtv_package), "com.xinxiangshicheng.wearbiliplayer.cn.player.PlayerActivity");
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.putExtra("cookie", SharedPreferencesUtil.getString("cookies", ""));
-                intent.putExtra("mode", (local ? "2" : "0"));
-                intent.putExtra("url", videourl);
-                intent.putExtra("danmaku", danmakuurl);
-                intent.putExtra("title", title);
+                intent.putExtra("mode", (playerData.local ? "2" : "0"));
+                intent.putExtra("url", playerData.videoUrl);
+                intent.putExtra("danmaku", playerData.danmakuUrl);
+                intent.putExtra("title", playerData.title);
                 break;
 
             case "aliangPlayer":
                 intent.setClassName(context.getString(R.string.player_aliang_package), "com.aliangmaker.media.PlayVideoActivity");
-                intent.putExtra("name", title);
-                intent.putExtra("danmaku", danmakuurl);
-                intent.putExtra("live_mode", live_mode);
+                intent.putExtra("name", playerData.title);
+                intent.putExtra("danmaku", playerData.danmakuUrl);
+                intent.putExtra("live_mode", playerData.live);
 
-                intent.setData(Uri.parse(videourl));
+                intent.setData(Uri.parse(playerData.videoUrl));
 
-                if (!local) {
+                if (!playerData.local) {
                     Map<String, String> headers = new HashMap<>();
                     headers.put("Cookie", SharedPreferencesUtil.getString("cookies", ""));
                     headers.put("Referer", "https://www.bilibili.com/");
                     intent.putExtra("cookie", (Serializable) headers);
                     intent.putExtra("agent", NetWorkUtil.USER_AGENT_WEB);
-                    intent.putExtra("progress", progress * 1000L);
+                    intent.putExtra("progress", playerData.progress * 1000L);
                 }
                 intent.setAction(Intent.ACTION_VIEW);
 

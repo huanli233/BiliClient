@@ -4,6 +4,7 @@ package com.RobinNotBad.BiliClient.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import java.io.Serializable;
@@ -107,5 +108,14 @@ public class VideoInfo implements Parcelable, Serializable {    //自定义类�
 
     public VideoCard toCard(){
         return new VideoCard(title, staff.get(0).name, ToolsUtil.toWan(stats.view), cover, aid, bvid);
+    }
+
+    public PlayerData toPlayerData(int index){
+        PlayerData data = new PlayerData();
+        data.aid = aid;
+        data.cid = cids.get(index);
+        data.title = pagenames.size() == 1 ? title : pagenames.get(index);
+        data.mid = SharedPreferencesUtil.getLong("mid",0);
+        return data;
     }
 }

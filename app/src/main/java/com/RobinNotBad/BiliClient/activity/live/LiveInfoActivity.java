@@ -23,6 +23,7 @@ import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.model.LivePlayInfo;
 import com.RobinNotBad.BiliClient.model.LiveRoom;
+import com.RobinNotBad.BiliClient.model.PlayerData;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.*;
@@ -125,15 +126,18 @@ public class LiveInfoActivity extends BaseActivity {
                             codec = playInfo.playUrl.stream.get(0).format.get(0).codec.get(0);
                             LivePlayInfo.UrlInfo urlInfo = codec.url_info.get(selectedHost);
                             String play_url = urlInfo.host + codec.base_url + urlInfo.extra;
+
+                            PlayerData playerData = new PlayerData();
+                            playerData.live = true;
+                            playerData.videoUrl = play_url;
+                            playerData.title = "直播·" + room.title;
+                            playerData.aid = room_id;
+                            playerData.mid = SharedPreferencesUtil.getLong("mid",0);
+
                             runOnUiThread(() -> {
                                 try {
-                                    long mid;
-                                    try {
-                                        mid = SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
-                                    } catch (Throwable ignored) {
-                                        mid = 0;
-                                    }
-                                    Intent player = PlayerApi.jumpToPlayer(this, play_url, "","", "直播·" + room.title, false, room_id, "", 0, mid, 0, true);
+
+                                    Intent player = PlayerApi.jumpToPlayer(playerData);
                                     startActivity(player);
                                 } catch (ActivityNotFoundException e) {
                                     MsgUtil.showMsg("没有找到播放器，请检查是否安装");

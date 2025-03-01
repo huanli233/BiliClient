@@ -14,6 +14,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.video.PageChooseAdapter;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
+import com.RobinNotBad.BiliClient.model.PlayerData;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -48,8 +49,13 @@ public class LocalPageChooseActivity extends BaseActivity {
 
         PageChooseAdapter adapter = new PageChooseAdapter(this, pageList);
         adapter.setOnItemClickListener(position -> {
+            PlayerData playerData = new PlayerData();
+            playerData.local = true;
+            playerData.videoUrl = videoFileList.get(position);
+            playerData.danmakuUrl = danmakuFileList.get(position);
+            playerData.title = pageList.get(position);
             try {
-                Intent player = PlayerApi.jumpToPlayer(LocalPageChooseActivity.this, videoFileList.get(position), danmakuFileList.get(position), "", pageList.get(position), true, 0, "", 0, 0, 0, false);
+                Intent player = PlayerApi.jumpToPlayer(playerData);
                 startActivity(player);
             } catch (ActivityNotFoundException e) {
                 MsgUtil.showMsg("没有找到播放器，请检查是否安装");

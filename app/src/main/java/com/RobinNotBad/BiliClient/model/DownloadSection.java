@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.model;
 import android.database.Cursor;
 
 import com.RobinNotBad.BiliClient.util.FileUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.io.File;
 
@@ -53,5 +54,14 @@ public class DownloadSection {
             return path;
         }
         else return FileUtil.getDownloadPicturePath();
+    }
+
+    public PlayerData toPlayerData(){
+        PlayerData data = new PlayerData();
+        data.aid = aid;
+        data.cid = cid;
+        data.title = title;
+        data.mid = SharedPreferencesUtil.getLong("mid",0);
+        return data;
     }
 }

@@ -22,6 +22,7 @@ import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.model.DownloadSection;
 import com.RobinNotBad.BiliClient.helper.sql.DownloadSqlHelper;
+import com.RobinNotBad.BiliClient.model.PlayerData;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -67,7 +68,6 @@ public class DownloadService extends Service {
             String percentStr = String.format(Locale.CHINA,"%.2f",percent * 100);
 
             builder.setContentText(downloadingSection.title + "\n" + state + "："+ percentStr + "%");
-            notifyManager.notify(1, builder.build());
 
             MsgUtil.showMsg(state + "："+ percentStr + "%\n" + downloadingSection.name_short);
         }
@@ -90,7 +90,7 @@ public class DownloadService extends Service {
         }
 
         Intent intent = new Intent(this, DownloadListActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,0);
         builder = new NotificationCompat.Builder(this, "download_service")
                 .setSmallIcon(R.mipmap.icon)
                 .setContentTitle("哔哩终端下载服务")
@@ -132,7 +132,9 @@ public class DownloadService extends Service {
                 try {
                     String url;
                     try{
-                        url = PlayerApi.getVideo(downloadingSection.aid, downloadingSection.cid, downloadingSection.qn, true).first;
+                        PlayerData data = downloadingSection.toPlayerData();
+                        PlayerApi.getVideo(data, true);
+                        url = data.videoUrl;
                     } catch (JSONException e){
                         MsgUtil.showMsg("下载链接获取失败");
                         setState(downloadingSection.id,"error");

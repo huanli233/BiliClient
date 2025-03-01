@@ -10,21 +10,17 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.QualityChooseAdapter;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
+import com.RobinNotBad.BiliClient.model.PlayerData;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
 
 public class QualityChooserActivity extends BaseActivity {
 
-    List<Integer> qns = new LinkedList<>();
+    int[] qns;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,25 +45,18 @@ public class QualityChooserActivity extends BaseActivity {
             CenterThreadPool.run(() -> {
                 // 我只知道它返回可用清晰度列表
                 try {
-                    String response = PlayerApi.getVideo(videoInfo.aid, videoInfo.cids.get(page), 16, true).second;
-                    JSONObject data = new JSONObject(response).getJSONObject("data");
-                    JSONArray accept_description = data.getJSONArray("accept_description");
-                    JSONArray accept_quality = data.getJSONArray("accept_quality");
-                    ArrayList<String> descs = new ArrayList<>();
-                    for (int i = 0; i < accept_description.length(); i++) {
-                        String desc = accept_description.getString(i);
-                        int qn = accept_quality.getInt(i);
-                        qns.add(qn);
-                        descs.add(desc);
-                    }
-                    runOnUiThread(() -> adapter.setNameList(descs));
+                    PlayerData playerData = videoInfo.toPlayerData(page);
+                    PlayerApi.getVideo(playerData, true);
+                    qns = playerData.qnValueList;
+                    runOnUiThread(() -> adapter.setNameList(Arrays.asList(playerData.qnStrList)));
                 } catch (Exception e) {
                     runOnUiThread(() -> MsgUtil.showMsg("清晰度列表获取失败！"));
                     e.printStackTrace();
                 }
             });
             adapter.setOnItemClickListener((position -> {
-                int qn = qns.get(position);
+                if(qns == null) return;
+                int qn = qns[position];
                 PlayerApi.startDownloading(videoInfo, page, qn);
                 finish();
             }));
