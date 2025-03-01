@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.api;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.core.content.FileProvider;
@@ -19,6 +20,7 @@ import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.service.DownloadService;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -113,6 +115,20 @@ public class PlayerApi {
         playerData.qnValueList = qnValueList;
     }
 
+    public static void getBangumi(PlayerData playerData){
+        NetWorkUtil.FormData reqData = new NetWorkUtil.FormData()
+                .setUrlParam(true)
+                .put("ep_id", playerData.aid)
+                .put("cid", playerData.cid)
+                .put("fnval", 1)
+                .put("fnvar", 0)
+                .put("qn", playerData.qn)
+                .put("season_type",1)
+                .put("session", ToolsUtil.md5(String.valueOf(System.currentTimeMillis() - SystemClock.currentThreadTimeMillis())))
+                .put("platform", "pc");
+
+        String url = "https://api.bilibili.com/pgc/player/api/playurl" + reqData.toString();
+    }
 
 
     public static Intent jumpToPlayer(PlayerData playerData) {

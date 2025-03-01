@@ -45,6 +45,9 @@ import com.RobinNotBad.BiliClient.model.UserInfo;
 
 import org.jsoup.Jsoup;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -244,6 +247,22 @@ public class ToolsUtil {
             textView.setText(spannableString);
             textView.setOnTouchListener(new ClickableSpanTouchListener());
         }
+    }
+
+    public static String md5(String plainText) {
+        byte[] secretBytes;
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(plainText.getBytes());
+            secretBytes = md.digest();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("没有md5这个算法！");
+        }
+        StringBuilder md5code = new StringBuilder(new BigInteger(1, secretBytes).toString(16));
+        for (int i = 0; i < 32 - md5code.length(); i++) {
+            md5code.insert(0, "0");
+        }
+        return md5code.toString();
     }
 
 

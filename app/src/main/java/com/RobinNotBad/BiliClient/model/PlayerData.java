@@ -18,6 +18,7 @@ public class PlayerData implements Parcelable {
     public int progress = -1;
     public boolean live;
     public boolean local;
+    public boolean bangumi;
 
     public PlayerData() {}
 
