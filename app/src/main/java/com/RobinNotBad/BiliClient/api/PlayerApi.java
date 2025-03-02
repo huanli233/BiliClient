@@ -35,7 +35,7 @@ import java.util.Map;
 
 public class PlayerApi {
     public static void startGettingUrl(VideoInfo videoInfo, int page, int progress) {
-        Context context = BiliTerminal.context;
+        Context context = BiliTerminal.appContext.get();
 
         PlayerData playerData = videoInfo.toPlayerData(page);
         playerData.progress = progress;
@@ -49,7 +49,7 @@ public class PlayerApi {
 
     public static void startDownloading(VideoInfo videoInfo, int page, int qn) {
         if(SharedPreferencesUtil.getBoolean("dev_download_old",false)) {
-            Context context = BiliTerminal.context;
+            Context context = BiliTerminal.appContext.get();
 
             Intent intent = new Intent(context, JumpToPlayerActivity.class)
                     .putExtra("data", videoInfo.toPlayerData(page))
@@ -165,7 +165,7 @@ public class PlayerApi {
      * @return 播放器跳转Intent
      */
     public static Intent jumpToPlayer(PlayerData playerData) {
-        Context context = BiliTerminal.context;
+        Context context = BiliTerminal.appContext.get();
         Logu.v("准备跳转", "--------");
         Logu.v("视频标题", playerData.title);
         Logu.v("视频地址", playerData.videoUrl);

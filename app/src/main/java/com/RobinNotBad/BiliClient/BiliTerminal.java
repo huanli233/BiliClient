@@ -1,6 +1,5 @@
 package com.RobinNotBad.BiliClient;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -22,8 +21,7 @@ import java.lang.ref.WeakReference;
 
 public class BiliTerminal extends Application {
 
-    @SuppressLint("StaticFieldLeak")
-    public static Context context;
+    public static WeakReference<Context> appContext;
 
     public static boolean DPI_FORCE_CHANGE = false;
 
@@ -38,11 +36,11 @@ public class BiliTerminal extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (context == null) {
+        if (appContext == null || appContext.get() == null) {
             SharedPreferencesUtil.sharedPreferences = getSharedPreferences("default", MODE_PRIVATE);
-            context = getFitDisplayContext(this);
+            appContext = new WeakReference<>(getFitDisplayContext(this));
             ErrorCatch errorCatch = ErrorCatch.getInstance();
-            errorCatch.init(context);
+            errorCatch.init(appContext.get());
             Logu.LOGV_ENABLED = SharedPreferencesUtil.getBoolean("dev_logv", false);
         }
     }
@@ -78,6 +76,7 @@ public class BiliTerminal extends Application {
     }
 
     public static int getVersion() throws PackageManager.NameNotFoundException {
+        Context context = appContext.get();
         return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
     }
 

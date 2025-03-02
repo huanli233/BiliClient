@@ -78,8 +78,9 @@ public class FileUtil {
     public static boolean checkStoragePermission(){
         int sdk = Build.VERSION.SDK_INT;
         if(sdk < 17) return true;
-        return ContextCompat.checkSelfPermission(BiliTerminal.context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(BiliTerminal.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        Context context = BiliTerminal.appContext.get();
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     public static void requestStoragePermission(Activity activity){
@@ -87,7 +88,8 @@ public class FileUtil {
     }
 
     public static File getDownloadPath() {
-        File path = new File(SharedPreferencesUtil.getString("save_path_video", Environment.getExternalStorageDirectory() + "/Android/media/" + BiliTerminal.context.getPackageName() + "/"));
+        File path = new File(SharedPreferencesUtil.getString("save_path_video",
+                Environment.getExternalStorageDirectory() + "/Android/media/" + BiliTerminal.appContext.get().getPackageName() + "/"));
         try {
             File nomedia = new File(path, ".nomedia");    //为了防止系统扫描
             if (!nomedia.exists()) nomedia.createNewFile();
