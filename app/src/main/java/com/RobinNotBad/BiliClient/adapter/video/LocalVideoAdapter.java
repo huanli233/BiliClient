@@ -69,8 +69,7 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.itemView.setOnClickListener(view -> {
                 LocalVideo localVideo = localVideoList.get(realPosition);
                 if (localVideo.videoFileList.size() == 1) {
-                    PlayerData playerData = new PlayerData();
-                    playerData.local = true;
+                    PlayerData playerData = new PlayerData(PlayerData.TYPE_LOCAL);
                     playerData.videoUrl = localVideo.videoFileList.get(0);
                     playerData.danmakuUrl = localVideo.danmakuFileList.get(0);
                     playerData.title = localVideo.title;

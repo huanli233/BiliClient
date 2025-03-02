@@ -137,10 +137,7 @@ public class BangumiInfoFragment extends Fragment {
             Bangumi.Episode episode = bangumi.sectionList.get(selectedSection).episodeList.get(selectedEpisode);
             Glide.get(requireContext()).clearMemory();
             Intent intent = new Intent(v.getContext(), JumpToPlayerActivity.class);
-            intent.putExtra("cid", episode.cid);
-            intent.putExtra("title", episode.title);
-            intent.putExtra("aid", episode.aid);
-            intent.putExtra("html5", false);
+            intent.putExtra("data", episode.toPlayerData());
             startActivity(intent);
         });
         playButton.setOnLongClickListener(v -> {

@@ -18,6 +18,7 @@ import com.RobinNotBad.BiliClient.model.Subtitle;
 import com.RobinNotBad.BiliClient.model.SubtitleLink;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.service.DownloadService;
+import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -115,10 +116,15 @@ public class PlayerApi {
         playerData.qnValueList = qnValueList;
     }
 
-    public static void getBangumi(PlayerData playerData){
+    /**
+     * 解析番剧，和普通视频的api不一样
+     *
+     * @param playerData 传入aid、cid、qn等必要数据
+     */
+    public static void getBangumi(PlayerData playerData) throws JSONException, IOException {
         NetWorkUtil.FormData reqData = new NetWorkUtil.FormData()
                 .setUrlParam(true)
-                .put("ep_id", playerData.aid)
+                .put("aid", playerData.aid)
                 .put("cid", playerData.cid)
                 .put("fnval", 1)
                 .put("fnvar", 0)
@@ -127,17 +133,44 @@ public class PlayerApi {
                 .put("session", ToolsUtil.md5(String.valueOf(System.currentTimeMillis() - SystemClock.currentThreadTimeMillis())))
                 .put("platform", "pc");
 
-        String url = "https://api.bilibili.com/pgc/player/api/playurl" + reqData.toString();
+        String url = "https://api.bilibili.com/pgc/player/web/playurl" + reqData.toString();
+
+        JSONObject body = NetWorkUtil.getJson(url);
+        Logu.i(body.toString());
+
+        JSONObject data = body.getJSONObject("result");
+        JSONArray durl = data.getJSONArray("durl");
+        JSONObject video_url = durl.getJSONObject(0);
+        playerData.videoUrl = video_url.getString("url");
+
+        playerData.danmakuUrl = "https://comment.bilibili.com/" + playerData.cid + ".xml";
+
+        JSONArray accept_description = data.getJSONArray("accept_description");
+        JSONArray accept_quality = data.getJSONArray("accept_quality");
+        String[] qnStrList = new String[accept_description.length()];
+        int[] qnValueList = new int[accept_description.length()];
+        for (int i = 0; i < qnStrList.length; i++) {
+            qnStrList[i] = accept_description.optString(i);
+            qnValueList[i] = accept_quality.optInt(i);
+        }
+        playerData.qnStrList = qnStrList;
+        playerData.qnValueList = qnValueList;
     }
 
 
+    /**
+     * 跳转到播放器
+     *
+     * @param playerData 传入aid、cid、qn等必要数据
+     * @return 播放器跳转Intent
+     */
     public static Intent jumpToPlayer(PlayerData playerData) {
         Context context = BiliTerminal.context;
-        Log.i("debug-准备跳转", "--------");
-        Log.i("debug-视频标题", playerData.title);
-        Log.i("debug-视频地址", playerData.videoUrl);
-        Log.i("debug-弹幕地址", playerData.danmakuUrl);
-        Log.i("debug-准备跳转", "--------");
+        Log.i("playerAPI-准备跳转", "--------");
+        Log.i("playerAPI-视频标题", playerData.title);
+        Log.i("playerAPI-视频地址", playerData.videoUrl);
+        Log.i("playerAPI-弹幕地址", playerData.danmakuUrl);
+        Log.i("playerAPI-准备跳转", "--------");
 
         Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -151,14 +184,14 @@ public class PlayerApi {
                 intent.putExtra("cid", playerData.cid);
                 intent.putExtra("mid", playerData.mid);
                 intent.putExtra("progress", playerData.progress);
-                intent.putExtra("live_mode", playerData.live);
+                intent.putExtra("live_mode", playerData.isLive());
                 break;
 
             case "mtvPlayer":
                 intent.setClassName(context.getString(R.string.player_mtv_package), "com.xinxiangshicheng.wearbiliplayer.cn.player.PlayerActivity");
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.putExtra("cookie", SharedPreferencesUtil.getString("cookies", ""));
-                intent.putExtra("mode", (playerData.local ? "2" : "0"));
+                intent.putExtra("mode", (playerData.isLocal() ? "2" : "0"));
                 intent.putExtra("url", playerData.videoUrl);
                 intent.putExtra("danmaku", playerData.danmakuUrl);
                 intent.putExtra("title", playerData.title);
@@ -168,11 +201,11 @@ public class PlayerApi {
                 intent.setClassName(context.getString(R.string.player_aliang_package), "com.aliangmaker.media.PlayVideoActivity");
                 intent.putExtra("name", playerData.title);
                 intent.putExtra("danmaku", playerData.danmakuUrl);
-                intent.putExtra("live_mode", playerData.live);
+                intent.putExtra("live_mode", playerData.isLocal());
 
                 intent.setData(Uri.parse(playerData.videoUrl));
 
-                if (!playerData.local) {
+                if (!playerData.isLocal()) {
                     Map<String, String> headers = new HashMap<>();
                     headers.put("Cookie", SharedPreferencesUtil.getString("cookies", ""));
                     headers.put("Referer", "https://www.bilibili.com/");
@@ -215,6 +248,14 @@ public class PlayerApi {
          */
     }
 
+
+    /**
+     * 获取视频的字幕链接列表
+     *
+     * @param aid aid
+     * @param cid cid
+     * @return 链接列表
+     */
     public static SubtitleLink[] getSubtitleLinks(long aid, long cid) throws JSONException, IOException {
         String url = "https://api.bilibili.com/x/player/wbi/v2?aid=" + aid
                 + "&cid=" + cid;
@@ -222,7 +263,7 @@ public class PlayerApi {
         JSONObject data = NetWorkUtil.getJson(url).getJSONObject("data");
 
         JSONArray subtitles = data.getJSONObject("subtitle").getJSONArray("subtitles");
-        Log.d("debug-subtitle",subtitles.toString());
+        Log.d("playerAPI-subtitle",subtitles.toString());
 
         SubtitleLink[] links = new SubtitleLink[subtitles.length() + 1];
         for (int i = 0; i < subtitles.length(); i++) {
@@ -240,6 +281,13 @@ public class PlayerApi {
         return links;
     }
 
+
+    /**
+     * 通过链接获取字幕
+     *
+     * @param url 传入链接，可通过getSubtitleLinks()获取
+     * @return 逐条字幕的列表，每条包含文本和始末时间，时间以秒为单位
+     */
     public static Subtitle[] getSubtitle(String url) throws JSONException, IOException {
         JSONArray body = NetWorkUtil.getJson(url).getJSONArray("body");
         Subtitle[] subtitles = new Subtitle[body.length()];

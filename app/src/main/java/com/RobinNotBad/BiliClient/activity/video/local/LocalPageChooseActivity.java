@@ -49,8 +49,7 @@ public class LocalPageChooseActivity extends BaseActivity {
 
         PageChooseAdapter adapter = new PageChooseAdapter(this, pageList);
         adapter.setOnItemClickListener(position -> {
-            PlayerData playerData = new PlayerData();
-            playerData.local = true;
+            PlayerData playerData = new PlayerData(PlayerData.TYPE_LOCAL);
             playerData.videoUrl = videoFileList.get(position);
             playerData.danmakuUrl = danmakuFileList.get(position);
             playerData.title = pageList.get(position);

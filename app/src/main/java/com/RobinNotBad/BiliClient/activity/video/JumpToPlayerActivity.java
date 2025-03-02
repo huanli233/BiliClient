@@ -85,7 +85,9 @@ public class JumpToPlayerActivity extends BaseActivity {
                     Pair<Long, Integer> progressPair = VideoInfoApi.getWatchProgress(playerData.aid);
                     playerData.progress = progressPair.first == playerData.cid ? progressPair.second : 0;
                 }
-                PlayerApi.getVideo(playerData, download != 0);
+
+                if(playerData.isBangumi()) PlayerApi.getBangumi(playerData);
+                else PlayerApi.getVideo(playerData, download != 0);
 
                 try {
                     if(download != 0) {
@@ -116,7 +118,7 @@ public class JumpToPlayerActivity extends BaseActivity {
         if (download == 0) {
             Intent intent = PlayerApi.jumpToPlayer(playerData);
             launcher.launch(intent);
-            setClickExit("等待退出播放后上报进度\n（点一下返回）");
+            setClickExit("等待退出播放后上报进度\n（点击跳过）");
         }
         else {
             Intent intent = new Intent();

@@ -1,5 +1,7 @@
 package com.RobinNotBad.BiliClient.model;
 
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+
 import java.util.ArrayList;
 
 public class Bangumi {
@@ -40,6 +42,15 @@ public class Bangumi {
         public String badge;//标记（如会员/限免）
 
         public Episode() {
+        }
+
+        public PlayerData toPlayerData(){
+            PlayerData data = new PlayerData(PlayerData.TYPE_BANGUMI);
+            data.aid = aid;
+            data.cid = cid;
+            data.title = title;
+            data.mid = SharedPreferencesUtil.getLong("mid",0);
+            return data;
         }
     }
 }

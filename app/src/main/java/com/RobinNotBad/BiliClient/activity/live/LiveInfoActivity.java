@@ -127,8 +127,7 @@ public class LiveInfoActivity extends BaseActivity {
                             LivePlayInfo.UrlInfo urlInfo = codec.url_info.get(selectedHost);
                             String play_url = urlInfo.host + codec.base_url + urlInfo.extra;
 
-                            PlayerData playerData = new PlayerData();
-                            playerData.live = true;
+                            PlayerData playerData = new PlayerData(PlayerData.TYPE_LIVE);
                             playerData.videoUrl = play_url;
                             playerData.title = "直播·" + room.title;
                             playerData.aid = room_id;
