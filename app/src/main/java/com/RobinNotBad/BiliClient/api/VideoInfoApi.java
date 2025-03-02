@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.api;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 import android.util.Pair;
 
 import com.RobinNotBad.BiliClient.model.At;
@@ -9,6 +8,7 @@ import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.Stats;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
+import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.StringUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -108,11 +108,11 @@ public class VideoInfoApi {
 
     public static VideoInfo getInfoByJson(JSONObject data) throws JSONException {  //项目实在太多qwq 拆就完事了
         VideoInfo videoInfo = new VideoInfo();
-        Log.e("视频信息", "--------");
+        Logu.v("视频信息", "--------");
         videoInfo.title = data.getString("title");
-        Log.e("标题", videoInfo.title);
+        Logu.v("标题", videoInfo.title);
         videoInfo.cover = data.getString("pic");
-        Log.e("封面", videoInfo.cover);
+        Logu.v("封面", videoInfo.cover);
         if (data.has("desc_v2") && !data.isNull("desc_v2")) {
             StringBuilder sb = new StringBuilder();
             JSONArray descArray = data.getJSONArray("desc_v2");
@@ -135,17 +135,17 @@ public class VideoInfoApi {
         } else {
             videoInfo.description = data.getString("desc");
         }
-        Log.e("简介", videoInfo.description);
+        Logu.v("简介", videoInfo.description);
 
         videoInfo.bvid = data.optString("bvid");
         videoInfo.aid = data.getLong("aid");
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         videoInfo.timeDesc = sdf.format(data.getLong("pubdate") * 1000);
-        Log.e("发布时间", String.valueOf(videoInfo.timeDesc));
+        Logu.v("发布时间", String.valueOf(videoInfo.timeDesc));
 
         videoInfo.duration = ToolsUtil.toTime(data.getInt("duration"));
-        Log.e("视频时长", videoInfo.duration);
+        Logu.v("视频时长", videoInfo.duration);
 
         JSONObject stat = data.getJSONObject("stat");
         Stats stats = new Stats();
@@ -165,10 +165,10 @@ public class VideoInfoApi {
                 JSONObject page = pages.getJSONObject(i);
                 String pagename = page.getString("part");
                 pagenames.add(pagename);
-                Log.e("第" + i + "个视频的标题", pagename);
+                Logu.v("第" + i + "个视频的标题", pagename);
                 long cid = page.getLong("cid");
                 cids.add(cid);
-                Log.e("第" + i + "个视频的cid", String.valueOf(cid));
+                Logu.v("第" + i + "个视频的cid", String.valueOf(cid));
             }
             videoInfo.pagenames = pagenames;
             videoInfo.cids = cids;
@@ -238,17 +238,6 @@ public class VideoInfoApi {
         }
 
         return videoInfo;
-    }
-
-    public static String getWatching(String bvid, long cid) throws IOException, JSONException {
-        String url = "https://api.bilibili.com/x/player/online/total?bvid=" + bvid + "&cid=" + cid;
-        JSONObject result = NetWorkUtil.getJson(url);
-        if (result.has("data") && !result.isNull("data")) {
-            JSONObject data = result.getJSONObject("data");
-            if (data.has("total") && !data.isNull("total"))
-                return ToolsUtil.toWan(data.getLong("total"));
-        }
-        return "";
     }
 
     public static String getWatching(long aid, long cid) throws IOException, JSONException {

@@ -130,9 +130,7 @@ public class NetWorkUtil {
     }
 
     public static Response get(String url, ArrayList<String> headers, RedirectHandler redirectHandler) throws IOException {
-        Log.e("debug-get", "----------------");
-        Log.e("debug-get-url", url);
-        Log.e("debug-get", "----------------");
+        Logu.v("get-url", url);
         OkHttpClient client = getOkHttpInstance();
         Request.Builder requestBuilder = new Request.Builder().url(url).get();
         for (int i = 0; i < headers.size(); i += 2)
@@ -143,10 +141,8 @@ public class NetWorkUtil {
     }
 
     public static Response post(String url, String data, List<String> headers, String contentType) throws IOException {
-        Log.e("debug-post", "----------------");
-        Log.e("debug-post-url", url);
-        Log.e("debug-post-data", data);
-        Log.e("debug-post", "----------------");
+        Logu.v("post-url", url);
+        Logu.v("post-data", data);
         OkHttpClient client = getOkHttpInstance();
         RequestBody body = RequestBody.create(MediaType.parse(contentType + "; charset=utf-8"), data);
         Request.Builder requestBuilder = new Request.Builder().url(url).post(body);
@@ -237,7 +233,7 @@ public class NetWorkUtil {
             if (index == 0) continue;   //如果没有等号，跳过
 
             String key = newCookie.substring(0, index);    //key=
-            Log.e("debug-newCookie", newCookie);
+            Logu.v("newCookie", newCookie);
 
             boolean added = false;
             for (int i = 0; i < oldCookies.size(); i++) {  //查找旧cookie表有没有
@@ -259,7 +255,7 @@ public class NetWorkUtil {
         }
         //如果一次setCookies都没有，就不要存了， 因为是个空字符串
         if (setCookies.length() >= 2) {
-            Log.e("debug-save-result", setCookies.substring(0, setCookies.length() - 2));
+            Logu.v("save-result", setCookies.substring(0, setCookies.length() - 2));
             SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, setCookies.substring(0, setCookies.length() - 2));
             refreshHeaders();
         }

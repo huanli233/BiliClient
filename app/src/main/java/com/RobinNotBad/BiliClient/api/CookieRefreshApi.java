@@ -1,8 +1,8 @@
 package com.RobinNotBad.BiliClient.api;
 
 import android.util.Base64;
-import android.util.Log;
 
+import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -82,26 +82,26 @@ public class CookieRefreshApi {
         JSONObject result = new JSONObject(Objects.requireNonNull(response.body()).string());
         if (result.getInt("code") == 0) {
             String refreshToken_new = result.getJSONObject("data").getString("refresh_token");
-            Log.e("新的RefreshToken", refreshToken_new);
+            Logu.v("新的RefreshToken", refreshToken_new);
 
             String cookies_new = SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, "");
-            Log.e("新的cookies", cookies_new);
+            Logu.v("新的cookies", cookies_new);
 
 
             //使老的Cookie失效
             int confirmCode = new JSONObject(Objects.requireNonNull(NetWorkUtil.post("https://passport.bilibili.com/x/passport-login/web/confirm/refresh", "csrf=" + NetWorkUtil.getInfoFromCookie("bili_jct", cookies_new) + "&refresh_token=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), NetWorkUtil.webHeaders).body()).string()).getInt("code");
             if (confirmCode != 0) { //必须要等确认更新Cookie成功，不然就无法完成Cookie的刷新
-                Log.e("Cookie刷新失败", "确认刷新时返回:" + confirmCode);
+                Logu.e("Cookie刷新失败", "确认刷新时返回:" + confirmCode);
                 SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies_old);
                 return false;
             }
             SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token, refreshToken_new);
             SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(NetWorkUtil.getInfoFromCookie("DedeUserID", cookies_new)));
             SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, NetWorkUtil.getInfoFromCookie("bili_jct", cookies_new));
-            Log.e("Cookie刷新成功", "Success");
+            Logu.v("Cookie刷新成功");
             return true;
         } else {
-            Log.e("Cookie刷新失败", "刷新时返回:" + result.getInt("code"));
+            Logu.e("Cookie刷新失败", "刷新时返回:" + result.getInt("code"));
             return false;
         }
     }

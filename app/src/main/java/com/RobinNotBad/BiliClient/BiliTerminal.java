@@ -14,6 +14,7 @@ import androidx.multidex.MultiDex;
 
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
+import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
 
@@ -42,6 +43,7 @@ public class BiliTerminal extends Application {
             context = getFitDisplayContext(this);
             ErrorCatch errorCatch = ErrorCatch.getInstance();
             errorCatch.init(context);
+            Logu.LOGV_ENABLED = SharedPreferencesUtil.getBoolean("dev_logv", false);
         }
     }
 
