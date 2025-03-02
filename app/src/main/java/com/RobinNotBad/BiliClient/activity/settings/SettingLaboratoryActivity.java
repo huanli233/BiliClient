@@ -31,6 +31,7 @@ public class SettingLaboratoryActivity extends RefreshListActivity {
             add(new SettingSection("input_float","表冠适配灵敏度（Recycler）","ui_rotatory_recycler", getString(R.string.setting_lab_ui_rotatory),"0"));
             add(new SettingSection("input_float","表冠适配灵敏度（Scroll）","ui_rotatory_scroll", getString(R.string.setting_lab_ui_rotatory),"0"));
             add(new SettingSection("input_float","表冠适配灵敏度（List）","ui_rotatory_scroll", getString(R.string.setting_lab_ui_rotatory),"0"));
+            add(new SettingSection("switch","允许Logu.v","dev_logv",getString(R.string.setting_lab_logv),"false"));
             add(new SettingSection("switch","详细显示数据解析报错","dev_jsonerr_detailed",getString(R.string.setting_lab_jsonerr_detailed),"false"));
             add(new SettingSection("switch","详细显示列表报错","dev_recyclererr_detailed",getString(R.string.setting_lab_recyclererr_detailed),"false"));
             //add(new SettingSection("input_int","test_int","test_int", "这是描述描述描述","123"));

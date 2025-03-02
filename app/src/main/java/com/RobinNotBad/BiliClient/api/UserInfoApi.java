@@ -1,7 +1,5 @@
 package com.RobinNotBad.BiliClient.api;
 
-import android.util.Log;
-
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.model.UserInfo;
@@ -165,7 +163,6 @@ public class UserInfoApi {
         String url = "https://api.bilibili.com/x/space/wbi/article?";
         url += "mid=" + mid + "&order_avoided=true&order=pubdate&pn=" + page
                 + "&ps=30&tid=0";
-        Log.e("debug", url);
         JSONObject all = NetWorkUtil.getJson(ConfInfoApi.signWBI(url), NetWorkUtil.webHeaders);
         if (all.has("data") && !all.isNull("data")) {
             JSONObject data = all.getJSONObject("data");

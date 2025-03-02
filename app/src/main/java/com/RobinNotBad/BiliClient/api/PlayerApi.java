@@ -136,7 +136,7 @@ public class PlayerApi {
         String url = "https://api.bilibili.com/pgc/player/web/playurl" + reqData.toString();
 
         JSONObject body = NetWorkUtil.getJson(url);
-        Logu.i(body.toString());
+        Logu.v(body.toString());
 
         JSONObject data = body.getJSONObject("result");
         JSONArray durl = data.getJSONArray("durl");
@@ -166,11 +166,11 @@ public class PlayerApi {
      */
     public static Intent jumpToPlayer(PlayerData playerData) {
         Context context = BiliTerminal.context;
-        Log.i("playerAPI-准备跳转", "--------");
-        Log.i("playerAPI-视频标题", playerData.title);
-        Log.i("playerAPI-视频地址", playerData.videoUrl);
-        Log.i("playerAPI-弹幕地址", playerData.danmakuUrl);
-        Log.i("playerAPI-准备跳转", "--------");
+        Logu.v("准备跳转", "--------");
+        Logu.v("视频标题", playerData.title);
+        Logu.v("视频地址", playerData.videoUrl);
+        Logu.v("弹幕地址", playerData.danmakuUrl);
+        Logu.v("准备跳转", "--------");
 
         Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -263,7 +263,7 @@ public class PlayerApi {
         JSONObject data = NetWorkUtil.getJson(url).getJSONObject("data");
 
         JSONArray subtitles = data.getJSONObject("subtitle").getJSONArray("subtitles");
-        Log.d("playerAPI-subtitle",subtitles.toString());
+        Log.d("subtitle",subtitles.toString());
 
         SubtitleLink[] links = new SubtitleLink[subtitles.length() + 1];
         for (int i = 0; i < subtitles.length(); i++) {

@@ -8,7 +8,10 @@ package com.RobinNotBad.BiliClient.util;
 import android.util.Log;
 
 public class Logu {
+    public static boolean LOGV_ENABLED = false;
+
     public static void v(String s){
+        if(LOGV_ENABLED) return;
         Log.v(getCaller(), s);
     }
     public static void i(String s){
@@ -25,6 +28,27 @@ public class Logu {
     }
     public static void wtf(String s){
         Log.wtf(getCaller(), s);
+    }
+
+
+    public static void v(String tag, String info){
+        if(LOGV_ENABLED) return;
+        Log.v(getCaller(), tag + ">" + info);
+    }
+    public static void i(String tag, String info){
+        Log.i(getCaller(), tag + ">" + info);
+    }
+    public static void d(String tag, String info){
+        Log.d(getCaller(), tag + ">" + info);
+    }
+    public static void w(String tag, String info){
+        Log.w(getCaller(), tag + ">" + info);
+    }
+    public static void e(String tag, String info){
+        Log.e(getCaller(), tag + ">" + info);
+    }
+    public static void wtf(String tag, String info){
+        Log.wtf(getCaller(), tag + ">" + info);
     }
 
     private static String getCaller(){
