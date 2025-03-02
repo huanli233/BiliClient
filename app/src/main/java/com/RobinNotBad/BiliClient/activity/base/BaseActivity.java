@@ -263,10 +263,8 @@ public class BaseActivity extends AppCompatActivity {
                     float finalMultiple = multiple;
                     viewChild.setOnGenericMotionListener((v, ev) -> {
                         if (ev.getAction() == MotionEvent.ACTION_SCROLL && ev.getSource() == InputDevice.SOURCE_ROTARY_ENCODER) {
-                            float delta = -ev.getAxisValue(MotionEvent.AXIS_SCROLL)
-                                    * ViewConfigurationCompat.getScaledVerticalScrollFactor(
-                                    ViewConfiguration.get(BiliTerminal.context),
-                                    BiliTerminal.context) * 2;
+                            float delta = -ev.getAxisValue(MotionEvent.AXIS_SCROLL) * ViewConfigurationCompat.getScaledVerticalScrollFactor(ViewConfiguration.get(this),
+                                    this) * 2;
 
                             if (viewChild instanceof ScrollView)
                                 ((ScrollView) viewChild).smoothScrollBy(0, Math.round(delta * finalMultiple));
