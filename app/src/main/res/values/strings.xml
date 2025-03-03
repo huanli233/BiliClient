@@ -126,7 +126,7 @@
         <item>优化了播放器字幕的圆屏适配</item>
 
         <item>更改了报错页的文字，现在上传报错可以用了</item>
-        <item>修复了一些崩溃问题</item>
+        <item>修复了一些崩溃问题，优化了一些屎山代码</item>
         <item>新增了一些bug和屎山代码</item>
     </string-array>
 
