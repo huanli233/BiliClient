@@ -38,7 +38,7 @@ public class MsgUtil {
         } else {
             toast(str);
         }
-        Log.d("debug-msg",str);
+        Logu.i(str);
     }
 
     public static void showMsgLong(String str) {
@@ -47,15 +47,15 @@ public class MsgUtil {
         } else {
             toastLong(str);
         }
-        Log.d("debug-msg-long",str);
+        Logu.i("long",str);
     }
 
     public static void toast(String str) {
-        CenterThreadPool.runOnUiThread(() -> toastInternal(str, BiliTerminal.appContext.get()));
+        CenterThreadPool.runOnUiThread(() -> toastInternal(str, BiliTerminal.context));
     }
 
     public static void toastLong(String str) {
-        CenterThreadPool.runOnUiThread(() -> toastLongInternal(str, BiliTerminal.appContext.get()));
+        CenterThreadPool.runOnUiThread(() -> toastLongInternal(str, BiliTerminal.context));
     }
 
     private static void toastInternal(String str, Context context) {
@@ -159,7 +159,7 @@ public class MsgUtil {
             } else if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
                 output.append("数据解析错误\n建议登陆后再尝试");
             } else if (e_str.contains("-352") || e_str.contains("22015") || e_str.contains("65056"))
-                output.append(BiliTerminal.appContext.get().getString(R.string.err_rejected));
+                output.append(BiliTerminal.context.getString(R.string.err_rejected));
             else {
                 output.append("数据解析错误：\n");
                 output.append(e_str.replace("org.json.JSONException:", ""));
@@ -186,7 +186,7 @@ public class MsgUtil {
     }
 
     public static void showText(String title, String text) {
-        Context context = BiliTerminal.appContext.get();
+        Context context = BiliTerminal.context;
         Intent testIntent = new Intent()
                 .setClass(context, ShowTextActivity.class)
                 .putExtra("title", title)
@@ -196,7 +196,7 @@ public class MsgUtil {
     }
 
     public static void showDialog(String title, String content) {
-        Context context = BiliTerminal.appContext.get();
+        Context context = BiliTerminal.context;
         Intent intent = new Intent(context, DialogActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("content", content);
@@ -205,7 +205,7 @@ public class MsgUtil {
     }
 
     public static void showDialog(String title, String content, int wait_time) {
-        Context context = BiliTerminal.appContext.get();
+        Context context = BiliTerminal.context;
         Intent intent = new Intent(context, DialogActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("content", content);

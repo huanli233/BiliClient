@@ -2,6 +2,7 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.util.Log;
 
+import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -20,7 +21,7 @@ public class DanmakuApi {
         String url = "https://api.bilibili.com/x/v2/dm/post";
         String arg = "type=1&oid=" + cid + "&msg=" + msg + "&bvid=" + bvid + "&progress=" + progress + "&color=" + color + "&mode=" + mode + "&rnd=" + (System.currentTimeMillis() * 1000000) + "&csrf=" + SharedPreferencesUtil.getString("csrf", "");
         JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, arg, NetWorkUtil.webHeaders).body()).string());
-        Log.e("debug-发送弹幕", result.toString());
+        Logu.i(result.toString());
         return result.getInt("code"); //https://socialsisteryi.github.io/bilibili-API-collect/docs/danmaku/action.html#%E5%8F%91%E9%80%81%E8%A7%86%E9%A2%91%E5%BC%B9%E5%B9%95
     }
 
@@ -28,7 +29,7 @@ public class DanmakuApi {
         String url = "https://api.bilibili.com/x/v2/dm/post";
         String arg = "type=1&oid=" + cid + "&msg=" + msg + "&aid=" + aid + "&progress=" + progress + "&color=" + color + "&mode=" + mode + "&rnd=" + (System.currentTimeMillis() * 1000000) + "&csrf=" + SharedPreferencesUtil.getString("csrf", "");
         JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, arg, NetWorkUtil.webHeaders).body()).string());
-        Log.e("debug-发送弹幕", result.toString());
+        Logu.i(result.toString());
         return result.getInt("code"); //https://socialsisteryi.github.io/bilibili-API-collect/docs/danmaku/action.html#%E5%8F%91%E9%80%81%E8%A7%86%E9%A2%91%E5%BC%B9%E5%B9%95
     }
 
@@ -37,7 +38,7 @@ public class DanmakuApi {
         String url = "https://api.bilibili.com/x/v2/dm/thumbup/add";
         String arg = "oid=" + cid + "&dmid=" + dmid + "&op=" + op + "&platform=web_player" + "&csrf=" + SharedPreferencesUtil.getString("csrf", "");
         JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, arg, NetWorkUtil.webHeaders).body()).string());
-        Log.e("debug-点赞弹幕", result.toString());
+        Logu.i(result.toString());
         return result.getInt("code");
     }
 
@@ -47,7 +48,7 @@ public class DanmakuApi {
         //文档里就是cid，不是oid
         String arg = "cid=" + cid + "&dmid=" + dmid + "&csrf=" + SharedPreferencesUtil.getString("csrf", "");
         JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, arg, NetWorkUtil.webHeaders).body()).string());
-        Log.e("debug-撤回弹幕", result.toString());
+        Logu.i(result.toString());
         return result.getInt("code");
     }
 }

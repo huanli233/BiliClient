@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.api;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -15,6 +14,8 @@ import com.RobinNotBad.BiliClient.model.Stats;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.DmImgParamUtil;
+import com.RobinNotBad.BiliClient.util.Logu;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.StringUtil;
@@ -25,8 +26,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +36,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 //新的动态api，旧的那个实在太蛋疼而且说不定随时会被弃用（
 
@@ -58,9 +58,11 @@ public class DynamicApi {
                 .put("csrf", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
         try {
-            JSONObject respBody = new JSONObject(resp.body().string());
-            if (respBody.getString("code").equals("0") && respBody.has("data"))
-                return respBody.getJSONObject("data").getLong("dynamic_id");
+            ResponseBody body = resp.body();
+            if(body == null) return -1;
+            JSONObject result = new JSONObject(body.string());
+            if (result.getString("code").equals("0") && result.has("data"))
+                return result.getJSONObject("data").getLong("dynamic_id");
         } catch (JSONException ignored) {
             return -1;
         }
@@ -96,14 +98,16 @@ public class DynamicApi {
                 reqBody.put(key, val);
             }
         }
-        Log.d("debug", "publishComplex reqBody=" + reqBody);
+        Logu.v("publishComplex reqBody=" + reqBody);
         Response resp = Objects.requireNonNull(NetWorkUtil.postJson(url, reqBody.toString()));
         try {
-            JSONObject respBody = new JSONObject(resp.body().string());
-            if (respBody.getString("code").equals("0") && respBody.has("data"))
-                return respBody.getJSONObject("data").getLong("dyn_id");
+            ResponseBody body = resp.body();
+            if(body == null) return  -1;
+            JSONObject result = new JSONObject(body.string());
+            if (result.getString("code").equals("0") && result.has("data"))
+                return result.getJSONObject("data").getLong("dyn_id");
         } catch (JSONException e) {
-            Log.e("debug", "publishComplex", e);
+            MsgUtil.err("发送动态", e);
             return -1;
         }
         return -1;
@@ -152,9 +156,11 @@ public class DynamicApi {
                 .put("csrf_token", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
         try {
-            JSONObject respBody = new JSONObject(resp.body().string());
-            if (respBody.getString("code").equals("0") && respBody.has("data"))
-                return respBody.getJSONObject("data").getLong("dynamic_id");
+            ResponseBody body = resp.body();
+            if(body == null) return -1;
+            JSONObject result = new JSONObject(body.string());
+            if (result.getString("code").equals("0") && result.has("data"))
+                return result.getJSONObject("data").getLong("dynamic_id");
         } catch (JSONException ignored) {
             return -1;
         }
@@ -206,7 +212,6 @@ public class DynamicApi {
         }
 
         ArrayList<Pair<Integer, Integer>> indexesList = new ArrayList<>(indexes);
-        Collections.sort(indexesList, Comparator.comparingInt(p -> p.first));
         int pos = 0;
         for (Pair<Integer, Integer> index : indexesList) {
             int start = index.first;
@@ -240,9 +245,12 @@ public class DynamicApi {
                 .put("csrf_token", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
         try {
-            JSONObject respBody = new JSONObject(resp.body().string());
-            return respBody.getInt("code");
-        } catch (JSONException ignored) {
+            ResponseBody responseBody = resp.body();
+            if(responseBody == null) return -1;
+            JSONObject result = new JSONObject(responseBody.string());
+            return result.getInt("code");
+        } catch (Exception e) {
+            e.printStackTrace();
             return -1;
         }
     }
@@ -254,8 +262,10 @@ public class DynamicApi {
                 .put("csrf_token", SharedPreferencesUtil.getString("csrf", ""))
                 .toString(), NetWorkUtil.webHeaders));
         try {
-            JSONObject respBody = new JSONObject(resp.body().string());
-            return respBody.getInt("code");
+            ResponseBody body = resp.body();
+            if(body == null) return -1;
+            JSONObject result = new JSONObject(body.string());
+            return result.getInt("code");
         } catch (JSONException ignored) {
             return -1;
         }
@@ -321,15 +331,15 @@ public class DynamicApi {
     }
 
     public static Dynamic analyzeDynamic(JSONObject dynamic_json) throws JSONException {
-        Log.e("debug-dynamic", "--------------");
+        Logu.v("--------------");
         Dynamic dynamic = new Dynamic();
 
         if (!dynamic_json.isNull("id_str"))
             dynamic.dynamicId = Long.parseLong(dynamic_json.getString("id_str"));
         else dynamic.dynamicId = 0;
-        Log.e("debug-dynamic-id", String.valueOf(dynamic.dynamicId));
+        Logu.v("id", String.valueOf(dynamic.dynamicId));
         dynamic.type = dynamic_json.getString("type");
-        Log.e("debug-dynamic-type", dynamic.type);
+        Logu.v("type", dynamic.type);
 
         JSONObject basic = dynamic_json.getJSONObject("basic");
         String comment_id_str = basic.getString("comment_id_str");
@@ -352,7 +362,7 @@ public class DynamicApi {
             if (vipJson != null) {
                 userInfo.vip_nickname_color = vipJson.optString("nickname_color", "");
             }
-            Log.e("debug-dynamic-sender", userInfo.name);
+            Logu.v("sender", userInfo.name);
             dynamic.pubTime = module_author.getString("pub_time");
         }
         dynamic.userInfo = userInfo;
@@ -397,7 +407,7 @@ public class DynamicApi {
                     }
                 }
                 dynamic.content = dynamic_content.toString();
-                Log.e("debug-dynamic-content", dynamic.content);
+                Logu.v("content", dynamic.content);
                 dynamic.emotes = dynamic_emotes;
                 dynamic.ats = ats;
             } else dynamic.content = "";
@@ -480,7 +490,7 @@ public class DynamicApi {
                 if (module_additional.getString("type").equals("ADDITIONAL_TYPE_UGC")) {
                     dynamic.major_type = "MAJOR_TYPE_ARCHIVE";
                     dynamic.major_object = analyzeVideoCard(module_additional.getJSONObject("ugc"));
-                } else Log.e("debug-dynamic-addi", module_additional.getString("type"));
+                } else Logu.v("addi", module_additional.getString("type"));
             }
         }
 

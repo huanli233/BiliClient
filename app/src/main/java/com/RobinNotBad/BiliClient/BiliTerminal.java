@@ -44,6 +44,8 @@ public class BiliTerminal extends Application {
             ErrorCatch errorCatch = ErrorCatch.getInstance();
             errorCatch.init(context);
             Logu.LOGV_ENABLED = SharedPreferencesUtil.getBoolean("dev_logv", false);
+            Logu.LOGD_ENABLED = SharedPreferencesUtil.getBoolean("dev_logd", false);
+            Logu.LOGI_ENABLED = SharedPreferencesUtil.getBoolean("dev_logi", false);
         }
     }
 

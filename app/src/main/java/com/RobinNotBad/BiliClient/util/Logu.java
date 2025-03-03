@@ -9,15 +9,19 @@ import android.util.Log;
 
 public class Logu {
     public static boolean LOGV_ENABLED = false;
+    public static boolean LOGD_ENABLED = false;
+    public static boolean LOGI_ENABLED = false;
 
     public static void v(String s){
-        if(LOGV_ENABLED) return;
+        if(!LOGV_ENABLED) return;
         Log.v(getCaller(), s);
     }
     public static void i(String s){
+        if(!LOGI_ENABLED) return;
         Log.i(getCaller(), s);
     }
     public static void d(String s){
+        if(!LOGD_ENABLED) return;
         Log.d(getCaller(), s);
     }
     public static void w(String s){
@@ -32,13 +36,15 @@ public class Logu {
 
 
     public static void v(String tag, String info){
-        if(LOGV_ENABLED) return;
+        if(!LOGV_ENABLED) return;
         Log.v(getCaller(), tag + ">" + info);
     }
     public static void i(String tag, String info){
+        if(!LOGI_ENABLED) return;
         Log.i(getCaller(), tag + ">" + info);
     }
     public static void d(String tag, String info){
+        if(!LOGD_ENABLED) return;
         Log.d(getCaller(), tag + ">" + info);
     }
     public static void w(String tag, String info){

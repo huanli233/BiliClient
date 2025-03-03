@@ -124,12 +124,12 @@ public class ToolsUtil {
     }
 
     public static int dp2px(float dpValue) {
-        final float scale = BiliTerminal.appContext.get().getResources().getDisplayMetrics().density;
+        final float scale = BiliTerminal.context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 
     public static int sp2px(float spValue) {
-        final float fontScale = BiliTerminal.appContext.get().getResources()
+        final float fontScale = BiliTerminal.context.getResources()
                 .getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
