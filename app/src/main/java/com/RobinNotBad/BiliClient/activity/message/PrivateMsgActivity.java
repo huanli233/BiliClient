@@ -190,6 +190,7 @@ public class PrivateMsgActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         if (refreshTimer != null) refreshTimer.cancel();
+        refreshTimer = null;
         super.onDestroy();
     }
 

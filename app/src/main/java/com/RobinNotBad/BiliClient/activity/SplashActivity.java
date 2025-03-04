@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
@@ -44,7 +42,6 @@ public class SplashActivity extends Activity {
     private TextView splashTextView;
     private int splashFrame;
     private Timer splashTimer;
-    private Handler handler;
     private String splashText = "欢迎使用\n哔哩终端";
 
     @Override
@@ -59,7 +56,6 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         Log.e("debug", "进入应用");
 
-        handler = new Handler(Looper.getMainLooper());
         splashTextView = findViewById(R.id.splashText);
         splashText = SharedPreferencesUtil.getString("ui_splashtext","欢迎使用\n哔哩终端");
 
@@ -120,7 +116,7 @@ public class SplashActivity extends Activity {
 
                     interruptSplash();
 
-                    handler.postDelayed(()->{
+                    splashTextView.postDelayed(()->{
                         startActivity(intent);
                         CenterThreadPool.run(() -> AppInfoApi.check(SplashActivity.this));
                         finish();
@@ -132,7 +128,7 @@ public class SplashActivity extends Activity {
                         interruptSplash();
                         splashTextView.setText("网络错误");
                         if (SharedPreferencesUtil.getBoolean("setup", false)) {
-                            handler.postDelayed(()->{
+                            splashTextView.postDelayed(()->{
                                 Intent intent = new Intent();
                                 intent.setClass(SplashActivity.this, LocalListActivity.class);
                                 startActivity(intent);
@@ -202,6 +198,7 @@ public class SplashActivity extends Activity {
 
     private void interruptSplash() {
         if (splashTimer != null) splashTimer.cancel();
+        splashTimer = null;
         runOnUiThread(() -> splashTextView.setText(splashText));
     }
 }
