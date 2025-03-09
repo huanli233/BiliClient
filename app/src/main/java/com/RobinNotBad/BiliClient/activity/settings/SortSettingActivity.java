@@ -102,14 +102,14 @@ public class SortSettingActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MsgUtil.showMsg("拖动以排序~", this);
+        MsgUtil.showMsg("拖动以排序~");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         save();
-        MsgUtil.showMsg("已保存", this);
+        MsgUtil.showMsg("已保存");
     }
 
     private void save() {

@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.activity.settings;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,8 +14,9 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SettingMenuActivity extends BaseActivity {
 
-    private SwitchMaterial menu_popular, menu_precious;
+    private SwitchMaterial menu_popular, menu_live, menu_precious;
 
+    @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +29,9 @@ public class SettingMenuActivity extends BaseActivity {
 
             menu_popular = findViewById(R.id.menu_popular);
             menu_popular.setChecked(SharedPreferencesUtil.getBoolean("menu_popular", true));
+
+            menu_live = findViewById(R.id.menu_live);
+            menu_live.setChecked(SharedPreferencesUtil.getBoolean("menu_live", false));
 
             menu_precious = findViewById(R.id.menu_precious);
             menu_precious.setChecked(SharedPreferencesUtil.getBoolean("menu_precious", false));
@@ -42,6 +47,7 @@ public class SettingMenuActivity extends BaseActivity {
     private void save() {
         SharedPreferencesUtil.putBoolean("menu_popular", menu_popular.isChecked());
         SharedPreferencesUtil.putBoolean("menu_precious", menu_precious.isChecked());
+        SharedPreferencesUtil.putBoolean("menu_live", menu_live.isChecked());
     }
 
     @Override

@@ -1,10 +1,15 @@
 package com.RobinNotBad.BiliClient.activity.dynamic;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +22,7 @@ import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicHolder;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
 
 //真正的视频详情页
@@ -32,18 +38,23 @@ public class DynamicInfoFragment extends Fragment {
     public DynamicInfoFragment() {
     }
 
-    public static DynamicInfoFragment newInstance() {
-        return new DynamicInfoFragment();
+    public static DynamicInfoFragment newInstance(long id) {
+        DynamicInfoFragment fragment = new DynamicInfoFragment();
+        Bundle args = new Bundle();
+        args.putLong("id", id);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            dynamic = TerminalContext.getInstance().getCurrentDynamic();
-        } catch (TerminalContext.IllegalTerminalStateException e) {
+            long id = getArguments().getLong("id", 0);
+            dynamic = TerminalContext.getInstance().getDynamicById(id).getValue().getOrThrow();
+        } catch (Exception e) {
             Log.wtf(TAG, e);
-            MsgUtil.toast("找不到动态信息QAQ", BiliTerminal.context);
+            MsgUtil.showMsg("找不到动态信息QAQ");
         }
     }
 
@@ -57,6 +68,16 @@ public class DynamicInfoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ScrollView scrollView = view.findViewById(R.id.scrollView);
+
+        if(SharedPreferencesUtil.getBoolean("ui_landscape",false)) {
+            WindowManager windowManager = (WindowManager) view.getContext().getSystemService(Context.WINDOW_SERVICE);
+            Display display = windowManager.getDefaultDisplay();
+            DisplayMetrics metrics = new DisplayMetrics();
+            if(Build.VERSION.SDK_INT >= 17) display.getRealMetrics(metrics);
+            else display.getMetrics(metrics);
+            int paddings = metrics.widthPixels / 6;
+            scrollView.setPadding(paddings,0,paddings,0);
+        }
 
         CenterThreadPool.run(() -> {
             if (isAdded()) requireActivity().runOnUiThread(() -> {

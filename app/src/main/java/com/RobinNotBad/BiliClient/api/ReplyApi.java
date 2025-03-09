@@ -1,25 +1,27 @@
 package com.RobinNotBad.BiliClient.api;
 
 import android.annotation.SuppressLint;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import com.RobinNotBad.BiliClient.model.ContentType;
 import com.RobinNotBad.BiliClient.model.Emote;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.UserInfo;
-import com.RobinNotBad.BiliClient.util.JsonUtil;
-import com.RobinNotBad.BiliClient.util.NetWorkUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,16 +42,21 @@ public class ReplyApi {
     public static final int REPLY_TYPE_DYNAMIC = 17;
     public static final String TOP_TIP = "[置顶]";
 
-    //oid：评论区id，可以是视频aid
-    //rpid：若要查看子评论，这个参数是父评论的id，否则填0
-    //sort：评论区排序方式，0=时间；1=点赞数量；2=回复数量
-    public static int getReplies(long oid, long rpid, int pn, int type, int sort, List<Reply> replyArrayList) throws JSONException, IOException {
+    /**
+     * @param originId 评论区id，为评论所属内容的id，例如视频aid
+     * @param rpid 父评论的id，无父评论则为0
+     * @param pageNumber 分页，需要拉取的评论的页号
+     * @param type 评论所属内容类型
+     * @param sort 评论区排序方式，0=时间；1=点赞数量；2=回复数量
+     * @param replyArrayList 填充数组
+     * @return -1错误,0正常，1到底了
+     * @throws JSONException json解析异常
+     * @throws IOException 网络异常
+     */
+    public static int getReplies(long originId, long rpid, int pageNumber, ContentType type, int sort, List<Reply> replyArrayList) throws JSONException, IOException {
 
-        String url = "https://api.bilibili.com/x/v2/reply" + (rpid == 0 ? "" : "/reply") + "?pn=" + pn
-                + "&type=" + type + "&oid=" + oid + "&sort=" + sort + (rpid == 0 ? "" : ("&root=" + rpid));
-
-        //Log.e("debug-评论区链接", url);
-
+        String url = "https://api.bilibili.com/x/v2/reply" + (rpid == 0 ? "" : "/reply") + "?pn=" + pageNumber
+                + "&type=" + type.getTypeCode() + "&oid=" + originId + "&sort=" + sort + (rpid == 0 ? "" : ("&root=" + rpid));
         JSONObject all = NetWorkUtil.getJson(url);
 
         //Log.e("debug-评论区",all.toString());
@@ -67,7 +74,25 @@ public class ReplyApi {
                 else return 0;
             } else return 1;
         } else return -1;
-    }  //-1错误,0正常，1到底了
+    }
+
+    public static Result<Reply> getRootReply(ContentType contentType, long originId, long rpid) {
+        String url = "https://api.bilibili.com/x/v2/reply/reply" + "?type=" + contentType.getTypeCode() + "&oid=" + originId + "&root=" + rpid;
+        try {
+            JSONObject json = NetWorkUtil.getJson(url);
+            if (json.getInt("code") != 0 || json.isNull("data")) {
+                return Result.failure(new Exception(json.getString("message")));
+            }
+            JSONObject data = json.getJSONObject("data");
+            if (data.isNull("root")) {
+                return Result.failure(new Exception("未找到根评论"));
+            }
+            return Result.success(new Reply(true, data.getJSONObject("root")));
+        } catch (Exception e) {
+            return Result.failure(e);
+        }
+    }
+
 
     /**
      * 获取评论列表（/x/v2/reply/wbi/main）
@@ -122,140 +147,12 @@ public class ReplyApi {
     }  //-1错误,0正常，1到底了
 
     public static void analyzeReplyArray(boolean isRoot, JSONArray replies, List<Reply> replyArrayList) throws JSONException {
-        long timeCurr = System.currentTimeMillis();
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
         for (int i = 0; i < replies.length(); i++) {
             JSONObject reply = replies.getJSONObject(i);
-            Reply replyReturn = analyzeReply(isRoot, reply, timeCurr, sdf);
+            Reply replyReturn = new Reply(isRoot, reply);
             replyArrayList.add(replyReturn);
         }
     }
-
-    public static Reply analyzeReply(boolean isRoot, JSONObject reply, long timeCurr, SimpleDateFormat sdf) throws JSONException {
-        Reply replyReturn = new Reply();
-        replyReturn.rpid = reply.getLong("rpid");
-        replyReturn.oid = reply.getLong("oid");
-        replyReturn.root = reply.getLong("root");
-        replyReturn.parent = reply.getLong("parent");
-        JSONObject member = reply.getJSONObject("member");
-        String uname = member.getString("uname");
-        long mid = member.getLong("mid");
-        String avatar = member.getString("avatar");
-        int level = member.getJSONObject("level_info").getInt("current_level");
-
-        UserInfo userInfo = new UserInfo();
-        userInfo.level = level;
-        userInfo.mid = mid;
-        userInfo.name = uname;
-        userInfo.avatar = avatar;
-        JSONObject vip = member.getJSONObject("vip");
-        userInfo.vip_role = vip.getInt("vipStatus");
-        userInfo.vip_nickname_color = vip.getString("nickname_color");
-        if ((!member.isNull("fans_detail")) && (!SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.NO_MEDAL, false))) {
-            JSONObject fans_detail = member.getJSONObject("fans_detail");
-            userInfo.medal_name = fans_detail.getString("medal_name");
-            userInfo.medal_level = fans_detail.getInt("level");
-        }
-        replyReturn.sender = userInfo;    //发送者
-
-        JSONObject content = reply.getJSONObject("content");
-        replyReturn.message = ToolsUtil.htmlToString(content.getString("message"));
-        //Log.e("debug-评论内容", message);
-
-        //Log.e("debug-点赞数", String.valueOf(likeCount));
-        replyReturn.likeCount = reply.getInt("like");
-        replyReturn.liked = reply.getInt("action") == 1;
-
-        if (content.has("emote") && !content.isNull("emote")) {
-            ArrayList<Emote> emoteList = new ArrayList<>();
-            JSONObject emoteJson = content.getJSONObject("emote");
-            //Log.e("debug-emote",emoteJson.toString());
-            ArrayList<String> emoteKeys = JsonUtil.getJsonKeys(emoteJson);
-
-            //LsonObject lsonEmote = LsonUtil.parseAsObject(emote.toString());    //最终还是用了Lson的一个功能，因为原生方式确实难以解决，还好这个功能是github版已有的
-            //String[] emoteKeys = lsonEmote.getKeys();                           //你看这多简单，唉，但是仅用这一处却引用整个库确实有些浪费，如果我有时间就自己写了。就当是致敬了罢（
-            //最终结果是自己写了函数，luern的库彻底扔掉了
-            for (String emoteKey : emoteKeys) {
-                //Log.e("debug-key",emoteKey);
-                JSONObject key = emoteJson.getJSONObject(emoteKey);
-                emoteList.add(new Emote(
-                        emoteKey,
-                        key.getString("url"),
-                        key.getJSONObject("meta").getInt("size")
-                ));
-            }
-            replyReturn.emotes = emoteList;
-        }
-
-        if (content.has("at_name_to_mid") && !content.isNull("at_name_to_mid")) {
-            Map<String, Long> atNameToMid = new HashMap<>();
-            JSONObject jsonObject = content.getJSONObject("at_name_to_mid");
-            Iterator<String> keys = jsonObject.keys();
-            for (Iterator<String> it = keys; it.hasNext(); ) {
-                String key = it.next();
-                long val = jsonObject.getLong(key);
-                atNameToMid.put(key, val);
-            }
-            replyReturn.atNameToMid = atNameToMid;
-        }
-
-        //表情包列表 不知道咋办就直接传json了  显示部分见EmoteUtil
-
-        JSONObject upAction = reply.getJSONObject("up_action");
-        replyReturn.upLiked = upAction.getBoolean("like");
-        replyReturn.upReplied = upAction.getBoolean("reply");
-
-        //up主觉得很淦
-
-        JSONObject replyCtrl = reply.getJSONObject("reply_control");
-        long ctime = reply.getLong("ctime") * 1000;
-        //Log.e("debug-评论时间戳", String.valueOf(ctime));
-
-        String timeStr;
-        if (timeCurr - ctime < 259200000 && replyCtrl.has("time_desc"))
-            timeStr = replyCtrl.getString("time_desc");  //大于3天变成日期
-        else timeStr = sdf.format(ctime);
-
-        if (replyCtrl.has("location"))
-            timeStr += " | IP:" + replyCtrl.getString("location").substring(5);  //这字符串还是切割一下吧不然太长了，只留个地址，前缀去了
-
-        if (replyCtrl.has("is_up_top")) {
-            if (replyCtrl.getBoolean("is_up_top")) {
-                replyReturn.message = TOP_TIP + replyReturn.message;
-                replyReturn.isTop = true;
-            }
-        }
-        //Log.e("debug-时间和IP",timeStr);
-        replyReturn.pubTime = timeStr;
-
-        if (isRoot) {
-            if (content.has("pictures") && !content.isNull("pictures")) {
-                ArrayList<String> pictureList = new ArrayList<>();
-                JSONArray pictures = content.getJSONArray("pictures");
-                for (int j = 0; j < pictures.length(); j++) {
-                    JSONObject picture = pictures.getJSONObject(j);
-                    //Log.e("debug-第" + j + "张图片", picture.getString("img_src"));
-                    pictureList.add(picture.getString("img_src"));
-                }
-                replyReturn.pictureList = pictureList;
-            }
-
-            replyReturn.childCount = reply.getInt("rcount");
-
-            if (reply.has("replies") && !reply.isNull("replies")) {
-                ArrayList<Reply> childMsgList = new ArrayList<>();
-                JSONArray childReplies = reply.getJSONArray("replies");
-                for (int j = 0; j < childReplies.length(); j++) {
-                    JSONObject childReply = childReplies.getJSONObject(j);
-                    childMsgList.add(analyzeReply(false, childReply, timeCurr, sdf));
-                }
-                replyReturn.childMsgList = childMsgList;
-            }
-        }
-        return replyReturn;
-    }
-
 
     public static Pair<Integer, Reply> sendReply(long oid, long root, long parent, String text, int type) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/v2/reply/add";
@@ -267,7 +164,7 @@ public class ReplyApi {
         if (result.has("data") && !result.isNull("data") && result.getJSONObject("data").has("reply") && !result.getJSONObject("data").isNull("reply")) {
             reply = result.getJSONObject("data").getJSONObject("reply");
         }
-        return new Pair<>(result.getInt("code"), reply == null ? null : analyzeReply(root != 0, reply, System.currentTimeMillis(), new SimpleDateFormat("yyyy-MM-dd HH:mm")));
+        return new Pair<>(result.getInt("code"), reply == null ? null : new Reply(root != 0, reply));
     }
 
     public static Pair<Integer, Reply> sendReply(long oid, long root, long parent, String text) throws IOException, JSONException {

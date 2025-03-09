@@ -38,8 +38,7 @@ public class RecommendLiveActivity extends RefreshMainActivity {
                 setRefreshing(false);
                 setAdapter(adapter);
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
+                loadFail(e);
             }
         });
     }
@@ -62,9 +61,7 @@ public class RecommendLiveActivity extends RefreshMainActivity {
                 }
                 setRefreshing(false);
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
-                this.page--;
+                loadFail(e);
             }
         });
     }

@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.settings.SettingMainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_alignParentTop="true">
 
         <TextView
             android:id="@+id/pageName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="3dp"
             android:layout_marginStart="8dp"
-            android:gravity="center"
+            android:layout_marginVertical="3dp"
             android:text="设置"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             app:drawableStartCompat="@drawable/arrow_down" />
 
         <com.RobinNotBad.BiliClient.ui.widget.TextClock
@@ -34,24 +30,17 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginVertical="3dp"
-            android:format12Hour="hh:mm"
-            android:format24Hour="HH:mm"
-            android:gravity="center"
             android:text="11:45"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top">
+        android:layout_height="match_parent"
+        android:layout_below="@id/top">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -125,9 +114,7 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="选择播放器"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toTopOf="@+id/playerSetting_desc"
                         app:layout_constraintEnd_toStartOf="@+id/playerSetting_go"
                         app:layout_constraintStart_toEndOf="@+id/playerSetting_icon"
@@ -141,7 +128,6 @@
                         android:layout_marginBottom="10dp"
                         android:singleLine="true"
                         android:text="切换播放器、视频清晰度"
-                        android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/playerSetting_go"
@@ -152,7 +138,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/clientPlayerSetting"
+                android:id="@+id/terminalPlayerSetting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="visible">
@@ -162,7 +148,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/clientPlayerSetting_go"
+                        android:id="@+id/terminalPlayerSetting_go"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -174,7 +160,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-                        android:id="@+id/clientPlayerSetting_icon"
+                        android:id="@+id/terminalPlayerSetting_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
@@ -187,7 +173,7 @@
                         app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
-                        android:id="@+id/clientPlayerSetting_title"
+                        android:id="@+id/terminalPlayerSetting_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -195,28 +181,25 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="内置播放器设置"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintBottom_toTopOf="@+id/clientPlayerSetting_desc"
-                        app:layout_constraintEnd_toStartOf="@+id/clientPlayerSetting_go"
-                        app:layout_constraintStart_toEndOf="@+id/clientPlayerSetting_icon"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toTopOf="@+id/terminalPlayerSetting_desc"
+                        app:layout_constraintEnd_toStartOf="@+id/terminalPlayerSetting_go"
+                        app:layout_constraintStart_toEndOf="@+id/terminalPlayerSetting_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
-                        android:id="@+id/clientPlayerSetting_desc"
+                        android:id="@+id/terminalPlayerSetting_desc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
                         android:singleLine="true"
                         android:text="试试内置播放器的特色功能吧"
-                        android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/clientPlayerSetting_go"
-                        app:layout_constraintStart_toEndOf="@+id/clientPlayerSetting_icon"
-                        app:layout_constraintTop_toBottomOf="@+id/clientPlayerSetting_title" />
+                        app:layout_constraintEnd_toStartOf="@+id/terminalPlayerSetting_go"
+                        app:layout_constraintStart_toEndOf="@+id/terminalPlayerSetting_icon"
+                        app:layout_constraintTop_toBottomOf="@+id/terminalPlayerSetting_title" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -248,7 +231,7 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/icon_tv"
+                        android:src="@drawable/icon_ui"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"
@@ -264,9 +247,7 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="界面设置"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toTopOf="@+id/uiSetting_desription"
                         app:layout_constraintEnd_toStartOf="@+id/uiSetting_go"
                         app:layout_constraintStart_toEndOf="@+id/uiSetting_icon"
@@ -280,7 +261,6 @@
                         android:layout_marginBottom="10dp"
                         android:singleLine="true"
                         android:text="界面大小、边距等"
-                        android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/uiSetting_go"
@@ -334,9 +314,7 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="菜单设置"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toTopOf="@+id/menuSetting_desription"
                         app:layout_constraintEnd_toStartOf="@+id/menuSetting_go"
                         app:layout_constraintStart_toEndOf="@+id/menuSetting_icon"
@@ -349,8 +327,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
                         android:singleLine="true"
-                        android:text="隐藏菜单内按钮、跳转菜单排序"
-                        android:textColor="#fff"
+                        android:text="隐藏菜单内按钮、调整菜单排序"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/menuSetting_go"
@@ -388,7 +365,7 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/icon_maker"
+                        android:src="@drawable/icon_creative_center"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"
@@ -404,9 +381,7 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="偏好设置"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toTopOf="@+id/prefSetting_desription"
                         app:layout_constraintEnd_toStartOf="@+id/prefSetting_go"
                         app:layout_constraintStart_toEndOf="@+id/prefSetting_icon"
@@ -419,8 +394,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
                         android:singleLine="true"
-                        android:text="找不到某些功能时就看看这里吧"
-                        android:textColor="#fff"
+                        android:text="一些特殊适配和特殊需求选项"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/prefSetting_go"
@@ -475,9 +449,7 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="评论区设置"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toTopOf="@+id/repliesSetting_desription"
                         app:layout_constraintEnd_toStartOf="@+id/repliesSetting_go"
                         app:layout_constraintStart_toEndOf="@+id/repliesSetting_icon"
@@ -491,7 +463,6 @@
                         android:layout_marginBottom="10dp"
                         android:singleLine="true"
                         android:text="关于评论区的一些设置选项"
-                        android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/repliesSetting_go"
@@ -546,9 +517,7 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="详情页设置"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toTopOf="@+id/infoSetting_desription"
                         app:layout_constraintEnd_toStartOf="@+id/infoSetting_go"
                         app:layout_constraintStart_toEndOf="@+id/infoSetting_icon"
@@ -561,8 +530,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
                         android:singleLine="true"
-                        android:text="视频详情页、专栏详情页等各类详情页相关设置"
-                        android:textColor="#fff"
+                        android:text="视频详情页、专栏详情页等相关设置"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/infoSetting_go"
@@ -616,9 +584,7 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="测试性功能"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toTopOf="@+id/laboratory_desription"
                         app:layout_constraintEnd_toStartOf="@+id/laboratory_go"
                         app:layout_constraintStart_toEndOf="@+id/laboratory_icon"
@@ -631,8 +597,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
                         android:singleLine="true"
-                        android:text="还在测试中，不保证能正常使用的功能"
-                        android:textColor="#fff"
+                        android:text="不保证能用或者用于开发调试的功能"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/laboratory_go"
@@ -685,9 +650,7 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="关于"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toTopOf="@+id/about_desription"
                         app:layout_constraintEnd_toStartOf="@+id/about_go"
                         app:layout_constraintStart_toEndOf="@+id/about_icon"
@@ -700,8 +663,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="10dp"
                         android:singleLine="true"
-                        android:text="版本号、开发团队、联系方式等"
-                        android:textColor="#fff"
+                        android:text="版本号、开发团队、联系方式、开源信息"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/about_go"
@@ -741,9 +703,7 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="查看登录信息"
-                        android:textColor="#fff"
-                        android:textSize="11sp"
-                        app:autoSizeTextType="uniform"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toTopOf="@+id/cookie_desription"
                         app:layout_constraintEnd_toStartOf="@+id/cookie_go"
                         app:layout_constraintStart_toStartOf="parent"
@@ -757,7 +717,6 @@
                         android:layout_marginBottom="10dp"
                         android:singleLine="true"
                         android:text="查看当前账号的登录信息，用于在另外的哔哩终端中特殊登录"
-                        android:textColor="#fff"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/cookie_go"
@@ -839,4 +798,4 @@
         </LinearLayout>
     </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

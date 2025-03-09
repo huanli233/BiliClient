@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseAdapter<M, VH extends BaseHolder> extends AbstractAdapter<VH> {
-    private List<M> dataList;
+    private final List<M> dataList;
 
     public int getViewType(int position) {
         return 0;

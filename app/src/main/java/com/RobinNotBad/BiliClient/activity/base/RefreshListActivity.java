@@ -83,6 +83,15 @@ public class RefreshListActivity extends BaseActivity {
         }
     }
 
+    public void hideEmptyView() {
+        if (emptyView != null) {
+            runOnUiThread(() -> {
+                recyclerView.setVisibility(View.VISIBLE);
+                emptyView.setVisibility(View.GONE);
+            });
+        }
+    }
+
     public void setRefreshing(boolean bool) {
         runOnUiThread(() -> swipeRefreshLayout.setRefreshing(bool));
     }
@@ -108,7 +117,7 @@ public class RefreshListActivity extends BaseActivity {
 
     public void loadFail() {
         page--;
-        MsgUtil.showMsgLong("加载失败", this);
+        MsgUtil.showMsgLong("加载失败");
         setRefreshing(false);
     }
 

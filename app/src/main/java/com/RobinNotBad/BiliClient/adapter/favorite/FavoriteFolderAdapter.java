@@ -55,9 +55,9 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
             holder.name.setText("图文收藏夹");
             holder.count.setText("");
             Glide.with(context).asDrawable()
-                    .load(ResourcesCompat.getDrawable(context.getResources(), R.drawable.article_fav_cover, context.getTheme()))
+                    .load(ToolsUtil.getDrawable(context, R.drawable.article_fav_cover))
                     .transition(GlideUtil.getTransitionOptions())
-                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))))
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(holder.cover);
             holder.itemView.setOnClickListener(v -> {
@@ -69,7 +69,7 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
             holder.count.setText(folderList.get(position).videoCount + "/" + folderList.get(position).maxCount);
             Glide.with(this.context).asDrawable().load(GlideUtil.url(folderList.get(position).cover))
                     .transition(GlideUtil.getTransitionOptions())
-                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))))
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))))
                     .format(DecodeFormat.PREFER_RGB_565)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(holder.cover);
@@ -96,9 +96,9 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
 
         public FavoriteHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.title);
-            count = itemView.findViewById(R.id.itemCount);
-            cover = itemView.findViewById(R.id.cover);
+            name = itemView.findViewById(R.id.text_title);
+            count = itemView.findViewById(R.id.text_itemcount);
+            cover = itemView.findViewById(R.id.img_cover);
         }
     }
 }

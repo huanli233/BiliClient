@@ -18,15 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
-import com.RobinNotBad.BiliClient.util.GlideUtil;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.TerminalContext;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.*;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -39,51 +35,45 @@ import java.util.List;
 import java.util.Objects;
 
 public class CollectionInfoActivity extends RefreshListActivity {
+    private Collection collection = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setPageName("合集详情");
-        Collection collection;
-        try {
-            collection = TerminalContext.getInstance().getCurrentVideo().collection;
-        }catch (TerminalContext.IllegalTerminalStateException ignored) {
-            collection = null;
-        }
+        long from_aid = getIntent().getLongExtra("fromVideo", -1);
         int season_id = getIntent().getIntExtra("season_id", -1);
         long mid = getIntent().getLongExtra("mid", -1);
-        if (collection == null/* && (season_id == -1 || mid == -1)*/) {
-            MsgUtil.showMsg("合集不存在", this);
-            finish();
-            return; 
-        }
-        long from_aid = getIntent().getLongExtra("fromVideo", -1);
+        setPageName("合集详情");
 
-        RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
-        if (collection.sections == null && collection.cards != null) {
-            adapter = new CardAdapter(this, collection, recyclerView);
-        } else if (collection.sections != null) {
-            adapter = new SectionAdapter(this, collection, recyclerView);
-            List<Collection.Section> sections = collection.sections;
-            int pos = 1;
-            for (Collection.Section section : sections) {
-                pos++;
-                List<Collection.Episode> episodes = section.episodes;
-                for (Collection.Episode episode : episodes) {
+        TerminalContext.getInstance().getVideoInfoByAidOrBvId(from_aid,null).observe(this, result -> result.onSuccess((videoInfo -> {
+            collection = videoInfo.collection;
+
+            RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
+            if (collection.sections == null && collection.cards != null) {
+                adapter = new CardAdapter(this, collection);
+            } else if (collection.sections != null) {
+                adapter = new SectionAdapter(this, collection, recyclerView);
+                List<Collection.Section> sections = collection.sections;
+                int pos = 1;
+                for (Collection.Section section : sections) {
                     pos++;
-                    if (episode.aid == from_aid) {
-                        Objects.requireNonNull(recyclerView.getLayoutManager()).scrollToPosition(--pos);
+                    List<Collection.Episode> episodes = section.episodes;
+                    for (Collection.Episode episode : episodes) {
+                        pos++;
+                        if (episode.aid == from_aid) {
+                            Objects.requireNonNull(recyclerView.getLayoutManager()).scrollToPosition(--pos);
+                        }
                     }
                 }
+            } else {
+                finish();
+                return;
             }
-        } else {
-            finish();
-            return;
-        }
 
-        setAdapter(adapter);
-        setRefreshing(false);
+            setAdapter(adapter);
+            setRefreshing(false);
+        })));
     }
 
     static class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -92,7 +82,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
         final Context context;
         final List<VideoCard> data;
 
-        public CardAdapter(Context context, Collection collection, RecyclerView recyclerView) {
+        public CardAdapter(Context context, Collection collection) {
             this.context = context;
             this.data = collection.cards;
             this.collection = collection;
@@ -122,7 +112,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 position--;
                 VideoCardHolder videoCardHolder = (VideoCardHolder) holder;
                 VideoCard videoCard = data.get(position);
-                videoCardHolder.itemView.setOnClickListener((view) -> context.startActivity(new Intent(context, VideoInfoActivity.class).putExtra("aid", videoCard.aid).putExtra("bvid", videoCard.bvid)));
+                videoCardHolder.itemView.setOnClickListener((view) -> TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, videoCard.bvid));
                 videoCardHolder.showVideoCard(videoCard, context);
             } else if (holder instanceof CollectionInfoHolder) {
                 CollectionInfoHolder collectionInfoHolder = (CollectionInfoHolder) holder;
@@ -133,7 +123,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                         .transition(GlideUtil.getTransitionOptions())
                         .placeholder(R.mipmap.placeholder)
                         .format(DecodeFormat.PREFER_RGB_565)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))).sizeMultiplier(0.85f).dontAnimate())
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))).sizeMultiplier(0.85f).dontAnimate())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(collectionInfoHolder.cover);
                 collectionInfoHolder.cover.setOnClickListener(view -> context.startActivity(new Intent(context, ImageViewerActivity.class).putExtra("imageList", new ArrayList<>(Collections.singletonList(collection.cover)))));
@@ -157,7 +147,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 super(itemView);
                 this.name = itemView.findViewById(R.id.name);
                 this.desc = itemView.findViewById(R.id.desc);
-                this.cover = itemView.findViewById(R.id.cover);
+                this.cover = itemView.findViewById(R.id.img_cover);
                 this.playTimes = itemView.findViewById(R.id.playTimes);
             }
         }
@@ -241,7 +231,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 VideoCardHolder videoCardHolder = (VideoCardHolder) holder;
                 VideoInfo videoInfo = data.get(getSectionPos(position)).episodes.get(getEpisodePos(position)).arc;
                 VideoCard videoCard = new VideoCard(videoInfo.title, "", ToolsUtil.toWan(videoInfo.stats.view), videoInfo.cover, videoInfo.aid, videoInfo.bvid);
-                videoCardHolder.itemView.setOnClickListener((view) -> context.startActivity(new Intent(context, VideoInfoActivity.class).putExtra("aid", videoInfo.aid).putExtra("bvid", videoInfo.bvid)));
+                videoCardHolder.itemView.setOnClickListener((view) -> TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, videoCard.bvid));
                 videoCardHolder.showVideoCard(videoCard, context);
             } else if (holder instanceof CollectionInfoHolder) {
                 CollectionInfoHolder collectionInfoHolder = (CollectionInfoHolder) holder;
@@ -252,7 +242,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                         .transition(GlideUtil.getTransitionOptions())
                         .placeholder(R.mipmap.placeholder)
                         .format(DecodeFormat.PREFER_RGB_565)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))).sizeMultiplier(0.85f).dontAnimate())
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))).sizeMultiplier(0.85f).dontAnimate())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(collectionInfoHolder.cover);
                 collectionInfoHolder.cover.setOnClickListener(view -> context.startActivity(new Intent(context, ImageViewerActivity.class).putExtra("imageList", new ArrayList<>(Collections.singletonList(collection.cover)))));
@@ -289,7 +279,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 super(itemView);
                 this.name = itemView.findViewById(R.id.name);
                 this.desc = itemView.findViewById(R.id.desc);
-                this.cover = itemView.findViewById(R.id.cover);
+                this.cover = itemView.findViewById(R.id.img_cover);
                 this.playTimes = itemView.findViewById(R.id.playTimes);
             }
         }

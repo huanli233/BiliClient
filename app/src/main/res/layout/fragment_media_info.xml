@@ -46,7 +46,7 @@
             app:layout_constraintTop_toBottomOf="@+id/image_media_cover" />
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -63,10 +63,10 @@
             android:text="正片 点击切换"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+            app:layout_constraintTop_toBottomOf="@+id/text_title" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/eposides"
+            android:id="@+id/episodes"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="4dp"
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/eposide_choose"
+                    android:id="@+id/episode_choose"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"
@@ -93,8 +93,8 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_eposide_list"
-                    app:layout_constraintTop_toBottomOf="@+id/eposide_choose"
+                    android:id="@+id/rv_episode_list"
+                    app:layout_constraintTop_toBottomOf="@+id/episode_choose"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_width="match_parent"
@@ -116,6 +116,6 @@
             android:text="播放"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/eposides" />
+            app:layout_constraintTop_toBottomOf="@id/episodes" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

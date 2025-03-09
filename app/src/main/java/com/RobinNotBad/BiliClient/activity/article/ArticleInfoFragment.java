@@ -1,24 +1,33 @@
 package com.RobinNotBad.BiliClient.activity.article;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.article.ArticleContentAdapter;
 import com.RobinNotBad.BiliClient.api.ArticleApi;
 import com.RobinNotBad.BiliClient.model.ArticleInfo;
 import com.RobinNotBad.BiliClient.model.ArticleLine;
-import com.RobinNotBad.BiliClient.util.*;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.JsonUtil;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.Result;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -47,10 +56,6 @@ public class ArticleInfoFragment extends Fragment {
         return fragment;
     }
 
-    public static ArticleInfoFragment newInstance() {
-        return new ArticleInfoFragment();
-    }
-
     public void setOnFinishLoad(Runnable onFinishLoad) {
         this.onFinishLoad = onFinishLoad;
     }
@@ -61,12 +66,16 @@ public class ArticleInfoFragment extends Fragment {
         if (getArguments() != null) {
             cvid = getArguments().getLong("cvid");
         }
-        try {
-            articleInfo = TerminalContext.getInstance().getCurrentArticle();
-        }catch (TerminalContext.IllegalTerminalStateException e) {
-            Log.wtf(TAG, e);
-            MsgUtil.toast("找不到专栏信息QAQ", BiliTerminal.context);
+        Result<ArticleInfo> articleInfoResult = TerminalContext.getInstance().getArticleInfoByCvId(cvid).getValue();
+        if (articleInfoResult == null) {
+            articleInfoResult = Result.failure(new TerminalContext.IllegalTerminalStateException("articleInfoResult is null"));
         }
+        articleInfoResult
+                .onSuccess((articleInfo) -> this.articleInfo = articleInfo)
+                .onFailure((e) -> {
+                    Log.wtf(TAG, e);
+                    MsgUtil.showMsg("找不到专栏信息QAQ");
+                });
     }
 
     @Override
@@ -81,6 +90,16 @@ public class ArticleInfoFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerView);
 
+        if(SharedPreferencesUtil.getBoolean("ui_landscape",false)) {
+            WindowManager windowManager = (WindowManager) view.getContext().getSystemService(Context.WINDOW_SERVICE);
+            Display display = windowManager.getDefaultDisplay();
+            DisplayMetrics metrics = new DisplayMetrics();
+            if(Build.VERSION.SDK_INT >= 17) display.getRealMetrics(metrics);
+            else display.getMetrics(metrics);
+            int paddings = metrics.widthPixels / 6;
+            recyclerView.setPadding(paddings,0,paddings,0);
+        }
+
         //开始解析内容
         lineList = new ArrayList<>();
 
@@ -89,10 +108,8 @@ public class ArticleInfoFragment extends Fragment {
                 if (articleInfo == null) articleInfo = ArticleApi.getArticle(cvid);
 
                 if (articleInfo == null) {
-                    if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0)
-                        requireActivity().runOnUiThread(() -> MsgUtil.showMsg("登录后再尝试", requireContext()));
-                    else
-                        requireActivity().runOnUiThread(() -> MsgUtil.showMsg("获取信息失败！\n可能是专栏不存在？", requireContext()));
+                    if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) MsgUtil.showMsg("登录后再尝试");
+                    else MsgUtil.showMsg("获取信息失败！\n可能是专栏不存在？");
                     requireActivity().finish();
                     return;
                 }
@@ -116,14 +133,11 @@ public class ArticleInfoFragment extends Fragment {
                 }
                 if (isAdded()) requireActivity().runOnUiThread(() -> {
                     ArticleContentAdapter adapter = new ArticleContentAdapter(requireActivity(), articleInfo, lineList);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                    recyclerView.setLayoutManager(new CustomLinearManager(requireContext()));
                     recyclerView.setAdapter(adapter);
                     if (onFinishLoad != null) onFinishLoad.run();
                 });
-            } catch (Exception e) {
-                if (isAdded())
-                    requireActivity().runOnUiThread(() -> MsgUtil.err(e, requireContext()));
-            }
+            } catch (Exception e) {MsgUtil.err(e);}
         });
     }
 

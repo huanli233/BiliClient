@@ -37,8 +37,7 @@ public class FollowLiveActivity extends RefreshListActivity {
                 setAdapter(adapter);
                 if (roomList.size() < 1) showEmptyView();
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
+                loadFail(e);
             }
         });
     }
@@ -61,9 +60,7 @@ public class FollowLiveActivity extends RefreshListActivity {
                 }
                 setRefreshing(false);
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
-                this.page--;
+                loadFail(e);
             }
         });
     }

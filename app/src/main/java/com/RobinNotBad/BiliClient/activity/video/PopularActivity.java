@@ -15,6 +15,7 @@ import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.RecommendApi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.view.ImageAutoLoadScrollListener;
@@ -60,7 +61,7 @@ public class PopularActivity extends InstanceActivity {
         Log.e("debug", "刷新");
         page = 1;
         if (firstRefresh) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(PopularActivity.this));
+            recyclerView.setLayoutManager(new CustomLinearManager(this));
             videoCardList = new ArrayList<>();
         } else {
             int last = videoCardList.size();
@@ -113,7 +114,7 @@ public class PopularActivity extends InstanceActivity {
                 }
             });
         } catch (Exception e) {
-            runOnUiThread(() -> MsgUtil.err(e, this));
+            runOnUiThread(() -> MsgUtil.err(e));
         }
     }
 }

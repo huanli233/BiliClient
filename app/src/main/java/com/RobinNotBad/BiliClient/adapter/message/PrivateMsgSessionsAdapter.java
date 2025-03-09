@@ -53,7 +53,7 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
     public void onBindViewHolder(@NonNull PrivateMsgSessionsHolder holder, int position) {
         PrivateMsgSession msgContent = sessionsList.get(position);
         try {
-            switch (msgContent.contentType) {
+            if (msgContent.content != null) switch (msgContent.contentType) {
                 case PrivateMessage.TYPE_TEXT:
                     holder.contentText.setText(msgContent.content.getString("content"));
                     break;
@@ -77,6 +77,8 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
                 default:
                     holder.contentText.setText("");
             }
+            else holder.contentText.setText("");
+
             holder.contentText.setEllipsize(TextUtils.TruncateAt.END);
             holder.nameText.setText(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).name);
             Glide.with(context).asDrawable().load(GlideUtil.url(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).avatar))

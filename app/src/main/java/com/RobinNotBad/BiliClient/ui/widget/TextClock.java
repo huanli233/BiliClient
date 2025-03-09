@@ -18,71 +18,107 @@ package com.RobinNotBad.BiliClient.ui.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Handler;
-import android.os.SystemClock;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import java.text.SimpleDateFormat;
 
 /**
- * 从安卓自带的DigitalClock（被TextClock替代而废弃）复制来的，进行了一些修改
- * 这样的方式貌似要好一些？
+ * 为了兼容安卓4.0，必须自己实现TextClock
+ * 参考了安卓官方TextClock和DigitalClock的写法
  */
 @SuppressLint("AppCompatCustomView")
 public class TextClock extends TextView {
-    @SuppressLint("SimpleDateFormat")
-    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
-
-    private Runnable mTicker;
-    private Handler mHandler;
-
-    private boolean mTickerStopped = false;
-
-    private static long delta;
-
 
     public TextClock(Context context) {
         super(context);
         init();
     }
 
-    public TextClock(Context context, AttributeSet attrs) {
+    public TextClock(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
+    public TextClock(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public TextClock(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init();
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+    private boolean stopped = false;
+
     public void init(){
-        delta = System.currentTimeMillis() - SystemClock.uptimeMillis();
-        //Log.i("debug-clock","init,delta=" + delta);
+        setTypeface(Typeface.DEFAULT_BOLD);
+    }
+
+    private final Runnable ticker = new Runnable() {
+        @Override
+        public void run() {
+            removeCallbacks(this);
+            if(stopped) return;
+
+            long now = System.currentTimeMillis();
+            setText(dateFormat.format(now));
+
+            long next = 60000 - now % 60000;
+            postDelayed(this,next);
+            //Log.i("debug-clock-tick","now:" + SystemClock.uptimeMillis() + " | next:" + next);
+            //再次修改，原先的handler容易被系统杀…
+        }
+    };
+
+
+    public void startTick(){
+        stopped = false;
+        ticker.run();
+    }
+
+    public void stopTick(){
+        stopped = true;
+        removeCallbacks(ticker);
     }
 
     @Override
     protected void onAttachedToWindow() {
-        mTickerStopped = false;
         super.onAttachedToWindow();
-
-        mHandler = new Handler();
-
-        mTicker = () -> {
-            if (mTickerStopped) return;
-            long now = System.currentTimeMillis();
-            setText(dateFormat.format(now));
-            invalidate();
-            long next = now + (60000 - now % 60000) - delta;
-            mHandler.postAtTime(mTicker, next);
-            //Log.i("debug-clock","tick");
-            //这样的方式非常巧妙，计算好下一时刻然后postAtTime
-            //原先是一秒一次，我改成了一分钟一次
-            //由于基准是systemclock（开机时间），如果开机时不是整分钟，可能会有误差几十秒。经过修改，增加了偏差值计算，避免了这个问题（但其实没啥必要的说
-        };
-        mTicker.run();
+        startTick();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mTickerStopped = true;
+        stopTick();
     }
+
+
+    @Override
+    public void onScreenStateChanged(int screenState) {
+        super.onScreenStateChanged(screenState);
+
+        if(screenState == SCREEN_STATE_ON) startTick();
+        else stopTick();
+    }
+
+    @Override
+    public void onVisibilityAggregated(boolean isVisible) {
+        super.onVisibilityAggregated(isVisible);
+
+        if(isVisible) startTick();
+        else stopTick();
+    }
+
 
 }

@@ -15,12 +15,13 @@
 
         <LinearLayout
             android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/listCover"
+                android:id="@+id/img_cover"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -32,14 +33,13 @@
                 app:layout_constraintDimensionRatio="16:9" />
 
             <TextView
-                android:id="@+id/listVideoTitle"
+                android:id="@+id/text_title"
                 android:layout_marginStart="4dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.52"
                 android:ellipsize="end"
-                android:gravity="center_vertical"
                 android:maxLines="3"
                 android:text="标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题"
                 android:textSize="11sp" />
@@ -47,35 +47,35 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/extra_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/listPlayTimes"
+                android:id="@+id/text_viewcount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0.5"
+                android:drawableStart="@drawable/icon_play_12"
                 android:singleLine="true"
                 android:text="11.4万"
                 android:textSize="11sp"
-                android:drawableStart="@drawable/icon_play_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView3"
-                app:layout_constraintTop_toBottomOf="@+id/listCover" />
+                app:layout_constraintTop_toBottomOf="@+id/img_cover" />
 
 
             <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
-                android:id="@+id/listUpName"
+                android:id="@+id/text_upname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:alpha="0.5"
                 android:layout_marginStart="4dp"
-                android:singleLine="true"
-                android:textSize="11sp"
+                android:alpha="0.5"
                 android:drawableStart="@drawable/icon_person"
-                android:text="蔡徐坤"/>
+                android:singleLine="true"
+                android:text="蔡徐坤"
+                android:textSize="11sp" />
 
         </LinearLayout>
 

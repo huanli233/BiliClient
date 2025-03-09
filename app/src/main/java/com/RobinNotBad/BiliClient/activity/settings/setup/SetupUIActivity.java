@@ -1,4 +1,4 @@
-package com.RobinNotBad.BiliClient.activity.settings;
+package com.RobinNotBad.BiliClient.activity.settings.setup;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -8,8 +8,10 @@ import android.widget.EditText;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.settings.UIPreviewActivity;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SetupUIActivity extends BaseActivity {
 
@@ -29,6 +31,21 @@ public class SetupUIActivity extends BaseActivity {
         uiPaddingV = findViewById(R.id.ui_padding_vertical);
         uiPaddingV.setText(String.valueOf(SharedPreferencesUtil.getInt("paddingV_percent", 0)));
 
+        SwitchMaterial round = findViewById(R.id.switch_round);
+        round.setChecked(SharedPreferencesUtil.getBoolean("player_ui_round",false));
+        round.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked){
+                uiPaddingH.setText("11");
+                uiPaddingV.setText("11");
+                SharedPreferencesUtil.putBoolean("player_ui_round",true);
+            }
+            else{
+                uiPaddingH.setText("0");
+                uiPaddingV.setText("0");
+                SharedPreferencesUtil.putBoolean("player_ui_round",false);
+            }
+        });
+
         findViewById(R.id.preview).setOnClickListener(view -> {
             save();
             Intent intent = new Intent();
@@ -44,14 +61,16 @@ public class SetupUIActivity extends BaseActivity {
             finish();
         });
 
-        findViewById(R.id.reset_default).setOnClickListener(view -> {
+        findViewById(R.id.reset).setOnClickListener(view -> {
             SharedPreferencesUtil.putInt("paddingH_percent", 0);
             SharedPreferencesUtil.putInt("paddingV_percent", 0);
             SharedPreferencesUtil.putFloat("dpi", 1.0f);
+            SharedPreferencesUtil.putBoolean("player_ui_round",false);
             uiScaleInput.setText("1.0");
             uiPaddingH.setText("0");
             uiPaddingV.setText("0");
-            MsgUtil.showMsg("恢复完成", this);
+            round.setChecked(false);
+            MsgUtil.showMsg("恢复完成");
         });
     }
 

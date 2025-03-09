@@ -20,6 +20,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.message.PrivateMsgAdapter;
 import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -72,7 +73,7 @@ public class PrivateMsgActivity extends BaseActivity {
                 emoteArray = PrivateMsgApi.getEmoteJsonArray(allMsg);
                 adapter = new PrivateMsgAdapter(list, emoteArray, this);
                 runOnUiThread(() -> {
-                    msgView.setLayoutManager(new LinearLayoutManager(this));
+                    msgView.setLayoutManager(new CustomLinearManager(this));
                     msgView.setAdapter(adapter);
                     ((LinearLayoutManager) Objects.requireNonNull(msgView.getLayoutManager())).scrollToPositionWithOffset(list.size() - 1, 0);
                     msgView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -121,7 +122,7 @@ public class PrivateMsgActivity extends BaseActivity {
                     }, 15000, 15000);
                 });
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.err(e, this));
+                runOnUiThread(() -> MsgUtil.err(e));
             }
         });
 
@@ -134,25 +135,25 @@ public class PrivateMsgActivity extends BaseActivity {
                     runOnUiThread(() -> {
                         try {
                             if (result.getInt("code") == 0) {
-                                MsgUtil.showMsg("发送成功", this);
+                                MsgUtil.showMsg("发送成功");
                                 refresh();
                                 msgView.smoothScrollToPosition(list.size() - 1);
                             } else {
                                 if (result.getInt("code") == 21047) {
-                                    MsgUtil.showMsg(result.getString("message"), this);
+                                    MsgUtil.showMsg(result.getString("message"));
                                 }
-                                MsgUtil.showMsg("发送失败", this);
+                                MsgUtil.showMsg("发送失败");
                             }
                         } catch (JSONException e) {
-                            MsgUtil.showMsg("发送失败：\n" + result, this);
+                            MsgUtil.showMsg("发送失败：\n" + result);
                             e.printStackTrace();
                         }
                     });
                 } else {
-                    runOnUiThread(() -> MsgUtil.showMsg("你还木有输入喵~", this));
+                    runOnUiThread(() -> MsgUtil.showMsg("你还木有输入喵~"));
                 }
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.err(e, this));
+                runOnUiThread(() -> MsgUtil.err(e));
             }
         }));
     }
@@ -189,6 +190,7 @@ public class PrivateMsgActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         if (refreshTimer != null) refreshTimer.cancel();
+        refreshTimer = null;
         super.onDestroy();
     }
 
@@ -213,7 +215,7 @@ public class PrivateMsgActivity extends BaseActivity {
                     });
                 }
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.err(e, this));
+                runOnUiThread(() -> MsgUtil.err(e));
             }
         });
     }
@@ -221,7 +223,7 @@ public class PrivateMsgActivity extends BaseActivity {
     @SuppressLint("SuspiciousIndentation")
     private void loadMore() {
         isLoadingMore = true;
-        MsgUtil.showMsg("加载更多中...", this);
+        MsgUtil.showMsg("加载更多中...");
         CenterThreadPool.run(() -> {
             try {
                 if (allMsg.getInt("has_more") == 1) {
@@ -241,12 +243,12 @@ public class PrivateMsgActivity extends BaseActivity {
                     Log.e("loadMore", "loadMore");
                     runOnUiThread(() -> {
                         adapter.addItem(newList);
-                        MsgUtil.showMsg("已加载更多消息！", this);
+                        MsgUtil.showMsg("已加载更多消息！");
                     });
                     isLoadingMore = false;
-                } else runOnUiThread(() -> MsgUtil.showMsg("没有更多消息了", this));
+                } else runOnUiThread(() -> MsgUtil.showMsg("没有更多消息了"));
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.err(e, this));
+                runOnUiThread(() -> MsgUtil.err(e));
             }
         });
     }

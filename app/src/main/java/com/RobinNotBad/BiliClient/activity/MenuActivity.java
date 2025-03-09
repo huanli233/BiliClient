@@ -2,13 +2,16 @@ package com.RobinNotBad.BiliClient.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.lifecycle.Lifecycle;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
@@ -18,8 +21,8 @@ import com.RobinNotBad.BiliClient.activity.dynamic.DynamicActivity;
 import com.RobinNotBad.BiliClient.activity.live.RecommendLiveActivity;
 import com.RobinNotBad.BiliClient.activity.message.MessageActivity;
 import com.RobinNotBad.BiliClient.activity.search.SearchActivity;
-import com.RobinNotBad.BiliClient.activity.settings.login.LoginActivity;
 import com.RobinNotBad.BiliClient.activity.settings.SettingMainActivity;
+import com.RobinNotBad.BiliClient.activity.settings.login.LoginActivity;
 import com.RobinNotBad.BiliClient.activity.user.MySpaceActivity;
 import com.RobinNotBad.BiliClient.activity.video.PopularActivity;
 import com.RobinNotBad.BiliClient.activity.video.PreciousActivity;
@@ -73,6 +76,10 @@ public class MenuActivity extends BaseActivity {
 
         Intent intent = getIntent();
         from = intent.getStringExtra("from");
+        if(from!=null){
+            Log.d("debug-menu",from);
+            if(btnNames.containsKey(from)) setPageName(Objects.requireNonNull(btnNames.get(from)).first);
+        }
 
         findViewById(R.id.top).setOnClickListener(view -> finish());
 
@@ -109,6 +116,7 @@ public class MenuActivity extends BaseActivity {
 
         if (!SharedPreferencesUtil.getBoolean("menu_popular", true)) btnList.remove("popular");
         if (!SharedPreferencesUtil.getBoolean("menu_precious", false)) btnList.remove("precious");
+        if (!SharedPreferencesUtil.getBoolean("menu_live", false)) btnList.remove("live");
 
         btnList.add("exit"); //如果你希望用户手动把退出按钮排到第一个（
 
@@ -150,7 +158,7 @@ public class MenuActivity extends BaseActivity {
     private void killAndJump(String name) {
         if (btnNames.containsKey(name) && !Objects.equals(name, from)) {
             InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
-            if (instance != null && (Build.VERSION.SDK_INT < 17 || !instance.isDestroyed())) instance.finish();
+            if (instance != null && instance.getLifecycle().getCurrentState() != Lifecycle.State.DESTROYED) instance.finish();
 
             Intent intent = new Intent();
             intent.setClass(MenuActivity.this, Objects.requireNonNull(btnNames.get(name)).second);
@@ -160,7 +168,8 @@ public class MenuActivity extends BaseActivity {
             switch (name) {
                 case "exit": //退出按钮
                     InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
-                    if (instance != null && (Build.VERSION.SDK_INT < 17 || !instance.isDestroyed())) instance.finish();
+                    if (instance != null && !instance.isDestroyed()) instance.finish();
+                    Process.killProcess(Process.myPid());
                     break;
                 case "login": //登录按钮
                     Intent intent = new Intent();
@@ -185,6 +194,12 @@ public class MenuActivity extends BaseActivity {
             add("local");
             add("settings");
         }};
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_MENU) finish();
+        return super.onKeyDown(keyCode, event);
     }
 }
 

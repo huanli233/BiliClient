@@ -1,8 +1,6 @@
 package com.RobinNotBad.BiliClient;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -12,15 +10,13 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.multidex.MultiDex;
 
-import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
+import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 
 import java.lang.ref.WeakReference;
 
@@ -28,6 +24,8 @@ public class BiliTerminal extends Application {
 
     @SuppressLint("StaticFieldLeak")
     public static Context context;
+
+    public static boolean DPI_FORCE_CHANGE = false;
 
     private static WeakReference<InstanceActivity> instance = new WeakReference<>(null);
 
@@ -40,10 +38,14 @@ public class BiliTerminal extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (context == null && getApplicationContext() != null) {
-            context = getApplicationContext();
+        if (context == null) {
+            SharedPreferencesUtil.sharedPreferences = getSharedPreferences("default", MODE_PRIVATE);
+            context = getFitDisplayContext(this);
             ErrorCatch errorCatch = ErrorCatch.getInstance();
             errorCatch.init(context);
+            Logu.LOGV_ENABLED = SharedPreferencesUtil.getBoolean("dev_logv", false);
+            Logu.LOGD_ENABLED = SharedPreferencesUtil.getBoolean("dev_logd", false);
+            Logu.LOGI_ENABLED = SharedPreferencesUtil.getBoolean("dev_logi", false);
         }
     }
 
@@ -64,7 +66,8 @@ public class BiliTerminal extends Application {
      */
     public static Context getFitDisplayContext(Context old) {
         float dpiTimes = SharedPreferencesUtil.getFloat("dpi", 1.0F);
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || dpiTimes == 1.0F) return old;
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) return old;
+        if(!DPI_FORCE_CHANGE && dpiTimes == 1.0F) return old;
         try {
             DisplayMetrics displayMetrics = old.getResources().getDisplayMetrics();
             Configuration configuration = old.getResources().getConfiguration();
@@ -81,26 +84,15 @@ public class BiliTerminal extends Application {
     }
 
     public static void jumpToVideo(Context context, long aid) {
-        Intent intent = new Intent();
-        intent.setClass(context, VideoInfoActivity.class);
-        intent.putExtra("aid", aid);
-        intent.putExtra("bvid", "");
-        context.startActivity(intent);
+        TerminalContext.getInstance().enterVideoDetailPage(context, aid);
     }
 
     public static void jumpToVideo(Context context, String bvid) {
-        Intent intent = new Intent();
-        intent.setClass(context, VideoInfoActivity.class);
-        intent.putExtra("aid", 0);
-        intent.putExtra("bvid", bvid);
-        context.startActivity(intent);
+        TerminalContext.getInstance().enterVideoDetailPage(context, bvid);
     }
 
     public static void jumpToArticle(Context context, long cvid) {
-        Intent intent = new Intent();
-        intent.setClass(context, ArticleInfoActivity.class);
-        intent.putExtra("cvid", cvid);
-        context.startActivity(intent);
+        TerminalContext.getInstance().enterArticleDetailPage(context, cvid);
     }
 
     public static void jumpToUser(Context context, long mid) {
@@ -110,18 +102,4 @@ public class BiliTerminal extends Application {
         context.startActivity(intent);
     }
 
-    public static boolean checkStoragePermission(){
-        int sdk = getSystemSdk();
-        if(sdk < 17) return true;
-        return ContextCompat.checkSelfPermission(BiliTerminal.context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(BiliTerminal.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    public static void requestStoragePermission(Activity activity){
-        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
-    }
-
-    public static int getSystemSdk(){
-        return Build.VERSION.SDK_INT;
-    }
 }

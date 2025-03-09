@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".BiliTerminal"
@@ -28,16 +29,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BiliClient"
         android:usesCleartextTraffic="true"
-        tools:ignore="LockedOrientationActivity"
+        tools:ignore="LockedOrientationActivity,RtlEnabled"
         tools:targetApi="m">
         <service
             android:name=".service.DownloadService"
-            android:enabled="true"
-            android:exported="true"/>
+            android:enabled="true"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.RobinNotBad.BiliClient.FileProvider"
+            android:authorities="com.RobinNotBad.BiliClient.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -59,6 +59,11 @@
             android:name=".activity.update.UpdateInfoActivity"
             android:exported="false"
             android:label="更新详情"
+            android:screenOrientation="locked" />
+        <activity
+            android:name=".activity.video.local.DownloadListActivity"
+            android:exported="true"
+            android:label="下载列表"
             android:screenOrientation="locked" />
         <activity
             android:name=".activity.video.series.SeriesInfoActivity"
@@ -205,7 +210,7 @@
             android:label="实验性功能"
             android:screenOrientation="locked" />
         <activity
-            android:name=".activity.settings.SettingPlayerInsideActivity"
+            android:name=".activity.settings.SettingTerminalPlayerActivity"
             android:exported="false"
             android:label="内置播放器设置"
             android:screenOrientation="locked" />
@@ -220,12 +225,12 @@
             android:label="界面预览"
             android:screenOrientation="locked" />
         <activity
-            android:name=".activity.settings.SetupUIActivity"
+            android:name=".activity.settings.setup.SetupUIActivity"
             android:exported="false"
             android:label="初始设置"
             android:screenOrientation="locked" />
         <activity
-            android:name=".activity.settings.IntroductionActivity"
+            android:name=".activity.settings.setup.IntroductionActivity"
             android:exported="true"
             android:label="介绍"
             android:screenOrientation="locked" />

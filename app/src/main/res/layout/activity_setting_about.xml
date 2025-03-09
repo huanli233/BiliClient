@@ -1,57 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".activity.settings.AboutActivity">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_height="wrap_content"
+    <RelativeLayout
+        android:id="@+id/top"
         android:layout_width="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/top">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
 
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginVertical="3dp"
-            android:gravity="center"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="8dp"
             android:id="@+id/pageName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginVertical="3dp"
             android:text="关于"
             android:textStyle="bold"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             app:drawableStartCompat="@drawable/arrow_back" />
 
         <com.RobinNotBad.BiliClient.ui.widget.TextClock
-            android:layout_height="wrap_content"
+            android:id="@+id/timeText"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginVertical="3dp"
-            android:format24Hour="HH:mm"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:gravity="center"
-            app:layout_constraintTop_toTopOf="parent"
-            android:format12Hour="hh:mm"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/timeText"
             android:text="11:45"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
     <ScrollView
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top">
+        android:layout_below="@id/top">
 
         <LinearLayout
             android:layout_height="wrap_content"
@@ -267,7 +254,6 @@
                     android:text="捐赠列表"
                     android:textAlignment="textStart"
                     android:textSize="13sp"
-                    tools:ignore="RtlCompat"
                     app:drawableEndCompat="@drawable/arrow_forward" />
             </com.google.android.material.card.MaterialCardView>
 
@@ -522,6 +508,62 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/dada_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/dadaAvatar"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_marginStart="8dp"
+                                android:adjustViewBounds="true"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintDimensionRatio="1:1"
+                                app:layout_constraintHeight_percent="0.7"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/dadaName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginBottom="1dp"
+                                android:singleLine="true"
+                                android:text="达达"
+                                app:layout_constraintBottom_toTopOf="@+id/dadaDesc"
+                                app:layout_constraintStart_toEndOf="@id/dadaAvatar"
+                                app:layout_constraintTop_toTopOf="@id/dadaAvatar" />
+
+                            <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
+                                android:id="@+id/dadaDesc"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:layout_marginTop="1dp"
+                                android:layout_marginBottom="2dp"
+                                android:alpha="0.7"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                android:text="（这位开发者很懒，什么也没有留下）"
+                                android:textSize="11sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/dadaAvatar"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/dadaAvatar"
+                                app:layout_constraintTop_toBottomOf="@id/dadaName" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
                         android:id="@+id/huanli_card"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -577,61 +619,6 @@
 
                     </com.google.android.material.card.MaterialCardView>
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/dada_card"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <ImageView
-                                android:id="@+id/dadaAvatar"
-                                android:layout_width="0dp"
-                                android:layout_height="0dp"
-                                android:layout_marginStart="8dp"
-                                android:adjustViewBounds="true"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintDimensionRatio="1:1"
-                                app:layout_constraintHeight_percent="0.7"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
-                                android:id="@+id/dadaName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="6dp"
-                                android:layout_marginTop="2dp"
-                                android:layout_marginBottom="1dp"
-                                android:singleLine="true"
-                                android:text="达达"
-                                app:layout_constraintBottom_toTopOf="@+id/dadaDesc"
-                                app:layout_constraintStart_toEndOf="@id/dadaAvatar"
-                                app:layout_constraintTop_toTopOf="@id/dadaAvatar" />
-
-                            <TextView
-                                android:id="@+id/dadaDesc"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="6dp"
-                                android:layout_marginTop="1dp"
-                                android:layout_marginBottom="2dp"
-                                android:alpha="0.7"
-                                android:ellipsize="end"
-                                android:singleLine="true"
-                                android:text=""
-                                android:textSize="11sp"
-                                app:layout_constraintBottom_toBottomOf="@+id/dadaAvatar"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@id/dadaAvatar"
-                                app:layout_constraintTop_toBottomOf="@id/dadaName" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    </com.google.android.material.card.MaterialCardView>
 
                 </LinearLayout>
 
@@ -726,6 +713,23 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/icon_license_list"
+                android:layout_marginTop="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
+                    android:layout_marginHorizontal="8dp"
+                    android:gravity="center_vertical"
+                    android:text="开源图标的信息"
+                    android:textAlignment="textStart"
+                    android:textSize="13sp"
+                    app:drawableEndCompat="@drawable/arrow_forward" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:id="@+id/toUncle"
@@ -762,4 +766,4 @@
 
     </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

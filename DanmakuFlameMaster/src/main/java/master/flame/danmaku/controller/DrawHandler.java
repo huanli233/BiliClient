@@ -90,7 +90,7 @@ public class DrawHandler extends Handler {
 
     private Callback mCallback;
 
-    private final DanmakuTimer timer = new DanmakuTimer();
+    public final DanmakuTimer timer = new DanmakuTimer();
 
     private BaseDanmakuParser mParser;
 
@@ -415,12 +415,12 @@ public class DrawHandler extends Handler {
     }
     private long mSpeedOffsetNoRender = 0L;
     private long mSpeedOffsetRender = 0L;
-    private static float mSpeed = 1.0F;
+    private float mSpeed = 1.0F;
 
-    public static void setSpeed(float speed) {
+    public void setSpeed(float speed) {
         mSpeed = speed;
     }
-    private long syncTimer(long startMS) {
+    public long syncTimer(long startMS) {
         if (mInSeekingAction || mInSyncAction) {
             return 0;
         }
@@ -465,7 +465,7 @@ public class DrawHandler extends Handler {
         return d;
     }
 
-    private void syncTimerIfNeeded() {
+    public void syncTimerIfNeeded() {
         if (mInWaitingState) {
             syncTimer(SystemClock.uptimeMillis());
         }

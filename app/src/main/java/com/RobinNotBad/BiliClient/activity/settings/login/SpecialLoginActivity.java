@@ -36,21 +36,17 @@ public class SpecialLoginActivity extends BaseActivity {
 
         textInput = findViewById(R.id.loginInput);
         MaterialCardView confirm = findViewById(R.id.confirm);
+        MaterialCardView refuse = findViewById(R.id.refuse);
         TextView desc = findViewById(R.id.desc);
 
         Intent intent = getIntent();
 
         if (intent.getBooleanExtra("login", true)) {
-            if(intent.getBooleanExtra("allow_refuse", false)) {
-                MaterialCardView refuse = findViewById(R.id.refuse);
-                refuse.setVisibility(View.VISIBLE);
-                refuse.setOnClickListener(v -> {
-                    if (!SharedPreferencesUtil.getBoolean("setup", false)) {
-                        SharedPreferencesUtil.putBoolean("setup", true);
-                        startActivity(new Intent(this,SplashActivity.class));
-                    }
-                });
-            }
+            refuse.setOnClickListener(v -> {
+                if (getIntent().getBooleanExtra("from_setup", false))
+                    startActivity(new Intent(this, SplashActivity.class));
+                else finish();
+            });
 
             confirm.setOnClickListener(view -> {
                 String loginInfo = textInput.getText().toString();
@@ -61,7 +57,7 @@ public class SpecialLoginActivity extends BaseActivity {
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, NetWorkUtil.getInfoFromCookie("bili_jct", cookies));
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies);
                     SharedPreferencesUtil.putString(SharedPreferencesUtil.refresh_token, jsonObject.getString("refresh_token"));
-                    runOnUiThread(() -> MsgUtil.showMsg("登录成功！", this));
+                    runOnUiThread(() -> MsgUtil.showMsg("登录成功！"));
                     SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.setup, true);
 
                     NetWorkUtil.refreshHeaders();
@@ -71,7 +67,7 @@ public class SpecialLoginActivity extends BaseActivity {
                     startActivity(intent1);
                     finish();
                 } catch (JSONException e) {
-                    runOnUiThread(() -> MsgUtil.showMsg("请检查输入的内容，不要有多余空格或字符", this));
+                    runOnUiThread(() -> MsgUtil.showMsg("请检查输入的内容，不要有多余空格或字符"));
                 }
             });
         } else {
@@ -91,11 +87,12 @@ public class SpecialLoginActivity extends BaseActivity {
             }
             textInput.setText(jsonObject.toString());
             textInput.clearFocus();
+            refuse.setVisibility(View.GONE);
             confirm.setOnClickListener((view) -> {
                 ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clipData = ClipData.newPlainText("label", textInput.getText());
                 clipboardManager.setPrimaryClip(clipData);
-                MsgUtil.showMsg("已复制", this);
+                MsgUtil.showMsg("已复制");
             });
         }
     }

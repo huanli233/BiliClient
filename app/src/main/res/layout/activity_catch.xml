@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.CatchActivity">
-
-    <androidx.core.widget.NestedScrollView
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -26,13 +21,9 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginVertical="2dp"
-                android:layout_marginTop="4dp"
-                android:alpha="0.8"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title">
+                android:layout_marginTop="4dp">
 
                 <TextView
                     android:id="@+id/catch_reason"
@@ -48,41 +39,50 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginVertical="2dp"
-                android:layout_marginTop="4dp"
-                android:alpha="0.8"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title">
-
-                <TextView
-                    android:id="@+id/stack"
+                android:layout_marginTop="4dp">
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
-                    android:text="错误堆栈：\nxxx.xxx.xxx.xxxException\nAt ...\nAt ...\nAt ...\nAt ...\nAt ..."
-                    android:maxLines="5"
-                    android:ellipsize="end"
-                    android:textSize="13sp"
-                    tools:ignore="RtlCompat" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="崩溃堆栈："
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/stack"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="xxx.xxx.xxx.xxxException\nAt ...\nAt ...\nAt ...\nAt ...\nAt ..."
+                        android:maxLines="5"
+                        android:ellipsize="end"
+                        android:textSize="13sp"
+                        tools:ignore="RtlCompat" />
+                </LinearLayout>
+
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="点击展开错误堆栈"
                 android:alpha="0.7"
                 android:gravity="center"
+                android:text="点击上方展开错误堆栈"
                 android:textSize="11sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="你可以上传，或将错误堆栈截图给开发者"
                 android:alpha="0.85"
                 android:gravity="center"
+                android:text="@string/text_crash"
                 android:textSize="12sp" />
 
             <com.google.android.material.button.MaterialButton
@@ -111,7 +111,6 @@
                 android:alpha="0.1"
                 android:textSize="12sp"
                 android:text="“哔哩终端坏掉了，这不是终端的错，绝对不是”"
-                android:textAlignment="center" />
+                android:gravity="center"/>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>

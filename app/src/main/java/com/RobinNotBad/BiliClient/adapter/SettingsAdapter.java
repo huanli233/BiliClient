@@ -32,6 +32,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     final Context context;
     final List<SettingSection> list;
     private static final Map<String, Integer> typeMap = new HashMap<>() {{
+        put("divider", -1);
         put("switch", 0);
         put("choose", 1);
         put("input_int",2);
@@ -60,6 +61,8 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case 3:
             case 4:
                 return new InputHolder(LayoutInflater.from(this.context).inflate(R.layout.cell_setting_input, parent, false));
+            case -1:
+                return new DividerHolder(LayoutInflater.from(this.context).inflate(R.layout.cell_divider, parent, false));
             default:
                 return new SwitchHolder(LayoutInflater.from(this.context).inflate(R.layout.cell_setting_switch, parent, false));
         }
@@ -70,6 +73,8 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         SettingSection settingSection = list.get(position);
         switch (holder.getItemViewType()) {
+            case -1:
+                break;
             case 1:
                 ChooseHolder chooseHolder = (ChooseHolder) holder;
                 chooseHolder.bind(settingSection);
@@ -103,7 +108,11 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         public void bind(SettingSection settingSection) {
-            desc.setText(settingSection.desc);
+            if(settingSection.desc==null || settingSection.desc.isEmpty()) desc.setVisibility(View.GONE);
+            else {
+                desc.setText(settingSection.desc);
+                desc.setVisibility(View.VISIBLE);
+            }
             switchMaterial.setText(settingSection.name);
             switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) ->
                     SharedPreferencesUtil.putBoolean(settingSection.id, isChecked));
@@ -126,13 +135,22 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         public void bind(SettingSection settingSection) {
-            desc.setText(settingSection.desc);
+            if(settingSection.desc==null || settingSection.desc.isEmpty()) desc.setVisibility(View.GONE);
+            else {
+                desc.setText(settingSection.desc);
+                desc.setVisibility(View.VISIBLE);
+            }
             name.setText(settingSection.name);
-            chocola.setOnCheckedChangeListener((buttonView, isChecked) ->
-                    SharedPreferencesUtil.putBoolean(settingSection.id, isChecked));
+            String[] strings = (String[]) settingSection.extra;
+            chocola.setText(strings[0]);
+            vanilla.setText(strings[1]);
+
             boolean value = SharedPreferencesUtil.getBoolean(settingSection.id, Boolean.parseBoolean(settingSection.defaultValue));
             chocola.setChecked(value);
             vanilla.setChecked(!value);
+
+            chocola.setOnCheckedChangeListener((buttonView, isChecked) ->
+                    SharedPreferencesUtil.putBoolean(settingSection.id, isChecked));  //有些选项的true和false不能改了，所以交换
         }
     }
 
@@ -149,7 +167,11 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         public void bind(SettingSection settingSection) {
-            desc.setText(settingSection.desc);
+            if(settingSection.desc==null || settingSection.desc.isEmpty()) desc.setVisibility(View.GONE);
+            else {
+                desc.setText(settingSection.desc);
+                desc.setVisibility(View.VISIBLE);
+            }
             name.setText(settingSection.name);
             switch (settingSection.type){
                 case "input_int":
@@ -201,6 +223,13 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         }
                     });
             }
+        }
+    }
+
+    public static class DividerHolder extends RecyclerView.ViewHolder {
+
+        public DividerHolder(@NonNull View itemView) {
+            super(itemView);
         }
     }
 }

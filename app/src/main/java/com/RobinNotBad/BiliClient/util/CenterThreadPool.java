@@ -8,8 +8,6 @@ import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.RobinNotBad.BiliClient.BiliTerminal;
-
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -26,15 +24,15 @@ import kotlinx.coroutines.*;
  */
 public class CenterThreadPool {
 
-    private static final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
-    private static CoroutineScope COROUTINE_SCOPE;
-    private static AtomicReference<ExecutorService> threadPool;
+    private static final Handler MAIN_THREAD_HANDLER = new Handler(Looper.getMainLooper());
+    private static final CoroutineScope COROUTINE_SCOPE;
+    private static final AtomicReference<ExecutorService> THREAD_POOL;
 
     private static ExecutorService getThreadPoolInstance() {
-        if(threadPool == null) return null;
+        if(THREAD_POOL == null) return null;
         int bestThreadPoolSize = Runtime.getRuntime().availableProcessors();
-        while (threadPool.get() == null) {
-            threadPool.compareAndSet(null, new ThreadPoolExecutor(
+        while (THREAD_POOL.get() == null) {
+            THREAD_POOL.compareAndSet(null, new ThreadPoolExecutor(
                     bestThreadPoolSize / 2,
                     bestThreadPoolSize * 2,
                     60,
@@ -42,16 +40,16 @@ public class CenterThreadPool {
                     new ArrayBlockingQueue<>(20)
             ));
         }
-        return threadPool.get();
+        return THREAD_POOL.get();
     }
 
-    private CenterThreadPool() {
+    static {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
             COROUTINE_SCOPE = null;
-            threadPool = new AtomicReference<>();
+            THREAD_POOL = new AtomicReference<>();
         } else {
             COROUTINE_SCOPE = CoroutineScopeKt.CoroutineScope((CoroutineContext) Dispatchers.getIO());
-            threadPool = null;
+            THREAD_POOL = null;
         }
     }
 
@@ -96,9 +94,9 @@ public class CenterThreadPool {
             try {
                 T res = supplier.call();
                 retval.postValue(Result.success(res));
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 retval.postValue(Result.failure(e));
-                MsgUtil.err(e, BiliTerminal.context);
+                MsgUtil.err(e);
             }
         });
         return retval;
@@ -153,11 +151,14 @@ public class CenterThreadPool {
      * @param runnable 要运行的任务
      */
     public static void runOnUiThread(Runnable runnable) {
-        mainThreadHandler.post(runnable);
+        MAIN_THREAD_HANDLER.post(runnable);
     }
-    public static void runOnUIThreadAfter(Long time, TimeUnit unit, Runnable runnable) {
+    public static void runOnUIThreadAfter(long time, TimeUnit unit, Runnable runnable) {
         long millis = TimeUnit.MILLISECONDS.convert(time, unit);
-        mainThreadHandler.postDelayed(runnable, millis);
+        MAIN_THREAD_HANDLER.postDelayed(runnable, millis);
+    }
+    public static void runOnUIThreadAfter(long time, Runnable runnable) {
+        MAIN_THREAD_HANDLER.postDelayed(runnable, time);
     }
 
 }

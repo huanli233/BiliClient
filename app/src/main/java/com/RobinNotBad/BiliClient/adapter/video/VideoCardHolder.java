@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.model.Collection;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -30,35 +29,39 @@ public class VideoCardHolder extends RecyclerView.ViewHolder {
 
     public VideoCardHolder(@NonNull View itemView) {
         super(itemView);
-        title = itemView.findViewById(R.id.listVideoTitle);
-        upName = itemView.findViewById(R.id.listUpName);
-        viewCount = itemView.findViewById(R.id.listPlayTimes);
-        cover = itemView.findViewById(R.id.listCover);
+        title = itemView.findViewById(R.id.text_title);
+        upName = itemView.findViewById(R.id.text_upname);
+        viewCount = itemView.findViewById(R.id.text_viewcount);
+        cover = itemView.findViewById(R.id.img_cover);
     }
 
     @SuppressLint("SetTextI18n")
     public void showVideoCard(VideoCard videoCard, Context context) {
-        String upNameStr = videoCard.upName;
-        if (upNameStr == null || upNameStr.isEmpty()) {
+        String str_upName = videoCard.upName;
+        if (str_upName == null || str_upName.isEmpty()) {
             upName.setVisibility(View.GONE);
-        } else upName.setText(upNameStr);
+        } else upName.setText(str_upName);
 
 
-        String viewCountStr = videoCard.view;
-        if (viewCountStr == null || viewCountStr.isEmpty()) {
+        String str_viewCount = videoCard.view;
+        if (str_viewCount == null || str_viewCount.isEmpty()) {
             viewCount.setVisibility(View.GONE);
         }
         else {
-            viewCount.setText(viewCountStr);
+            viewCount.setText(str_viewCount);
         }
 
-        Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
-                .transition(GlideUtil.getTransitionOptions())
-                .placeholder(R.mipmap.placeholder)
-                .format(DecodeFormat.PREFER_RGB_565)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))).sizeMultiplier(0.85f))
-                .into(cover);
+        try {
+            Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
+                    .transition(GlideUtil.getTransitionOptions())
+                    .placeholder(R.mipmap.placeholder)
+                    .format(DecodeFormat.PREFER_RGB_565)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))).sizeMultiplier(0.85f))
+                    .into(cover);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         switch (videoCard.type){
             case "live":

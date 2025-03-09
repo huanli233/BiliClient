@@ -3,12 +3,12 @@ package com.RobinNotBad.BiliClient.activity.settings;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.QualityChooseAdapter;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class SettingQualityActivity extends BaseActivity {
         adapter.setNameList(new ArrayList<>(qnMap.keySet()));
         adapter.setOnItemClickListener((this::save));
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new CustomLinearManager(this));
         recyclerView.setAdapter(adapter);
     }
 

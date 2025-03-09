@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <shape>
-            <solid android:color="#cc262626" />
-            <stroke android:width="@dimen/card_stroke" android:color="#70707070" />
-            <corners android:radius="@dimen/card_round" />
-        </shape>
-    </item>
-</selector>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#cc262626" />
+    <stroke android:width="@dimen/card_stroke" android:color="#70707070" />
+    <corners android:radius="@dimen/card_round" />
+</shape>

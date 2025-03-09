@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.adapter.article;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
-import com.RobinNotBad.BiliClient.activity.dynamic.DynamicInfoActivity;
 import com.RobinNotBad.BiliClient.api.ArticleApi;
 import com.RobinNotBad.BiliClient.model.Opus;
-import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.GlideUtil;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.*;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -55,32 +49,28 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
         Glide.with(context).load(GlideUtil.url(opus.cover))
                 .transition(GlideUtil.getTransitionOptions())
                 .placeholder(R.mipmap.placeholder)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5, context))))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.coverView);
         if (opus.content.equals("内容失效")) {
-            holder.itemView.setOnClickListener(v -> MsgUtil.showMsg("内容失效，无法打开", context));
+            holder.itemView.setOnClickListener(v -> MsgUtil.showMsg("内容失效，无法打开"));
         } else {
             holder.itemView.setOnClickListener(v -> CenterThreadPool.run(() -> {
                 try {
                     parsedOpus = ArticleApi.opusId2cvid(opus.opusId);
                     cvid = parsedOpus.parsedId;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    MsgUtil.err(e);
                     cvid = -1;
                 }
                 if (cvid == -1)
-                    ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("打开失败", context));
+                    ((Activity) context).runOnUiThread(() -> MsgUtil.showMsg("打开失败"));
                 else {
                     if (parsedOpus.type == Opus.TYPE_ARTICLE) {
-                        Intent intent = new Intent(context, ArticleInfoActivity.class);
-                        intent.putExtra("cvid", cvid);
-                        context.startActivity(intent);
+                        TerminalContext.getInstance().enterArticleDetailPage(context, cvid);
                     }
                     if (parsedOpus.type == Opus.TYPE_DYNAMIC) {
-                        Intent intent = new Intent(context, DynamicInfoActivity.class);
-                        intent.putExtra("id", opus.opusId);
-                        context.startActivity(intent);
+                        TerminalContext.getInstance().enterDynamicDetailPage(context, opus.opusId);
                     }
                 }
             }));
@@ -102,9 +92,9 @@ public class OpusAdapter extends RecyclerView.Adapter<OpusAdapter.OpusHolder> {
 
         public OpusHolder(View itemView) {
             super(itemView);
-            coverView = itemView.findViewById(R.id.listCover);
-            favTimeText = itemView.findViewById(R.id.favTime);
-            titleText = itemView.findViewById(R.id.listOpusTitle);
+            coverView = itemView.findViewById(R.id.img_cover);
+            favTimeText = itemView.findViewById(R.id.text_favTime);
+            titleText = itemView.findViewById(R.id.text_title);
         }
 
     }

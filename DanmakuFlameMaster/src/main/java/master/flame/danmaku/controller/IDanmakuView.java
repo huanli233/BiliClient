@@ -2,6 +2,7 @@
 package master.flame.danmaku.controller;
 
 import android.view.View;
+import android.view.ViewGroup;
 
 import master.flame.danmaku.controller.DrawHandler.Callback;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
@@ -15,7 +16,6 @@ public interface IDanmakuView {
     public final static int THREAD_TYPE_MAIN_THREAD = 0x1;
     public final static int THREAD_TYPE_HIGH_PRIORITY = 0x2;
     public final static int THREAD_TYPE_LOW_PRIORITY = 0x3;
-    
 
     public boolean isPrepared();
     
@@ -77,9 +77,15 @@ public interface IDanmakuView {
 
     public void seekTo(Long ms);
 
+    public void setSpeed(float speed);
+
+    public void adjust();
+
     public void start();
 
     public void start(long postion);
+
+    public DrawHandler getHandler();
 
     public void stop();
 
@@ -129,4 +135,6 @@ public interface IDanmakuView {
     public void setOnDanmakuClickListener(OnDanmakuClickListener listener);
     public OnDanmakuClickListener getOnDanmakuClickListener();
 
+    public ViewGroup.LayoutParams getLayoutParams();
+    public void setLayoutParams(ViewGroup.LayoutParams params);
 }

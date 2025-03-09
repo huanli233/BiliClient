@@ -217,7 +217,7 @@ public class TutorialHelper {
                     show(indentify, context, context.getResources().getStringArray(R.array.tutorial_list)[tutorial_key], n--);
             }
         } catch (Exception e) {
-            MsgUtil.showMsg("加载教程时遇到问题", context);
+            MsgUtil.showMsg("加载教程时遇到问题");
             e.printStackTrace();
         }
     }

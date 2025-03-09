@@ -66,15 +66,15 @@ public class CopyTextActivity extends BaseActivity {
 
         findViewById(R.id.copy_all).setOnClickListener(view -> {
             ToolsUtil.copyText(this, content);
-            MsgUtil.showMsg("已复制", this);
+            MsgUtil.showMsg("已复制");
         });
         findViewById(R.id.copy).setOnClickListener(view -> {
             try {
                 ToolsUtil.copyText(this, content.substring(Integer.parseInt(String.valueOf(beginEdit.getText()))
                         , Integer.parseInt(String.valueOf(endEdit.getText()))));   //我嘞个超级括号
-                MsgUtil.showMsg("已复制", this);
+                MsgUtil.showMsg("已复制");
             } catch (Exception e) {
-                MsgUtil.showMsg("复制失败，请检查选择的范围", this);
+                MsgUtil.showMsg("复制失败，请检查选择的范围");
             }
         });
 

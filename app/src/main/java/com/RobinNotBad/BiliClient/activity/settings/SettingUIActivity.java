@@ -7,11 +7,13 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SettingUIActivity extends BaseActivity {
 
@@ -42,32 +44,51 @@ public class SettingUIActivity extends BaseActivity {
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             density_input.setText(String.valueOf((density == -1 ? displayMetrics.densityDpi + "(默认)" : density)));
 
+            SwitchMaterial round = findViewById(R.id.switch_round);
+            round.setChecked(SharedPreferencesUtil.getBoolean("player_ui_round",false));
+            round.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if(isChecked){
+                    uiPaddingH.setText("11");
+                    uiPaddingV.setText("11");
+                    SharedPreferencesUtil.putBoolean("player_ui_round",true);
+                }
+                else{
+                    uiPaddingH.setText("0");
+                    uiPaddingV.setText("0");
+                    SharedPreferencesUtil.putBoolean("player_ui_round",false);
+                }
+            });
+
             findViewById(R.id.preview).setOnClickListener(view -> {
                 save();
                 Intent intent = new Intent();
                 intent.setClass(SettingUIActivity.this, UIPreviewActivity.class);
                 startActivity(intent);
             });
-            findViewById(R.id.reset_default).setOnClickListener(view -> {
+            findViewById(R.id.reset).setOnClickListener(view -> {
                 SharedPreferencesUtil.putInt("paddingH_percent", 0);
                 SharedPreferencesUtil.putInt("paddingV_percent", 0);
                 SharedPreferencesUtil.putFloat("dpi", 1.0f);
                 SharedPreferencesUtil.putInt("density", -1);
+                SharedPreferencesUtil.putBoolean("player_ui_round",false);
                 uiScaleInput.setText("1.0");
                 uiPaddingH.setText("0");
                 uiPaddingV.setText("0");
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 density_input.setText(displayMetrics.densityDpi + "(默认)");
-                MsgUtil.showMsg("恢复完成", this);
+                round.setChecked(false);
+                MsgUtil.showMsg("恢复完成");
             });
         });
     }
 
     private void save() {
         if (!uiScaleInput.getText().toString().isEmpty()) {
-            float dpiTimes = Float.parseFloat(uiScaleInput.getText().toString());
-            if (dpiTimes >= 0.25F && dpiTimes <= 5.0F)
-                SharedPreferencesUtil.putFloat("dpi", dpiTimes);
+            float dpiScale = Float.parseFloat(uiScaleInput.getText().toString());
+            if (dpiScale >= 0.25F && dpiScale <= 5.0F) {
+                SharedPreferencesUtil.putFloat("dpi", dpiScale);
+                BiliTerminal.DPI_FORCE_CHANGE = true;
+            }
             Log.e("dpi", uiScaleInput.getText().toString());
         }
 
@@ -95,7 +116,7 @@ public class SettingUIActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        save();
+        if(uiScaleInput != null) save();
         super.onDestroy();
     }
 }

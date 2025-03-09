@@ -6,6 +6,7 @@ public class SettingSection {
     public final String name;
     public final String desc;
     public final String defaultValue;
+    public Object extra;
 
     public SettingSection(String type, String name, String key, String desc, String defaultValue) {
         this.type = type;
@@ -13,5 +14,14 @@ public class SettingSection {
         this.name = name;
         this.desc = desc;
         this.defaultValue = defaultValue;
+    }
+
+    public SettingSection(String type, String name, String key, String desc, String defaultValue, Object extra) {
+        this.type = type;
+        this.id = key;
+        this.name = name;
+        this.desc = desc;
+        this.defaultValue = defaultValue;
+        this.extra = extra;
     }
 }

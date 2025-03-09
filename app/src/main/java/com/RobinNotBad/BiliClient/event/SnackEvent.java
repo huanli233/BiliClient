@@ -16,6 +16,12 @@ public class SnackEvent {
         this.duration = Snackbar.LENGTH_SHORT;
     }
 
+    public SnackEvent(String message, int duration) {
+        this.message = message;
+        this.startTime = System.currentTimeMillis();
+        this.duration = duration;
+    }
+
     public SnackEvent(String message, long startTime) {
         this.message = message;
         this.startTime = startTime;

@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONArray;
@@ -30,12 +29,12 @@ public class RecommendApi {
         String url = ("https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd");
         url += new NetWorkUtil.FormData().setUrlParam(true)
                 .put("web_location", 1430650)
-                .put("feed_version", SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.RCMD_API_NEW_PARAM, false) ? "V8" : "V3")
+                .put("feed_version", "V8")
                 .put("homepage_ver", 1)
                 .put("uniq_id", UNIQ_ID)
                 .put("screen", "1100-2056");
 
-        JSONObject result = NetWorkUtil.getJson(SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.RCMD_API_NEW_PARAM, false) ? ConfInfoApi.signWBI(url) : url);  //得到一整个json
+        JSONObject result = NetWorkUtil.getJson(ConfInfoApi.signWBI(url));  //得到一整个json
 
         JSONObject data = result.getJSONObject("data");  //推荐列表中的data项又是一个json，把它提出来
 

@@ -17,7 +17,7 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
-public class MediaEpisodeAdapter extends RecyclerView.Adapter<MediaEpisodeAdapter.EposidesHolder> {
+public class MediaEpisodeAdapter extends RecyclerView.Adapter<MediaEpisodeAdapter.EpisodeHolder> {
     private List<Bangumi.Episode> episodeList;
 
     public OnItemClickListener listener;
@@ -52,13 +52,13 @@ public class MediaEpisodeAdapter extends RecyclerView.Adapter<MediaEpisodeAdapte
 
     @NonNull
     @Override
-    public EposidesHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public EpisodeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(useVerticalLayout ? R.layout.cell_item_vertical : R.layout.cell_episode, parent, false);
-        return new EposidesHolder(view);
+        return new EpisodeHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EposidesHolder holder, int position) {
+    public void onBindViewHolder(@NonNull EpisodeHolder holder, int position) {
         if (listener != null) {
             holder.listener = listener;
         }
@@ -70,12 +70,12 @@ public class MediaEpisodeAdapter extends RecyclerView.Adapter<MediaEpisodeAdapte
         return episodeList.size();
     }
 
-    public class EposidesHolder extends RecyclerView.ViewHolder {
+    public class EpisodeHolder extends RecyclerView.ViewHolder {
 
         private OnItemClickListener listener;
         private final MaterialButton button;
 
-        public EposidesHolder(View view) {
+        public EpisodeHolder(View view) {
             super(view);
             button = itemView.findViewById(R.id.btn);
         }
@@ -85,17 +85,16 @@ public class MediaEpisodeAdapter extends RecyclerView.Adapter<MediaEpisodeAdapte
             if (isSelected) {
                 button.setTextColor(0xcc262626);
                 ViewCompat.setBackgroundTintList(button, AppCompatResources.getColorStateList(itemView.getContext(), R.color.background_button_selected));
-                button.setOnClickListener(null);
             } else {
                 button.setTextColor(0xffebe0e2);
                 ViewCompat.setBackgroundTintList(button, AppCompatResources.getColorStateList(itemView.getContext(), R.color.background_button));
-                button.setOnClickListener(v -> {
-                    setSelectedItemIndex(currentIndex);
-                    if (listener != null) {
-                        listener.onItemClick(currentIndex);
-                    }
-                });
             }
+            button.setOnClickListener(v -> {
+                setSelectedItemIndex(currentIndex);
+                if (listener != null) {
+                    listener.onItemClick(currentIndex);
+                }
+            });
         }
     }
 }

@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.activity.live.LiveInfoActivity;
 import com.RobinNotBad.BiliClient.activity.message.PrivateMsgActivity;
 import com.RobinNotBad.BiliClient.activity.user.FollowUsersActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
@@ -34,6 +33,7 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -155,7 +155,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (!userInfo.sys_notice.isEmpty()) {
                 userInfoHolder.exclusiveTip.setVisibility(View.VISIBLE);
                 SpannableString spannableString = new SpannableString("!:" + userInfo.sys_notice);
-                Drawable drawable = context.getResources().getDrawable(R.drawable.icon_warning);
+                Drawable drawable = ToolsUtil.getDrawable(context, R.drawable.icon_warning);
                 drawable.setBounds(0, 0, 30, 30);
                 spannableString.setSpan(new ImageSpan(drawable), 0, 2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 userInfoHolder.exclusiveTipLabel.setText(spannableString);
@@ -164,11 +164,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (userInfo.live_room != null) {
                 userInfoHolder.liveRoom.setVisibility(View.VISIBLE);
                 userInfoHolder.liveRoomLabel.setText(userInfo.live_room.title);
-                userInfoHolder.liveRoom.setOnClickListener(view -> {
-                    Intent intent = new Intent(context, LiveInfoActivity.class);
-                    intent.putExtra("room_id", userInfo.live_room.roomid);
-                    context.startActivity(intent);
-                });
+                userInfoHolder.liveRoom.setOnClickListener(view -> TerminalContext.getInstance().enterLiveDetailPage(context, userInfo.live_room.roomid));
             } else userInfoHolder.liveRoom.setVisibility(View.GONE);
 
             if ((userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0)) || (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) || (userInfo.mid == 0))
@@ -181,15 +177,18 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     CenterThreadPool.run(() -> {
                         try {
                             int result = UserInfoApi.followUser(userInfo.mid, !(userInfo.followed));
+                            String msg;
                             if (result == 0) {
                                 userInfo.followed = !(userInfo.followed);
-                                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("操作成功", context));
+                                msg = "操作成功喵~";
                             } else {
-                                userInfoHolder.setFollowed(userInfo.followed);
-                                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("操作失败：" + result, context));
+                                CenterThreadPool.runOnUiThread(() -> userInfoHolder.setFollowed(userInfo.followed));
+                                if(result == 25056) msg = "被B站风控系统拦截了\n（无法解决）";
+                                else msg = "操作失败（原因未知）：" + result;
                             }
+                            MsgUtil.showMsg(msg);
                         } catch (Exception e) {
-                            CenterThreadPool.runOnUiThread(() -> MsgUtil.err(e, context));
+                            MsgUtil.err(e);
                         }
                         follow_onprocess = false;
                     });

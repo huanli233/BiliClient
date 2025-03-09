@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.EmoteActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.api.EmoteApi;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.model.Reply;
@@ -57,7 +58,7 @@ public class WriteReplyActivity extends BaseActivity {
         setContentView(R.layout.activity_reply_write);
 
         if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-            MsgUtil.showMsg("还没有登录喵~", this);
+            MsgUtil.showMsg("还没有登录喵~");
             finish();
         }
 
@@ -95,26 +96,27 @@ public class WriteReplyActivity extends BaseActivity {
                                 sent = true;
 
                                 if (resultCode == 0) {
-                                    runOnUiThread(() -> MsgUtil.showMsg("发送成功>w<", this));
+                                    runOnUiThread(() -> MsgUtil.showMsg("发送成功>w<"));
                                     resultReply.forceDelete = true;
                                     resultReply.pubTime = "刚刚";
                                     EventBus.getDefault().post(new ReplyEvent(1, resultReply, pos, oid));
                                     finish();
                                 } else {
                                     String toast_msg = "评论发送失败：\n" + (msgMap.containsKey(resultCode) ? msgMap.get(resultCode) : resultCode);
-                                    runOnUiThread(() -> MsgUtil.showMsg(toast_msg, this));
+                                    runOnUiThread(() -> MsgUtil.showMsg(toast_msg));
                                     sent = false;
                                 }
                             } catch (Exception e) {
-                                runOnUiThread(() -> MsgUtil.err(e, this));
+                                runOnUiThread(() -> MsgUtil.err(e));
                             }
-                        } else runOnUiThread(() -> MsgUtil.showMsg("还没输入内容呢~", this));
+                        } else runOnUiThread(() -> MsgUtil.showMsg("还没输入内容呢~"));
                     });
-                } else MsgUtil.showMsg("正在发送中", this);
+                } else MsgUtil.showMsg("正在发送中");
             } else
-                MsgUtil.showDialog(this, "无法发送", "上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作", -1);
+                MsgUtil.showDialog("无法发送", "上一次的Cookie刷新失败了，\n您可能需要重新登录以进行敏感操作", -1);
         });
 
-        findViewById(R.id.emote).setOnClickListener(view -> emoteLauncher.launch(new Intent(this, EmoteActivity.class)));
+        findViewById(R.id.emote).setOnClickListener(view ->
+                emoteLauncher.launch(new Intent(this, EmoteActivity.class).putExtra("from", EmoteApi.BUSINESS_REPLY)));
     }
 }

@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
 }
 
-int betaVer = 3 //如果为0则是正式版
+int betaVer = 0 //如果为0则是正式版
 
 android {
 
@@ -21,8 +21,8 @@ android {
         minSdk 14
         //noinspection ExpiredTargetSdkVersion
         targetSdk 26
-        versionCode 20241027
-        versionName "2.6.3"
+        versionCode 20250304
+        versionName "2.7.3"
 
         if (betaVer) {
             versionName += "-BETA" + betaVer
@@ -32,7 +32,7 @@ android {
 
         ndk {
             //noinspection ChromeOsAbiSupport
-            abiFilters 'armeabi-v7a','x86'
+            abiFilters 'armeabi-v7a','x86',"mips"
         }
     }
 
@@ -84,7 +84,8 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.zxing:core:3.5.0'
+    //noinspection GradleDependency
+    implementation 'com.google.zxing:core:3.3.0'
     //noinspection GradleDependency
     implementation 'androidx.appcompat:appcompat:1.5.1'
     //noinspection GradleDependency

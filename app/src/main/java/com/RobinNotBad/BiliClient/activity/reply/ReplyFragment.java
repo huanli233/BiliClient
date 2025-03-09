@@ -1,10 +1,15 @@
 package com.RobinNotBad.BiliClient.activity.reply;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +20,7 @@ import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.TerminalContext;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +61,7 @@ public class ReplyFragment extends RefreshListFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 
     public static ReplyFragment newInstance(long aid, int type, long seek_rpid) {
         ReplyFragment fragment = new ReplyFragment();
@@ -100,13 +106,22 @@ public class ReplyFragment extends RefreshListFragment {
             seek = getArguments().getLong("seek", -1);
             mid = getArguments().getLong("mid", -1);
         }
-        this.source = TerminalContext.getInstance().getSource();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         setForceSingleColumn();
         super.onViewCreated(view, savedInstanceState);
+
+        if(SharedPreferencesUtil.getBoolean("ui_landscape",false)) {
+            WindowManager windowManager = (WindowManager) view.getContext().getSystemService(Context.WINDOW_SERVICE);
+            Display display = windowManager.getDefaultDisplay();
+            DisplayMetrics metrics = new DisplayMetrics();
+            if(Build.VERSION.SDK_INT >= 17) display.getRealMetrics(metrics);
+            else display.getMetrics(metrics);
+            int paddings = metrics.widthPixels / 6;
+            recyclerView.setPadding(paddings,0,paddings,0);
+        }
 
         setOnRefreshListener(() -> refresh(aid));
         setOnLoadMoreListener(this::continueLoading);
@@ -123,7 +138,7 @@ public class ReplyFragment extends RefreshListFragment {
                     setRefreshing(false);
                     if (result != -1 && isAdded()) {
                         replyAdapter = createReplyAdapter();
-                        replyAdapter.source = TerminalContext.getInstance().getSource();
+                        replyAdapter.source = source;
                         setOnSortSwitch();
                         setAdapter(replyAdapter);
 
@@ -136,6 +151,12 @@ public class ReplyFragment extends RefreshListFragment {
                     setRefreshing(false);
                 }
             });
+        }
+    }
+    public void setSource(Object source) {
+        this.source = source;
+        if (replyAdapter != null) {
+            replyAdapter.source = source;
         }
     }
 

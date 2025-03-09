@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.live.LiveInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import java.util.List;
@@ -58,11 +57,7 @@ public class LiveCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
 
         holder.showVideoCard(videoCard, context);    //此函数在VideoCardHolder里
 
-        holder.itemView.setOnClickListener(view -> {
-            Intent intent = new Intent(context, LiveInfoActivity.class);
-            intent.putExtra("room_id", room.roomid);
-            context.startActivity(intent);
-        });
+        holder.itemView.setOnClickListener(view -> TerminalContext.getInstance().enterLiveDetailPage(context, room.roomid));
 
         holder.itemView.setOnLongClickListener(view -> {
             if (longClickListener != null) {

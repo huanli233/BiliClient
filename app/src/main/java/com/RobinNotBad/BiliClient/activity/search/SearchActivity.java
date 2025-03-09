@@ -16,7 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -25,6 +24,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.SearchHistoryAdapter;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.JsonUtil;
 import com.RobinNotBad.BiliClient.util.LinkUrlUtil;
@@ -42,6 +42,7 @@ public class SearchActivity extends InstanceActivity {
     private String lastKeyword = "≠~`";
     private RecyclerView historyRecyclerview;
     SearchHistoryAdapter searchHistoryAdapter;
+    ViewPager2 viewPager;
     EditText keywordInput;
     private ConstraintLayout searchBar;
     private boolean searchBarVisible = true;
@@ -73,7 +74,7 @@ public class SearchActivity extends InstanceActivity {
 
             handler = new Handler();
 
-            ViewPager2 viewPager = findViewById(R.id.viewPager);
+            viewPager = findViewById(R.id.viewPager);
 
             View searchBtn = findViewById(R.id.search);
             keywordInput = findViewById(R.id.keywordInput);
@@ -83,7 +84,6 @@ public class SearchActivity extends InstanceActivity {
             keywordInput.setOnFocusChangeListener((view, b) -> historyRecyclerview.setVisibility(b ? View.VISIBLE : View.GONE));
             historyRecyclerview.setVisibility(View.VISIBLE);
             FragmentStateAdapter vpfAdapter = new FragmentStateAdapter(this) {
-
                 @Override
                 public int getItemCount() {
                     return 4;
@@ -112,6 +112,11 @@ public class SearchActivity extends InstanceActivity {
                             SharedPreferencesUtil.putBoolean("tutorial_pager_"+ classname, false);
                         }
                     }
+
+                    Fragment fragmentCurr = getSupportFragmentManager().findFragmentByTag("f" + viewPager.getCurrentItem());
+                    if (fragmentCurr != null) {
+                        ((SearchFragment) fragmentCurr).refresh();  //在fragment里已做判断
+                    }
                     super.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
             });
@@ -128,26 +133,26 @@ public class SearchActivity extends InstanceActivity {
             try {
                 searchHistory = JsonUtil.jsonToArrayList(new JSONArray(SharedPreferencesUtil.getString(SharedPreferencesUtil.search_history, "[]")), false);
             } catch (JSONException e) {
-                runOnUiThread(() -> MsgUtil.err(e, this));
+                runOnUiThread(() -> MsgUtil.err(e));
                 searchHistory = new ArrayList<>();
             }
             searchHistoryAdapter = new SearchHistoryAdapter(this, searchHistory);
             searchHistoryAdapter.setOnClickListener(position -> keywordInput.setText(searchHistory.get(position)));
             searchHistoryAdapter.setOnLongClickListener(position -> {
-                MsgUtil.showMsg("删除成功", this);
+                MsgUtil.showMsg("删除成功");
                 searchHistory.remove(position);
                 searchHistoryAdapter.notifyItemRemoved(position);
                 searchHistoryAdapter.notifyItemRangeChanged(position, searchHistory.size() - position);
                 SharedPreferencesUtil.putString(SharedPreferencesUtil.search_history, new JSONArray(searchHistory).toString());
             });
-            historyRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+            historyRecyclerview.setLayoutManager(new CustomLinearManager(this));
             historyRecyclerview.setAdapter(searchHistoryAdapter);
 
 
             if (getIntent().getStringExtra("keyword") != null) {
                 findViewById(R.id.top).setOnClickListener(view1 -> finish());
                 keywordInput.setText(getIntent().getStringExtra("keyword"));
-                MsgUtil.showMsg("可点击标题栏返回详情页", this);
+                MsgUtil.showMsg("可点击标题栏返回详情页");
             }
         });
     }
@@ -162,17 +167,17 @@ public class SearchActivity extends InstanceActivity {
     public void searchKeyword(String str) {
         if (str.contains("Robin") || str.contains("robin")) {
             if (str.contains("撅")) {
-                MsgUtil.showText(this, "特殊彩蛋", getString(R.string.egg_special));
+                MsgUtil.showText("特殊彩蛋", getString(R.string.egg_special));
                 return;
             }
             if (str.contains("纳西妲")) {
-                MsgUtil.showText(this, "特殊彩蛋", getString(R.string.egg_robin_nahida));
+                MsgUtil.showText("特殊彩蛋", getString(R.string.egg_robin_nahida));
                 return;
             }
         }
         for (String s:specialList) {
             if(str.contains(s)){
-                MsgUtil.showText(this, "特殊彩蛋", getString(R.string.egg_warmwords_warmworld));
+                MsgUtil.showText("特殊彩蛋", getString(R.string.egg_warmwords_warmworld));
                 break;
             }
         }
@@ -185,7 +190,7 @@ public class SearchActivity extends InstanceActivity {
             }
 
             if (str.isEmpty()) {
-                runOnUiThread(() -> MsgUtil.showMsg("还没输入内容喵~", this));
+                runOnUiThread(() -> MsgUtil.showMsg("还没输入内容喵~"));
             } else if (Objects.equals(lastKeyword, str)) {
                 runOnUiThread(() -> {
                     keywordInput.clearFocus();
@@ -211,7 +216,7 @@ public class SearchActivity extends InstanceActivity {
                             historyRecyclerview.scrollToPosition(0);
                         });
                     } catch (Exception e) {
-                        runOnUiThread(() -> MsgUtil.err(e, this));
+                        runOnUiThread(() -> MsgUtil.err(e));
                     }
                 } else {
                     try {
@@ -225,23 +230,22 @@ public class SearchActivity extends InstanceActivity {
                             historyRecyclerview.scrollToPosition(0);
                         });
                     } catch (Exception e) {
-                        runOnUiThread(() -> MsgUtil.err(e, this));
+                        runOnUiThread(() -> MsgUtil.err(e));
                     }
                 }
 
                 try {
                     for (int i = 0; i < 4; i++) {
-                        //从viewpager中拿真正added的fragment的方法: tag = "f{position}", 得到的fragment将会是真实存在的
                         Fragment fragmentById = getSupportFragmentManager().findFragmentByTag("f" + i);
-                        if (fragmentById != null) {
-                            ((SearchRefreshable) fragmentById).refresh(str);
-                        }
+                        if (fragmentById != null)
+                            ((SearchFragment) fragmentById).update(str);
                     }
-                    refreshing = false;
-                } catch (Exception e) {
-                    refreshing = false;
-                    runOnUiThread(() -> MsgUtil.err(e, this));
-                }
+                    Fragment fragmentCurr = getSupportFragmentManager().findFragmentByTag("f" + viewPager.getCurrentItem());
+                    if (fragmentCurr != null) {
+                        ((SearchFragment) fragmentCurr).refresh();
+                    }
+                } catch (Exception e) {report(e);}
+                refreshing = false;
 
                 if(tutorial_show) {
                     runOnUiThread(() -> {
@@ -255,7 +259,7 @@ public class SearchActivity extends InstanceActivity {
     }
 
     public void onScrolled(int dy) {
-        float height = searchBar.getHeight() + ToolsUtil.dp2px(2f, this);
+        float height = searchBar.getHeight() + ToolsUtil.dp2px(2f);
 
         if (System.currentTimeMillis() - animate_last > 200) {
             if (dy > 0 && searchBarVisible) {

@@ -27,6 +27,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.EmoteApi;
 import com.RobinNotBad.BiliClient.model.Emote;
 import com.RobinNotBad.BiliClient.model.EmotePackage;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomGridManager;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -54,9 +55,13 @@ public class EmoteActivity extends BaseActivity {
                 super.onScrolled(recyclerView, dx, dy);
             }
         };
+
         CenterThreadPool.run(() -> {
             try {
-                List<EmotePackage> packages = EmoteApi.getEmotes(EmoteApi.BUSINESS_DYNAMIC);
+                String from = getIntent().getStringExtra("from");
+                if(from==null) from = EmoteApi.BUSINESS_REPLY;
+
+                List<EmotePackage> packages = EmoteApi.getEmotes(from);
                 runOnUiThread(() -> {
                     loading.setVisibility(View.GONE);
                     viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(), packages, origin -> {
@@ -83,27 +88,35 @@ public class EmoteActivity extends BaseActivity {
                     });
                     tabLayout.setTabIconTint(null);
                     int count = tabLayout.getTabCount();
-                    for (int i = 0; i < count; i++) {
-                        int finalI = i;
-                        Objects.requireNonNull(packages);
-                        Objects.requireNonNull(tabLayout.getTabAt(finalI)).setText(packages.get(finalI).text);
-                        if (finalI != 0)
-                            Objects.requireNonNull(tabLayout.getTabAt(finalI)).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED);
-                        CenterThreadPool.run(() -> {
+
+                    CenterThreadPool.run(()->{
+                        for (int i = 0; i < count; i++) {
+                            int finalI = i;
+                            Objects.requireNonNull(packages);
+
+                            runOnUiThread(()->{
+                                Objects.requireNonNull(tabLayout.getTabAt(finalI)).setText(packages.get(finalI).text);
+                                if (finalI != 0)
+                                    Objects.requireNonNull(tabLayout.getTabAt(finalI)).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED);
+                            });
+
                             try {
                                 Drawable drawable = Glide.with(this).asDrawable()
-                                        .transition(GlideUtil.getTransitionOptions()).load(packages.get(finalI).url).placeholder(R.mipmap.placeholder).submit().get();
+                                        .transition(GlideUtil.getTransitionOptions())
+                                        .load(packages.get(finalI).url)
+                                        .submit().get();
                                 runOnUiThread(() -> Objects.requireNonNull(tabLayout.getTabAt(finalI)).setIcon(drawable));
                             } catch (ExecutionException e) {
-                                throw new RuntimeException(e);
+                                MsgUtil.err("加载表情列表图标时出现错误：",e);
+                                e.printStackTrace();
                             } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
+                                e.printStackTrace();
                             }
-                        });
-                    }
+                        }
+                    });
                 });
             } catch (Exception e) {
-                runOnUiThread(() -> MsgUtil.err(e, this));
+                runOnUiThread(() -> MsgUtil.err(e));
             }
         });
     }
@@ -169,7 +182,7 @@ public class EmoteActivity extends BaseActivity {
             super.onViewCreated(view, savedInstanceState);
 
             this.recyclerView = view.findViewById(R.id.recyclerView);
-            GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false);
+            CustomGridManager layoutManager = new CustomGridManager(getContext(), 4, RecyclerView.VERTICAL, false);
             layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {

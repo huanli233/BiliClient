@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
@@ -16,6 +16,7 @@ import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.PrivateMsgSession;
 import com.RobinNotBad.BiliClient.model.UserInfo;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -39,6 +40,9 @@ public class MessageActivity extends InstanceActivity {
         new AsyncLayoutInflaterX(this).inflate(R.layout.activity_message, null, (layoutView, id, parent) -> {
             setContentView(layoutView);
             setMenuClick();
+            SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+            swipeRefreshLayout.setEnabled(false);
+            swipeRefreshLayout.setRefreshing(true);
 
             MaterialCardView reply = findViewById(R.id.reply);
             reply.setOnClickListener(view -> {
@@ -90,18 +94,19 @@ public class MessageActivity extends InstanceActivity {
                     HashMap<Long, UserInfo> userMap = PrivateMsgApi.getUsersInfo(uidList);
                     PrivateMsgSessionsAdapter adapter = new PrivateMsgSessionsAdapter(this, sessionsList, userMap);
                     runOnUiThread(() -> {
+                        swipeRefreshLayout.setRefreshing(false);
                         try {
                             ((TextView) findViewById(R.id.reply_text)).setText("回复我的" + ((stats.getInt("reply") > 0) ? ("(" + stats.getInt("reply") + "未读)") : ""));
                             ((TextView) findViewById(R.id.like_text)).setText("收到的赞" + ((stats.getInt("like") > 0) ? ("(" + stats.getInt("like") + "未读)") : ""));
                             ((TextView) findViewById(R.id.at_text)).setText("@我" + ((stats.getInt("at") > 0) ? ("(" + stats.getInt("at") + "未读)") : ""));
-                            sessionsView.setLayoutManager(new LinearLayoutManager(this));
+                            sessionsView.setLayoutManager(new CustomLinearManager(this));
                             sessionsView.setAdapter(adapter);
                         } catch (Exception e) {
-                            MsgUtil.err(e, this);
+                            MsgUtil.err(e);
                         }
                     });
                 } catch (Exception e) {
-                    runOnUiThread(() -> MsgUtil.err(e, this));
+                    runOnUiThread(() -> MsgUtil.err(e));
                 }
             });
 

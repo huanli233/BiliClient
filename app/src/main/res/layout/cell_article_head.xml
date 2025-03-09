@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:paddingBottom="4dp"
     android:paddingHorizontal="@dimen/activity_padding_horizontal"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
-        android:id="@+id/cover"
-        android:layout_width="0dp"
+        android:id="@+id/img_cover"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:adjustViewBounds="true"
@@ -28,7 +29,7 @@
         android:layout_marginTop="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cover">
+        app:layout_constraintTop_toBottomOf="@+id/img_cover">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -70,98 +71,94 @@
         android:id="@+id/like_coin_fav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/upInfo">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:gravity="center"
+            android:layout_marginVertical="6dp"
+            android:layout_marginHorizontal="8dp"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/layout_like"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/layout_coin"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_weight="0.3"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageButton
                     android:id="@+id/btn_like"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/icon_like_0" />
+                    android:background="#0000"
+                    android:src="@drawable/icon_like_0" />
 
                 <TextView
                     android:id="@+id/like_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textSize="13sp"
-                    android:text="点赞" />
+                    android:text="点赞"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_coin"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/layout_fav"
-                app:layout_constraintStart_toEndOf="@id/layout_like"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_weight="0.3"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageButton
                     android:id="@+id/btn_coin"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/icon_coin_0" />
+                    android:background="#0000"
+                    android:src="@drawable/icon_coin_0" />
 
                 <TextView
                     android:id="@+id/coin_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="13sp"
-                    android:text="投币" />
+                    android:text="投币"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_fav"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/layout_coin"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_weight="0.3"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageButton
                     android:id="@+id/btn_fav"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/icon_favourite_0" />
+                    android:background="#0000"
+                    android:src="@drawable/icon_fav_0" />
 
                 <TextView
                     android:id="@+id/fav_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="13sp"
-                    android:text="收藏" />
+                    android:text="收藏"
+                    android:textSize="12sp" />
             </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
+        android:id="@+id/text_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
@@ -171,4 +168,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/like_coin_fav" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -72,7 +72,7 @@ public class MySpaceActivity extends InstanceActivity {
                                 .into(userAvatar);
                         userName.setText(userInfo.name);
                         userFans.setText(ToolsUtil.toWan(userInfo.fans) + "粉丝 " + userCoin + "硬币");
-                        userExp.setText("当前成长" + userInfo.current_exp + (userInfo.level >= 6 ? "" : ",距离Lv" + (userInfo.level + 1) + "还需" + (userInfo.next_exp - userInfo.current_exp)));
+                        userExp.setText("EXP:" + userInfo.current_exp + (userInfo.level >= 6 ? "" : "/" + userInfo.next_exp));
 
                         myInfo.setOnClickListener(view -> {
                             Intent intent = new Intent();
@@ -129,11 +129,11 @@ public class MySpaceActivity extends InstanceActivity {
                                 SharedPreferencesUtil.removeValue(SharedPreferencesUtil.csrf);
                                 SharedPreferencesUtil.removeValue(SharedPreferencesUtil.refresh_token);
                                 SharedPreferencesUtil.removeValue(SharedPreferencesUtil.cookie_refresh);
-                                MsgUtil.showMsg("账号已退出", this);
+                                MsgUtil.showMsg("账号已退出");
                                 Intent intent = new Intent(this, LoginActivity.class);
                                 startActivity(intent);
                                 finish();
-                            } else MsgUtil.showMsg("再点一次退出登录！", this);
+                            } else MsgUtil.showMsg("再点一次退出登录！");
                             confirmLogout = !confirmLogout;
                         });
                     });

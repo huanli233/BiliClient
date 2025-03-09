@@ -54,20 +54,20 @@ public class FavoriteVideoListActivity extends RefreshListActivity {
                                     int delResult = FavoriteApi.deleteFavorite(videoList.get(position).aid, fid);
                                     longClickPosition = -1;
                                     if (delResult == 0) runOnUiThread(() -> {
-                                        MsgUtil.showMsg("删除成功", this);
+                                        MsgUtil.showMsg("删除成功");
                                         videoList.remove(position);
                                         videoCardAdapter.notifyItemRemoved(position);
                                         videoCardAdapter.notifyItemRangeChanged(position, videoList.size() - position);
                                     });
                                     else
-                                        runOnUiThread(() -> MsgUtil.showMsg("删除失败，错误码：" + delResult, this));
+                                        runOnUiThread(() -> MsgUtil.showMsg("删除失败，错误码：" + delResult));
                                 } catch (Exception e) {
                                     report(e);
                                 }
                             });
                         } else {
                             longClickPosition = position;
-                            MsgUtil.showMsg("再次长按删除", this);
+                            MsgUtil.showMsg("再次长按删除");
                         }
                     });
 
@@ -82,8 +82,7 @@ public class FavoriteVideoListActivity extends RefreshListActivity {
                 }
 
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
+                loadFail(e);
             }
         });
     }
@@ -104,9 +103,7 @@ public class FavoriteVideoListActivity extends RefreshListActivity {
                 }
                 setRefreshing(false);
             } catch (Exception e) {
-                report(e);
-                setRefreshing(false);
-                this.page--;
+                loadFail(e);
             }
         });
     }

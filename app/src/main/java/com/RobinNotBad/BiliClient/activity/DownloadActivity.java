@@ -3,20 +3,16 @@ package com.RobinNotBad.BiliClient.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
-import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -28,8 +24,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.zip.Inflater;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 import okio.BufferedSink;
 import okio.Okio;
@@ -74,7 +68,6 @@ public class DownloadActivity extends BaseActivity {
         Intent intent = getIntent();
 
         type = intent.getIntExtra("type", 0);  //0=单个文件，1=视频，2=分页视频
-        String title = ToolsUtil.stringToFile(intent.getStringExtra("title"));
         link = intent.getStringExtra("link");
 
 
@@ -86,19 +79,21 @@ public class DownloadActivity extends BaseActivity {
         timer.schedule(showText, 100, 100);
         CenterThreadPool.run(() -> {
             if (type == 0) {
-                rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "BiliClient");
+                rootPath = FileUtil.getDownloadPicturePath();
                 if (!rootPath.exists()) rootPath.mkdirs();
-                downFile = new File(rootPath, title);
+                downFile = new File(rootPath, FileUtil.getFileNameFromLink(link));
                 download(link, downFile, "下载文件中", true);
             } else {
-                rootPath = ConfInfoApi.getDownloadPath(this);
+                String title = FileUtil.stringToFile(intent.getStringExtra("title"));
+
+                rootPath = FileUtil.getDownloadPath();
 
                 if (type == 1) {
                     downPath = new File(rootPath, title);
                     rootPath = downPath;
                 }
                 if (type == 2) {
-                    rootPath = new File(rootPath, ToolsUtil.stringToFile(intent.getStringExtra("parent_title")));
+                    rootPath = new File(rootPath, FileUtil.stringToFile(intent.getStringExtra("parent_title")));
                     downPath = new File(rootPath, title);
                 }
 
@@ -120,15 +115,8 @@ public class DownloadActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     private void download(String url, File file, String desc, boolean exitOnFinish) {
         dldText = desc;
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder().url(url)
-                .addHeader("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""))
-                .addHeader("Connection", "Keep-Alive")
-                .addHeader("User-Agent", NetWorkUtil.USER_AGENT_WEB)
-                .addHeader("Referer", "https://www.bilibili.com/")
-                .build();
         try {
-            Response response = okHttpClient.newCall(request).execute();
+            Response response = NetWorkUtil.get(url);
             if (!file.exists()) file.createNewFile();
             InputStream inputStream = Objects.requireNonNull(response.body()).byteStream();
             FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -143,7 +131,7 @@ public class DownloadActivity extends BaseActivity {
             inputStream.close();
             fileOutputStream.close();
             if (exitOnFinish) {
-                runOnUiThread(() -> MsgUtil.showMsg("下载完成", this));
+                runOnUiThread(() -> MsgUtil.showMsg("下载完成"));
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
@@ -153,8 +141,10 @@ public class DownloadActivity extends BaseActivity {
                     }
                 }, 200);
             }
+            response.body().close();
+            response.close();
         } catch (IOException e) {
-            runOnUiThread(() -> MsgUtil.showMsg("下载失败", this));
+            runOnUiThread(() -> MsgUtil.showMsg("下载失败"));
             e.printStackTrace();
             finish();
         }
@@ -162,15 +152,8 @@ public class DownloadActivity extends BaseActivity {
 
 
     private void downdanmu(String danmaku, File danmakuFile) {
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder().url(danmaku)
-                .addHeader("Cookie", SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""))
-                .addHeader("Connection", "Keep-Alive")
-                .addHeader("User-Agent", NetWorkUtil.USER_AGENT_WEB)
-                .addHeader("Referer", "https://www.bilibili.com/")
-                .build();
         try {
-            Response response = okHttpClient.newCall(request).execute();
+            Response response = NetWorkUtil.get(danmaku);
             BufferedSink bufferedSink = null;
             try {
                 if (!danmakuFile.exists()) danmakuFile.createNewFile();
@@ -187,8 +170,10 @@ public class DownloadActivity extends BaseActivity {
                     bufferedSink.close();
                 }
             }
+            if(response.body()!=null) response.body().close();
+            response.close();
         } catch (IOException e) {
-            runOnUiThread(() -> MsgUtil.showMsg("弹幕下载失败！", this));
+            runOnUiThread(() -> MsgUtil.showMsg("弹幕下载失败！"));
             finish();
             e.printStackTrace();
         }

@@ -1,10 +1,9 @@
 package com.RobinNotBad.BiliClient.api;
 
-import android.content.Context;
 import android.net.Uri;
-import android.os.Environment;
 import android.util.Log;
 
+import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -12,11 +11,7 @@ import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,9 +27,6 @@ import okhttp3.HttpUrl;
  */
 
 public class ConfInfoApi {
-    public static File getDownloadPath(Context context) {
-        return new File(Environment.getExternalStorageDirectory() + "/Android/media/" + context.getPackageName() + "/");
-    }
 
 
     /*
@@ -49,8 +41,8 @@ public class ConfInfoApi {
     public static String getWBIRawKey() throws IOException, JSONException {
         JSONObject getJson = NetWorkUtil.getJson("https://api.bilibili.com/x/web-interface/nav");
         JSONObject wbi_img = getJson.getJSONObject("data").getJSONObject("wbi_img");  //不要被名称骗了，这玩意是签名用的
-        String img_key = ToolsUtil.getFileFirstName(ToolsUtil.getFileNameFromLink(wbi_img.getString("img_url")));  //得到文件名
-        String sub_key = ToolsUtil.getFileFirstName(ToolsUtil.getFileNameFromLink(wbi_img.getString("sub_url")));
+        String img_key = FileUtil.getFileFirstName(FileUtil.getFileNameFromLink(wbi_img.getString("img_url")));  //得到文件名
+        String sub_key = FileUtil.getFileFirstName(FileUtil.getFileNameFromLink(wbi_img.getString("sub_url")));
 
         return img_key + sub_key;  //相连
     }
@@ -79,7 +71,7 @@ public class ConfInfoApi {
         String calc_str = sortUrlParams(Uri.encode(url_query, "@#&=*+-_.,:!?()/~'%") + "&wts=" + wts) + mixin_key;
         Log.e("calc_str", calc_str);
 
-        String w_rid = md5(calc_str);
+        String w_rid = ToolsUtil.md5(calc_str);
 
         return Objects.requireNonNull(HttpUrl.parse(url_query)).newBuilder().addQueryParameter("w_rid", w_rid).addQueryParameter("wts", wts).build().toString();
     }
@@ -115,22 +107,6 @@ public class ConfInfoApi {
         }
 
         return sortedUrl.toString();
-    }
-
-    private static String md5(String plainText) {
-        byte[] secretBytes;
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(plainText.getBytes());
-            secretBytes = md.digest();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("没有md5这个算法！");
-        }
-        StringBuilder md5code = new StringBuilder(new BigInteger(1, secretBytes).toString(16));
-        for (int i = 0; i < 32 - md5code.length(); i++) {
-            md5code.insert(0, "0");
-        }
-        return md5code.toString();
     }
 
 

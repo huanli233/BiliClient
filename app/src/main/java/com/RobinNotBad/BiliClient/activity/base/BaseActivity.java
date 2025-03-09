@@ -12,21 +12,30 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.InputDevice;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.core.view.ViewConfigurationCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.event.SnackEvent;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomGridManager;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -53,7 +62,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setRequestedOrientation(SharedPreferencesUtil.getBoolean("ui_landscape", false)
-                ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
                 : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         super.onCreate(savedInstanceState);
@@ -65,7 +74,8 @@ public class BaseActivity extends AppCompatActivity {
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
-        display.getRealMetrics(metrics);
+        if(Build.VERSION.SDK_INT >= 17) display.getRealMetrics(metrics);
+        else display.getMetrics(metrics);
 
         int scrW = metrics.widthPixels;
         int scrH = metrics.heightPixels;
@@ -95,10 +105,31 @@ public class BaseActivity extends AppCompatActivity {
 
     public void setPageName(String name) {
         TextView textView = findViewById(R.id.pageName);
-        if (textView != null) textView.setText(name);
+        if (textView != null) {
+            textView.setText(name);
+            textView.setMaxLines(1);
+        }
     }
 
     public void setTopbarExit() {
+        /*
+        //圆屏适配
+        if(SharedPreferencesUtil.getBoolean("player_ui_round",false)){
+            TextView pagename = findViewById(R.id.pageName);
+            if(pagename != null) {
+                ViewGroup.LayoutParams params = pagename.getLayoutParams();
+                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                int paddings = ToolsUtil.dp2px(16);
+                Log.d("debug-round","ok");
+                pagename.setPadding(paddings,paddings,paddings,0);
+                pagename.setLayoutParams(params);
+                pagename.setGravity(Gravity.CENTER);
+            }
+        }
+
+         */
+
         View view = findViewById(R.id.top);
         if(view==null) return;
         if(Build.VERSION.SDK_INT > 17 && view.hasOnClickListeners()) return;
@@ -110,8 +141,18 @@ public class BaseActivity extends AppCompatActivity {
         Log.e("debug", "set_exit");
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_MENU) {
+            if (Build.VERSION.SDK_INT < 17 || !isDestroyed()) {
+                finish();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     public void report(Exception e) {
-        runOnUiThread(() -> MsgUtil.err(e, this));
+        runOnUiThread(() -> MsgUtil.err(getClassName(), e));
     }
 
     private boolean eventBusInit = false;
@@ -152,10 +193,11 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected boolean eventBusEnabled() {
-        return SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, false);
+        return SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, true);
     }
 
     public void setDensity(int targetDensityDpi) {
+        if(Build.VERSION.SDK_INT < 17) return;
         Resources resources = getResources();
 
         if (resources.getConfiguration().densityDpi == targetDensityDpi) return;
@@ -185,11 +227,73 @@ public class BaseActivity extends AppCompatActivity {
 
     public RecyclerView.LayoutManager getLayoutManager() {
         return SharedPreferencesUtil.getBoolean("ui_landscape", false) && !force_single_column
-                ? new GridLayoutManager(this, 3)
-                : new LinearLayoutManager(this);
+                ? new CustomGridManager(this, 3)
+                : new CustomLinearManager(this);
     }
 
     public void setForceSingleColumn() {
         force_single_column = true;
+    }
+    
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        //自动适配表冠
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {    //既然不支持，那低版本直接跳过
+            ViewGroup rootView = (ViewGroup) this.getWindow().getDecorView();
+            setRotaryScroll(rootView);
+        }
+    }
+
+    private void setRotaryScroll(View view) {
+        if(view instanceof ViewGroup) {
+            ViewGroup vp = (ViewGroup) view;
+            try {
+                for (int i = 0; i < vp.getChildCount(); i++) {
+                    View viewChild = vp.getChildAt(i);
+
+                    float multiple = -114;
+                    if (viewChild instanceof ScrollView || viewChild instanceof NestedScrollView) multiple=SharedPreferencesUtil.getFloat("ui_rotatory_scroll",0);
+                    if (viewChild instanceof RecyclerView) multiple=SharedPreferencesUtil.getFloat("ui_rotatory_recycler",0);
+                    if (viewChild instanceof ListView) multiple=SharedPreferencesUtil.getFloat("ui_rotatory_list",0);
+
+                    if(multiple==-114) setRotaryScroll(viewChild);  //不符合上面的情况说明不是可滑动列表
+                    if(multiple<=0) return;    //负值和0都不执行
+
+                    float finalMultiple = multiple;
+                    viewChild.setOnGenericMotionListener((v, ev) -> {
+                        if (ev.getAction() == MotionEvent.ACTION_SCROLL && ev.getSource() == InputDevice.SOURCE_ROTARY_ENCODER) {
+                            float delta = -ev.getAxisValue(MotionEvent.AXIS_SCROLL) * ViewConfigurationCompat.getScaledVerticalScrollFactor(ViewConfiguration.get(this),
+                                    this) * 2;
+
+                            if (viewChild instanceof ScrollView)
+                                ((ScrollView) viewChild).smoothScrollBy(0, Math.round(delta * finalMultiple));
+                            else if (viewChild instanceof NestedScrollView)
+                                ((NestedScrollView) viewChild).smoothScrollBy(0, Math.round(delta * finalMultiple));
+                            else if (viewChild instanceof RecyclerView)
+                                ((RecyclerView) viewChild).smoothScrollBy(0, Math.round(delta * finalMultiple));
+                            else ((ListView) viewChild).smoothScrollBy(0, Math.round(delta * finalMultiple));
+
+                            viewChild.requestFocus();
+
+                            return true;
+                        }
+
+                        return false;
+                    });
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        } 
+    }
+
+    @Override
+    public boolean isDestroyed(){
+        return getLifecycle().getCurrentState().equals(Lifecycle.State.DESTROYED);
+    }
+
+    public String getClassName(){
+        return this.getClass().getSimpleName();
     }
 }

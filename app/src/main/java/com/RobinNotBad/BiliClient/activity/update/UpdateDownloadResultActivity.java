@@ -21,6 +21,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.video.MediaEpisodeAdapter;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.Bangumi;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -70,9 +71,9 @@ public class UpdateDownloadResultActivity extends BaseActivity {
             installBtn = findViewById(R.id.install);
             installWayList = findViewById(R.id.install_way_list);
 
-            pathTv.setText(String.format("下载的APK保存在: \n%s\n\n你可以另外使用自己的安装方法安装，或在下方选择一个安装方案进行安装", path));
+            pathTv.setText(String.format("下载的APK保存在: \n%s\n\n你可以使用pm install或其他自己的安装方法安装，或在下方选择一个安装器进行安装", path));
             ToolsUtil.setCopy(pathTv, path);
-            installWayList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            installWayList.setLayoutManager(new CustomLinearManager(this, LinearLayoutManager.VERTICAL, false));
             List<Bangumi.Episode> episodeList = new ArrayList<>();
             for (int i = 0; i < installWays.size(); i++) {
                 Bangumi.Episode episode = new Bangumi.Episode();
@@ -88,12 +89,10 @@ public class UpdateDownloadResultActivity extends BaseActivity {
             selectedInstallWay = 0;
             installBtn.setOnClickListener((view1 -> {
                 String str = installWays.get(selectedInstallWay);
-                switch (str) {
-                    case "system":
-                        installBySystemInstaller();
-                        break;
-                    default:
-                        MsgUtil.showMsg("未知的安装方式", this);
+                if ("system".equals(str)) {
+                    installBySystemInstaller();
+                } else {
+                    MsgUtil.showMsg("未知的安装方式");
                 }
             }));
         }));
@@ -114,7 +113,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
     private void installBySystemInstaller() {
         try {
             if (!checkRequestInstallPermission()) {
-                MsgUtil.showMsg("没有授予请求安装应用权限", this);
+                MsgUtil.showMsg("没有授予请求安装应用权限");
                 return;
             }
             Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -137,7 +136,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
             }
         } catch (Throwable th) {
             Log.e("BiliClient", th.toString());
-            MsgUtil.showMsg("未知错误: " + th.getMessage(), this);
+            MsgUtil.showMsg("未知错误: " + th.getMessage());
         }
     }
 }

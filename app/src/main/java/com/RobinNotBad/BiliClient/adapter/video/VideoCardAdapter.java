@@ -10,9 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 
 import java.util.List;
 
@@ -49,19 +49,13 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
         holder.showVideoCard(videoCard, context);    //此函数在VideoCardHolder里
 
         holder.itemView.setOnClickListener(view -> {
-            Intent intent = new Intent();
             switch (videoCard.type) {
                 case "video":
-                    intent.setClass(context, VideoInfoActivity.class);
-                    intent.putExtra("bvid", videoCard.bvid);
-                    intent.putExtra("aid", videoCard.aid);
-                    context.startActivity(intent);
+                    TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, videoCard.bvid, "video");
                     break;
                 case "media_bangumi":
-                    intent.putExtra("aid", videoCard.aid);
-                    intent.setClass(context, VideoInfoActivity.class);
-                    intent.putExtra("type", "media");
-                    context.startActivity(intent);
+                    TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, null, "media");
+                    break;
             }
         });
 

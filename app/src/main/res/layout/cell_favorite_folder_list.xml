@@ -15,7 +15,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/cover"
+            android:id="@+id/img_cover"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="10dp"
@@ -46,7 +46,7 @@
             app:layout_constraintGuide_percent="0.5" />
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/text_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -60,7 +60,7 @@
             app:layout_constraintStart_toStartOf="@+id/guide_horizontal_0.5" />
 
         <TextView
-            android:id="@+id/itemCount"
+            android:id="@+id/text_itemcount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -68,19 +68,19 @@
             android:alpha="0.7"
             android:text="1000/1000"
             android:textSize="11sp"
-            app:layout_constraintStart_toEndOf="@+id/countIcon"
+            app:layout_constraintStart_toEndOf="@+id/icon_count"
             app:layout_constraintTop_toTopOf="@+id/guide_vertical_0.4" />
 
         <ImageView
-            android:id="@+id/countIcon"
+            android:id="@+id/icon_count"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:alpha="0.7"
-            app:layout_constraintBottom_toBottomOf="@+id/itemCount"
-            app:layout_constraintStart_toStartOf="@+id/title"
-            app:layout_constraintTop_toTopOf="@+id/itemCount"
-            android:src="@drawable/video_library" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_itemcount"
+            app:layout_constraintStart_toStartOf="@+id/text_title"
+            app:layout_constraintTop_toTopOf="@+id/text_itemcount"
+            android:src="@drawable/icon_folder" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

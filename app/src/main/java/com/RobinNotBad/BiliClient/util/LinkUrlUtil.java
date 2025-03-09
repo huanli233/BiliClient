@@ -5,11 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Pair;
-import android.util.Patterns;
 
-import com.RobinNotBad.BiliClient.activity.article.ArticleInfoActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,13 +58,13 @@ public class LinkUrlUtil {
                         int type = parse.second;
                         switch (type) {
                             case TYPE_BVID:
-                                context.startActivity(new Intent(context, VideoInfoActivity.class).putExtra("bvid", val));
+                                TerminalContext.getInstance().enterVideoDetailPage(context, val);
                                 return;
                             case TYPE_AVID:
-                                context.startActivity(new Intent(context, VideoInfoActivity.class).putExtra("aid", Long.parseLong(val.replace("av", ""))));
+                                TerminalContext.getInstance().enterVideoDetailPage(context, Long.parseLong(val.replace("av", "")));
                                 return;
                             case TYPE_CVID:
-                                context.startActivity(new Intent(context, ArticleInfoActivity.class).putExtra("cvid", Long.parseLong(val.replace("cv", ""))));
+                                TerminalContext.getInstance().enterArticleDetailPage(context, Long.parseLong(val.replace("cv", "")));
                                 return;
                             case TYPE_UID:
                                 context.startActivity(new Intent(context, UserInfoActivity.class).putExtra("mid", Long.parseLong(val.replaceFirst("(?i)^uid", ""))));
@@ -77,14 +74,14 @@ public class LinkUrlUtil {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            MsgUtil.err(e);
         }
         try {
             context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(text)));
         } catch (ActivityNotFoundException e) {
-            MsgUtil.showMsg("没有可处理此链接的应用！", context);
+            MsgUtil.showMsg("没有可处理此链接的应用！");
         } catch (Throwable th) {
-            MsgUtil.err(th, context);
+            MsgUtil.err(th);
         }
     }
 
@@ -95,13 +92,13 @@ public class LinkUrlUtil {
             int type = parse.second;
             switch (type) {
                 case TYPE_BVID:
-                    context.startActivity(new Intent(context, VideoInfoActivity.class).putExtra("bvid", val));
+                    TerminalContext.getInstance().enterVideoDetailPage(context, val);
                     break;
                 case TYPE_AVID:
-                    context.startActivity(new Intent(context, VideoInfoActivity.class).putExtra("aid", Long.parseLong(val.replace("av", ""))));
+                    TerminalContext.getInstance().enterVideoDetailPage(context, Long.parseLong(val.replace("av", "")));
                     break;
                 case TYPE_CVID:
-                    context.startActivity(new Intent(context, ArticleInfoActivity.class).putExtra("cvid", Long.parseLong(val.replace("cv", ""))));
+                    TerminalContext.getInstance().enterArticleDetailPage(context, Long.parseLong(val.replace("cv", "")));
                     break;
                 case TYPE_UID:
                     context.startActivity(new Intent(context, UserInfoActivity.class).putExtra("mid", Long.parseLong(val.replaceFirst("(?i)^uid", ""))));
@@ -121,11 +118,11 @@ public class LinkUrlUtil {
                 if (response.code() == 200 && (body = response.body()) != null) {
                     JSONObject json = new JSONObject(body.string());
                     if (json.has("code") && json.getInt("code") == -404) {
-                        CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("啥都木有~", context));
+                        MsgUtil.showMsg("啥都木有~");
                     }
                 }
             } catch (IOException | JSONException e) {
-                CenterThreadPool.runOnUiThread(() -> MsgUtil.showMsg("解析失败！", context));
+                MsgUtil.showMsg("解析失败！");
             }
         });
     }
@@ -153,7 +150,7 @@ public class LinkUrlUtil {
             return new Pair<>(matcher.group(), TYPE_UID);
         }
 
-        matcher = (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.STRICT_URL_MATCH, true) ? Pattern.compile("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]") : Patterns.WEB_URL).matcher(item);
+        matcher = Pattern.compile("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]").matcher(item);
         if (matcher.find()) {
             return new Pair<>(matcher.group(), TYPE_WEB_URL);
         }

@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.user.MySpaceActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_alignParentTop="true">
 
         <TextView
             android:id="@+id/pageName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginStart="8dp"
             android:layout_marginVertical="3dp"
             android:text="我的"
             android:textStyle="bold"
-            app:drawableStartCompat="@drawable/arrow_down"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            app:drawableStartCompat="@drawable/arrow_down" />
 
         <com.RobinNotBad.BiliClient.ui.widget.TextClock
             android:id="@+id/timeText"
@@ -34,24 +30,17 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginVertical="3dp"
-            android:format12Hour="hh:mm"
-            android:format24Hour="HH:mm"
-            android:gravity="center"
             android:text="11:45"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/top">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -62,69 +51,6 @@
             android:paddingVertical="2dp"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/userAvatar"
-                    android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:adjustViewBounds="true"
-                    android:src="@mipmap/akari"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
-                    android:id="@+id/userName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="1dp"
-                    android:singleLine="true"
-                    android:text="加载中..."
-                    android:textColor="#fff"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    app:layout_constraintBottom_toTopOf="@+id/userFans"
-                    app:layout_constraintStart_toEndOf="@id/userAvatar"
-                    app:layout_constraintTop_toTopOf="@id/userAvatar" />
-
-                <TextView
-                    android:id="@+id/userFans"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginBottom="2dp"
-                    android:alpha="0.7"
-                    android:textColor="#fff"
-                    android:textSize="13sp"
-                    android:text="1145"
-                    app:layout_constraintStart_toEndOf="@id/userAvatar"
-                    app:layout_constraintTop_toBottomOf="@id/userName" />
-
-                <TextView
-                    android:id="@+id/userExp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="-4dp"
-                    android:layout_marginBottom="2dp"
-                    android:alpha="0.7"
-                    android:textColor="#fff"
-                    android:textSize="11sp"
-                    app:layout_constraintStart_toEndOf="@id/userAvatar"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/userFans" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/myinfo"
                 android:layout_width="match_parent"
@@ -132,48 +58,65 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginVertical="8dp">
 
                     <ImageView
-                        android:id="@+id/myinfo_go"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="16dp"
-                        android:src="@drawable/arrow_forward"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/userAvatar"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:adjustViewBounds="true"
+                        android:src="@mipmap/akari"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/myinfo_icon"
+                    <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
+                        android:id="@+id/userName"
                         android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="8dp"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/icon_info"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHeight_percent="0.4"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginBottom="1dp"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:singleLine="true"
+                        android:text="加载中..."
+                        android:textColor="#fff"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toTopOf="@+id/userFans"
+                        app:layout_constraintStart_toEndOf="@id/userAvatar"
+                        app:layout_constraintTop_toTopOf="@id/userAvatar" />
 
                     <TextView
+                        android:id="@+id/userFans"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginTop="-1dp"
+                        android:alpha="0.7"
+                        android:text="1145"
+                        android:textColor="#fff"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toEndOf="@id/userAvatar"
+                        app:layout_constraintTop_toBottomOf="@id/userName" />
+
+                    <TextView
+                        android:id="@+id/userExp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="我的主页"
-                        android:textSize="13sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/myinfo_go"
-                        app:layout_constraintStart_toEndOf="@+id/myinfo_icon"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginStart="6dp"
+                        android:layout_marginTop="-3dp"
+                        android:alpha="0.7"
+                        android:textColor="#fff"
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/userAvatar"
+                        app:layout_constraintTop_toBottomOf="@id/userFans" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.card.MaterialCardView>
+
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/follow"
@@ -353,7 +296,7 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/icon_danmaku"
+                        android:src="@drawable/icon_bangumi"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"
@@ -453,7 +396,7 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/icon_maker"
+                        android:src="@drawable/icon_creative_center"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHeight_percent="0.4"
                         app:layout_constraintStart_toStartOf="parent"
@@ -528,4 +471,4 @@
         </LinearLayout>
     </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

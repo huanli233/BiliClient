@@ -11,13 +11,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.listener.OnItemClickListener;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
+import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public class ListChooseActivity extends BaseActivity {
             finish();
         }));
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new CustomLinearManager(this));
         recyclerView.setAdapter(adapter);
     }
 
@@ -112,15 +112,6 @@ public class ListChooseActivity extends BaseActivity {
         @Override
         public int getItemCount() {
             return nameList.size();
-        }
-
-        class Holder extends RecyclerView.ViewHolder {
-            TextView folder_name;
-
-            public Holder(@NonNull View itemView) {
-                super(itemView);
-                folder_name = itemView.findViewById(R.id.text);
-            }
         }
     }
 }

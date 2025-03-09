@@ -21,13 +21,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.CopyTextActivity;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
-import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -66,13 +66,13 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
             nameTv = view.findViewById(R.id.msg_name);
             textContentTv = view.findViewById(R.id.msg_text_content);
             tipTv = view.findViewById(R.id.msg_type_tip_text);
-            playTimesTv = view.findViewById(R.id.listPlayTimes);
-            upNameTv = view.findViewById(R.id.listUpName);
-            videoTitleTv = view.findViewById(R.id.listVideoTitle);
+            playTimesTv = view.findViewById(R.id.text_viewcount);
+            upNameTv = view.findViewById(R.id.text_upname);
+            videoTitleTv = view.findViewById(R.id.text_title);
             textContentCard = view.findViewById(R.id.msg_type_text_card);
             videoCard = view.findViewById(R.id.cardView);
             picMsg = view.findViewById(R.id.msg_type_pic);
-            videoCover = view.findViewById(R.id.listCover);
+            videoCover = view.findViewById(R.id.img_cover);
         }
     }
 
@@ -184,11 +184,7 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                         try {
                             long aid = msg.content.getLong("id");
                             String bvid = VideoInfoApi.getJsonByAid(aid).getString("bvid");
-                            Intent intent = new Intent(context, VideoInfoActivity.class);
-                            intent.putExtra("aid", aid);
-                            intent.putExtra("bvid", bvid);
-                            intent.putExtra("type", "video");
-                            context.startActivity(intent);
+                            TerminalContext.getInstance().enterVideoDetailPage(context, aid, bvid, "video");
                         } catch (IOException err) {
                             Log.e("", err.toString());
                         } catch (JSONException err) {

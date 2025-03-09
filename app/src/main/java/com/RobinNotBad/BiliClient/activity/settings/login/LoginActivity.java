@@ -1,5 +1,7 @@
 package com.RobinNotBad.BiliClient.activity.settings.login;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,8 +22,6 @@ import java.util.List;
 
 public class LoginActivity extends BaseActivity {
 
-    private List<Fragment> fragmentList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,9 +29,18 @@ public class LoginActivity extends BaseActivity {
         Log.e("debug", "进入登录页面");
         setPageName("登录");
 
+        boolean from_setup = getIntent().getBooleanExtra("from_setup",false);
+
+        /*
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            startActivity(new Intent(this, SpecialLoginActivity.class).putExtra("from_setup",from_setup));
+            finish();
+        }
+         */
+
         ViewPager viewPager = findViewById(R.id.viewPager);
-        fragmentList = new ArrayList<>();
-        fragmentList.add(new QRLoginFragment());
+        List<Fragment> fragmentList = new ArrayList<>();
+        fragmentList.add(QRLoginFragment.newInstance(from_setup));
 
         viewPager.setOffscreenPageLimit(fragmentList.size());
         ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
@@ -39,7 +48,7 @@ public class LoginActivity extends BaseActivity {
 
         findViewById(R.id.loading).setVisibility(View.GONE);
         if (fragmentList.size() > 1 && SharedPreferencesUtil.getBoolean("first_" + LoginActivity.class.getSimpleName(), true)) {
-            MsgUtil.showMsgLong("提示：本页面可以左右滑动", this);
+            MsgUtil.showMsgLong("提示：本页面可以左右滑动");
             SharedPreferencesUtil.putBoolean("first_" + LoginActivity.class.getSimpleName(), false);
         }
     }
