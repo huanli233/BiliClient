@@ -49,7 +49,7 @@ public class DownloadListActivity extends RefreshListActivity {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if(DownloadService.downloadingSection!=null && started) runOnUiThread(()->adapter.notifyItemChanged(0));
+                    if(DownloadService.section !=null && started) runOnUiThread(()->adapter.notifyItemChanged(0));
                 }
             },300,500);
         });
@@ -63,11 +63,11 @@ public class DownloadListActivity extends RefreshListActivity {
         if(fromOutside && !started) return;
         Log.d("debug","刷新下载列表");
 
-        boolean downloading = DownloadService.downloadingSection != null;
+        boolean downloading = DownloadService.section != null;
 
         sections = downloading ? DownloadService.getAllExceptDownloading() : DownloadService.getAll();
 
-        if (sections == null && DownloadService.downloadingSection == null) {
+        if (sections == null && !downloading) {
             if(!emptyTipShown) {
                 runOnUiThread(()->MsgUtil.showMsg("下载列表为空"));
                 showEmptyView();
@@ -124,7 +124,7 @@ public class DownloadListActivity extends RefreshListActivity {
                     try {
                         final DownloadSection delete;
                         if(position == -1){
-                            delete = DownloadService.downloadingSection;
+                            delete = DownloadService.section;
                             stopService(new Intent(this, DownloadService.class));
                         }
                         else delete = sections.get(position);

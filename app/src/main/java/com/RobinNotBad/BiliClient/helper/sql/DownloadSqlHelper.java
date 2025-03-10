@@ -10,7 +10,7 @@ import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 public class DownloadSqlHelper extends SQLiteOpenHelper {
     public DownloadSqlHelper(@Nullable Context context) {
-        super(context, "download.db", null, 2);
+        super(context, "download.db", null, 3);
     }
 
     @Override
@@ -23,17 +23,14 @@ public class DownloadSqlHelper extends SQLiteOpenHelper {
                 "qn INTEGER," +
                 "title TEXT," +
                 "child TEXT," +
-                "cover TEXT," +
-                "danmaku TEXT)");
+                "cover TEXT)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        try {
-            if (oldVersion == 1) {
-                db.execSQL("drop table if exists download");
-                onCreate(db);
-            }
+        if(oldVersion != newVersion) try {
+            db.execSQL("drop table if exists download");
+            onCreate(db);
         } catch (Throwable e){
             MsgUtil.err(e);
         }

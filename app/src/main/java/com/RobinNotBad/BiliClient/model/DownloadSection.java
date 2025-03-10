@@ -13,7 +13,6 @@ public class DownloadSection {
     public long aid;
     public long cid;
     public int qn;
-    public String url_dm;
     public String url_cover;
     public String title;
     public String child;
@@ -32,7 +31,6 @@ public class DownloadSection {
         title = cursor.getString(6);
         child = cursor.getString(7);
         url_cover = cursor.getString(8);
-        url_dm = cursor.getString(9);
 
         StringBuilder sBuilder = new StringBuilder();
         sBuilder.append(title.substring(0, Math.min(8, title.length())));

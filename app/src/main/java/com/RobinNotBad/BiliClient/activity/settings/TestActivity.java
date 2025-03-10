@@ -105,15 +105,12 @@ public class TestActivity extends BaseActivity {
 
         btn_download.setOnClickListener(v -> {
             DownloadService.startDownload("雀魂","早春赏樱",501590258L,294292444L,
-                    "https://comment.bilibili.com/294292444.xml",
                     "http://i1.hdslb.com/bfs/archive/321b2291b55f1effc0f0646f593cf47b78ea0e9b.png",16);
 
             DownloadService.startDownload("雀魂","曲水流觞",501590258L,294370880L,
-                    "https://comment.bilibili.com/294370880.xml",
                     "http://i1.hdslb.com/bfs/archive/321b2291b55f1effc0f0646f593cf47b78ea0e9b.png",16);
 
             DownloadService.startDownload("雀魂","锦绣梦",501590258L,493168287L,
-                    "https://comment.bilibili.com/493168287.xml",
                     "http://i1.hdslb.com/bfs/archive/321b2291b55f1effc0f0646f593cf47b78ea0e9b.png",16);
 
 

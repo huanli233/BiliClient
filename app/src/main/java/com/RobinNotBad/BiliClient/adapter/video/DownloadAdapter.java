@@ -58,7 +58,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
     @Override
     public void onBindViewHolder(@NonNull DownloadHolder holder, int position) {
         if(position==0) {
-            holder.show(DownloadService.downloadingSection, context);    //第一项为正在下载的项（不存在就gone掉）
+            holder.show(DownloadService.section, context);    //第一项为正在下载的项（不存在就gone掉）
             holder.showProgress(DownloadService.state, DownloadService.percent);
         }
         else {
@@ -117,13 +117,14 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
                     extra.setText("等待下载");
                     break;
                 case "downloading":
-                    if(DownloadService.downloadingSection==null) extra.setText("下载中断");
+                    if(DownloadService.section ==null) extra.setText("下载中断");
                     break;
                 default:
                     extra.setText("未知状态？");
             }
 
-            Glide.with(context).asDrawable().load(section.url_cover)
+            if(!section.url_cover.isEmpty())
+                Glide.with(context).asDrawable().load(section.url_cover)
                     .transition(GlideUtil.getTransitionOptions())
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -134,7 +135,6 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
         public void showProgress(String state, float percent){
             if(state == null || percent==-1) {
                 progress.setVisibility(View.GONE);
-                extra.setText("未知状态");
                 return;
             }
             progress.setVisibility(View.VISIBLE);

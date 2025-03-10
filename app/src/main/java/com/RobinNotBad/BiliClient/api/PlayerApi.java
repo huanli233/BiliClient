@@ -65,12 +65,10 @@ public class PlayerApi {
         if(videoInfo.cids.size() == 1)
             DownloadService.startDownload(videoInfo.title,
                     videoInfo.aid, videoInfo.cids.get(0),
-                    ("https://comment.bilibili.com/" + videoInfo.cids.get(0) + ".xml"),
                     videoInfo.cover,
                     qn);
         else DownloadService.startDownload(videoInfo.title, videoInfo.pagenames.get(page),
                 videoInfo.aid, videoInfo.cids.get(page),
-                ("https://comment.bilibili.com/" + videoInfo.cids.get(page) + ".xml"),
                 videoInfo.cover,
                 qn);
     }
