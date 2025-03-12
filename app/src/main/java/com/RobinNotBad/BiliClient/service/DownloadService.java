@@ -55,8 +55,6 @@ public class DownloadService extends Service {
     public static DownloadSection section;
     private static long firstDown;
 
-    private boolean endByLimit = false;    //用于标记是否由于单线程限制而退出下载服务
-
     final String NOTIFY_CHANNEL_ID = "biliterminal_download";
     NotificationCompat.Builder statusBuilder, completionBuilder;
     NotificationManager notifyManager;
@@ -70,6 +68,8 @@ public class DownloadService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Logu.d("onCreate");
 
         notifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
@@ -95,6 +95,7 @@ public class DownloadService extends Service {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
         completionBuilder = new NotificationCompat.Builder(this, NOTIFY_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.icon)
+                .setContentTitle("下载完成")
                 .setContentIntent(pendingIntent)
                 .setOngoing(false)
                 .setSound(null)
@@ -110,24 +111,17 @@ public class DownloadService extends Service {
     @SuppressLint("MutatingSharedPrefs")
     @Override
     public int onStartCommand(Intent serviceIntent, int flags, int startId) {
-        if(started) {
-            endByLimit = true;    //用于标记，防止在onDestroy里把started设为false
-            stopSelf();
-            return super.onStartCommand(serviceIntent, flags, startId);
-        }
-
-        started = true;
-
-        if(serviceIntent!=null) firstDown = serviceIntent.getLongExtra("first",-1);
+        Logu.d("onStartCommand");
 
         startNotifyProgress();
 
         CenterThreadPool.run(()->{
             boolean failed = false;
             while (!failed) {
-                section = getFirst();
-                if(section ==null) break;
+                DownloadSection section_tmp = getFirst();
+                if(section_tmp == null) break;
 
+                section = section_tmp;
 
                 //获取视频链接
                 try {
@@ -260,10 +254,8 @@ public class DownloadService extends Service {
         notifyTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(section == null || notifyTimer == null) {
-                    this.cancel();
-                    return;
-                }
+                if(section == null || notifyTimer == null) return;
+
                 statusBuilder.setContentText(state + "：" + section.name_short);
                 statusBuilder.setProgress(100, (int) (percent * 100),false);
                 notifyManager.notify(1, statusBuilder.build());
@@ -273,15 +265,18 @@ public class DownloadService extends Service {
 
     private void notifyExit(String content){
         MsgUtil.showMsg(content);
+        notifyManager.cancel(1);
+        completionBuilder.setContentTitle("下载结束");
         completionBuilder.setContentText(content);
-        notifyManager.notify(1, completionBuilder.build());
+        completionBuilder.setProgress(0,0,false);
+        notifyManager.notify(2, completionBuilder.build());
     }
 
 
     private void notifyCompletion(String content, int id){
         MsgUtil.showMsg(content);
         completionBuilder.setContentText(content);
-        notifyManager.notify(100 + id, completionBuilder.build());
+        notifyManager.notify(id % 100 + 100, completionBuilder.build());
     }
 
     private void refreshDownloadList(){
@@ -352,33 +347,33 @@ public class DownloadService extends Service {
 
     @Override
     public void onDestroy() {
-        if(!endByLimit) {
-            started = false;
-            percent = -1;
-            state = null;
+        Logu.d("结束");
 
-            if (toastTimer != null) toastTimer.cancel();
-            toastTimer = null;
+        started = false;
+        percent = -1;
+        state = null;
 
-            if(notifyTimer != null) notifyTimer.cancel();
-            notifyTimer = null;
+        if (toastTimer != null) toastTimer.cancel();
+        toastTimer = null;
 
-            if (exitMessage == null) exitMessage = "下载服务已退出";
-            notifyExit(exitMessage);
+        if (notifyTimer != null) notifyTimer.cancel();
+        notifyTimer = null;
 
-            if (section != null) {
-                Logu.d("退出下载服务");
-                FileUtil.deleteFolder(section.getPath());
-                final long id = section.id;
-                section = null;
+        if (exitMessage == null) exitMessage = "下载服务已退出";
 
-                CenterThreadPool.run(() -> {
-                    setState(id, "none");
-                    refreshDownloadList();
-                });
-            }
+        if (section != null) {
+            Logu.d("退出下载服务");
+            FileUtil.deleteFolder(section.getPath());
+            final long id = section.id;
+            section = null;
 
+            CenterThreadPool.run(() -> {
+                notifyExit(exitMessage);
+                setState(id, "none");
+                refreshDownloadList();
+            });
         }
+
         super.onDestroy();
     }
 
@@ -547,8 +542,7 @@ public class DownloadService extends Service {
 
                 MsgUtil.showMsg("已添加下载");
 
-                Context context = BiliTerminal.context;
-                context.startService(new Intent(context, DownloadService.class));
+                start(-1);
             } catch (Exception e){
                 MsgUtil.err(e);
             }
@@ -573,12 +567,21 @@ public class DownloadService extends Service {
 
                 MsgUtil.showMsg("已添加下载");
 
-                Context context = BiliTerminal.context;
-                context.startService(new Intent(context, DownloadService.class));
+                start(-1);
             } catch (Exception e){
                 MsgUtil.err(e);
             }
         });
+    }
+
+    public static void start(long first){
+        if(started) return;
+        started = true;
+        Logu.d("start");
+        firstDown = first;
+
+        Context context = BiliTerminal.context;
+        context.startService(new Intent(context, DownloadService.class));
     }
 
 }

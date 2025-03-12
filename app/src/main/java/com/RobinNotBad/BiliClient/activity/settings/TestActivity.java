@@ -101,7 +101,7 @@ public class TestActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        btn_start.setOnClickListener(v -> startService(new Intent(this,DownloadService.class)));
+        btn_start.setOnClickListener(v -> DownloadService.start(-1));
 
         btn_download.setOnClickListener(v -> {
             DownloadService.startDownload("雀魂","早春赏樱",501590258L,294292444L,

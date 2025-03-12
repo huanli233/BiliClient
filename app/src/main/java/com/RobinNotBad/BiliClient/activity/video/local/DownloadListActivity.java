@@ -94,7 +94,7 @@ public class DownloadListActivity extends RefreshListActivity {
                             MsgUtil.showMsg("已结束下载服务");
                         }
                         else{
-                            startService(new Intent(this, DownloadService.class));
+                            DownloadService.start(-1);
                         }
                     }
                     else{
@@ -113,9 +113,7 @@ public class DownloadListActivity extends RefreshListActivity {
                             }
 
                             DownloadService.setState(section.id,"none");
-                            Intent intent = new Intent(this, DownloadService.class);
-                            intent.putExtra("first",section.id);
-                            startService(intent);
+                            DownloadService.start(section.id);
                         }
                     }
                 }));

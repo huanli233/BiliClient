@@ -33,21 +33,21 @@ public class MsgUtil {
     private static Toast toast;
 
     public static void showMsg(String str) {
+        Logu.i(str);
         if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, true)) {
             CenterThreadPool.runOnUiThread(() -> EventBus.getDefault().postSticky(new SnackEvent(str)));
         } else {
             toast(str);
         }
-        Logu.i(str);
     }
 
     public static void showMsgLong(String str) {
+        Logu.i("long",str);
         if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.SNACKBAR_ENABLE, true)) {
             CenterThreadPool.runOnUiThread(() -> EventBus.getDefault().postSticky(new SnackEvent(str,Snackbar.LENGTH_LONG)));
         } else {
             toastLong(str);
         }
-        Logu.i("long",str);
     }
 
     public static void toast(String str) {
