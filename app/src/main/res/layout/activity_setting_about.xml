@@ -652,10 +652,10 @@
                                 android:layout_marginBottom="1dp"
                                 android:ellipsize="end"
                                 android:singleLine="true"
-                                android:text="huanli233"
-                                app:layout_constraintBottom_toTopOf="@+id/huanliDesc"
-                                app:layout_constraintStart_toEndOf="@id/huanliAvatar"
-                                app:layout_constraintTop_toTopOf="@id/huanliAvatar" />
+                                android:text="Jank000.h"
+                                app:layout_constraintBottom_toTopOf="@+id/jankDesc"
+                                app:layout_constraintStart_toEndOf="@id/jankAvatar"
+                                app:layout_constraintTop_toTopOf="@id/jankAvatar" />
 
                             <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
                                 android:id="@+id/jankDesc"
@@ -668,10 +668,10 @@
                                 android:singleLine="true"
                                 android:text="（这位开发者很懒，什么也没有留下）"
                                 android:textSize="11sp"
-                                app:layout_constraintBottom_toBottomOf="@+id/huanliAvatar"
+                                app:layout_constraintBottom_toBottomOf="@+id/jankAvatar"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@id/huanliAvatar"
-                                app:layout_constraintTop_toBottomOf="@id/huanliName" />
+                                app:layout_constraintStart_toEndOf="@id/jankAvatar"
+                                app:layout_constraintTop_toBottomOf="@id/jankName" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
