@@ -92,7 +92,7 @@ public class AboutActivity extends BaseActivity {
                 add((long) 394675616);
                 add((long) 40140732);
                 add((long) 673815151);
-                add((long) -1);
+                add((long) 661403494);
             }};
 
             for (int i = 0; i < developerAvaterViews.size(); i++) {
