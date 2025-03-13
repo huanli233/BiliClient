@@ -25,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
+                android:imeOptions="actionDone"
                 android:id="@+id/setting_input_edittext" />
 
             <TextView

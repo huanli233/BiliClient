@@ -620,6 +620,64 @@
                     </com.google.android.material.card.MaterialCardView>
 
 
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/jank_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/jankAvatar"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_marginStart="8dp"
+                                android:adjustViewBounds="true"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintDimensionRatio="1:1"
+                                app:layout_constraintHeight_percent="0.7"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/jankName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginBottom="1dp"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                android:text="huanli233"
+                                app:layout_constraintBottom_toTopOf="@+id/huanliDesc"
+                                app:layout_constraintStart_toEndOf="@id/huanliAvatar"
+                                app:layout_constraintTop_toTopOf="@id/huanliAvatar" />
+
+                            <com.RobinNotBad.BiliClient.ui.widget.MarqueeTextView
+                                android:id="@+id/jankDesc"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:layout_marginTop="1dp"
+                                android:layout_marginBottom="2dp"
+                                android:alpha="0.7"
+                                android:singleLine="true"
+                                android:text="（这位开发者很懒，什么也没有留下）"
+                                android:textSize="11sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/huanliAvatar"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/huanliAvatar"
+                                app:layout_constraintTop_toBottomOf="@id/huanliName" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>

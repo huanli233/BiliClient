@@ -13,6 +13,7 @@ import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Objects;
 
 public class SettingQualityActivity extends BaseActivity {
     QualityChooseAdapter adapter;
@@ -45,7 +46,8 @@ public class SettingQualityActivity extends BaseActivity {
     }
 
     private void save(int position) {
-        SharedPreferencesUtil.putInt("play_qn", qnMap.get(adapter.getName(position)));
+        String str = adapter.getName(position);
+        if(qnMap.containsKey(str)) SharedPreferencesUtil.putInt("play_qn", Objects.requireNonNull(qnMap.get(str)));
         finish();
     }
 }

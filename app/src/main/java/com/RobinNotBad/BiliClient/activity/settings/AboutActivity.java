@@ -65,6 +65,7 @@ public class AboutActivity extends BaseActivity {
                 add(findViewById(R.id.moyeAvatar));
                 add(findViewById(R.id.silentAvatar));
                 add(findViewById(R.id.huanliAvatar));
+                add(findViewById(R.id.jankAvatar));
             }};
             List<Integer> developerAvaters = new ArrayList<>() {{
                 add(R.mipmap.avatar_robin);
@@ -73,6 +74,7 @@ public class AboutActivity extends BaseActivity {
                 add(R.mipmap.avatar_moye);
                 add(R.mipmap.avatar_silent);
                 add(R.mipmap.avatar_huanli);
+                add(R.mipmap.avatar_jank);
             }};
             List<MaterialCardView> developerCardList = new ArrayList<>() {{
                 add(findViewById(R.id.robin_card));
@@ -81,6 +83,7 @@ public class AboutActivity extends BaseActivity {
                 add(findViewById(R.id.moye_card));
                 add(findViewById(R.id.silent_card));
                 add(findViewById(R.id.huanli_card));
+                add(findViewById(R.id.jank_card));
             }};
             List<Long> developerUidList = new ArrayList<>() {{
                 add((long) 646521226);
@@ -89,6 +92,7 @@ public class AboutActivity extends BaseActivity {
                 add((long) 394675616);
                 add((long) 40140732);
                 add((long) 673815151);
+                add((long) -1);
             }};
 
             for (int i = 0; i < developerAvaterViews.size(); i++) {
@@ -105,9 +109,11 @@ public class AboutActivity extends BaseActivity {
 
 
                 developerCardList.get(i).setOnClickListener(view -> {
+                    long uid = developerUidList.get(finalI);
+                    if(uid == -1) return;
                     Intent intent = new Intent()
                             .setClass(this, UserInfoActivity.class)
-                            .putExtra("mid", developerUidList.get(finalI));
+                            .putExtra("mid", uid);
                     startActivity(intent);
                 });
             }

@@ -107,8 +107,6 @@
 
     <string name="err_rejected">被B站风控系统拦截了\n（无法解决）</string>
 
-    <string name="update_tip">此版本主要是一些小问题的修修补补。\n\n如果你遇到了某些奇葩问题，请先在设置里找一找相关的兼容性选项，视频放不了、无法加载图片的问题都有可能解决哦~\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
-
     <string name="desc_icon_license">以下是已知的开源图标的开源许可证信息</string>
     <string-array name="icon_license">
         <item>界面设置: Newicons, MIT License</item>
@@ -116,21 +114,15 @@
         <item>退出登录: scarlab, MIT License</item>
     </string-array>
 
+
+
+    <string name="update_tip">此版本主要是一些小问题的修修补补。\n\n如果你遇到了某些奇葩问题，请先在设置里找一找相关的兼容性选项，视频放不了、无法加载图片的问题都有可能解决哦~\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
+
     #新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
-        <item>降级了二维码生成库，安卓4.4以下的设备现在能扫码登录了</item>
-        <item>设置为mips可安装，但播放视频不可用（无法解决）</item>
-        <item>新增了软件旋屏的实验性选项，可以解决小米手表等设备的旋屏问题（必须使用TextureView）</item>
-
-        <item>修复了部分番剧无法播放的问题（此问题存在已久）</item>
-        <item>暂时移除了系统通知入口（api失效，后续版本可能会回来）</item>
-
-        <item>优化了播放器退出时的内存释放，可能会解决部分设备退出卡死的问题</item>
-        <item>优化了播放器右侧按钮，添加了阴影</item>
-        <item>优化了播放器的视频拖动，拖动距离极短时会识别为点击，防止在某些设备上无法呼出控制栏</item>
-        <item>优化了播放器字幕的圆屏适配</item>
-
-        <item>更改了报错页的文字，现在上传报错可以用了</item>
+        <item>2.7.2、2.7.3版本未公开发布，其间修复了部分番剧无法播放和评论区加载错乱等陈年老问题，优化了搜索、内置播放器等页面，同时修复了不少崩溃，内容较多所以不在此赘述了</item>
+        <item>修复了后台下载器的各种问题</item>
+        <item>优化了后台下载器的通知，关闭振动和声音</item>
         <item>修复了一些崩溃问题，优化了一些屎山代码</item>
         <item>新增了一些bug和屎山代码</item>
     </string-array>
