@@ -666,7 +666,7 @@
                                 android:layout_marginBottom="2dp"
                                 android:alpha="0.7"
                                 android:singleLine="true"
-                                android:text="（这位开发者很懒，什么也没有留下）"
+                                android:text="CQCQCQ，这里是BI1TIA，是否有友台能够抄收？"
                                 android:textSize="11sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/jankAvatar"
                                 app:layout_constraintEnd_toEndOf="parent"
