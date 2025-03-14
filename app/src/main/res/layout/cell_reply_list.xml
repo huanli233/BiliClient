@@ -184,7 +184,7 @@
         android:gravity="center"
         android:text="回复"
         android:textSize="13sp"
-        app:drawableStartCompat="@drawable/reply"
+        app:drawableStartCompat="@drawable/icon_reply_btn"
         app:layout_constraintBottom_toBottomOf="@+id/likes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/likes"

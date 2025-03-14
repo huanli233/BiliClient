@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +16,7 @@ import com.RobinNotBad.BiliClient.adapter.video.PageChooseAdapter;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.model.PlayerData;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 
@@ -29,9 +29,8 @@ import java.util.ArrayList;
 public class LocalPageChooseActivity extends BaseActivity {
 
     private int longClickPosition = -1;
+    private long longClickTimestamp;
     private boolean deleted = false;
-    private Handler handler = new Handler();
-    private Runnable runnable;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -66,21 +65,22 @@ public class LocalPageChooseActivity extends BaseActivity {
             }
         });
         adapter.setOnItemLongClickListener(position -> {
-            if (longClickPosition == position) {
-                File workPath = FileUtil.getDownloadPath();
-                File videoPath = new File(workPath, title);
-                File pagePath = new File(videoPath, pageList.get(position));
+            long timestamp = System.currentTimeMillis();
+            if (longClickPosition == position && timestamp - longClickTimestamp < 4000) {
+                CenterThreadPool.run(()->{
+                    File workPath = FileUtil.getDownloadPath();
+                    File videoPath = new File(workPath, title);
+                    File pagePath = new File(videoPath, pageList.get(position));
 
-                FileUtil.deleteFolder(pagePath);
-                pageList.remove(position);
-                videoFileList.remove(position);
-                danmakuFileList.remove(position);
+                    FileUtil.deleteFolder(pagePath);
+                    pageList.remove(position);
+                    videoFileList.remove(position);
+                    danmakuFileList.remove(position);
+                    if (pageList.isEmpty()) FileUtil.deleteFolder(videoPath);
+                });
+
                 adapter.notifyItemRemoved(position);
                 adapter.notifyItemRangeChanged(0,pageList.size() - position);
-
-                if (pageList.isEmpty()) {
-                    FileUtil.deleteFolder(videoPath);
-                }
 
                 MsgUtil.showMsg("删除成功");
                 longClickPosition = -1;
@@ -88,12 +88,8 @@ public class LocalPageChooseActivity extends BaseActivity {
                 deleted = true;
             } else {
                 longClickPosition = position;
+                longClickTimestamp = timestamp;
                 MsgUtil.showMsg("再次长按删除");
-                handler.postDelayed(runnable = () -> {
-                    if (longClickPosition != -1) {
-                        longClickPosition = -1;
-                    }
-                }, 3000);
             }
         });
 
@@ -103,9 +99,6 @@ public class LocalPageChooseActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        if (handler != null && runnable != null) {
-            handler.removeCallbacks(runnable);
-        }
         InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
         if (deleted && instance instanceof LocalListActivity && !instance.isDestroyed())
             ((LocalListActivity) (instance)).refresh();

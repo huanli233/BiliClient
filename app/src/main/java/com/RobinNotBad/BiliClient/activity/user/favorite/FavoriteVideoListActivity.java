@@ -26,6 +26,7 @@ public class FavoriteVideoListActivity extends RefreshListActivity {
     private VideoCardAdapter videoCardAdapter;
 
     private int longClickPosition = -1;
+    private long longClickTimestamp;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -48,7 +49,8 @@ public class FavoriteVideoListActivity extends RefreshListActivity {
                     videoCardAdapter = new VideoCardAdapter(this, videoList);
 
                     videoCardAdapter.setOnLongClickListener(position -> {
-                        if (longClickPosition == position) {
+                        long timestamp = System.currentTimeMillis();
+                        if (longClickPosition == position && timestamp - longClickTimestamp < 4000) {
                             CenterThreadPool.run(() -> {
                                 try {
                                     int delResult = FavoriteApi.deleteFavorite(videoList.get(position).aid, fid);
@@ -67,6 +69,7 @@ public class FavoriteVideoListActivity extends RefreshListActivity {
                             });
                         } else {
                             longClickPosition = position;
+                            longClickTimestamp = timestamp;
                             MsgUtil.showMsg("再次长按删除");
                         }
                     });

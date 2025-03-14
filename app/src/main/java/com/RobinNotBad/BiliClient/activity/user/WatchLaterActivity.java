@@ -21,6 +21,7 @@ import java.util.ArrayList;
 public class WatchLaterActivity extends RefreshListActivity {
 
     private int longClickPosition = -1;
+    private long longClickTimestamp;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -35,7 +36,8 @@ public class WatchLaterActivity extends RefreshListActivity {
                 VideoCardAdapter adapter = new VideoCardAdapter(this, videoCardList);
 
                 adapter.setOnLongClickListener(position -> {
-                    if (longClickPosition == position) {
+                    long timestamp = System.currentTimeMillis();
+                    if (longClickPosition == position && timestamp - longClickTimestamp < 4000) {
                         CenterThreadPool.run(() -> {
                             try {
                                 int result = WatchLaterApi.delete(videoCardList.get(position).aid);
@@ -56,6 +58,7 @@ public class WatchLaterActivity extends RefreshListActivity {
                         });
                     } else {
                         longClickPosition = position;
+                        longClickTimestamp = timestamp;
                         MsgUtil.showMsg("再次长按删除");
                     }
                 });

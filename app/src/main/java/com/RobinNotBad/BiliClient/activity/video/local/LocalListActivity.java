@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.activity.video.local;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
@@ -32,8 +31,7 @@ public class LocalListActivity extends InstanceActivity {
     private TextView emptyTip;
 
     private int longClickPosition = -1;
-    private Handler handler = new Handler();
-    private Runnable runnable;
+    private long longClickTimestamp;
 
     private boolean started;
 
@@ -64,7 +62,8 @@ public class LocalListActivity extends InstanceActivity {
             adapter = new LocalVideoAdapter(this, videoList);
 
             adapter.setOnLongClickListener(position -> {
-                if (longClickPosition == position) {
+                long timestamp = System.currentTimeMillis();
+                if (longClickPosition == position && timestamp - longClickTimestamp < 4000) {
                     File file = new File(FileUtil.getDownloadPath(), videoList.get(position).title);
                     CenterThreadPool.run(() -> FileUtil.deleteFolder(file));
                     MsgUtil.showMsg("删除成功");
@@ -75,12 +74,8 @@ public class LocalListActivity extends InstanceActivity {
                     checkEmpty();
                 } else {
                     longClickPosition = position;
+                    longClickTimestamp = timestamp;
                     MsgUtil.showMsg("再次长按删除");
-                    handler.postDelayed(runnable = () -> {
-                        if (longClickPosition != -1) {
-                            longClickPosition = -1;
-                        }
-                    }, 3000);
                 }
             });
             runOnUiThread(() -> {

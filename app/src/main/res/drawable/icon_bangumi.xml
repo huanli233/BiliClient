@@ -1,27 +1,9 @@
-<vector android:height="24dp" android:viewportHeight="24"
-    android:viewportWidth="24" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="#00000000"
-        android:pathData="M3,6L3,18A3,3 0,0 0,6 21L18,21A3,3 0,0 0,21 18L21,6A3,3 0,0 0,18 3L6,3A3,3 0,0 0,3 6z"
-        android:strokeColor="#ebe0e2" android:strokeLineCap="round"
-        android:strokeLineJoin="round" android:strokeWidth="2"/>
-    <path android:fillColor="#00000000" android:pathData="M7,4L7,20"
-        android:strokeColor="#ebe0e2" android:strokeLineCap="round"
-        android:strokeLineJoin="round" android:strokeWidth="2"/>
-    <path android:fillColor="#00000000" android:pathData="M6,8L3,8"
-        android:strokeColor="#ebe0e2" android:strokeLineCap="round"
-        android:strokeLineJoin="round" android:strokeWidth="2"/>
-    <path android:fillColor="#00000000" android:pathData="M21,8L18,8"
-        android:strokeColor="#ebe0e2" android:strokeLineCap="round"
-        android:strokeLineJoin="round" android:strokeWidth="2"/>
-    <path android:fillColor="#00000000" android:pathData="M6,16L3,16"
-        android:strokeColor="#ebe0e2" android:strokeLineCap="round"
-        android:strokeLineJoin="round" android:strokeWidth="2"/>
-    <path android:fillColor="#00000000" android:pathData="M21,16L18,16"
-        android:strokeColor="#ebe0e2" android:strokeLineCap="round"
-        android:strokeLineJoin="round" android:strokeWidth="2"/>
-    <path android:fillColor="#00000000" android:pathData="M17,4L17,20"
-        android:strokeColor="#ebe0e2" android:strokeLineCap="round"
-        android:strokeLineJoin="round" android:strokeWidth="2"/>
-    <path android:fillColor="#00000000" android:pathData="M21,12L3,12"
-        android:strokeColor="#ebe0e2" android:strokeLineCap="round" android:strokeWidth="2"/>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960">
+    <path
+        android:pathData="m160,160 l80,160h120l-80,-160h80l80,160h120l-80,-160h80l80,160h120l-80,-160h120q33,0 56.5,23.5T880,240v480q0,33 -23.5,56.5T800,800L160,800q-33,0 -56.5,-23.5T80,720v-480q0,-33 23.5,-56.5T160,160ZM160,400v320h640v-320L160,400ZM160,400v320,-320Z"
+        android:fillColor="#ebe0e2"/>
 </vector>
