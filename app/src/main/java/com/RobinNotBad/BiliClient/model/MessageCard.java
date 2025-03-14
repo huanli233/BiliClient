@@ -22,6 +22,7 @@ public class MessageCard {
     public int getType;
     public long sourceId;
     public long rootId;
+    public long targetId;
 
     public static class Cursor {
         public final boolean is_end;

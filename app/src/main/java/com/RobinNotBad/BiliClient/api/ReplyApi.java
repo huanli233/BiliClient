@@ -37,9 +37,10 @@ import java.util.Objects;
 
 public class ReplyApi {
 
-    public static final int REPLY_TYPE_CHILD = 0;
+    public static final int REPLY_TYPE_VIDEO_CHILD = 0;
     public static final int REPLY_TYPE_VIDEO = 1;
     public static final int REPLY_TYPE_ARTICLE = 12;
+    public static final int REPLY_TYPE_DYNAMIC_CHILD = 11;
     public static final int REPLY_TYPE_DYNAMIC = 17;
     public static final String TOP_TIP = "[置顶]";
 

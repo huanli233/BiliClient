@@ -57,63 +57,69 @@ public class MessageApi {
                 likeInfo.user = userList;
                 likeInfo.timeStamp = object.getLong("like_time");
 
-                if (object.getJSONObject("item").getString("type").equals("video")) {
-                    likeInfo.content = "等总共 " + object.getLong("counts") + " 人点赞了你的视频";
-                    VideoCard videoCard = new VideoCard();
-                    videoCard.aid = 0;
-                    videoCard.bvid = object.getJSONObject("item").getString("uri").replace("https://www.bilibili.com/video/BV", "");
-                    videoCard.upName = "";
-                    videoCard.title = object.getJSONObject("item").getString("title");
-                    videoCard.cover = object.getJSONObject("item").getString("image");
-                    videoCard.view = "";
-                    likeInfo.videoCard = videoCard;
-                } else if (object.getJSONObject("item").getString("type").equals("reply")) {
-                    likeInfo.content = "等总共 " + object.getLong("counts") + " 人点赞了你的评论";
-                    Reply replyInfo = new Reply();
-                    replyInfo.rpid = object.getJSONObject("item").getLong("item_id");
-                    replyInfo.sender = null;
-                    replyInfo.message = object.getJSONObject("item").getString("title");
-                    replyInfo.emotes = new ArrayList<>();
-                    replyInfo.pictureList = new ArrayList<>();
-                    replyInfo.likeCount = 0;
-                    replyInfo.upLiked = false;
-                    replyInfo.upReplied = false;
-                    replyInfo.liked = false;
-                    replyInfo.childCount = 0;
-                    replyInfo.ofBvid = object.getJSONObject("item").getString("uri").replace("https://www.bilibili.com/video/", "");
-                    replyInfo.childMsgList = new ArrayList<>();
-                    likeInfo.replyInfo = replyInfo;
-                } else if (object.getJSONObject("item").getString("type").equals("dynamic")) {
-                    likeInfo.content = "等总共 " + object.getLong("counts") + " 人点赞了你的动态";
-                    Reply replyInfo = new Reply();
-                    replyInfo.rpid = object.getJSONObject("item").getLong("item_id");
-                    replyInfo.sender = null;
-                    replyInfo.message = object.getJSONObject("item").getString("title");
-                    replyInfo.emotes = new ArrayList<>();
-                    replyInfo.pictureList = new ArrayList<>();
-                    replyInfo.likeCount = 0;
-                    replyInfo.upLiked = false;
-                    replyInfo.upReplied = false;
-                    replyInfo.liked = false;
-                    replyInfo.isDynamic = true;
-                    replyInfo.childCount = 0;
-                    replyInfo.childMsgList = new ArrayList<>();
-                    likeInfo.dynamicInfo = replyInfo;
-                } else if (object.getJSONObject("item").getString("type").equals("article")) {
-                    likeInfo.content = "等总共 " + object.getLong("counts") + " 人点赞了你的专栏";
-                    // 实在是抽象 但是我没时间改那么多
-                    Reply replyChildInfo = new Reply();
-                    replyChildInfo.rpid = object.getJSONObject("item").getLong("target_id");
-                    replyChildInfo.message = object.getJSONObject("item").getString("title");
-                    replyChildInfo.childCount = 0;
-                    likeInfo.replyInfo = replyChildInfo;
-                }
                 JSONObject item = object.getJSONObject("item");
                 likeInfo.businessId = item.getInt("business_id");
                 likeInfo.subjectId = item.getLong("item_id");
                 likeInfo.sourceId = item.optLong("source_id", -1);
                 likeInfo.rootId = item.optLong("root_id", -1);
                 likeInfo.itemType = item.getString("type");
+
+                switch (likeInfo.itemType){
+                    case "video":
+                        likeInfo.content = "等总共 " + object.getLong("counts") + " 人点赞了你的视频";
+                        VideoCard videoCard = new VideoCard();
+                        videoCard.aid = 0;
+                        videoCard.bvid = item.getString("uri").replace("https://www.bilibili.com/video/BV", "");
+                        videoCard.upName = "";
+                        videoCard.title = item.getString("title");
+                        videoCard.cover = item.getString("image");
+                        videoCard.view = "";
+                        likeInfo.videoCard = videoCard;
+                        break;
+                    case "reply":
+                        likeInfo.content = "等总共 " + object.getLong("counts") + " 人点赞了你的评论";
+                        Reply replyInfo = new Reply();
+                        replyInfo.rpid = item.getLong("item_id");
+                        replyInfo.sender = null;
+                        replyInfo.message = item.getString("title");
+                        replyInfo.emotes = new ArrayList<>();
+                        replyInfo.pictureList = new ArrayList<>();
+                        replyInfo.likeCount = 0;
+                        replyInfo.upLiked = false;
+                        replyInfo.upReplied = false;
+                        replyInfo.liked = false;
+                        replyInfo.childCount = 0;
+                        replyInfo.ofBvid = item.getString("uri").replace("https://www.bilibili.com/video/", "");
+                        replyInfo.childMsgList = new ArrayList<>();
+                        likeInfo.replyInfo = replyInfo;
+                        break;
+                    case "dynamic":
+                        likeInfo.content = "等总共 " + object.getLong("counts") + " 人点赞了你的动态";
+                        Reply replyInfo_dynamic = new Reply();
+                        replyInfo_dynamic.rpid = item.getLong("item_id");
+                        replyInfo_dynamic.sender = null;
+                        replyInfo_dynamic.message = item.getString("title");
+                        replyInfo_dynamic.emotes = new ArrayList<>();
+                        replyInfo_dynamic.pictureList = new ArrayList<>();
+                        replyInfo_dynamic.likeCount = 0;
+                        replyInfo_dynamic.upLiked = false;
+                        replyInfo_dynamic.upReplied = false;
+                        replyInfo_dynamic.liked = false;
+                        replyInfo_dynamic.isDynamic = true;
+                        replyInfo_dynamic.childCount = 0;
+                        replyInfo_dynamic.childMsgList = new ArrayList<>();
+                        likeInfo.dynamicInfo = replyInfo_dynamic;
+                        break;
+                    case "article":
+                        likeInfo.content = "等总共 " + object.getLong("counts") + " 人点赞了你的专栏";
+                        // 实在是抽象 但是我没时间改那么多
+                        Reply replyChildInfo = new Reply();
+                        replyChildInfo.rpid = item.getLong("target_id");
+                        replyChildInfo.message = item.getString("title");
+                        replyChildInfo.childCount = 0;
+                        likeInfo.replyInfo = replyChildInfo;
+                        break;
+                }
 
                 likeInfo.getType = MessageCard.GET_TYPE_LIKE;
                 totalArray.add(likeInfo);
@@ -143,55 +149,7 @@ public class MessageApi {
 
                 replyInfo.id = object.getLong("id");
                 replyInfo.timeStamp = object.getLong("reply_time");
-                replyInfo.content = object.getJSONObject("item").getString("source_content");
 
-                if (object.getJSONObject("item").getString("type").equals("video")) {
-                    VideoCard videoCard = new VideoCard();
-                    videoCard.aid = 0;
-                    videoCard.bvid = object.getJSONObject("item").getString("uri").replace("https://www.bilibili.com/video/BV", "");
-                    videoCard.upName = "";
-                    videoCard.title = object.getJSONObject("item").getString("title");
-                    videoCard.cover = object.getJSONObject("item").getString("image");
-                    videoCard.view = "";
-                    replyInfo.videoCard = videoCard;
-                } else if (object.getJSONObject("item").getString("type").equals("reply")) {
-                    Reply replyChildInfo = new Reply();
-                    replyChildInfo.rpid = object.getJSONObject("item").getLong("target_id");
-                    replyChildInfo.sender = null;
-                    replyChildInfo.message = "[评论] " + object.getJSONObject("item").getString("title");
-                    replyChildInfo.emotes = new ArrayList<>();
-                    replyChildInfo.pictureList = new ArrayList<>();
-                    replyChildInfo.likeCount = 0;
-                    replyChildInfo.upLiked = false;
-                    replyChildInfo.upReplied = false;
-                    replyChildInfo.liked = false;
-                    replyChildInfo.childCount = 0;
-                    replyChildInfo.ofBvid = object.getJSONObject("item").getString("uri").replace("https://www.bilibili.com/video/", "");
-                    replyChildInfo.childMsgList = new ArrayList<>();
-                    replyInfo.replyInfo = replyChildInfo;
-                } else if (object.getJSONObject("item").getString("type").equals("dynamic")) {
-                    Reply replyChildInfo = new Reply();
-                    replyChildInfo.rpid = object.getJSONObject("item").getLong("target_id");
-                    replyChildInfo.sender = null;
-                    replyChildInfo.message = "[动态] " + object.getJSONObject("item").getString("title");
-                    replyChildInfo.emotes = new ArrayList<>();
-                    replyChildInfo.pictureList = new ArrayList<>();
-                    replyChildInfo.likeCount = 0;
-                    replyChildInfo.upLiked = false;
-                    replyChildInfo.upReplied = false;
-                    replyChildInfo.liked = false;
-                    replyChildInfo.childCount = 0;
-                    replyChildInfo.isDynamic = true;
-                    replyChildInfo.childMsgList = new ArrayList<>();
-                    replyInfo.dynamicInfo = replyChildInfo;
-                } else if (object.getJSONObject("item").getString("type").equals("article")) {
-                    // TODO 实在是抽象 但是我没时间改那么多
-                    Reply replyChildInfo = new Reply();
-                    replyChildInfo.rpid = object.getJSONObject("item").getLong("target_id");
-                    replyChildInfo.message = "[专栏] " + object.getJSONObject("item").getString("title");
-                    replyChildInfo.childCount = 0;
-                    replyInfo.replyInfo = replyChildInfo;
-                }
                 JSONObject item = object.getJSONObject("item");
                 replyInfo.businessId = item.getInt("business_id");
                 replyInfo.subjectId = item.getLong("subject_id");
@@ -199,6 +157,61 @@ public class MessageApi {
                 replyInfo.rootId = item.optLong("root_id", -1);
                 replyInfo.itemType = item.getString("type");
                 replyInfo.getType = MessageCard.GET_TYPE_REPLY;
+                replyInfo.targetId = item.optLong("target_id",-1);
+
+                replyInfo.content = item.getString("source_content");
+
+                switch (replyInfo.itemType){
+                    case "video":
+                        VideoCard videoCard = new VideoCard();
+                        videoCard.aid = 0;
+                        videoCard.bvid = item.getString("uri").replace("https://www.bilibili.com/video/BV", "");
+                        videoCard.upName = "";
+                        videoCard.title = item.getString("title");
+                        videoCard.cover = item.getString("image");
+                        videoCard.view = "";
+                        replyInfo.videoCard = videoCard;
+                        break;
+                    case "reply":
+                        Reply replyChildInfo = new Reply();
+                        replyChildInfo.rpid = item.getLong("target_id");
+                        replyChildInfo.sender = null;
+                        replyChildInfo.message = "[评论] " + item.getString("title");
+                        replyChildInfo.emotes = new ArrayList<>();
+                        replyChildInfo.pictureList = new ArrayList<>();
+                        replyChildInfo.likeCount = 0;
+                        replyChildInfo.upLiked = false;
+                        replyChildInfo.upReplied = false;
+                        replyChildInfo.liked = false;
+                        replyChildInfo.childCount = 0;
+                        replyChildInfo.ofBvid = item.getString("uri").replace("https://www.bilibili.com/video/", "");
+                        replyChildInfo.childMsgList = new ArrayList<>();
+                        replyInfo.replyInfo = replyChildInfo;
+                        break;
+                    case "dynamic":
+                    case "album":
+                        Reply replyChildInfo_dynamic = new Reply();
+                        replyChildInfo_dynamic.rpid = item.getLong("target_id");
+                        replyChildInfo_dynamic.sender = null;
+                        replyChildInfo_dynamic.message = "[动态] " + item.getString("title");
+                        replyChildInfo_dynamic.emotes = new ArrayList<>();
+                        replyChildInfo_dynamic.pictureList = new ArrayList<>();
+                        replyChildInfo_dynamic.likeCount = 0;
+                        replyChildInfo_dynamic.upLiked = false;
+                        replyChildInfo_dynamic.upReplied = false;
+                        replyChildInfo_dynamic.liked = false;
+                        replyChildInfo_dynamic.childCount = 0;
+                        replyChildInfo_dynamic.isDynamic = true;
+                        replyChildInfo_dynamic.childMsgList = new ArrayList<>();
+                        replyInfo.dynamicInfo = replyChildInfo_dynamic;
+                        break;
+                    case "article":
+                        Reply replyChildInfo_article = new Reply();
+                        replyChildInfo_article.rpid = item.getLong("target_id");
+                        replyChildInfo_article.message = "[专栏] " + item.getString("title");
+                        replyChildInfo_article.childCount = 0;
+                        replyInfo.replyInfo = replyChildInfo_article;
+                }
 
                 totalArray.add(replyInfo);
             }

@@ -103,11 +103,14 @@ public class NoticeHolder extends RecyclerView.ViewHolder {
                     if(message.itemType.equals("reply") || message.getType == MessageCard.GET_TYPE_REPLY) {
                         long seekReply = message.rootId == 0 ? message.sourceId : message.rootId;
                         switch (message.businessId) {
-                            case ReplyApi.REPLY_TYPE_CHILD:
-                                MsgUtil.showMsg("子评论暂时无法定位，也许以后会做吧……");
+                            case ReplyApi.REPLY_TYPE_VIDEO_CHILD:
+                                MsgUtil.showMsg("视频的子评论暂时无法定位，也许以后会做吧……");
                                 //Todo 定位子评论 MessageApi:70 可拆分native_uri获得id
                             case ReplyApi.REPLY_TYPE_VIDEO:
                                 TerminalContext.getInstance().enterVideoDetailPage(context, 0, childReply.ofBvid, null, seekReply);
+                                break;
+                            case ReplyApi.REPLY_TYPE_DYNAMIC_CHILD:
+                                MsgUtil.showMsg("动态的子评论暂时无法跳转，也许以后会做吧……");
                                 break;
                             case ReplyApi.REPLY_TYPE_DYNAMIC:
                                 TerminalContext.getInstance().enterDynamicDetailPage(context, message.subjectId, 0, seekReply);
