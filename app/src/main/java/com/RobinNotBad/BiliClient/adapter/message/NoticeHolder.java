@@ -1,7 +1,6 @@
 package com.RobinNotBad.BiliClient.adapter.message;
 
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -101,38 +100,46 @@ public class NoticeHolder extends RecyclerView.ViewHolder {
             holder.showReplyCard(childReply);
             holder.itemView.findViewById(R.id.cardView).setOnClickListener(view -> {
                 try {
-                    if (message.getType == MessageCard.GET_TYPE_REPLY && message.businessId == ReplyApi.REPLY_TYPE_VIDEO) {
-                        TerminalContext.getInstance()
-                                .enterVideoDetailPage(context, 0, childReply.ofBvid, null, message.rootId == 0 ? message.sourceId : message.rootId);
-                    } else if (message.getType == MessageCard.GET_TYPE_REPLY && message.businessId == ReplyApi.REPLY_TYPE_DYNAMIC) {
+                    if(message.itemType.equals("reply") || message.getType == MessageCard.GET_TYPE_REPLY) {
                         long seekReply = message.rootId == 0 ? message.sourceId : message.rootId;
-                        TerminalContext.getInstance().enterDynamicDetailPage(context, message.subjectId, 0, seekReply);
-                    } else if (message.getType == MessageCard.GET_TYPE_REPLY && message.businessId == ReplyApi.REPLY_TYPE_ARTICLE) {
-                        long seekReply = message.rootId == 0 ? message.sourceId : message.rootId;
-                        TerminalContext.getInstance().enterArticleDetailPage(context, message.subjectId, seekReply);
-                    } else if (message.getType == MessageCard.GET_TYPE_LIKE || message.getType == MessageCard.GET_TYPE_AT) {
-                        if (message.itemType.equals("video")) {
-                            TerminalContext.getInstance().enterVideoDetailPage(context, 0, childReply.ofBvid);
-                        } else if (message.itemType.equals("dynamic")) {
-                            TerminalContext.getInstance().enterDynamicDetailPage(context, message.subjectId);
-                        } else if (message.itemType.equals("article")) {
-                            TerminalContext.getInstance().enterArticleDetailPage(context, message.subjectId);
-                        } else if (message.itemType.equals("reply") && message.businessId == ReplyApi.REPLY_TYPE_VIDEO) {
-                            TerminalContext.getInstance().enterVideoDetailPage(context, 0, childReply.ofBvid, null, message.rootId == 0 ? message.sourceId : message.rootId);
-                        } else if (message.itemType.equals("reply") && message.businessId == ReplyApi.REPLY_TYPE_DYNAMIC) {
-                            long seekReply = message.rootId == 0 ? message.sourceId : message.rootId;
-                            TerminalContext.getInstance().enterDynamicDetailPage(context, message.subjectId, 0, seekReply);
-                        } else if (message.itemType.equals("reply") && message.businessId == ReplyApi.REPLY_TYPE_ARTICLE) {
-                            long seekReply = message.rootId == 0 ? message.sourceId : message.rootId;
-                            TerminalContext.getInstance().enterArticleDetailPage(context, message.subjectId, seekReply);
-                        } else {
-                            MsgUtil.showMsg("此类型暂不支持跳转");
+                        switch (message.businessId) {
+                            case ReplyApi.REPLY_TYPE_CHILD:
+                                MsgUtil.showMsg("子评论暂时无法定位，也许以后会做吧……");
+                                //Todo 定位子评论 MessageApi:70 可拆分native_uri获得id
+                            case ReplyApi.REPLY_TYPE_VIDEO:
+                                TerminalContext.getInstance().enterVideoDetailPage(context, 0, childReply.ofBvid, null, seekReply);
+                                break;
+                            case ReplyApi.REPLY_TYPE_DYNAMIC:
+                                TerminalContext.getInstance().enterDynamicDetailPage(context, message.subjectId, 0, seekReply);
+                                break;
+                            case ReplyApi.REPLY_TYPE_ARTICLE:
+                                TerminalContext.getInstance().enterArticleDetailPage(context, message.subjectId, seekReply);
+                                break;
+                            default:
+                                MsgUtil.showMsg("不支持这个类型喵：" + message.businessId);
                         }
-                    } else {
-                        MsgUtil.showMsg("此类型暂不支持跳转");
                     }
-                } catch (ActivityNotFoundException ignored) {
-                    MsgUtil.showMsg("此类型暂不支持跳转");
+                    else switch (message.getType) {
+                        case MessageCard.GET_TYPE_LIKE:
+                        case MessageCard.GET_TYPE_AT:
+                            switch (message.itemType) {
+                                case "video":
+                                    TerminalContext.getInstance().enterVideoDetailPage(context, 0, childReply.ofBvid);
+                                    break;
+                                case "dynamic":
+                                    TerminalContext.getInstance().enterDynamicDetailPage(context, message.subjectId);
+                                    break;
+                                case "article":
+                                    TerminalContext.getInstance().enterArticleDetailPage(context, message.subjectId);
+                                    break;
+                                default:
+                                    MsgUtil.showMsg("不支持这个类型喵：" + message.itemType);
+                            }
+                            break;
+                    }
+
+                } catch (Exception e) {
+                    MsgUtil.err("跳转出错？", e);
                 }
             });
         }

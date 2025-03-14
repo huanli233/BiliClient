@@ -17,6 +17,7 @@ public class NoticeActivity extends RefreshListActivity {
     private List<MessageCard> messageList;
     private NoticeAdapter noticeAdapter;
     private MessageCard.Cursor cursor;
+    private String pageType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +25,12 @@ public class NoticeActivity extends RefreshListActivity {
 
         setPageName("详情");
 
+        Intent intent = getIntent();
+        pageType = intent.getStringExtra("type");
         messageList = new ArrayList<>();
 
         CenterThreadPool.run(() -> {
             try {
-                Intent intent = getIntent();
-                String pageType = intent.getStringExtra("type");
                 Pair<MessageCard.Cursor, List<MessageCard>> pair;
                 switch (pageType) {
                     case "like":
@@ -68,7 +69,6 @@ public class NoticeActivity extends RefreshListActivity {
         CenterThreadPool.run(() -> {
             try {
                 int lastSize = messageList.size();
-                String pageType = getIntent().getStringExtra("type");
                 Pair<MessageCard.Cursor, List<MessageCard>> pair;
                 switch (pageType) {
                     case "like":

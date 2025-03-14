@@ -37,6 +37,7 @@ import java.util.Objects;
 
 public class ReplyApi {
 
+    public static final int REPLY_TYPE_CHILD = 0;
     public static final int REPLY_TYPE_VIDEO = 1;
     public static final int REPLY_TYPE_ARTICLE = 12;
     public static final int REPLY_TYPE_DYNAMIC = 17;
