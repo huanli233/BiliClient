@@ -119,6 +119,8 @@ public class MessageApi {
                         replyChildInfo.childCount = 0;
                         likeInfo.replyInfo = replyChildInfo;
                         break;
+                    default:
+                        likeInfo.content = "无法识别这个类别：" + likeInfo.itemType;
                 }
 
                 likeInfo.getType = MessageCard.GET_TYPE_LIKE;
@@ -211,6 +213,9 @@ public class MessageApi {
                         replyChildInfo_article.message = "[专栏] " + item.getString("title");
                         replyChildInfo_article.childCount = 0;
                         replyInfo.replyInfo = replyChildInfo_article;
+                        break;
+                    default:
+                        replyInfo.content = "无法识别这个类别：" + replyInfo.itemType;
                 }
 
                 totalArray.add(replyInfo);
