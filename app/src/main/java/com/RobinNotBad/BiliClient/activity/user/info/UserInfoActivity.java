@@ -14,7 +14,6 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.dynamic.DynamicHolder;
 import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerFragmentAdapter;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,39 +29,36 @@ public class UserInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
+        setContentView(R.layout.activity_simple_viewpager);
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_simple_viewpager, null, (layoutView, resId, parent) -> {
-            setContentView(layoutView);
-            setTopbarExit();
-            Intent intent = getIntent();
-            long mid = intent.getLongExtra("mid", 114514);
+        Intent intent = getIntent();
+        long mid = intent.getLongExtra("mid", 114514);
 
-            setPageName("用户信息");
+        setPageName("用户信息");
 
-            TutorialHelper.showTutorialList(this, R.array.tutorial_space, 2);
+        TutorialHelper.showTutorialList(this, R.array.tutorial_space, 2);
 
-            ViewPager viewPager = findViewById(R.id.viewPager);
+        ViewPager viewPager = findViewById(R.id.viewPager);
 
-            List<Fragment> fragmentList = new ArrayList<>();
-            udFragment = UserDynamicFragment.newInstance(mid);
-            fragmentList.add(udFragment);
-            UserVideoFragment uvFragment = UserVideoFragment.newInstance(mid);
-            fragmentList.add(uvFragment);
-            UserArticleFragment acFragment = UserArticleFragment.newInstance(mid);
-            fragmentList.add(acFragment);
-            //UserSeasonFragment ssFragment = UserSeasonFragment.newInstance(mid);
-            //fragmentList.add(ssFragment);
-            viewPager.setOffscreenPageLimit(fragmentList.size());
+        List<Fragment> fragmentList = new ArrayList<>();
+        udFragment = UserDynamicFragment.newInstance(mid);
+        fragmentList.add(udFragment);
+        UserVideoFragment uvFragment = UserVideoFragment.newInstance(mid);
+        fragmentList.add(uvFragment);
+        UserArticleFragment acFragment = UserArticleFragment.newInstance(mid);
+        fragmentList.add(acFragment);
+        //UserSeasonFragment ssFragment = UserSeasonFragment.newInstance(mid);
+        //fragmentList.add(ssFragment);
+        viewPager.setOffscreenPageLimit(fragmentList.size());
 
-            ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
+        ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
 
-            viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
+        viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
 
-            findViewById(R.id.loading).setVisibility(View.GONE);
+        findViewById(R.id.loading).setVisibility(View.GONE);
 
-            TutorialHelper.showPagerTutorial(this,3);
-        });
+        TutorialHelper.showPagerTutorial(this, 3);
+
     }
 
     @Override

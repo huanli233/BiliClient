@@ -583,7 +583,7 @@
                         android:layout_marginTop="10dp"
                         android:ellipsize="end"
                         android:lines="1"
-                        android:text="测试性功能"
+                        android:text="实验室"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toTopOf="@+id/laboratory_desription"
                         app:layout_constraintEnd_toStartOf="@+id/laboratory_go"

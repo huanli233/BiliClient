@@ -17,7 +17,6 @@ import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.PrivateMsgSession;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.google.android.material.card.MaterialCardView;
@@ -37,9 +36,7 @@ public class MessageActivity extends InstanceActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_message, null, (layoutView, id, parent) -> {
-            setContentView(layoutView);
-            setMenuClick();
+        asyncInflate(R.layout.activity_message ,(layoutView, resId) -> {
             SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
             swipeRefreshLayout.setEnabled(false);
             swipeRefreshLayout.setRefreshing(true);

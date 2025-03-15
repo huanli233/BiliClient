@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -20,6 +21,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -37,8 +39,10 @@ import com.RobinNotBad.BiliClient.event.SnackEvent;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomGridManager;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
+import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -105,31 +109,10 @@ public class BaseActivity extends AppCompatActivity {
 
     public void setPageName(String name) {
         TextView textView = findViewById(R.id.pageName);
-        if (textView != null) {
-            textView.setText(name);
-            textView.setMaxLines(1);
-        }
+        if (textView != null) textView.setText(name);
     }
 
     public void setTopbarExit() {
-        /*
-        //圆屏适配
-        if(SharedPreferencesUtil.getBoolean("player_ui_round",false)){
-            TextView pagename = findViewById(R.id.pageName);
-            if(pagename != null) {
-                ViewGroup.LayoutParams params = pagename.getLayoutParams();
-                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                int paddings = ToolsUtil.dp2px(16);
-                Log.d("debug-round","ok");
-                pagename.setPadding(paddings,paddings,paddings,0);
-                pagename.setLayoutParams(params);
-                pagename.setGravity(Gravity.CENTER);
-            }
-        }
-
-         */
-
         View view = findViewById(R.id.top);
         if(view==null) return;
         if(Build.VERSION.SDK_INT > 17 && view.hasOnClickListeners()) return;
@@ -139,6 +122,42 @@ public class BaseActivity extends AppCompatActivity {
             }
         });
         Log.e("debug", "set_exit");
+    }
+
+    public void setRound(){
+        //圆屏适配
+
+        TextView pagename = findViewById(R.id.pageName);
+        TextView clock = findViewById(R.id.timeText);
+        if(pagename != null) {
+            pagename.setMaxLines(1);
+            pagename.setEllipsize(TextUtils.TruncateAt.END);
+            if (SharedPreferencesUtil.getBoolean("player_ui_round", false)) {
+                try {
+                    ViewGroup.LayoutParams params = pagename.getLayoutParams();
+                    int paddingH = (int) (window_width * 0.18);
+                    int paddingV = (int) (window_width * 0.05);
+                    pagename.setPadding(paddingH, paddingV, paddingH, 0);
+                    if (params instanceof RelativeLayout.LayoutParams) {
+                        RelativeLayout.LayoutParams clockParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        clockParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                        clock.setLayoutParams(clockParams);
+                        clock.setAlpha(0.85f);
+                        clock.setTextSize(12
+                        );
+
+                        RelativeLayout.LayoutParams pnParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        pnParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                        pnParams.addRule(RelativeLayout.BELOW, R.id.clock);
+                        pnParams.topMargin = ToolsUtil.dp2px(3);
+                        pagename.setLayoutParams(pnParams);
+                        Logu.d("round", "ok");
+                    }
+                } catch (Throwable e){
+                    MsgUtil.err("圆屏适配执行错误：", e);
+                }
+            }
+        }
     }
 
     @Override
@@ -161,6 +180,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (!(this instanceof InstanceActivity)) setTopbarExit();
+        setRound();
         if (eventBusEnabled() && !eventBusInit) {
             EventBus.getDefault().register(this);
             eventBusInit = true;
@@ -217,6 +237,7 @@ public class BaseActivity extends AppCompatActivity {
             } else {
                 setTopbarExit();
             }
+            setRound();
             callBack.finishInflate(view, layoutId);
         });
     }

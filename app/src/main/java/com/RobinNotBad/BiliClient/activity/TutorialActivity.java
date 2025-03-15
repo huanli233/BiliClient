@@ -30,9 +30,7 @@ public class TutorialActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_tutorial, null, (layoutView, resId, parent) -> {
-            setContentView(layoutView);
-            setTopbarExit();
+        asyncInflate(R.layout.activity_tutorial ,(layoutView, resId) -> {
 
             Intent intent = getIntent();
 

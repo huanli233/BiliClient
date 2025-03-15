@@ -22,7 +22,6 @@ import com.RobinNotBad.BiliClient.adapter.video.MediaEpisodeAdapter;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
@@ -63,9 +62,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
 
         TutorialHelper.showTutorialList(this, R.array.tutorial_update_install, 3);
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_update_download_result, null, ((view, resid, parent) -> {
-            setContentView(view);
-            setTopbarExit();
+        asyncInflate(R.layout.activity_update_download_result ,(layoutView, resId) -> {
 
             pathTv = findViewById(R.id.path);
             installBtn = findViewById(R.id.install);
@@ -95,7 +92,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
                     MsgUtil.showMsg("未知的安装方式");
                 }
             }));
-        }));
+        });
     }
 
     private boolean checkRequestInstallPermission() {

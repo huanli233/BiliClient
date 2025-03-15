@@ -37,10 +37,7 @@ public class SettingPlayerChooseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_player_choose, null, (layoutView, resId, parent) -> {
-            setContentView(layoutView);
-            setTopbarExit();
-            Log.e("debug", "选择播放器");
+        asyncInflate(R.layout.activity_setting_player_choose ,(layoutView, resId) -> {
 
             terminalPlayer = findViewById(R.id.terminalPlayer);
             mtvPlayer = findViewById(R.id.mtvPlayer);

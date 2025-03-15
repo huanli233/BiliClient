@@ -37,43 +37,40 @@ public class DynamicInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
+        setContentView(R.layout.activity_simple_viewpager);
         this.seek_reply = getIntent().getLongExtra("seekReply", -1);
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_simple_viewpager, null, (layoutView, resId, parent) -> {
-            setContentView(layoutView);
-            setTopbarExit();
-            Intent intent = getIntent();
-            long id = intent.getLongExtra("id", 0);
+        Intent intent = getIntent();
+        long id = intent.getLongExtra("id", 0);
 
-            TextView pageName = findViewById(R.id.pageName);
-            pageName.setText("动态详情");
+        TextView pageName = findViewById(R.id.pageName);
+        pageName.setText("动态详情");
 
-            TutorialHelper.showTutorialList(this, R.array.tutorial_dynamic_info, 6);
-            TerminalContext.getInstance().getDynamicById(id)
-                    .observe(this, (dynamicResult) -> dynamicResult.onSuccess((dynamic) -> {
-                List<Fragment> fragmentList = new ArrayList<>();
-                DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance(id);
-                fragmentList.add(diFragment);
-                rFragment = ReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type, seek_reply, dynamic.userInfo.mid);
-                rFragment.setSource(dynamic);
-                rFragment.replyType = ReplyApi.REPLY_TYPE_DYNAMIC;
-                fragmentList.add(rFragment);
-                ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
-                ViewPager viewPager = findViewById(R.id.viewPager);
-                viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
-                View view;
-                if ((view = diFragment.getView()) != null) view.setVisibility(View.GONE);
-                if (seek_reply != -1) viewPager.setCurrentItem(1);
-                diFragment.setOnFinishLoad(() -> {
-                    AnimationUtils.crossFade(findViewById(R.id.loading), diFragment.getView());
-                    TutorialHelper.showPagerTutorial(this,2);
-                });
-            }).onFailure((e) -> {
-                MsgUtil.err(e);
-                ((ImageView) findViewById(R.id.loading)).setImageResource(R.mipmap.loading_2233_error);
-            }));
-        });
+        TutorialHelper.showTutorialList(this, R.array.tutorial_dynamic_info, 6);
+        TerminalContext.getInstance().getDynamicById(id)
+                .observe(this, (dynamicResult) -> dynamicResult.onSuccess((dynamic) -> {
+                    List<Fragment> fragmentList = new ArrayList<>();
+                    DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance(id);
+                    fragmentList.add(diFragment);
+                    rFragment = ReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type, seek_reply, dynamic.userInfo.mid);
+                    rFragment.setSource(dynamic);
+                    rFragment.replyType = ReplyApi.REPLY_TYPE_DYNAMIC;
+                    fragmentList.add(rFragment);
+                    ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
+                    ViewPager viewPager = findViewById(R.id.viewPager);
+                    viewPager.setAdapter(vpfAdapter);  //没啥好说的，教科书式的ViewPager使用方法
+                    View view;
+                    if ((view = diFragment.getView()) != null) view.setVisibility(View.GONE);
+                    if (seek_reply != -1) viewPager.setCurrentItem(1);
+                    diFragment.setOnFinishLoad(() -> {
+                        AnimationUtils.crossFade(findViewById(R.id.loading), diFragment.getView());
+                        TutorialHelper.showPagerTutorial(this, 2);
+                    });
+                }).onFailure((e) -> {
+                    MsgUtil.err(e);
+                    ((ImageView) findViewById(R.id.loading)).setImageResource(R.mipmap.loading_2233_error);
+                }));
+
     }
 
     @Override

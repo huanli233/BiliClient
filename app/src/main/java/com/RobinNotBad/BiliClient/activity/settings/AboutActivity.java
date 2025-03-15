@@ -38,10 +38,8 @@ public class AboutActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_about, null, (layoutView, resId, parent) -> {
-            setContentView(layoutView);
+        asyncInflate(R.layout.activity_setting_about ,(layoutView, resId) -> {
             Log.e("debug", "进入关于页面");
-            setTopbarExit();
 
             try {
                 SpannableString version_str = new SpannableString("版本名\n" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);

@@ -28,7 +28,6 @@ import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
@@ -69,9 +68,7 @@ public class SendDynamicActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_send_dynamic, null, (layoutView, resId, parent) -> {
-            setContentView(layoutView);
-            setTopbarExit();
+        asyncInflate(R.layout.activity_send_dynamic ,(layoutView, resId) -> {
 
             if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
                 setResult(RESULT_CANCELED);

@@ -15,7 +15,6 @@ import com.RobinNotBad.BiliClient.activity.user.favorite.FavoriteFolderListActiv
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.api.UserInfoApi;
 import com.RobinNotBad.BiliClient.model.UserInfo;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -40,9 +39,7 @@ public class MySpaceActivity extends InstanceActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_myspace, null, (layoutView, resId, parent) -> {
-            setContentView(layoutView);
-            setMenuClick();
+        asyncInflate(R.layout.activity_myspace ,(layoutView, resId) -> {
             Log.e("debug", "进入个人页");
 
             userAvatar = findViewById(R.id.userAvatar);

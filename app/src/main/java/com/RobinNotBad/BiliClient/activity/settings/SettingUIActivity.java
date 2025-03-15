@@ -10,7 +10,6 @@ import android.widget.EditText;
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -25,10 +24,7 @@ public class SettingUIActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_setting_ui, null, (layoutView, resId, parent) -> {
-            setContentView(R.layout.activity_setting_ui);
-            setTopbarExit();
-            Log.e("debug", "进入界面设置");
+        asyncInflate(R.layout.activity_setting_ui ,(layoutView, resId) -> {
 
             uiScaleInput = findViewById(R.id.ui_scale_input);
             uiScaleInput.setText(String.valueOf(SharedPreferencesUtil.getFloat("dpi", 1.0F)));
@@ -48,8 +44,8 @@ public class SettingUIActivity extends BaseActivity {
             round.setChecked(SharedPreferencesUtil.getBoolean("player_ui_round",false));
             round.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if(isChecked){
-                    uiPaddingH.setText("11");
-                    uiPaddingV.setText("11");
+                    uiPaddingH.setText("3");
+                    uiPaddingV.setText("3");
                     SharedPreferencesUtil.putBoolean("player_ui_round",true);
                 }
                 else{

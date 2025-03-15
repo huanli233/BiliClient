@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -61,9 +60,8 @@ public class UpdateInfoActivity extends BaseActivity {
         String updateLog = intent.getStringExtra("updateLog");
         int canDownload = intent.getIntExtra("canDownload", 0);
 
-        new AsyncLayoutInflaterX(this).inflate(R.layout.activity_update_info, null, ((view, resid, parent) -> {
-            setContentView(view);
-            setTopbarExit();
+        asyncInflate(R.layout.activity_update_info ,(layoutView, resId) -> {
+
             versionNameTv = findViewById(R.id.versionName);
             versionCodeTv = findViewById(R.id.versionCode);
             isReleaseTv = findViewById(R.id.isRelease);
@@ -183,7 +181,7 @@ public class UpdateInfoActivity extends BaseActivity {
                     }
                 });
             });
-        }));
+        });
     }
 
     @Override
