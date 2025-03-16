@@ -6,44 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".activity.EmoteActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_height="wrap_content"
+    <RelativeLayout
+        android:id="@+id/top"
         android:layout_width="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/top">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginVertical="3dp"
-            android:gravity="center"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="8dp"
             android:id="@+id/pageName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginVertical="3dp"
             android:text="表情"
             android:textStyle="bold"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             app:drawableStartCompat="@drawable/arrow_back" />
 
         <com.RobinNotBad.BiliClient.ui.widget.TextClock
-            android:layout_height="wrap_content"
+            android:id="@+id/timeText"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginVertical="3dp"
-            android:format24Hour="HH:mm"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:gravity="center"
-            app:layout_constraintTop_toTopOf="parent"
-            android:format12Hour="hh:mm"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/timeText"
             android:text="11:45"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tl_tab"

@@ -25,7 +25,6 @@ import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.adapter.SearchHistoryAdapter;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.JsonUtil;
 import com.RobinNotBad.BiliClient.util.LinkUrlUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;

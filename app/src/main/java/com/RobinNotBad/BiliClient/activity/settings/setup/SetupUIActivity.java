@@ -3,12 +3,12 @@ package com.RobinNotBad.BiliClient.activity.settings.setup;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.settings.UIPreviewActivity;
+import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -35,8 +35,8 @@ public class SetupUIActivity extends BaseActivity {
         round.setChecked(SharedPreferencesUtil.getBoolean("player_ui_round",false));
         round.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
-                uiPaddingH.setText("11");
-                uiPaddingV.setText("11");
+                uiPaddingH.setText("3");
+                uiPaddingV.setText("3");
                 SharedPreferencesUtil.putBoolean("player_ui_round",true);
             }
             else{
@@ -79,19 +79,19 @@ public class SetupUIActivity extends BaseActivity {
             float dpiTimes = Float.parseFloat(uiScaleInput.getText().toString());
             if (dpiTimes >= 0.1F && dpiTimes <= 10.0F)
                 SharedPreferencesUtil.putFloat("dpi", dpiTimes);
-            Log.e("dpi", uiScaleInput.getText().toString());
+            Logu.i("dpi", uiScaleInput.getText().toString());
         }
 
         if (!uiPaddingH.getText().toString().isEmpty()) {
             int paddingH = Integer.parseInt(uiPaddingH.getText().toString());
             if (paddingH <= 30) SharedPreferencesUtil.putInt("paddingH_percent", paddingH);
-            Log.e("paddingH", uiPaddingH.getText().toString());
+            Logu.i("paddingH", uiPaddingH.getText().toString());
         }
 
         if (!uiPaddingV.getText().toString().isEmpty()) {
             int paddingV = Integer.parseInt(uiPaddingV.getText().toString());
             if (paddingV <= 30) SharedPreferencesUtil.putInt("paddingV_percent", paddingV);
-            Log.e("paddingV", uiPaddingV.getText().toString());
+            Logu.i("paddingV", uiPaddingV.getText().toString());
         }
     }
 }

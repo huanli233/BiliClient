@@ -149,6 +149,7 @@ public class BaseActivity extends AppCompatActivity {
                         RelativeLayout.LayoutParams pnParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         pnParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
                         pnParams.addRule(RelativeLayout.BELOW, R.id.clock);
+                        pnParams.rightMargin = ToolsUtil.dp2px(3);
                         pnParams.topMargin = ToolsUtil.dp2px(3);
                         pagename.setLayoutParams(pnParams);
                         Logu.d("round", "ok");
