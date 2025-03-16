@@ -48,10 +48,15 @@ public class AppInfoApi {
 
                 if (last_ver != 0) {
                     if (last_ver < 20240606)
-                        MsgUtil.showDialog("提醒", "当前的新版本实现了对抗部分类型的风控，建议您重新登录账号以确保成功使用");
+                        MsgUtil.showDialog("部分风控问题已解决", "当前的新版本实现了对抗部分类型的风控，建议您重新登录账号以确保成功使用");
+
+                    if (last_ver < 20250313 && SharedPreferencesUtil.getBoolean("player_ui_round",false)){
+                        SharedPreferencesUtil.putInt("paddingV_percent", 3);
+                        SharedPreferencesUtil.putInt("paddingH_percent", 3);
+                    }
 
                     if (!SharedPreferencesUtil.getString("player", "null").equals("terminalPlayer"))
-                        MsgUtil.showDialog("提醒", "现在的内置播放器已支持以下特色功能：\n·视频实时观看人数\n·显示直播弹幕\n·强制滚动显示弹幕\n\n欢迎在需要时切换到内置播放器使用哦");
+                        MsgUtil.showDialog("内置播放器", "现在的内置播放器已支持以下特色功能：\n·视频实时观看人数\n·显示直播弹幕\n·强制滚动显示弹幕\n\n欢迎在需要时切换到内置播放器使用哦");
                 }
                 MsgUtil.showText("更新公告", context.getResources().getString(R.string.update_tip) + "\n\n更新细节：\n" + ToolsUtil.getUpdateLog(context));
                 if (ToolsUtil.isDebugBuild())

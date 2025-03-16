@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
@@ -32,7 +31,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -73,9 +71,10 @@ public class PrivateMsgActivity extends BaseActivity {
                 emoteArray = PrivateMsgApi.getEmoteJsonArray(allMsg);
                 adapter = new PrivateMsgAdapter(list, emoteArray, this);
                 runOnUiThread(() -> {
-                    msgView.setLayoutManager(new CustomLinearManager(this));
+                    CustomLinearManager manager = new CustomLinearManager(this);
+                    manager.setStackFromEnd(true);
+                    msgView.setLayoutManager(manager);
                     msgView.setAdapter(adapter);
-                    ((LinearLayoutManager) Objects.requireNonNull(msgView.getLayoutManager())).scrollToPositionWithOffset(list.size() - 1, 0);
                     msgView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override
                         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {

@@ -28,6 +28,7 @@ import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONException;
 
@@ -50,6 +51,7 @@ import okio.Sink;
 
 public class DownloadService extends Service {
     public static boolean started;
+    public static boolean normal_exit;
     public static float percent = -1;
     public static String state;
     public static DownloadSection section;
@@ -113,6 +115,7 @@ public class DownloadService extends Service {
     public int onStartCommand(Intent serviceIntent, int flags, int startId) {
         Logu.d("onStartCommand");
 
+        normal_exit = false;
         startNotifyProgress();
 
         CenterThreadPool.run(()->{
@@ -192,6 +195,7 @@ public class DownloadService extends Service {
                         refreshLocalList();
                     } catch (RuntimeException e){
                         e.printStackTrace();
+                        if(section != null)
                         setState(section.id,"error");
                         exitMessage = "下载失败：" + e.getMessage();
                     }
@@ -210,6 +214,7 @@ public class DownloadService extends Service {
 
             refreshDownloadList();
 
+            normal_exit = true;
             exitMessage = "全部下载完成";
 
             stopSelf();
@@ -234,19 +239,22 @@ public class DownloadService extends Service {
 
     private void toastState(String newState){
         state = newState;
-        if(toastTimer != null) toastTimer.cancel();
-        toastTimer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                if(section == null) return;
-                if(!started) this.cancel();
+        if (toastTimer != null) toastTimer.cancel();
+        if(SharedPreferencesUtil.getBoolean("download_toast",true)) {
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    if(section == null) return;
+                    if(!started) this.cancel();
 
-                String percentStr = String.format(Locale.CHINA,"%.2f",percent * 100);
-                MsgUtil.showMsg(state + "："+ percentStr + "%\n" + section.name_short);
-            }
-        };
-        toastTimer.schedule(timerTask,0,5000);
+                    String percentStr = String.format(Locale.CHINA,"%.2f",percent * 100);
+                    MsgUtil.showMsg(state + "："+ percentStr + "%\n" + section.name_short);
+                }
+            };
+            toastTimer = new Timer();
+            toastTimer.schedule(timerTask, 0, 5000);
+        }
+        else MsgUtil.showMsg(state + "：\n" + section.name_short);
     }
 
     private void startNotifyProgress(){
@@ -306,7 +314,7 @@ public class DownloadService extends Service {
             int len;
             byte[] bytes = new byte[1024 * 10];
             long TotalFileSize = Objects.requireNonNull(response.body()).contentLength();
-            while ((len = inputStream.read(bytes)) != -1) {
+            while ((len = inputStream.read(bytes)) != -1 || !started) {
                 fileOutputStream.write(bytes, 0, len);
                 long CompleteFileSize = file.length();
                 percent = 1.0f * CompleteFileSize / TotalFileSize;
@@ -361,15 +369,18 @@ public class DownloadService extends Service {
 
         if (exitMessage == null) exitMessage = "下载服务已退出";
 
+        Logu.d("退出下载服务");
         if (section != null) {
-            Logu.d("退出下载服务");
-            FileUtil.deleteFolder(section.getPath());
             final long id = section.id;
+            final File folder = section.getPath();
             section = null;
 
             CenterThreadPool.run(() -> {
                 notifyExit(exitMessage);
-                setState(id, "none");
+                if(!normal_exit) {
+                    setState(id, "none");
+                    FileUtil.deleteFolder(folder);
+                }
                 refreshDownloadList();
             });
         }

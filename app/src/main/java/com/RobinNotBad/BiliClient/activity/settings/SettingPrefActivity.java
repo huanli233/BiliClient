@@ -24,6 +24,7 @@ public class SettingPrefActivity extends RefreshListActivity {
 
         final List<SettingSection> sectionList = new ArrayList<>() {{
             add(new SettingSection("switch", "禁用返回键", "back_disable", getString(R.string.desc_back_disable), "false"));
+            add(new SettingSection("switch", "后台下载弹窗显示进度", "download_toast", "关闭此选项，下载器只会弹出开始下载和完成下载的Toast", "true"));
             add(new SettingSection("switch", "创作中心", "creative_enable", getString(R.string.desc_creative_enable), "true"));
             add(new SettingSection("switch", "长按复制", "copy_enable", getString(R.string.desc_copy_enable), "true"));
             add(new SettingSection("switch", "加载渐入渐出动画", SharedPreferencesUtil.LOAD_TRANSITION, getString(R.string.desc_load_transition), "true"));
