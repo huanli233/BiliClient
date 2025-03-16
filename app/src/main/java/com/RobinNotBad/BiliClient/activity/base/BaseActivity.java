@@ -136,21 +136,20 @@ public class BaseActivity extends AppCompatActivity {
                 try {
                     ViewGroup.LayoutParams params = pagename.getLayoutParams();
                     int paddingH = (int) (window_width * 0.18);
-                    int paddingV = (int) (window_width * 0.05);
+                    int paddingV = (int) (window_width * 0.03);
                     pagename.setPadding(paddingH, paddingV, paddingH, 0);
                     if (params instanceof RelativeLayout.LayoutParams) {
                         RelativeLayout.LayoutParams clockParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         clockParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
                         clock.setLayoutParams(clockParams);
                         clock.setAlpha(0.85f);
-                        clock.setTextSize(12
-                        );
+                        clock.setTextSize(12);
 
                         RelativeLayout.LayoutParams pnParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         pnParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
                         pnParams.addRule(RelativeLayout.BELOW, R.id.clock);
-                        pnParams.rightMargin = ToolsUtil.dp2px(3);
-                        pnParams.topMargin = ToolsUtil.dp2px(3);
+                        pnParams.rightMargin = ToolsUtil.dp2px(8);
+                        pnParams.topMargin = (int) (window_height * 0.03);
                         pagename.setLayoutParams(pnParams);
                         Logu.d("round", "ok");
                     }
