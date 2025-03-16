@@ -208,13 +208,13 @@
                 android:adjustViewBounds="true"
                 android:src="@drawable/icon_time"
                 android:alpha="0.5"
-                app:layout_constraintTop_toTopOf="@+id/timeText"
+                app:layout_constraintTop_toTopOf="@+id/durationText"
                 app:layout_constraintStart_toStartOf="@+id/viewsIcon"
-                app:layout_constraintBottom_toBottomOf="@+id/timeText"
+                app:layout_constraintBottom_toBottomOf="@+id/durationText"
                 android:id="@+id/timeIcon" />
 
             <TextView
-                android:id="@+id/timeText"
+                android:id="@+id/durationText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
@@ -255,7 +255,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/bvidIcon"
-                app:layout_constraintTop_toBottomOf="@id/timeText" />
+                app:layout_constraintTop_toBottomOf="@id/durationText" />
 
             <TextView
                 android:id="@+id/tags"

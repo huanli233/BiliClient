@@ -66,7 +66,7 @@ public class LiveInfoActivity extends BaseActivity {
             RecyclerView up_recyclerView = findViewById(R.id.up_recyclerView);
             TextView viewsCount = findViewById(R.id.viewsCount);
             MaterialButton play = findViewById(R.id.play);
-            TextView timeText = findViewById(R.id.timeText);
+            TextView durationText = findViewById(R.id.durationText);
             TextView idText = findViewById(R.id.idText);
             TextView tags = findViewById(R.id.tags);
             TextView description = findViewById(R.id.description);
@@ -101,7 +101,7 @@ public class LiveInfoActivity extends BaseActivity {
                 up_recyclerView.setAdapter(upListAdapter);
 
                 viewsCount.setText(ToolsUtil.toWan(room.online) + "人观看");
-                timeText.setText("直播开始于" + room.liveTime);
+                durationText.setText("直播开始于" + room.liveTime);
 
                 idText.setText(String.valueOf(room_id));
                 tags.setText("标签：" + room.tags);
