@@ -203,9 +203,12 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         Logu.v("加载", "加载");
         super.onCreate(savedInstanceState);
 
-        if(SharedPreferencesUtil.getBoolean("dev_player_rotate_software",false)) MsgUtil.showMsg("不支持默认横屏！");
+        screen_landscape = SharedPreferencesUtil.getBoolean("player_autolandscape", false) || SharedPreferencesUtil.getBoolean("ui_landscape", false);
+        if(SharedPreferencesUtil.getBoolean("dev_player_rotate_software",false) && screen_landscape) {
+            MsgUtil.showMsg("不支持默认横屏！");
+            screen_landscape = false;
+        }
         else {
-            screen_landscape = SharedPreferencesUtil.getBoolean("player_autolandscape", false) || SharedPreferencesUtil.getBoolean("ui_landscape", false);
             setRequestedOrientation(screen_landscape ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
