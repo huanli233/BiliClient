@@ -16,7 +16,6 @@ import android.media.AudioManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -217,45 +216,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             return;
         }
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        screen_width = displayMetrics.widthPixels;//获取屏宽
-        screen_height = displayMetrics.heightPixels;//获取屏高
-
-        if (SharedPreferencesUtil.getBoolean("player_ui_showRotateBtn", true))
-            btn_rotate.setVisibility(View.VISIBLE);
-        else btn_rotate.setVisibility(View.GONE);
-
-        screen_round = SharedPreferencesUtil.getBoolean("player_ui_round", false);
-        if (screen_round) {
-            int padding = ToolsUtil.dp2px(8);
-
-            LinearLayout.LayoutParams param_progress = (LinearLayout.LayoutParams) seekbar_progress.getLayoutParams();
-            param_progress.leftMargin = padding*4;
-            param_progress.rightMargin = padding*4;
-            seekbar_progress.setLayoutParams(param_progress);
-
-            text_online.setPadding(0,0,padding*3,0);
-            text_progress.setPadding(padding*3,0,0,0);
-
-            layout_top.setPadding((int) (padding*5.5f), padding*2, (int) (padding*5.5f), 0);
-            text_title.setGravity(Gravity.CENTER);
-
-            bottom_buttons.setPadding(padding, 0, padding, padding);
-
-            right_control.setPadding(0, 0, padding, 0);
-
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mDanmakuView.getLayoutParams();
-            params.setMargins(0,padding * 3,0,padding * 3);
-            mDanmakuView.setLayoutParams(params);
-
-            text_subtitle.setMaxWidth((int) (screen_width * 0.65));
-
-            findViewById(R.id.cl_1).setVisibility(View.GONE);
-        }
-
-        if ((!SharedPreferencesUtil.getBoolean("player_show_online", false)) || aid==0 || cid==0)
-            text_online.setVisibility(View.GONE);
+        initUI();
 
         IjkMediaPlayer.loadLibrariesOnce(null);
 
@@ -278,60 +239,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         setVideoGestures();
         autohideReset();
 
-
-        seekbar_progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
-                runOnUiThread(() -> {
-                    if (!isLiveMode)
-                        text_progress.setText(ToolsUtil.toTime(position / 1000) + "/" + progress_str);
-                });
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                isSeeking = true;
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                isSeeking = false;
-                if (isPrepared && !destroyed) {
-                    ijkPlayer.seekTo(seekbar_progress.getProgress());
-                    autohideReset();
-                }
-            }
-        });
-
-        seekbar_speed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
-                if (fromUser) {
-                    text_newspeed.setText(speed_strs[position]);
-                    text_speed.setText(speed_strs[position]);
-                    ijkPlayer.setSpeed(speed_values[position]);
-                    mDanmakuView.setSpeed(speed_values[position]);
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                if (speedTimer != null) speedTimer.cancel();
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                speedTimer = new Timer();
-                TimerTask timerTask = new TimerTask() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(() -> layout_speed.setVisibility(View.GONE));
-                    }
-                };
-                speedTimer.schedule(timerTask, 200);
-            }
-        });
+        initSeekbars();
 
         if(isLiveMode){
             btn_control.setVisibility(View.INVISIBLE); //暂停的话可能会出一些bug，那就别暂停了，卡住就退出重进吧（
@@ -341,8 +249,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             danmuSocketConnect();
         }
 
-        Handler handler = new Handler();
-        handler.postDelayed(() -> CenterThreadPool.run(() -> {    //等界面加载完成
+        layout_control.postDelayed(() -> CenterThreadPool.run(() -> {    //等界面加载完成
             if(isLiveMode) {
                 runOnUiThread(()-> btn_menu.setVisibility(View.GONE));
                 setDisplay();
@@ -407,101 +314,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         bottom_buttons = findViewById(R.id.bottom_buttons);
 
         text_subtitle = findViewById(R.id.text_subtitle);
-
-        layout_top.setOnClickListener(view -> finish());
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT < 19)) {
-            textureView = new TextureView(this);
-            textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
-                @Override
-                public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
-                    Logu.v("surfacetexture","available");
-                    mSurfaceTexture = surfaceTexture;
-                    if(isPrepared && ijkPlayer!=null) ijkPlayer.setSurface(new Surface(surfaceTexture));
-                }
-
-                @Override
-                public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
-                    Logu.v("surfacetexture","sizechanged");
-                }
-
-                @Override
-                public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
-                    Logu.v("surfacetexture","destroyed");
-                    mSurfaceTexture = null;
-                    if(ijkPlayer != null) ijkPlayer.setSurface(null);
-                    return true;
-                }
-
-                @Override
-                public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {}
-            });
-            layout_video.addView(textureView, params);
-        } else {
-            surfaceView = new SurfaceView(this);
-            layout_video.addView(surfaceView, params);
-        }
-
-        btn_rotate.setOnClickListener(view -> {
-            Logu.v("点击旋转按钮");
-            screen_landscape = !screen_landscape;
-            if(SharedPreferencesUtil.getBoolean("dev_player_rotate_software",false)) softwareRotate();
-            else setRequestedOrientation(screen_landscape ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        });
-
-        findViewById(R.id.button_sound_add).setOnClickListener(view -> changeVolume(true));
-        findViewById(R.id.button_sound_cut).setOnClickListener(view -> changeVolume(false));
-
-        btn_menu.setOnClickListener(view -> {
-            if(menu_opened) {
-                right_second.setVisibility(View.GONE);
-                btn_menu.setImageResource(R.mipmap.morehide);
-            }
-            else {
-                right_second.setVisibility(View.VISIBLE);
-                btn_menu.setImageResource(R.mipmap.moreshow);
-            }
-            menu_opened = !menu_opened;
-        });
-
-        layout_card_bg.setOnClickListener(view -> {
-            layout_card_bg.setVisibility(View.GONE);
-            card_subtitle.setVisibility(View.GONE);
-            card_danmaku_send.setVisibility(View.GONE);
-        });
-        btn_danmaku_send.setOnClickListener(view -> {
-            layout_card_bg.setVisibility(View.VISIBLE);
-            card_danmaku_send.setVisibility(View.VISIBLE);
-        });
-        findViewById(R.id.danmaku_send).setOnClickListener(view1 -> {
-            EditText editText = findViewById(R.id.danmaku_send_edit);
-            if(editText.getText().toString().isEmpty()){
-                MsgUtil.showMsg("不能发送空弹幕喵");
-            } else {
-                layout_card_bg.setVisibility(View.GONE);
-                card_danmaku_send.setVisibility(View.GONE);
-
-                CenterThreadPool.run(() -> {
-                    try {
-                        MsgUtil.showMsg("正在发送~");
-
-                        int result = DanmakuApi.sendVideoDanmakuByAid(cid, editText.getText().toString(), aid, video_now, ToolsUtil.getRgb888(Color.WHITE), 1);
-
-                        if(result == 0){
-                            MsgUtil.showMsg("发送成功喵~");
-                            runOnUiThread(() -> {
-                                addDanmaku(editText.getText().toString(), Color.WHITE);
-                                editText.setText("");
-                            });
-                        } else MsgUtil.showMsg("发送失败：" + result);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                        MsgUtil.err(e);
-                    }
-                });
-            }
-        });
     }
 
 
@@ -1527,9 +1339,213 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         });
     }
 
+    private void initUI(){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screen_width = displayMetrics.widthPixels;//获取屏宽
+        screen_height = displayMetrics.heightPixels;//获取屏高
 
+        if (SharedPreferencesUtil.getBoolean("player_ui_showRotateBtn", true))
+            btn_rotate.setVisibility(View.VISIBLE);
+        else btn_rotate.setVisibility(View.GONE);
 
+        screen_round = SharedPreferencesUtil.getBoolean("player_ui_round", false);
+        if (screen_round) {
+            int padding = (int) (screen_width * 0.03);
 
+            LinearLayout.LayoutParams progressParams = (LinearLayout.LayoutParams) seekbar_progress.getLayoutParams();
+            progressParams.leftMargin = padding*4;
+            progressParams.rightMargin = padding*4;
+            seekbar_progress.setLayoutParams(progressParams);
+
+            text_online.setPadding(0,0,padding*3,0);
+            text_progress.setPadding(padding*3,0,0,0);
+
+            bottom_buttons.setPadding(padding, 0, padding, padding);
+
+            right_control.setPadding(0, 0, padding, 0);
+
+            RelativeLayout.LayoutParams danmakuParams = (RelativeLayout.LayoutParams) mDanmakuView.getLayoutParams();
+            danmakuParams.setMargins(0,padding * 3,0,padding * 3);
+            mDanmakuView.setLayoutParams(danmakuParams);
+
+            text_subtitle.setMaxWidth((int) (screen_width * 0.65));
+
+            layout_top.setPadding(padding*7, padding, padding*7, 0);
+
+            LinearLayout clockLayout = findViewById(R.id.clock_layout);
+            clockLayout.setOrientation(LinearLayout.HORIZONTAL);
+            RelativeLayout.LayoutParams clockLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            clockLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            clockLayout.setLayoutParams(clockLayoutParams);
+
+            RelativeLayout.LayoutParams titleParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            titleParams.addRule(RelativeLayout.BELOW, R.id.clock_layout);
+            titleParams.topMargin = padding / 2;
+            text_title.setLayoutParams(titleParams);
+            text_title.setGravity(Gravity.CENTER);
+
+            TextView textClock = findViewById(R.id.clock);
+            LinearLayout.LayoutParams textClockParams = (LinearLayout.LayoutParams) textClock.getLayoutParams();
+            textClockParams.leftMargin = padding / 2;
+            textClockParams.topMargin = padding / 4;
+            textClock.setLayoutParams(textClockParams);
+        }
+
+        if ((!SharedPreferencesUtil.getBoolean("player_show_online", false)) || aid==0 || cid==0)
+            text_online.setVisibility(View.GONE);
+
+        layout_top.setOnClickListener(view -> finish());
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT < 19)) {
+            textureView = new TextureView(this);
+            textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+                @Override
+                public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
+                    Logu.v("surfacetexture","available");
+                    mSurfaceTexture = surfaceTexture;
+                    if(isPrepared && ijkPlayer!=null) ijkPlayer.setSurface(new Surface(surfaceTexture));
+                }
+
+                @Override
+                public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
+                    Logu.v("surfacetexture","sizechanged");
+                }
+
+                @Override
+                public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
+                    Logu.v("surfacetexture","destroyed");
+                    mSurfaceTexture = null;
+                    if(ijkPlayer != null) ijkPlayer.setSurface(null);
+                    return true;
+                }
+
+                @Override
+                public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {}
+            });
+            layout_video.addView(textureView, params);
+        } else {
+            surfaceView = new SurfaceView(this);
+            layout_video.addView(surfaceView, params);
+        }
+
+        btn_rotate.setOnClickListener(view -> {
+            Logu.v("点击旋转按钮");
+            screen_landscape = !screen_landscape;
+            if(SharedPreferencesUtil.getBoolean("dev_player_rotate_software",false)) softwareRotate();
+            else setRequestedOrientation(screen_landscape ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        });
+
+        findViewById(R.id.button_sound_add).setOnClickListener(view -> changeVolume(true));
+        findViewById(R.id.button_sound_cut).setOnClickListener(view -> changeVolume(false));
+
+        btn_menu.setOnClickListener(view -> {
+            if(menu_opened) {
+                right_second.setVisibility(View.GONE);
+                btn_menu.setImageResource(R.mipmap.morehide);
+            }
+            else {
+                right_second.setVisibility(View.VISIBLE);
+                btn_menu.setImageResource(R.mipmap.moreshow);
+            }
+            menu_opened = !menu_opened;
+        });
+
+        layout_card_bg.setOnClickListener(view -> {
+            layout_card_bg.setVisibility(View.GONE);
+            card_subtitle.setVisibility(View.GONE);
+            card_danmaku_send.setVisibility(View.GONE);
+        });
+        btn_danmaku_send.setOnClickListener(view -> {
+            layout_card_bg.setVisibility(View.VISIBLE);
+            card_danmaku_send.setVisibility(View.VISIBLE);
+        });
+        findViewById(R.id.danmaku_send).setOnClickListener(view1 -> {
+            EditText editText = findViewById(R.id.danmaku_send_edit);
+            if(editText.getText().toString().isEmpty()){
+                MsgUtil.showMsg("不能发送空弹幕喵");
+            } else {
+                layout_card_bg.setVisibility(View.GONE);
+                card_danmaku_send.setVisibility(View.GONE);
+
+                CenterThreadPool.run(() -> {
+                    try {
+                        MsgUtil.showMsg("正在发送~");
+
+                        int result = DanmakuApi.sendVideoDanmakuByAid(cid, editText.getText().toString(), aid, video_now, ToolsUtil.getRgb888(Color.WHITE), 1);
+
+                        if(result == 0){
+                            MsgUtil.showMsg("发送成功喵~");
+                            runOnUiThread(() -> {
+                                addDanmaku(editText.getText().toString(), Color.WHITE);
+                                editText.setText("");
+                            });
+                        } else MsgUtil.showMsg("发送失败：" + result);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        MsgUtil.err(e);
+                    }
+                });
+            }
+        });
+    }
+
+    private void initSeekbars(){
+        seekbar_progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
+                runOnUiThread(() -> {
+                    if (!isLiveMode)
+                        text_progress.setText(ToolsUtil.toTime(position / 1000) + "/" + progress_str);
+                });
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                isSeeking = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                isSeeking = false;
+                if (isPrepared && !destroyed) {
+                    ijkPlayer.seekTo(seekbar_progress.getProgress());
+                    autohideReset();
+                }
+            }
+        });
+
+        seekbar_speed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
+                if (fromUser) {
+                    text_newspeed.setText(speed_strs[position]);
+                    text_speed.setText(speed_strs[position]);
+                    ijkPlayer.setSpeed(speed_values[position]);
+                    mDanmakuView.setSpeed(speed_values[position]);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                if (speedTimer != null) speedTimer.cancel();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                speedTimer = new Timer();
+                TimerTask timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(() -> layout_speed.setVisibility(View.GONE));
+                    }
+                };
+                speedTimer.schedule(timerTask, 200);
+            }
+        });
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

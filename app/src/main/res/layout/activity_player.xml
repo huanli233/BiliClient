@@ -80,14 +80,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="4dp"
-                android:layout_toStartOf="@+id/cl_1"
+                android:layout_toStartOf="@+id/clock_layout"
                 android:drawableStart="@drawable/arrow_back"
                 android:text="原小电视播放器"
                 android:textColor="@color/textwhite"
                 android:textSize="12sp" />
 
             <LinearLayout
-                android:id="@+id/cl_1"
+                android:id="@+id/clock_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -105,10 +105,8 @@
                     android:id="@+id/clock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:format12Hour="hh:mm"
-                    android:format24Hour="HH:mm"
-                    android:text="彩蛋"
-                    android:textSize="8sp" />
+                    android:textSize="8sp"
+                    tools:ignore="SmallSp" />
             </LinearLayout>
         </RelativeLayout>
 
