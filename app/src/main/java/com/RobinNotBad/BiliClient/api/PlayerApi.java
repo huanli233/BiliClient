@@ -171,7 +171,6 @@ public class PlayerApi {
         Logu.v("准备跳转", "--------");
 
         Intent intent = new Intent();
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         switch (SharedPreferencesUtil.getString("player", "null")) {
             case "terminalPlayer":
                 intent.setClass(context, PlayerActivity.class);

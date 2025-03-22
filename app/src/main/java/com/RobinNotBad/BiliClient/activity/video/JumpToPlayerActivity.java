@@ -21,6 +21,7 @@ import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.model.PlayerData;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -41,9 +42,10 @@ public class JumpToPlayerActivity extends BaseActivity {
         public void onActivityResult(ActivityResult o) {
             int code = o.getResultCode();
             Intent result = o.getData();
+            Logu.d("进度回调", "onActivityResult");
             if(code == RESULT_OK && result != null){
                 int progress = result.getIntExtra("progress",0);
-                Log.d("debug-进度回调", String.valueOf(progress));
+                Logu.d("进度回调", String.valueOf(progress));
 
                 CenterThreadPool.run(() -> {
                     if (playerData.mid != 0 && playerData.aid != 0) try {
