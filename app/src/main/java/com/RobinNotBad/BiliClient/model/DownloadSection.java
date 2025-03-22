@@ -59,6 +59,7 @@ public class DownloadSection {
         data.aid = aid;
         data.cid = cid;
         data.title = title;
+        data.qn = qn;
         data.mid = SharedPreferencesUtil.getLong("mid",0);
         return data;
     }

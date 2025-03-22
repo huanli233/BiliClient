@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,6 +111,8 @@ public class PlayerApi {
             qnStrList[i] = accept_description.optString(i);
             qnValueList[i] = accept_quality.optInt(i);
         }
+        Logu.d("qn_str", Arrays.toString(qnStrList));
+        Logu.d("qn_val", Arrays.toString(qnValueList));
         playerData.qnStrList = qnStrList;
         playerData.qnValueList = qnValueList;
     }
