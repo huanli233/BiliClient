@@ -147,10 +147,10 @@ public class BaseActivity extends AppCompatActivity {
 
                         RelativeLayout.LayoutParams pnParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         pnParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                        pnParams.addRule(RelativeLayout.BELOW, R.id.clock);
-                        pnParams.rightMargin = ToolsUtil.dp2px(8);
-                        pnParams.topMargin = (int) (window_height * 0.03);
+                        pnParams.topMargin = (int) (window_height * 0.01) + ToolsUtil.sp2px(12);
+                        pnParams.bottomMargin = (int) (window_height * 0.01);
                         pagename.setLayoutParams(pnParams);
+                        pagename.setPadding(0,0,ToolsUtil.dp2px(5),0);
                         Logu.d("round", "ok");
                     }
                 } catch (Throwable e){
