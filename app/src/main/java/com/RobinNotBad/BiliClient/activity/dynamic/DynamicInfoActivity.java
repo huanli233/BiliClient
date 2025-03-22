@@ -53,7 +53,7 @@ public class DynamicInfoActivity extends BaseActivity {
                     DynamicInfoFragment diFragment = DynamicInfoFragment.newInstance(id);
                     fragmentList.add(diFragment);
                     rFragment = ReplyFragment.newInstance(dynamic.comment_id, dynamic.comment_type, seek_reply, dynamic.userInfo.mid);
-                    rFragment.setSource(dynamic);
+                    rFragment.setManager(dynamic.userInfo);
                     rFragment.replyType = ReplyApi.REPLY_TYPE_DYNAMIC;
                     fragmentList.add(rFragment);
                     ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);

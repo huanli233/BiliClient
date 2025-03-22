@@ -19,7 +19,9 @@ import com.RobinNotBad.BiliClient.adapter.ReplyAdapter;
 import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.model.Reply;
+import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
@@ -39,9 +41,9 @@ public class ReplyFragment extends RefreshListFragment {
     protected ArrayList<Reply> replyList;
     protected ReplyAdapter replyAdapter;
     public int replyType = ReplyApi.REPLY_TYPE_VIDEO;
-    private Object source;
     private long seek;
     private String pagination = "";
+    private boolean isManager = false;
 
     public static ReplyFragment newInstance(long aid, int type) {
         ReplyFragment fragment = new ReplyFragment();
@@ -138,7 +140,7 @@ public class ReplyFragment extends RefreshListFragment {
                     setRefreshing(false);
                     if (result != -1 && isAdded()) {
                         replyAdapter = createReplyAdapter();
-                        replyAdapter.source = source;
+                        replyAdapter.isManager = isManager;
                         setOnSortSwitch();
                         setAdapter(replyAdapter);
 
@@ -153,15 +155,31 @@ public class ReplyFragment extends RefreshListFragment {
             });
         }
     }
-    public void setSource(Object source) {
-        this.source = source;
-        if (replyAdapter != null) {
-            replyAdapter.source = source;
+    public void setManager(Object source) {
+        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) return;
+
+        try {
+            if (source != null) {
+                if (source instanceof List<?>) {
+                    List<UserInfo> staffs = (List<UserInfo>) source;
+                    for (UserInfo userInfo : staffs) {
+                        if (userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0)) {
+                            isManager = true;
+                            break;
+                        }
+                    }
+                }
+                else if (source instanceof UserInfo) {
+                    isManager = ((UserInfo) source).mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
+                }
+            }
+        } catch (Exception e) {
+            MsgUtil.err(e);
         }
     }
 
     private ReplyAdapter createReplyAdapter() {
-        return new ReplyAdapter(requireContext(), replyList, aid, 0, type, sort, source, mid);
+        return new ReplyAdapter(requireContext(), replyList, aid, 0, type, sort, mid);
     }
 
     @SuppressLint("NotifyDataSetChanged")

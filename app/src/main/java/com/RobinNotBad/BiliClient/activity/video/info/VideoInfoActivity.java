@@ -92,7 +92,7 @@ public class VideoInfoActivity extends BaseActivity {
             VideoInfoFragment videoInfoFragment = VideoInfoFragment.newInstance(aid, bvid);
             fragmentList.add(videoInfoFragment);
             replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1, seek_reply, videoInfo.staff.get(0).mid);
-            replyFragment.setSource(videoInfo);
+            replyFragment.setManager(videoInfo.staff);
             fragmentList.add(replyFragment);
             if (SharedPreferencesUtil.getBoolean("related_enable", true)) {
                 VideoRcmdFragment vrFragment = VideoRcmdFragment.newInstance(videoInfo.aid);

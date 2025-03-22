@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Parcelable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -52,7 +51,6 @@ import com.google.android.material.button.MaterialButton;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -73,9 +71,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public int sort;
     public final int replyType;
     OnItemClickListener listener;
-    public Object source;
 
-    public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort, Object source) {
+    public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort, long up_mid) {
         this.context = context;
         this.replyList = replyList;
         this.oid = oid;
@@ -83,24 +80,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.type = type;
         this.sort = sort;
         this.replyType = type;
-        this.source = source;
-        this.up_mid = -1;
-    }
-
-    public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort, Object source, long up_mid) {
-        this.context = context;
-        this.replyList = replyList;
-        this.oid = oid;
-        this.root = root;
-        this.type = type;
-        this.sort = sort;
-        this.replyType = type;
-        this.source = source;
         this.up_mid = up_mid;
-    }
-
-    public ReplyAdapter(Context context, ArrayList<Reply> replyList, long oid, long root, int type, int sort) {
-        this(context, replyList, oid, root, type, sort, null);
     }
 
     public void setOnSortSwitchListener(OnItemClickListener listener) {
@@ -436,30 +416,6 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public void setSource(Object source){   //传入并判断是否有删评论的权限  这种东西判断一次就够了，放onBindViewHolder里还开线程，神金啊
-        if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) return;
-
-        try {
-            if (source != null) {
-                if (source instanceof List<?>) {
-                    List<UserInfo> staffs = (List<UserInfo>) source;
-                    for (UserInfo userInfo : staffs) {
-                        if (userInfo.mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0)) {
-                            isManager = true;
-                            break;
-                        }
-                    }
-                }
-                else if (source instanceof UserInfo) {
-                    isManager = ((UserInfo) source).mid == SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0);
-                }
-            }
-        } catch (Exception e) {
-            MsgUtil.err(e);
-        }
-
-    }
-
     public void setTopSpan(Reply reply, ReplyHolder replyHolder) {
         if (reply.isTop && reply.message.startsWith(ReplyApi.TOP_TIP)) {
             SpannableString spannableString = new SpannableString(replyHolder.message.getText());
@@ -477,8 +433,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         intent.putExtra("oid", oid);
         intent.putExtra("type", replyType);
         intent.putExtra("up_mid", up_mid);
-        if (source != null && source instanceof Serializable)
-            intent.putExtra("source", (Serializable) source);
+        intent.putExtra("is_manager", isManager);
         context.startActivity(intent);
     }
 
