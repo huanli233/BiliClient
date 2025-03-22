@@ -548,7 +548,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
 
         Logu.v("准备设置显示");
-        if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT < 19)) {            //Texture
+        if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT < 26)) {            //Texture
             Logu.v("使用texture模式");
             surfaceTimer = new Timer();
             surfaceTimer.schedule(new TimerTask() {
