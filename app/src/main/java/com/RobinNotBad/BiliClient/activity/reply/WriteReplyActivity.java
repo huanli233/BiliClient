@@ -3,7 +3,6 @@ package com.RobinNotBad.BiliClient.activity.reply;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Pair;
 import android.widget.EditText;
 
@@ -50,6 +49,7 @@ public class WriteReplyActivity extends BaseActivity {
     });
 
     boolean sent = false;
+    boolean dontKyPlease = true;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -73,8 +73,6 @@ public class WriteReplyActivity extends BaseActivity {
         editText = findViewById(R.id.editText);
         MaterialCardView send = findViewById(R.id.send);
 
-        Log.e("debug-发送评论", String.valueOf(rpid));
-
         if (parentSender != null && !parentSender.isEmpty()) {
             editText.setText("回复 @" + parentSender + " :");
             editText.setSelection(editText.getText().length());
@@ -86,9 +84,12 @@ public class WriteReplyActivity extends BaseActivity {
                     CenterThreadPool.run(() -> {
                         String text = editText.getText().toString();
                         if (!text.isEmpty()) {
+                            if(checkKy(text) && dontKyPlease){
+                                MsgUtil.showDialog("保护措施……", getString(R.string.reply_dont_ky), 15);
+                                dontKyPlease = false;
+                                return;
+                            }
                             try {
-                                Log.e("debug-评论内容", text);
-
                                 Pair<Integer, Reply> result = ReplyApi.sendReply(oid, rpid, parent, text, replyType);
                                 int resultCode = result.first;
                                 Reply resultReply = result.second;
@@ -118,5 +119,18 @@ public class WriteReplyActivity extends BaseActivity {
 
         findViewById(R.id.emote).setOnClickListener(view ->
                 emoteLauncher.launch(new Intent(this, EmoteActivity.class).putExtra("from", EmoteApi.BUSINESS_REPLY)));
+    }
+
+    /**
+     * P用没有的保护措施
+     *
+     * @param str 评论文本
+     */
+    private boolean checkKy(String str){
+        if(str.contains("哔哩终端")) return true;
+        if(str.contains("终端")){
+            return str.contains("表") || str.contains("b站") || str.contains("B站") || str.contains("bili") || str.contains("哔");
+        }
+        return false;
     }
 }

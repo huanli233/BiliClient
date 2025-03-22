@@ -33,7 +33,7 @@ public class ShowTextActivity extends BaseActivity {
         TextView textView = findViewById(R.id.textView);
 
         if (content != null) {
-            content.replace("[extra_insert]", "<extra_insert>");
+            content = content.replace("[extra_insert]", "<extra_insert>");
             int extra_start = content.indexOf("<extra_insert>");
             if (extra_start != -1) {
                 try {

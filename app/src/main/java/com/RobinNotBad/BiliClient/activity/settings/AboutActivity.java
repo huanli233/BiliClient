@@ -120,7 +120,7 @@ public class AboutActivity extends BaseActivity {
                 eggClick_authorWords++;
                 if (eggClick_authorWords == 7) {
                     eggClick_authorWords = 0;
-                    MsgUtil.showText("作者的话", "无论当下的境遇如何，\n这片星空下永远有你的一片位置。\n抱抱屏幕前的你，\n真诚地祝愿你永远快乐幸福。\n让我们一起，迈向“下一个远方”。<extra_insert>{\"type\":\"video\",\"content\":\"BV1UC411B7Co\",\"title\":\"【原神新春会】下一个远方\"}");
+                    MsgUtil.showText("作者的话", getString(R.string.egg_about_author_words));
                 }
             });
 
@@ -128,7 +128,7 @@ public class AboutActivity extends BaseActivity {
                 eggClick_toUncle++;
                 if (eggClick_toUncle == 7) {
                     eggClick_toUncle = 0;
-                    MsgUtil.showText("给叔叔", "\"你指尖跃动的电光，是我此生不灭的信仰。\"<extra_insert>{\"type\":\"video\",\"content\":\"BV157411v76Z\",\"title\":\"【B站入站曲】\"}");
+                    MsgUtil.showText("给叔叔", getString(R.string.egg_about_to_uncle));
                 }
             });
 
