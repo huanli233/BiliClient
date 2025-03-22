@@ -58,13 +58,13 @@ public class LocalListActivity extends InstanceActivity {
 
         CenterThreadPool.run(() -> {
             runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
-            scan(FileUtil.getDownloadPath());
+            scan(FileUtil.getVideoDownloadPath());
             adapter = new LocalVideoAdapter(this, videoList);
 
             adapter.setOnLongClickListener(position -> {
                 long timestamp = System.currentTimeMillis();
                 if (longClickPosition == position && timestamp - longClickTimestamp < 4000) {
-                    File file = new File(FileUtil.getDownloadPath(), videoList.get(position).title);
+                    File file = new File(FileUtil.getVideoDownloadPath(), videoList.get(position).title);
                     CenterThreadPool.run(() -> FileUtil.deleteFolder(file));
                     MsgUtil.showMsg("删除成功");
                     videoList.remove(position);
@@ -156,7 +156,7 @@ public class LocalListActivity extends InstanceActivity {
             runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
             int oldSize = videoList.size();
             videoList.clear();
-            scan(FileUtil.getDownloadPath());
+            scan(FileUtil.getVideoDownloadPath());
             runOnUiThread(() -> {
                 adapter.notifyItemRangeChanged(1, oldSize);
                 swipeRefreshLayout.setRefreshing(false);

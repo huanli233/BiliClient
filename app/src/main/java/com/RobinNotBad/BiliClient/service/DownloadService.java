@@ -195,8 +195,7 @@ public class DownloadService extends Service {
                         refreshLocalList();
                     } catch (RuntimeException e){
                         e.printStackTrace();
-                        if(section != null)
-                        setState(section.id,"error");
+                        if(section != null) setState(section.id,"error");
                         exitMessage = "下载失败：" + e.getMessage();
                     }
 
@@ -239,6 +238,7 @@ public class DownloadService extends Service {
 
     private void toastState(String newState){
         state = newState;
+        percent = 0;
         if (toastTimer != null) toastTimer.cancel();
         if(SharedPreferencesUtil.getBoolean("download_toast",true)) {
             TimerTask timerTask = new TimerTask() {
@@ -545,7 +545,7 @@ public class DownloadService extends Service {
                         new Object[]{"video_single","none", aid, cid, qn, title, "", cover});
                 database.close();
 
-                File path_single = FileUtil.getDownloadPath(title,null);
+                File path_single = FileUtil.getVideoDownloadPath(title,null);
                 path_single.mkdirs();
 
                 File file_sign = new File(path_single,".DOWNLOADING");
@@ -570,7 +570,7 @@ public class DownloadService extends Service {
                 database.close();
 
 
-                File path_page = FileUtil.getDownloadPath(parent,child);
+                File path_page = FileUtil.getVideoDownloadPath(parent,child);
                 path_page.mkdirs();
 
                 File file_sign = new File(path_page,".DOWNLOADING");

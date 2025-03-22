@@ -87,7 +87,7 @@ public class FileUtil {
         ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
     }
 
-    public static File getDownloadPath() {
+    public static File getVideoDownloadPath() {
         File path = new File(SharedPreferencesUtil.getString("save_path_video",
                 Environment.getExternalStorageDirectory() + "/Android/media/" + BiliTerminal.context.getPackageName() + "/"));
         try {
@@ -99,18 +99,18 @@ public class FileUtil {
         return path;
     }
 
-    public static File getDownloadPath(String title){
-        return getDownloadPath(title,null);
-    }
-
-    public static File getDownloadPath(String title, String child){
-        File parentFolder = new File(getDownloadPath(), stringToFile(title));
+    public static File getVideoDownloadPath(String title, String child){
+        File parentFolder = new File(getVideoDownloadPath(), stringToFile(title));
         if(child==null || child.isEmpty()) return parentFolder;
         return new File(parentFolder, stringToFile(child));
     }
 
-    public static File getDownloadPicturePath() {
+    public static File getPicturePath() {
         return new File(SharedPreferencesUtil.getString("save_path_pictures", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/哔哩终端/"));
+    }
+
+    public static File getDownloadPath() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
     }
 
     public static void requireTFCardPermission(){

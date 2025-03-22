@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
@@ -22,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,6 +46,19 @@ public class AppInfoApi {
 
             int last_ver = SharedPreferencesUtil.getInt("app_version_last", 0);
             if (last_ver < version) {
+                String update_apk = SharedPreferencesUtil.getString("terminal_update_pkg", "");
+                if(!TextUtils.isEmpty(update_apk)){
+                    File file = new File(update_apk);
+                    if(file.exists()) {
+                        if(file.delete()) {
+                            SharedPreferencesUtil.putString("terminal_update_pkg", "");
+                            MsgUtil.showMsg("更新包已删除");
+                        }
+                        else MsgUtil.showMsg("更新包删除失败");
+                    }
+                    else SharedPreferencesUtil.putString("terminal_update_pkg", "");
+                }
+
                 MsgUtil.showDialog("提醒", "终端的每个版本都可能会新增一些兼容性相关的设置项\n如果你遇到了某些奇葩问题，请先在设置里找一找相关的兼容性选项，视频放不了、无法加载图片的问题都有可能解决哦~",5);
 
                 if (last_ver != 0) {

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -45,6 +46,8 @@ public class DownloadActivity extends BaseActivity {
 
     boolean finish = false;
 
+    boolean no_bili_headers = false;
+
     final Timer timer = new Timer();
     final TimerTask showText = new TimerTask() {
         @SuppressLint("SetTextI18n")
@@ -69,7 +72,7 @@ public class DownloadActivity extends BaseActivity {
 
         type = intent.getIntExtra("type", 0);  //0=单个文件，1=视频，2=分页视频
         link = intent.getStringExtra("link");
-
+        no_bili_headers = intent.getBooleanExtra("terminal",false);
 
         progressText = findViewById(R.id.progressText);
         progressView = findViewById(R.id.progressView);
@@ -79,14 +82,14 @@ public class DownloadActivity extends BaseActivity {
         timer.schedule(showText, 100, 100);
         CenterThreadPool.run(() -> {
             if (type == 0) {
-                rootPath = FileUtil.getDownloadPicturePath();
+                rootPath = new File(intent.getStringExtra("path"));
                 if (!rootPath.exists()) rootPath.mkdirs();
                 downFile = new File(rootPath, FileUtil.getFileNameFromLink(link));
                 download(link, downFile, "下载文件中", true);
             } else {
                 String title = FileUtil.stringToFile(intent.getStringExtra("title"));
 
-                rootPath = FileUtil.getDownloadPath();
+                rootPath = FileUtil.getVideoDownloadPath();
 
                 if (type == 1) {
                     downPath = new File(rootPath, title);
@@ -116,7 +119,8 @@ public class DownloadActivity extends BaseActivity {
     private void download(String url, File file, String desc, boolean exitOnFinish) {
         dldText = desc;
         try {
-            Response response = NetWorkUtil.get(url);
+            Response response = NetWorkUtil.get(url,
+                    no_bili_headers ? AppInfoApi.customHeaders : NetWorkUtil.webHeaders);
             if (!file.exists()) file.createNewFile();
             InputStream inputStream = Objects.requireNonNull(response.body()).byteStream();
             FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -153,7 +157,8 @@ public class DownloadActivity extends BaseActivity {
 
     private void downdanmu(String danmaku, File danmakuFile) {
         try {
-            Response response = NetWorkUtil.get(danmaku);
+            Response response = NetWorkUtil.get(danmaku,
+                    no_bili_headers ? AppInfoApi.customHeaders : NetWorkUtil.webHeaders);
             BufferedSink bufferedSink = null;
             try {
                 if (!danmakuFile.exists()) danmakuFile.createNewFile();

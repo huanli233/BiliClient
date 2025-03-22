@@ -3,35 +3,31 @@ package com.RobinNotBad.BiliClient.activity.update;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.DownloadActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
+import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.button.MaterialButton;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class UpdateInfoActivity extends BaseActivity {
 
@@ -42,9 +38,17 @@ public class UpdateInfoActivity extends BaseActivity {
     TextView updateLogTv;
     MaterialButton downloadBtn;
 
-    boolean stopDownload;
-    long lastClickTime;
-    boolean downloading;
+    File apkFile;
+
+    final ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
+        @Override
+        public void onActivityResult(ActivityResult o) {
+            Logu.d("下载回调", "onActivityResult");
+            if(apkFile != null && apkFile.exists()){
+                downloadComplete();
+            }
+        }
+    });
 
     @SuppressLint("InflateParams")
     @Override
@@ -82,23 +86,39 @@ public class UpdateInfoActivity extends BaseActivity {
 
             if (canDownload != 1) downloadBtn.setVisibility(View.GONE);
             downloadBtn.setOnClickListener((view1) -> {
-                long time = System.currentTimeMillis();
-                if (downloading) {
-                    if (time >= lastClickTime) {
-                        if (time - lastClickTime <= 3000) {
-                            stopDownload = true;
-                        } else {
-                            MsgUtil.showMsg("再按一次中止下载");
-                        }
-                    }
-                    lastClickTime = time;
-                    return;
-                }
                 if (!FileUtil.checkStoragePermission()) {
                     MsgUtil.showMsg("请授权存储空间权限");
                     FileUtil.requestStoragePermission(this);
                     return;
                 }
+
+                CenterThreadPool.run(() -> {
+                    try {
+                        runOnUiThread(() -> MsgUtil.showMsg("获取下载地址……"));
+                        String url = AppInfoApi.getDownloadUrl(versionCode);
+
+                        apkFile = new File(FileUtil.getDownloadPath(), FileUtil.getFileNameFromLink(url));
+                        if(apkFile.exists()) {
+                            MsgUtil.showMsg("已有本地安装包！");
+                            downloadComplete();
+                            return;
+                        }
+
+                        Intent downloadIntent = new Intent(this, DownloadActivity.class)
+                                .putExtra("link", url)
+                                .putExtra("path", FileUtil.getDownloadPath().getAbsolutePath())
+                                .putExtra("terminal", true)
+                                .putExtra("type", 0);
+                        launcher.launch(downloadIntent);
+
+                    } catch (Throwable e) {
+                        MsgUtil.err("下载更新", e);
+                    }
+                });
+
+
+
+                /*
                 CenterThreadPool.run(() -> {
                     try {
                         runOnUiThread(() -> MsgUtil.showMsg("开始获取下载地址"));
@@ -148,7 +168,7 @@ public class UpdateInfoActivity extends BaseActivity {
                                                     fos.write(data, 0, bytesRead);
                                                     totalBytesRead += bytesRead;
                                                     int progress = (int) ((totalBytesRead * 100) / fileSize);
-                                                    downloadBtn.setText(String.format(Locale.getDefault(), "下载(%d%%)", progress));
+                                                    runOnUiThread(()->downloadBtn.setText(String.format(Locale.getDefault(), "下载(%d%%)", progress)));
                                                 }
                                                 fos.flush();
                                                 fos.close();
@@ -157,9 +177,9 @@ public class UpdateInfoActivity extends BaseActivity {
                                                             .putExtra("path", file.getAbsolutePath()));
                                                 } else {
                                                     if (file.delete()) {
-                                                        runOnUiThread(() -> MsgUtil.showMsg("已中止下载并删除已下载的文件"));
+                                                        runOnUiThread(() -> MsgUtil.showMsg("已中止下载并删除文件"));
                                                     } else {
-                                                        runOnUiThread(() -> MsgUtil.showMsg("已中止下载但删除已下载的文件失败"));
+                                                        runOnUiThread(() -> MsgUtil.showMsg("已中止下载，删除文件失败"));
                                                     }
                                                 }
                                                 stopDownload = false;
@@ -180,13 +200,35 @@ public class UpdateInfoActivity extends BaseActivity {
                         runOnUiThread(() -> MsgUtil.showMsg("错误: " + th.getMessage()));
                     }
                 });
+                 */
             });
+        });
+    }
+
+    private void downloadComplete(){
+        runOnUiThread(()->{
+            SharedPreferencesUtil.putString("terminal_update_pkg", apkFile.getAbsolutePath());
+            downloadBtn.setVisibility(View.GONE);
+            MaterialButton installBtn = findViewById(R.id.install);
+            MaterialButton deleteBtn = findViewById(R.id.delete);
+            installBtn.setVisibility(View.VISIBLE);
+            deleteBtn.setVisibility(View.VISIBLE);
+
+            installBtn.setOnClickListener(v -> startActivity(new Intent(this, UpdateInstallActivity.class)
+                    .putExtra("path", apkFile.getAbsolutePath())));
+
+            deleteBtn.setOnClickListener(v -> CenterThreadPool.run(()->{
+                if(apkFile.delete()) MsgUtil.showMsg("删除成功");
+                else MsgUtil.showMsg("删除失败");
+                SharedPreferencesUtil.putString("terminal_update_pkg", "");
+                finish();
+                startActivity(getIntent());
+            }));
         });
     }
 
     @Override
     protected void onDestroy() {
-        stopDownload = true;
         super.onDestroy();
     }
 }

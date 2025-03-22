@@ -486,7 +486,7 @@ public class VideoInfoFragment extends Fragment {
                 download.setOnClickListener(view1 -> downloadClick());
                 download.setOnLongClickListener(v -> {
                     CenterThreadPool.run(()->{
-                        File downPath = FileUtil.getDownloadPath(videoInfo.title, null);
+                        File downPath = FileUtil.getVideoDownloadPath(videoInfo.title, null);
                         FileUtil.deleteFolder(downPath);
                         MsgUtil.showMsg("已清除此视频的缓存文件夹");
                     });
@@ -593,7 +593,7 @@ public class VideoInfoFragment extends Fragment {
         if (!FileUtil.checkStoragePermission()) {
             FileUtil.requestStoragePermission(requireActivity());
         } else {
-            File downPath = FileUtil.getDownloadPath(videoInfo.title,null);
+            File downPath = FileUtil.getVideoDownloadPath(videoInfo.title,null);
 
             if (downPath.exists() && videoInfo.pagenames.size() == 1){
                 File file_sign = new File(downPath,".DOWNLOADING");

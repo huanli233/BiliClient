@@ -68,7 +68,7 @@ public class LocalPageChooseActivity extends BaseActivity {
             long timestamp = System.currentTimeMillis();
             if (longClickPosition == position && timestamp - longClickTimestamp < 4000) {
                 CenterThreadPool.run(()->{
-                    File workPath = FileUtil.getDownloadPath();
+                    File workPath = FileUtil.getVideoDownloadPath();
                     File videoPath = new File(workPath, title);
                     File pagePath = new File(videoPath, pageList.get(position));
 

@@ -69,8 +69,9 @@ public class AddFavoriteActivity extends RefreshListActivity {
     @Override
     protected void onDestroy() {
         if (adapter != null) {
-            if (SharedPreferencesUtil.getBoolean("fav_notice", false)) {
+            if (SharedPreferencesUtil.getBoolean("fav_notice", true)) {
                 if (adapter.added) MsgUtil.showMsg("添加成功");
+                else if (adapter.isAllDeleted()) MsgUtil.showMsg("删除成功");
                 else if (adapter.changed) MsgUtil.showMsg("更改成功");
             }
         }

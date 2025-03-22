@@ -30,14 +30,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class UpdateDownloadResultActivity extends BaseActivity {
+public class UpdateInstallActivity extends BaseActivity {
 
     private static final List<String> installWays = List.of(
             "system"
     );
 
     private static final Map<String, String> wayIdToText = Map.of(
-            "system", "调用系统安装器"
+            "system", "系统安装器"
     );
 
     String path;
@@ -62,13 +62,13 @@ public class UpdateDownloadResultActivity extends BaseActivity {
 
         TutorialHelper.showTutorialList(this, R.array.tutorial_update_install, 3);
 
-        asyncInflate(R.layout.activity_update_download_result ,(layoutView, resId) -> {
+        asyncInflate(R.layout.activity_update_install,(layoutView, resId) -> {
 
             pathTv = findViewById(R.id.path);
             installBtn = findViewById(R.id.install);
             installWayList = findViewById(R.id.install_way_list);
 
-            pathTv.setText(String.format("下载的APK保存在: \n%s\n\n你可以使用pm install或其他自己的安装方法安装，或在下方选择一个安装器进行安装", path));
+            pathTv.setText(String.format(getString(R.string.text_update), path));
             ToolsUtil.setCopy(pathTv, path);
             installWayList.setLayoutManager(new CustomLinearManager(this, LinearLayoutManager.VERTICAL, false));
             List<Bangumi.Episode> episodeList = new ArrayList<>();
@@ -116,7 +116,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                Uri contentUri = FileProvider.getUriForFile(UpdateDownloadResultActivity.this, BuildConfig.APPLICATION_ID + ".FileProvider", new File(path));
+                Uri contentUri = FileProvider.getUriForFile(UpdateInstallActivity.this, BuildConfig.APPLICATION_ID + ".FileProvider", new File(path));
                 intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
             } else {
                 intent.setDataAndType(Uri.fromFile(new File(path)), "application/vnd.android.package-archive");
@@ -128,7 +128,7 @@ public class UpdateDownloadResultActivity extends BaseActivity {
                 if (getPackageManager().canRequestPackageInstalls()) {
                     startActivity(intent);
                 } else {
-                    Toast.makeText(UpdateDownloadResultActivity.this, "没有授予请求安装应用权限", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateInstallActivity.this, "没有授予请求安装应用权限", Toast.LENGTH_SHORT).show();
                 }
             }
         } catch (Throwable th) {
