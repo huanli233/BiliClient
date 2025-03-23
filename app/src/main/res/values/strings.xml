@@ -27,6 +27,7 @@
     <string name="setting_lab_ui_rotatory">为0则不使用适配方案，非0则滚动距离会乘以此值\n请从1.0开始上下调节，直至你自己满意为止。打开新页面才能生效。</string>
     <string name="setting_lab_path_video">缓存的视频将会保存到这个位置，若文件夹不存在会自动创建。之前缓存的视频请用文件管理器手动移动到新文件夹内。\n不保证会不会出现奇怪的问题。</string>
     <string name="setting_lab_path_pictures">下载的图片将会保存到这个位置，若文件夹不存在会自动创建。之前下载的图片请用文件管理器手动移动到新文件夹内。\n不保证会不会出现奇怪的问题。</string>
+    <string name="setting_lab_marquee">关闭此开关后，将会全局禁用文字跑马灯，可能会提升性能但会导致部分文字显示不全</string>
     <string name="setting_lab_download_old">2.7.0及以后的版本增加了后台下载服务，若后台下载在你的设备上有问题，请打开此选项以换回旧版的前台下载器！</string>
     <string name="setting_lab_splashtext">顾名思义，可以更改开屏文字，支持换行。开屏文字在网络请求完成后就会被打断。</string>
     <string name="setting_lab_jsonerr_detailed">如果你遇到了某些接口问题，开发者可能会需要你打开这个以提供更详细的报错信息。\n——当然开发者调试的时候也可能会用到这个。</string>

@@ -906,6 +906,11 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         try {
             if(subtitleLinks == null) subtitleLinks = PlayerApi.getSubtitleLinks(aid, cid);
 
+            if(subtitleLinks.length == 1){
+                if(from_btn) MsgUtil.showMsg("本视频无字幕");
+                return;
+            }
+
             boolean ai_not_only = (subtitleLinks.length > 2 || (subtitleLinks.length == 2 && !subtitleLinks[0].isAI));
             boolean ai_allowed = (from_btn || SharedPreferencesUtil.getBoolean("player_subtitle_ai_allowed", false));
 

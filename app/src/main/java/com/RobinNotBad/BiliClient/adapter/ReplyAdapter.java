@@ -179,7 +179,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             replyHolder.userName.setText(name_str);
 
-            if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.REPLY_MARQUEE_NAME, false)) {
+            if (SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.REPLY_MARQUEE_NAME, true)) {
                 replyHolder.userName.setSingleLine(true);
                 replyHolder.userName.setMaxLines(1);
             } else {

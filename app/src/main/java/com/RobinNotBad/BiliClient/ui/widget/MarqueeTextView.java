@@ -23,7 +23,7 @@ public class MarqueeTextView extends androidx.appcompat.widget.AppCompatTextView
     }
 
     public void setMarquee() {
-        if (!isInEditMode())
+        if (!isInEditMode()) {
             if (SharedPreferencesUtil.getBoolean("marquee_enable", true)) {
                 setSelected(true);
                 setEllipsize(TextUtils.TruncateAt.MARQUEE);
@@ -32,5 +32,10 @@ public class MarqueeTextView extends androidx.appcompat.widget.AppCompatTextView
                 setFocusable(true);
                 setFocusableInTouchMode(true);
             }
+            else {
+                setEllipsize(TextUtils.TruncateAt.END);
+                setSingleLine();
+            }
+        }
     }
 }
