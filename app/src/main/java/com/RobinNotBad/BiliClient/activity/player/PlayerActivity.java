@@ -918,7 +918,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 if(subtitle_selected == -1) subtitle_selected = subtitleLinks.length;
 
                 runOnUiThread(()->{
-                    RecyclerView eposideRecyclerView = findViewById(R.id.subtitle_list);
+                    RecyclerView subtitleRecycler = findViewById(R.id.subtitle_list);
                     SubtitleAdapter adapter = new SubtitleAdapter();
                     adapter.setData(subtitleLinks);
                     adapter.setSelectedItemIndex(subtitle_selected);
@@ -933,9 +933,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         }
                         else CenterThreadPool.run(() -> getSubtitle(subtitleLinks[index].url));
                     });
-                    eposideRecyclerView.setLayoutManager(new CustomLinearManager(this, LinearLayoutManager.HORIZONTAL, false));
-                    eposideRecyclerView.setHasFixedSize(true);
-                    eposideRecyclerView.setAdapter(adapter);
+                    subtitleRecycler.setLayoutManager(new CustomLinearManager(this, LinearLayoutManager.HORIZONTAL, false));
+                    subtitleRecycler.setHasFixedSize(true);
+                    subtitleRecycler.setAdapter(adapter);
                     layout_card_bg.setVisibility(View.VISIBLE);
                     card_subtitle.setVisibility(View.VISIBLE);
                 });
@@ -1248,6 +1248,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     @Override
     protected void onDestroy() {
+        if(!isFinishing()) return;    //貌似有些设备会先调用一下onDestroy，头大……
+
         Logu.v("结束");
         if (eventBusInit) {
             EventBus.getDefault().unregister(this);
