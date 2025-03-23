@@ -90,7 +90,7 @@ public class FileUtil {
     public static File getVideoDownloadPath() {
         File path = new File(SharedPreferencesUtil.getString("save_path_video",
                 Environment.getExternalStorageDirectory() + "/Android/media/" + BiliTerminal.context.getPackageName() + "/"));
-        try {
+        if(SharedPreferencesUtil.getBoolean("save_ban_gallery", true)) try {
             File nomedia = new File(path, ".nomedia");    //为了防止系统扫描
             if (!nomedia.exists()) nomedia.createNewFile();
         } catch (Exception e){

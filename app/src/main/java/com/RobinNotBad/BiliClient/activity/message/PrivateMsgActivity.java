@@ -136,7 +136,6 @@ public class PrivateMsgActivity extends BaseActivity {
                             if (result.getInt("code") == 0) {
                                 MsgUtil.showMsg("发送成功");
                                 refresh();
-                                msgView.smoothScrollToPosition(list.size() - 1);
                             } else {
                                 if (result.getInt("code") == 21047) {
                                     MsgUtil.showMsg(result.getString("message"));
@@ -211,6 +210,7 @@ public class PrivateMsgActivity extends BaseActivity {
                             adapter.notifyItemInserted(list.size() - 1);
                         }
                         adapter.notifyItemRangeChanged(oldListSize - 1, list.size());
+                        msgView.smoothScrollToPosition(list.size() - 1);
                     });
                 }
             } catch (Exception e) {

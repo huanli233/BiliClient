@@ -85,6 +85,7 @@
     <string name="desc_new_rcmd_param_enable">打开此选项，会使用新版首页推荐API，基本与网页版完全一致，请自行测试体验后决定是否开启</string>
     <string name="desc_related_enable">打开此选项，视频详情页的评论区右侧会有相关视频推荐</string>
     <string name="desc_creative_enable">打开此选项，在“我的”页面会显示创作中心（可查看投稿视频的数据变化情况）</string>
+    <string name="desc_ban_gallery">打开此选项，缓存的视频将不会出现在系统相册中</string>
     <string name="desc_copy_enable">打开此选项，长按一些文字（如视频描述或评论）可以打开复制界面以复制这些文本</string>
     <string name="desc_cover_play_enable">打开此选项，视频详情页点击封面由查看图片变更为播放。默认根据你首次使用时点击了视频封面还是播放按钮来决定开关。</string>
     <string name="desc_img_no_load_onscroll">打开此选项，翻动列表时将不会加载图片，松手后再加载，观感可能有影响，可能增加流畅度。</string>
@@ -126,6 +127,7 @@
     <string-array name="update_log_items">
         <item>修复了2.8.0中清晰度选择异常的问题</item>
         <item>修复了2.8.0中历史记录上传不正常的问题</item>
+        <item>修复了私信可能崩溃的问题</item>
         <item>修复了部分视频评论区打不开的问题</item>
         <item>修复了删除按钮的判断逻辑并进行了优化</item>
         <item>将“收藏成功提示”的开关改为默认开启</item>

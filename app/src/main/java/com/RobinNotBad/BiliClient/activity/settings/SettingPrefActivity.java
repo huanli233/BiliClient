@@ -28,6 +28,7 @@ public class SettingPrefActivity extends RefreshListActivity {
             add(new SettingSection("switch", "创作中心", "creative_enable", getString(R.string.desc_creative_enable), "true"));
             add(new SettingSection("switch", "长按复制", "copy_enable", getString(R.string.desc_copy_enable), "true"));
             add(new SettingSection("switch", "加载渐入渐出动画", SharedPreferencesUtil.LOAD_TRANSITION, getString(R.string.desc_load_transition), "true"));
+            add(new SettingSection("switch", "禁止视频在相册中显示", "save_ban_gallery", getString(R.string.desc_ban_gallery), "true"));
             add(new SettingSection("switch", "翻动时不加载图片", "image_no_load_onscroll", getString(R.string.desc_img_no_load_onscroll), "false"));
             add(new SettingSection("switch", "请求JPG格式图片", "image_request_jpg", getString(R.string.desc_img_request_jpg), "false"));
             add(new SettingSection("switch", "识别链接", "link_enable", getString(R.string.desc_link_enable), "true"));
