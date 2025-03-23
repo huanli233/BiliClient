@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.viewpager.widget.ViewPager;
@@ -27,7 +28,7 @@ public class ImageViewerActivity extends BaseActivity {
     //简简单单的图片查看页面
     //2023-07-21
 
-    private int longClickPosition = -1;
+    private long longClickTimestamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,20 @@ public class ImageViewerActivity extends BaseActivity {
 
         List<PhotoView> photoViewList = new ArrayList<>();
 
+        ImageButton download = findViewById(R.id.btn_download);
+        download.setOnClickListener(v -> {
+            long time_now = System.currentTimeMillis();
+            if(time_now - longClickTimestamp < 3000){
+                Intent intent1 = new Intent(this, DownloadActivity.class)
+                        .putExtra("link", imageList.get(viewPager.getCurrentItem()))
+                        .putExtra("path", FileUtil.getPicturePath().getAbsolutePath())
+                        .putExtra("type", 0);
+                startActivity(intent1);
+            }
+            else MsgUtil.showMsg("再次点击下载");
+            longClickTimestamp = time_now;
+        });
+
         for (int i = 0; i < imageList.size(); i++) {
             PhotoView photoView = new PhotoView(this);
             try {
@@ -55,23 +70,6 @@ public class ImageViewerActivity extends BaseActivity {
             } catch (OutOfMemoryError e) {
                 MsgUtil.showMsg("超出内存，加载失败");
             }
-
-            int id = i;
-            photoView.setOnLongClickListener(view -> {
-                if (longClickPosition != id) {
-                    MsgUtil.showMsg("再次长按下载图片");
-                    longClickPosition = id;
-                } else {
-                    Intent intent1 = new Intent()
-                            .setClass(ImageViewerActivity.this, DownloadActivity.class)
-                            .putExtra("link", imageList.get(id))
-                            .putExtra("path", FileUtil.getPicturePath())
-                            .putExtra("type", 0);
-                    startActivity(intent1);
-                    longClickPosition = -1;
-                }
-                return true;
-            });
 
             photoViewList.add(photoView);
 

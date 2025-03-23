@@ -72,14 +72,13 @@ public class MsgUtil {
 
     public static void processSnackEvent(SnackEvent snackEvent, View view) {
         long currentTime = System.currentTimeMillis();
-        int duration = 2750;
-        if (snackEvent.getDuration() > 0) {
-            duration = snackEvent.getDuration();
-        } else if (snackEvent.getDuration() == Snackbar.LENGTH_SHORT) {
-            duration = 1950;
-        } else if (snackEvent.getDuration() == Snackbar.LENGTH_INDEFINITE) {
-            duration = Integer.MAX_VALUE;
-        }
+
+        int duration;
+        if (snackEvent.getDuration() > 0) duration = snackEvent.getDuration();
+        else if (snackEvent.getDuration() == Snackbar.LENGTH_SHORT) duration = 1950;
+        else if (snackEvent.getDuration() == Snackbar.LENGTH_INDEFINITE) duration = Integer.MAX_VALUE;
+        else duration = 2750;
+
         long endTime = snackEvent.getStartTime() + duration;
         if (currentTime >= endTime) {
             EventBus.getDefault().removeStickyEvent(snackEvent);

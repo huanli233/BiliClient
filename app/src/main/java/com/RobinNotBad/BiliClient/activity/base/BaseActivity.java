@@ -208,7 +208,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEvent(SnackEvent event) {
-        if (isFinishing()) return;
+        if (isDestroyed()) return;
         MsgUtil.processSnackEvent(event, getWindow().getDecorView().getRootView());
     }
 
@@ -311,7 +311,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean isDestroyed(){
-        return getLifecycle().getCurrentState().equals(Lifecycle.State.DESTROYED);
+        return getLifecycle().getCurrentState().equals(Lifecycle.State.DESTROYED) || isFinishing();
     }
 
     public String getClassName(){

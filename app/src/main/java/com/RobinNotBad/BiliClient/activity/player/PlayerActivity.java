@@ -55,6 +55,7 @@ import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -1593,10 +1594,24 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onEvent(SnackEvent event) {
+    public void onEvent(SnackEvent snackEvent) {
         if (isFinishing()) return;
         Logu.v("event","onEvent");
-        MsgUtil.toast(event.getMessage());  //由于Theme.Black不支持，只能这样用了
+
+        long currentTime = System.currentTimeMillis();
+
+        int duration;
+        if (snackEvent.getDuration() > 0) duration = snackEvent.getDuration();
+        else if (snackEvent.getDuration() == Snackbar.LENGTH_SHORT) duration = 1950;
+        else if (snackEvent.getDuration() == Snackbar.LENGTH_INDEFINITE) duration = Integer.MAX_VALUE;
+        else duration = 2750;
+
+        long endTime = snackEvent.getStartTime() + duration;
+        if (currentTime >= endTime) {
+            EventBus.getDefault().removeStickyEvent(snackEvent);
+        } else {
+            MsgUtil.toast(snackEvent.getMessage());  //由于Theme.Black不支持，只能这样用了
+        }
     }
 
     protected boolean eventBusEnabled() {
