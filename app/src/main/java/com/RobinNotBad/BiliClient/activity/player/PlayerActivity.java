@@ -1409,7 +1409,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         layout_top.setOnClickListener(view -> finish());
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT < 19)) {
+        if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT < 26)) {
             textureView = new TextureView(this);
             textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
                 @Override

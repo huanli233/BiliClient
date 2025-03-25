@@ -188,7 +188,7 @@ public class PlayerApi {
                 break;
 
             case "mtvPlayer":
-                intent.setClassName(context.getString(R.string.player_mtv_package), "com.xinxiangshicheng.wearbiliplayer.cn.player.PlayerActivity");
+                intent.setClassName(context.getString(R.string.player_package_mtv), "com.xinxiangshicheng.wearbiliplayer.cn.player.PlayerActivity");
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.putExtra("cookie", SharedPreferencesUtil.getString("cookies", ""));
                 intent.putExtra("mode", (playerData.isLocal() ? "2" : "0"));
@@ -198,7 +198,7 @@ public class PlayerApi {
                 break;
 
             case "aliangPlayer":
-                intent.setClassName(context.getString(R.string.player_aliang_package), "com.aliangmaker.media.PlayVideoActivity");
+                intent.setClassName(context.getString(R.string.player_package_aliang), "com.aliangmaker.media.PlayVideoActivity");
                 intent.putExtra("name", playerData.title);
                 intent.putExtra("danmaku", playerData.danmakuUrl);
                 intent.putExtra("live_mode", playerData.isLocal());

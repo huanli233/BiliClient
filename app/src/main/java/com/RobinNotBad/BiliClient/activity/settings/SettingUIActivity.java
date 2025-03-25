@@ -47,6 +47,7 @@ public class SettingUIActivity extends BaseActivity {
                     uiPaddingH.setText("3");
                     uiPaddingV.setText("3");
                     SharedPreferencesUtil.putBoolean("player_ui_round",true);
+                    MsgUtil.showMsg("界面边距已设为3\n可以手动微调喵");
                 }
                 else{
                     uiPaddingH.setText("0");

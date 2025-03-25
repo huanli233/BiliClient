@@ -76,8 +76,8 @@
         <item>呐呐？这里没有更多彩蛋了呢＞﹏＜\n\n欢迎你的投稿哦？</item>
     </string-array>
 
-    <string name="player_aliang_package">com.aliangmaker.media</string>
-    <string name="player_mtv_package">com.xinxiangshicheng.wearbiliplayer.cn</string>
+    <string name="player_package_aliang">com.aliangmaker.media</string>
+    <string name="player_package_mtv">com.xinxiangshicheng.wearbiliplayer.cn</string>
 
     <string name="desc_back_disable">有一些手表（例如米兔等）是通过模拟按下返回键自行实现的右滑返回，若你在左右翻页时因触发滑动返回而退出页面，请开启此开关\n开启后，其他设备上则为按下返回键也不退出页面，并且右滑退出后会卡住。\n你可以使用菜单最下方的退出按钮结束本软件。\n正常用户无需打开。</string>
     <string name="desc_fav_single">打开此选项，添加收藏后即退出收藏页面，取消收藏不自动退出。</string>
@@ -126,6 +126,7 @@
 
     #新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
+        <item>fix3修复了2.8.1中播放器起播不正常的问题</item>
         <item>fix2修复了2.8.1中图片下载崩溃的问题</item>
         <item>修复了2.8.0中清晰度选择异常的问题</item>
         <item>修复了2.8.0中历史记录上传不正常的问题</item>
