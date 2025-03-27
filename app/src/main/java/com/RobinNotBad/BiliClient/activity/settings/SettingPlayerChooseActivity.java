@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -22,7 +21,7 @@ import java.util.Map;
 
 public class SettingPlayerChooseActivity extends BaseActivity {
 
-    final String playerCurr = SharedPreferencesUtil.getString("player", "null");
+    String playerCurr = SharedPreferencesUtil.getString("player", "null");
     MaterialCardView terminalPlayer, mtvPlayer, aliangPlayer, qn_choose;
     ArrayList<MaterialCardView> cardViewList;
     int checkPosition = -1;
@@ -67,6 +66,7 @@ public class SettingPlayerChooseActivity extends BaseActivity {
             });
 
             updateQn();
+            just_create = false;
         });
     }
 
@@ -92,14 +92,6 @@ public class SettingPlayerChooseActivity extends BaseActivity {
         startActivity(new Intent(this, SettingQualityActivity.class));
     }
 
-    @SuppressLint("SuspiciousIndentation")
-    @Override
-    protected void onDestroy() {
-        SharedPreferencesUtil.putString("player", playerList[checkPosition + 1]);
-        Log.e("debug-选择", playerList[checkPosition + 1]);
-
-        super.onDestroy();
-    }
 
     private void setOnClick() {
         for (int i = 0; i < cardViewList.size(); i++) {
@@ -122,27 +114,23 @@ public class SettingPlayerChooseActivity extends BaseActivity {
                 cardViewList.get(i).setStrokeWidth(ToolsUtil.dp2px(0.1f));
             }
         }
-        if (!just_create) switch (playerList[checkPosition + 1]) {
-            case "terminalPlayer":
-                if (SharedPreferencesUtil.getBoolean("player_inside_firstchoose", true)) {
-                    SharedPreferencesUtil.putBoolean("player_inside_firstchoose", false);
-                    Intent intent = new Intent();
-                    intent.setClass(this, SettingTerminalPlayerActivity.class);
-                    startActivity(intent);
-                }
-                break;
-            case "mtvPlayer":
-                MsgUtil.showDialog("提醒", "不再推荐使用小电视播放器，许多功能已不再支持，推荐使用内置播放器", -1);
-                break;
+        if (!just_create) {
+            switch (playerList[checkPosition + 1]) {
+                case "terminalPlayer":
+                    if (playerCurr.equals("null"))
+                        startActivity(new Intent(this, SettingTerminalPlayerActivity.class));
+                    break;
+                case "mtvPlayer":
+                    MsgUtil.showDialog("提醒", "不再推荐使用小电视播放器，许多功能已不再支持，推荐使用内置播放器", -1);
+                    break;
 
-            case "aliangPlayer":
-                if (Build.VERSION.SDK_INT <= 19)
-                    MsgUtil.showDialog("提醒", "您的安卓版本过低，可能无法使用凉腕播放器，可以使用内置播放器（改版小电视不再推荐）", -1);
-                break;
-
-            default:
-                break;
+                case "aliangPlayer":
+                    if (Build.VERSION.SDK_INT <= 19)
+                        MsgUtil.showDialog("提醒", "您的安卓版本过低，可能无法使用凉腕播放器，可以使用内置播放器", -1);
+                    break;
+            }
+            playerCurr = playerList[checkPosition + 1];
+            SharedPreferencesUtil.putString("player", playerCurr);
         }
-        else just_create = false;
     }
 }

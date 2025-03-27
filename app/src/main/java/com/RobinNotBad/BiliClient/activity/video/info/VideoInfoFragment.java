@@ -25,7 +25,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -93,7 +92,7 @@ public class VideoInfoFragment extends Fragment {
     private Pair<Long, Integer> progressPair;
     private boolean play_clicked = false;
 
-    private Boolean coverPlayEnabled = SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cover_play_enable, false);
+    private Boolean coverPlayEnabled = SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cover_play_enabled, false);
 
     final int RESULT_ADDED = 1;
     final int RESULT_DELETED = -1;
@@ -313,6 +312,30 @@ public class VideoInfoFragment extends Fragment {
 
             if(isAdded()) requireActivity().runOnUiThread(()-> {
 
+                //封面
+                Glide.with(requireContext()).asDrawable().load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
+                        .transition(GlideUtil.getTransitionOptions())
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .into(cover);
+                cover.requestFocus();
+                cover.setOnClickListener(view1 -> {
+                    if (SharedPreferencesUtil.getString("player", null) == null) {
+                        SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cover_play_enabled, true);
+                        MsgUtil.showDialog("播放视频", getString(R.string.desc_cover_play_cover_first), 1);
+                        coverPlayEnabled = true;
+                    }
+                    if (coverPlayEnabled) {
+                        playClick();
+                        return;
+                    }
+                    showCover();
+                });
+                cover.setOnLongClickListener(v -> {
+                    showCover();
+                    return true;
+                });
+
                 //标题
                 title.setText(getTitleSpan());
                 ToolsUtil.setCopy(title, videoInfo.title);
@@ -328,31 +351,6 @@ public class VideoInfoFragment extends Fragment {
                 up_recyclerView.setHasFixedSize(true);
                 up_recyclerView.setLayoutManager(new CustomLinearManager(getContext()));
                 up_recyclerView.setAdapter(adapter);
-
-
-                //封面
-                Glide.with(requireContext()).asDrawable().load(GlideUtil.url(videoInfo.cover)).placeholder(R.mipmap.placeholder)
-                        .transition(GlideUtil.getTransitionOptions())
-                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4))).sizeMultiplier(0.85f).skipMemoryCache(true).dontAnimate())
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .into(cover);
-                cover.requestFocus();
-                cover.setOnClickListener(view1 -> {
-                    if (SharedPreferencesUtil.getString("player", null) == null) {
-                        SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cover_play_enable, true);
-                        Toast.makeText(requireContext(), "将播放视频！\n如需变更点击行为请至设置->偏好设置喵", Toast.LENGTH_SHORT).show();
-                        coverPlayEnabled = true;
-                    }
-                    if (coverPlayEnabled) {
-                        playClick();
-                        return;
-                    }
-                    showCover();
-                });
-                if(coverPlayEnabled) cover.setOnLongClickListener(v -> {
-                    showCover();
-                    return true;
-                });
 
                 viewCount.setText(ToolsUtil.toWan(videoInfo.stats.view));
                 likeLabel.setText(ToolsUtil.toWan(videoInfo.stats.like));
@@ -385,7 +383,15 @@ public class VideoInfoFragment extends Fragment {
                 });
 
                 //播放
-                play.setOnClickListener(view1 -> playClick());
+                play.setOnClickListener(view1 -> {
+                    if (SharedPreferencesUtil.getString("player", null) == null) {
+                        SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cover_play_enabled, false);
+                        MsgUtil.showDialog("播放视频", getString(R.string.desc_cover_play_button_first), 1);
+                        coverPlayEnabled = false;
+                        return;
+                    }
+                    playClick();
+                });
                 play.setOnLongClickListener(view1 -> {
                     Intent intent = new Intent();
                     Context context = getContext();
@@ -529,7 +535,7 @@ public class VideoInfoFragment extends Fragment {
 
 
     private SpannableString getTitleSpan() {
-        String string = "";
+        String string = null;
 
         //优先级要对
         if (videoInfo.upowerExclusive) string = "充电专属";
@@ -537,7 +543,7 @@ public class VideoInfoFragment extends Fragment {
         else if (videoInfo.is360) string = "全景视频";
         else if (videoInfo.isCooperation) string = "联合投稿";
 
-        if (string.isEmpty()) return new SpannableString(videoInfo.title);
+        if (string == null) return new SpannableString(videoInfo.title);
 
         SpannableString titleStr = new SpannableString(" " + string + " " + videoInfo.title);
         RadiusBackgroundSpan badgeBG = new RadiusBackgroundSpan(0, (int) getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95));
@@ -597,7 +603,7 @@ public class VideoInfoFragment extends Fragment {
 
             if (downPath.exists() && videoInfo.pagenames.size() == 1){
                 File file_sign = new File(downPath,".DOWNLOADING");
-                MsgUtil.showMsg(file_sign.exists() ? "已在下载队列" : "已下载完成");
+                MsgUtil.showMsg(file_sign.exists() ? "已在下载队列\n如有异常，长按可清空文件" : "已下载完成");
             }
             else {
                 if (videoInfo.pagenames.size() > 1) {

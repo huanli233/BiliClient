@@ -25,6 +25,7 @@ import com.RobinNotBad.BiliClient.helper.sql.DownloadSqlHelper;
 import com.RobinNotBad.BiliClient.model.PlayerData;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
+import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -542,7 +543,7 @@ public class DownloadService extends Service {
                 DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
                 SQLiteDatabase database = helper.getWritableDatabase();
                 database.execSQL("insert into download(type,state,aid,cid,qn,title,child,cover) values(?,?,?,?,?,?,?,?)",
-                        new Object[]{"video_single","none", aid, cid, qn, title, "", cover});
+                        new Object[]{"video_single","none", aid, cid, qn, title, "", GlideUtil.url(cover)});
                 database.close();
 
                 File path_single = FileUtil.getVideoDownloadPath(title,null);
@@ -566,7 +567,7 @@ public class DownloadService extends Service {
                 DownloadSqlHelper helper = new DownloadSqlHelper(BiliTerminal.context);
                 SQLiteDatabase database = helper.getWritableDatabase();
                 database.execSQL("insert into download(type,state,aid,cid,qn,title,child,cover) values(?,?,?,?,?,?,?,?)",
-                        new Object[]{"video_multi", "none", aid, cid, qn, parent, child, cover});
+                        new Object[]{"video_multi", "none", aid, cid, qn, parent, child, GlideUtil.url(cover)});
                 database.close();
 
 

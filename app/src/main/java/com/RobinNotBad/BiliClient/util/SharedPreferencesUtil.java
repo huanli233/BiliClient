@@ -1,9 +1,6 @@
 package com.RobinNotBad.BiliClient.util;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-
-import com.RobinNotBad.BiliClient.BiliTerminal;
 
 /**
  * 被 luern0313 创建于 2020/5/4.
@@ -33,7 +30,7 @@ public class SharedPreferencesUtil {
     public static String padding_vertical = "padding_vertical";
     public static String cookie_refresh = "cookie_refresh";
     public static String search_history = "search_history";
-    public static String cover_play_enable = "cover_play_enable";
+    public static String cover_play_enabled = "cover_play_enabled";
     public static String tutorial_version = "tutorial_version";
 
 

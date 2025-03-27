@@ -147,7 +147,10 @@ public class MsgUtil {
 
         String e_str = e.toString();
 
-        if (e instanceof IOException) output.append("网络错误(＃°Д°)");
+        if (e instanceof IOException) {
+            showMsg("网络错误(＃°Д°)");
+            return;
+        }
         else if (e instanceof JSONException) {
             if (SharedPreferencesUtil.getBoolean("dev_jsonerr_detailed", false)) {
                 Writer writer = new StringWriter();
