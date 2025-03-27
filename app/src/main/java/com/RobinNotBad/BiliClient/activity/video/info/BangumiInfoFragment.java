@@ -44,8 +44,6 @@ public class BangumiInfoFragment extends Fragment {
     private RecyclerView episodeRecyclerView;
     private Button section_choose;
     private TextView episode_choose;
-    private Runnable onFinishLoad;
-    private boolean loadFinished;
     private Bangumi bangumi;
 
     public static BangumiInfoFragment newInstance(long mediaId) {
@@ -91,8 +89,6 @@ public class BangumiInfoFragment extends Fragment {
         selectedSection = 0;
 
         rootView.setVisibility(View.GONE);
-        if (onFinishLoad != null) onFinishLoad.run();
-        else loadFinished = true;
 
         Glide.with(this)
                 .load(GlideUtil.url(bangumi.info.cover_horizontal))
@@ -145,6 +141,7 @@ public class BangumiInfoFragment extends Fragment {
             startActivity(intent);
             return true;
         });
+        onFinishLoad();
 
         refreshReplies();
     }
@@ -210,8 +207,12 @@ public class BangumiInfoFragment extends Fragment {
         }
     }
 
-    public void setOnFinishLoad(Runnable onFinishLoad) {
-        if(loadFinished) onFinishLoad.run();
-        else this.onFinishLoad = onFinishLoad;
+    public void onFinishLoad() {
+        try {
+            Activity activity = requireActivity();
+            if (activity instanceof VideoInfoActivity) {
+                ((VideoInfoActivity) activity).crossFade(getView());
+            }
+        } catch (Exception ignored){}
     }
 }

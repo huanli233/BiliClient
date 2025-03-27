@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity.video.info;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
@@ -36,6 +37,7 @@ public class VideoInfoActivity extends BaseActivity {
 
     private List<Fragment> fragmentList;
     ReplyFragment replyFragment;
+    Fragment contentFragment;
     private long seek_reply;
     private ImageView loading;
     private ViewPager viewPager;
@@ -66,8 +68,8 @@ public class VideoInfoActivity extends BaseActivity {
         setPageName("番剧详情");
 
         fragmentList = new ArrayList<>(2);
-        BangumiInfoFragment bangumiInfoFragment = BangumiInfoFragment.newInstance(aid);
-        fragmentList.add(bangumiInfoFragment);
+        contentFragment = BangumiInfoFragment.newInstance(aid);
+        fragmentList.add(contentFragment);
         replyFragment = ReplyFragment.newInstance(aid, 1, seek_reply == -1, seek_reply);
         fragmentList.add(replyFragment);
 
@@ -75,7 +77,6 @@ public class VideoInfoActivity extends BaseActivity {
         ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(vpfAdapter);
         if (seek_reply != -1) viewPager.setCurrentItem(1);
-        bangumiInfoFragment.setOnFinishLoad(() -> AnimationUtils.crossFade(loading, bangumiInfoFragment.getView()));
         if (SharedPreferencesUtil.getBoolean("first_videoinfo", true)) {
             MsgUtil.showMsgLong("提示：本页面可以左右滑动");
             SharedPreferencesUtil.putBoolean("first_videoinfo", false);
@@ -89,8 +90,8 @@ public class VideoInfoActivity extends BaseActivity {
         setPageName("视频详情");
         TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).observe(this, (result) -> result.onSuccess((videoInfo) -> {
             fragmentList = new ArrayList<>(3);
-            VideoInfoFragment videoInfoFragment = VideoInfoFragment.newInstance(aid, bvid);
-            fragmentList.add(videoInfoFragment);
+            contentFragment = VideoInfoFragment.newInstance(aid, bvid);
+            fragmentList.add(contentFragment);
             replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1, seek_reply, videoInfo.staff.get(0).mid);
             replyFragment.setManager(videoInfo.staff);
             fragmentList.add(replyFragment);
@@ -102,7 +103,6 @@ public class VideoInfoActivity extends BaseActivity {
             ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);
             viewPager.setAdapter(vpfAdapter);
             if (seek_reply != -1) viewPager.setCurrentItem(1);
-            videoInfoFragment.setOnFinishLoad(()-> AnimationUtils.crossFade(loading, videoInfoFragment.getView()));
         }).onFailure((error) -> {
             loading.setImageResource(R.mipmap.loading_2233_error);
             MsgUtil.showMsg("获取信息失败！\n可能是视频不存在？");
@@ -113,6 +113,10 @@ public class VideoInfoActivity extends BaseActivity {
 
     public void setCurrentAid(long aid) {
         if (replyFragment != null) runOnUiThread(() -> replyFragment.refresh(aid));
+    }
+
+    public void crossFade(View fragmentView){
+        AnimationUtils.crossFade(loading, fragmentView);
     }
 
     @Override
