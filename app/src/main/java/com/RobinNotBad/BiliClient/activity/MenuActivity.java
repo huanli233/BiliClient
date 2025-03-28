@@ -29,6 +29,7 @@ import com.RobinNotBad.BiliClient.activity.video.PreciousActivity;
 import com.RobinNotBad.BiliClient.activity.video.RecommendActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalListActivity;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -164,6 +165,7 @@ public class MenuActivity extends BaseActivity {
             intent.setClass(MenuActivity.this, Objects.requireNonNull(btnNames.get(name)).second);
             intent.putExtra("from", name);
             startActivity(intent);
+            Glide.get(BiliTerminal.context).clearMemory();
         } else {
             switch (name) {
                 case "exit": //退出按钮

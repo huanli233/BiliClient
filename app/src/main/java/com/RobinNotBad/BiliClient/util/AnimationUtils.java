@@ -40,26 +40,26 @@ public class AnimationUtils {
         });
     }
 
-    public static void crossFade(final View view, final View view2) {
-        crossFade(view, view2, 100);
+    public static void crossFade(final View toShow, final View toHide) {
+        crossFade(toShow, toHide, 100);
     }
 
-    public static void crossFade(final View view, final View view2, final int duration) {
+    public static void crossFade(final View toHide, final View toShow, final int duration) {
         runOnUiThread(() -> {
             if (!SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.LOAD_TRANSITION, true)) {
-                if(view!=null) view.setVisibility(View.GONE);
-                if(view2!=null) view2.setVisibility(View.VISIBLE);
+                if(toHide!=null) toHide.setVisibility(View.GONE);
+                if(toShow!=null) toShow.setVisibility(View.VISIBLE);
                 return;
             }
-            if(view != null) {
-                ObjectAnimator fadeOut = ObjectAnimator.ofFloat(view, "alpha", 1f, 0f);
+            if(toHide != null) {
+                ObjectAnimator fadeOut = ObjectAnimator.ofFloat(toHide, "alpha", 1f, 0f);
                 fadeOut.setDuration(duration);
                 fadeOut.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(@NonNull Animator animation) {}
                     @Override
                     public void onAnimationEnd(@NonNull Animator animation) {
-                        view.setVisibility(View.GONE);
+                        toHide.setVisibility(View.GONE);
                     }
                     @Override
                     public void onAnimationCancel(@NonNull Animator animation) {}
@@ -69,13 +69,11 @@ public class AnimationUtils {
                 fadeOut.start();
             }
 
-            if(view2 != null) {
-                ObjectAnimator fadeIn = ObjectAnimator.ofFloat(view2, "alpha", 0f, 1f);
-                fadeIn.setDuration(duration);
-                CenterThreadPool.runOnUIThreadAfter(duration, ()-> {
-                    view2.setVisibility(View.VISIBLE);
-                    fadeIn.start();
-                });
+            if(toShow != null) {
+                ObjectAnimator showUp = ObjectAnimator.ofFloat(toShow, "alpha", 0f, 1f);
+                showUp.setDuration(duration);
+                toShow.setVisibility(View.VISIBLE);
+                showUp.start();
             }
 
         });

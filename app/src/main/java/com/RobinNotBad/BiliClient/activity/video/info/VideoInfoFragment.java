@@ -16,7 +16,6 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.Pair;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -34,6 +33,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
@@ -58,7 +58,6 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.Result;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
@@ -92,8 +91,6 @@ public class VideoInfoFragment extends Fragment {
     private ImageView fav;
     private Pair<Long, Integer> progressPair;
     private boolean play_clicked = false;
-
-    private Boolean coverPlayEnabled = SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.cover_play_enabled, false);
 
     final int RESULT_ADDED = 1;
     final int RESULT_DELETED = -1;
@@ -182,7 +179,6 @@ public class VideoInfoFragment extends Fragment {
 
         TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).observe(getViewLifecycleOwner(), (videoInfoResult) -> videoInfoResult.onSuccess((videoInfo) -> {
             this.videoInfo = videoInfo;
-
 
             if(videoInfo == null){
                 Activity activity = getActivity();
@@ -320,18 +316,7 @@ public class VideoInfoFragment extends Fragment {
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(cover);
                     cover.requestFocus();
-                    cover.setOnClickListener(view1 -> {
-                        if (SharedPreferencesUtil.getString("player", null) == null) {
-                            SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cover_play_enabled, true);
-                            MsgUtil.showDialog("播放视频", getString(R.string.desc_cover_play_cover_first), 1);
-                            coverPlayEnabled = true;
-                        }
-                        if (coverPlayEnabled) {
-                            playClick();
-                            return;
-                        }
-                        showCover();
-                    });
+                    cover.setOnClickListener(view1 -> playClick());
                     cover.setOnLongClickListener(v -> {
                         showCover();
                         return true;
@@ -384,22 +369,11 @@ public class VideoInfoFragment extends Fragment {
                     });
 
                     //播放
-                    play.setOnClickListener(view1 -> {
-                        if (SharedPreferencesUtil.getString("player", null) == null) {
-                            SharedPreferencesUtil.putBoolean(SharedPreferencesUtil.cover_play_enabled, false);
-                            MsgUtil.showDialog("播放视频", getString(R.string.desc_cover_play_button_first), 1);
-                            coverPlayEnabled = false;
-                            return;
-                        }
-                        playClick();
-                    });
+                    play.setOnClickListener(view1 -> playClick());
                     play.setOnLongClickListener(view1 -> {
-                        Intent intent = new Intent();
                         Context context = getContext();
-                        if (context != null) {
-                            intent.setClass(context, SettingPlayerChooseActivity.class);
-                            startActivity(intent);
-                        }
+                        if (context != null)
+                            startActivity(new Intent(context, SettingPlayerChooseActivity.class));
                         return true;
                     });
 
@@ -588,7 +562,13 @@ public class VideoInfoFragment extends Fragment {
     }
 
     private void playClick() {
-        Glide.get(requireContext()).clearMemory();
+        if(SharedPreferencesUtil.getBoolean("first_play",true)){
+            SharedPreferencesUtil.putBoolean("first_play", false);
+            MsgUtil.showDialog("播放视频", getString(R.string.desc_cover_play));
+            return;
+        }
+
+        Glide.get(BiliTerminal.context).clearMemory();
         //在播放前清除内存缓存，因为手表内存太小了，播放完回来经常把Activity全释放掉
         //...经过测试，还是会释放，但会好很多
         if (videoInfo.pagenames.size() > 1) {

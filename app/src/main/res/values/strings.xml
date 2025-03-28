@@ -88,9 +88,7 @@
     <string name="desc_creative_enable">打开此选项，在“我的”页面会显示创作中心（可查看投稿视频的数据变化情况）</string>
     <string name="desc_ban_gallery">打开此选项，缓存的视频将不会出现在系统相册中</string>
     <string name="desc_copy_enable">打开此选项，长按一些文字（如视频描述或评论）可以打开复制界面以复制这些文本</string>
-    <string name="desc_cover_play_enabled">打开此选项，视频详情页点击封面由查看图片变更为播放。默认根据你首次使用时点击了视频封面还是播放按钮来决定开关。</string>
-    <string name="desc_cover_play_cover_first">默认将以点击封面播放视频、长按封面查看大图！\n\n如需关闭点击封面播放，请前往【详情页设置】喵~</string>
-    <string name="desc_cover_play_button_first">默认将以点击按钮播放视频、点击封面查看大图！\n\n如需启用点击封面播放，请前往【详情页设置】喵~</string>
+    <string name="desc_cover_play">从现版本开始，点击封面将会播放视频，长按封面查看大图。\n原先的播放按钮仍可使用，长按播放按钮可切换播放器。\n\n之前设置中的“点击封面播放”开关已删除。</string>
     <string name="desc_img_no_load_onscroll">打开此选项，翻动列表时将不会加载图片，松手后再加载，观感可能有影响，可能增加流畅度。</string>
     <string name="desc_img_request_jpg">部分杂牌手表和安卓版本极低的设备不支持webp格式，可能导致大量图片无法显示。打开此选项，将会请求jpg格式的图片以解决此问题，可能会略微延长加载时间。</string>
     <string name="desc_link_enable">打开此选项，会识别部分文本中的链接/BV号/AV号/CV号并标记为链接，点击可打开。</string>
