@@ -1249,7 +1249,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     @Override
     protected void onDestroy() {
-        if(!isFinishing()) return;    //貌似有些设备会先调用一下onDestroy，头大……
+        if(!isFinishing()) {
+            super.onDestroy();
+            return;    //貌似有些设备启动activity会先调用一下onDestroy，头大…… 不super还会报错
+        }
 
         Logu.v("结束");
         if (eventBusInit) {
