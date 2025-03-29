@@ -44,10 +44,10 @@ public class SettingUIActivity extends BaseActivity {
             round.setChecked(SharedPreferencesUtil.getBoolean("player_ui_round",false));
             round.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if(isChecked){
-                    uiPaddingH.setText("3");
+                    uiPaddingH.setText("5");
                     uiPaddingV.setText("3");
                     SharedPreferencesUtil.putBoolean("player_ui_round",true);
-                    MsgUtil.showMsg("界面边距已设为3\n可以手动微调喵");
+                    MsgUtil.showMsg("界面边距已更改\n可以手动微调喵");
                 }
                 else{
                     uiPaddingH.setText("0");

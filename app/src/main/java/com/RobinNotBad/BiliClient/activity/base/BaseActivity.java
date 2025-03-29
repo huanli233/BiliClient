@@ -74,7 +74,6 @@ public class BaseActivity extends AppCompatActivity {
         int paddingH_percent = SharedPreferencesUtil.getInt("paddingH_percent", 0);
         int paddingV_percent = SharedPreferencesUtil.getInt("paddingV_percent", 0);
 
-        View rootView = this.getWindow().getDecorView().getRootView();
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
@@ -86,10 +85,14 @@ public class BaseActivity extends AppCompatActivity {
         if (paddingH_percent != 0 || paddingV_percent != 0) {
             Log.e("debug", "调整边距");
             int paddingH = scrW * paddingH_percent / 100;
-            int paddingV = scrH * paddingV_percent / 100;
-            window_width = scrW - paddingH;
-            window_height = scrH - paddingV;
-            rootView.setPadding(paddingH, paddingV, paddingH, paddingV);
+            int paddingT = scrH * paddingV_percent / 100;
+            int paddingB = paddingT;
+            if(SharedPreferencesUtil.getBoolean("player_ui_round", false))
+                paddingB += scrH * 0.03;
+            window_width = scrW - paddingH * 2;
+            window_height = scrH - paddingT - paddingB;
+            View rootView = this.getWindow().getDecorView().getRootView();
+            rootView.setPadding(paddingH, paddingT, paddingH, paddingB);
         } else {
             window_width = scrW;
             window_height = scrH;
