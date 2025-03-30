@@ -29,7 +29,7 @@ public class SettingLaboratoryActivity extends RefreshListActivity {
             add(new SettingSection("input_string","缓存路径","save_path_video",getString(R.string.setting_lab_path_video), FileUtil.getVideoDownloadPath().toString()));
             add(new SettingSection("input_string","图片下载路径","save_path_pictures",getString(R.string.setting_lab_path_pictures), FileUtil.getPicturePath().toString()));
             add(new SettingSection("switch", "文字跑马灯", "marquee_enable", getString(R.string.setting_lab_marquee), "true"));
-            add(new SettingSection("input_float","启用表冠适配","ui_rotatory_enable", getString(R.string.setting_lab_ui_rotatory),"false"));
+            add(new SettingSection("switch","启用表冠适配","ui_rotatory_enable", getString(R.string.setting_lab_ui_rotatory),"false"));
             add(new SettingSection("input_float","表冠适配灵敏度（Recycler）","ui_rotatory_recycler", "","0"));
             add(new SettingSection("input_float","表冠适配灵敏度（Scroll）","ui_rotatory_scroll", "","0"));
             add(new SettingSection("input_float","表冠适配灵敏度（List）","ui_rotatory_scroll", "","0"));
