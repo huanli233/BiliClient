@@ -359,7 +359,7 @@ public class ToolsUtil {
         StringBuilder str = new StringBuilder();
         String[] logItems = context.getResources().getStringArray(R.array.update_log_items);
         for (int i = 0; i < logItems.length; i++)
-            str.append((i + 1)).append(".").append(logItems[i]).append("\n");
+            str.append("\n").append((i + 1)).append(".").append(logItems[i]);
         return str.toString();
     }
 

@@ -50,8 +50,9 @@ public class AboutActivity extends BaseActivity {
                 code_str.setSpan(new StyleSpan(Typeface.BOLD), 0, 3, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 ((TextView) findViewById(R.id.app_version_code)).setText(code_str);
 
-                ((TextView) findViewById(R.id.updatelog_view)).setText("\n更新细节：\n " + ToolsUtil.getUpdateLog(this));
-                ToolsUtil.setCopy(findViewById(R.id.updatelog_view), ToolsUtil.getUpdateLog(this));
+                String updateLog =  ToolsUtil.getUpdateLog(this);
+                ((TextView) findViewById(R.id.updatelog_view)).setText("\n更新细节：" + updateLog);
+                ToolsUtil.setCopy(findViewById(R.id.updatelog_view), updateLog);
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }

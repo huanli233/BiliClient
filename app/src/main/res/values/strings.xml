@@ -24,17 +24,19 @@
     <string name="special_login_export">以下是你的登录信息，可用于在其他设备上特殊登录，点击最下面的按钮可以复制。\n登录信息具有一定的时效性，请即取即用，导入完成请将此设备的哔哩终端清除数据。（不要点退出登录！）\n请勿将此页面的信息传给别人，以防盗号！</string>
 
     <string name="setting_lab_ui_landscape">！此功能将不再继续进行改进，除非开发者有时间！\n开启选项后，软件将会变为横屏，部分列表会变为三列，更适合平板等默认横屏的设备\n*注意：部分页面仍为单列式，可能有一些页面适配不佳，电视请移步官方电视版本或使用其他第三方软件。</string>
-    <string name="setting_lab_ui_rotatory">为0则不使用适配方案，非0则滚动距离会乘以此值\n请从1.0开始上下调节，直至你自己满意为止。打开新页面才能生效。</string>
+    <string name="setting_lab_ui_rotatory">开启开关将会使用表冠适配方案。下面的三项若非0则滚动距离会乘以该值。\n请从1.0开始上下调节，直至你自己满意为止。打开新页面才能生效。</string>
     <string name="setting_lab_path_video">缓存的视频将会保存到这个位置，若文件夹不存在会自动创建。之前缓存的视频请用文件管理器手动移动到新文件夹内。\n不保证会不会出现奇怪的问题。</string>
     <string name="setting_lab_path_pictures">下载的图片将会保存到这个位置，若文件夹不存在会自动创建。之前下载的图片请用文件管理器手动移动到新文件夹内。\n不保证会不会出现奇怪的问题。</string>
-    <string name="setting_lab_marquee">关闭此开关后，将会全局禁用文字跑马灯，可能会提升性能但会导致部分文字显示不全</string>
-    <string name="setting_lab_download_old">2.7.0及以后的版本增加了后台下载服务，若后台下载在你的设备上有问题，请打开此选项以换回旧版的前台下载器！</string>
+    <string name="setting_lab_marquee">关闭此开关后，将会全局禁用文字跑马灯，可能会提升性能但会导致部分文字显示不全。</string>
+    <string name="setting_lab_download_old">若后台下载在你的设备上有问题，请打开此选项以换回旧版的前台下载器！</string>
     <string name="setting_lab_splashtext">顾名思义，可以更改开屏文字，支持换行。开屏文字在网络请求完成后就会被打断。</string>
     <string name="setting_lab_jsonerr_detailed">如果你遇到了某些接口问题，开发者可能会需要你打开这个以提供更详细的报错信息。\n——当然开发者调试的时候也可能会用到这个。</string>
     <string name="setting_lab_recyclererr_detailed">由于开发者技术稀烂（？），软件中的各种列表可能会偶尔出现报错且难以避免。\n虽然是偶尔出现，但很烦人很恶心。\n所以被逼疯的开发者把这个报错catch掉了，只留下一个“此错误无需上报”的提示框和这个用于调试的开关。</string>
     <string name="setting_lab_logv">打开此开关，将会允许输出verbose等级的log，仅对Logu生效。\n下面那两个开关同理，管的分别是debug和info等级\n*非开发者不需要看懂这段话，一般人不需要动这个开关。大量的日志输出可能会降低性能。\n——不过其实终端的代码里从一开始就是Log.e到处飞，很多地方根本没做限制（从小天才和小电视播放器学来的坏习惯），现在在逐步替换……</string>
 
     <string name="text_update">下载的APK保存在: %s\n\n你可以使用pm install或其他方法自己安装，或在下方选择一个安装器进行安装\n若安装出现问题请删除安装包重试，仍然无法安装请反馈给开发者</string>
+    <string name="text_update_success">终端的每个版本都可能会新增一些兼容性相关的设置项。\n如果你遇到了某些奇葩问题，请先在设置里找一找相关的兼容性选项，视频放不了、无法加载图片的问题都有可能解决哦~</string>
+    <string name="warning_debug">这个版本是测试版，仅在测试群中发布。测试版可能bug较多，禁止外传到各种其他平台以免造成大范围影响！</string>
 
     <string name="reply_dont_ky">请不要在无关视频的评论区提及哔哩终端。如果你是以炫耀为目的发送这条评论，请不要这样做，谢谢喵。\n\n——另外，在任何视频的评论区发与内容无关的评论都不好哦。\n\n如果这是误判，等待15秒后可以再点击发送喵。\n\n如果不是误判，希望你自觉遵守评论区礼仪哦。</string>
 
@@ -127,7 +129,7 @@
     #新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
         <item>将点击封面设为播放视频，长按封面设为查看大图</item>
-        <item>修复了一些崩溃问题，优化了一些屎山代码</item>
+        <item>修了一处详情页崩溃和一处播放器崩溃</item>
         <item>新增了一些bug和屎山代码</item>
     </string-array>
 

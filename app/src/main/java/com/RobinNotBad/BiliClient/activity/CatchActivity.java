@@ -53,7 +53,7 @@ public class CatchActivity extends BaseActivity {
             if (stack.contains("java.lang.NumberFormatException"))
                 reason_str = new SpannableString("可能的崩溃原因：\n数值转换出错");
             else if (stack.contains("java.lang.UnsatisfiedLinkError"))
-                reason_str = new SpannableString("可能的崩溃原因：\n外部库加载出错，请不要乱删文件");
+                reason_str = new SpannableString("可能的崩溃原因：\n外部库加载出错，可能设备太老或修改了安装包");
             else if (stack.contains("org.json.JSONException"))
                 reason_str = new SpannableString("可能的崩溃原因：\n数据解析错误");
             else if (stack.contains("java.lang.OutOfMemoryError"))

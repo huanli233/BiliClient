@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.InputDevice;
 import android.view.KeyEvent;
@@ -83,7 +82,7 @@ public class BaseActivity extends AppCompatActivity {
         int scrW = metrics.widthPixels;
         int scrH = metrics.heightPixels;
         if (paddingH_percent != 0 || paddingV_percent != 0) {
-            Log.e("debug", "调整边距");
+            Logu.d("debug", "调整边距");
             int paddingH = scrW * paddingH_percent / 100;
             int paddingT = scrH * paddingV_percent / 100;
             int paddingB = paddingT;
@@ -124,7 +123,7 @@ public class BaseActivity extends AppCompatActivity {
                 finish();
             }
         });
-        Log.e("debug", "set_exit");
+        Logu.d("debug", "set_exit");
     }
 
     public void setRound(){
@@ -235,11 +234,10 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
         new AsyncLayoutInflaterX(this).inflate(id, null, (view, layoutId, parent) -> {
             setContentView(view);
-            if (this instanceof InstanceActivity) {
-                ((InstanceActivity) this).setMenuClick();
-            } else {
-                setTopbarExit();
-            }
+
+            if (this instanceof InstanceActivity) ((InstanceActivity) this).setMenuClick();
+            else setTopbarExit();
+
             setRound();
             callBack.finishInflate(view, layoutId);
         });
@@ -263,7 +261,7 @@ public class BaseActivity extends AppCompatActivity {
     public void onContentChanged() {
         super.onContentChanged();
         //自动适配表冠
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {    //既然不支持，那低版本直接跳过
+        if(SharedPreferencesUtil.getBoolean("ui_rotatory_enable", false) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {    //既然不支持，那低版本直接跳过
             ViewGroup rootView = (ViewGroup) this.getWindow().getDecorView();
             setRotaryScroll(rootView);
         }

@@ -59,7 +59,7 @@ public class AppInfoApi {
                     else SharedPreferencesUtil.putString("terminal_update_pkg", "");
                 }
 
-                MsgUtil.showDialog("提醒", "终端的每个版本都可能会新增一些兼容性相关的设置项\n如果你遇到了某些奇葩问题，请先在设置里找一找相关的兼容性选项，视频放不了、无法加载图片的问题都有可能解决哦~",5);
+                MsgUtil.showDialog("提醒", context.getString(R.string.text_update_success),5);
 
                 if (last_ver != 0) {
                     if (last_ver < 20240606)
@@ -69,13 +69,10 @@ public class AppInfoApi {
                         SharedPreferencesUtil.putInt("paddingV_percent", 3);
                         SharedPreferencesUtil.putInt("paddingH_percent", 7);
                     }
-
-                    if (!SharedPreferencesUtil.getString("player", "null").equals("terminalPlayer"))
-                        MsgUtil.showDialog("内置播放器", "现在的内置播放器已支持以下特色功能：\n·视频实时观看人数\n·显示直播弹幕\n·强制滚动显示弹幕\n\n欢迎在需要时切换到内置播放器使用哦");
                 }
                 MsgUtil.showText("更新公告", context.getResources().getString(R.string.update_tip) + "\n\n更新细节：\n" + ToolsUtil.getUpdateLog(context));
                 if (ToolsUtil.isDebugBuild())
-                    MsgUtil.showDialog("警告", "这个版本是测试版，仅在测试群中发布，禁止外传到如奇妙应用、小趣空间等平台或其他QQ群");
+                    MsgUtil.showDialog("警告", context.getString(R.string.warning_debug));
                 SharedPreferencesUtil.putInt("app_version_last", version);
             }
 
