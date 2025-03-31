@@ -94,6 +94,7 @@ public class MessageApi {
                         likeInfo.replyInfo = replyInfo;
                         break;
                     case "dynamic":
+                    case "album":
                         likeInfo.content = "等总共 " + object.getLong("counts") + " 人点赞了你的动态";
                         Reply replyInfo_dynamic = new Reply();
                         replyInfo_dynamic.rpid = item.getLong("item_id");
