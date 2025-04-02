@@ -18,6 +18,7 @@ import com.RobinNotBad.BiliClient.event.ReplyEvent;
 import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.util.AnimationUtils;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
@@ -134,6 +135,7 @@ public class VideoInfoActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        Logu.d("onDestroy");
         Glide.get(BiliTerminal.context).clearMemory();
         TerminalContext.getInstance().leaveDetailPage();
         super.onDestroy();

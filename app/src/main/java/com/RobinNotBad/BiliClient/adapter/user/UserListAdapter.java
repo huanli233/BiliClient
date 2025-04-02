@@ -54,7 +54,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.Holder
             holder.avatar.setVisibility(View.GONE);
             holder.desc.setSingleLine(false);
         } else {
-            Glide.with(context).asDrawable().load(GlideUtil.url(userList.get(position).avatar))
+            Glide.with(context.getApplicationContext()).asDrawable().load(GlideUtil.url(userList.get(position).avatar))
                     .transition(GlideUtil.getTransitionOptions())
                     .placeholder(R.mipmap.akari)
                     .apply(RequestOptions.circleCropTransform())

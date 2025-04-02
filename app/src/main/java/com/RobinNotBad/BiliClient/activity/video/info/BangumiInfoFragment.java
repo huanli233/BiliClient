@@ -90,7 +90,7 @@ public class BangumiInfoFragment extends Fragment {
 
         rootView.setVisibility(View.GONE);
 
-        Glide.with(this)
+        Glide.with(requireContext())
                 .load(GlideUtil.url(bangumi.info.cover_horizontal))
                 .transition(GlideUtil.getTransitionOptions())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
