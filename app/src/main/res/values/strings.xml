@@ -84,13 +84,14 @@
     <string name="desc_back_disable">有一些手表（例如米兔等）是通过模拟按下返回键自行实现的右滑返回，若你在左右翻页时因触发滑动返回而退出页面，请开启此开关\n开启后，其他设备上则为按下返回键也不退出页面，并且右滑退出后会卡住。\n你可以使用菜单最下方的退出按钮结束本软件。\n正常用户无需打开。</string>
     <string name="desc_fav_single">打开此选项，添加收藏后即退出收藏页面，取消收藏不自动退出。</string>
     <string name="desc_fav_notice">打开此选项，退出收藏页面会提示收藏成功。\n但其实在你框选了收藏夹的时候就已经收藏了，这个选项只是为了看上去放心（</string>
+    <string name="desc_cover_play">打开此选项，点击封面将播放视频，否则将查看大图。</string>
     <string name="desc_tags_enable">打开此选项，视频详情页会显示形如“原神UP主激励计划/原神/纳西妲/手机游戏”的视频标签</string>
     <string name="desc_new_rcmd_param_enable">打开此选项，会使用新版首页推荐API，基本与网页版完全一致，请自行测试体验后决定是否开启</string>
     <string name="desc_related_enable">打开此选项，视频详情页的评论区右侧会有相关视频推荐</string>
     <string name="desc_creative_enable">打开此选项，在“我的”页面会显示创作中心（可查看投稿视频的数据变化情况）</string>
     <string name="desc_ban_gallery">打开此选项，缓存的视频将不会出现在系统相册中</string>
     <string name="desc_copy_enable">打开此选项，长按一些文字（如视频描述或评论）可以打开复制界面以复制这些文本</string>
-    <string name="desc_cover_play">从现版本开始，点击封面将会播放视频，长按封面查看大图。\n原先的播放按钮仍可使用，长按播放按钮可切换播放器。\n\n之前设置中的“点击封面播放”开关已删除。</string>
+    <string name="tutorial_first_play">从现版本开始，点击封面将会播放视频，长按封面查看大图。\n原先的播放按钮仍可使用，长按播放按钮可切换播放器。\n\n如果不习惯，你可以在详情页设置中关闭“点击封面播放”的开关，换回老版本里点击封面查看大图的操作逻辑。</string>
     <string name="desc_img_no_load_onscroll">打开此选项，翻动列表时将不会加载图片，松手后再加载，观感可能有影响，可能增加流畅度。</string>
     <string name="desc_img_request_jpg">部分杂牌手表和安卓版本极低的设备不支持webp格式，可能导致大量图片无法显示。打开此选项，将会请求jpg格式的图片以解决此问题，会略微延长加载时间。</string>
     <string name="desc_link_enable">打开此选项，会识别部分文本中的链接/BV号/AV号/CV号并标记为链接，点击可打开。</string>
@@ -127,7 +128,7 @@
 
     #新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
-        <item>将点击封面设为播放视频，长按封面设为查看大图</item>
+        <item>默认打开了点击封面播放的开关并加入提示</item>
         <item>限制了查看大图的分辨率宽度上限为1024，防止图片过大导致崩溃</item>
         <item>修了2.8.0的详情页崩溃问题</item>
         <item>修了2.8.0的播放器崩溃问题</item>
