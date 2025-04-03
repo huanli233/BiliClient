@@ -124,51 +124,54 @@
 
 
 
-    <string name="update_tip">此版本主要是一些小问题的修修补补。\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
+    <string name="update_tip">此版本继续修各种崩溃问题。\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
 
     #新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
         <item>将点击封面设为播放视频，长按封面设为查看大图</item>
-        <item>修了一处详情页崩溃和一处播放器崩溃，优化了部分代码</item>
+        <item>缩略图换用avif格式，加载更快但略微变糊（大图仍使用webp，若要求更高质量的图片请在偏好设置里切换为jpeg）</item>
+        <item>限制了查看大图的分辨率宽度上限为1024，防止图片过大导致崩溃</item>
+        <item>修了2.8.0的详情页崩溃问题</item>
+        <item>修了2.8.0的播放器崩溃问题</item>
         <item>新增了一些bug和屎山代码</item>
     </string-array>
 
 
-    //后来写新功能添加的教程请放在列表的第一个
+    #后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_space">
         <item>xml/tutorial_space_2</item>
         <item>xml/tutorial_space</item>
     </array>
-    //后来写新功能添加的教程请放在列表的第一个
+    #后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_video">
         <item>xml/tutorial_video_2</item>
         <item>xml/tutorial_video</item>
     </array>
-    //后来写新功能添加的教程请放在列表的第一个
+    #后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_search">
         <item>xml/tutorial_search</item>
     </array>
-    //后来写新功能添加的教程请放在列表的第一个
+    #后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_update_install">
         <item>xml/tutorial_update_install</item>
     </array>
-    //后来写新功能添加的教程请放在列表的第一个
+    #后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_recommend">
         <item>xml/tutorial_recommend</item>
     </array>
-    //后来写新功能添加的教程请放在列表的第一个
+    #后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_message">
         <item>xml/tutorial_message</item>
     </array>
-    //后来写新功能添加的教程请放在列表的第一个
+    #后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_article">
         <item>xml/tutorial_article</item>
     </array>
-    //后来写新功能添加的教程请放在列表的第一个
+    #后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_dynamic">
         <item>xml/tutorial_dynamic</item>
     </array>
-    //后来写新功能添加的教程请放在列表的第一个
+    #后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_dynamic_info">
         <item>xml/tutorial_dynamic_info</item>
     </array>

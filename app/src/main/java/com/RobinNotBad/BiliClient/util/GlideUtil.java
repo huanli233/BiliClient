@@ -15,7 +15,7 @@ import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 
 public class GlideUtil {
     public static final int QUALITY_HIGH = 80;
-    public static final int QUALITY_LOW = 15;
+    public static final int QUALITY_LOW = 30;
     public static final int MAX_W_HIGH = 1024;
     public static final int MAX_W_LOW = 512;
 
@@ -29,11 +29,11 @@ public class GlideUtil {
                     + MAX_W_LOW + "w.jpeg";
         }
         else {
-            if (url.endsWith("webp")) return url;
+            if (url.endsWith("avif")) return url;
             return url + "@0e_"
                     + QUALITY_LOW + "q_"
                     //+ MAX_H_LOW + "h_"
-                    + MAX_W_LOW + "w.webp";
+                    + MAX_W_LOW + "w.avif";
         }
     }
 

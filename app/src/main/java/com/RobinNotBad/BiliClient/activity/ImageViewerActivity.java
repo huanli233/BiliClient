@@ -70,6 +70,8 @@ public class ImageViewerActivity extends BaseActivity {
                 photoView.setMaximumScale(6.25f);
             } catch (OutOfMemoryError e) {
                 MsgUtil.showMsg("超出内存，加载失败");
+            } catch (Exception e){
+                MsgUtil.err("图片查看", e);
             }
 
             photoViewList.add(photoView);
