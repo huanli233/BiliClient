@@ -59,7 +59,6 @@ public class SearchActivity extends InstanceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
 
         classname = getClass().getSimpleName();
         tutorial_show = SharedPreferencesUtil.getBoolean("tutorial_pager_"+ classname, true);

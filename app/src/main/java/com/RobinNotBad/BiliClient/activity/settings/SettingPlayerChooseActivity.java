@@ -34,7 +34,6 @@ public class SettingPlayerChooseActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
 
         asyncInflate(R.layout.activity_setting_player_choose ,(layoutView, resId) -> {
 

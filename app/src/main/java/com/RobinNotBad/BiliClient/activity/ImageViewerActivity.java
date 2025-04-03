@@ -3,6 +3,7 @@ package com.RobinNotBad.BiliClient.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -10,7 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerImageAdapter;
+import com.RobinNotBad.BiliClient.adapter.viewpager.ViewPagerViewAdapter;
 import com.RobinNotBad.BiliClient.ui.widget.PhotoViewpager;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
@@ -41,7 +42,7 @@ public class ImageViewerActivity extends BaseActivity {
         PhotoViewpager viewPager = findViewById(R.id.viewPager);
         TextView textView = findViewById(R.id.text_page);
 
-        List<PhotoView> photoViewList = new ArrayList<>();
+        List<View> photoViewList = new ArrayList<>();
 
         ImageButton download = findViewById(R.id.btn_download);
         download.setOnClickListener(v -> {
@@ -75,7 +76,7 @@ public class ImageViewerActivity extends BaseActivity {
 
         }
 
-        ViewPagerImageAdapter vpiAdapter = new ViewPagerImageAdapter(photoViewList);
+        ViewPagerViewAdapter vpiAdapter = new ViewPagerViewAdapter(photoViewList);
 
         viewPager.setAdapter(vpiAdapter);
 

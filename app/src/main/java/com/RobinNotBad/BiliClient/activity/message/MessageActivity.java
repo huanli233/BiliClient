@@ -34,7 +34,6 @@ public class MessageActivity extends InstanceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
 
         asyncInflate(R.layout.activity_message ,(layoutView, resId) -> {
             SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);

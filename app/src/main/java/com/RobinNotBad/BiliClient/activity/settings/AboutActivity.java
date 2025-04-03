@@ -36,7 +36,6 @@ public class AboutActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
 
         asyncInflate(R.layout.activity_setting_about ,(layoutView, resId) -> {
             Log.e("debug", "进入关于页面");

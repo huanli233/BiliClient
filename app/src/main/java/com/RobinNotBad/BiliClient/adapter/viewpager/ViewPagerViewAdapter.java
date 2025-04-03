@@ -6,23 +6,21 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.github.chrisbanes.photoview.PhotoView;
-
 import java.util.List;
 
 //图片查看专用Adapter
 
-public class ViewPagerImageAdapter extends PagerAdapter {
+public class ViewPagerViewAdapter extends PagerAdapter {
 
-    private final List<PhotoView> photoViewList;
+    private final List<? extends View> viewList;
 
-    public ViewPagerImageAdapter(List<PhotoView> photoViewList) {
-        this.photoViewList = photoViewList;
+    public ViewPagerViewAdapter(List<? extends View> viewList) {
+        this.viewList = viewList;
     }
 
     @Override
     public int getCount() {
-        return photoViewList.size();
+        return viewList.size();
     }
 
     @Override
@@ -33,9 +31,9 @@ public class ViewPagerImageAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        PhotoView photoView = photoViewList.get(position);
-        container.addView(photoView);
-        return photoView;
+        View view = viewList.get(position);
+        container.addView(view);
+        return view;
     }
 
     @Override
