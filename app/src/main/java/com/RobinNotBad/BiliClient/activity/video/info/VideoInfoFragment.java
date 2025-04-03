@@ -326,7 +326,7 @@ public class VideoInfoFragment extends Fragment {
         //封面
         cover.requestFocus();
         cover.setOnClickListener(view1 -> {
-            if(SharedPreferencesUtil.getBoolean("cover_play", true)) playClick();
+            if(SharedPreferencesUtil.getBoolean("cover_play_enable", true)) playClick();
             else showCover();
         });
         cover.setOnLongClickListener(v -> {
@@ -566,7 +566,12 @@ public class VideoInfoFragment extends Fragment {
     private void playClick() {
         if(SharedPreferencesUtil.getBoolean("first_play",true)){
             SharedPreferencesUtil.putBoolean("first_play", false);
-            MsgUtil.showDialog("播放视频", getString(R.string.tutorial_first_play));
+
+            if(SharedPreferencesUtil.getBoolean("cover_play_enable", true))
+                MsgUtil.showDialog("播放视频", getString(R.string.tutorial_cover_play_enabled));
+            else
+                MsgUtil.showDialog("播放视频", getString(R.string.tutorial_cover_play_disabled));
+
             return;
         }
 
