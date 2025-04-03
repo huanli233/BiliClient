@@ -15,7 +15,7 @@ import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 
 public class GlideUtil {
     public static final int QUALITY_HIGH = 80;
-    public static final int QUALITY_LOW = 30;
+    public static final int QUALITY_LOW = 25;
     public static final int MAX_W_HIGH = 1024;
     public static final int MAX_W_LOW = 512;
 
