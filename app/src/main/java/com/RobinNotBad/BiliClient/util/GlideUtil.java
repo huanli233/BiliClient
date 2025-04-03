@@ -16,13 +16,11 @@ import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 public class GlideUtil {
     public static final int QUALITY_HIGH = 80;
     public static final int QUALITY_LOW = 15;
-    public static final int MAX_H_HIGH = 4096;
-    public static final int MAX_W_HIGH = 4096;
-    public static final int MAX_H_LOW = 1024;
-    public static final int MAX_W_LOW = 1024;
+    public static final int MAX_W_HIGH = 1024;
+    public static final int MAX_W_LOW = 512;
 
     public static String url(String url) {
-        if(!url.startsWith("http") || url.endsWith("gif") || url.contains("@") || url.contains("afdiancdn.com")) return url;
+        if(!url.startsWith("http") || url.endsWith("gif") || url.contains("@") || url.contains("afdian")) return url;
         if(SharedPreferencesUtil.getBoolean("image_request_jpg",false)){
             if (url.endsWith("jpeg") || url.endsWith("jpg")) return url;
             return url + "@0e_"
