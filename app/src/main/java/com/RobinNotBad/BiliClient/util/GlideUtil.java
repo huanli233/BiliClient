@@ -29,11 +29,11 @@ public class GlideUtil {
                     + MAX_W_LOW + "w.jpeg";
         }
         else {
-            if (url.endsWith("avif")) return url;
+            if (url.endsWith("webp")) return url;
             return url + "@0e_"
                     + QUALITY_LOW + "q_"
                     //+ MAX_H_LOW + "h_"
-                    + MAX_W_LOW + "w.avif";
+                    + MAX_W_LOW + "w.webp";
         }
     }
 

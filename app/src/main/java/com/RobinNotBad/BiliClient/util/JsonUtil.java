@@ -50,8 +50,6 @@ public class JsonUtil {
         int count = 0;
         int i = index + searchKey.length();
         for (int j = i; j < json.length(); j++) {
-            Log.e("index", String.valueOf(json.charAt(j)));
-
             if (json.charAt(j) == '{') count++;
             if (json.charAt(j) == '}') count--;
             if ((json.charAt(j + 1) == ',' || json.charAt(j + 1) == '}') && count == 0) {
