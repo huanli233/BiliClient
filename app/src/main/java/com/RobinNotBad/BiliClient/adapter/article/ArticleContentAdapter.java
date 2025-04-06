@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
@@ -82,7 +83,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
 
 
                 String url = article.get(realPosition).content;
-                Glide.with(context).asDrawable().load(GlideUtil.url(url)).placeholder(R.mipmap.placeholder)
+                Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(url)).placeholder(R.mipmap.placeholder)
                         .transition(GlideUtil.getTransitionOptions())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(imageView);
@@ -109,14 +110,14 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 upName.setText(articleInfo.upInfo.name);
                 if (articleInfo.banner.isEmpty()) cover.setVisibility(View.GONE);
                 else {
-                    Glide.with(context).asDrawable().load(GlideUtil.url(articleInfo.banner)).placeholder(R.mipmap.placeholder)
+                    Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(articleInfo.banner)).placeholder(R.mipmap.placeholder)
                             .transition(GlideUtil.getTransitionOptions())
                             .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(4))))
                             .format(DecodeFormat.PREFER_RGB_565)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(cover);
                 }
-                Glide.with(context).asDrawable().load(GlideUtil.url(articleInfo.upInfo.avatar)).placeholder(R.mipmap.akari)
+                Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(articleInfo.upInfo.avatar)).placeholder(R.mipmap.akari)
                         .transition(GlideUtil.getTransitionOptions())
                         .apply(RequestOptions.circleCropTransform())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)

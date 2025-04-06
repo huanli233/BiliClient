@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
@@ -46,7 +47,7 @@ public class ArticleCardHolder extends RecyclerView.ViewHolder {
             readTimes.setVisibility(View.GONE);
         } else readTimes.setText(articleCard.view);
 
-        Glide.with(context).asDrawable().load(!TextUtils.isEmpty(articleCard.cover) ? GlideUtil.url(articleCard.cover) : R.mipmap.article_placeholder)
+        Glide.with(BiliTerminal.context).asDrawable().load(!TextUtils.isEmpty(articleCard.cover) ? GlideUtil.url(articleCard.cover) : R.mipmap.article_placeholder)
                 .placeholder(R.mipmap.placeholder)
                 .transition(GlideUtil.getTransitionOptions())
                 .format(DecodeFormat.PREFER_RGB_565)

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.message.PrivateMsgActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
@@ -81,7 +82,7 @@ public class PrivateMsgSessionsAdapter extends RecyclerView.Adapter<PrivateMsgSe
 
             holder.contentText.setEllipsize(TextUtils.TruncateAt.END);
             holder.nameText.setText(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).name);
-            Glide.with(context).asDrawable().load(GlideUtil.url(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).avatar))
+            Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(Objects.requireNonNull(userMap.get(msgContent.talkerUid)).avatar))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .placeholder(R.mipmap.akari)
                     .apply(RequestOptions.circleCropTransform())

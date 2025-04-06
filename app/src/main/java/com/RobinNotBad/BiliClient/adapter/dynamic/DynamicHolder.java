@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
@@ -195,7 +196,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
     }
 
     @SuppressLint("SetTextI18n")
-    public void showDynamic(Dynamic dynamic, Context context, boolean clickable) {    //公用的显示函数 这样修改和调用都方便
+    public void showDynamic(Context context, Dynamic dynamic, boolean clickable) {    //公用的显示函数 这样修改和调用都方便
         ToolsUtil.setCopy(content);
         username.setText(dynamic.userInfo.name);
         if (!dynamic.userInfo.vip_nickname_color.isEmpty()) {
@@ -222,31 +223,11 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
             ToolsUtil.setLink(content);
             ToolsUtil.setAtLink(dynamic.ats, content);
         } else content.setVisibility(View.GONE);
-        Glide.with(context).asDrawable().load(GlideUtil.url(dynamic.userInfo.avatar))
+        Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(dynamic.userInfo.avatar))
                 .transition(GlideUtil.getTransitionOptions())
                 .placeholder(R.mipmap.akari)
                 .apply(RequestOptions.circleCropTransform())
-                .diskCacheStrategy(new DiskCacheStrategy() {
-                    @Override
-                    public boolean isDataCacheable(DataSource dataSource) {
-                        return dataSource != DataSource.DATA_DISK_CACHE && dataSource != DataSource.MEMORY_CACHE;
-                    }
-
-                    @Override
-                    public boolean isResourceCacheable(boolean isFromAlternateCacheKey, DataSource dataSource, EncodeStrategy encodeStrategy) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean decodeCachedResource() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean decodeCachedData() {
-                        return false;
-                    }
-                })
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(avatar);
 
         avatar.setOnClickListener(view -> {
@@ -309,7 +290,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                 View imageCard = cell_dynamic_image;
                 ImageView imageView = imageCard.findViewById(R.id.imageView);
                 if(!pictureList.isEmpty()) {
-                    Glide.with(context).asDrawable().load(GlideUtil.url(pictureList.get(0)))
+                    Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(pictureList.get(0)))
                             .transition(GlideUtil.getTransitionOptions())
                             .placeholder(R.mipmap.placeholder)
                             .centerCrop()

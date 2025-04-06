@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.user.favorite.FavoriteVideoListActivity;
 import com.RobinNotBad.BiliClient.activity.user.favorite.FavouriteOpusListActivity;
@@ -54,7 +55,7 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
         if (position == folderList.size()) {
             holder.name.setText("图文收藏夹");
             holder.count.setText("");
-            Glide.with(context).asDrawable()
+            Glide.with(BiliTerminal.context).asDrawable()
                     .load(ToolsUtil.getDrawable(context, R.drawable.article_fav_cover))
                     .transition(GlideUtil.getTransitionOptions())
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))))
@@ -67,7 +68,7 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
         } else {
             holder.name.setText(ToolsUtil.htmlToString(folderList.get(position).name));
             holder.count.setText(folderList.get(position).videoCount + "/" + folderList.get(position).maxCount);
-            Glide.with(this.context).asDrawable().load(GlideUtil.url(folderList.get(position).cover))
+            Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(folderList.get(position).cover))
                     .transition(GlideUtil.getTransitionOptions())
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))))
                     .format(DecodeFormat.PREFER_RGB_565)

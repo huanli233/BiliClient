@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
@@ -53,7 +54,7 @@ public class NoticeHolder extends RecyclerView.ViewHolder {
         else avaterList.setVisibility(View.VISIBLE);
         for (int i = 0; i < message.user.size(); i++) {
             ImageView imageView = new ImageView(context);
-            Glide.with(context)
+            Glide.with(BiliTerminal.context)
                     .asDrawable()
                     .load(GlideUtil.url(message.user.get(i).avatar))
                     .transition(GlideUtil.getTransitionOptions())

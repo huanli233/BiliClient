@@ -78,12 +78,12 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             long time = System.currentTimeMillis();
             position--;
             DynamicHolder dynamicHolder = (DynamicHolder) holder;
-            dynamicHolder.showDynamic(dynamicList.get(position), context, true);      //该函数在DynamicHolder里
+            dynamicHolder.showDynamic(context, dynamicList.get(position), true);      //该函数在DynamicHolder里
 
             if (dynamicList.get(position).dynamic_forward != null) {
                 View childCard = dynamicHolder.cell_dynamic_child;
                 DynamicHolder childHolder = new DynamicHolder(childCard, dynamicActivity, true);
-                childHolder.showDynamic(dynamicList.get(position).dynamic_forward, context, true);
+                childHolder.showDynamic(context, dynamicList.get(position).dynamic_forward, true);
                 childCard.setVisibility(View.VISIBLE);
             } else {
                 dynamicHolder.cell_dynamic_child.setVisibility(View.GONE);

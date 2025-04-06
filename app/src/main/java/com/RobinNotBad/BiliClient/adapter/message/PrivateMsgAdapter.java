@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.CopyTextActivity;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
@@ -138,7 +139,7 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                     holder.nameTv.setVisibility(View.VISIBLE);
                     holder.textContentCard.setVisibility(View.GONE);
                     holder.videoCard.setVisibility(View.GONE);
-                    Glide.with(context)
+                    Glide.with(BiliTerminal.context)
                             .asDrawable()
                             .load(GlideUtil.url(msg.content.getString("url")))
                             .transition(GlideUtil.getTransitionOptions())
@@ -171,7 +172,7 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                     holder.picMsg.setVisibility(View.GONE);
                     holder.textContentCard.setVisibility(View.GONE);
                     holder.tipTv.setVisibility(View.GONE);
-                    Glide.with(context)
+                    Glide.with(BiliTerminal.context)
                             .asDrawable()
                             .load(GlideUtil.url(msg.content.getString("thumb")))
                             .transition(GlideUtil.getTransitionOptions())

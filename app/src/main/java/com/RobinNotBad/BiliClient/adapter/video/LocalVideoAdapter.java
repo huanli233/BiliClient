@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.video.local.DownloadListActivity;
 import com.RobinNotBad.BiliClient.activity.video.local.LocalPageChooseActivity;
@@ -140,7 +141,7 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             extra.setVisibility(View.GONE); //TODO:大小显示
 
             try {
-                Glide.with(context).asDrawable().load(videoCard.cover)
+                Glide.with(BiliTerminal.context).asDrawable().load(videoCard.cover)
                         .transition(GlideUtil.getTransitionOptions())
                         .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))))
                         .diskCacheStrategy(DiskCacheStrategy.NONE)

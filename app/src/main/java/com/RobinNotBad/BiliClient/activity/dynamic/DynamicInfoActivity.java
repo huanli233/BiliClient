@@ -62,10 +62,9 @@ public class DynamicInfoActivity extends BaseActivity {
                     View view;
                     if ((view = diFragment.getView()) != null) view.setVisibility(View.GONE);
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
-                    diFragment.setOnFinishLoad(() -> {
-                        AnimationUtils.crossFade(findViewById(R.id.loading), diFragment.getView());
-                        TutorialHelper.showPagerTutorial(this, 2);
-                    });
+
+                    AnimationUtils.crossFade(findViewById(R.id.loading), diFragment.getView());
+                    TutorialHelper.showPagerTutorial(this, 2);
                 }).onFailure((e) -> {
                     MsgUtil.err(e);
                     ((ImageView) findViewById(R.id.loading)).setImageResource(R.mipmap.loading_2233_error);

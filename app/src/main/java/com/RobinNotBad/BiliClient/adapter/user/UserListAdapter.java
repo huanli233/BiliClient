@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.model.UserInfo;
@@ -54,7 +55,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.Holder
             holder.avatar.setVisibility(View.GONE);
             holder.desc.setSingleLine(false);
         } else {
-            Glide.with(context.getApplicationContext()).asDrawable().load(GlideUtil.url(userList.get(position).avatar))
+            Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(userList.get(position).avatar))
                     .transition(GlideUtil.getTransitionOptions())
                     .placeholder(R.mipmap.akari)
                     .apply(RequestOptions.circleCropTransform())

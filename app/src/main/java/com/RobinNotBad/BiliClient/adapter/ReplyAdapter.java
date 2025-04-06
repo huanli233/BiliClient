@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.reply.ReplyInfoActivity;
@@ -144,7 +145,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ReplyHolder replyHolder = (ReplyHolder) holder;
             Reply reply = replyList.get(realPosition);
 
-            Glide.with(context.getApplicationContext()).asDrawable().load(GlideUtil.url(reply.sender.avatar))
+            Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(reply.sender.avatar))
                     .transition(GlideUtil.getTransitionOptions())
                     .placeholder(R.mipmap.akari)
                     .apply(RequestOptions.circleCropTransform())
@@ -267,7 +268,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (reply.pictureList != null && !reply.pictureList.isEmpty()) {  //图片显示相关
                 replyHolder.imageCard.setVisibility(View.VISIBLE);
                 replyHolder.imageCount.setVisibility(View.VISIBLE);
-                Glide.with(context.getApplicationContext()).asDrawable().load(GlideUtil.url(reply.pictureList.get(0)))
+                Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(reply.pictureList.get(0)))
                         .transition(GlideUtil.getTransitionOptions())
                         .placeholder(R.mipmap.placeholder)
                         .format(DecodeFormat.PREFER_RGB_565)

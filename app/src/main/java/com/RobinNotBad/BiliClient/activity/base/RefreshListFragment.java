@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -25,7 +24,7 @@ import com.RobinNotBad.BiliClient.util.view.ImageAutoLoadScrollListener;
 2024-05-02
  */
 
-public class RefreshListFragment extends Fragment {
+public class RefreshListFragment extends BaseFragment {
     public SwipeRefreshLayout swipeRefreshLayout;
     public RecyclerView recyclerView;
     public TextView emptyView;
@@ -53,7 +52,7 @@ public class RefreshListFragment extends Fragment {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (listener != null && !recyclerView.canScrollVertically(1) && !swipeRefreshLayout.isRefreshing() && newState == RecyclerView.SCROLL_STATE_DRAGGING && !bottom) {
+                if (listener != null && !recyclerView.canScrollVertically(1) && !isRefreshing() && newState == RecyclerView.SCROLL_STATE_DRAGGING && !bottom) {
                     goOnLoad();
                 }
             }
@@ -66,7 +65,7 @@ public class RefreshListFragment extends Fragment {
                     assert manager != null;
                     int lastItemPosition = manager.findLastVisibleItemPosition();  //获取最后一个显示的itemPosition
                     int itemCount = manager.getItemCount();
-                    if (lastItemPosition >= (itemCount - 3) && dy > 0 && !swipeRefreshLayout.isRefreshing() && !bottom) {// 滑动到倒数第三个就可以刷新了
+                    if (lastItemPosition >= (itemCount - 3) && dy > 0 && !isRefreshing() && !bottom) {// 滑动到倒数第三个就可以刷新了
                         goOnLoad();
                     }
                 }
@@ -104,10 +103,6 @@ public class RefreshListFragment extends Fragment {
 
     public void setBottom(boolean bool) {
         bottom = bool;
-    }
-
-    public void runOnUiThread(Runnable runnable) {
-        if (isAdded()) requireActivity().runOnUiThread(runnable);
     }
 
     public void showEmptyView() {

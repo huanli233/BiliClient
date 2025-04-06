@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
@@ -52,7 +53,7 @@ public class VideoCardHolder extends RecyclerView.ViewHolder {
         }
 
         try {
-            Glide.with(context).asDrawable().load(GlideUtil.url(videoCard.cover))
+            Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(videoCard.cover))
                     .transition(GlideUtil.getTransitionOptions())
                     .placeholder(R.mipmap.placeholder)
                     .format(DecodeFormat.PREFER_RGB_565)
