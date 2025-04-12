@@ -14,15 +14,18 @@
 
         <TextView
             android:id="@+id/pageName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginVertical="3dp"
-            android:text="我的"
-            android:textStyle="bold"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            app:drawableStartCompat="@drawable/arrow_down" />
+            android:layout_alignParentLeft="true"
+            android:layout_marginVertical="3dp"
+            android:layout_marginStart="8dp"
+            android:layout_toStartOf="@id/timeText"
+            android:layout_toLeftOf="@id/timeText"
+            android:lines="1"
+            android:text="@string/pagename_myspace"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/arrow_back" />
 
         <com.RobinNotBad.BiliClient.ui.widget.TextClock
             android:id="@+id/timeText"
@@ -30,8 +33,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginVertical="3dp"
-            android:text="11:45"
-            android:textStyle="bold"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 

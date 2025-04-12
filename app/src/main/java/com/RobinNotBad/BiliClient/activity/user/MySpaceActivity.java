@@ -38,7 +38,7 @@ public class MySpaceActivity extends InstanceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        asyncInflate(R.layout.activity_myspace ,(layoutView, resId) -> {
+        asyncInflate(R.layout.activity_main_myspace,(layoutView, resId) -> {
             Log.e("debug", "进入个人页");
 
             userAvatar = findViewById(R.id.userAvatar);

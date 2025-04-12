@@ -48,7 +48,7 @@
             android:background="@drawable/background_searchbar"
             android:drawableEnd="@drawable/icon_search"
             android:ems="10"
-            android:hint="搜点什么"
+            android:hint="@string/hint_search"
             android:inputType="text"
             android:imeOptions="actionDone"
             android:minHeight="42dp"
@@ -82,8 +82,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginVertical="3dp"
-            android:text="搜索"
+            android:text="@string/pagename_search"
             android:textStyle="bold"
+            android:layout_toStartOf="@id/timeText"
+            android:layout_toLeftOf="@id/timeText"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             app:drawableStartCompat="@drawable/arrow_down" />
@@ -94,8 +96,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginVertical="3dp"
-            android:text="11:45"
-            android:textStyle="bold"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 

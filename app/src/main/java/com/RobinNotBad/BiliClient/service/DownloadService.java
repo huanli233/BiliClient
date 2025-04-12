@@ -52,7 +52,7 @@ import okio.Sink;
 
 public class DownloadService extends Service {
     public static boolean started;
-    public static boolean normal_exit;
+    public static boolean normalExit;
     public static float percent = -1;
     public static String state;
     public static DownloadSection section;
@@ -116,7 +116,7 @@ public class DownloadService extends Service {
     public int onStartCommand(Intent serviceIntent, int flags, int startId) {
         Logu.d("onStartCommand");
 
-        normal_exit = false;
+        normalExit = false;
         startNotifyProgress();
 
         CenterThreadPool.run(()->{
@@ -214,7 +214,7 @@ public class DownloadService extends Service {
 
             refreshDownloadList();
 
-            normal_exit = true;
+            normalExit = true;
             exitMessage = "全部下载完成";
 
             stopSelf();
@@ -378,7 +378,7 @@ public class DownloadService extends Service {
 
             CenterThreadPool.run(() -> {
                 notifyExit(exitMessage);
-                if(!normal_exit) {
+                if(!normalExit) {
                     setState(id, "none");
                     FileUtil.deleteFolder(folder);
                 }

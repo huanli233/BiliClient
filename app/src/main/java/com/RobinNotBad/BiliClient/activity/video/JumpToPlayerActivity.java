@@ -91,17 +91,7 @@ public class JumpToPlayerActivity extends BaseActivity {
                 if(playerData.isBangumi()) PlayerApi.getBangumi(playerData);
                 else PlayerApi.getVideo(playerData, download != 0);
 
-                try {
-                    if(download != 0) {
-                        jump();
-                        return;
-                    }
-                    jump();
-                } catch (Exception e){
-                    MsgUtil.showMsg("没有获取到字幕");
-                    jump();
-                    e.printStackTrace();
-                }
+                jump();
             } catch (IOException e) {
                 setClickExit("网络错误！\n请检查你的网络连接是否正常");
                 e.printStackTrace();

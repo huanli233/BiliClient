@@ -55,7 +55,7 @@ public class WriteReplyActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reply_write);
+        setContentView(R.layout.activity_write_reply);
 
         if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
             MsgUtil.showMsg("还没有登录喵~");

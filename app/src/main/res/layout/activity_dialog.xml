@@ -17,7 +17,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:gravity="center"
-                android:text="提示"
+                android:text="@string/pagename_dialog"
                 android:textSize="17sp" />
 
             <com.google.android.material.card.MaterialCardView

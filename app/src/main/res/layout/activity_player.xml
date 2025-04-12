@@ -40,7 +40,7 @@
             android:gravity="center"
             android:paddingHorizontal="6dp"
             android:paddingVertical="3dp"
-            android:text="当你的天空突然下起了大雨~\n那是我在为你炸乌云~"
+            android:text="@string/text_default_subtitle"
             android:textSize="11sp"
             android:visibility="gone" />
 
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="2dp"
             android:gravity="start"
-            android:text="00:00/00:00"
+            android:text="@string/text_default_progress"
             android:alpha="0.8"
             android:textSize="11sp"
             android:layout_above="@id/bottom_control"/>
@@ -63,7 +63,7 @@
             android:alpha="0.8"
             android:gravity="end"
             android:paddingEnd="2dp"
-            android:text="0人在看"
+            android:text="@string/text_default_online"
             android:textAlignment="textEnd"
             android:textSize="11sp" />
 
@@ -82,7 +82,7 @@
                 android:layout_marginVertical="4dp"
                 android:layout_toStartOf="@+id/clock_layout"
                 android:drawableStart="@drawable/arrow_back"
-                android:text="原小电视播放器"
+                android:text="@string/pagename_player"
                 android:textColor="@color/textwhite"
                 android:textSize="12sp" />
 
@@ -130,7 +130,8 @@
                 android:progressTint="#aa44aaff"
                 android:secondaryProgressTint="#eeFEFEFE"
                 android:thumb="@drawable/player_selector_progress"
-                android:thumbOffset="8dp" />
+                android:thumbOffset="8dp"
+                tools:targetApi="lollipop" />
 
             <LinearLayout
                 android:id="@+id/bottom_buttons"

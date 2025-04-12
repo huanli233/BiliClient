@@ -15,7 +15,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="哔哩终端崩溃了"
+                android:text="@string/pagename_catch"
                 android:gravity="center"
                 android:textSize="18sp" />
 

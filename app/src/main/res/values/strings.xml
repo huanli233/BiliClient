@@ -123,9 +123,39 @@
         <item>Material Icons, Apache 2.0: browse, chat, display, download, group, home, info, kid, menu, movie, reply, science, search, select, smart_display, video_settings, history, logout</item>
     </string-array>
 
-
-
     <string name="update_tip">此版本继续修各种崩溃问题。\n\n如果你是跨版本更新到这个版本的，可以前往官网biliterminal.cn查看过往的更新日志。</string>
+
+    <string name="hint_write_reply">写一条友善的评论……</string>
+    <string name="hint_search">搜点什么</string>
+    <string name="hint_private_message">爱国诚信友善……</string>
+
+    <string name="btn_login_confirm">登录</string>
+    <string name="btn_login_refuse">但是我拒绝</string>
+    <string name="btn_emote">表情</string>
+    <string name="btn_send">发送</string>
+
+    <string name="text_getting_video">解析视频地址……</string>
+    <string name="text_default_subtitle">当你的天空突然下起了大雨~\n那是我在为你炸乌云~</string>
+    <string name="text_default_progress">00:00/00:00</string>
+    <string name="text_default_online">0人在看</string>
+
+    <string name="pagename_default">页面标题</string>
+    <string name="pagename_loading">加载中……</string>
+    <string name="pagename_catch">哔哩终端崩溃了</string>
+    <string name="pagename_live_info">直播详情</string>
+    <string name="pagename_copy">复制</string>
+    <string name="pagename_creative_center">创作中心</string>
+    <string name="pagename_dialog">提示</string>
+    <string name="pagename_emote">表情</string>
+    <string name="pagename_image_viewer">图片查看</string>
+    <string name="pagename_login_special">特殊登录</string>
+    <string name="pagename_menu">菜单</string>
+    <string name="pagename_message">消息</string>
+    <string name="pagename_myspace">我的</string>
+    <string name="pagename_player">原小电视播放器</string>
+    <string name="pagename_private_message">私信</string>
+    <string name="pagename_write_reply">写评论</string>
+    <string name="pagename_search">搜索</string>
 
     #新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
