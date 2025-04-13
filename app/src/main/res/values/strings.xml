@@ -177,7 +177,7 @@
     <string name="pagename_setup_ui">调整界面……</string>
 
     <string name="percent">%</string>
-    <string name="desc_setup_ui_padding_desc">第一个输入框为横向边距，第二个输入框为纵向边距，单位百分比。\n出于保护，数值超过30不会保存。</string>
+    <string name="desc_setup_ui_padding">第一个输入框为横向边距，第二个输入框为纵向边距，单位百分比。\n出于保护，数值超过30不会保存。</string>
 
     #新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">

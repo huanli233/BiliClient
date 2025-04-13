@@ -247,7 +247,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="@string/desc_setup_ui_padding_desc"
+                    android:text="@string/desc_setup_ui_padding"
                     android:textSize="11sp" />
 
             </LinearLayout>
