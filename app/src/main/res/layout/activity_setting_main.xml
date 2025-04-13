@@ -14,14 +14,17 @@
 
         <TextView
             android:id="@+id/pageName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginVertical="3dp"
-            android:text="设置"
-            android:textStyle="bold"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginVertical="3dp"
+            android:layout_marginStart="8dp"
+            android:layout_toStartOf="@id/timeText"
+            android:layout_toLeftOf="@id/timeText"
+            android:lines="1"
+            android:text="@string/pagename_setting_main"
+            android:textStyle="bold"
             app:drawableStartCompat="@drawable/arrow_down" />
 
         <com.RobinNotBad.BiliClient.ui.widget.TextClock
@@ -30,8 +33,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginVertical="3dp"
-            android:text="11:45"
-            android:textStyle="bold"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
@@ -62,7 +63,7 @@
                     android:layout_height="35sp"
                     android:layout_marginHorizontal="8dp"
                     android:gravity="center_vertical"
-                    android:text="你还木有登录哦！点击这里登录"
+                    android:text="@string/btn_login_tip"
                     android:textAlignment="textStart"
                     android:textSize="13sp"
                     android:visibility="visible"

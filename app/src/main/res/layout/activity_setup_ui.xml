@@ -14,14 +14,17 @@
 
         <TextView
             android:id="@+id/pageName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginVertical="3dp"
-            android:text="初次见面……"
-            android:textStyle="bold"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginVertical="3dp"
+            android:layout_marginStart="8dp"
+            android:layout_toStartOf="@id/timeText"
+            android:layout_toLeftOf="@id/timeText"
+            android:lines="1"
+            android:text="@string/pagename_setup_ui"
+            android:textStyle="bold"
             app:drawableStartCompat="@drawable/arrow_back" />
 
         <com.RobinNotBad.BiliClient.ui.widget.TextClock
@@ -30,8 +33,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginVertical="3dp"
-            android:text="11:45"
-            android:textStyle="bold"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
@@ -63,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="4dp"
-                android:text="恢复默认" />
+                android:text="@string/btn_reset" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -82,7 +83,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#00000000"
-                        android:text="圆屏适配" />
+                        android:text="@string/section_ui_round" />
 
                     <TextView
                         android:id="@+id/switch_round_desc"
@@ -107,7 +108,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="界面大小" />
+                    android:text="@string/text_ui_size" />
 
                 <EditText
                     android:id="@+id/ui_scale_input"
@@ -131,7 +132,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="有效范围：0.25倍-5.00倍，建议少量多次调节"
+                    android:text="@string/desc_setup_ui_size"
                     android:textSize="11sp" />
 
             </LinearLayout>
@@ -147,7 +148,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="界面边距" />
+                    android:text="@string/section_ui_paddings" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -162,7 +163,7 @@
                         android:id="@+id/desc1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="横向"
+                        android:text="@string/text_ui_padding_horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/ui_padding_horizontal"
                         app:layout_constraintStart_toStartOf="parent"
@@ -185,11 +186,10 @@
                         tools:ignore="HardcodedText,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                     <TextView
-
                         android:id="@+id/desc2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="%"
+                        android:text="@string/percent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/ui_padding_horizontal"
@@ -209,7 +209,7 @@
                         android:id="@+id/desc3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="纵向"
+                        android:text="@string/text_ui_padding_vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/ui_padding_vertical"
                         app:layout_constraintStart_toStartOf="parent"
@@ -235,7 +235,7 @@
                         android:id="@+id/desc4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="%"
+                        android:text="@string/percent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/ui_padding_vertical"
@@ -247,7 +247,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="第一个输入框为横向边距，第二个输入框为纵向边距，单位百分比。\n出于保护，数值超过30不会保存。"
+                    android:text="@string/desc_setup_ui_padding_desc"
                     android:textSize="11sp" />
 
             </LinearLayout>
