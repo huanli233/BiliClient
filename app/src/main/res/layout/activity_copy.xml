@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/background_edittext"
-                android:hint="啥都木有"
+                android:hint="@string/hint_copy_empty"
                 android:minHeight="40dp"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="选择范围"
+                android:text="@string/text_select_range"
                 android:gravity="center" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -76,8 +76,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="2dp"
-                    android:hint="起始位置"
-                    android:text="0"
+                    android:hint="@string/hint_start_position"
+                    android:text="@string/zero"
                     android:inputType="number"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/index_between"
@@ -93,15 +93,15 @@
                     app:layout_constraintStart_toEndOf="@id/begin_index"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:text="~"/>
+                    android:text="@string/tilde"/>
 
                 <EditText
                     android:id="@+id/end_index"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
-                    android:hint="结束位置"
-                    android:text="0"
+                    android:hint="@string/hint_end_position"
+                    android:text="@string/zero"
                     android:inputType="number"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -120,7 +120,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="1dp"
-                    android:text="&lt;"
+                    android:text="@string/lt"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/begin_right"
                     app:layout_constraintStart_toStartOf="parent"
@@ -132,7 +132,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="1dp"
                     android:layout_marginEnd="6dp"
-                    android:text="&gt;"
+                    android:text="@string/gt"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/begin_left"
                     app:layout_constraintEnd_toStartOf="@id/end_left"
@@ -143,7 +143,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="1dp"
-                    android:text="&lt;"
+                    android:text="@string/lt"
                     app:layout_constraintEnd_toStartOf="@+id/end_right"
                     app:layout_constraintStart_toEndOf="@id/begin_right"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -153,7 +153,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="1dp"
-                    android:text="&gt;"
+                    android:text="@string/gt"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/end_left"
@@ -166,25 +166,25 @@
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:gravity="center"
-                android:text="*长按选择到开头/结尾*" />
+                android:text="@string/text_copy_longclick" />
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/copy"
-                android:text="复制选中" />
+                android:text="@string/btn_copy_selected" />
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/copy_all"
-                android:text="复制全部" />
+                android:text="@string/btn_copy_all" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:text="*部分设备可能阉割剪贴板导致无法复制，此处点名表扬小天才*" />
+                android:text="@string/text_copy_naughty_devices" />
 
         </LinearLayout>
     </ScrollView>

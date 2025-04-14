@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:gravity="center"
-                android:text="教程"
+                android:text="@string/pagename_tutorial"
                 android:textSize="17sp" />
 
             <TextView
@@ -32,7 +32,7 @@
                 android:textSize="14sp"
                 android:id="@+id/content"
                 android:layout_margin="6dp"
-                android:text="内容" />
+                android:text="@string/text_default_subtitle" />
 
             <androidx.constraintlayout.utils.widget.ImageFilterView
                 android:id="@+id/image_view"
@@ -45,7 +45,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/close_btn"
-                android:text="已阅"
+                android:text="@string/btn_read"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="8dp"
                 android:layout_width="match_parent"

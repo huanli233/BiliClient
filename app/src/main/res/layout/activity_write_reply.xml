@@ -60,7 +60,8 @@
                 android:hint="@string/hint_write_reply"
                 android:minHeight="40dp"
                 android:padding="8dp"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                android:inputType="textMultiLine" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/emote"

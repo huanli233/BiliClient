@@ -53,7 +53,7 @@
                 android:id="@+id/desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/setup_introduction"
+                android:text="@string/text_setup_introduction"
                 android:textSize="12sp" />
 
             <com.google.android.material.card.MaterialCardView

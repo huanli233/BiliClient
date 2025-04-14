@@ -79,6 +79,8 @@ public class DownloadActivity extends BaseActivity {
 
         scrHeight = window_height;
 
+        if(!FileUtil.checkStoragePermission()) FileUtil.requestStoragePermission(this);
+
         timer.schedule(showText, 100, 100);
         CenterThreadPool.run(() -> {
             if (type == 0) {

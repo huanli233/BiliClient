@@ -57,7 +57,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_edittext"
-                android:hint="输入文字内容..."
+                android:hint="@string/hint_write_dynamic"
+                android:inputType="textMultiLine"
                 android:minHeight="40dp"
                 android:padding="8dp"
                 android:textSize="13sp" />

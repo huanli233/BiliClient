@@ -91,7 +91,7 @@
                         android:layout_marginTop="1dp"
                         android:layout_marginBottom="4dp"
                         android:alpha="0.9"
-                        android:text="@string/setting_ui_round_desc"
+                        android:text="@string/desc_setting_ui_round"
                         android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -146,7 +146,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="2dp"
-                        android:text="@string/setting_ui_desc"
+                        android:text="@string/desc_setting_ui"
                         android:textSize="11sp" />
 
                 </LinearLayout>
@@ -311,7 +311,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="2dp"
-                        android:text="@string/setting_ui_density_desc"
+                        android:text="@string/desc_setting_ui_density"
                         android:textSize="11sp" />
 
                 </LinearLayout>

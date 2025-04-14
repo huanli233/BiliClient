@@ -68,7 +68,7 @@
             android:textColorHint="#80ffffff"
             android:textCursorDrawable="@drawable/cursor_drawable"
             android:textSize="13sp"
-            android:inputType="text" />
+            android:inputType="textMultiLine" />
 
         <ImageButton
             android:id="@+id/send_btn"

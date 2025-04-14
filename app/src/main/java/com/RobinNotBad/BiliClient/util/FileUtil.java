@@ -90,12 +90,13 @@ public class FileUtil {
     public static File getVideoDownloadPath() {
         File path = new File(SharedPreferencesUtil.getString("save_path_video",
                 Environment.getExternalStorageDirectory() + "/Android/media/" + BiliTerminal.context.getPackageName() + "/"));
-        if(SharedPreferencesUtil.getBoolean("save_ban_gallery", true)) try {
-            File nomedia = new File(path, ".nomedia");    //为了防止系统扫描
-            if (!nomedia.exists()) nomedia.createNewFile();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+
+        try {
+            File nomedia = new File(path, ".nomedia");
+            if (SharedPreferencesUtil.getBoolean("save_ban_gallery", true) && !nomedia.exists())
+                nomedia.createNewFile();
+            else if (nomedia.exists()) nomedia.delete();
+        } catch (Exception ignored){}
         return path;
     }
 

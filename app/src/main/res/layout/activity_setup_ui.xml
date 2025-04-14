@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="4dp"
                 android:gravity="center_horizontal"
-                android:text="@string/setup_ui_desc"
+                android:text="@string/desc_setup_ui"
                 android:textSize="12sp" />
 
             <com.google.android.material.button.MaterialButton
@@ -93,7 +93,7 @@
                         android:layout_marginTop="1dp"
                         android:layout_marginBottom="4dp"
                         android:alpha="0.9"
-                        android:text="@string/setting_ui_round_desc"
+                        android:text="@string/desc_setting_ui_round"
                         android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -108,7 +108,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_ui_size" />
+                    android:text="@string/section_ui_size" />
 
                 <EditText
                     android:id="@+id/ui_scale_input"
@@ -125,8 +125,7 @@
                     android:textColor="#fff"
                     android:textColorHint="#80ffffff"
                     android:textCursorDrawable="@drawable/cursor_drawable"
-                    android:textSize="13sp"
-                    tools:ignore="HardcodedText,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+                    android:textSize="13sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -182,8 +181,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/desc2"
                         app:layout_constraintStart_toEndOf="@+id/desc1"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="HardcodedText,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/desc2"
@@ -258,14 +256,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="4dp"
-                android:text="查看预览" />
+                android:text="@string/btn_preview" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/confirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
-                android:text="确认设置" />
+                android:text="@string/btn_confirm_settings" />
 
         </LinearLayout>
     </ScrollView>

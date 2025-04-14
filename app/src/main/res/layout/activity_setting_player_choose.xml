@@ -249,7 +249,7 @@
                 android:id="@+id/desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/setting_player_desc"
+                android:text="@string/desc_setting_player"
                 android:textSize="12sp" />
 
         </LinearLayout>

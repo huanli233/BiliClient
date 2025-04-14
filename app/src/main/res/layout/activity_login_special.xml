@@ -64,13 +64,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/background_edittext"
-                android:hint="在这里输入登录信息"
+                android:hint="@string/hint_login_cookies"
                 android:minHeight="40dp"
                 android:padding="8dp"
                 android:text=""
                 android:textSize="13sp"
-                tools:ignore="HardcodedText,SpeakableTextPresentCheck,TouchTargetSizeCheck"
-                android:inputType="text" />
+                android:inputType="textMultiLine" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/confirm"
