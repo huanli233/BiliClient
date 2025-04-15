@@ -38,7 +38,7 @@ public class EmoteUtil {
     }
 
     public static SpannableString textReplaceEmote(String text, ArrayList<Emote> emotes, float scale, Context context, CharSequence source) throws ExecutionException, InterruptedException {
-        SpannableString result = (!(source instanceof SpannableString)) ? new SpannableString(text) : (SpannableString) source;
+        SpannableString result = (source instanceof SpannableString) ? (SpannableString) source : new SpannableString(text);
         if (emotes != null && !emotes.isEmpty()) {
             for (int i = 0; i < emotes.size(); i++) {    //遍历每一个表情包
                 Emote key = emotes.get(i);

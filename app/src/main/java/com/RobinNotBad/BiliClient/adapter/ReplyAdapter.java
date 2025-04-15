@@ -54,7 +54,6 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 //评论Adapter
 //2023-07-22
@@ -196,17 +195,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 CenterThreadPool.run(() -> {
                     try {
                         SpannableString spannableString = EmoteUtil.textReplaceEmote(text, reply.emotes, 1.0f, context, replyHolder.message.getText());
-                        ((Activity) context).runOnUiThread(() -> {
+                        CenterThreadPool.runOnUiThread(() -> {
                             replyHolder.message.setText(spannableString);
                             setTopSpan(reply, replyHolder);
                             ToolsUtil.setLink(replyHolder.message);
                             ToolsUtil.setAtLink(reply.atNameToMid, replyHolder.message);
                         });
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    } catch (Exception ignored) {}
                 });
             }
             else setTopSpan(reply, replyHolder);
@@ -234,29 +229,27 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                 if (reply.childMsgList != null) {
                     final String up_tip = "  UP  ";
-                    List<CharSequence> childMsgViewList = new ArrayList<>();
-                    for (Reply child : reply.childMsgList) {
-                        String senderName = child.sender.name;
-                        SpannableString content = new SpannableString(senderName + (child.sender.mid == up_mid ? up_tip : "") + "：" + child.message);
-                        if (child.sender.mid == up_mid) {
-                            float lineHeight = ToolsUtil.getTextHeightWithSize(context);
-                            content.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95), (int) (lineHeight)), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                            content.setSpan(new RelativeSizeSpan(0.8f), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                        }
-                        if (child.emotes != null) {
-                            CenterThreadPool.run(() -> {
-                                try {
-                                    EmoteUtil.textReplaceEmote(content.toString(), child.emotes, 1.0f, context, content);
-                                } catch (ExecutionException ignored) {
-                                } catch (InterruptedException ignored) {
+                    List<CharSequence> childStrList = new ArrayList<>();
+                    CenterThreadPool.run(() -> {
+                        try {
+                            for (Reply child : reply.childMsgList) {
+                                String senderName = child.sender.name;
+                                SpannableString content = new SpannableString(senderName + (child.sender.mid == up_mid ? up_tip : "") + "：" + child.message);
+                                if (child.sender.mid == up_mid) {
+                                    float lineHeight = ToolsUtil.getTextHeightWithSize(context);
+                                    content.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95), (int) (lineHeight)), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                                    content.setSpan(new RelativeSizeSpan(0.8f), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                                 }
-                            });
-                        }
-                        childMsgViewList.add(content);
-                    }
-                    replyHolder.childReplies.setVerticalScrollBarEnabled(false);
-                    ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(context, R.layout.cell_reply_child, childMsgViewList);
-                    replyHolder.childReplies.setAdapter(adapter);
+                                if (child.emotes != null) {
+                                    EmoteUtil.textReplaceEmote(content.toString(), child.emotes, 1.0f, context, content);
+                                }
+                                childStrList.add(content);
+                            }
+                            replyHolder.childReplies.setVerticalScrollBarEnabled(false);
+                            ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(context, R.layout.cell_reply_child, childStrList);
+                            replyHolder.childReplies.setAdapter(adapter);
+                        } catch (Exception ignored){}
+                    });
                 }
             } else replyHolder.childReplyCard.setVisibility(View.GONE);
 
