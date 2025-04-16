@@ -228,9 +228,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     replyHolder.childCount.setText("共" + reply.childCount + "条回复");
 
                 if (reply.childMsgList != null) {
-                    final String up_tip = "  UP  ";
-                    List<CharSequence> childStrList = new ArrayList<>();
                     CenterThreadPool.run(() -> {
+                        final String up_tip = "  UP  ";
+                        List<CharSequence> childStrList = new ArrayList<>();
                         try {
                             for (Reply child : reply.childMsgList) {
                                 String senderName = child.sender.name;

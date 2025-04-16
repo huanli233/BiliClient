@@ -253,17 +253,4 @@ public class VideoInfoApi {
         return "";
     }
 
-    public static Pair<Long, Integer> getWatchProgress(long aid) throws IOException, JSONException {
-        String url = "https://api.bilibili.com/x/v2/history?max=" + aid + "&ps=1&business=archive";
-        JSONObject result = NetWorkUtil.getJson(url);
-        if (!result.isNull("data")) {
-            JSONArray data = result.getJSONArray("data");
-            if (data.length() > 0) {
-                JSONObject video = data.getJSONObject(0);
-                JSONObject page = video.optJSONObject("page");
-                return new Pair<>(page == null ? 0L : page.optLong("cid", 0), video.getInt("progress"));
-            }
-        }
-        return new Pair<>(0L, 0);
-    }
 }

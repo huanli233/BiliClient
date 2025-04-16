@@ -1,13 +1,14 @@
 package com.RobinNotBad.BiliClient.activity.user;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
 import com.RobinNotBad.BiliClient.adapter.video.VideoCardAdapter;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
+import com.RobinNotBad.BiliClient.model.ApiResult;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 
 public class HistoryActivity extends RefreshListActivity {
 
+    private ApiResult lastResult = new ApiResult();
     private ArrayList<VideoCard> videoList;
     private VideoCardAdapter videoCardAdapter;
 
@@ -33,18 +35,18 @@ public class HistoryActivity extends RefreshListActivity {
 
         CenterThreadPool.run(() -> {
             try {
-                int result = HistoryApi.getHistory(page, videoList);
-                if (result != -1) {
+                lastResult = HistoryApi.getHistory(lastResult, videoList);
+                if (lastResult.code == 0) {
                     videoCardAdapter = new VideoCardAdapter(this, videoList);
                     setOnLoadMoreListener(this::continueLoading);
                     setRefreshing(false);
                     setAdapter(videoCardAdapter);
 
-                    if (result == 1) {
-                        Log.e("debug", "到底了");
+                    if (lastResult.isBottom) {
                         setBottom(true);
                     }
                 }
+                else MsgUtil.showMsg(lastResult.message);
 
             } catch (Exception e) {
                 loadFail(e);
@@ -56,15 +58,13 @@ public class HistoryActivity extends RefreshListActivity {
         CenterThreadPool.run(() -> {
             try {
                 List<VideoCard> list = new ArrayList<>();
-                int result = HistoryApi.getHistory(page, list);
-                if (result != -1) {
-                    Log.e("debug", "下一页");
+                lastResult = HistoryApi.getHistory(lastResult, list);
+                if (lastResult.code == 0) {
                     runOnUiThread(() -> {
                         videoList.addAll(list);
                         videoCardAdapter.notifyItemRangeInserted(videoList.size() - list.size(), list.size());
                     });
-                    if (result == 1) {
-                        Log.e("debug", "到底了");
+                    if (lastResult.isBottom) {
                         setBottom(true);
                     }
                 }

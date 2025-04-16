@@ -30,11 +30,9 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseFragment;
@@ -75,7 +73,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -302,7 +299,7 @@ public class VideoInfoFragment extends BaseFragment {
         //历史上报
         CenterThreadPool.run(()-> {
             try {
-                progressPair = VideoInfoApi.getWatchProgress(videoInfo.aid);
+                progressPair = HistoryApi.getWatchProgress(videoInfo.aid, false);
                 if (progressPair.first == null || !videoInfo.cids.contains(progressPair.first))
                     progressPair = new Pair<>(videoInfo.cids.get(0), 0);
 
