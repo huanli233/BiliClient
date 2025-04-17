@@ -148,27 +148,26 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="8dp"
         android:background="@drawable/background_grey_cardview"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="@+id/replyText"
         app:layout_constraintStart_toStartOf="@+id/replyText"
         app:layout_constraintTop_toBottomOf="@+id/upLiked">
 
-        <com.RobinNotBad.BiliClient.ui.widget.CustomListView
+        <LinearLayout
             android:id="@+id/repliesList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp" />
+            android:divider="@drawable/divider"
+            android:showDividers="middle"
+            android:orientation="vertical" />
 
         <TextView
             android:id="@+id/repliesControl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
             android:text="共114条回复"
             android:textColor="#FE679A"
             android:textSize="13sp"

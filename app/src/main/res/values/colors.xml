@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="textwhite">#ebe0e2</color>
+    <color name="text_transparent">#50FEFEFE</color>
     <color name="color_ripple">#78FEFEFE</color>
     <color name="bgblack">#000000</color>
     <color name="pink">#FBFB8787</color>

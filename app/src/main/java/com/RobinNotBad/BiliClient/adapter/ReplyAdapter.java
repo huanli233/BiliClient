@@ -16,7 +16,6 @@ import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,7 +34,6 @@ import com.RobinNotBad.BiliClient.api.ReplyApi;
 import com.RobinNotBad.BiliClient.listener.OnItemClickListener;
 import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.UserInfo;
-import com.RobinNotBad.BiliClient.ui.widget.CustomListView;
 import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.EmoteUtil;
@@ -53,7 +51,6 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 //评论Adapter
 //2023-07-22
@@ -62,6 +59,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public boolean isDetail = false;
     public boolean isManager = false;
+    private long count = -1;
     final Context context;
     final ArrayList<Reply> replyList;
     final long oid;
@@ -127,7 +125,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                 CenterThreadPool.run(() -> {
                     try {
-                        long count = ReplyApi.getReplyCount(oid, type);
+                        if(count == -1) count = ReplyApi.getReplyCount(oid, type);
                         CenterThreadPool.runOnUiThread(() -> writeReply.count_label.setText("共" + count + "条评论"));
                     } catch (Exception ignore) {
                     }
@@ -230,7 +228,6 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 if (reply.childMsgList != null) {
                     CenterThreadPool.run(() -> {
                         final String up_tip = "  UP  ";
-                        List<CharSequence> childStrList = new ArrayList<>();
                         try {
                             for (Reply child : reply.childMsgList) {
                                 String senderName = child.sender.name;
@@ -243,11 +240,11 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                 if (child.emotes != null) {
                                     EmoteUtil.textReplaceEmote(content.toString(), child.emotes, 1.0f, context, content);
                                 }
-                                childStrList.add(content);
+                                if(replyHolder.childReplies == null) return;
+                                @SuppressLint("InflateParams") TextView textView = (TextView) LayoutInflater.from(context).inflate(R.layout.cell_reply_child, null);
+                                textView.setText(content);
+                                replyHolder.childReplies.addView(textView);
                             }
-                            replyHolder.childReplies.setVerticalScrollBarEnabled(false);
-                            ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(context, R.layout.cell_reply_child, childStrList);
-                            replyHolder.childReplies.setAdapter(adapter);
                         } catch (Exception ignored){}
                     });
                 }
@@ -281,7 +278,6 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
 
             replyHolder.childReplyCard.setOnClickListener(view -> startReplyInfoActivity(reply));
-            replyHolder.childReplies.setOnItemClickListener((adapterView, view, i, l) -> startReplyInfoActivity(reply));
             if (!isDetail) {
                 replyHolder.itemView.setOnClickListener((view) -> startReplyInfoActivity(reply));
                 replyHolder.message.setOnClickListener((view) -> startReplyInfoActivity(reply));
@@ -410,6 +406,15 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
+    @Override
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        if(holder instanceof ReplyHolder){
+            ((ReplyHolder) holder).childReplies.removeAllViews();
+            ((ReplyHolder) holder).imageCard.setImageBitmap(null);
+        }
+        super.onViewRecycled(holder);
+    }
+
     public void setTopSpan(Reply reply, ReplyHolder replyHolder) {
         if (reply.isTop && reply.message.startsWith(ReplyApi.TOP_TIP)) {
             SpannableString spannableString = new SpannableString(replyHolder.message.getText());
@@ -449,7 +454,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static class ReplyHolder extends RecyclerView.ViewHolder {
         final ImageView replyAvatar;
         final ImageView dislikeBtn;
-        final CustomListView childReplies;
+        final LinearLayout childReplies;
         final TextView message;
         final TextView userName;
         final TextView pubDate;
