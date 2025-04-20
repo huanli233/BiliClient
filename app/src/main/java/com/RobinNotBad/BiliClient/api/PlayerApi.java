@@ -91,7 +91,10 @@ public class PlayerApi {
                 + (html5 ? "&high_quality=1" : "")
                 + "&qn=" + playerData.qn
                 + "&fnval=1&fnver=0"
-                + "&platform=" + (html5 ? "html5" : "pc");
+                + "&platform=" + (html5 ? "html5" : "pc")
+                + "&voice_balance=1"
+                + "&gaia_source=pre-load"
+                + "&isGaiaAvoided=true";
 
         url = ConfInfoApi.signWBI(url);
 
