@@ -428,6 +428,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.xtc.unbind.clearUserData.white_list"
+            android:value="true" />
     </application>
 
 </manifest>
