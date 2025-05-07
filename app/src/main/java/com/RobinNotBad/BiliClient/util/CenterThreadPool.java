@@ -68,8 +68,10 @@ public class CenterThreadPool {
                     return Unit.INSTANCE;
                 });
                 //协程不可用时尝试以原生线程池运行
-            } else if (getThreadPoolInstance() != null) {
-                getThreadPoolInstance().submit(runnable);
+            } else if (THREAD_POOL != null) {
+                ExecutorService service = getThreadPoolInstance();
+                if(service != null) service.submit(runnable);
+                else new Thread(runnable).start();
             } else {
                 //都不可用再开线程
                 new Thread(runnable).start();

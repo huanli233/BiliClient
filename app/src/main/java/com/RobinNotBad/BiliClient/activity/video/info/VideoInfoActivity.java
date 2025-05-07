@@ -39,8 +39,8 @@ public class VideoInfoActivity extends BaseActivity {
     private String bvid;
 
     private List<Fragment> fragmentList;
-    ReplyFragment replyFragment;
-    Fragment contentFragment;
+    public ReplyFragment replyFragment;
+    public Fragment contentFragment;
     private long seek_reply;
     private ImageView loading;
     private ViewPager viewPager;
