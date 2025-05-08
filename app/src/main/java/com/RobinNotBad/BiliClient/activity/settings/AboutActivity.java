@@ -16,10 +16,10 @@ import android.widget.TextView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
-import com.RobinNotBad.BiliClient.util.AsyncLayoutInflaterX;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -51,7 +51,7 @@ public class AboutActivity extends BaseActivity {
 
                 String updateLog =  ToolsUtil.getUpdateLog(this);
                 ((TextView) findViewById(R.id.updatelog_view)).setText("\n更新细节：" + updateLog);
-                ToolsUtil.setCopy(findViewById(R.id.updatelog_view), updateLog);
+                StringUtil.setCopy(findViewById(R.id.updatelog_view), updateLog);
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }

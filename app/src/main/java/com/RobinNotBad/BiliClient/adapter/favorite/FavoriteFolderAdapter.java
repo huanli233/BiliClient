@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.BiliTerminal;
@@ -19,6 +18,7 @@ import com.RobinNotBad.BiliClient.activity.user.favorite.FavoriteVideoListActivi
 import com.RobinNotBad.BiliClient.activity.user.favorite.FavouriteOpusListActivity;
 import com.RobinNotBad.BiliClient.model.FavoriteFolder;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
@@ -56,7 +56,7 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
             holder.name.setText("图文收藏夹");
             holder.count.setText("");
             Glide.with(BiliTerminal.context).asDrawable()
-                    .load(ToolsUtil.getDrawable(context, R.drawable.article_fav_cover))
+                    .load(StringUtil.getDrawable(context, R.drawable.article_fav_cover))
                     .transition(GlideUtil.getTransitionOptions())
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(ToolsUtil.dp2px(5))))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -66,7 +66,7 @@ public class FavoriteFolderAdapter extends RecyclerView.Adapter<FavoriteFolderAd
                 context.startActivity(intent);
             });
         } else {
-            holder.name.setText(ToolsUtil.htmlToString(folderList.get(position).name));
+            holder.name.setText(StringUtil.htmlToString(folderList.get(position).name));
             holder.count.setText(folderList.get(position).videoCount + "/" + folderList.get(position).maxCount);
             Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(folderList.get(position).cover))
                     .transition(GlideUtil.getTransitionOptions())

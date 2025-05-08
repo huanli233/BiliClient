@@ -17,6 +17,7 @@ import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
@@ -66,17 +67,17 @@ public class VideoCardHolder extends RecyclerView.ViewHolder {
 
         switch (videoCard.type){
             case "live":
-                SpannableString sstr_live = new SpannableString("[直播]" + ToolsUtil.htmlToString(videoCard.title));
+                SpannableString sstr_live = new SpannableString("[直播]" + StringUtil.htmlToString(videoCard.title));
                 sstr_live.setSpan(new ForegroundColorSpan(Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 title.setText(sstr_live);
                 break;
             case "series":
-                SpannableString sstr_series = new SpannableString("[系列]" + ToolsUtil.htmlToString(videoCard.title));
+                SpannableString sstr_series = new SpannableString("[系列]" + StringUtil.htmlToString(videoCard.title));
                 sstr_series.setSpan(new ForegroundColorSpan(Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 title.setText(sstr_series);
                 break;
             default:
-                title.setText(ToolsUtil.htmlToString(videoCard.title));
+                title.setText(StringUtil.htmlToString(videoCard.title));
         }
 
     }

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.model.Reply;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 
 public class ReplyCardHolder extends RecyclerView.ViewHolder {
     final TextView content;
@@ -21,6 +21,6 @@ public class ReplyCardHolder extends RecyclerView.ViewHolder {
     }
 
     public void showReplyCard(Reply replyInfo) {
-        content.setText(ToolsUtil.htmlToString(replyInfo.message));
+        content.setText(replyInfo.message);
     }
 }

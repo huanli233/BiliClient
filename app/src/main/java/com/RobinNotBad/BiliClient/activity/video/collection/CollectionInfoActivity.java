@@ -127,8 +127,8 @@ public class CollectionInfoActivity extends RefreshListActivity {
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(collectionInfoHolder.cover);
                 collectionInfoHolder.cover.setOnClickListener(view -> context.startActivity(new Intent(context, ImageViewerActivity.class).putExtra("imageList", new ArrayList<>(Collections.singletonList(collection.cover)))));
-                ToolsUtil.setCopy(collectionInfoHolder.name, collectionInfoHolder.desc);
-                ToolsUtil.setLink(collectionInfoHolder.desc);
+                StringUtil.setCopy(collectionInfoHolder.name, collectionInfoHolder.desc);
+                StringUtil.setLink(collectionInfoHolder.desc);
             }
         }
 
@@ -230,7 +230,7 @@ public class CollectionInfoActivity extends RefreshListActivity {
                 position--;
                 VideoCardHolder videoCardHolder = (VideoCardHolder) holder;
                 VideoInfo videoInfo = data.get(getSectionPos(position)).episodes.get(getEpisodePos(position)).arc;
-                VideoCard videoCard = new VideoCard(videoInfo.title, "", ToolsUtil.toWan(videoInfo.stats.view), videoInfo.cover, videoInfo.aid, videoInfo.bvid);
+                VideoCard videoCard = new VideoCard(videoInfo.title, "", StringUtil.toWan(videoInfo.stats.view), videoInfo.cover, videoInfo.aid, videoInfo.bvid);
                 videoCardHolder.itemView.setOnClickListener((view) -> TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, videoCard.bvid));
                 videoCardHolder.showVideoCard(videoCard, context);
             } else if (holder instanceof CollectionInfoHolder) {

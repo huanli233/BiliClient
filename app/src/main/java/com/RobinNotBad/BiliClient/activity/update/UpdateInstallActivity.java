@@ -23,7 +23,7 @@ import com.RobinNotBad.BiliClient.helper.TutorialHelper;
 import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class UpdateInstallActivity extends BaseActivity {
             installWayList = findViewById(R.id.install_way_list);
 
             pathTv.setText(String.format(getString(R.string.text_update), path));
-            ToolsUtil.setCopy(pathTv, path);
+            StringUtil.setCopy(pathTv, path);
             installWayList.setLayoutManager(new CustomLinearManager(this, LinearLayoutManager.VERTICAL, false));
             List<Bangumi.Episode> episodeList = new ArrayList<>();
             for (int i = 0; i < installWays.size(); i++) {

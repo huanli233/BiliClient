@@ -25,6 +25,7 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
@@ -105,7 +106,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 TextView upName = holder.itemView.findViewById(R.id.upInfo_Name);
                 MaterialCardView upCard = holder.itemView.findViewById(R.id.upInfo);
 
-                ToolsUtil.setCopy(title);
+                StringUtil.setCopy(title);
 
                 upName.setText(articleInfo.upInfo.name);
                 if (articleInfo.banner.isEmpty()) cover.setVisibility(View.GONE);
@@ -135,9 +136,9 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 TextView favLabel = holder.itemView.findViewById(R.id.fav_label);
                 ImageButton fav = holder.itemView.findViewById(R.id.btn_fav);
 
-                likeLabel.setText(ToolsUtil.toWan(articleInfo.stats.like));
-                coinLabel.setText(ToolsUtil.toWan(articleInfo.stats.coin));
-                favLabel.setText(ToolsUtil.toWan(articleInfo.stats.favorite));
+                likeLabel.setText(StringUtil.toWan(articleInfo.stats.like));
+                coinLabel.setText(StringUtil.toWan(articleInfo.stats.coin));
+                favLabel.setText(StringUtil.toWan(articleInfo.stats.favorite));
 
                 like.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     try {
@@ -152,8 +153,8 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                                 MsgUtil.showMsg((articleInfo.stats.liked ? "点赞成功" : "取消成功"));
 
                                 if (articleInfo.stats.liked)
-                                    likeLabel.setText(ToolsUtil.toWan(++articleInfo.stats.like));
-                                else likeLabel.setText(ToolsUtil.toWan(--articleInfo.stats.like));
+                                    likeLabel.setText(StringUtil.toWan(++articleInfo.stats.like));
+                                else likeLabel.setText(StringUtil.toWan(--articleInfo.stats.like));
                                 like.setImageResource(articleInfo.stats.liked ? R.drawable.icon_like_1 : R.drawable.icon_like_0);
                             });
                         } else {
@@ -176,7 +177,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                                 if(++coinAdd <= 2) articleInfo.stats.coined++;
                                 context.runOnUiThread(() -> {
                                     MsgUtil.showMsg("投币成功！");
-                                    coinLabel.setText(ToolsUtil.toWan(++articleInfo.stats.coin));
+                                    coinLabel.setText(StringUtil.toWan(++articleInfo.stats.coin));
                                     coin.setImageResource(R.drawable.icon_coin_1);
                                 });
                             } else {
@@ -210,7 +211,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                         }
                         articleInfo.stats.favoured = !articleInfo.stats.favoured;
                         context.runOnUiThread(() -> {
-                            favLabel.setText(ToolsUtil.toWan(articleInfo.stats.favorite));
+                            favLabel.setText(StringUtil.toWan(articleInfo.stats.favorite));
                             MsgUtil.showMsg("操作成功~");
                         });
                     } catch (Exception e) {
@@ -246,8 +247,8 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 TextView timeText = holder.itemView.findViewById(R.id.timeText);
                 TextView cvidText = holder.itemView.findViewById(R.id.cvidText);
                 cvidText.setText("cv" + articleInfo.id + " | " + articleInfo.wordCount + "字");
-                ToolsUtil.setCopy(cvidText, "cv" + articleInfo.id);
-                views.setText(ToolsUtil.toWan(articleInfo.stats.view) + "阅读");
+                StringUtil.setCopy(cvidText, "cv" + articleInfo.id);
+                views.setText(StringUtil.toWan(articleInfo.stats.view) + "阅读");
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 timeText.setText(sdf.format(articleInfo.ctime * 1000));
                 break;
@@ -265,8 +266,8 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                         textView.setAlpha(0.85f);
                         break;
                 }
-                ToolsUtil.setCopy(textView);
-                ToolsUtil.setLink(textView);
+                StringUtil.setCopy(textView);
+                StringUtil.setLink(textView);
                 break;
 
         }

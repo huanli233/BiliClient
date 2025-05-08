@@ -53,6 +53,7 @@ import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
@@ -714,7 +715,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
 
         seekbar_progress.setMax(video_all);
-        progress_str = ToolsUtil.toTime(video_all / 1000);
+        progress_str = StringUtil.toTime(video_all / 1000);
 
         if (SharedPreferencesUtil.getBoolean("player_from_last", true) && !isLiveMode) {
             if (progress_history > 6 && ((video_all / 1000) - progress_history) > 6) { //阈值
@@ -805,7 +806,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                         float curr_sec = video_now / 1000f;
                         runOnUiThread(() -> {
                             if (isLiveMode) {
-                                text_progress.setText(ToolsUtil.toTime((int) curr_sec));
+                                text_progress.setText(StringUtil.toTime((int) curr_sec));
                                 text_online.setText(online_number);
                             }
                             else {
@@ -1512,7 +1513,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
                 runOnUiThread(() -> {
                     if (!isLiveMode)
-                        text_progress.setText(ToolsUtil.toTime(position / 1000) + "/" + progress_str);
+                        text_progress.setText(StringUtil.toTime(position / 1000) + "/" + progress_str);
                 });
             }
 

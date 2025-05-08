@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.api;
 
+import android.text.SpannableString;
 import android.util.Pair;
 
 import com.RobinNotBad.BiliClient.model.MessageCard;
@@ -81,8 +82,7 @@ public class MessageApi {
                         Reply replyInfo = new Reply();
                         replyInfo.rpid = item.getLong("item_id");
                         replyInfo.sender = null;
-                        replyInfo.message = item.getString("title");
-                        replyInfo.emotes = new ArrayList<>();
+                        replyInfo.message = new SpannableString(item.getString("title"));
                         replyInfo.pictureList = new ArrayList<>();
                         replyInfo.likeCount = 0;
                         replyInfo.upLiked = false;
@@ -99,8 +99,7 @@ public class MessageApi {
                         Reply replyInfo_dynamic = new Reply();
                         replyInfo_dynamic.rpid = item.getLong("item_id");
                         replyInfo_dynamic.sender = null;
-                        replyInfo_dynamic.message = item.getString("title");
-                        replyInfo_dynamic.emotes = new ArrayList<>();
+                        replyInfo_dynamic.message = new SpannableString(item.getString("title"));
                         replyInfo_dynamic.pictureList = new ArrayList<>();
                         replyInfo_dynamic.likeCount = 0;
                         replyInfo_dynamic.upLiked = false;
@@ -116,7 +115,7 @@ public class MessageApi {
                         // 实在是抽象 但是我没时间改那么多
                         Reply replyChildInfo = new Reply();
                         replyChildInfo.rpid = item.getLong("target_id");
-                        replyChildInfo.message = item.getString("title");
+                        replyChildInfo.message = new SpannableString(item.getString("title"));
                         replyChildInfo.childCount = 0;
                         likeInfo.replyInfo = replyChildInfo;
                         break;
@@ -179,8 +178,7 @@ public class MessageApi {
                         Reply replyChildInfo = new Reply();
                         replyChildInfo.rpid = item.getLong("target_id");
                         replyChildInfo.sender = null;
-                        replyChildInfo.message = "[评论] " + item.getString("title");
-                        replyChildInfo.emotes = new ArrayList<>();
+                        replyChildInfo.message = new SpannableString("[评论] " + item.getString("title"));
                         replyChildInfo.pictureList = new ArrayList<>();
                         replyChildInfo.likeCount = 0;
                         replyChildInfo.upLiked = false;
@@ -196,8 +194,7 @@ public class MessageApi {
                         Reply replyChildInfo_dynamic = new Reply();
                         replyChildInfo_dynamic.rpid = item.getLong("target_id");
                         replyChildInfo_dynamic.sender = null;
-                        replyChildInfo_dynamic.message = "[动态] " + item.getString("title");
-                        replyChildInfo_dynamic.emotes = new ArrayList<>();
+                        replyChildInfo_dynamic.message = new SpannableString("[动态] " + item.getString("title"));
                         replyChildInfo_dynamic.pictureList = new ArrayList<>();
                         replyChildInfo_dynamic.likeCount = 0;
                         replyChildInfo_dynamic.upLiked = false;
@@ -211,7 +208,7 @@ public class MessageApi {
                     case "article":
                         Reply replyChildInfo_article = new Reply();
                         replyChildInfo_article.rpid = item.getLong("target_id");
-                        replyChildInfo_article.message = "[专栏] " + item.getString("title");
+                        replyChildInfo_article.message = new SpannableString("[专栏] " + item.getString("title"));
                         replyChildInfo_article.childCount = 0;
                         replyInfo.replyInfo = replyChildInfo_article;
                         break;
@@ -260,8 +257,7 @@ public class MessageApi {
                     Reply replyChildInfo = new Reply();
                     replyChildInfo.rpid = object.getJSONObject("item").getLong("target_id");
                     replyChildInfo.sender = null;
-                    replyChildInfo.message = "[评论] " + object.getJSONObject("item").getString("title");
-                    replyChildInfo.emotes = new ArrayList<>();
+                    replyChildInfo.message = new SpannableString("[评论] " + object.getJSONObject("item").getString("title"));
                     replyChildInfo.pictureList = new ArrayList<>();
                     replyChildInfo.likeCount = 0;
                     replyChildInfo.upLiked = false;
@@ -275,8 +271,7 @@ public class MessageApi {
                     Reply replyChildInfo = new Reply();
                     replyChildInfo.rpid = object.getJSONObject("item").getLong("target_id");
                     replyChildInfo.sender = null;
-                    replyChildInfo.message = "[动态] " + object.getJSONObject("item").getString("title");
-                    replyChildInfo.emotes = new ArrayList<>();
+                    replyChildInfo.message = new SpannableString("[动态] " + object.getJSONObject("item").getString("title"));
                     replyChildInfo.pictureList = new ArrayList<>();
                     replyChildInfo.likeCount = 0;
                     replyChildInfo.upLiked = false;
@@ -289,7 +284,7 @@ public class MessageApi {
                 } else if (object.getJSONObject("item").getString("type").equals("article")) {
                     Reply replyChildInfo = new Reply();
                     replyChildInfo.rpid = object.getJSONObject("item").getLong("target_id");
-                    replyChildInfo.message = "[专栏] " + object.getJSONObject("item").getString("title");
+                    replyChildInfo.message = new SpannableString("[专栏] " + object.getJSONObject("item").getString("title"));
                     replyChildInfo.childCount = 0;
                     replyInfo.replyInfo = replyChildInfo;
                 }

@@ -5,7 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -107,7 +107,7 @@ public class VideoInfo implements Parcelable, Serializable {    //自定义类�
     };
 
     public VideoCard toCard(){
-        return new VideoCard(title, staff.get(0).name, ToolsUtil.toWan(stats.view), cover, aid, bvid);
+        return new VideoCard(title, staff.get(0).name, StringUtil.toWan(stats.view), cover, aid, bvid);
     }
 
     public PlayerData toPlayerData(int index){

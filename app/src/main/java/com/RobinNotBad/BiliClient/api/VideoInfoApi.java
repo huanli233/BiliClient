@@ -11,7 +11,6 @@ import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.StringUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,7 +67,7 @@ public class VideoInfoApi {
         collection.intro = json.optString("intro");
         collection.cover = json.optString("cover");
         collection.mid = json.optLong("mid");
-        collection.view = ToolsUtil.toWan(json.getJSONObject("stat").optLong("view"));
+        collection.view = StringUtil.toWan(json.getJSONObject("stat").optLong("view"));
         JSONArray sections = json.optJSONArray("sections");
         if (sections != null) {
             List<Collection.Section> sectionList = new ArrayList<>();
@@ -144,7 +143,7 @@ public class VideoInfoApi {
         videoInfo.timeDesc = sdf.format(data.getLong("pubdate") * 1000);
         Logu.v("发布时间", String.valueOf(videoInfo.timeDesc));
 
-        videoInfo.duration = ToolsUtil.toTime(data.getInt("duration"));
+        videoInfo.duration = StringUtil.toTime(data.getInt("duration"));
         Logu.v("视频时长", videoInfo.duration);
 
         JSONObject stat = data.getJSONObject("stat");
@@ -247,7 +246,7 @@ public class VideoInfoApi {
             JSONObject data = result.getJSONObject("data");
             if (data.has("total") && !data.isNull("total")) {
                 if (data.get("total") instanceof String) return data.getString("total");
-                else return ToolsUtil.toWan(data.getLong("total"));
+                else return StringUtil.toWan(data.getLong("total"));
             }
         }
         return "";

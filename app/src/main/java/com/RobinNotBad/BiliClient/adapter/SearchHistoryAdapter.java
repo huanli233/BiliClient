@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.listener.OnItemClickListener;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 
 import java.util.ArrayList;
 
@@ -76,7 +76,7 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdap
         }
 
         public void show(String text) {
-            text_view.setText(ToolsUtil.htmlToString(text));
+            text_view.setText(StringUtil.htmlToString(text));
         }
     }
 }

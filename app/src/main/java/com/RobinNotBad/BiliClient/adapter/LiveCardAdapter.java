@@ -14,8 +14,8 @@ import com.RobinNotBad.BiliClient.adapter.video.VideoCardHolder;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 
 import java.util.List;
 
@@ -46,13 +46,13 @@ public class LiveCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
         LiveRoom room = roomList.get(position);
 
         VideoCard videoCard = new VideoCard();
-        videoCard.title = ToolsUtil.removeHtml(room.title);
+        videoCard.title = StringUtil.removeHtml(room.title);
         if (!room.user_cover.startsWith("http")) videoCard.cover = "http:" + room.user_cover;
         else videoCard.cover = room.user_cover;
         if (TextUtils.isEmpty(videoCard.cover) || videoCard.cover.equals("http:"))
             videoCard.cover = room.cover;
         videoCard.upName = room.uname;
-        videoCard.view = ToolsUtil.toWan(room.online) + "人观看";
+        videoCard.view = StringUtil.toWan(room.online) + "人观看";
         videoCard.type = "live";
 
         holder.showVideoCard(videoCard, context);    //此函数在VideoCardHolder里

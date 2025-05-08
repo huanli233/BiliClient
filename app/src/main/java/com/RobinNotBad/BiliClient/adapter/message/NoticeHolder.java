@@ -23,6 +23,7 @@ import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
@@ -85,7 +86,7 @@ public class NoticeHolder extends RecyclerView.ViewHolder {
         } else pubdate.setText(message.timeDesc);
 
         action.setText(message.content);
-        ToolsUtil.setCopy(action);
+        StringUtil.setCopy(action);
 
         if (message.videoCard != null) {
             VideoCard childVideoCard = message.videoCard;

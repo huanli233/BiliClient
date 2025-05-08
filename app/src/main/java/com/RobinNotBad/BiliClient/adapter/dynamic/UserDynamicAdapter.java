@@ -34,8 +34,8 @@ import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -142,7 +142,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             followBtn = itemView.findViewById(R.id.followBtn);
             msgBtn = itemView.findViewById(R.id.msgBtn);
             uidTv = itemView.findViewById(R.id.uidText);
-            ToolsUtil.setCopy(userDesc, userNotice);
+            StringUtil.setCopy(userDesc, userNotice);
         }
 
         public void setFollowed(boolean followed) {
@@ -154,7 +154,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @SuppressLint("SetTextI18n")
         public void bind(Context context, UserInfo userInfo){
             SpannableStringBuilder lvStr = new SpannableStringBuilder("Lv" + userInfo.level);
-            lvStr.setSpan(ToolsUtil.getLevelBadge(context, userInfo), 0, lvStr.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            lvStr.setSpan(StringUtil.getLevelBadge(context, userInfo), 0, lvStr.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             if (userInfo.vip_role > 0) {
                 LinkedHashMap<Integer, String> vipTypeMap = new LinkedHashMap<>() {{
                     put(1, "月度大会员");
@@ -173,11 +173,11 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (!userInfo.notice.isEmpty()) this.userNotice.setText(userInfo.notice);
             else this.userNotice.setVisibility(View.GONE);
             this.uidTv.setText(String.valueOf(userInfo.mid));
-            ToolsUtil.setCopy(this.uidTv);
-            ToolsUtil.setLink(this.userDesc, this.userNotice);
-            this.userFans.setText(ToolsUtil.toWan(userInfo.fans) + "粉丝");
+            StringUtil.setCopy(this.uidTv);
+            StringUtil.setLink(this.userDesc, this.userNotice);
+            this.userFans.setText(StringUtil.toWan(userInfo.fans) + "粉丝");
             this.userFans.setOnClickListener((view) -> view.getContext().startActivity(new Intent(view.getContext(), FollowUsersActivity.class).putExtra("mode", 1).putExtra("mid", userInfo.mid)));
-            this.userFollowings.setText(ToolsUtil.toWan(userInfo.following) + "关注");
+            this.userFollowings.setText(StringUtil.toWan(userInfo.following) + "关注");
             this.userFollowings.setOnClickListener((view) -> view.getContext().startActivity(new Intent(view.getContext(), FollowUsersActivity.class).putExtra("mode", 0).putExtra("mid", userInfo.mid)));
 
             if (userInfo.official != 0) {
@@ -210,7 +210,7 @@ public class UserDynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (!userInfo.sys_notice.isEmpty()) {
                 this.exclusiveTip.setVisibility(View.VISIBLE);
                 SpannableString spannableString = new SpannableString("!:" + userInfo.sys_notice);
-                Drawable drawable = ToolsUtil.getDrawable(context, R.drawable.icon_warning);
+                Drawable drawable = StringUtil.getDrawable(context, R.drawable.icon_warning);
                 drawable.setBounds(0, 0, 30, 30);
                 spannableString.setSpan(new ImageSpan(drawable), 0, 2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 this.exclusiveTipLabel.setText(spannableString);

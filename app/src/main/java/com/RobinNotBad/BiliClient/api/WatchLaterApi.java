@@ -3,7 +3,7 @@ package com.RobinNotBad.BiliClient.api;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +37,7 @@ public class WatchLaterApi {
                 String cover = videoCard.getString("pic");
                 String upName = videoCard.getJSONObject("owner").getString("name");
                 long view = videoCard.getJSONObject("stat").getLong("view");
-                String viewStr = ToolsUtil.toWan(view) + "观看";
+                String viewStr = StringUtil.toWan(view) + "观看";
                 videoCardList.add(new VideoCard(title, upName, viewStr, cover, aid, bvid));
             }
         }

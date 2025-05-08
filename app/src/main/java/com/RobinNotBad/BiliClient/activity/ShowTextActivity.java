@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 import com.google.android.material.card.MaterialCardView;
 
 import org.json.JSONException;
@@ -58,7 +58,7 @@ public class ShowTextActivity extends BaseActivity {
         }
 
         textView.setText(content);
-        ToolsUtil.setCopy(textView);
+        StringUtil.setCopy(textView);
 
 
     }

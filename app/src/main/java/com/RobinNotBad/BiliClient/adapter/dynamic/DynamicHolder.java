@@ -1,6 +1,6 @@
 package com.RobinNotBad.BiliClient.adapter.dynamic;
 
-import static com.RobinNotBad.BiliClient.util.ToolsUtil.toWan;
+import static com.RobinNotBad.BiliClient.util.StringUtil.toWan;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -35,9 +35,7 @@ import com.RobinNotBad.BiliClient.model.LiveRoom;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.*;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.load.EncodeStrategy;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
@@ -197,7 +195,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
 
     @SuppressLint("SetTextI18n")
     public void showDynamic(Context context, Dynamic dynamic, boolean clickable) {    //公用的显示函数 这样修改和调用都方便
-        ToolsUtil.setCopy(content);
+        StringUtil.setCopy(content);
         username.setText(dynamic.userInfo.name);
         if (!dynamic.userInfo.vip_nickname_color.isEmpty()) {
             username.setTextColor(Color.parseColor(dynamic.userInfo.vip_nickname_color));
@@ -212,16 +210,16 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                         SpannableString spannableString = EmoteUtil.textReplaceEmote(dynamic.content, dynamic.emotes, 1.0f, context, content.getText());
                         CenterThreadPool.runOnUiThread(() -> {
                             content.setText(spannableString);
-                            ToolsUtil.setLink(content);
-                            ToolsUtil.setAtLink(dynamic.ats, content);
+                            StringUtil.setLink(content);
+                            StringUtil.setAtLink(dynamic.ats, content);
                         });
                     } catch (Exception e) {
                         MsgUtil.err(e);
                     }
                 });
             }
-            ToolsUtil.setLink(content);
-            ToolsUtil.setAtLink(dynamic.ats, content);
+            StringUtil.setLink(content);
+            StringUtil.setAtLink(dynamic.ats, content);
         } else content.setVisibility(View.GONE);
         Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(dynamic.userInfo.avatar))
                 .transition(GlideUtil.getTransitionOptions())

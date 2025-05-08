@@ -87,7 +87,7 @@ public class LiveInfoActivity extends BaseActivity {
 
                 cover.setOnClickListener((view) -> startActivity(new Intent(view.getContext(), ImageViewerActivity.class).putExtra("imageList", new ArrayList<>(List.of(room.user_cover)))));
 
-                title.setText(ToolsUtil.removeHtml(room.title));
+                title.setText(StringUtil.removeHtml(room.title));
 
                 ArrayList<UserInfo> upList = new ArrayList<>();
                 if (userInfo != null) {
@@ -100,7 +100,7 @@ public class LiveInfoActivity extends BaseActivity {
                 up_recyclerView.setLayoutManager(new CustomLinearManager(this));
                 up_recyclerView.setAdapter(upListAdapter);
 
-                viewsCount.setText(ToolsUtil.toWan(room.online) + "人观看");
+                viewsCount.setText(StringUtil.toWan(room.online) + "人观看");
                 durationText.setText("直播开始于" + room.liveTime);
 
                 idText.setText(String.valueOf(room_id));
@@ -111,9 +111,9 @@ public class LiveInfoActivity extends BaseActivity {
                     else tags.setMaxLines(233);
                     tags_expand = !tags_expand;
                 });
-                ToolsUtil.setCopy(idText, tags, title);
+                StringUtil.setCopy(idText, tags, title);
 
-                description.setText(ToolsUtil.removeHtml(ToolsUtil.htmlToString(room.description)));
+                description.setText(StringUtil.removeHtml(StringUtil.htmlToString(room.description)));
                 description.setOnClickListener(view1 -> {
                     if (desc_expand) description.setMaxLines(3);
                     else description.setMaxLines(512);

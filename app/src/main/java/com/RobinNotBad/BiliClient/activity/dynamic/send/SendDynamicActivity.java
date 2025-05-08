@@ -33,8 +33,8 @@ import com.RobinNotBad.BiliClient.util.EmoteUtil;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -133,23 +133,17 @@ public class SendDynamicActivity extends BaseActivity {
             content.setText(dynamic.content);
             if (dynamic.emotes != null) {
                 CenterThreadPool.run(() -> {
-                    try {
-                        SpannableString spannableString = EmoteUtil.textReplaceEmote(dynamic.content, dynamic.emotes, 1.0f, this, content.getText());
-                        CenterThreadPool.runOnUiThread(() -> {
-                            content.setText(spannableString);
-                            ToolsUtil.setLink(content);
-                            ToolsUtil.setAtLink(dynamic.ats, content);
-                        });
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    SpannableString spannableString = EmoteUtil.textReplaceEmote(dynamic.content, dynamic.emotes, 1.0f, this, content.getText());
+                    CenterThreadPool.runOnUiThread(() -> {
+                        content.setText(spannableString);
+                        StringUtil.setLink(content);
+                        StringUtil.setAtLink(dynamic.ats, content);
+                    });
                 });
             }
         } else content.setVisibility(View.GONE);
-        ToolsUtil.setLink(content);
-        ToolsUtil.setAtLink(dynamic.ats, content);
+        StringUtil.setLink(content);
+        StringUtil.setAtLink(dynamic.ats, content);
         Glide.with(this).load(GlideUtil.url(dynamic.userInfo.avatar))
                 .transition(GlideUtil.getTransitionOptions())
                 .placeholder(R.mipmap.akari)

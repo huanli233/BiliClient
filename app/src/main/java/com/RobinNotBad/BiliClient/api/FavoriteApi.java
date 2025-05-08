@@ -9,7 +9,7 @@ import com.RobinNotBad.BiliClient.model.Opus;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,7 +88,7 @@ public class FavoriteApi {
                     collection.title = item.optString("title");
                     collection.cover = item.optString("cover");
                     collection.intro = item.optString("intro");
-                    collection.view = ToolsUtil.toWan(item.optInt("view_count", -1));
+                    collection.view = StringUtil.toWan(item.optInt("view_count", -1));
                     collectionList.add(collection);
                 }
             }
@@ -114,7 +114,7 @@ public class FavoriteApi {
                     String upName = owner.getString("name");
 
                     JSONObject stat = video.getJSONObject("stat");
-                    String view = ToolsUtil.toWan(stat.getLong("view")) + "观看";
+                    String view = StringUtil.toWan(stat.getLong("view")) + "观看";
                     videoList.add(new VideoCard(title, upName, view, cover, aid, ""));
                 }
                 return 0;

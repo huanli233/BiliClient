@@ -13,6 +13,7 @@ import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.model.ArticleCard;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
@@ -35,7 +36,7 @@ public class ArticleCardHolder extends RecyclerView.ViewHolder {
     }
 
     public void showArticleCard(ArticleCard articleCard, Context context) {
-        title.setText(ToolsUtil.htmlToString(articleCard.title));
+        title.setText(StringUtil.htmlToString(articleCard.title));
         String upNameStr = articleCard.upName;
         if (upNameStr.isEmpty()) {
             upName.setVisibility(View.GONE);

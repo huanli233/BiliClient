@@ -4,7 +4,7 @@ import com.RobinNotBad.BiliClient.model.PageInfo;
 import com.RobinNotBad.BiliClient.model.Series;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -114,7 +114,7 @@ public class SeriesApi {
                     videoCard.aid = archive.optLong("aid", 0);
                     videoCard.bvid = archive.optString("bvid","");
                     videoCard.cover = archive.optString("pic","");
-                    videoCard.view = ToolsUtil.toWan(archive.getJSONObject("stat").optInt("view", -1));
+                    videoCard.view = StringUtil.toWan(archive.getJSONObject("stat").optInt("view", -1));
                     videoCard.title = archive.optString("title","");
                     videoList.add(videoCard);
                 }

@@ -7,7 +7,7 @@ import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.DmImgParamUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -145,7 +145,7 @@ public class UserInfoApi {
                     JSONObject card = vlist.getJSONObject(i);
                     String cover = card.getString("pic");
                     long play = card.getLong("play");
-                    String playStr = ToolsUtil.toWan(play) + "观看";
+                    String playStr = StringUtil.toWan(play) + "观看";
                     long aid = card.getLong("aid");
                     String bvid = card.getString("bvid");
                     String upName = card.getString("author");
@@ -176,7 +176,7 @@ public class UserInfoApi {
                     articleCard.id = card.getLong("id");
                     articleCard.title = card.getString("title");
                     JSONObject stats = card.getJSONObject("stats");
-                    articleCard.view = ToolsUtil.toWan(stats.getInt("view")) + "阅读";
+                    articleCard.view = StringUtil.toWan(stats.getInt("view")) + "阅读";
                     articleCard.cover = card.getString("banner_url");
                     JSONObject author = card.getJSONObject("author");
                     articleCard.upName = author.getString("name");

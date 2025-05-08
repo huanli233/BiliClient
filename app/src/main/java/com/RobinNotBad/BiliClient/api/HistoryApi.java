@@ -6,7 +6,7 @@ import com.RobinNotBad.BiliClient.model.ApiResult;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +44,7 @@ public class HistoryApi {
 
                 String viewStr;
                 if (progress == 0) viewStr = "还没看过";
-                else viewStr = "看到" + ToolsUtil.toTime(videoCard.getInt("progress"));
+                else viewStr = "看到" + StringUtil.toTime(videoCard.getInt("progress"));
 
                 videoList.add(new VideoCard(title, upName, viewStr, cover, aid, bvid));
             }

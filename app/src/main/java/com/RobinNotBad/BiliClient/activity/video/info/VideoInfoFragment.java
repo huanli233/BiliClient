@@ -60,6 +60,7 @@ import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
@@ -326,7 +327,7 @@ public class VideoInfoFragment extends BaseFragment {
 
         //标题
         title.setText(getTitleSpan());
-        ToolsUtil.setCopy(title, videoInfo.title);
+        StringUtil.setCopy(title, videoInfo.title);
 
         //争议信息
         if (!videoInfo.argueMsg.isEmpty()) {
@@ -340,10 +341,10 @@ public class VideoInfoFragment extends BaseFragment {
         up_recyclerView.setLayoutManager(new CustomLinearManager(getContext()));
         up_recyclerView.setAdapter(adapter);
 
-        viewCount.setText(ToolsUtil.toWan(videoInfo.stats.view));
-        likeLabel.setText(ToolsUtil.toWan(videoInfo.stats.like));
-        coinLabel.setText(ToolsUtil.toWan(videoInfo.stats.coin));
-        favLabel.setText(ToolsUtil.toWan(videoInfo.stats.favorite));
+        viewCount.setText(StringUtil.toWan(videoInfo.stats.view));
+        likeLabel.setText(StringUtil.toWan(videoInfo.stats.like));
+        coinLabel.setText(StringUtil.toWan(videoInfo.stats.coin));
+        favLabel.setText(StringUtil.toWan(videoInfo.stats.favorite));
 
         danmakuCount.setText(String.valueOf(videoInfo.stats.danmaku));
         bvidText.setText(videoInfo.bvid);
@@ -356,16 +357,16 @@ public class VideoInfoFragment extends BaseFragment {
             else description.setMaxLines(512);
             desc_expand = !desc_expand;
         });
-        ToolsUtil.setLink(description);
-        ToolsUtil.setAtLink(videoInfo.descAts, description);
-        ToolsUtil.setCopy(description);
+        StringUtil.setLink(description);
+        StringUtil.setAtLink(videoInfo.descAts, description);
+        StringUtil.setCopy(description);
 
         bvidText.setOnLongClickListener(v -> {
             Context context = getContext();
             if (context == null) {
                 return true;
             }
-            ToolsUtil.copyText(context, videoInfo.bvid);
+            StringUtil.copyText(context, videoInfo.bvid);
             MsgUtil.showMsg("BV号已复制");
             return true;
         });
@@ -393,8 +394,8 @@ public class VideoInfoFragment extends BaseFragment {
                         MsgUtil.showMsg(videoInfo.stats.liked ? "点赞成功" : "取消成功");
 
                         if (videoInfo.stats.liked)
-                            likeLabel.setText(ToolsUtil.toWan(++videoInfo.stats.like));
-                        else likeLabel.setText(ToolsUtil.toWan(--videoInfo.stats.like));
+                            likeLabel.setText(StringUtil.toWan(++videoInfo.stats.like));
+                        else likeLabel.setText(StringUtil.toWan(--videoInfo.stats.like));
                         like.setImageResource(videoInfo.stats.liked ? R.drawable.icon_like_1 : R.drawable.icon_like_0);
                     });
                 } else if (isAdded()) {
@@ -423,7 +424,7 @@ public class VideoInfoFragment extends BaseFragment {
                         if (++coinAdd <= 2) videoInfo.stats.coined++;
                         runOnUiThread(() -> {
                             MsgUtil.showMsg("投币成功");
-                            coinLabel.setText(ToolsUtil.toWan(++videoInfo.stats.coin));
+                            coinLabel.setText(StringUtil.toWan(++videoInfo.stats.coin));
                             coin.setImageResource(R.drawable.icon_coin_1);
                         });
                     } else if (isAdded()) {
@@ -488,7 +489,7 @@ public class VideoInfoFragment extends BaseFragment {
             writeDynamicLauncher.launch(intent);
         });
         relay.setOnLongClickListener(v -> {
-            ToolsUtil.copyText(requireContext(), "https://www.bilibili.com/" + videoInfo.bvid);
+            StringUtil.copyText(requireContext(), "https://www.bilibili.com/" + videoInfo.bvid);
             MsgUtil.showMsg("视频完整链接已复制");
             return true;
         });

@@ -1,17 +1,15 @@
 package com.RobinNotBad.BiliClient.adapter;
 
-import static com.RobinNotBad.BiliClient.util.ToolsUtil.toWan;
+import static com.RobinNotBad.BiliClient.util.StringUtil.toWan;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,11 +34,10 @@ import com.RobinNotBad.BiliClient.model.Reply;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
-import com.RobinNotBad.BiliClient.util.EmoteUtil;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -55,6 +52,7 @@ import java.util.ArrayList;
 //评论Adapter
 //2023-07-22
 
+@SuppressLint("ClickableViewAccessibility")
 public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public boolean isDetail = false;
@@ -165,7 +163,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             int last_length = name_str.length();
             name_str.append(" ").append(String.valueOf(sender.level));
             if(sender.is_senior_member == 1) name_str.append("+");
-            name_str.setSpan(ToolsUtil.getLevelBadge(context, sender), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            name_str.setSpan(StringUtil.getLevelBadge(context, sender), last_length + 1, name_str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
             //等级
             if (!TextUtils.isEmpty(sender.medal_name)) {
@@ -185,27 +183,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 replyHolder.userName.setMaxLines(3);
             }
 
-
-            String text = reply.message;
-            replyHolder.message.setText(text);  //防止加载速度慢时露出鸡脚
-            ToolsUtil.setCopy(replyHolder.message);
-            if (reply.emotes != null) {
-                CenterThreadPool.run(() -> {
-                    try {
-                        SpannableString spannableString = EmoteUtil.textReplaceEmote(text, reply.emotes, 1.0f, context, replyHolder.message.getText());
-                        CenterThreadPool.runOnUiThread(() -> {
-                            replyHolder.message.setText(spannableString);
-                            setTopSpan(reply, replyHolder);
-                            ToolsUtil.setLink(replyHolder.message);
-                            ToolsUtil.setAtLink(reply.atNameToMid, replyHolder.message);
-                        });
-                    } catch (Exception ignored) {}
-                });
-            }
-            else setTopSpan(reply, replyHolder);
-
-            ToolsUtil.setLink(replyHolder.message);
-            ToolsUtil.setAtLink(reply.atNameToMid, replyHolder.message);
+            replyHolder.message.setText(reply.message);  //防止加载速度慢时露出鸡脚
+            StringUtil.setCopy(replyHolder.message);
+            replyHolder.message.setOnTouchListener(new StringUtil.ClickableSpanTouchListener());
 
             replyHolder.likeCount.setText(toWan(reply.likeCount));
 
@@ -226,27 +206,16 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     replyHolder.childCount.setText("共" + reply.childCount + "条回复");
 
                 if (reply.childMsgList != null) {
-                    CenterThreadPool.run(() -> {
-                        final String up_tip = "  UP  ";
-                        try {
-                            for (Reply child : reply.childMsgList) {
-                                String senderName = child.sender.name;
-                                SpannableString content = new SpannableString(senderName + (child.sender.mid == up_mid ? up_tip : "") + "：" + child.message);
-                                if (child.sender.mid == up_mid) {
-                                    float lineHeight = ToolsUtil.getTextHeightWithSize(context);
-                                    content.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.card_round), Color.WHITE, Color.rgb(207, 75, 95), (int) (lineHeight)), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                                    content.setSpan(new RelativeSizeSpan(0.8f), senderName.length(), senderName.length() + up_tip.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                                }
-                                if (child.emotes != null) {
-                                    EmoteUtil.textReplaceEmote(content.toString(), child.emotes, 1.0f, context, content);
-                                }
-                                if(replyHolder.childReplies == null) return;
-                                @SuppressLint("InflateParams") TextView textView = (TextView) LayoutInflater.from(context).inflate(R.layout.cell_reply_child, null);
-                                textView.setText(content);
-                                replyHolder.childReplies.addView(textView);
-                            }
-                        } catch (Exception ignored){}
-                    });
+                    for (Reply child : reply.childMsgList) {
+                        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(child.sender.name);
+                        stringBuilder.append("：");
+                        stringBuilder.append(child.message);
+
+                        if(replyHolder.childReplies == null) return;
+                        @SuppressLint("InflateParams") TextView textView = (TextView) LayoutInflater.from(context).inflate(R.layout.cell_reply_child, null);
+                        textView.setText(stringBuilder);
+                        replyHolder.childReplies.addView(textView);
+                    }
                 }
             } else replyHolder.childReplyCard.setVisibility(View.GONE);
 
@@ -413,14 +382,6 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((ReplyHolder) holder).imageCard.setImageBitmap(null);
         }
         super.onViewRecycled(holder);
-    }
-
-    public void setTopSpan(Reply reply, ReplyHolder replyHolder) {
-        if (reply.isTop && reply.message.startsWith(ReplyApi.TOP_TIP)) {
-            SpannableString spannableString = new SpannableString(replyHolder.message.getText());
-            spannableString.setSpan(new ForegroundColorSpan(Color.rgb(207, 75, 95)), 0, ReplyApi.TOP_TIP.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            replyHolder.message.setText(spannableString);
-        }
     }
 
     public void startReplyInfoActivity(Reply reply) {

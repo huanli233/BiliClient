@@ -9,7 +9,7 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.CreativeCenterApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,9 +51,9 @@ public class CreativeCenterActivity extends BaseActivity {
         int totalValue = jsonObject.getInt(totalKey);
         int incrValue = jsonObject.getInt(incrKey);
 
-        String totalText = ToolsUtil.toWan(totalValue);
+        String totalText = StringUtil.toWan(totalValue);
         String incrSymbol = (incrValue < 0) ? "" : "+";
-        String incrText = ToolsUtil.toWan(incrValue);
+        String incrText = StringUtil.toWan(incrValue);
 
         textView.setText(totalText + incrSymbol + incrText);
     }

@@ -6,7 +6,7 @@ import com.RobinNotBad.BiliClient.model.Bangumi;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
-import com.RobinNotBad.BiliClient.util.ToolsUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +38,7 @@ public class BangumiApi {
             card.aid = bangumi.getLong("media_id");
             card.title = bangumi.getString("title");
             card.cover = bangumi.getString("cover");
-            card.view = ToolsUtil.toWan(bangumi.getJSONObject("stat").optInt("view"));
+            card.view = StringUtil.toWan(bangumi.getJSONObject("stat").optInt("view"));
 
             cardList.add(card);
         }
