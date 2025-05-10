@@ -82,7 +82,7 @@
                 android:layout_marginTop="3dp"
                 android:alpha="0.85"
                 android:gravity="center"
-                android:text="@string/text_crash"
+                android:text="@string/desc_crash"
                 android:textSize="12sp" />
 
             <com.google.android.material.button.MaterialButton

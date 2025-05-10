@@ -140,6 +140,7 @@ public class MsgUtil {
         err(null,e);
     }
     public static void err(String desc, Throwable e) {
+        Context context = BiliTerminal.context;
         if(desc!=null) Log.e("debug-error",desc);
         e.printStackTrace();
 
@@ -148,22 +149,23 @@ public class MsgUtil {
         String e_str = e.toString();
 
         if (e instanceof IOException) {
-            showMsg("网络错误(＃°Д°)");
+            showMsg(context.getString(R.string.err_network));
             return;
         }
         else if (e instanceof JSONException) {
+            output.append(context.getString(R.string.err_json));
+
             if (SharedPreferencesUtil.getBoolean("dev_jsonerr_detailed", false)) {
                 Writer writer = new StringWriter();
                 PrintWriter printWriter = new PrintWriter(writer);
                 e.printStackTrace(printWriter);
-                showText(desc + "数据解析错误", writer.toString());
+                showText(output.toString(), writer.toString());
                 return;
             } else if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
-                output.append("数据解析错误\n建议登陆后再尝试");
+                output.append(context.getString(R.string.err_login_first));
             } else if (e_str.contains("-352") || e_str.contains("22015") || e_str.contains("65056"))
-                output.append(BiliTerminal.context.getString(R.string.err_rejected));
+                output.append(context.getString(R.string.err_rejected));
             else {
-                output.append("数据解析错误：\n");
                 output.append(e_str.replace("org.json.JSONException:", ""));
             }
         }
@@ -178,7 +180,7 @@ public class MsgUtil {
                 output.append("遇到Adapter错误：\n无需上报，除非你在某个界面经常遇到");
             }
         }
-        else if(e instanceof SQLException) output.append("数据库读写错误\n请清理空间或清除软件数据");
+        else if(e instanceof SQLException) output.append(context.getString(R.string.err_sql));
         else {
             output.append("错误：");
             output.append(e_str);

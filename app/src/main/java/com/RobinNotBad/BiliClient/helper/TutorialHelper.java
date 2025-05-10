@@ -229,7 +229,7 @@ public class TutorialHelper {
             if(SharedPreferencesUtil.getBoolean("tutorial_pager_"+ pagename, true)) {
                 Log.d("debug-tutorial", pagename);
                 textView.setVisibility(View.VISIBLE);
-                textView.setText(String.format(activity.getString(R.string.tutorial_pager), pagecount));
+                textView.setText(activity.getString(R.string.tutorial_pager, pagecount));
 
                 View viewPager = activity.findViewById(R.id.viewPager);
                 if (viewPager instanceof ViewPager) {

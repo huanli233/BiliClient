@@ -148,7 +148,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .into(replyHolder.replyAvatar);
 
             UserInfo sender = reply.sender;
-            SpannableStringBuilder name_str = new SpannableStringBuilder(reply.sender.name);
+            SpannableStringBuilder name_str = new SpannableStringBuilder();
 
             //大会员红字
             if (!TextUtils.isEmpty(sender.vip_nickname_color) && !SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.NO_VIP_COLOR, false))
@@ -156,10 +156,12 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             //up主标识
             if (sender.mid == up_mid) {
-                name_str = new SpannableStringBuilder(" UP " + reply.sender.name);
+                name_str.append(" UP ");
+                name_str.append(reply.sender.name);
                 name_str.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.round_small), Color.WHITE, Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 name_str.setSpan(new RelativeSizeSpan(0.8f), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
+            else name_str.append(sender.name);
             int last_length = name_str.length();
             name_str.append(" ").append(String.valueOf(sender.level));
             if(sender.is_senior_member == 1) name_str.append("+");
@@ -207,13 +209,20 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                 if (reply.childMsgList != null) {
                     for (Reply child : reply.childMsgList) {
-                        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(child.sender.name);
-                        stringBuilder.append("：");
-                        stringBuilder.append(child.message);
+                        SpannableStringBuilder childMsg = new SpannableStringBuilder();
+                        if (child.sender.mid == up_mid) {
+                            childMsg.append(" UP ");
+                            childMsg.append(child.sender.name);
+                            childMsg.setSpan(new RadiusBackgroundSpan(2, (int) context.getResources().getDimension(R.dimen.round_small), Color.WHITE, Color.rgb(207, 75, 95)), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                            childMsg.setSpan(new RelativeSizeSpan(0.8f), 0, 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        }
+                        else childMsg.append(child.sender.name);
+
+                        childMsg.append("：").append(child.message);
 
                         if(replyHolder.childReplies == null) return;
                         @SuppressLint("InflateParams") TextView textView = (TextView) LayoutInflater.from(context).inflate(R.layout.cell_reply_child, null);
-                        textView.setText(stringBuilder);
+                        textView.setText(childMsg);
                         replyHolder.childReplies.addView(textView);
                     }
                 }

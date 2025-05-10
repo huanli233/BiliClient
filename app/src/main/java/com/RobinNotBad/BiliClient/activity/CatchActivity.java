@@ -8,7 +8,6 @@ import android.os.Process;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
-import android.util.Pair;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,13 +15,12 @@ import androidx.annotation.Nullable;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.AppInfoApi;
+import com.RobinNotBad.BiliClient.model.ApiResult;
 import com.RobinNotBad.BiliClient.service.DownloadService;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.google.android.material.button.MaterialButton;
-
-import java.text.SimpleDateFormat;
 
 public class CatchActivity extends BaseActivity {
     private boolean openStack = false;
@@ -62,41 +60,22 @@ public class CatchActivity extends BaseActivity {
                 allow_upload = true;
 
             if(allow_upload) btn_upload.setOnClickListener(view -> {
+                btn_upload.setEnabled(false);
                 if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, -1) == -1)
                     MsgUtil.toast("我们不对未登录时遇到的问题负责\n——除非它真的经常出现且非常影响使用");
                 else {
                     CenterThreadPool.run(() -> {
-                        Pair<Integer,String> res = AppInfoApi.uploadStack(stack, this);
+                        ApiResult res = AppInfoApi.uploadStack(stack, this);
                         runOnUiThread(() -> {
-                            if(res.first >= 0) {
-                                btn_upload.setText("请带着你的报错ID：" + res.first + "\n去找开发者\n（提醒：开发者不保证会修好也不保证随时回复你）");
-                                btn_upload.setEnabled(false);
-                            }
-                            if(res.first == -114){
-                                @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            if(res.code >= 0) btn_upload.setText("请带着你的报错ID：" + res.code + "\n和你崩溃前进行的操作\n去找开发者\n（提醒：开发者不保证会修好也不保证随时回复你）");
+                            else btn_upload.setText(res.message);
 
-                                StringBuilder text = new StringBuilder();
-                                text.append("已上传，但应该没什么用\n请带着下面的信息找开发者：");
-                                text.append("\n报错类别：");
-                                for (int i = 0; i < Math.max(50,stack.length()); i++) {
-                                    char c = stack.charAt(i);
-                                    if(c == '\n') break;
-                                    text.append(c);
-                                }
-                                text.append("\n上传时间：");
-                                text.append(dateFormat.format(System.currentTimeMillis()));
-                                text.append("\n（提醒：开发者不保证会修好也不保证随时回复你）");
-
-                                btn_upload.setText(text.toString());
-                                btn_upload.setEnabled(false);
-                            }
-                            MsgUtil.toast(res.second);
+                            if (res.code == -1) btn_upload.setEnabled(true);
                         });
                     });
                 }
             });
-            else btn_upload.setOnClickListener(v ->
-                    MsgUtil.toast("此类型报错不可上传\n非特殊情况请勿打扰开发者谢谢喵"));
+            else btn_upload.setText("此类型报错不可上传\n非特殊情况请勿打扰开发者谢谢喵");
 
         } else finish();
 

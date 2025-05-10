@@ -247,7 +247,7 @@ public class SearchActivity extends InstanceActivity {
                     runOnUiThread(() -> {
                         TextView textView = findViewById(R.id.text_tutorial_pager);
                         textView.setVisibility(View.VISIBLE);
-                        textView.setText(getString(R.string.tutorial_pager).replace("NNN", "4"));
+                        textView.setText(getString(R.string.tutorial_pager,4));
                     });
                 }
             }
