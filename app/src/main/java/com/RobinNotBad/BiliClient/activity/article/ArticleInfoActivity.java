@@ -55,7 +55,7 @@ public class ArticleInfoActivity extends BaseActivity {
                 List<Fragment> fragmentList = new ArrayList<>();
                 ArticleInfoFragment articleInfoFragment = ArticleInfoFragment.newInstance(cvid);
                 fragmentList.add(articleInfoFragment);
-                replyFragment = ReplyFragment.newInstance(cvid, ReplyApi.REPLY_TYPE_ARTICLE, seek_reply, articleInfo.upInfo.mid);
+                replyFragment = ReplyFragment.newInstance(cvid, ReplyApi.REPLY_TYPE_ARTICLE, articleInfo.stats.reply, seek_reply, articleInfo.upInfo.mid);
                 replyFragment.setManager(articleInfo.upInfo);
                 fragmentList.add(replyFragment);
                 ViewPagerFragmentAdapter vpfAdapter = new ViewPagerFragmentAdapter(getSupportFragmentManager(), fragmentList);

@@ -166,7 +166,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                 }));
 
                 coin.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
-                    if (articleInfo.stats.coined < articleInfo.stats.allow_coin) {
+                    if (articleInfo.stats.coined < articleInfo.stats.coin_limit) {
                         try {
                             if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
                                 context.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~"));
@@ -224,7 +224,7 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
                         ArticleInfo viewInfo = ArticleApi.getArticleViewInfo(articleInfo.id);
                         if (viewInfo != null) {
                             articleInfo.stats = viewInfo.stats;
-                            articleInfo.stats.allow_coin = 1;
+                            articleInfo.stats.coin_limit = 1;
                             context.runOnUiThread(() -> {
                                 if (articleInfo.stats.coined != 0)
                                     coin.setImageResource(R.drawable.icon_coin_1);

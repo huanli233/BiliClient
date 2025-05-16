@@ -1,9 +1,8 @@
 package com.RobinNotBad.BiliClient.api;
 
-import android.util.Pair;
-
 import com.RobinNotBad.BiliClient.model.ApiResult;
 import com.RobinNotBad.BiliClient.model.VideoCard;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.StringUtil;
@@ -58,19 +57,26 @@ public class HistoryApi {
         return apiResult;
     }
 
-    public static Pair<Long, Integer> getWatchProgress(long aid, boolean isBangumi) throws IOException, JSONException {
-        String url = "https://api.bilibili.com/x/web-interface/history/cursor?max=" + aid + "&ps=1&type="
-                + (isBangumi ? "pgc" : "archive") + "&business=" + (isBangumi ? "pgc" : "archive");
-        JSONObject result = NetWorkUtil.getJson(url);
-        if (!result.isNull("data")) {
-            JSONObject data = result.getJSONObject("data");
-            JSONArray list = data.getJSONArray("list");
+    public static ApiResult getWatchProgress(long aid, boolean isBangumi) {
+        ApiResult apiResult = new ApiResult();
+        try {
+            String url = "https://api.bilibili.com/x/web-interface/history/cursor?max=" + aid + "&ps=1&type="
+                    + (isBangumi ? "pgc" : "archive") + "&business=" + (isBangumi ? "pgc" : "archive");
+            JSONObject result = NetWorkUtil.getJson(url);
+            apiResult.fromJson(result);
+            if (!result.isNull("data")) {
+                JSONObject data = result.getJSONObject("data");
+                JSONArray list = data.getJSONArray("list");
 
-            JSONObject video = list.optJSONObject(0);
-            JSONObject history = video.optJSONObject("history");
-            if(history == null) return new Pair<>(0L, 0);
-            return new Pair<>(history.optLong("cid", 0), video.getInt("progress"));
-        }
-        return new Pair<>(0L, 0);
+                JSONObject video = list.optJSONObject(0);
+                if(video == null) return apiResult.setOffset(-1,-1,"");
+                JSONObject history = video.optJSONObject("history");
+                if (history != null) return apiResult.setOffset(
+                        video.getInt("progress"),
+                        history.optLong("cid", 0),
+                        null);
+            }
+        } catch (Throwable e){MsgUtil.err(apiResult.message, e);}
+        return apiResult;
     }
 }

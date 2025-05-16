@@ -2,6 +2,9 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.util.Log;
 
+import com.RobinNotBad.BiliClient.model.ApiResult;
+import com.RobinNotBad.BiliClient.model.VideoInfo;
+import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
@@ -41,6 +44,24 @@ public class LikeCoinFavApi {
         JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, NetWorkUtil.webHeaders).body()).string());
         Log.e("debug-添加收藏", result.toString());
         return result.getInt("code");
+    }
+
+    public static ApiResult getVideoStats(VideoInfo videoInfo) {
+        ApiResult apiResult = new ApiResult();
+        try {
+            String url = "https://api.bilibili.com/x/web-interface/archive/relation?aid=" + videoInfo.aid;
+            JSONObject result = NetWorkUtil.getJson(url);
+            apiResult.fromJson(result);
+            JSONObject data = result.getJSONObject("data");
+            videoInfo.stats.followed = data.optBoolean("attention");
+            videoInfo.stats.liked = data.optBoolean("like");
+            videoInfo.stats.disliked = data.optBoolean("dislik");
+            videoInfo.stats.favoured = data.optBoolean("favorite");
+            videoInfo.stats.coined = data.optInt("coin");
+        } catch (Exception e){
+            MsgUtil.err(apiResult.message, e);
+        }
+        return apiResult;
     }
 
     public static boolean getLiked(long aid) throws IOException, JSONException {

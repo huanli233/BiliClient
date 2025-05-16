@@ -192,6 +192,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         mid = intent.getLongExtra("mid", 0);
 
         progress_history = intent.getIntExtra("progress", 0);
+        Logu.d("history", String.valueOf(progress_history));
 
         isLiveMode = intent.getBooleanExtra("live_mode", false);
         isOnlineVideo = video_url.contains("http");
@@ -718,7 +719,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         progress_str = StringUtil.toTime(video_all / 1000);
 
         if (SharedPreferencesUtil.getBoolean("player_from_last", true) && !isLiveMode) {
-            if (progress_history > 6 && ((video_all / 1000) - progress_history) > 6) { //阈值
+            if (progress_history > 5) { //阈值
                 mediaPlayer.seekTo(progress_history * 1000);
                 runOnUiThread(() -> MsgUtil.showMsg("已从上次的位置播放"));
             }

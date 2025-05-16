@@ -57,7 +57,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public boolean isDetail = false;
     public boolean isManager = false;
-    private long count = -1;
+    public long count = -1;
     final Context context;
     final ArrayList<Reply> replyList;
     final long oid;
@@ -120,14 +120,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     if (this.listener != null) listener.onItemClick(0);
                     writeReply.sort.setText(sorts[sort]);
                 });
-
-                CenterThreadPool.run(() -> {
-                    try {
-                        if(count == -1) count = ReplyApi.getReplyCount(oid, type);
-                        CenterThreadPool.runOnUiThread(() -> writeReply.count_label.setText("共" + count + "条评论"));
-                    } catch (Exception ignore) {
-                    }
-                });
+                writeReply.count_label.setText("共" + count + "条评论");
             }
         }
         if (holder instanceof ReplyHolder) {

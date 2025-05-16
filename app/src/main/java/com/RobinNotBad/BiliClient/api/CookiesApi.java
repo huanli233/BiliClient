@@ -96,10 +96,7 @@ public class CookiesApi {
                         .put("hexsign", o)
                         .put("context[ts]", String.valueOf(ts))
                         .put("csrf", ""),
-                "", new ArrayList<>() {{
-                    add("User-Agent");
-                    add(NetWorkUtil.USER_AGENT_WEB);
-                }}).body()).string());
+                "", NetWorkUtil.webHeaders).body()).string());
         if (result.has("data") && !result.isNull("data")) {
             JSONObject data = result.getJSONObject("data");
             return new Pair<>(data.optString("ticket"), data.optInt("created_at"));

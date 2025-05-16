@@ -96,7 +96,7 @@ public class VideoInfoActivity extends BaseActivity {
             fragmentList = new ArrayList<>(3);
             contentFragment = VideoInfoFragment.newInstance(aid, bvid);
             fragmentList.add(contentFragment);
-            replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1, seek_reply, videoInfo.staff.get(0).mid);
+            replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1, videoInfo.stats.reply, seek_reply, videoInfo.staff.get(0).mid);
             replyFragment.setManager(videoInfo.staff);
             fragmentList.add(replyFragment);
             if (SharedPreferencesUtil.getBoolean("related_enable", true)) {

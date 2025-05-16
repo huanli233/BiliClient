@@ -23,7 +23,6 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.CopyTextActivity;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
 import com.RobinNotBad.BiliClient.api.PrivateMsgApi;
-import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.model.PrivateMessage;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
@@ -38,7 +37,6 @@ import com.google.android.material.card.MaterialCardView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -184,10 +182,7 @@ public class PrivateMsgAdapter extends RecyclerView.Adapter<PrivateMsgAdapter.Vi
                     holder.videoCard.setOnClickListener(view -> CenterThreadPool.run(() -> {
                         try {
                             long aid = msg.content.getLong("id");
-                            String bvid = VideoInfoApi.getJsonByAid(aid).getString("bvid");
-                            TerminalContext.getInstance().enterVideoDetailPage(context, aid, bvid, "video");
-                        } catch (IOException err) {
-                            Log.e("", err.toString());
+                            TerminalContext.getInstance().enterVideoDetailPage(context, aid, "", "video");
                         } catch (JSONException err) {
                             Log.e("", err.toString());
                         }

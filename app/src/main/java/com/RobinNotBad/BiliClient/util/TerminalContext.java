@@ -14,7 +14,6 @@ import com.RobinNotBad.BiliClient.activity.live.LiveInfoActivity;
 import com.RobinNotBad.BiliClient.activity.video.info.VideoInfoActivity;
 import com.RobinNotBad.BiliClient.api.*;
 import com.RobinNotBad.BiliClient.model.*;
-import org.json.JSONObject;
 
 import java.util.concurrent.Future;
 
@@ -84,43 +83,33 @@ public class TerminalContext {
     }
 
     private Result<VideoInfo> fetchVideoInfoByAid(long aid, boolean saveToCache) {
-        JSONObject object;
+        VideoInfo videoInfo;
         try {
-            object = VideoInfoApi.getJsonByAid(aid);
-        } catch (Exception t) {
-            return Result.failure(t);
-        }
-        if (object != null) {
-            try {
-                VideoInfo info = VideoInfoApi.getInfoByJson(object);
+            videoInfo = VideoInfoApi.getVideoInfo(aid);
+            if (videoInfo != null) {
                 if (saveToCache) {
-                    contentLruCache.put(ContentType.Video.getTypeCode() + "_" + aid, info);
+                    contentLruCache.put(ContentType.Video.getTypeCode() + "_" + aid, videoInfo);
                 }
-                return Result.success(info);
-            } catch (Exception e) {
-                return Result.failure(e);
+                return Result.success(videoInfo);
             }
+        } catch (Exception e) {
+            return Result.failure(e);
         }
         return Result.failure(new IllegalTerminalStateException("video object is null"));
     }
 
     private Result<VideoInfo> fetchVideoInfoByBvId(String bvid, boolean saveToCache) {
-        JSONObject object;
+        VideoInfo videoInfo;
         try {
-            object = VideoInfoApi.getJsonByBvid(bvid);
-        } catch (Exception t) {
-            return Result.failure(t);
-        }
-        if (object != null) {
-            try {
-                VideoInfo info = VideoInfoApi.getInfoByJson(object);
+            videoInfo = VideoInfoApi.getVideoInfo(bvid);
+            if (videoInfo != null) {
                 if (saveToCache) {
-                    contentLruCache.put(ContentType.Video.getTypeCode() + "_" + bvid, info);
+                    contentLruCache.put(ContentType.Video.getTypeCode() + "_" + bvid, videoInfo);
                 }
-                return Result.success(info);
-            } catch (Exception t) {
-                return Result.failure(t);
+                return Result.success(videoInfo);
             }
+        } catch (Exception e) {
+            return Result.failure(e);
         }
         return Result.failure(new IllegalTerminalStateException("video object is null"));
     }

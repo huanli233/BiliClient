@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
@@ -18,6 +17,7 @@ import com.RobinNotBad.BiliClient.activity.DownloadActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
+import com.RobinNotBad.BiliClient.model.ApiResult;
 import com.RobinNotBad.BiliClient.model.PlayerData;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.Logu;
@@ -51,9 +51,9 @@ public class JumpToPlayerActivity extends BaseActivity {
                         HistoryApi.reportHistory(playerData.aid, playerData.cid, playerData.mid, progress / 1000);
                     }
                     catch (Exception e) {MsgUtil.err("进度上报：", e);}
+                    finish();
                 });
             }
-            finish();
         }
     });
 
@@ -81,17 +81,9 @@ public class JumpToPlayerActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     private void requestVideo() {
         CenterThreadPool.run(() -> {
-            if (download == 0 && playerData.progress == -1) {
-                try {
-                    Pair<Long, Integer> progressPair = HistoryApi.getWatchProgress(playerData.aid, playerData.isBangumi());
-                    playerData.progress = progressPair.first == playerData.cid ? progressPair.second : 0;
-                } catch (JSONException e) {
-                    MsgUtil.err("历史记录获取错误：", e);
-                    playerData.progress = 0;
-                } catch (IOException e) {
-                    setClickExit("网络错误！\n请检查你的网络连接是否正常");
-                }
-            }
+                ApiResult progressPair = HistoryApi.getWatchProgress(playerData.aid, playerData.isBangumi());
+                playerData.progress = progressPair.offset == playerData.cid ? (int) progressPair.timestamp : 0;
+                Logu.d("history", playerData.progress + "," + progressPair.timestamp);
 
             try {
                 if(playerData.isBangumi()) PlayerApi.getBangumi(playerData);
@@ -101,7 +93,7 @@ public class JumpToPlayerActivity extends BaseActivity {
             } catch (IOException e) {
                 setClickExit("网络错误！\n请检查你的网络连接是否正常");
             } catch (JSONException e) {
-                setClickExit("视频获取失败！\n可能的原因：\n1.本视频仅大会员可播放\n2.视频获取接口失效\n\n" + e.getMessage());
+                setClickExit("视频获取失败！\n可能的原因：\n1.本视频仅大会员可播放\n2.视频获取接口失效\n\n清除应用数据也许可以解决" + e.getMessage());
                 e.printStackTrace();
             } catch (ActivityNotFoundException e) {
                 setClickExit("跳转失败！\n请安装对应的播放器\n或在设置中选择正确的播放器\n或将哔哩终端和播放器同时更新到最新版本");

@@ -16,7 +16,6 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.DisplayMetrics;
-import android.util.Pair;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +50,7 @@ import com.RobinNotBad.BiliClient.api.LikeCoinFavApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.api.WatchLaterApi;
+import com.RobinNotBad.BiliClient.model.ApiResult;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
@@ -89,8 +89,6 @@ public class VideoInfoFragment extends BaseFragment {
     private TextView description;
     private TextView tagsText;
     private ImageView fav;
-    private Pair<Long, Integer> progressPair;
-    private boolean play_clicked = false;
 
     final int RESULT_ADDED = 1;
     final int RESULT_DELETED = -1;
@@ -254,7 +252,7 @@ public class VideoInfoFragment extends BaseFragment {
             CenterThreadPool.run(() -> {
                 try {
                     SpannableStringBuilder tags_spannable
-                            = getDescSpan(VideoInfoApi.getTagsByAid(videoInfo.aid));
+                            = getDescSpan(VideoInfoApi.getTags(videoInfo.aid));
 
                     runOnUiThread(() -> {
                         tagsText.setMovementMethod(LinkMovementMethod.getInstance());
@@ -278,37 +276,24 @@ public class VideoInfoFragment extends BaseFragment {
         else tagsText.setVisibility(View.GONE);
 
         //点赞投币收藏
-        CenterThreadPool.run(() -> {
-            try {
-                videoInfo.stats.coined = LikeCoinFavApi.getCoined(videoInfo.aid);
-                videoInfo.stats.liked = LikeCoinFavApi.getLiked(videoInfo.aid);
-                videoInfo.stats.favoured = LikeCoinFavApi.getFavoured(videoInfo.aid);
-                videoInfo.stats.allow_coin = (videoInfo.copyright == VideoInfo.COPYRIGHT_REPRINT) ? 1 : 2;
-                runOnUiThread(() -> {
-                    if (videoInfo.stats.coined != 0)
-                        coin.setImageResource(R.drawable.icon_coin_1);
-                    if (videoInfo.stats.liked)
-                        like.setImageResource(R.drawable.icon_like_1);
-                    if (videoInfo.stats.favoured)
-                        fav.setImageResource(R.drawable.icon_fav_1);
-                });
-            } catch (Exception e) {
-                MsgUtil.err(e);
-            }
-        });
+        if (videoInfo.stats.coined != 0)
+            coin.setImageResource(R.drawable.icon_coin_1);
+        if (videoInfo.stats.liked)
+            like.setImageResource(R.drawable.icon_like_1);
+        if (videoInfo.stats.favoured)
+            fav.setImageResource(R.drawable.icon_fav_1);
 
         //历史上报
         CenterThreadPool.run(()-> {
             try {
-                progressPair = HistoryApi.getWatchProgress(videoInfo.aid, false);
-                if (progressPair.first == null || !videoInfo.cids.contains(progressPair.first))
-                    progressPair = new Pair<>(videoInfo.cids.get(0), 0);
+                ApiResult progressResult = HistoryApi.getWatchProgress(videoInfo.aid, false);
+                if (!videoInfo.cids.contains(progressResult.offset))
+                    progressResult.setOffset(0,videoInfo.cids.get(0),null);
 
-                HistoryApi.reportHistory(videoInfo.aid, progressPair.first, videoInfo.staff.get(0).mid, progressPair.second);
+                HistoryApi.reportHistory(videoInfo.aid, progressResult.offset, videoInfo.staff.get(0).mid, progressResult.timestamp);
                 //历史记录接口，如果没有记录过该视频，会返回历史记录的最后一项，神奇吧
             } catch (Exception e) {
                 MsgUtil.err(e);
-                progressPair = new Pair<>(0L, 0);
             }
 
             onFinishLoad();
@@ -417,7 +402,7 @@ public class VideoInfoFragment extends BaseFragment {
                 MsgUtil.showMsg("还没有登录喵~");
                 return;
             }
-            if (videoInfo.stats.coined < videoInfo.stats.allow_coin) {
+            if (videoInfo.stats.coined < videoInfo.stats.coin_limit) {
                 try {
                     int result = LikeCoinFavApi.coin(videoInfo.aid, 1);
                     if (result == 0) {
@@ -572,17 +557,14 @@ public class VideoInfoFragment extends BaseFragment {
         if (videoInfo.pagenames.size() > 1) {
             Intent intent = new Intent()
                     .setClass(requireContext(), MultiPageActivity.class)
-                    .putExtra("progress_cid", progressPair.first)
-                    .putExtra("progress", (play_clicked ? -1 : progressPair.second))
                     .putExtra("aid", videoInfo.aid)
                     .putExtra("bvid", videoInfo.bvid);
             //这里也会传过去，如果后面选择当页就不再获取直接传，选择其他页就传-1剩下的交给解析页
             startActivity(intent);
         } else {
-            PlayerApi.startGettingUrl(videoInfo, 0, (progressPair == null ? 0 : play_clicked ? -1 : progressPair.second));
+            PlayerApi.startGettingUrl(videoInfo, 0, -1);
             //避免重复获取的同时保证播放进度是新的，如果是-1会在解析页里再获取一次
         }
-        play_clicked = true;
     }
 
     private void downloadClick(){

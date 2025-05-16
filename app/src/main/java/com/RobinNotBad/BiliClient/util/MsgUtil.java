@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.SQLException;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -144,7 +145,7 @@ public class MsgUtil {
         if(desc!=null) Log.e("debug-error",desc);
         e.printStackTrace();
 
-        StringBuilder output = new StringBuilder(desc == null ? "" : desc);
+        StringBuilder output = new StringBuilder(TextUtils.isEmpty(desc) ? "" : desc + "\n");
 
         String e_str = e.toString();
 

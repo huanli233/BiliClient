@@ -38,6 +38,7 @@ public class ReplyFragment extends RefreshListFragment {
     protected long aid, mid;
     protected int sort = 3;
     protected int type;
+    protected int count;
     protected ArrayList<Reply> replyList;
     protected ReplyAdapter replyAdapter;
     public int replyType = ReplyApi.REPLY_TYPE_VIDEO;
@@ -86,10 +87,11 @@ public class ReplyFragment extends RefreshListFragment {
         return fragment;
     }
 
-    public static ReplyFragment newInstance(long aid, int type, long seek_rpid, long up_mid) {
+    public static ReplyFragment newInstance(long aid, int type, int count, long seek_rpid, long up_mid) {
         ReplyFragment fragment = new ReplyFragment();
         Bundle args = new Bundle();
         args.putLong("aid", aid);
+        args.putInt("count", count);
         args.putInt("type", type);
         args.putLong("seek", seek_rpid);
         args.putLong("mid", up_mid);
@@ -101,8 +103,9 @@ public class ReplyFragment extends RefreshListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            aid = getArguments().getLong("aid");
-            type = getArguments().getInt("type");
+            aid = getArguments().getLong("aid",0);
+            count = getArguments().getInt("count",0);
+            type = getArguments().getInt("type",0);
             replyType = type;
             dontload = getArguments().getBoolean("dontload", false);
             seek = getArguments().getLong("seek", -1);
@@ -131,29 +134,8 @@ public class ReplyFragment extends RefreshListFragment {
         Log.e("debug-av号", String.valueOf(aid));
 
         replyList = new ArrayList<>();
-        if (!dontload) {
-            CenterThreadPool.run(() -> {
-                try {
-                    Pair<Integer, String> pageState = ReplyApi.getRepliesLazy(aid, seek, pagination, type, sort, replyList);
-                    int result = pageState.first;
-                    this.pagination = pageState.second;
-                    setRefreshing(false);
-                    if (result != -1 && isAdded()) {
-                        replyAdapter = createReplyAdapter();
-                        replyAdapter.isManager = isManager;
-                        setOnSortSwitch();
-                        setAdapter(replyAdapter);
 
-                        if (result == 1) {
-                            Log.e("debug", "到底了");
-                            setBottom(true);
-                        }
-                    }
-                } catch (Exception e) {
-                    setRefreshing(false);
-                }
-            });
-        }
+        if (!dontload) refresh(aid);
     }
     public void setManager(Object source) {
         if(SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) return;
@@ -238,7 +220,7 @@ public class ReplyFragment extends RefreshListFragment {
         CenterThreadPool.run(() -> {
             try {
                 List<Reply> list = new ArrayList<>();
-                Pair<Integer, String> pageState = ReplyApi.getRepliesLazy(aid, 0, pagination, type, sort, list);
+                Pair<Integer, String> pageState = ReplyApi.getRepliesLazy(aid, seek, pagination, type, sort, list);
                 int result = pageState.first;
                 this.pagination = pageState.second;
                 setRefreshing(false);
@@ -250,6 +232,9 @@ public class ReplyFragment extends RefreshListFragment {
                         replyList.addAll(list);
                         if (replyAdapter == null) {
                             replyAdapter = createReplyAdapter();
+                            replyAdapter.count = count;
+                            replyAdapter.isManager = isManager;
+                            setOnSortSwitch();
                             setAdapter(replyAdapter);
                         } else {
                             replyAdapter.notifyDataSetChanged();

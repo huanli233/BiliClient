@@ -26,26 +26,32 @@ import java.util.List;
 
 
 public class VideoInfoApi {
-    public static JSONObject getJsonByBvid(String bvid) throws IOException, JSONException {  //通过bvid获取json
+    public static VideoInfo getVideoInfo(String bvid) throws IOException, JSONException {  //通过bvid获取json
         String url = "https://api.bilibili.com/x/web-interface/view?bvid=" + bvid;
         JSONObject result = NetWorkUtil.getJson(url);
-        return result.has("data") ? result.getJSONObject("data") : null;
+        if(!result.has("data")) return null;
+        VideoInfo videoInfo = getInfoByJson(result.getJSONObject("data"));
+        LikeCoinFavApi.getVideoStats(videoInfo);
+        return videoInfo;
     }
 
-    public static JSONObject getJsonByAid(long aid) throws IOException, JSONException {  //通过aid获取json
+    public static VideoInfo getVideoInfo(long aid) throws IOException, JSONException {  //通过aid获取json
         String url = "https://api.bilibili.com/x/web-interface/view?aid=" + aid;
         JSONObject result = NetWorkUtil.getJson(url);
-        return result.has("data") ? result.getJSONObject("data") : null;
+        if(!result.has("data")) return null;
+        VideoInfo videoInfo = getInfoByJson(result.getJSONObject("data"));
+        LikeCoinFavApi.getVideoStats(videoInfo);
+        return videoInfo;
     }
 
 
-    public static String getTagsByBvid(String bvid) throws IOException, JSONException {  //通过bvid获取tag
+    public static String getTags(String bvid) throws IOException, JSONException {  //通过bvid获取tag
         String url = "https://api.bilibili.com/x/tag/archive/tags?bvid=" + bvid;
         JSONObject result = NetWorkUtil.getJson(url);
         return analyzeTags(result.getJSONArray("data"));
     }
 
-    public static String getTagsByAid(long aid) throws IOException, JSONException {  //通过aid获取tag
+    public static String getTags(long aid) throws IOException, JSONException {  //通过aid获取tag
         String url = "https://api.bilibili.com/x/tag/archive/tags?aid=" + aid;
         JSONObject result = NetWorkUtil.getJson(url);
         return analyzeTags(result.getJSONArray("data"));
@@ -146,6 +152,9 @@ public class VideoInfoApi {
         videoInfo.duration = StringUtil.toTime(data.getInt("duration"));
         Logu.v("视频时长", videoInfo.duration);
 
+        if (data.has("copyright") && !data.isNull("copyright"))
+            videoInfo.copyright = data.getInt("copyright");
+
         JSONObject stat = data.getJSONObject("stat");
         Stats stats = new Stats();
         stats.view = stat.getInt("view");
@@ -154,6 +163,7 @@ public class VideoInfoApi {
         stats.reply = stat.getInt("reply");
         stats.danmaku = stat.getInt("danmaku");
         stats.favorite = stat.optInt("favorite", -1);
+        stats.coin_limit = (videoInfo.copyright == VideoInfo.COPYRIGHT_REPRINT) ? 1 : 2;
         videoInfo.stats = stats;
 
         JSONArray pages = data.optJSONArray("pages");
@@ -227,9 +237,6 @@ public class VideoInfoApi {
             e.printStackTrace();
             videoInfo.epid = -1;
         }
-
-        if (data.has("copyright") && !data.isNull("copyright"))
-            videoInfo.copyright = data.getInt("copyright");
 
         JSONObject ugc_season = data.optJSONObject("ugc_season");
         if (ugc_season != null) {
