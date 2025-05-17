@@ -93,8 +93,10 @@ public class VideoInfoActivity extends BaseActivity {
 
         setPageName("视频详情");
         TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).observe(this, (result) -> result.onSuccess((videoInfo) -> {
+            aid = videoInfo.aid;
+            bvid = videoInfo.bvid;
             fragmentList = new ArrayList<>(3);
-            contentFragment = VideoInfoFragment.newInstance(aid, bvid);
+            contentFragment = VideoInfoFragment.newInstance(videoInfo.aid, bvid);
             fragmentList.add(contentFragment);
             replyFragment = ReplyFragment.newInstance(videoInfo.aid, 1, videoInfo.stats.reply, seek_reply, videoInfo.staff.get(0).mid);
             replyFragment.setManager(videoInfo.staff);

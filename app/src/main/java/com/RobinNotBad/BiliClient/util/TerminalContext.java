@@ -85,6 +85,7 @@ public class TerminalContext {
     private Result<VideoInfo> fetchVideoInfoByAid(long aid, boolean saveToCache) {
         VideoInfo videoInfo;
         try {
+            Logu.v("aid");
             videoInfo = VideoInfoApi.getVideoInfo(aid);
             if (videoInfo != null) {
                 if (saveToCache) {
@@ -101,10 +102,11 @@ public class TerminalContext {
     private Result<VideoInfo> fetchVideoInfoByBvId(String bvid, boolean saveToCache) {
         VideoInfo videoInfo;
         try {
+            Logu.v("bvid");
             videoInfo = VideoInfoApi.getVideoInfo(bvid);
             if (videoInfo != null) {
                 if (saveToCache) {
-                    contentLruCache.put(ContentType.Video.getTypeCode() + "_" + bvid, videoInfo);
+                    contentLruCache.put(ContentType.Video.getTypeCode() + "_" + videoInfo.aid, videoInfo);
                 }
                 return Result.success(videoInfo);
             }
@@ -115,7 +117,7 @@ public class TerminalContext {
     }
 
     private Result<VideoInfo> fetchVideoInfoByAidOrBvId(long aid, String bvid, boolean saveToCache) {
-        if (TextUtils.isEmpty(bvid)) {
+        if (aid != 0) {
             return fetchVideoInfoByAid(aid, saveToCache);
         } else {
             return fetchVideoInfoByBvId(bvid, saveToCache);
@@ -239,7 +241,7 @@ public class TerminalContext {
     // ---------------------------- 数据源上下文 ----------------------------------------
     public LiveData<Result<VideoInfo>> getVideoInfoByAidOrBvId(long aid, String bvid) {
         String key;
-        if (TextUtils.isEmpty(bvid)) {
+        if (aid != 0) {
             key = ContentType.Video.getTypeCode() + "_" + aid;
         } else {
             key = ContentType.Video.getTypeCode() + "_" + bvid;

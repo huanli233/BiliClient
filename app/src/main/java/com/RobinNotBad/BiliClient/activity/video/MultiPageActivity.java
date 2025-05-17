@@ -11,6 +11,7 @@ import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.adapter.video.PageChooseAdapter;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
+import com.RobinNotBad.BiliClient.model.PlayerData;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
 import com.RobinNotBad.BiliClient.util.FileUtil;
@@ -23,8 +24,8 @@ import java.io.File;
 //2023-07-17
 
 public class MultiPageActivity extends BaseActivity {
-    boolean play_clicked;
     VideoInfo videoInfo;
+    PlayerData playerData;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -38,9 +39,9 @@ public class MultiPageActivity extends BaseActivity {
         textView.setText("请选择分页");
 
         Intent intent = getIntent();
-        long aid = intent.getLongExtra("aid", 0);
-        String bvid = intent.getStringExtra("bvid");
-        TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid,bvid).observe(this, result -> result.onSuccess((videoInfo -> {
+        playerData = intent.getParcelableExtra("data");
+
+        TerminalContext.getInstance().getVideoInfoByAidOrBvId(playerData.aid, "").observe(this, result -> result.onSuccess((videoInfo -> {
             this.videoInfo = videoInfo;
             PageChooseAdapter adapter = new PageChooseAdapter(this, videoInfo.pagenames);
 
@@ -64,8 +65,15 @@ public class MultiPageActivity extends BaseActivity {
                 });
             } else {        //普通播放模式
                 adapter.setOnItemClickListener(position -> {
-                    PlayerApi.startGettingUrl(videoInfo, position, -1);
-                    play_clicked = true;
+                    long cid_curr = videoInfo.cids.get(position);
+                    if(cid_curr != playerData.cidHistory) {
+                        playerData = videoInfo.toPlayerData(position);
+                        playerData.cidHistory = cid_curr;
+                        playerData.timeStamp = 0;
+                    }
+
+                    PlayerApi.startGettingUrl(playerData);
+                    playerData.timeStamp = 0;
                 });
             }
 

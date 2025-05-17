@@ -677,12 +677,12 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     @Override
     public void onPrepared(IMediaPlayer mediaPlayer) {
         if(destroyed){
-            mediaPlayer.release();
+            ijkPlayer.release();
             return;
         }
 
         isPrepared = true;
-        video_all = (int) mediaPlayer.getDuration();
+        video_all = (int) ijkPlayer.getDuration();
 
         changeVideoSize();
 
@@ -720,7 +720,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         if (SharedPreferencesUtil.getBoolean("player_from_last", true) && !isLiveMode) {
             if (progress_history > 5) { //阈值
-                mediaPlayer.seekTo(progress_history * 1000);
+                ijkPlayer.seekTo(progress_history);
+                Logu.d("进度跳转", String.valueOf(progress_history));
                 runOnUiThread(() -> MsgUtil.showMsg("已从上次的位置播放"));
             }
         }
@@ -737,7 +738,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         progressChange();
         onlineChange();
 
-        mediaPlayer.start();
+        ijkPlayer.start();
 
         btn_control.setOnClickListener(view -> controlVideo());
         btn_subtitle.setOnClickListener(view -> CenterThreadPool.run(() -> downSubtitle(true)));
@@ -1626,9 +1627,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     @Override
     public void finish() {
         if(isPlaying) playerPause();
-        if(video_now!=0) {
+        if(ijkPlayer != null) {
             Intent result = new Intent();
-            result.putExtra("progress", video_now);
+            result.putExtra("progress", (int) ijkPlayer.getCurrentPosition());
+            Logu.d("进度回传", String.valueOf(ijkPlayer.getCurrentPosition()));
             setResult(RESULT_OK, result);
         }
         else setResult(RESULT_CANCELED);

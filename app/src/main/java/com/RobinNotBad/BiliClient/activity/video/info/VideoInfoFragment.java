@@ -50,7 +50,7 @@ import com.RobinNotBad.BiliClient.api.LikeCoinFavApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.api.VideoInfoApi;
 import com.RobinNotBad.BiliClient.api.WatchLaterApi;
-import com.RobinNotBad.BiliClient.model.ApiResult;
+import com.RobinNotBad.BiliClient.model.PlayerData;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.ui.widget.RadiusBackgroundSpan;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
@@ -83,6 +83,7 @@ import java.util.regex.Pattern;
 public class VideoInfoFragment extends BaseFragment {
 
     private VideoInfo videoInfo;
+    private PlayerData playerData;
     private long aid;
     private String bvid;
 
@@ -286,16 +287,13 @@ public class VideoInfoFragment extends BaseFragment {
         //历史上报
         CenterThreadPool.run(()-> {
             try {
-                ApiResult progressResult = HistoryApi.getWatchProgress(videoInfo.aid, false);
-                if (!videoInfo.cids.contains(progressResult.offset))
-                    progressResult.setOffset(0,videoInfo.cids.get(0),null);
-
-                HistoryApi.reportHistory(videoInfo.aid, progressResult.offset, videoInfo.staff.get(0).mid, progressResult.timestamp);
-                //历史记录接口，如果没有记录过该视频，会返回历史记录的最后一项，神奇吧
+                playerData = videoInfo.toPlayerData(0);
+                PlayerApi.getVideo(playerData, false);
+                if(playerData == null) return;
+                HistoryApi.reportHistory(videoInfo.aid, playerData.cidHistory, playerData.progress);
             } catch (Exception e) {
                 MsgUtil.err(e);
             }
-
             onFinishLoad();
         });
 
@@ -554,17 +552,10 @@ public class VideoInfoFragment extends BaseFragment {
         Glide.get(getAppContext()).clearMemory();
         //在播放前清除内存缓存，因为手表内存太小了，播放完回来经常把Activity全释放掉
         //...经过测试，还是会释放，但会好很多
-        if (videoInfo.pagenames.size() > 1) {
-            Intent intent = new Intent()
-                    .setClass(requireContext(), MultiPageActivity.class)
-                    .putExtra("aid", videoInfo.aid)
-                    .putExtra("bvid", videoInfo.bvid);
-            //这里也会传过去，如果后面选择当页就不再获取直接传，选择其他页就传-1剩下的交给解析页
-            startActivity(intent);
-        } else {
-            PlayerApi.startGettingUrl(videoInfo, 0, -1);
-            //避免重复获取的同时保证播放进度是新的，如果是-1会在解析页里再获取一次
-        }
+        if (videoInfo.pagenames.size() == 1) PlayerApi.startGettingUrl(playerData);
+        else startActivity(new Intent(requireContext(), MultiPageActivity.class).putExtra("data", playerData));
+
+        playerData.timeStamp = 0;
     }
 
     private void downloadClick(){

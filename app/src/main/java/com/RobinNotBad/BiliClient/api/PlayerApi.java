@@ -35,11 +35,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerApi {
-    public static void startGettingUrl(VideoInfo videoInfo, int page, int progress) {
+    public static void startGettingUrl(PlayerData playerData) {
         Context context = BiliTerminal.context;
-
-        PlayerData playerData = videoInfo.toPlayerData(page);
-        playerData.progress = progress;
 
         Intent intent = new Intent()
                 .setClass(context, JumpToPlayerActivity.class)
@@ -81,6 +78,12 @@ public class PlayerApi {
      * @param download 是否下载
      */
     public static void getVideo(PlayerData playerData, boolean download) throws JSONException, IOException {
+        //如果上一次获取在十分钟内就无需再次获取了
+        if (System.currentTimeMillis() - playerData.timeStamp < 600000) return;
+
+        playerData.timeStamp = System.currentTimeMillis();
+
+        playerData.danmakuUrl = "https://comment.bilibili.com/" + playerData.cid + ".xml";
 
         boolean html5 = !download && SharedPreferencesUtil.getString("player", "").equals("mtvPlayer");
         //html5方式现在已经仅对小电视播放器保留了
@@ -103,8 +106,8 @@ public class PlayerApi {
         JSONArray durl = data.getJSONArray("durl");
         JSONObject video_url = durl.getJSONObject(0);
         playerData.videoUrl = video_url.getString("url");
-
-        playerData.danmakuUrl = "https://comment.bilibili.com/" + playerData.cid + ".xml";
+        playerData.cidHistory = data.optLong("last_play_cid", 0);
+        playerData.progress = data.optInt("last_play_time");
 
         JSONArray accept_description = data.getJSONArray("accept_description");
         JSONArray accept_quality = data.getJSONArray("accept_quality");
@@ -118,6 +121,7 @@ public class PlayerApi {
         Logu.d("qn_val", Arrays.toString(qnValueList));
         playerData.qnStrList = qnStrList;
         playerData.qnValueList = qnValueList;
+
     }
 
     /**

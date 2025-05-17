@@ -38,7 +38,7 @@ public class LiveApi {
                 .put("page", page)
                 .put("page_size", 10)
                 .put("platform", "web");
-        JSONObject result = NetWorkUtil.getJson(url);
+        JSONObject result = NetWorkUtil.getJson(ConfInfoApi.signWBI(url));
         if (result.getInt("code") != 0) throw new JSONException(result.getString("message"));
 
         JSONObject data = result.optJSONObject("data");

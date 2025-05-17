@@ -48,7 +48,7 @@ public class JumpToPlayerActivity extends BaseActivity {
 
                 CenterThreadPool.run(() -> {
                     if (playerData.mid != 0 && playerData.aid != 0) try {
-                        HistoryApi.reportHistory(playerData.aid, playerData.cid, playerData.mid, progress / 1000);
+                        HistoryApi.reportHistory(playerData.aid, playerData.cid, progress / 1000);
                     }
                     catch (Exception e) {MsgUtil.err("进度上报：", e);}
                     finish();
@@ -81,14 +81,12 @@ public class JumpToPlayerActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     private void requestVideo() {
         CenterThreadPool.run(() -> {
-                ApiResult progressPair = HistoryApi.getWatchProgress(playerData.aid, playerData.isBangumi());
-                playerData.progress = progressPair.offset == playerData.cid ? (int) progressPair.timestamp : 0;
-                Logu.d("history", playerData.progress + "," + progressPair.timestamp);
 
             try {
                 if(playerData.isBangumi()) PlayerApi.getBangumi(playerData);
                 else PlayerApi.getVideo(playerData, download != 0);
 
+                Logu.d("history", String.valueOf(playerData.progress));
                 jump();
             } catch (IOException e) {
                 setClickExit("网络错误！\n请检查你的网络连接是否正常");

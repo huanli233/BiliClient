@@ -21,12 +21,12 @@ public class PlayerData implements Parcelable {
     public long cid;
     public long mid;
     public int progress = -1;
+    public long cidHistory = 0;
     public int type = 0;
+    public long timeStamp;
 
     public PlayerData() {}
-    public PlayerData(int type) {
-        this.type = type;
-    }
+    public PlayerData(int type) {this.type = type;}
 
     protected PlayerData(Parcel in) {
         title = in.readString();
@@ -40,9 +40,10 @@ public class PlayerData implements Parcelable {
         mid = in.readLong();
         progress = in.readInt();
         type = in.readInt();
+        timeStamp = in.readLong();
     }
 
-    public static final Creator<PlayerData> CREATOR = new Creator<PlayerData>() {
+    public static final Creator<PlayerData> CREATOR = new Creator<>() {
         @Override
         public PlayerData createFromParcel(Parcel in) {
             return new PlayerData(in);
@@ -72,6 +73,7 @@ public class PlayerData implements Parcelable {
         dest.writeLong(mid);
         dest.writeInt(progress);
         dest.writeInt(type);
+        dest.writeLong(timeStamp);
     }
 
     public boolean isVideo(){

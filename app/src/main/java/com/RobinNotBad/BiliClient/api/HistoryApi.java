@@ -15,9 +15,12 @@ import java.io.IOException;
 import java.util.List;
 
 public class HistoryApi {
-    public static void reportHistory(long aid, long cid, long mid, long progress) throws IOException {
-        String url = "https://api.bilibili.com/x/report/web/heartbeat";
-        String per = "aid=" + aid + "&cid=" + cid + "&mid=" + mid + "&csrf=" + SharedPreferencesUtil.getString("csrf", "") + "&played_time=" + progress + "&realtime=0&start_ts=" + (System.currentTimeMillis() / 1000) + "&type=3&dt=2&play_type=1";
+    public static void reportHistory(long aid, long cid, long progress) throws IOException {
+        String url = "https://api.bilibili.com/x/v2/history/report";
+        String per = "aid=" + aid + "&cid=" + cid
+                + "&progress=" + (progress > 0 ? progress : "")
+                + "&platform=pc"
+                + "&csrf=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.csrf,"");
         NetWorkUtil.post(url, per, NetWorkUtil.webHeaders);
     }
 
@@ -57,6 +60,10 @@ public class HistoryApi {
         return apiResult;
     }
 
+    /*
+     * 单个视频的历史记录可以直接从取流api里找到，无需再次请求，同时此api无法使用
+     */
+    @Deprecated
     public static ApiResult getWatchProgress(long aid, boolean isBangumi) {
         ApiResult apiResult = new ApiResult();
         try {
