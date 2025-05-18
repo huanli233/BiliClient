@@ -48,6 +48,7 @@ public class LikeCoinFavApi {
 
     public static ApiResult getVideoStats(VideoInfo videoInfo) {
         ApiResult apiResult = new ApiResult();
+        if(SharedPreferencesUtil.getLong("mid",0) == 0) return apiResult;
         try {
             String url = "https://api.bilibili.com/x/web-interface/archive/relation?aid=" + videoInfo.aid;
             JSONObject result = NetWorkUtil.getJson(url);
@@ -62,24 +63,6 @@ public class LikeCoinFavApi {
             MsgUtil.err(apiResult.message, e);
         }
         return apiResult;
-    }
-
-    public static boolean getLiked(long aid) throws IOException, JSONException {
-        String url = "https://api.bilibili.com/x/web-interface/archive/has/like?aid=" + aid;
-        JSONObject result = NetWorkUtil.getJson(url);
-        return (result.getInt("code") == 0 && result.getInt("data") == 1);
-    }
-
-    public static int getCoined(long aid) throws IOException, JSONException {
-        String url = "https://api.bilibili.com/x/web-interface/archive/coins?aid=" + aid;
-        JSONObject result = NetWorkUtil.getJson(url);
-        return (result.getInt("code") == 0 ? result.getJSONObject("data").getInt("multiply") : 0);
-    }
-
-    public static boolean getFavoured(long aid) throws IOException, JSONException {
-        String url = "https://api.bilibili.com/x/v2/fav/video/favoured?aid=" + aid;
-        JSONObject result = NetWorkUtil.getJson(url);
-        return (result.getInt("code") == 0 && result.getJSONObject("data").getBoolean("favoured"));
     }
 
 }

@@ -5,6 +5,7 @@ import android.util.Pair;
 
 import com.RobinNotBad.BiliClient.util.Cookies;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -87,7 +88,7 @@ public class CookiesApi {
      * @throws JSONException
      */
     public static Pair<String, Integer> genBiliTicket() throws IOException, NoSuchAlgorithmException, InvalidKeyException, JSONException {
-        int ts = (int) (System.currentTimeMillis() / 1000);
+        long ts = System.currentTimeMillis() / 1000;
         String o = hmacSha256("XgwSnGZ1p", "ts" + ts);
         String url = "https://api.bilibili.com/bapis/bilibili.api.ticket.v1.Ticket/GenWebTicket";
         JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.postJson(url + new NetWorkUtil.FormData()
@@ -95,11 +96,8 @@ public class CookiesApi {
                         .put("key_id", "ec02")
                         .put("hexsign", o)
                         .put("context[ts]", String.valueOf(ts))
-                        .put("csrf", ""),
-                "", new ArrayList<>() {{
-                    add("User-Agent");
-                    add(NetWorkUtil.USER_AGENT_WEB);
-                }}).body()).string());
+                        .put("csrf", SharedPreferencesUtil.getString("csrf","")),
+                "", NetWorkUtil.webHeaders).body()).string());
         if (result.has("data") && !result.isNull("data")) {
             JSONObject data = result.getJSONObject("data");
             return new Pair<>(data.optString("ticket"), data.optInt("created_at"));
@@ -135,7 +133,7 @@ public class CookiesApi {
         Cookies cookies = NetWorkUtil.getCookies();
 
         // bili_ticket
-        if (!cookies.containsKey("bili_ticket") || cookies.get("bili_ticket").equals("null") || !cookies.containsKey("bili_ticket_expires") || parseInt(cookies.get("bili_ticket_expires")) == null || parseInt(cookies.get("bili_ticket_expires")) < (int) (System.currentTimeMillis() / 1000)) {
+        if (!cookies.containsKey("bili_ticket") || cookies.get("bili_ticket").equals("null") || !cookies.containsKey("bili_ticket_expires") || parseInt(cookies.get("bili_ticket_expires")) == null || parseInt(cookies.get("bili_ticket_expires")) < System.currentTimeMillis() / 1000) {
             try {
                 Pair<String, Integer> bili_ticket = genBiliTicket();
                 NetWorkUtil.putCookie("bili_ticket", bili_ticket.first);
