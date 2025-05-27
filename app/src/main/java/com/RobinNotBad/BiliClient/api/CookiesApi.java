@@ -1,8 +1,12 @@
 package com.RobinNotBad.BiliClient.api;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.util.DisplayMetrics;
 import android.util.Pair;
+import android.view.WindowManager;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.util.Cookies;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -146,6 +150,11 @@ public class CookiesApi {
         }
 
         // _uuid
+        if (!cookies.containsKey("browser_resolution")) {
+            NetWorkUtil.putCookie("browser_resolution", gen_browser_resolution());
+        }
+
+        // _uuid
         if (!cookies.containsKey("_uuid")) {
             NetWorkUtil.putCookie("_uuid", gen_uuid_infoc());
         }
@@ -187,6 +196,13 @@ public class CookiesApi {
         }
 
         NetWorkUtil.refreshHeaders();
+    }
+
+    private static String gen_browser_resolution() {
+        WindowManager windowManager = (WindowManager) BiliTerminal.context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics metrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        return metrics.widthPixels + "-" + metrics.heightPixels;
     }
 
     private static Integer parseInt(String string) {

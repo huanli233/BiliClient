@@ -43,6 +43,24 @@ import okhttp3.ResponseBody;
  */
 
 public class NetWorkUtil {
+
+    public static final String USER_AGENT_WEB = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36";
+    public static final ArrayList<String> webHeaders = new ArrayList<>() {{
+        add("Cookie");
+        add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
+        add("Referer");
+        add("https://www.bilibili.com/");
+        add("User-Agent");
+        add(USER_AGENT_WEB);
+
+        add("Sec-Ch-Ua");
+        add("\"Chromium\";v=\"122\", \"Not(A:Brand\";v=\"24\", \"Google Chrome\";v=\"122\"");
+        add("Sec-Ch-Ua-Mobile");
+        add("?0");
+        add("Sec-Ch-Ua-Platform");
+        add("\"Windows\"");
+    }};
+
     private static final AtomicReference<OkHttpClient> INSTANCE = new AtomicReference<>();
 
     public static OkHttpClient getOkHttpInstance() {
@@ -296,16 +314,6 @@ public class NetWorkUtil {
             return new Cookies(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
         }
     }
-
-    public static final String USER_AGENT_WEB = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36";
-    public static final ArrayList<String> webHeaders = new ArrayList<>() {{
-        add("Cookie");
-        add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
-        add("Referer");
-        add("https://www.bilibili.com/");
-        add("User-Agent");
-        add(USER_AGENT_WEB);
-    }};
 
     public static void refreshHeaders() {
         webHeaders.set(1, SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
