@@ -2,7 +2,6 @@ package com.RobinNotBad.BiliClient.api;
 
 import android.graphics.Bitmap;
 
-import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.QRCodeUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -32,6 +31,12 @@ public class LoginApi {
 
         headers = new ArrayList<>() {{
             addAll(NetWorkUtil.webHeaders);
+            add("Sec-Ch-Ua");
+            add("\"Chromium\";v=\"109\", \"Not_A Brand\";v=\"99\"");
+            add("Sec-Ch-Ua-Platform");
+            add("\"Windows\"");
+            add("Sec-Ch-Ua-Mobile");
+            add("?0");
             add("Sec-Fetch-Site");
             add("same-site");
             add("Sec-Fetch-Mode");
@@ -42,11 +47,8 @@ public class LoginApi {
 
         String url = "https://passport.bilibili.com/x/passport-login/web/qrcode/generate?source=main-fe-header";
         JSONObject loginUrlJson = NetWorkUtil.getJson(url, headers).getJSONObject("data");
-        String qrUrl = loginUrlJson.getString("url");
-        oauthKey = loginUrlJson.getString("qrcode_key");
-        Logu.d("qrcode-url", qrUrl);
-        Logu.d("qrcode-key", oauthKey);
-        return QRCodeUtil.createQRCodeBitmap(qrUrl , 320, 320);
+        oauthKey = (String) loginUrlJson.get("qrcode_key");
+        return QRCodeUtil.createQRCodeBitmap((String) loginUrlJson.get("url"), 320, 320);
     }
 
     public static Response getLoginState() throws IOException {
