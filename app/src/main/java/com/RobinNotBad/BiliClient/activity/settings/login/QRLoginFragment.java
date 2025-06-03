@@ -132,8 +132,9 @@ public class QRLoginFragment extends Fragment {
         CenterThreadPool.run(() -> {
             try {
                 CenterThreadPool.runOnUiThread(() -> scanStat.setText("正在获取二维码"));
-                QRImage = LoginApi.getLoginQR();
 
+                CookiesApi.checkCookies();
+                QRImage = LoginApi.getLoginQR();
                 CookiesApi.activeCookieInfo();
 
                 CenterThreadPool.runOnUiThread(() -> {
@@ -247,6 +248,6 @@ public class QRLoginFragment extends Fragment {
                     this.cancel();
                 }
             }
-        }, 2000, 500);
+        }, 500, 1000);
     }
 }

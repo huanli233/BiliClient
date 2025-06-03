@@ -23,36 +23,16 @@ import okhttp3.Response;
 
 public class LoginApi {
     private static String oauthKey;
-    private static ArrayList<String> headers = new ArrayList<>();
 
     public static Bitmap getLoginQR() throws JSONException, IOException {
-        CookiesApi.checkCookies();
-        NetWorkUtil.refreshHeaders();
-
-        headers = new ArrayList<>() {{
-            addAll(NetWorkUtil.webHeaders);
-            add("Sec-Ch-Ua");
-            add("\"Chromium\";v=\"109\", \"Not_A Brand\";v=\"99\"");
-            add("Sec-Ch-Ua-Platform");
-            add("\"Windows\"");
-            add("Sec-Ch-Ua-Mobile");
-            add("?0");
-            add("Sec-Fetch-Site");
-            add("same-site");
-            add("Sec-Fetch-Mode");
-            add("cors");
-            add("Sec-Fetch-Dest");
-            add("empty");
-        }};
-
         String url = "https://passport.bilibili.com/x/passport-login/web/qrcode/generate?source=main-fe-header";
-        JSONObject loginUrlJson = NetWorkUtil.getJson(url, headers).getJSONObject("data");
+        JSONObject loginUrlJson = NetWorkUtil.getJson(url, CookiesApi.genWebHeaders()).getJSONObject("data");
         oauthKey = (String) loginUrlJson.get("qrcode_key");
         return QRCodeUtil.createQRCodeBitmap((String) loginUrlJson.get("url"), 320, 320);
     }
 
     public static Response getLoginState() throws IOException {
-        return NetWorkUtil.get("https://passport.bilibili.com/x/passport-login/web/qrcode/poll?source=main-fe-header&qrcode_key=" + oauthKey, headers);
+        return NetWorkUtil.get("https://passport.bilibili.com/x/passport-login/web/qrcode/poll?source=main-fe-header&qrcode_key=" + oauthKey, CookiesApi.genWebHeaders());
     }
 
     public static void requestSSOs() throws JSONException, IOException {

@@ -301,10 +301,21 @@ public class NetWorkUtil {
     public static final ArrayList<String> webHeaders = new ArrayList<>() {{
         add("Cookie");
         add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
+
         add("Referer");
         add("https://www.bilibili.com/");
+
         add("User-Agent");
         add(USER_AGENT_WEB);
+
+        add("Sec-Ch-Ua");
+        add("\"Chromium\";v=\"122\", \"Not(A:Brand\";v=\"24\", \"Google Chrome\";v=\"122\"");
+
+        add("Sec-Ch-Ua-Platform");
+        add("\"Windows\"");
+
+        add("Sec-Ch-Ua-Mobile");
+        add("?0");
     }};
 
     public static void refreshHeaders() {

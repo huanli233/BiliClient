@@ -43,9 +43,9 @@ public class BiliTerminal extends Application {
             context = getFitDisplayContext(this);
             ErrorCatch errorCatch = ErrorCatch.getInstance();
             errorCatch.init(context);
-            Logu.LOGV_ENABLED = SharedPreferencesUtil.getBoolean("dev_logv", false);
-            Logu.LOGD_ENABLED = SharedPreferencesUtil.getBoolean("dev_logd", false);
-            Logu.LOGI_ENABLED = SharedPreferencesUtil.getBoolean("dev_logi", false);
+            Logu.LOGV_ENABLED = SharedPreferencesUtil.getBoolean("dev_logv", true);
+            Logu.LOGD_ENABLED = SharedPreferencesUtil.getBoolean("dev_logd", true);
+            Logu.LOGI_ENABLED = SharedPreferencesUtil.getBoolean("dev_logi", true);
         }
     }
 
