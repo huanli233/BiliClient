@@ -162,7 +162,7 @@ public class SplashActivity extends Activity {
                 Log.e("Cookies", "需要刷新");
                 if (Objects.equals(SharedPreferencesUtil.getString(SharedPreferencesUtil.refresh_token, ""), "")) {
                     if (!SharedPreferencesUtil.getBoolean("dev_refresh_token_null", false)) {
-                        MsgUtil.showDialog("呜喵——被风控了！", "近期发现B站对登录接口可能做了一些验证机制。\n看到这个提示，说明你的登录操作被拦截了，你的哔哩终端可能出现以下问题：\n1.发评论被吞\n2.点赞、投币、关注失败\n3.一段时间后被退出登录\n\n我们在找解决方法，别急。\n——当然也有可能无法解决。\n\n*此提示只会出现一次，请认真阅读，可以反馈但请不要反复询问开发者何时修好，谢谢喵*", 20);
+                        CenterThreadPool.runOnUIThreadAfter(2000,()->MsgUtil.showDialog("呜喵——被风控了！", "近期发现B站对登录接口可能做了一些验证机制。\n看到这个提示，说明你的登录操作被拦截了，你的哔哩终端可能出现以下问题：\n1.发评论被吞\n2.点赞、投币、关注失败\n3.一段时间后被退出登录\n\n我们在找解决方法，别急。\n——当然也有可能无法解决。\n\n*此提示只会出现一次，请认真阅读，可以反馈但请不要反复询问开发者何时修好，谢谢喵*", 20));
                         SharedPreferencesUtil.putBoolean("dev_refresh_token_null", true);
                     }
                 }
