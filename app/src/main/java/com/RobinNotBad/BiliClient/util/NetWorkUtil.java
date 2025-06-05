@@ -302,6 +302,9 @@ public class NetWorkUtil {
         add("Cookie");
         add(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
 
+        add("Origin");
+        add("https://www.bilibili.com");
+
         add("Referer");
         add("https://www.bilibili.com/");
 
