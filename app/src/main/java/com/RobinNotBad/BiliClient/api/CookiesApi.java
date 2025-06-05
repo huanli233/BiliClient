@@ -87,7 +87,18 @@ public class CookiesApi {
     }
 
     /**
-     * 生成buvid3、buvid4
+     * 仅获取buvid3
+     *
+     * @return buvid3
+     */
+    public static String getBuvid3Only() throws JSONException, IOException {
+        String url = "https://api.bilibili.com/x/web-frontend/getbuvid";
+        JSONObject data = NetWorkUtil.getJson(url, genWebHeaders());
+        return data.optString("buvid","");
+    }
+
+    /**
+     * 获取buvid3、buvid4，可能需要在上面先获取单个的buvid3
      *
      * @return buvid3、buvid4
      */
@@ -165,8 +176,14 @@ public class CookiesApi {
             NetWorkUtil.putCookie("b_lsid", gen_b_lsid());
         }
 
+        // buvid3 根据浏览器端的网络请求顺序，B站自己是先获取单个buvid3的，虽然我并不知道为什么要这样做…？
+        if(!cookies.containsKey("buvid3")){
+            String buvid3 = getBuvid3Only();
+            NetWorkUtil.putCookie("buvid3", buvid3);
+        }
+
         // buvid3 & buvid4. Get from http API.
-        if (!cookies.containsKey("buvid3") || !cookies.containsKey("buvid4")) {
+        if (!cookies.containsKey("buvid4")) {
             Pair<String, String> buvids = getWebBuvids();
             NetWorkUtil.putCookie("buvid3", buvids.first);
             NetWorkUtil.putCookie("buvid4", buvids.second);
