@@ -573,8 +573,7 @@ public class VideoInfoFragment extends BaseFragment {
                     Intent intent = new Intent();
                     intent.setClass(requireContext(), MultiPageActivity.class)
                             .putExtra("download", 1)
-                            .putExtra("aid", videoInfo.aid)
-                            .putExtra("bvid", videoInfo.bvid);
+                            .putExtra("data", playerData);
                     startActivity(intent);
                 }
                 else {
