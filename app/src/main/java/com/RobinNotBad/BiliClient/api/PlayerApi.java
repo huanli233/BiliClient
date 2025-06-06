@@ -107,7 +107,13 @@ public class PlayerApi {
         JSONObject video_url = durl.getJSONObject(0);
         playerData.videoUrl = video_url.getString("url");
         playerData.cidHistory = data.optLong("last_play_cid", 0);
-        playerData.progress = data.optInt("last_play_time");
+        playerData.progress = data.optInt("last_play_time", 0);
+
+        if(playerData.cidHistory == 0) {
+            playerData.cidHistory = playerData.cid;
+            playerData.progress = 0;
+        }
+        Logu.d("history", playerData.progress + "," + playerData.cidHistory);
 
         JSONArray accept_description = data.getJSONArray("accept_description");
         JSONArray accept_quality = data.getJSONArray("accept_quality");

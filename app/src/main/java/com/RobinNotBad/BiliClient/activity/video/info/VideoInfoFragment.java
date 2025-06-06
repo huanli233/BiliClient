@@ -290,7 +290,7 @@ public class VideoInfoFragment extends BaseFragment {
                 playerData = videoInfo.toPlayerData(0);
                 PlayerApi.getVideo(playerData, false);
                 if(playerData == null) return;
-                HistoryApi.reportHistory(videoInfo.aid, playerData.cidHistory, playerData.progress);
+                HistoryApi.reportHistory(videoInfo.aid, playerData.cidHistory, playerData.progress / 1000);
             } catch (Exception e) {
                 MsgUtil.err(e);
             }

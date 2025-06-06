@@ -18,7 +18,7 @@ public class HistoryApi {
     public static void reportHistory(long aid, long cid, long progress) throws IOException {
         String url = "https://api.bilibili.com/x/v2/history/report";
         String per = "aid=" + aid + "&cid=" + cid
-                + "&progress=" + (progress > 0 ? progress : "")
+                + "&progress=" + (progress >= 0 ? progress : "")
                 + "&platform=pc"
                 + "&csrf=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.csrf,"");
         NetWorkUtil.post(url, per, NetWorkUtil.webHeaders);

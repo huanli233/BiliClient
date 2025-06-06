@@ -20,7 +20,7 @@ public class PlayerData implements Parcelable {
     public long aid;
     public long cid;
     public long mid;
-    public int progress = -1;
+    public int progress = 0;
     public long cidHistory = 0;
     public int type = 0;
     public long timeStamp;
