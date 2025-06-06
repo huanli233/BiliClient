@@ -208,8 +208,11 @@
 
     #新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
-        <item>彻底修复了评论区崩了又崩的问题，这次应该彻底不崩了，各位对不起……</item>
-        <item>彻底修复了历史记录上传相关问题</item>
+        <item>新增了缓存视频的大小显示</item>
+        <item>更换了部分旧API</item>
+        <item>修复了历史记录上传单位错误的问题</item>
+        <item>修复了评论区At不显示的问题</item>
+        <item>修复了BV号无法打开的问题</item>
         <item>优化了少量屎山代码</item>
         <item>新增了一些bug和屎山代码</item>
     </string-array>
