@@ -23,6 +23,7 @@ import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
 import com.RobinNotBad.BiliClient.api.CookiesApi;
 import com.RobinNotBad.BiliClient.api.LoginApi;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
+import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -184,7 +185,9 @@ public class QRLoginFragment extends Fragment {
                         return;
                     }
 
-                    JSONObject loginJson = new JSONObject(response.body().string());
+                    String str = response.body().string();
+                    JSONObject loginJson = new JSONObject(str);
+                    Logu.v("login_state", str);
 
                     int code = loginJson.getJSONObject("data").getInt("code");
                     switch (code) {
@@ -220,8 +223,6 @@ public class QRLoginFragment extends Fragment {
 
                             NetWorkUtil.refreshHeaders();
 
-                            int activeResult = CookiesApi.activeCookieInfo();
-                            if (activeResult != 0) MsgUtil.showMsg("警告：激活Cookies失败");
                             LoginApi.requestSSOs();
                             if (loginJson.getJSONObject("data").has("url")) {
                                 try {

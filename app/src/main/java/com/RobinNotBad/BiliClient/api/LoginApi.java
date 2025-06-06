@@ -25,10 +25,10 @@ public class LoginApi {
     private static String oauthKey;
 
     public static Bitmap getLoginQR() throws JSONException, IOException {
-        String url = "https://passport.bilibili.com/x/passport-login/web/qrcode/generate?source=main-fe-header";
+        String url = "https://passport.bilibili.com/x/passport-login/web/qrcode/generate?source=main-fe-header&go_url=https:%2F%2Fwww.bilibili.com%2F";
         JSONObject loginUrlJson = NetWorkUtil.getJson(url, CookiesApi.genWebHeaders()).getJSONObject("data");
-        oauthKey = (String) loginUrlJson.get("qrcode_key");
-        return QRCodeUtil.createQRCodeBitmap((String) loginUrlJson.get("url"), 320, 320);
+        oauthKey = loginUrlJson.getString("qrcode_key");
+        return QRCodeUtil.createQRCodeBitmap(loginUrlJson.getString("url"), 320, 320);
     }
 
     public static Response getLoginState() throws IOException {

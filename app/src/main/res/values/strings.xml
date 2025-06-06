@@ -220,6 +220,7 @@
     <string name="tutorial_pager">提示\n\n←这个页面可以左右翻页喵→\n\n（共有%d页，滑动一下不再显示）</string>
     <string name="btn_confirm_settings">确认设置</string>
     <string name="btn_preview">查看预览</string>
+    <string name="btn_login_copy">复制</string>
 
     #后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_space">

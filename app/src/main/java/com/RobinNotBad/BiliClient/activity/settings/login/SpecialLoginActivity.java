@@ -12,9 +12,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.SplashActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -32,11 +34,12 @@ public class SpecialLoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_special);
-        Log.e("debug", "使用特殊登录方式");
+        Logu.i("debug", "使用特殊登录方式");
 
         textInput = findViewById(R.id.loginInput);
         MaterialCardView confirm = findViewById(R.id.confirm);
         MaterialCardView refuse = findViewById(R.id.refuse);
+        MaterialCardView copy = findViewById(R.id.copy);
         TextView desc = findViewById(R.id.desc);
 
         Intent intent = getIntent();
@@ -72,12 +75,7 @@ public class SpecialLoginActivity extends BaseActivity {
             });
         } else {
             desc.setText(R.string.special_login_export);
-            TextView buttonText = findViewById(R.id.confirm_text);
-            buttonText.setText("复制");
-            buttonText.setCompoundDrawables(null, null, null, null);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                buttonText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            }
+
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("cookies", SharedPreferencesUtil.getString("cookies", ""));
@@ -87,8 +85,24 @@ public class SpecialLoginActivity extends BaseActivity {
             }
             textInput.setText(jsonObject.toString());
             textInput.clearFocus();
+
             refuse.setVisibility(View.GONE);
-            confirm.setOnClickListener((view) -> {
+            if(BiliTerminal.isDebugBuild()){
+                confirm.setOnClickListener(v -> {
+                    try {
+                        JSONObject input = new JSONObject(textInput.getText().toString());
+                        String cookies = input.getString("cookies");
+                        SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies);
+                        runOnUiThread(() -> MsgUtil.showMsg("导入cookies成功"));
+
+                        NetWorkUtil.refreshHeaders();
+                    } catch (JSONException e) {
+                        runOnUiThread(() -> MsgUtil.showMsg("请检查输入的内容，不要有多余空格或字符"));
+                    }
+                });
+            }
+            else confirm.setVisibility(View.GONE);
+            copy.setOnClickListener((view) -> {
                 ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clipData = ClipData.newPlainText("label", textInput.getText());
                 clipboardManager.setPrimaryClip(clipData);

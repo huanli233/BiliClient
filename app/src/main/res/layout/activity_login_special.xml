@@ -58,6 +58,23 @@
                 android:text="@string/special_login_desc"
                 android:textSize="12sp" />
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/copy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="35sp"
+                    android:layout_marginHorizontal="8dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/btn_login_copy"
+                    android:textAlignment="center"
+                    android:textSize="13sp"
+                    tools:ignore="RtlCompat" />
+            </com.google.android.material.card.MaterialCardView>
+
             <EditText
                 android:id="@+id/loginInput"
                 android:layout_width="match_parent"
@@ -78,7 +95,6 @@
                 android:layout_marginTop="4dp">
 
                 <TextView
-                    android:id="@+id/confirm_text"
                     android:layout_width="match_parent"
                     android:layout_height="35sp"
                     android:layout_marginHorizontal="8dp"

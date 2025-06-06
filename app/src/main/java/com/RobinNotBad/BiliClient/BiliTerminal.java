@@ -43,9 +43,11 @@ public class BiliTerminal extends Application {
             context = getFitDisplayContext(this);
             ErrorCatch errorCatch = ErrorCatch.getInstance();
             errorCatch.init(context);
-            Logu.LOGV_ENABLED = SharedPreferencesUtil.getBoolean("dev_logv", true);
-            Logu.LOGD_ENABLED = SharedPreferencesUtil.getBoolean("dev_logd", true);
-            Logu.LOGI_ENABLED = SharedPreferencesUtil.getBoolean("dev_logi", true);
+
+            boolean debugBuild = isDebugBuild();
+            Logu.LOGV_ENABLED = SharedPreferencesUtil.getBoolean("dev_logv", debugBuild);
+            Logu.LOGD_ENABLED = SharedPreferencesUtil.getBoolean("dev_logd", debugBuild);
+            Logu.LOGI_ENABLED = SharedPreferencesUtil.getBoolean("dev_logi", debugBuild);
         }
     }
 
@@ -81,6 +83,10 @@ public class BiliTerminal extends Application {
 
     public static int getVersion() throws PackageManager.NameNotFoundException {
         return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+    }
+
+    public static boolean isDebugBuild() {
+        return "debug".equals(BuildConfig.BUILD_TYPE);
     }
 
     public static void jumpToVideo(Context context, long aid) {

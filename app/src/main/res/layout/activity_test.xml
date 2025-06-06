@@ -68,60 +68,9 @@
                     app:drawableEndCompat="@drawable/arrow_forward" />
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/start"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:layout_marginHorizontal="8dp"
-                    android:gravity="center_vertical"
-                    android:text="启动下载服务"
-                    android:textAlignment="textEnd"
-                    android:textSize="13sp"
-                    app:drawableEndCompat="@drawable/arrow_forward" />
-            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/download"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:layout_marginHorizontal="8dp"
-                    android:gravity="center_vertical"
-                    android:text="添加下载任务"
-                    android:textAlignment="textEnd"
-                    android:textSize="13sp"
-                    app:drawableEndCompat="@drawable/arrow_forward" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/download_goto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:layout_marginHorizontal="8dp"
-                    android:gravity="center_vertical"
-                    android:text="进入下载列表"
-                    android:textAlignment="textEnd"
-                    android:textSize="13sp"
-                    app:drawableEndCompat="@drawable/arrow_forward" />
-            </com.google.android.material.card.MaterialCardView>
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/download_clear"
+                android:id="@+id/payload"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -132,7 +81,7 @@
                     android:layout_height="35sp"
                     android:layout_marginHorizontal="8dp"
                     android:gravity="center_vertical"
-                    android:text="清空下载列表"
+                    android:text="生成payload"
                     android:textAlignment="textEnd"
                     android:textSize="13sp"
                     app:drawableEndCompat="@drawable/arrow_forward" />

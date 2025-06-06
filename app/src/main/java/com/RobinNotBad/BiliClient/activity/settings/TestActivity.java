@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.settings.login.SpecialLoginActivity;
-import com.RobinNotBad.BiliClient.activity.video.local.DownloadListActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
+import com.RobinNotBad.BiliClient.api.CookiesApi;
 import com.RobinNotBad.BiliClient.service.DownloadService;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
@@ -22,11 +22,13 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
+import okhttp3.Cookie;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.BufferedSource;
@@ -35,7 +37,7 @@ public class TestActivity extends BaseActivity {
 
     SwitchMaterial sw_wbi, sw_post;
     EditText input_link, input_data, output;
-    MaterialCardView btn_crash,btn_request, btn_cookies, btn_start, btn_download, btn_download_goto, btn_download_clear;
+    MaterialCardView btn_crash,btn_request, btn_cookies, btn_payload;
 
     JSONArray conversation;
 
@@ -51,10 +53,7 @@ public class TestActivity extends BaseActivity {
         input_data = findViewById(R.id.input_data);
         output = findViewById(R.id.output_json);
         btn_crash = findViewById(R.id.crash);
-        btn_start = findViewById(R.id.start);
-        btn_download = findViewById(R.id.download);
-        btn_download_goto = findViewById(R.id.download_goto);
-        btn_download_clear = findViewById(R.id.download_clear);
+        btn_payload = findViewById(R.id.payload);
 
         sw_post.setOnCheckedChangeListener((compoundButton, checked) ->
                 input_data.setVisibility(checked ? View.VISIBLE : View.GONE));
@@ -101,28 +100,14 @@ public class TestActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        btn_start.setOnClickListener(v -> DownloadService.start(-1));
-
-        btn_download.setOnClickListener(v -> {
-            DownloadService.startDownload("雀魂","早春赏樱",501590258L,294292444L,
-                    "http://i1.hdslb.com/bfs/archive/321b2291b55f1effc0f0646f593cf47b78ea0e9b.png",16);
-
-            DownloadService.startDownload("雀魂","曲水流觞",501590258L,294370880L,
-                    "http://i1.hdslb.com/bfs/archive/321b2291b55f1effc0f0646f593cf47b78ea0e9b.png",16);
-
-            DownloadService.startDownload("雀魂","锦绣梦",501590258L,493168287L,
-                    "http://i1.hdslb.com/bfs/archive/321b2291b55f1effc0f0646f593cf47b78ea0e9b.png",16);
-
-
-            //startService(new Intent(TestActivity.this,DownloadService.class));
-        });
-
-        btn_download_goto.setOnClickListener(view -> {
-            Intent intent = new Intent(this, DownloadListActivity.class);
-            startActivity(intent);
-        });
-
-        btn_download_clear.setOnClickListener(v -> DownloadService.clear());
+        btn_payload.setOnClickListener(v -> CenterThreadPool.run(()->{
+            try {
+                String payload = CookiesApi.genCookiePayload();
+                runOnUiThread(()-> output.setText(payload));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }));
 
 
         //我为什么要加这个？
