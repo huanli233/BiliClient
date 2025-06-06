@@ -6,10 +6,17 @@
 
 [官方 Gitee 仓库](https://gitee.com/RobinNotBad/BiliClient) | [Github 仓库 (由huanli233 fork)](https://github.com/huanli233/BiliClient) | [Action Build (Github)](https://github.com/huanli233/action_build_biliclient/actions)
 
+[安装包下载](https://gitee.com/RobinNotBad/BiliClient/releases)
+
 </div>
 
 # 介绍
-这是一个**极其轻量级**的**B站客户端**，名字来源于原神中的“虚空终端”。使用 `java` + `xml`开发，最低支持**安卓4.2**。本项目借鉴了 [WearBili](https://github.com/SpaceXC/WearBili) 和 [腕上哔哩](https://github.com/luern0313/WristBilibili) 的部分开源代码和它们收集的部分 API ，界面曾使用 [WearBili](https://github.com/SpaceXC/WearBili) 的布局（现已重做）。**本项目与 WearBili 无任何关系**。
+这是一个**极其轻量级**的**B站客户端**，名字来源于原神中的“虚空终端”。使用远古技术 `java` + `xml`开发，最低支持**安卓4.0.4**。（部分4.0.4设备无法运行，但也无法解决）~~这么古老的设备解码视频都费劲，要不还是留作收藏吧（~~
+
+本项目借鉴了 [WearBili](https://github.com/SpaceXC/WearBili) 和 [腕上哔哩](https://github.com/luern0313/WristBilibili) 的部分开源代码和它们收集的部分 API 。
+界面曾使用 [WearBili](https://github.com/SpaceXC/WearBili) 的布局（现已重做）。
+**除此之外本项目与 其他第三方B站浏览软件 无任何关系**。
+**谢绝在无关评论区提及终端，谢谢喵**。
 
 播放视频可选择使用内置播放器、小电视播放器或凉腕播放器，内置播放器会优先支持部分功能。
 
@@ -18,7 +25,7 @@
 3. ~~项目的API解析逻辑十分甚至九分清晰~~（指直接一层一层拆json）
 4. 依赖库少，~~可以快速嫁接到其他工程里~~（大嘘
 
->**请注意：此工程的某些部分存在复用以及有一些奇怪的写法以及可能存在暗病和屎山！**
+>**品鉴此项目代码前请注意：此工程的某些部分存在复用以及有一些奇怪的写法以及可能存在暗病和屎山！**
 >
 >#### 本项目可能包含：
 >
@@ -40,7 +47,7 @@
 > if (data.getInt("ccc") == 1 ? true : false)
 >```
 >
->
+> 以上问题正在逐渐改善，大概（QAQ
 >
 > 很多结构相同的页面（如`稍后再看`、`收藏`等只有一个 `RecyclerView`的页面）都直接使用了共用的一套界面布局。动态和视频的 `Adapter` 和 `Holder` 并没有按照常规套路来写，而是将 `Holder` 独立出来。因为有些页面如搜索页、个人信息页也用到了相同的代码，我就选择了把这些共用代码统一放在同一个类里。这可以减小一部分资源浪费，也易于整体修改。
 >
@@ -61,7 +68,7 @@
 
 # 联系
  
-- 唯一官网：[biliterminal.cn](https://biliterminal.cn) / [短链接](http://bil.asia)
+- 唯一官网：[biliterminal.cn](https://biliterminal.cn)
 - QQ交流群
 > 交流一群：482091687
 >
@@ -78,20 +85,4 @@
 
 ## 部分问题的解决方法
 
-### ~~Android IDE无法正常编译（当前版本已经不会出现）~~
-
-不使用Android IDE自动下载的Android NDK
-
-正确的方法：
-
-1.打开Android IDE的终端，运行`pkg install wget && wget https://github.com/MrIkso/AndroidIDE-NDK/raw/main/ndk-install.sh --no-verbose --show-progress -N && chmod +x ndk-install.sh && bash ndk-install.sh`
-
-2.输入数字选择`r24`选项
-
-3.等待安装完毕
-
-4.当出现`finish`并退出脚本后，重启Android IDE
-
-5.在`brotlij/build.gradle`中的`android`结构中加入`ndkVersion "24.0.8215888"`
-
-6.编译你的哔哩终端吧
+### ~~当前似乎没有什么大问题~~
