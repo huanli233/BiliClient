@@ -1,5 +1,6 @@
 package com.RobinNotBad.BiliClient.adapter.video;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 //本地视频Adapter
 //2023-10-04
@@ -136,9 +138,11 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             cover = itemView.findViewById(R.id.img_cover);
         }
 
+        @SuppressLint("SetTextI18n")
         public void showLocalVideo(LocalVideo videoCard, Context context) {
             title.setText(videoCard.title);
-            extra.setVisibility(View.GONE); //TODO:大小显示
+            String size = String.format(Locale.CHINA,"%.2f",videoCard.size  / 1000000f) + "MB";
+            extra.setText(size);
 
             try {
                 Glide.with(BiliTerminal.context).asDrawable().load(videoCard.cover)

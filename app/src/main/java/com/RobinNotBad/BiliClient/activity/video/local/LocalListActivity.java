@@ -101,16 +101,20 @@ public class LocalListActivity extends InstanceActivity {
                 localVideo.pageList = new ArrayList<>();
                 localVideo.danmakuFileList = new ArrayList<>();
                 localVideo.videoFileList = new ArrayList<>();
+                localVideo.sizeList = new ArrayList<>();
 
                 File videoFile = new File(video, "video.mp4");
                 File danmakuFile = new File(video, "danmaku.xml");
 
-                if (videoFile.exists() && danmakuFile.exists()) {
+                if (videoFile.exists()) {
                     File mark = new File(video,".DOWNLOADING");
                     if(mark.exists()) continue;
 
+                    localVideo.sizeList.add(videoFile.length());
                     localVideo.videoFileList.add(videoFile.toString());
                     localVideo.danmakuFileList.add(danmakuFile.toString());    //单集视频
+
+                    localVideo.calcTotalSize();
                     videoList.add(localVideo);
                 }
                 else {
@@ -123,17 +127,18 @@ public class LocalListActivity extends InstanceActivity {
 
                                 File pageVideoFile = new File(page, "video.mp4");
                                 File pageDanmakuFile = new File(page, "danmaku.xml");
-                                if (pageVideoFile.exists() && pageDanmakuFile.exists()) {
+                                if (pageVideoFile.exists()) {
                                     localVideo.pageList.add(page.getName());
+                                    localVideo.sizeList.add(pageVideoFile.length());
                                     localVideo.videoFileList.add(pageVideoFile.toString());
                                     localVideo.danmakuFileList.add(pageDanmakuFile.toString());
                                 }
                             }
                         }
+                        localVideo.calcTotalSize();
                         if(localVideo.videoFileList.size() > 0) videoList.add(localVideo);
                     }
                 }
-
             }
         }
         checkEmpty();

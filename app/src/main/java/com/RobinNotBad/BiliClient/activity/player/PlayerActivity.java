@@ -238,7 +238,6 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         File cachepath = getCacheDir();
         if (!cachepath.exists()) cachepath.mkdirs();
-        danmakuFile = new File(cachepath, "danmaku.xml");
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -267,6 +266,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 loading_text1.setText("(≧∇≦)");
             });
             if(isOnlineVideo) {
+                danmakuFile = new File(cachepath, "danmaku.xml");
                 downdanmu();
                 if(SharedPreferencesUtil.getBoolean("player_subtitle_autoshow", true)) downSubtitle(false);
             }
@@ -275,7 +275,9 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     btn_subtitle.setVisibility(View.GONE);
                     btn_danmaku_send.setVisibility(View.GONE);
                 });
-                streamDanmaku(danmaku_url);
+                danmakuFile = new File(danmaku_url);
+                if(danmakuFile.exists()) streamDanmaku(danmakuFile.toString());
+                else hasDanmaku = false;
             }
 
             if(!destroyed) setDisplay();
@@ -996,7 +998,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         return parser;
     }
 
-    private void streamDanmaku(String danmakuPath) {
+    private void streamDanmaku(String danmakuFile) {
         Logu.v("danmaku", "stream");
 
         mContext = DanmakuContext.create();
@@ -1013,7 +1015,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 .setDanmakuTransparency(SharedPreferencesUtil.getFloat("player_danmaku_transparency", 0.5f))
                 .preventOverlapping(overlap);
 
-        BaseDanmakuParser mParser = createParser(danmakuPath);
+        BaseDanmakuParser mParser = createParser(danmakuFile);
 
         mDanmakuView.setCallback(new DrawHandler.Callback() {
             @Override

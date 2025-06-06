@@ -24,6 +24,7 @@ import kotlinx.coroutines.*;
  */
 public class CenterThreadPool {
 
+    private static final boolean FORCE_DISABLED = false;
     private static final Handler MAIN_THREAD_HANDLER = new Handler(Looper.getMainLooper());
     private static final CoroutineScope COROUTINE_SCOPE;
     private static final AtomicReference<ExecutorService> THREAD_POOL;
@@ -78,7 +79,8 @@ public class CenterThreadPool {
             }
         } catch (Throwable e) {
             //最后再放手一博
-            new Thread(runnable).start();
+            //new Thread(runnable).start();
+            e.printStackTrace();
         }
     }
 

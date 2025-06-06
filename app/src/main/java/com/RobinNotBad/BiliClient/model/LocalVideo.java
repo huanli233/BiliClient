@@ -8,9 +8,15 @@ public class LocalVideo {
     public ArrayList<String> pageList;
     public ArrayList<String> videoFileList;
     public ArrayList<String> danmakuFileList;
-    public int size;
+    public ArrayList<Long> sizeList;
+    public long size;
 
+    public LocalVideo() {}
 
-    public LocalVideo() {
+    public void calcTotalSize(){
+        size = 0;
+        for (long pageSize: sizeList) {
+            size += pageSize;
+        }
     }
 }
