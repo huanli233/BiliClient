@@ -110,9 +110,8 @@ public class Reply implements Serializable {
             while (keys.hasNext()) {
                 String key = keys.next();
                 long val = jsonObject.getLong(key);
-                ats.add(new At(val,key));
+                StringUtil.setSingleAt(messageSpannable, key, val);
             }
-            StringUtil.setAtLink(messageSpannable, ats);
         }
 
         JSONObject upAction = replyJson.getJSONObject("up_action");

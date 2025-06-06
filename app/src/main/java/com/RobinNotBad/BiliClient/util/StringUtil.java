@@ -212,12 +212,15 @@ public class StringUtil {
         }
     }
 
-    public static void setAtLink(SpannableString spannableString, List<At> ats){
-        if(TextUtils.isEmpty(spannableString) || ats == null) return;
+    public static void setSingleAt(SpannableString spannableString, String atName, long atMid){
+        Pattern pattern = Pattern.compile("@" + atName);
         String text = spannableString.toString();
-        for (At at : ats) {
-            spannableString.setSpan(new LinkClickableSpan(text.substring(at.textStartIndex, at.textEndIndex), TYPE_USER, String.valueOf(at.rid)),
-                    at.textStartIndex, at.textEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        Matcher matcher = pattern.matcher(text);
+        while (matcher.find()) {
+            int start = matcher.start();
+            int end = matcher.end();
+            spannableString.setSpan(new LinkClickableSpan(text.substring(start, end), TYPE_USER, String.valueOf(atMid)),
+                    start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
     }
 
