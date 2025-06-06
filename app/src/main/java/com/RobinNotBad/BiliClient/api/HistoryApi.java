@@ -15,6 +15,15 @@ import java.io.IOException;
 import java.util.List;
 
 public class HistoryApi {
+
+    /**
+     * 上传历史记录
+     *
+     * @param aid 视频aid
+     * @param cid 分集cid
+     * @param progress 观看进度，单位为s
+     * @throws IOException
+     */
     public static void reportHistory(long aid, long cid, long progress) throws IOException {
         String url = "https://api.bilibili.com/x/v2/history/report";
         String per = "aid=" + aid + "&cid=" + cid
@@ -24,12 +33,19 @@ public class HistoryApi {
         NetWorkUtil.post(url, per, NetWorkUtil.webHeaders);
     }
 
+    /**
+     * 获取视频历史记录
+     *
+     * @param lastResult 上一次获取返回的ApiResult，如果是第一次就传入新对象
+     * @param videoList 已有的视频列表
+     * @return 新的ApiResult，包含了返回码、文本信息以及翻页所需的offset
+     * @throws IOException
+     * @throws JSONException
+     */
     public static ApiResult getHistory(ApiResult lastResult, List<VideoCard> videoList) throws IOException, JSONException {
-        ApiResult apiResult = new ApiResult();
         String url = "https://api.bilibili.com/x/web-interface/history/cursor?type=archive&view_at=" + lastResult.timestamp +"&business=" + lastResult.business + "&max=" + lastResult.offset;
         JSONObject result = NetWorkUtil.getJson(url);
-        apiResult.code = result.optInt("code");
-        apiResult.message = result.optString("message");
+        ApiResult apiResult = new ApiResult(result);
         if (!result.isNull("data")) {
             JSONObject data = result.getJSONObject("data");
             JSONArray list = data.getJSONArray("list");
@@ -60,30 +76,4 @@ public class HistoryApi {
         return apiResult;
     }
 
-    /*
-     * 单个视频的历史记录可以直接从取流api里找到，无需再次请求，同时此api无法使用
-     */
-    @Deprecated
-    public static ApiResult getWatchProgress(long aid, boolean isBangumi) {
-        ApiResult apiResult = new ApiResult();
-        try {
-            String url = "https://api.bilibili.com/x/web-interface/history/cursor?max=" + aid + "&ps=1&type="
-                    + (isBangumi ? "pgc" : "archive") + "&business=" + (isBangumi ? "pgc" : "archive");
-            JSONObject result = NetWorkUtil.getJson(url);
-            apiResult.fromJson(result);
-            if (!result.isNull("data")) {
-                JSONObject data = result.getJSONObject("data");
-                JSONArray list = data.getJSONArray("list");
-
-                JSONObject video = list.optJSONObject(0);
-                if(video == null) return apiResult.setOffset(-1,-1,"");
-                JSONObject history = video.optJSONObject("history");
-                if (history != null) return apiResult.setOffset(
-                        video.getInt("progress"),
-                        history.optLong("cid", 0),
-                        null);
-            }
-        } catch (Throwable e){MsgUtil.err(apiResult.message, e);}
-        return apiResult;
-    }
 }

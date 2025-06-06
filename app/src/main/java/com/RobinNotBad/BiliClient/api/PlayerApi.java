@@ -74,7 +74,7 @@ public class PlayerApi {
     /**
      * 解析视频
      *
-     * @param playerData 传入aid、cid、qn等必要数据
+     * @param playerData 传入aid、cid、qn等必要数据，可以使用VideoInfo.toPlayerData
      * @param download 是否下载
      */
     public static void getVideo(PlayerData playerData, boolean download) throws JSONException, IOException {
