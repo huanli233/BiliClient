@@ -1,12 +1,15 @@
 package com.RobinNotBad.BiliClient.ui.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.widget.TextView;
 
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 
-public class MarqueeTextView extends androidx.appcompat.widget.AppCompatTextView {
+@SuppressLint("AppCompatCustomView")
+public class MarqueeTextView extends TextView {
     public MarqueeTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setMarquee();
