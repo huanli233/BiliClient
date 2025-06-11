@@ -13,7 +13,6 @@ import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.activity.settings.login.SpecialLoginActivity;
 import com.RobinNotBad.BiliClient.api.ConfInfoApi;
 import com.RobinNotBad.BiliClient.api.CookiesApi;
-import com.RobinNotBad.BiliClient.service.DownloadService;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
@@ -28,7 +27,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import okhttp3.Cookie;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.BufferedSource;
@@ -54,6 +52,8 @@ public class TestActivity extends BaseActivity {
         output = findViewById(R.id.output_json);
         btn_crash = findViewById(R.id.crash);
         btn_payload = findViewById(R.id.payload);
+
+        input_link.setText(SharedPreferencesUtil.getString("dev_test_link", ""));
 
         sw_post.setOnCheckedChangeListener((compoundButton, checked) ->
                 input_data.setVisibility(checked ? View.VISIBLE : View.GONE));
@@ -103,7 +103,8 @@ public class TestActivity extends BaseActivity {
         btn_payload.setOnClickListener(v -> CenterThreadPool.run(()->{
             try {
                 String payload = CookiesApi.genCookiePayload();
-                runOnUiThread(()-> output.setText(payload));
+                runOnUiThread(()-> input_link.setText("https://api.bilibili.com/x/internal/gaia-gateway/ExClimbWuzhi"));
+                runOnUiThread(()-> input_data.setText(payload));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -111,33 +112,38 @@ public class TestActivity extends BaseActivity {
 
 
         //我为什么要加这个？
-        try {
-            conversation = new JSONArray();
-            JSONObject prompt = new JSONObject();
-            prompt.put("role", "system");
-            prompt.put("content", getString(R.string.dev_catgirl_prompt));
-            conversation.put(prompt);
-            input_link.setText(SharedPreferencesUtil.getString("dev_catgirl_apikey", ""));
+        btn_crash.setOnClickListener(v -> {
+            input_data.setVisibility(View.VISIBLE);
+            sw_wbi.setText("使用R1");
+            sw_post.setVisibility(View.GONE);
+            btn_cookies.setVisibility(View.GONE);
+            btn_request.setVisibility(View.GONE);
+            btn_payload.setVisibility(View.GONE);
+            TextView desc = findViewById(R.id.desc);
+            desc.setText(getString(R.string.dev_catgirl_desc));
 
-            btn_crash.setOnClickListener(v -> CenterThreadPool.run(() -> {
-                runOnUiThread(()->{
-                    input_data.setVisibility(View.VISIBLE);
-                    sw_wbi.setText("使用R1");
-                    sw_post.setVisibility(View.GONE);
-                    btn_cookies.setVisibility(View.GONE);
-                    btn_request.setVisibility(View.GONE);
-                    TextView desc = findViewById(R.id.desc);
-                    desc.setText(getString(R.string.dev_catgirl_desc));
-                });
-
+            CenterThreadPool.run(() -> {
                 try {
+                    if (conversation == null) {
+                        conversation = new JSONArray();
+                        JSONObject prompt = new JSONObject();
+                        try {
+                            prompt.put("role", "system");
+                            prompt.put("content", getString(R.string.dev_catgirl_prompt));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        conversation.put(prompt);
+                        runOnUiThread(()-> input_link.setText(SharedPreferencesUtil.getString("dev_catgirl_apikey", "")));
+                        return;
+                    }
+
                     String api_key = input_link.getText().toString();
                     if (api_key.isEmpty()) {
                         MsgUtil.showMsg("请在链接栏填写API KEY！");
                         return;
-                    }
-                    else{
-                        SharedPreferencesUtil.putString("dev_catgirl_apikey",api_key);
+                    } else {
+                        SharedPreferencesUtil.putString("dev_catgirl_apikey", api_key);
                     }
                     ArrayList<String> deepseekHeaders = new ArrayList<>() {{
                         add("Content-Type");
@@ -187,6 +193,8 @@ public class TestActivity extends BaseActivity {
 
                     boolean reasoning = sw_wbi.isChecked();
 
+                    StringBuilder contentBuilder = new StringBuilder();
+
                     while (!source.exhausted()) {
                         String line = source.readUtf8Line();
                         if (line == null) break;
@@ -201,26 +209,25 @@ public class TestActivity extends BaseActivity {
                             JSONObject delta = choices.getJSONObject(0).getJSONObject("delta");
 
                             String deltaContent;
-                            if(!delta.isNull("reasoning_content")){
+                            if (!delta.isNull("reasoning_content")) {
                                 deltaContent = delta.optString("reasoning_content");
-                            }
-                            else if(!delta.isNull("content")){
-                                if(reasoning) {
+                            } else if (!delta.isNull("content")) {
+                                if (reasoning) {
                                     reasoning = false;
                                     runOnUiThread(() -> output.append("\n\n*思考结束*\n\n"));
                                 }
                                 deltaContent = delta.optString("content");
-                            }
-                            else deltaContent = "";
+                            } else deltaContent = "";
 
+                            if(!reasoning) contentBuilder.append(deltaContent);
                             runOnUiThread(() -> output.append(deltaContent));
                         }
                     }
 
                     response.close();
 
-                    String output_str = output.getText().toString();
-                    if(!output_str.isEmpty()){
+                    String output_str = contentBuilder.toString();
+                    if (!output_str.isEmpty()) {
                         JSONObject output_json = new JSONObject();
                         output_json.put("role", "assistant");
                         output_json.put("content", output_str);
@@ -228,8 +235,9 @@ public class TestActivity extends BaseActivity {
                     }
 
                     MsgUtil.showMsg("响应结束，请查看下方文本框！");
+                } catch (Exception e) {
+                    report(e);
                 }
-                catch (Exception e) {report(e);}
 
                 runOnUiThread(() -> {
                     btn_crash.setEnabled(true);
@@ -237,7 +245,15 @@ public class TestActivity extends BaseActivity {
                     input_link.setEnabled(true);
                     input_data.setEnabled(true);
                 });
-            }));
-        } catch (Exception e){report(e);}
+            });
+
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(conversation == null)
+            SharedPreferencesUtil.putString("dev_test_link", input_link.getText().toString());
+        super.onDestroy();
     }
 }
