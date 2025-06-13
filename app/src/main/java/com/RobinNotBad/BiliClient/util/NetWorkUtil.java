@@ -271,6 +271,7 @@ public class NetWorkUtil {
             Cookies cookies = new Cookies(SharedPreferencesUtil.getString(SharedPreferencesUtil.cookies, ""));
             cookies.set(key, val);
             SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies.toString());
+            refreshHeaders();
         }
     }
 
@@ -282,6 +283,7 @@ public class NetWorkUtil {
     public static void setCookies(Cookies cookies) {
         synchronized (NetWorkUtil.class) {
             SharedPreferencesUtil.putString(SharedPreferencesUtil.cookies, cookies.toString());
+            refreshHeaders();
         }
     }
 
