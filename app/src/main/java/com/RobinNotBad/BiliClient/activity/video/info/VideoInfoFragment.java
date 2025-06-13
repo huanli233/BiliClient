@@ -383,8 +383,15 @@ public class VideoInfoFragment extends BaseFragment {
                     });
                 } else if (isAdded()) {
                     String msg = "操作失败：" + result;
-                    if (result == -403) {
-                        msg = "当前请求触发B站风控";
+                    switch (result) {
+                        case -403:
+                            msg = "当前请求触发B站风控";
+                            break;
+                        case 65006:
+                            msg = "已经点赞过了喵~";
+                            videoInfo.stats.liked = true;    
+                            runOnUiThread(() ->like.setImageResource(R.drawable.icon_like_1));
+                            break;    
                     }
                     String finalMsg = msg;
                     MsgUtil.showMsg(finalMsg);
