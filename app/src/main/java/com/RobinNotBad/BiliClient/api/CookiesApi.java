@@ -156,6 +156,8 @@ public class CookiesApi {
     }};
 
     public static void checkCookies() throws JSONException, IOException {
+        NetWorkUtil.get("https://www.bilibili.com/");
+
         Cookies cookies = NetWorkUtil.getCookies();
 
         // _uuid
@@ -223,7 +225,8 @@ public class CookiesApi {
                 NetWorkUtil.putCookie(entry.getKey(), entry.getValue());
             }
         }
-        
+
+        activeCookieInfo();
     }
 
     private static Integer parseInt(String string) {
