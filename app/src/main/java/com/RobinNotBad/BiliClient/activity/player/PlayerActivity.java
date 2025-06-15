@@ -878,10 +878,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         boolean need_show = true;
 
         while (need_adjust) {
-            if (curr_sec <= subtitle_curr.from) {  //进度在当前字幕的起始位置之前
+            if (curr_sec < subtitle_curr.from) {  //进度在当前字幕的起始位置之前
                 //如果不是第一条字幕，且进度在上一条字幕的结束位置之前，那么字幕前移一位
                 //否则字幕不显示且退出校准（当前进度在两条字幕之间）
-                if (subtitle_curr_index != 0 && curr_sec <= subtitles[subtitle_curr_index - 1].to) {
+                if (subtitle_curr_index != 0 && curr_sec < subtitles[subtitle_curr_index - 1].to) {
                     subtitle_curr_index--;
                 }
                 else {
@@ -889,10 +889,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     need_show = false;
                 }
             }
-            else if (curr_sec >= subtitle_curr.to) {  //在当前字幕的结束位置之后
+            else if (curr_sec > subtitle_curr.to) {  //在当前字幕的结束位置之后
                 //如果不是最后一条字幕，且进度在下一条字幕的开始位置之后，那么字幕后移一位
                 //否则字幕不显示且退出校准（当前进度在两条字幕之间）
-                if (subtitle_curr_index+1 < subtitle_count && curr_sec >= subtitles[subtitle_curr_index + 1].from) {
+                if (subtitle_curr_index+1 < subtitle_count && curr_sec > subtitles[subtitle_curr_index + 1].from) {
                     subtitle_curr_index++;
                 }
                 else {
