@@ -81,7 +81,7 @@ public class SplashActivity extends Activity {
                         checkCookieRefresh();
                     } else {
                         // [开发者]RobinNotBad: 如果提前不请求bilibili.com，未登录时的推荐有概率一直返回同样的内容
-                        NetWorkUtil.get("https://www.bilibili.com", NetWorkUtil.webHeaders);
+                        //NetWorkUtil.get("https://www.bilibili.com", NetWorkUtil.webHeaders);
                     }
 
                     CookiesApi.checkCookies();

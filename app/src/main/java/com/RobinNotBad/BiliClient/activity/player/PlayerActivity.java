@@ -111,6 +111,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private SubtitleLink[] subtitleLinks = null;
     private Subtitle[] subtitles = null;
     private int subtitle_curr_index, subtitle_count;
+    private float subtitle_delta;
 
     private RelativeLayout layout_control, layout_top, layout_video, layout_card_bg;
     private LinearLayout layout_speed, right_control, right_second, loading_info, bottom_buttons;
@@ -265,22 +266,20 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 loading_text0.setText("装填弹幕中");
                 loading_text1.setText("(≧∇≦)");
             });
-            if(isOnlineVideo) {
+            if (isOnlineVideo) {
                 danmakuFile = new File(cachepath, "danmaku.xml");
                 downdanmu();
-                if(SharedPreferencesUtil.getBoolean("player_subtitle_autoshow", true)) downSubtitle(false);
             }
             else {
-                runOnUiThread(() -> {
-                    btn_subtitle.setVisibility(View.GONE);
-                    btn_danmaku_send.setVisibility(View.GONE);
-                });
+                runOnUiThread(() -> btn_danmaku_send.setVisibility(View.GONE));
                 danmakuFile = new File(danmaku_url);
                 if(danmakuFile.exists()) streamDanmaku(danmakuFile.toString());
                 else hasDanmaku = false;
             }
 
-            if(!destroyed) setDisplay();
+            if (!destroyed && SharedPreferencesUtil.getBoolean("player_subtitle_autoshow", true)) downSubtitle(false);
+
+            if (!destroyed) setDisplay();
         }), 60);
     }
 
@@ -818,7 +817,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                                 //progressBar上有一个onProgressChange的监听器，文字更改在那里
                             }
                         });
-                        if(subtitles != null) showSubtitle(curr_sec);
+                        if(subtitles != null) showSubtitle(curr_sec + subtitle_delta);
                         else runOnUiThread(()->text_subtitle.setVisibility(View.GONE));
                     }
                 }
@@ -859,7 +858,11 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private void getSubtitle(String subtitle_url){
         if (subtitle_url == null || subtitle_url.isEmpty()) return;
         try {
-            subtitles = PlayerApi.getSubtitle(subtitle_url);
+            if (isOnlineVideo) subtitles = PlayerApi.getSubtitle(subtitle_url);
+            else subtitles = PlayerApi.getSubtitle(new File(subtitle_url));
+
+            if (subtitles == null) return;
+
             subtitle_count = subtitles.length;
             subtitle_curr_index = 0;
             runOnUiThread(()-> btn_subtitle.setImageResource(R.mipmap.subtitle_on));
@@ -875,10 +878,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         boolean need_show = true;
 
         while (need_adjust) {
-            if (curr_sec < subtitle_curr.from) {  //进度在当前字幕的起始位置之前
+            if (curr_sec <= subtitle_curr.from) {  //进度在当前字幕的起始位置之前
                 //如果不是第一条字幕，且进度在上一条字幕的结束位置之前，那么字幕前移一位
                 //否则字幕不显示且退出校准（当前进度在两条字幕之间）
-                if (subtitle_curr_index != 0 && curr_sec < subtitles[subtitle_curr_index - 1].to) {
+                if (subtitle_curr_index != 0 && curr_sec <= subtitles[subtitle_curr_index - 1].to) {
                     subtitle_curr_index--;
                 }
                 else {
@@ -886,10 +889,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                     need_show = false;
                 }
             }
-            else if (curr_sec > subtitle_curr.to) {  //在当前字幕的结束位置之后
+            else if (curr_sec >= subtitle_curr.to) {  //在当前字幕的结束位置之后
                 //如果不是最后一条字幕，且进度在下一条字幕的开始位置之后，那么字幕后移一位
                 //否则字幕不显示且退出校准（当前进度在两条字幕之间）
-                if (subtitle_curr_index+1 < subtitle_count && curr_sec > subtitles[subtitle_curr_index + 1].from) {
+                if (subtitle_curr_index+1 < subtitle_count && curr_sec >= subtitles[subtitle_curr_index + 1].from) {
                     subtitle_curr_index++;
                 }
                 else {
@@ -910,12 +913,17 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private int subtitle_selected = -1;
     private void downSubtitle(boolean from_btn){
         try {
-            if(subtitleLinks == null) subtitleLinks = PlayerApi.getSubtitleLinks(aid, cid);
+            if(subtitleLinks == null) {    //首次运行，获取字幕
+                if(isOnlineVideo) subtitleLinks = PlayerApi.getSubtitleLinks(aid, cid);
+                else subtitleLinks = PlayerApi.getSubtitleLinks(new File(danmakuFile.getParentFile(), "subtitles"));
+            }
 
             if(subtitleLinks.length == 1){
                 if(from_btn) MsgUtil.showMsg("本视频无字幕");
                 return;
             }
+
+            subtitle_delta = SharedPreferencesUtil.getFloat("player_subtitle_delta", 0.2f);
 
             boolean ai_not_only = (subtitleLinks.length > 2 || (subtitleLinks.length == 2 && !subtitleLinks[0].isAI));
             boolean ai_allowed = (from_btn || SharedPreferencesUtil.getBoolean("player_subtitle_ai_allowed", false));

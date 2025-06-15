@@ -23,6 +23,7 @@ import com.RobinNotBad.BiliClient.api.PlayerApi;
 import com.RobinNotBad.BiliClient.model.DownloadSection;
 import com.RobinNotBad.BiliClient.helper.sql.DownloadSqlHelper;
 import com.RobinNotBad.BiliClient.model.PlayerData;
+import com.RobinNotBad.BiliClient.model.SubtitleLink;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
@@ -52,7 +53,7 @@ import okio.Sink;
 
 public class DownloadService extends Service {
     public static boolean started;
-    public static boolean normalExit;
+    public static int exitCode;
     public static float percent = -1;
     public static String state;
     public static DownloadSection section;
@@ -65,6 +66,13 @@ public class DownloadService extends Service {
     private String exitMessage = null;
 
     private Timer toastTimer, notifyTimer;
+
+    private static final int NORMAL = 0;
+    private static final int ERR_NETWORK = -1;
+    private static final int ERR_JSON = -2;
+    private static final int ERR_FILE = -3;
+    private static final int ERR_DATABASE = -4;
+    private static final int ERR_UNKNOWN = -7;
 
     public DownloadService() {
     }
@@ -116,106 +124,169 @@ public class DownloadService extends Service {
     public int onStartCommand(Intent serviceIntent, int flags, int startId) {
         Logu.d("onStartCommand");
 
-        normalExit = false;
+        exitCode = ERR_UNKNOWN;
         startNotifyProgress();
 
-        CenterThreadPool.run(()->{
+        CenterThreadPool.run(()-> {
             boolean failed = false;
             while (!failed) {
                 DownloadSection section_tmp = getFirst();
-                if(section_tmp == null) break;
+                if (section_tmp == null) break;
 
                 section = section_tmp;
 
                 //获取视频链接
+                String url_video, url_danmaku;
                 try {
-                    String url_video, url_danmaku;
-                    try{
-                        PlayerData data = section.toPlayerData();
-                        PlayerApi.getVideo(data, true);
-                        url_video = data.videoUrl;
-                        url_danmaku = data.danmakuUrl;
-                    } catch (JSONException e){
-                        setState(section.id,"error");
-                        notifyCompletion("下载链接获取失败：\n" + section.name_short, (int) section.id);
-                        continue;
-                    }
-
-
-                    try {
-                        setState(section.id,"downloading");
-                        percent = 0;
-                        refreshDownloadList();
-
-                        File file_sign = null;
-                        switch (section.type) {
-                            case "video_single":  //单集视频
-                                File path_single = section.getPath();
-
-                                file_sign = new File(path_single,".DOWNLOADING");
-                                if(!file_sign.exists())file_sign.createNewFile();
-
-                                toastState("下载弹幕");
-                                downDanmaku(url_danmaku, new File(path_single, "danmaku.xml"));
-
-                                toastState("下载封面");
-                                downFile(section.url_cover, new File(path_single, "cover.png"));
-
-                                toastState("下载视频");
-                                downFile(url_video, new File(path_single, "video.mp4"));
-
-                                break;
-                            case "video_multi":  //多集视频
-                                File path_page = section.getPath();
-                                File path_parent = path_page.getParentFile();
-
-                                if(!path_page.exists()) path_page.mkdirs();
-
-                                file_sign = new File(path_page,".DOWNLOADING");
-                                if(!file_sign.exists())file_sign.createNewFile();
-
-                                toastState("下载封面");
-                                File cover_multi = new File(path_parent, "cover.png");
-                                if (!cover_multi.exists()) downFile(section.url_cover, cover_multi);
-
-                                toastState("下载弹幕");
-                                downDanmaku(url_danmaku, new File(path_page, "danmaku.xml"));
-
-                                toastState("下载视频");
-                                downFile(url_video, new File(path_page, "video.mp4"));
-
-                                break;
-                        }
-
-                        notifyCompletion("下载成功：\n" + section.name_short, (int) section.id);
-
-                        if(file_sign!=null && file_sign.exists()) file_sign.delete();
-
-                        deleteSection(section.id);
-
-                        refreshLocalList();
-                    } catch (RuntimeException e){
-                        e.printStackTrace();
-                        if(section != null) setState(section.id,"error");
-                        exitMessage = "下载失败：" + e.getMessage();
-                    }
-
+                    PlayerData data = section.toPlayerData();
+                    PlayerApi.getVideo(data, true);
+                    url_video = data.videoUrl;
+                    url_danmaku = data.danmakuUrl;
+                } catch (JSONException e) {
+                    setState(section.id, "error");
+                    notifyCompletion("下载链接获取失败：\n" + section.name_short, (int) section.id);
+                    continue;
                 } catch (IOException e) {
-                    exitMessage = "下载失败，网络或文件错误\n请手动前往下载列表页重启下载";
                     failed = true;
-                    stopSelf();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    exitCode = ERR_NETWORK;
+                    continue;
                 }
 
 
+                try {
+                    setState(section.id, "downloading");
+                    percent = 0;
+                    refreshDownloadList();
 
+                    File file_sign = null;
+
+                    int result;
+
+                    switch (section.type) {
+                        case "video_single":  //单集视频
+                            File path_single = section.getPath();
+
+                            file_sign = new File(path_single, ".DOWNLOADING");
+                            if (!file_sign.exists() && !file_sign.createNewFile()) {
+                                failed = true;
+                                exitCode = ERR_FILE;
+                                continue;
+                            }
+
+                            toastState("下载封面");
+                            result = downFile(section.url_cover, new File(path_single, "cover.png"));
+                            if (result != NORMAL) {
+                                failed = true;
+                                exitCode = result;
+                                continue;
+                            }
+
+                            toastState("下载字幕");
+                            downSubtitles(section.aid, section.cid, path_single);
+
+                            toastState("下载弹幕");
+                            result = downDanmaku(url_danmaku, new File(path_single, "danmaku.xml"));
+                            if (result != NORMAL) {
+                                failed = true;
+                                exitCode = result;
+                                continue;
+                            }
+
+                            toastState("下载视频");
+                            result = downFile(url_video, new File(path_single, "video.mp4"));
+                            if (result != NORMAL) {
+                                failed = true;
+                                exitCode = result;
+                                continue;
+                            }
+
+                            break;
+                        case "video_multi":  //多集视频
+                            File path_page = section.getPath();
+                            File path_parent = path_page.getParentFile();
+
+                            if (!path_page.exists() && !path_page.mkdirs()) {
+                                failed = true;
+                                exitCode = ERR_FILE;
+                                continue;
+                            }
+
+                            file_sign = new File(path_page, ".DOWNLOADING");
+                            if (!file_sign.exists() && !file_sign.createNewFile()) {
+                                failed = true;
+                                exitCode = ERR_FILE;
+                                continue;
+                            }
+
+                            toastState("下载封面");
+                            File cover_multi = new File(path_parent, "cover.png");
+                            if (!cover_multi.exists()) {
+                                result = downFile(section.url_cover, cover_multi);
+                                if (result != NORMAL) {
+                                    failed = true;
+                                    exitCode = result;
+                                    continue;
+                                }
+                            }
+
+                            toastState("下载字幕");
+                            downSubtitles(section.aid, section.cid, path_page);
+
+                            toastState("下载弹幕");
+                            result = downDanmaku(url_danmaku, new File(path_page, "danmaku.xml"));
+                            if (result != NORMAL) {
+                                failed = true;
+                                exitCode = result;
+                                continue;
+                            }
+
+                            toastState("下载视频");
+                            result = downFile(url_video, new File(path_page, "video.mp4"));
+                            if (result != NORMAL) {
+                                failed = true;
+                                exitCode = result;
+                                continue;
+                            }
+
+                            break;
+                    }
+
+                    notifyCompletion("下载成功：\n" + section.name_short, (int) section.id);
+
+                    if (file_sign != null && file_sign.exists()) file_sign.delete();
+
+                    deleteSection(section.id);
+
+                    refreshLocalList();
+                } catch (IOException e) {
+                    failed = true;
+                    exitCode = ERR_FILE;
+                }
             }
 
             refreshDownloadList();
 
-            normalExit = true;
-            exitMessage = "全部下载完成";
+            if (!failed) {
+                exitCode = NORMAL;
+                exitMessage = "全部下载完成";
+            }
+            else switch (exitCode){
+                case ERR_NETWORK:
+                    exitMessage = "下载失败，网络错误";
+                    break;
+                case ERR_JSON:
+                    exitMessage = "下载失败，视频链接获取错误";
+                    break;
+                case ERR_FILE:
+                    exitMessage = "下载失败，文件错误";
+                    break;
+                case ERR_DATABASE:
+                    exitMessage = "下载失败，数据库错误";
+                    break;
+                default:
+                    exitMessage = "下载失败，未知错误";
+            }
+
 
             stopSelf();
         });
@@ -300,16 +371,42 @@ public class DownloadService extends Service {
             ((LocalListActivity) (instance)).refresh();
     }
 
-    private void downFile(String url, File file) throws IOException {
-        Response response = NetWorkUtil.get(url);
+    private int downSubtitles(long aid, long cid, File folder) {
+        try {
+            SubtitleLink[] subtitleLinks = PlayerApi.getSubtitleLinks(aid, cid);
+            if(subtitleLinks.length <= 1) return NORMAL;
+
+            File subtitleFolder = new File(folder, "subtitles");
+            if (!subtitleFolder.mkdirs()) return ERR_FILE;
+            for (SubtitleLink subtitleLink: subtitleLinks) {
+                if(subtitleLink.id != -1){
+                    File subtitleFile = new File(subtitleFolder, subtitleLink.lang + ".json");
+                    if (!subtitleFile.createNewFile()) return ERR_FILE;
+                    int result = downFile(subtitleLink.url, subtitleFile);
+                    if(result != NORMAL) return result;
+                }
+            }
+        } catch (IOException e){
+            return ERR_NETWORK;
+        } catch (JSONException e){
+            return ERR_JSON;
+        }
+        return NORMAL;
+    }
+
+    private int downFile(String url, File file) throws IOException {
+        Response response;
+        try {
+            response = NetWorkUtil.get(url);
+        } catch (IOException e){
+            return ERR_NETWORK;
+        }
         InputStream inputStream = null;
         FileOutputStream fileOutputStream = null;
         try {
-            if (!file.exists()) file.createNewFile();
-            else {
-                file.delete();
-                file.createNewFile();
-            }
+            if (!file.exists() && !file.createNewFile()) return ERR_FILE;
+            else if (!file.delete() || !file.createNewFile()) return ERR_FILE;
+
             inputStream = Objects.requireNonNull(response.body()).byteStream();
             fileOutputStream = new FileOutputStream(file);
             int len;
@@ -321,37 +418,41 @@ public class DownloadService extends Service {
                 percent = 1.0f * CompleteFileSize / TotalFileSize;
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("文件错误");
+            return ERR_FILE;
         } finally {
-            if(inputStream!=null) inputStream.close();
-            if(fileOutputStream!=null) fileOutputStream.close();
+            if (inputStream != null) inputStream.close();
+            if (fileOutputStream != null) fileOutputStream.close();
             if (response.body() != null) response.body().close();
             response.close();
         }
+        return NORMAL;
     }
 
-    private void downDanmaku(String danmaku, File danmakuFile) throws IOException {
-        Response response = NetWorkUtil.get(danmaku);
+    private int downDanmaku(String danmaku, File danmakuFile) throws IOException {
+        Response response;
+        try {
+            response = NetWorkUtil.get(danmaku);
+        } catch (IOException e){
+            return ERR_NETWORK;
+        }
         BufferedSink bufferedSink = null;
         try {
-            if (!danmakuFile.exists()) danmakuFile.createNewFile();
-            else {
-                danmakuFile.delete();
-                danmakuFile.createNewFile();
-            }
+            if (!danmakuFile.exists() && !danmakuFile.createNewFile()) return ERR_FILE;
+            else if(!danmakuFile.delete() || !danmakuFile.createNewFile()) return ERR_FILE;
+
             Sink sink = Okio.sink(danmakuFile);
             byte[] decompressBytes = decompress(Objects.requireNonNull(response.body()).bytes());//调用解压函数进行解压，返回包含解压后数据的byte数组
             bufferedSink = Okio.buffer(sink);
             bufferedSink.write(decompressBytes);//将解压后数据写入文件（sink）中
             bufferedSink.close();
         } catch (IOException e) {
-            throw new RuntimeException("文件错误");
+            return ERR_FILE;
         } finally {
             if (bufferedSink != null) bufferedSink.close();
             if(response.body()!=null) response.body().close();
             response.close();
         }
+        return NORMAL;
     }
 
     @Override
@@ -378,7 +479,7 @@ public class DownloadService extends Service {
 
             CenterThreadPool.run(() -> {
                 notifyExit(exitMessage);
-                if(!normalExit) {
+                if(exitCode != NORMAL) {
                     setState(id, "none");
                     FileUtil.deleteFolder(folder);
                 }

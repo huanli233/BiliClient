@@ -55,7 +55,7 @@ public class FileUtil {
         folder.delete();
     }
 
-    public static JSONObject readJson(File file) {
+    public static String readString(File file) {
         if(file==null || !file.exists() || !file.canRead() || !file.isFile()) return null;
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -68,8 +68,8 @@ public class FileUtil {
                 outputStream.write(buffer.array(),0,i);
                 buffer.clear();
             }
-            return new JSONObject(outputStream.toString());
-        }catch (Exception e){
+            return outputStream.toString();
+        } catch (Exception e){
             e.printStackTrace();
             return null;
         }

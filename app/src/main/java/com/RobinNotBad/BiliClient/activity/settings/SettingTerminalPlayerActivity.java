@@ -52,6 +52,10 @@ public class SettingTerminalPlayerActivity extends RefreshListActivity {
 
             add(new SettingSection("divider", "", "", "", ""));
 
+            add(new SettingSection("input_float", "字幕校准", "player_subtitle_delta", "将字幕提前/退后一段时间，从而与视频对齐", "0.2"));
+
+            add(new SettingSection("divider", "", "", "", ""));
+
             add(new SettingSection("switch", "显示旋转按钮", "player_ui_showRotateBtn", "", "true"));
             add(new SettingSection("switch", "显示弹幕按钮", "player_ui_showDanmakuBtn", "", "true"));
         }};

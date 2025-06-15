@@ -18,6 +18,7 @@ import com.RobinNotBad.BiliClient.model.Subtitle;
 import com.RobinNotBad.BiliClient.model.SubtitleLink;
 import com.RobinNotBad.BiliClient.model.VideoInfo;
 import com.RobinNotBad.BiliClient.service.DownloadService;
+import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
@@ -28,11 +29,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class PlayerApi {
     public static void startGettingUrl(PlayerData playerData) {
@@ -261,6 +264,21 @@ public class PlayerApi {
          */
     }
 
+    /**
+     * 通过本地文件获取字幕
+     *
+     * @param folder 字幕文件夹
+     * @return 字幕列表
+     */
+    public static SubtitleLink[] getSubtitleLinks(File folder){
+        File[] files = folder.listFiles((dir, name) -> name.endsWith(".json"));
+        SubtitleLink[] links = new SubtitleLink[files != null ? (files.length + 1) : 1];
+        if(files != null) for (int i = 0; i < files.length; i++) {
+            links[i] = new SubtitleLink(i, files[i].getName(), files[i].toString(), false);
+        }
+        links[links.length-1] = new SubtitleLink(-1,"不显示字幕","null",false);
+        return links;
+    }
 
     /**
      * 获取视频的字幕链接列表
@@ -303,6 +321,28 @@ public class PlayerApi {
      */
     public static Subtitle[] getSubtitle(String url) throws JSONException, IOException {
         JSONArray body = NetWorkUtil.getJson(url).getJSONArray("body");
+        Subtitle[] subtitles = new Subtitle[body.length()];
+        for (int i = 0; i < body.length(); i++) {
+            JSONObject single = body.getJSONObject(i);
+            subtitles[i] = new Subtitle(
+                    single.getString("content"),
+                    single.getDouble("from"),
+                    single.getDouble("to"));
+        }
+        return subtitles;
+    }
+
+    /**
+     * 通过本地文件获取字幕
+     *
+     * @param file 传入json文件
+     * @return 逐条字幕的列表，每条包含文本和始末时间，时间以秒为单位
+     */
+    public static Subtitle[] getSubtitle(File file) throws JSONException {
+        String str = FileUtil.readString(file);
+        if(str == null) return null;
+
+        JSONArray body = new JSONObject(str).getJSONArray("body");
         Subtitle[] subtitles = new Subtitle[body.length()];
         for (int i = 0; i < body.length(); i++) {
             JSONObject single = body.getJSONObject(i);
