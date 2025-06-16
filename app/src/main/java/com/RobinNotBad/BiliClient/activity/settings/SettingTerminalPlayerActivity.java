@@ -52,7 +52,7 @@ public class SettingTerminalPlayerActivity extends RefreshListActivity {
 
             add(new SettingSection("divider", "", "", "", ""));
 
-            add(new SettingSection("input_float", "字幕校准", "player_subtitle_delta", "将字幕提前/退后一段时间，从而与视频对齐", "0.2"));
+            add(new SettingSection("input_float", "字幕校准", "player_subtitle_delta", "将字幕提前/退后一段时间，从而与视频对齐", "0.3"));
 
             add(new SettingSection("divider", "", "", "", ""));
 

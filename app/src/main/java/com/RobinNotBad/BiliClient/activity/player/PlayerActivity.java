@@ -923,7 +923,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 return;
             }
 
-            subtitle_delta = SharedPreferencesUtil.getFloat("player_subtitle_delta", 0.2f);
+            subtitle_delta = SharedPreferencesUtil.getFloat("player_subtitle_delta", 0.3f);
 
             boolean ai_not_only = (subtitleLinks.length > 2 || (subtitleLinks.length == 2 && !subtitleLinks[0].isAI));
             boolean ai_allowed = (from_btn || SharedPreferencesUtil.getBoolean("player_subtitle_ai_allowed", false));
