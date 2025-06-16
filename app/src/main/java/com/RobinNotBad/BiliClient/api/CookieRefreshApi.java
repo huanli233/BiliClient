@@ -99,6 +99,7 @@ public class CookieRefreshApi {
             SharedPreferencesUtil.putLong(SharedPreferencesUtil.mid, Long.parseLong(NetWorkUtil.getInfoFromCookie("DedeUserID", cookies_new)));
             SharedPreferencesUtil.putString(SharedPreferencesUtil.csrf, NetWorkUtil.getInfoFromCookie("bili_jct", cookies_new));
             Logu.v("Cookie刷新成功");
+            NetWorkUtil.refreshHeaders();
             return true;
         } else {
             Logu.e("Cookie刷新失败", "刷新时返回:" + result.getInt("code"));
