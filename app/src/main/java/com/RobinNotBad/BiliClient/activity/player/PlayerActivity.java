@@ -1286,7 +1286,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         }
 
 
-        if (danmakuFile != null && danmakuFile.exists()) danmakuFile.delete();
+        if (isOnlineVideo && danmakuFile != null && danmakuFile.exists()) danmakuFile.delete();
 
         if (liveWebSocket != null) {
             liveWebSocket.close(1000, "");

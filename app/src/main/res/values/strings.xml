@@ -208,6 +208,7 @@
 
     #新增功能放到上面，修复问题放下面，方便用户看见
     <string-array name="update_log_items">
+        <item>fix版本修复了播放缓存视频自动删弹幕的问题</item>
         <item>新增了缓存视频的大小显示</item>
         <item>新增了缓存下载字幕</item>
         <item>新增了字幕校准的设置项，默认+0.3s</item>
