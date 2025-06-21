@@ -16,6 +16,14 @@ import java.util.Objects;
 
 public class LikeCoinFavApi {
 
+    public static int triple(long aid) throws IOException, JSONException {
+        String url = "https://api.bilibili.com/x/web-interface/archive/like/triple";
+        String per = "aid=" + aid + "&csrf=" + SharedPreferencesUtil.getString("csrf", "");
+
+        JSONObject result = new JSONObject(Objects.requireNonNull(NetWorkUtil.post(url, per, NetWorkUtil.webHeaders).body()).string());
+        Log.e("debug-三联", result.toString());
+        return result.getInt("code");
+    }
 
     public static int like(long aid, int likeState) throws IOException, JSONException {  //likeState 1点赞0取消
         String url = "https://api.bilibili.com/x/web-interface/archive/like";

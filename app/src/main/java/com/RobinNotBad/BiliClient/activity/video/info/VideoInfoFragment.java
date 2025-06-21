@@ -524,23 +524,19 @@ public class VideoInfoFragment extends BaseFragment {
                     coin.clearAnimation();
                     fav.clearAnimation();
 
-                    if (!videoInfo.stats.liked) {
-                        rootview.findViewById(R.id.layout_like).performClick();
-                    }
-
-                    int coinsToAdd = Math.min(2 - videoInfo.stats.coined, 2);
-                    for (int i = 0; i < coinsToAdd; i++) {
-                        rootview.findViewById(R.id.layout_coin).performClick();
-                    }
-
-                    if (!videoInfo.stats.favoured) {
-                        Intent intent = new Intent();
-                        intent.setClass(requireContext(), AddFavoriteActivity.class);
-                        intent.putExtra("aid", videoInfo.aid);
-                        intent.putExtra("bvid", videoInfo.bvid);
-                        intent.putExtra("default_first", true);
-                        favLauncher.launch(intent);
-                    }
+                    CenterThreadPool.run(() -> {
+                        try {
+                            int code = LikeCoinFavApi.triple(aid);
+                            if (code == 0){
+                                coin.setImageResource(R.drawable.icon_coin_1);
+                                like.setImageResource(R.drawable.icon_like_1);
+                                fav.setImageResource(R.drawable.icon_fav_1);
+                                MsgUtil.showMsg("三联成功");
+                            } else MsgUtil.showMsg("三联失败，错误码：" + code);
+                        }catch (Exception e){
+                            MsgUtil.err("三联失败", e);
+                        }
+                    });
                 };
                 like.postDelayed(tripleActionRunnable, 2000);
 
