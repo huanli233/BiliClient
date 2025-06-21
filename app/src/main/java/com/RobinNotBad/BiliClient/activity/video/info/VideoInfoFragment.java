@@ -18,9 +18,12 @@ import android.text.style.ClickableSpan;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -82,21 +85,8 @@ import java.util.regex.Pattern;
 
 public class VideoInfoFragment extends BaseFragment {
 
-    private VideoInfo videoInfo;
-    private PlayerData playerData;
-    private long aid;
-    private String bvid;
-
-    private TextView description;
-    private TextView tagsText;
-    private ImageView fav;
-
     final int RESULT_ADDED = 1;
     final int RESULT_DELETED = -1;
-
-    private int coinAdd = 0;
-
-    private boolean desc_expand = false, tags_expand = false;
     final ActivityResultLauncher<Intent> favLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
         @Override
         public void onActivityResult(ActivityResult o) {
@@ -108,7 +98,7 @@ public class VideoInfoFragment extends BaseFragment {
             }
         }
     });
-
+    private VideoInfo videoInfo;
     // 其实我不会用，也是抄的上面的😡
     final ActivityResultLauncher<Intent> writeDynamicLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
         @Override
@@ -135,11 +125,24 @@ public class VideoInfoFragment extends BaseFragment {
                         if (dynId != -1) MsgUtil.showMsg("转发成功~");
                         else MsgUtil.showMsg("转发失败");
 
-                    } catch (Exception e) {MsgUtil.err(e);}
+                    } catch (Exception e) {
+                        MsgUtil.err(e);
+                    }
                 });
             }
         }
     });
+    private PlayerData playerData;
+    private long aid;
+    private String bvid;
+    private TextView description;
+    private TextView tagsText;
+    private ImageView like, coin, fav;
+    private int coinAdd = 0;
+    private boolean desc_expand = false, tags_expand = false;
+    private Animation shakeAnimation;
+    private Runnable tripleActionRunnable;
+    private boolean isTripleInProgress = false;
 
     public VideoInfoFragment() {
     }
@@ -158,7 +161,7 @@ public class VideoInfoFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
-        if(bundle == null) {
+        if (bundle == null) {
             MsgUtil.showMsg("视频详情页：数据为空");
             return;
         }
@@ -176,30 +179,31 @@ public class VideoInfoFragment extends BaseFragment {
         super.onViewCreated(rootview, savedInstanceState);
 
         TerminalContext.getInstance().getVideoInfoByAidOrBvId(aid, bvid).observe(getViewLifecycleOwner(), (videoInfoResult) -> videoInfoResult.onSuccess((videoInfo) -> {
-            if(getLifecycle().getCurrentState() == Lifecycle.State.DESTROYED) return;
+            if (getLifecycle().getCurrentState() == Lifecycle.State.DESTROYED) return;
             this.videoInfo = videoInfo;
 
-            if(videoInfo == null){
+            if (videoInfo == null) {
                 Activity activity = getActivity();
-                if(activity == null) return;
+                if (activity == null) return;
                 activity.finish();
                 return;
             }
 
             initView(rootview);
-        }).onFailure((error) -> {}));
+        }).onFailure((error) -> {
+        }));
     }
 
     @SuppressLint("SetTextI18n")
-    private void initView(View rootview){
-        if(SharedPreferencesUtil.getBoolean("ui_landscape",false)) {
+    private void initView(View rootview) {
+        if (SharedPreferencesUtil.getBoolean("ui_landscape", false)) {
             WindowManager windowManager = (WindowManager) rootview.getContext().getSystemService(Context.WINDOW_SERVICE);
             Display display = windowManager.getDefaultDisplay();
             DisplayMetrics metrics = new DisplayMetrics();
-            if(Build.VERSION.SDK_INT >= 17) display.getRealMetrics(metrics);
+            if (Build.VERSION.SDK_INT >= 17) display.getRealMetrics(metrics);
             else display.getMetrics(metrics);
             int paddings = metrics.widthPixels / 6;
-            rootview.setPadding(paddings,0,paddings,0);
+            rootview.setPadding(paddings, 0, paddings, 0);
         }
 
         ImageView cover = rootview.findViewById(R.id.img_cover);
@@ -218,8 +222,8 @@ public class VideoInfoFragment extends BaseFragment {
         MaterialButton relay = rootview.findViewById(R.id.relay);
         TextView bvidText = rootview.findViewById(R.id.bvidText);
         TextView danmakuCount = rootview.findViewById(R.id.danmakuCount);
-        ImageView like = rootview.findViewById(R.id.btn_like);
-        ImageView coin = rootview.findViewById(R.id.btn_coin);
+        like = rootview.findViewById(R.id.btn_like);
+        coin = rootview.findViewById(R.id.btn_coin);
         fav = rootview.findViewById(R.id.btn_fav);
         TextView likeLabel = rootview.findViewById(R.id.like_label);
         TextView coinLabel = rootview.findViewById(R.id.coin_label);
@@ -231,7 +235,7 @@ public class VideoInfoFragment extends BaseFragment {
 
         if (videoInfo.epid != -1) { //不是空的的话就应该跳转到番剧页面了
             Context context = rootview.getContext();
-            if(context == null) return;
+            if (context == null) return;
             CenterThreadPool.run(() -> {
                 TerminalContext.getInstance()
                         .enterVideoDetailPage(context, BangumiApi.getMdidFromEpid(videoInfo.epid), null, "media");
@@ -273,8 +277,7 @@ public class VideoInfoFragment extends BaseFragment {
                     MsgUtil.err(e);
                 }
             });
-        }
-        else tagsText.setVisibility(View.GONE);
+        } else tagsText.setVisibility(View.GONE);
 
         //点赞投币收藏
         if (videoInfo.stats.coined != 0)
@@ -285,11 +288,11 @@ public class VideoInfoFragment extends BaseFragment {
             fav.setImageResource(R.drawable.icon_fav_1);
 
         //历史上报
-        CenterThreadPool.run(()-> {
+        CenterThreadPool.run(() -> {
             try {
                 playerData = videoInfo.toPlayerData(0);
                 PlayerApi.getVideo(playerData, false);
-                if(playerData == null) return;
+                if (playerData == null) return;
                 HistoryApi.reportHistory(videoInfo.aid, playerData.cidHistory, playerData.progress / 1000);
             } catch (Exception e) {
                 MsgUtil.err(e);
@@ -300,7 +303,7 @@ public class VideoInfoFragment extends BaseFragment {
         //封面
         cover.requestFocus();
         cover.setOnClickListener(view1 -> {
-            if(SharedPreferencesUtil.getBoolean("cover_play_enable", true)) playClick();
+            if (SharedPreferencesUtil.getBoolean("cover_play_enable", true)) playClick();
             else showCover();
         });
         cover.setOnLongClickListener(v -> {
@@ -389,9 +392,9 @@ public class VideoInfoFragment extends BaseFragment {
                             break;
                         case 65006:
                             msg = "已经点赞过了喵~";
-                            videoInfo.stats.liked = true;    
-                            runOnUiThread(() ->like.setImageResource(R.drawable.icon_like_1));
-                            break;    
+                            videoInfo.stats.liked = true;
+                            runOnUiThread(() -> like.setImageResource(R.drawable.icon_like_1));
+                            break;
                     }
                     String finalMsg = msg;
                     MsgUtil.showMsg(finalMsg);
@@ -500,6 +503,71 @@ public class VideoInfoFragment extends BaseFragment {
         } else {
             collectionCard.setVisibility(View.GONE);
         }
+
+        // 一键三联
+        rootview.findViewById(R.id.layout_like).setOnLongClickListener(v -> {
+            if (SharedPreferencesUtil.getBoolean("like_one_triple", true) &&
+                    SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) != 0) {
+
+                if (shakeAnimation == null) {
+                    shakeAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.shake);
+                    shakeAnimation.setRepeatCount(Animation.INFINITE);
+                }
+
+                like.startAnimation(shakeAnimation);
+                coin.startAnimation(shakeAnimation);
+                fav.startAnimation(shakeAnimation);
+
+                isTripleInProgress = true;
+                tripleActionRunnable = () -> {
+                    like.clearAnimation();
+                    coin.clearAnimation();
+                    fav.clearAnimation();
+
+                    if (!videoInfo.stats.liked) {
+                        rootview.findViewById(R.id.layout_like).performClick();
+                    }
+
+                    int coinsToAdd = Math.min(2 - videoInfo.stats.coined, 2);
+                    for (int i = 0; i < coinsToAdd; i++) {
+                        rootview.findViewById(R.id.layout_coin).performClick();
+                    }
+
+                    if (!videoInfo.stats.favoured) {
+                        Intent intent = new Intent();
+                        intent.setClass(requireContext(), AddFavoriteActivity.class);
+                        intent.putExtra("aid", videoInfo.aid);
+                        intent.putExtra("bvid", videoInfo.bvid);
+                        intent.putExtra("default_first", true);
+                        favLauncher.launch(intent);
+                    }
+                };
+                like.postDelayed(tripleActionRunnable, 2000);
+
+                return true;
+            }
+            return false;
+        });
+
+        rootview.findViewById(R.id.layout_like).setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP ||
+                    event.getAction() == MotionEvent.ACTION_CANCEL) {
+                cancelTripleAction();
+            }
+            return false;
+        });
+    }
+
+    private void cancelTripleAction() {
+        if (isTripleInProgress) {
+            isTripleInProgress = false;
+            if (tripleActionRunnable != null) {
+                like.removeCallbacks(tripleActionRunnable);
+            }
+            like.clearAnimation();
+            coin.clearAnimation();
+            fav.clearAnimation();
+        }
     }
 
 
@@ -520,7 +588,7 @@ public class VideoInfoFragment extends BaseFragment {
         return titleStr;
     }
 
-    private SpannableStringBuilder getDescSpan(String tags){
+    private SpannableStringBuilder getDescSpan(String tags) {
         SpannableStringBuilder tag_str = new SpannableStringBuilder("标签：");
         for (String str : tags.split("/")) {
             int old_len = tag_str.length();
@@ -545,10 +613,10 @@ public class VideoInfoFragment extends BaseFragment {
     }
 
     private void playClick() {
-        if(SharedPreferencesUtil.getBoolean("first_play",true)){
+        if (SharedPreferencesUtil.getBoolean("first_play", true)) {
             SharedPreferencesUtil.putBoolean("first_play", false);
 
-            if(SharedPreferencesUtil.getBoolean("cover_play_enable", true))
+            if (SharedPreferencesUtil.getBoolean("cover_play_enable", true))
                 MsgUtil.showDialog("播放视频", getString(R.string.tutorial_cover_play_enabled));
             else
                 MsgUtil.showDialog("播放视频", getString(R.string.tutorial_cover_play_disabled));
@@ -560,31 +628,30 @@ public class VideoInfoFragment extends BaseFragment {
         //在播放前清除内存缓存，因为手表内存太小了，播放完回来经常把Activity全释放掉
         //...经过测试，还是会释放，但会好很多
         if (videoInfo.pagenames.size() == 1) PlayerApi.startGettingUrl(playerData);
-        else startActivity(new Intent(requireContext(), MultiPageActivity.class).putExtra("data", playerData));
+        else
+            startActivity(new Intent(requireContext(), MultiPageActivity.class).putExtra("data", playerData));
 
         playerData.timeStamp = 0;
     }
 
-    private void downloadClick(){
+    private void downloadClick() {
         if (!FileUtil.checkStoragePermission()) {
             FileUtil.requestStoragePermission(requireActivity());
         } else {
-            File downPath = FileUtil.getVideoDownloadPath(videoInfo.title,null);
+            File downPath = FileUtil.getVideoDownloadPath(videoInfo.title, null);
 
-            if (downPath.exists() && videoInfo.pagenames.size() == 1){
-                File file_sign = new File(downPath,".DOWNLOADING");
+            if (downPath.exists() && videoInfo.pagenames.size() == 1) {
+                File file_sign = new File(downPath, ".DOWNLOADING");
                 MsgUtil.showMsg(file_sign.exists() ? "已在下载队列\n如有异常，长按可清空文件" : "已下载完成");
-            }
-            else {
+            } else {
                 if (videoInfo.pagenames.size() > 1) {
                     Intent intent = new Intent();
                     intent.setClass(requireContext(), MultiPageActivity.class)
                             .putExtra("download", 1)
                             .putExtra("data", playerData);
                     startActivity(intent);
-                }
-                else {
-                    startActivity(new Intent(requireContext(),QualityChooserActivity.class)
+                } else {
+                    startActivity(new Intent(requireContext(), QualityChooserActivity.class)
                             .putExtra("page", 0)
                             .putExtra("aid", videoInfo.aid)
                             .putExtra("bvid", videoInfo.bvid)
@@ -594,7 +661,7 @@ public class VideoInfoFragment extends BaseFragment {
         }
     }
 
-    private void showCover(){
+    private void showCover() {
         try {
             Intent intent = new Intent();
             intent.setClass(requireContext(), ImageViewerActivity.class);
@@ -602,7 +669,8 @@ public class VideoInfoFragment extends BaseFragment {
             imageList.add(videoInfo.cover);
             intent.putExtra("imageList", imageList);
             requireContext().startActivity(intent);
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
     }
 
 
@@ -612,7 +680,7 @@ public class VideoInfoFragment extends BaseFragment {
             if (activity instanceof VideoInfoActivity) {
                 ((VideoInfoActivity) activity).crossFade(getView());
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -620,6 +688,8 @@ public class VideoInfoFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         Logu.d("onDestroy");
+        cancelTripleAction();
         super.onDestroy();
+
     }
 }

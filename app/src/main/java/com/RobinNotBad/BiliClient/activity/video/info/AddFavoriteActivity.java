@@ -48,6 +48,14 @@ public class AddFavoriteActivity extends RefreshListActivity {
                 setAdapter(adapter);
 
                 setRefreshing(false);
+
+                if (getIntent().getBooleanExtra("default_first", false)) {
+                    int result = FavoriteApi.addFavorite(aid, fidList.get(0));
+                    if (result != 0) runOnUiThread(() -> {
+                        MsgUtil.showMsg("添加失败！错误码：" + result);
+                    });
+                    finish();
+                }
             } catch (Exception e) {
                 loadFail(e);
             }
@@ -57,7 +65,7 @@ public class AddFavoriteActivity extends RefreshListActivity {
     @Override
     public void finish() {
         if (adapter != null) {
-            if (adapter.added) {
+            if (adapter.added || getIntent().getBooleanExtra("default_first", false)) {
                 setResult(RESULT_ADDED);
             } else if (adapter.isAllDeleted()) {
                 setResult(RESULT_DELETED);
@@ -69,7 +77,7 @@ public class AddFavoriteActivity extends RefreshListActivity {
     @Override
     protected void onDestroy() {
         if (adapter != null) {
-            if (SharedPreferencesUtil.getBoolean("fav_notice", true)) {
+            if (SharedPreferencesUtil.getBoolean("fav_notice", true) && !getIntent().getBooleanExtra("default_first", false)) {
                 if (adapter.added) MsgUtil.showMsg("添加成功");
                 else if (adapter.isAllDeleted()) MsgUtil.showMsg("删除成功");
                 else if (adapter.changed) MsgUtil.showMsg("更改成功");

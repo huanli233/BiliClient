@@ -224,6 +224,7 @@
     <string name="btn_confirm_settings">确认设置</string>
     <string name="btn_preview">查看预览</string>
     <string name="btn_login_copy">复制</string>
+    <string name="desc_one_triple">开启此选项后，在视频详情页长按点赞按钮可以进行一键三联操作</string>
 
     #后来写新功能添加的教程请放在列表的第一个
     <array name="tutorial_space">
