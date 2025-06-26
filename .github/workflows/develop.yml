@@ -1,0 +1,60 @@
+# .github/workflows/sync-gitee-develop.yml
+
+# 工作流程的名称
+name: Sync Gitee Develop Branch
+
+# 工作流程的触发条件
+on:
+  # 1. 定时触发：每天凌晨2点 (UTC时间) 自动执行一次
+  schedule:
+    - cron: '0 2 * * *'
+  
+  # 2. 手动触发：允许你在 GitHub Actions 页面手动点击 "Run workflow" 来触发
+  workflow_dispatch:
+
+# 权限设置：允许工作流程对仓库内容进行写操作
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    # 运行环境
+    runs-on: ubuntu-latest
+    
+    # 任务步骤
+    steps:
+      # 第一步：检出（Checkout）当前 GitHub 仓库的代码
+      # 这是为了能够将之后从 Gitee 拉取的内容推送到这个仓库
+      - name: Checkout Target Repo
+        uses: actions/checkout@v4
+        with:
+          # 指定要操作的分支为 'develop'
+          ref: 'develop'
+
+      # 第二步：从 Gitee 的 develop 分支拉取代码并强制同步
+      - name: Sync from Gitee Repo
+        run: |
+          # 设置 Git 用户信息，这样提交记录会显示是由 action 完成的
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+          # 添加 Gitee 仓库作为远程源，命名为 "gitee"
+          # 使用 --mirror 选项的 Gitee 地址可以获得更好的性能和完整性
+          echo "Adding Gitee remote..."
+          git remote add gitee https://gitee.com/RobinNotBad/BiliClient.git
+          
+          # 从 Gitee 源拉取 develop 分支的最新内容
+          echo "Fetching from Gitee develop branch..."
+          git fetch gitee develop
+          
+          # 将本地的 develop 分支重置为 Gitee 的 develop 分支状态
+          # 这会丢弃当前 GitHub 仓库 develop 分支上所有本地独有的提交
+          echo "Resetting local develop to Gitee's develop..."
+          git reset --hard gitee/develop
+          
+          # 强制推送到 GitHub 仓库的 develop 分支
+          # --force 是必须的，因为 reset 操作改变了 Git 历史
+          echo "Force pushing to GitHub develop branch..."
+          git push origin develop --force
+          
+          echo "Sync completed
