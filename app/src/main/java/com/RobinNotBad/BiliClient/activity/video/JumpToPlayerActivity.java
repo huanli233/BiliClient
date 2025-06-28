@@ -17,7 +17,6 @@ import com.RobinNotBad.BiliClient.activity.DownloadActivity;
 import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
 import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.api.PlayerApi;
-import com.RobinNotBad.BiliClient.model.ApiResult;
 import com.RobinNotBad.BiliClient.model.PlayerData;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.Logu;
