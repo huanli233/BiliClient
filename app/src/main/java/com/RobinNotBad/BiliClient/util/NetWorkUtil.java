@@ -13,9 +13,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,6 +31,7 @@ import java.util.zip.Inflater;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
 
+import okhttp3.Dns;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -43,6 +47,14 @@ import okhttp3.ResponseBody;
 
 public class NetWorkUtil {
     private static final AtomicReference<OkHttpClient> INSTANCE = new AtomicReference<>();
+
+    private static class Inet4Selector implements Dns {
+        @NonNull
+        @Override
+        public List<InetAddress> lookup(@NonNull String hostname) throws UnknownHostException {
+            return List.of(Inet4Address.getAllByName(hostname));    //筛选IPV4地址，IPV6请求有异常
+        }
+    }
 
     public static OkHttpClient getOkHttpInstance() {
         while (INSTANCE.get() == null) {
@@ -71,6 +83,7 @@ public class NetWorkUtil {
                         return response;
                     })
                     .addInterceptor(new CookieSaveInterceptor())
+                    .dns(new Inet4Selector())
                     .pingInterval(15, TimeUnit.SECONDS)
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(15, TimeUnit.SECONDS).build());
