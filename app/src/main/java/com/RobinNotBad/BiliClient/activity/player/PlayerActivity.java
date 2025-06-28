@@ -252,7 +252,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             seekbar_progress.setVisibility(View.GONE);
             seekbar_progress.setEnabled(false);
             streamDanmaku(null); //用来初始化一下弹幕层
-            danmuSocketConnect();
+            //danmuSocketConnect();
+            //先把弹幕连接注释掉
         }
 
         layout_control.postDelayed(() -> CenterThreadPool.run(() -> {    //等界面加载完成
