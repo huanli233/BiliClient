@@ -29,13 +29,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class PlayerApi {
     public static void startGettingUrl(PlayerData playerData) {
@@ -211,13 +209,14 @@ public class PlayerApi {
                 intent.putExtra("url", playerData.videoUrl);
                 intent.putExtra("danmaku", playerData.danmakuUrl);
                 intent.putExtra("title", playerData.title);
+                intent.putExtra("live_mode", playerData.isLive());
                 break;
 
             case "aliangPlayer":
                 intent.setClassName(context.getString(R.string.player_package_aliang), "com.aliangmaker.media.PlayVideoActivity");
                 intent.putExtra("name", playerData.title);
                 intent.putExtra("danmaku", playerData.danmakuUrl);
-                intent.putExtra("live_mode", playerData.isLocal());
+                intent.putExtra("live_mode", playerData.isLive());
 
                 intent.setData(Uri.parse(playerData.videoUrl));
 
