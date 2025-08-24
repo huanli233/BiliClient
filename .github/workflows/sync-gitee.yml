@@ -1,0 +1,65 @@
+# .github/workflows/sync-gitee.yml
+# 此版本专为“默认分支是 develop 且 workflow 文件也在 develop 上”的场景设计
+
+name: Sync Gitee Develop Branch (Self-healing)
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  
+  workflow_dispatch:
+
+# 定义一个环境变量，方便后续引用 workflow 文件路径
+env:
+  WORKFLOW_FILE: .github/workflows/sync-gitee.yml
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Target Repo
+        uses: actions/checkout@v4
+        # 因为 workflow 文件就在 develop 分支，所以直接 checkout 默认分支即可
+      
+      - name: Sync from Gitee Repo with Self-healing
+        run: |
+          # 1. 备份工作流文件
+          echo "Backing up workflow file: ${{ env.WORKFLOW_FILE }}"
+          cp ${{ env.WORKFLOW_FILE }} /tmp/workflow_backup.yml
+
+          # 2. 配置 Git
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+          # 3. 添加 Gitee 远程源并拉取
+          echo "Adding Gitee remote and fetching..."
+          git remote add gitee https://gitee.com/RobinNotBad/BiliClient.git
+          git fetch gitee develop
+
+          # 4. 重置本地分支为 Gitee 的状态 (此时 workflow 文件会被删除)
+          echo "Resetting local develop to Gitee's state..."
+          git reset --hard gitee/develop
+
+          # 5. 恢复工作流文件
+          echo "Restoring workflow file..."
+          # 确保目录存在
+          mkdir -p .github/workflows
+          mv /tmp/workflow_backup.yml ${{ env.WORKFLOW_FILE }}
+
+          # 6. 将恢复的文件添加到 Git 暂存区
+          git add ${{ env.WORKFLOW_FILE }}
+
+          # 7. 使用 amend 修改最后一次提交，将 workflow 文件注入，同时保持 commit message 不变
+          # 这是最关键的一步，它不会产生新的 "Restore workflow" commit，而是让历史保持干净
+          echo "Amending last commit to include workflow file..."
+          git commit --amend --no-edit
+
+          # 8. 强制推送到 GitHub，覆盖远程分支
+          echo "Force pushing to GitHub develop branch..."
+          git push origin develop --force
+          
+          echo "Sync completed successfully."

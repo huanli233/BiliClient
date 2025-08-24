@@ -53,7 +53,7 @@ public class SearchActivity extends InstanceActivity {
     boolean tutorial_show;
     String classname;
 
-    String[] specialList = {"自杀","自尽","自残","抑郁","双相"};
+    String[] specialList = {"心理疾病","自杀","自尽","自残","抑郁","双相","安眠药"};
 
     @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged", "InflateParams"})
     @Override
