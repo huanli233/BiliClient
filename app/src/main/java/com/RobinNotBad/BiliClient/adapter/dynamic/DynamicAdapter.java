@@ -69,7 +69,7 @@ public class DynamicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 intent.setClass(context, SendDynamicActivity.class);
                 writeDynamicLauncher.launch(intent);
             });
-            writeDynamic.type.setOnClickListener((view) -> dynamicActivity.selectTypeLauncher.launch(new Intent().setClass(context, ListChooseActivity.class).putExtra("title", "选择类型").putExtra("items", new ArrayList<>(Arrays.asList("全部", "视频投稿", "追番", "专栏")))));
+            writeDynamic.type.setOnClickListener((view) -> dynamicActivity.selectTypeLauncher.launch(new Intent().setClass(context, ListChooseActivity.class).putExtra("title", "选择类型").putExtra("items", new ArrayList<>(Arrays.asList("全部", "视频投稿", "追番", "专栏", "图文")))));
             writeDynamic.live.setOnClickListener(view -> {
                 Intent intent = new Intent(context, FollowLiveActivity.class);
                 context.startActivity(intent);

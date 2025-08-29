@@ -38,12 +38,15 @@ public class DynamicActivity extends RefreshMainActivity {
     private long offset = 0;
     private boolean firstRefresh = true;
     private String type = "all";
-    private static final Map<String, String> typeNameMap = Map.of(
-            "全部", "all",
-            "视频投稿", "video",
-            "追番", "pgc",
-            "专栏", "article"
-    );
+    private static final Map<String, String> typeNameMap;
+    static {
+        typeNameMap = new HashMap<>();
+        typeNameMap.put("全部", "all");
+        typeNameMap.put("视频投稿", "video");
+        typeNameMap.put("追番", "pgc");
+        typeNameMap.put("专栏", "article");
+        typeNameMap.put("图文", "draw");
+    }
     public final ActivityResultLauncher<Intent> selectTypeLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
         int code = result.getResultCode();
         Intent data = result.getData();
@@ -195,12 +198,28 @@ public class DynamicActivity extends RefreshMainActivity {
         CenterThreadPool.run(() -> {
             try {
                 List<Dynamic> list = new ArrayList<>();
-                offset = DynamicApi.getDynamicList(list, offset, 0, type);
+                String requestType = type;
+                if ("draw".equals(type)) {
+                    requestType = "all";
+                }
+                offset = DynamicApi.getDynamicList(list, offset, 0, requestType);
+
+                if ("draw".equals(type)) {
+                    List<Dynamic> filteredList = new ArrayList<>();
+                    for (Dynamic dynamic : list) {
+                        if (dynamic.major_type != null && (dynamic.major_type.equals("MAJOR_TYPE_DRAW") || dynamic.major_type.equals("MAJOR_TYPE_OPUS"))) {
+                            filteredList.add(dynamic);
+                        }
+                    }
+                    list = filteredList;
+                }
+
                 bottom = (offset == -1);
                 setRefreshing(false);
 
+                final List<Dynamic> finalList = list;
                 runOnUiThread(() -> {
-                    dynamicList.addAll(list);
+                    dynamicList.addAll(finalList);
                     if (firstRefresh) {
                         firstRefresh = false;
                         dynamicAdapter = new DynamicAdapter(this, dynamicList, recyclerView);
@@ -209,7 +228,7 @@ public class DynamicActivity extends RefreshMainActivity {
                         if (refresh) {
                             dynamicAdapter.notifyDataSetChanged();
                         } else {
-                            dynamicAdapter.notifyItemRangeInserted(dynamicList.size() - list.size() + 1, list.size());
+                            dynamicAdapter.notifyItemRangeInserted(dynamicList.size() - finalList.size() + 1, finalList.size());
                         }
                     }
                 });
