@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -45,7 +46,13 @@ public class FolderManagerActivity extends InstanceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_folder_manager);
-        setMenuClick();
+
+        TextView pageName = findViewById(R.id.pageName);
+        pageName.setText("文件夹管理");
+        pageName.setOnClickListener(v -> finish());
+
+        // Disable the original menu click
+        findViewById(R.id.timeText).setOnClickListener(null);
 
         foldersConfigFile = FileUtil.getFoldersConfigFile();
 
@@ -193,6 +200,10 @@ public class FolderManagerActivity extends InstanceActivity {
             }
         });
         dialog.show();
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = (int) (getResources().getDisplayMetrics().widthPixels * 0.8);
+        dialog.getWindow().setAttributes(lp);
     }
 
     private void createNewFolder(String folderName) {

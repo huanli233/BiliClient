@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.InstanceActivity;
@@ -38,12 +40,16 @@ public class FolderVideosActivity extends InstanceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_main_refresh);
-        setMenuClick();
 
         folderName = getIntent().getStringExtra("folderName");
 
         TextView pageName = findViewById(R.id.pageName);
         pageName.setText(folderName);
+        pageName.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(this, R.drawable.arrow_back), null, null, null);
+        pageName.setOnClickListener(v -> finish());
+
+        // Disable the original menu click
+        findViewById(R.id.timeText).setOnClickListener(null);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(getLayoutManager());
