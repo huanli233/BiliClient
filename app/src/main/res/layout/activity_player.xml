@@ -33,7 +33,7 @@
             android:id="@+id/text_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/text_progress"
+            android:layout_above="@id/text_progress"
             android:layout_centerHorizontal="true"
             android:alpha="0.8"
             android:background="@drawable/background_grey_cardview"
@@ -80,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="4dp"
-                android:layout_toStartOf="@+id/clock_layout"
+                android:layout_toStartOf="@id/clock_layout"
                 android:drawableStart="@drawable/arrow_back"
                 android:text="@string/pagename_player"
                 android:textColor="@color/textwhite"
@@ -176,9 +176,9 @@
             android:id="@+id/right_control"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_above="@+id/bottom_control"
+            android:layout_above="@id/bottom_control"
             android:gravity="center"
-            android:layout_below="@+id/top"
+            android:layout_below="@id/top"
             android:layout_alignParentRight="true"
             android:layout_marginEnd="4dp"
             android:orientation="horizontal">
@@ -221,6 +221,17 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:scaleType="fitXY"
                     android:src="@mipmap/loopoff" />
+
+                <TextView
+                    android:id="@+id/lock_btn"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="L"
+                    android:textColor="@color/textwhite"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -351,7 +362,7 @@
                 android:textAlignment="center"
                 android:textColor="#DDDDDD"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/seekbar_speed" />
+                app:layout_constraintBottom_toTopOf="@id/seekbar_speed" />
 
             <SeekBar
                 android:id="@+id/seekbar_speed"
@@ -485,5 +496,20 @@
         </LinearLayout>
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/unlock_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:background="@drawable/background_grey_cardview"
+        android:padding="8dp"
+        android:text="L"
+        android:textColor="@color/textwhite"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
 </RelativeLayout>

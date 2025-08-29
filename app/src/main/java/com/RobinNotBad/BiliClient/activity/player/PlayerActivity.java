@@ -121,6 +121,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private ImageView img_loading;
     private AnimationDrawable anim_loading;
     private ImageButton btn_control, btn_danmaku, btn_loop, btn_rotate, btn_menu, btn_subtitle, btn_danmaku_send;
+    private TextView btn_lock, btn_unlock;
     private SeekBar seekbar_progress, seekbar_speed;
     private TextView text_progress, text_online, text_volume, loading_text0, loading_text1, text_speed, text_newspeed;
     public TextView text_title, text_subtitle;
@@ -131,6 +132,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     private boolean isPlaying, isPrepared, hasDanmaku,
             isOnlineVideo, isLiveMode, isSeeking, isDanmakuVisible;
     private boolean menu_opened = false;
+    private boolean isLocked = false;
 
     private int video_all, video_now, video_now_last;
     private long progress_history;
@@ -168,6 +170,10 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     @Override
     public void onBackPressed() {
+        if (isLocked) {
+            btn_unlock.performClick();
+            return;
+        }
         if (!SharedPreferencesUtil.getBoolean("back_disable", false)) super.onBackPressed();
     }
 
@@ -310,6 +316,8 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         btn_danmaku_send = findViewById(R.id.danmaku_send_btn);
         btn_subtitle = findViewById(R.id.subtitle_btn);
         btn_control = findViewById(R.id.button_video);
+        btn_lock = findViewById(R.id.lock_btn);
+        btn_unlock = findViewById(R.id.unlock_btn);
         seekbar_progress = findViewById(R.id.videoprogress);
         loading_text0 = findViewById(R.id.loading_text0);
         loading_text1 = findViewById(R.id.loading_text1);
@@ -338,27 +346,40 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
             boolean doublemove_enabled = SharedPreferencesUtil.getBoolean("player_doublemove", true);  //是否启用双指移动
 
             layout_control.setOnTouchListener((v, event) -> {
-                int action = event.getActionMasked();
-                int pointerCount = event.getPointerCount();
-                boolean singleTouch = pointerCount == 1;
-                boolean doubleTouch = pointerCount == 2;
+                if (!isLocked) {
+                    int action = event.getActionMasked();
+                    int pointerCount = event.getPointerCount();
+                    boolean singleTouch = pointerCount == 1;
+                    boolean doubleTouch = pointerCount == 2;
 
-                //Logu.v("gesture", event.getEventTime() + "");
-                scaleGestureDetector.onTouchEvent(event);
-                boolean gesture_scaling = scaleGestureListener.scaling;
+                    //Logu.v("gesture", event.getEventTime() + "");
+                    scaleGestureDetector.onTouchEvent(event);
+                    boolean gesture_scaling = scaleGestureListener.scaling;
 
-                if (!gesture_scaled && gesture_scaling) gesture_scaled = true;
+                    if (!gesture_scaled && gesture_scaling) gesture_scaled = true;
 
-                //Logu.v("gesture", (scaling ? "scaled-yes" : "scaled-no"));
+                    //Logu.v("gesture", (scaling ? "scaled-yes" : "scaled-no"));
 
-                switch (action) {
-                    case MotionEvent.ACTION_MOVE:
-                        if (singleTouch) {
-                            if (gesture_scaling) {
-                                videoMoveBy(0, 0);    //防止单指缩放出框
-                            } else if (!(gesture_scaled && !doublemove_enabled)) {
-                                float currentX = event.getX(0);  //单指移动
-                                float currentY = event.getY(0);
+                    switch (action) {
+                        case MotionEvent.ACTION_MOVE:
+                            if (singleTouch) {
+                                if (gesture_scaling) {
+                                    videoMoveBy(0, 0);    //防止单指缩放出框
+                                } else if (!(gesture_scaled && !doublemove_enabled)) {
+                                    float currentX = event.getX(0);  //单指移动
+                                    float currentY = event.getY(0);
+                                    float deltaX = currentX - previousX;
+                                    float deltaY = currentY - previousY;
+                                    if (deltaX != 0f || deltaY != 0f) {
+                                        videoMoveBy(deltaX, deltaY);
+                                        previousX = currentX;
+                                        previousY = currentY;
+                                    }
+                                }
+                            }
+                            if (doubleTouch && doublemove_enabled) {
+                                float currentX = (event.getX(0) + event.getX(1)) / 2;
+                                float currentY = (event.getY(0) + event.getY(1)) / 2;
                                 float deltaX = currentX - previousX;
                                 float deltaY = currentY - previousY;
                                 if (deltaX != 0f || deltaY != 0f) {
@@ -367,72 +388,62 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                                     previousY = currentY;
                                 }
                             }
-                        }
-                        if (doubleTouch && doublemove_enabled) {
-                            float currentX = (event.getX(0) + event.getX(1)) / 2;
-                            float currentY = (event.getY(0) + event.getY(1)) / 2;
-                            float deltaX = currentX - previousX;
-                            float deltaY = currentY - previousY;
-                            if (deltaX != 0f || deltaY != 0f) {
-                                videoMoveBy(deltaX, deltaY);
-                                previousX = currentX;
-                                previousY = currentY;
+                            break;
+
+                        case MotionEvent.ACTION_DOWN:
+                            if (singleTouch) {  //如果是单指按下，设置起始位置为当前手指位置
+                                previousX = event.getX(0);
+                                previousY = event.getY(0);
+                                //Logu.v("gesture", "touch_start:" + previousX + "," + previousY);
                             }
-                        }
-                        break;
+                            break;
 
-                    case MotionEvent.ACTION_DOWN:
-                        if (singleTouch) {  //如果是单指按下，设置起始位置为当前手指位置
-                            previousX = event.getX(0);
-                            previousY = event.getY(0);
-                            //Logu.v("gesture", "touch_start:" + previousX + "," + previousY);
-                        }
-                        break;
+                        case MotionEvent.ACTION_POINTER_DOWN:
+                            if (doubleTouch) {  //如果是双指按下，设置起始位置为两指连线的中心点
+                                previousX = (event.getX(0) + event.getX(1)) / 2;
+                                previousY = (event.getY(0) + event.getY(1)) / 2;
+                                //Logu.v("gesture","double_touch");
+                            }
+                            break;
 
-                    case MotionEvent.ACTION_POINTER_DOWN:
-                        if (doubleTouch) {  //如果是双指按下，设置起始位置为两指连线的中心点
-                            previousX = (event.getX(0) + event.getX(1)) / 2;
-                            previousY = (event.getY(0) + event.getY(1)) / 2;
-                            //Logu.v("gesture","double_touch");
-                        }
-                        break;
+                        case MotionEvent.ACTION_POINTER_UP:
+                            if (doubleTouch) {
+                                int index = event.getActionIndex();  //actionIndex是抬起来的手指位置
+                                previousX = event.getX((index == 0 ? 1 : 0));
+                                previousY = event.getY((index == 0 ? 1 : 0));
+                                //Logu.v("gesture","single_touch");
+                            }
+                            break;
 
-                    case MotionEvent.ACTION_POINTER_UP:
-                        if (doubleTouch) {
-                            int index = event.getActionIndex();  //actionIndex是抬起来的手指位置
-                            previousX = event.getX((index == 0 ? 1 : 0));
-                            previousY = event.getY((index == 0 ? 1 : 0));
-                            //Logu.v("gesture","single_touch");
-                        }
-                        break;
+                        case MotionEvent.ACTION_UP:
+                            //Logu.v("gesture","touch_stop");
+                            if (onLongClick) {
+                                onLongClick = false;
+                                ijkPlayer.setSpeed(speed_values[seekbar_speed.getProgress()]);
+                                mDanmakuView.setSpeed(speed_values[seekbar_speed.getProgress()]);
+                                text_speed.setText(speed_strs[seekbar_speed.getProgress()]);
+                            }
+                            if (gesture_moved) gesture_moved = false;
+                            if (gesture_scaled) gesture_scaled = false;
+                            break;
+                    }
 
-                    case MotionEvent.ACTION_UP:
-                        //Logu.v("gesture","touch_stop");
-                        if (onLongClick) {
-                            onLongClick = false;
-                            ijkPlayer.setSpeed(speed_values[seekbar_speed.getProgress()]);
-                            mDanmakuView.setSpeed(speed_values[seekbar_speed.getProgress()]);
-                            text_speed.setText(speed_strs[seekbar_speed.getProgress()]);
-                        }
-                        if (gesture_moved) gesture_moved = false;
-                        if (gesture_scaled) gesture_scaled = false;
-                        break;
+                    if (!gesture_click_disabled && (gesture_moved || gesture_scaled)) {
+                        gesture_click_disabled = true;
+                        hidecon.run();
+                    }
                 }
-
-                if (!gesture_click_disabled && (gesture_moved || gesture_scaled)) {
-                    gesture_click_disabled = true;
-                    hidecon.run();
-                }
-
                 return false;
             });
         } else {
             layout_control.setOnTouchListener((view, motionEvent) -> {
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP && onLongClick) {
-                    onLongClick = false;
-                    ijkPlayer.setSpeed(speed_values[seekbar_speed.getProgress()]);
-                    mDanmakuView.setSpeed(speed_values[seekbar_speed.getProgress()]);
-                    text_speed.setText(speed_strs[seekbar_speed.getProgress()]);
+                if (!isLocked) {
+                    if (motionEvent.getAction() == MotionEvent.ACTION_UP && onLongClick) {
+                        onLongClick = false;
+                        ijkPlayer.setSpeed(speed_values[seekbar_speed.getProgress()]);
+                        mDanmakuView.setSpeed(speed_values[seekbar_speed.getProgress()]);
+                        text_speed.setText(speed_strs[seekbar_speed.getProgress()]);
+                    }
                 }
                 return false;
             });
@@ -445,6 +456,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
         });
         //这个管长按开始
         layout_control.setOnLongClickListener(view -> {
+            if (isLocked) return true;
             if (SharedPreferencesUtil.getBoolean("player_longclick", true) && ijkPlayer != null && (isPlaying) && (!isLiveMode)) {
                 if (!onLongClick && !gesture_click_disabled) {
                     hidecon.run();
@@ -469,6 +481,11 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
     }
 
     private void clickUI() {
+        if (isLocked) {
+            btn_unlock.setVisibility(View.VISIBLE);
+            btn_unlock.postDelayed(() -> btn_unlock.setVisibility(View.GONE), 2000);
+            return;
+        }
         long now_timestamp = System.currentTimeMillis();
         if (now_timestamp - timestamp_click < 300) {
             if (SharedPreferencesUtil.getBoolean("player_scale", true) && scaleGestureListener.can_reset) {
@@ -1488,6 +1505,19 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
                 btn_menu.setImageResource(R.mipmap.moreshow);
             }
             menu_opened = !menu_opened;
+        });
+
+        btn_lock.setOnClickListener(view -> {
+            isLocked = true;
+            hidecon.run();
+            btn_unlock.setVisibility(View.VISIBLE);
+            btn_unlock.postDelayed(() -> btn_unlock.setVisibility(View.GONE), 2000);
+        });
+
+        btn_unlock.setOnClickListener(view -> {
+            isLocked = false;
+            showcon();
+            btn_unlock.setVisibility(View.GONE);
         });
 
         layout_card_bg.setOnClickListener(view -> {
