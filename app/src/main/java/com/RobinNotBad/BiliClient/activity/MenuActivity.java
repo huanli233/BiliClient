@@ -1,15 +1,21 @@
 package com.RobinNotBad.BiliClient.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.lifecycle.Lifecycle;
 
@@ -44,6 +50,8 @@ import java.util.Objects;
 public class MenuActivity extends BaseActivity {
 
     private String from;
+    private CountDownTimer countDownTimer;
+    private MaterialButton timedExitButton;
 
     /**
      * 在排序设置和Splash中使用到的，
@@ -119,6 +127,7 @@ public class MenuActivity extends BaseActivity {
         if (!SharedPreferencesUtil.getBoolean("menu_precious", false)) btnList.remove("precious");
         if (!SharedPreferencesUtil.getBoolean("menu_live", false)) btnList.remove("live");
 
+        btnList.add("timed_exit");
         btnList.add("exit"); //如果你希望用户手动把退出按钮排到第一个（
 
         LinearLayout layout = findViewById(R.id.menu_layout);
@@ -133,11 +142,19 @@ public class MenuActivity extends BaseActivity {
                 case "login":
                     materialButton.setText("登录");
                     break;
+                case "timed_exit":
+                    timedExitButton = materialButton;
+                    materialButton.setText("定时关闭");
+                    break;
                 default:
                     materialButton.setText(Objects.requireNonNull(btnNames.get(btn)).first);
                     break;
             }
-            materialButton.setOnClickListener(view -> killAndJump(btn));
+            if (btn.equals("timed_exit")) {
+                materialButton.setOnClickListener(view -> showTimedExitDialog());
+            } else {
+                materialButton.setOnClickListener(view -> killAndJump(btn));
+            }
             layout.addView(materialButton, params);
         }
 
@@ -203,5 +220,81 @@ public class MenuActivity extends BaseActivity {
         if(keyCode == KeyEvent.KEYCODE_MENU) finish();
         return super.onKeyDown(keyCode, event);
     }
-}
 
+    private void showTimedExitDialog() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer = null;
+            timedExitButton.setText("定时关闭");
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_timed_exit, null);
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(0));
+        }
+
+        dialogView.findViewById(R.id.btn_15_min).setOnClickListener(v -> {
+            startTimer(15 * 60 * 1000);
+            dialog.dismiss();
+        });
+
+        dialogView.findViewById(R.id.btn_30_min).setOnClickListener(v -> {
+            startTimer(30 * 60 * 1000);
+            dialog.dismiss();
+        });
+
+        dialogView.findViewById(R.id.btn_60_min).setOnClickListener(v -> {
+            startTimer(60 * 60 * 1000);
+            dialog.dismiss();
+        });
+
+        EditText customTimeEditText = dialogView.findViewById(R.id.edit_text_custom_time);
+        dialogView.findViewById(R.id.btn_custom_time).setOnClickListener(v -> {
+            String customTimeStr = customTimeEditText.getText().toString();
+            if (!TextUtils.isEmpty(customTimeStr)) {
+                try {
+                    long minutes = Long.parseLong(customTimeStr);
+                    if (minutes > 0) {
+                        startTimer(minutes * 60 * 1000);
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(this, "请输入大于0的分钟数", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(this, "请输入有效的分钟数", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "请输入分钟数", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void startTimer(long timeInMillis) {
+        countDownTimer = new CountDownTimer(timeInMillis, 1000) {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onTick(long millisUntilFinished) {
+                long seconds = millisUntilFinished / 1000;
+                long minutes = seconds / 60;
+                seconds = seconds % 60;
+                timedExitButton.setText("剩余 " + minutes + "分" + seconds + "秒");
+            }
+
+            @Override
+            public void onFinish() {
+                timedExitButton.setText("定时关闭");
+                InstanceActivity instance = BiliTerminal.getInstanceActivityOnTop();
+                if (instance != null && !instance.isDestroyed()) instance.finish();
+                Process.killProcess(Process.myPid());
+            }
+        }.start();
+    }
+}
