@@ -249,6 +249,11 @@ public class MenuActivity extends BaseActivity {
             dialog.dismiss();
         });
 
+        dialogView.findViewById(R.id.btn_45_min).setOnClickListener(v -> {
+            startTimer(45 * 60 * 1000);
+            dialog.dismiss();
+        });
+
         dialogView.findViewById(R.id.btn_60_min).setOnClickListener(v -> {
             startTimer(60 * 60 * 1000);
             dialog.dismiss();
@@ -275,6 +280,15 @@ public class MenuActivity extends BaseActivity {
         });
 
         dialog.show();
+        //动态设置弹窗大小
+        if (dialog.getWindow() != null) {
+            android.view.WindowManager.LayoutParams lp = new android.view.WindowManager.LayoutParams();
+            lp.copyFrom(dialog.getWindow().getAttributes());
+            android.util.DisplayMetrics dm = new android.util.DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(dm);
+            lp.width = (int) (dm.widthPixels * 0.8);
+            dialog.getWindow().setAttributes(lp);
+        }
     }
 
     private void startTimer(long timeInMillis) {
