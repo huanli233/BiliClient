@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <RelativeLayout
         android:id="@+id/top"
@@ -36,11 +38,37 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top"
+        android:layout_marginTop="2dp"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/search_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:background="@drawable/background_searchbar"
+            android:drawableEnd="@android:drawable/ic_menu_search"
+            android:ems="10"
+            android:hint="@string/hint_search"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:minHeight="42dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textSize="13sp" />
+
+    </RelativeLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/top">
+        android:layout_below="@id/search_layout">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

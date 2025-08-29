@@ -2,8 +2,16 @@ package com.RobinNotBad.BiliClient.activity.user;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
+import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.base.RefreshListActivity;
 import com.RobinNotBad.BiliClient.adapter.user.UserListAdapter;
 import com.RobinNotBad.BiliClient.api.FollowApi;
@@ -24,6 +32,9 @@ public class FollowUsersActivity extends RefreshListActivity {
     private ArrayList<UserInfo> userList;
     private UserListAdapter adapter;
     private int mode;
+    private EditText searchEditText;
+    private final Handler searchHandler = new Handler(Looper.getMainLooper());
+    private Runnable searchRunnable;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -43,26 +54,68 @@ public class FollowUsersActivity extends RefreshListActivity {
         recyclerView.setHasFixedSize(true);
 
         userList = new ArrayList<>();
+        adapter = new UserListAdapter(this, userList);
+        setAdapter(adapter);
 
+        searchEditText = findViewById(R.id.search_edit_text);
+        if (mode == 0) {
+            findViewById(R.id.search_layout).setVisibility(View.VISIBLE);
+            searchEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (searchRunnable != null) {
+                        searchHandler.removeCallbacks(searchRunnable);
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String query = s.toString();
+                    if (TextUtils.isEmpty(query)) {
+                        // if query is empty, load initial list
+                        resetAndLoadInitialList();
+                    } else {
+                        // otherwise, perform search after a delay
+                        searchRunnable = () -> performSearch(query);
+                        searchHandler.postDelayed(searchRunnable, 300); // 300ms delay
+                    }
+                }
+            });
+        }
+
+        resetAndLoadInitialList();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void resetAndLoadInitialList() {
+        setRefreshing(true);
+        page = 1;
+        bottom = false;
+        userList.clear();
+        adapter.notifyDataSetChanged();
+        setOnLoadMoreListener(this::continueLoading);
+        loadInitialList();
+    }
+
+    private void loadInitialList() {
         CenterThreadPool.run(() -> {
             try {
-                int result = mode == 0 ? FollowApi.getFollowingList(mid, page, userList) : FollowApi.getFollowerList(mid, page, userList);
-                adapter = new UserListAdapter(this, userList);
-                setOnLoadMoreListener(this::continueLoading);
-                setRefreshing(false);
-                setAdapter(adapter);
-
-                if (result == 1) {
-                    Log.e("debug", "到底了");
-                    setBottom(true);
-                }
+                List<UserInfo> list = new ArrayList<>();
+                int result = mode == 0 ? FollowApi.getFollowingList(mid, page, list) : FollowApi.getFollowerList(mid, page, list);
+                runOnUiThread(() -> {
+                    userList.addAll(list);
+                    adapter.notifyDataSetChanged();
+                    setRefreshing(false);
+                    if (result == 1) {
+                        setBottom(true);
+                    }
+                });
             } catch (Exception e) {
-                if (e.getMessage() != null && (e.getMessage().startsWith("22115") || e.getMessage().startsWith("22118"))) {
-                    finish();
-                    MsgUtil.showMsg(e.getMessage());
-                } else {
-                    loadFail(e);
-                }
+                handleLoadError(e);
             }
         });
     }
@@ -72,24 +125,47 @@ public class FollowUsersActivity extends RefreshListActivity {
             try {
                 List<UserInfo> list = new ArrayList<>();
                 int result = mode == 0 ? FollowApi.getFollowingList(mid, page, list) : FollowApi.getFollowerList(mid, page, list);
-                Log.e("debug", "下一页");
                 runOnUiThread(() -> {
                     userList.addAll(list);
                     adapter.notifyItemRangeInserted(userList.size() - list.size(), list.size());
+                    setRefreshing(false);
+                    if (result == 1) {
+                        setBottom(true);
+                    }
                 });
-                if (result == 1) {
-                    Log.e("debug", "到底了");
-                    setBottom(true);
-                }
-                setRefreshing(false);
             } catch (Exception e) {
-                if (e.getMessage() != null && (e.getMessage().startsWith("22115") || e.getMessage().startsWith("22118"))) {
-                    finish();
-                    MsgUtil.showMsg(e.getMessage());
-                } else {
-                    loadFail(e);
-                }
+                handleLoadError(e);
             }
         });
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void performSearch(String query) {
+        setRefreshing(true);
+        setOnLoadMoreListener(null); // Disable load more for search results
+        CenterThreadPool.run(() -> {
+            try {
+                List<UserInfo> searchResult = new ArrayList<>();
+                FollowApi.searchFollowingList(mid, query, searchResult);
+                runOnUiThread(() -> {
+                    userList.clear();
+                    userList.addAll(searchResult);
+                    adapter.notifyDataSetChanged();
+                    setRefreshing(false);
+                    setBottom(true); // Search results are not paginated
+                });
+            } catch (Exception e) {
+                handleLoadError(e);
+            }
+        });
+    }
+
+    private void handleLoadError(Exception e) {
+        if (e.getMessage() != null && (e.getMessage().startsWith("22115") || e.getMessage().startsWith("22118"))) {
+            finish();
+            MsgUtil.showMsg(e.getMessage());
+        } else {
+            loadFail(e);
+        }
     }
 }
