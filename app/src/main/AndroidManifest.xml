@@ -195,6 +195,16 @@
             android:label="缓存"
             android:screenOrientation="locked" />
         <activity
+            android:name=".activity.video.local.FolderManagerActivity"
+            android:exported="false"
+            android:label="文件夹管理"
+            android:screenOrientation="locked" />
+        <activity
+            android:name=".activity.video.local.FolderVideosActivity"
+            android:exported="false"
+            android:label="文件夹视频"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".activity.DownloadActivity"
             android:exported="false"
             android:label="下载"
