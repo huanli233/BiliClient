@@ -12,8 +12,10 @@ public class PlayerData implements Parcelable {
     public static int TYPE_LOCAL = 4;
 
     public String title = "";
+    public String bvid = "";
     public String videoUrl = "";
     public String danmakuUrl = "";
+    public String localPath = "";
     public int qn = -1;
     public String[] qnStrList;
     public int[] qnValueList;
@@ -30,8 +32,10 @@ public class PlayerData implements Parcelable {
 
     protected PlayerData(Parcel in) {
         title = in.readString();
+        bvid = in.readString();
         videoUrl = in.readString();
         danmakuUrl = in.readString();
+        localPath = in.readString();
         qn = in.readInt();
         qnStrList = in.createStringArray();
         qnValueList = in.createIntArray();
@@ -63,8 +67,10 @@ public class PlayerData implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(title);
+        dest.writeString(bvid);
         dest.writeString(videoUrl);
         dest.writeString(danmakuUrl);
+        dest.writeString(localPath);
         dest.writeInt(qn);
         dest.writeStringArray(qnStrList);
         dest.writeIntArray(qnValueList);

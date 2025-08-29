@@ -4,7 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/activity_padding_horizontal"
-    android:layout_marginVertical="@dimen/list_margin_vertical">
+    android:layout_marginVertical="@dimen/list_margin_vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:longClickable="true"
+    android:descendantFocusability="blocksDescendants">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -62,14 +66,11 @@
             android:id="@+id/progress"
             android:layout_width="0px"
             android:layout_height="0dp"
-            android:layout_alignTop="@+id/linearLayout"
+            android:layout_alignTop="@id/linearLayout"
             android:layout_alignBottom="@id/linearLayout"
             android:alpha="0.3"
             android:background="#74a864"
             android:visibility="gone" />
     </RelativeLayout>
-
-
-
 
 </com.google.android.material.card.MaterialCardView>

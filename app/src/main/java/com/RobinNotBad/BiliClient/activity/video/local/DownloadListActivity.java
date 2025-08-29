@@ -100,40 +100,28 @@ public class DownloadListActivity extends RefreshListActivity {
                     else{
                         if(position < sections.size()){
                             DownloadSection section = sections.get(position);
-                            if(section.state.equals("downloading")) {
-                                try {
-                                    File folder = section.getPath();
-                                    FileUtil.deleteFolder(folder);
-                                    folder.mkdirs();
-                                    File sign = new File(folder,".DOWNLOADING");
-                                    sign.createNewFile();
-                                } catch (IOException e) {
-                                    MsgUtil.err("文件错误：",e);
+                            File folder = section.getPath();
+                            File downloadingSign = new File(folder, ".DOWNLOADING");
+
+                            if (section.type.contains("video") && !downloadingSign.exists()) {
+                                Intent intent = new Intent(this, DownloadedActivity.class);
+                                intent.putExtra("path", folder.getAbsolutePath());
+                                startActivity(intent);
+                            } else {
+                                if(section.state.equals("downloading")) {
+                                    try {
+                                        FileUtil.deleteFolder(folder);
+                                        folder.mkdirs();
+                                        File sign = new File(folder,".DOWNLOADING");
+                                        sign.createNewFile();
+                                    } catch (IOException e) {
+                                        MsgUtil.err("文件错误：",e);
+                                    }
                                 }
+                                DownloadService.setState(section.id,"none");
+                                DownloadService.start(section.id);
                             }
-
-                            DownloadService.setState(section.id,"none");
-                            DownloadService.start(section.id);
                         }
-                    }
-                }));
-
-                adapter.setOnLongClickListener(position -> CenterThreadPool.run(()->{
-                    try {
-                        final DownloadSection delete;
-                        if(position == -1){
-                            delete = DownloadService.section;
-                            stopService(new Intent(this, DownloadService.class));
-                        }
-                        else delete = sections.get(position);
-                        if(delete == null) return;
-
-                        DownloadService.deleteSection(delete.id);
-
-                        refreshList(false);
-                        MsgUtil.showMsg("删除成功");
-                    } catch (Exception e){
-                        MsgUtil.err(e);
                     }
                 }));
 

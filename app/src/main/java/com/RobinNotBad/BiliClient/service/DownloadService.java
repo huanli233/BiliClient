@@ -24,6 +24,7 @@ import com.RobinNotBad.BiliClient.helper.sql.DownloadSqlHelper;
 import com.RobinNotBad.BiliClient.model.DownloadSection;
 import com.RobinNotBad.BiliClient.model.PlayerData;
 import com.RobinNotBad.BiliClient.model.SubtitleLink;
+import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.FileUtil;
 import com.RobinNotBad.BiliClient.util.GlideUtil;
@@ -31,12 +32,14 @@ import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -140,8 +143,9 @@ public class DownloadService extends Service {
 
                 //获取视频链接
                 String url_video, url_danmaku;
+                PlayerData data;
                 try {
-                    PlayerData data = section.toPlayerData();
+                    data = section.toPlayerData();
                     PlayerApi.getVideo(data, true);
                     url_video = data.videoUrl;
                     url_danmaku = data.danmakuUrl;
@@ -155,6 +159,17 @@ public class DownloadService extends Service {
                     continue;
                 }
 
+                // Save video metadata
+                try {
+                    VideoCard videoCard = new VideoCard(section.title, null, null, section.url_cover, section.aid, data.bvid);
+                    File infoFile = new File(section.getPath(), "info.json");
+                    try (FileWriter writer = new FileWriter(infoFile)) {
+                        new Gson().toJson(videoCard, writer);
+                    }
+                } catch (Exception e) {
+                    // Ignore, metadata saving is not critical
+                    Logu.e("Failed to save info.json", e.toString());
+                }
 
                 try {
                     setState(section.id, "downloading");

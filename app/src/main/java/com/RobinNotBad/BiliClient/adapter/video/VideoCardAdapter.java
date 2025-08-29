@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.activity.player.PlayerActivity;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
@@ -26,10 +27,18 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
     final Context context;
     final List<VideoCard> videoCardList;
     OnItemLongClickListener longClickListener;
+    private final boolean isLocal;
 
     public VideoCardAdapter(Context context, List<VideoCard> videoCardList) {
         this.context = context;
         this.videoCardList = videoCardList;
+        this.isLocal = false; // Default to online
+    }
+
+    public VideoCardAdapter(Context context, List<VideoCard> videoCardList, boolean isLocal) {
+        this.context = context;
+        this.videoCardList = videoCardList;
+        this.isLocal = isLocal;
     }
 
     public void setOnLongClickListener(OnItemLongClickListener listener) {
@@ -49,13 +58,23 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
         holder.showVideoCard(videoCard, context);    //此函数在VideoCardHolder里
 
         holder.itemView.setOnClickListener(view -> {
-            switch (videoCard.type) {
-                case "video":
-                    TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, videoCard.bvid, "video");
-                    break;
-                case "media_bangumi":
-                    TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, null, "media");
-                    break;
+            if (isLocal) {
+                Intent intent = new Intent(context, PlayerActivity.class);
+                String videoPath = videoCard.localPath;
+                String danmakuPath = videoPath.replace(".blv", ".xml");
+                intent.putExtra("url", videoPath);
+                intent.putExtra("danmaku", danmakuPath);
+                intent.putExtra("title", videoCard.title);
+                context.startActivity(intent);
+            } else {
+                switch (videoCard.type) {
+                    case "video":
+                        TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, videoCard.bvid, "video");
+                        break;
+                    case "media_bangumi":
+                        TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, null, "media");
+                        break;
+                }
             }
         });
 

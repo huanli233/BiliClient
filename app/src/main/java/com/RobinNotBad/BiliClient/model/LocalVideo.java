@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class LocalVideo {
     public String cover;
     public String title;
+    public long aid;
+    public String bvid;
     public ArrayList<String> pageList;
     public ArrayList<String> videoFileList;
     public ArrayList<String> danmakuFileList;

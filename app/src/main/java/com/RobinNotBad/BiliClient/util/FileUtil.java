@@ -28,31 +28,30 @@ import java.util.Objects;
 public class FileUtil {
     public static void clearCache(Context context) {
         File cacheDir = context.getCacheDir();
-        if (cacheDir.exists() && Objects.requireNonNull(cacheDir.listFiles()).length != 0)
-            deleteFolder(cacheDir);
-        Log.e("debug", "清除了缓存");
+        if (cacheDir != null && cacheDir.exists()) {
+            if (deleteFolder(cacheDir)) {
+                Log.d("FileUtil", "Cache cleared successfully");
+            } else {
+                Log.d("FileUtil", "Failed to clear cache");
+            }
+        }
     }
 
-    public static void deleteFolder(File folder) {
-        if(!folder.exists()) return;
-
-        if(folder.isFile()) {
-            folder.delete();
-            return;
+    public static boolean deleteFolder(File file) {
+        if (file == null || !file.exists()) {
+            return true;
         }
-
-        File[] templist = folder.listFiles();
-        assert templist != null;
-        for (File file : templist) {
-            if (file.isFile()) {   //如果该项是文件，直接删除
-                file.delete();
-            } else {    //如果该项是目录
-                if (Objects.requireNonNull(file.listFiles()).length != 0)
-                    deleteFolder(file);    //如果子文件夹不是空的，继续扫描下去，实现套娃效果
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    if (!deleteFolder(f)) {
+                        return false;
+                    }
+                }
             }
-            Log.e("debug", file.toString());
         }
-        folder.delete();
+        return file.delete();
     }
 
     public static String readString(File file) {
@@ -106,12 +105,20 @@ public class FileUtil {
         return new File(parentFolder, stringToFile(child));
     }
 
+    public static File getFoldersConfigFile() {
+        return new File(getVideoDownloadPath(), "folders.json");
+    }
+
     public static File getPicturePath() {
         return new File(SharedPreferencesUtil.getString("save_path_pictures", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/哔哩终端/"));
     }
 
     public static File getDownloadPath() {
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+    }
+
+    public static File getInternalFilesPath() {
+        return BiliTerminal.context.getFilesDir();
     }
 
     public static void requireTFCardPermission(){

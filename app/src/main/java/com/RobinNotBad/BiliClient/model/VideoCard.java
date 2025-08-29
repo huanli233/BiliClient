@@ -3,8 +3,6 @@ package com.RobinNotBad.BiliClient.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.json.JSONObject;
-
 import java.io.Serializable;
 
 public class VideoCard implements Parcelable, Serializable {
@@ -16,6 +14,8 @@ public class VideoCard implements Parcelable, Serializable {
     public long aid;
     public String bvid;
     public long cid = 0;
+    public String localPath;
+    public String pageTitle; // For multi-part videos, this holds the title of the specific part
 
     public VideoCard(String title, String upName, String view, String cover, long aid, String bvid, String type) {
         this.title = title;
@@ -58,6 +58,8 @@ public class VideoCard implements Parcelable, Serializable {
         aid = in.readLong();
         bvid = in.readString();
         cid = in.readLong();
+        localPath = in.readString();
+        pageTitle = in.readString();
     }
 
     public static final Creator<VideoCard> CREATOR = new Creator<>() {
@@ -87,5 +89,7 @@ public class VideoCard implements Parcelable, Serializable {
         parcel.writeLong(aid);
         parcel.writeString(bvid);
         parcel.writeLong(cid);
+        parcel.writeString(localPath);
+        parcel.writeString(pageTitle);
     }
 }
