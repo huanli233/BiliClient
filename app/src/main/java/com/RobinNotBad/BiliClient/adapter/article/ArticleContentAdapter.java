@@ -80,13 +80,14 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
         int realPosition = position - 1;
         switch (getItemViewType(position)) {
             case 1:
-                ImageFilterView imageView = (ImageFilterView) holder.itemView;  //图片
+                ImageFilterView imageView = holder.itemView.findViewById(R.id.imageView);  //图片
 
 
                 String url = article.get(realPosition).content;
                 Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(url)).placeholder(R.mipmap.placeholder)
                         .transition(GlideUtil.getTransitionOptions())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .fitCenter()
                         .into(imageView);
 
                 imageView.setOnClickListener(view -> {

@@ -205,6 +205,11 @@
             android:label="文件夹视频"
             android:screenOrientation="locked" />
         <activity
+            android:name=".activity.video.local.AddToFolderActivity"
+            android:exported="false"
+            android:label="添加到文件夹"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".activity.DownloadActivity"
             android:exported="false"
             android:label="下载"

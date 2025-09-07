@@ -242,7 +242,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
             case "MAJOR_TYPE_PGC":
                 isPgc = true;
             case "MAJOR_TYPE_ARCHIVE":
-            case "MAJOR_TYPE_UGC_SEASON":
+            case "MAJOR_TYPE_UGC_SEASON": {
                 VideoCard childVideoCard = (VideoCard) dynamic.major_object;
                 VideoCardHolder video_holder = new VideoCardHolder(cell_dynamic_video);
                 video_holder.showVideoCard(childVideoCard, context);
@@ -250,9 +250,9 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                 cell_dynamic_video.setOnClickListener(view -> TerminalContext.getInstance().enterVideoDetailPage(context, childVideoCard.aid, "", finalIsPgc ? "media": null));
                 cell_dynamic_video.setVisibility(View.VISIBLE);
                 break;
-
+            }
             case "MAJOR_TYPE_LIVE":
-            case "MAJOR_TYPE_LIVE_RCMD":
+            case "MAJOR_TYPE_LIVE_RCMD": {
                 LiveRoom liveRoom = (LiveRoom) dynamic.major_object;
                 VideoCard childLiveCard = new VideoCard();
                 childLiveCard.title = liveRoom.title;
@@ -266,17 +266,47 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                 cell_dynamic_video.setOnClickListener(view -> TerminalContext.getInstance().enterLiveDetailPage(context, liveRoom.roomid));
                 cell_dynamic_video.setVisibility(View.VISIBLE);
                 break;
-
-            case "MAJOR_TYPE_ARTICLE":
-                ArticleCard articleCard = (ArticleCard) dynamic.major_object;
-                ArticleCardHolder article_holder = new ArticleCardHolder(cell_dynamic_article);
-                article_holder.showArticleCard(articleCard, context);
-                cell_dynamic_article.setOnClickListener(view -> TerminalContext.getInstance().enterArticleDetailPage(context, articleCard.id));
-                cell_dynamic_article.setVisibility(View.VISIBLE);
+            }
+            case "MAJOR_TYPE_ARTICLE": {
+                if (dynamic.major_object instanceof ArrayList) {
+                    ArrayList<String> pictureList = (ArrayList<String>) dynamic.major_object;
+                    View imageCard = cell_dynamic_image;
+                    ImageView imageView = imageCard.findViewById(R.id.imageView);
+                    if (pictureList != null && !pictureList.isEmpty()) {
+                        Glide.with(BiliTerminal.context).asDrawable().load(GlideUtil.url(pictureList.get(0)))
+                                .transition(GlideUtil.getTransitionOptions())
+                                .placeholder(R.mipmap.placeholder)
+                                .centerCrop()
+                                .format(DecodeFormat.PREFER_RGB_565)
+                                .sizeMultiplier(0.85f)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .into(imageView);
+                        TextView textView = imageCard.findViewById(R.id.imageCount);
+                        textView.setText("共" + pictureList.size() + "张图片");
+                        cell_dynamic_image.setOnClickListener(view -> {
+                            Intent intent = new Intent();
+                            intent.setClass(context, ImageViewerActivity.class);
+                            intent.putExtra("imageList", pictureList);
+                            context.startActivity(intent);
+                        });
+                        cell_dynamic_image.setVisibility(View.VISIBLE);
+                    }
+                    cell_dynamic_article.setVisibility(View.GONE);
+                } else if (dynamic.major_object instanceof ArticleCard) {
+                    if (TextUtils.isEmpty(dynamic.title)) {
+                        cell_dynamic_article.setVisibility(View.GONE);
+                    } else {
+                        ArticleCard articleCard = (ArticleCard) dynamic.major_object;
+                        ArticleCardHolder article_holder = new ArticleCardHolder(cell_dynamic_article);
+                        article_holder.showArticleCard(articleCard, context);
+                        cell_dynamic_article.setOnClickListener(view -> TerminalContext.getInstance().enterArticleDetailPage(context, articleCard.id));
+                        cell_dynamic_article.setVisibility(View.VISIBLE);
+                    }
+                }
                 break;
-
+            }
             case "MAJOR_TYPE_DRAW":
-            case "MAJOR_TYPE_OPUS":
+            case "MAJOR_TYPE_OPUS": {
                 ArrayList<String> pictureList;
                 if (dynamic.major_object instanceof ArrayList) {
                     pictureList = (ArrayList<String>) dynamic.major_object;
@@ -305,6 +335,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                     cell_dynamic_image.setVisibility(View.VISIBLE);
                 }
                 break;
+            }
         }
 
         if(dynamic.major_object == null && dynamic.dynamic_forward == null)
