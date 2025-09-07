@@ -2,6 +2,9 @@ package com.RobinNotBad.BiliClient.adapter.article;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,8 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.RobinNotBad.BiliClient.BiliTerminal;
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.activity.ImageViewerActivity;
+import com.RobinNotBad.BiliClient.activity.base.BaseActivity;
+import com.RobinNotBad.BiliClient.activity.dynamic.send.SendDynamicActivity;
 import com.RobinNotBad.BiliClient.activity.user.info.UserInfoActivity;
 import com.RobinNotBad.BiliClient.api.ArticleApi;
+import com.RobinNotBad.BiliClient.model.ArticleCard;
+import com.RobinNotBad.BiliClient.model.Dynamic;
 import com.RobinNotBad.BiliClient.model.Opus;
 import com.RobinNotBad.BiliClient.model.OpusParagraph;
 import com.RobinNotBad.BiliClient.util.CenterThreadPool;
@@ -27,6 +34,7 @@ import com.RobinNotBad.BiliClient.util.GlideUtil;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.StringUtil;
+import com.RobinNotBad.BiliClient.util.TerminalContext;
 import com.RobinNotBad.BiliClient.util.ToolsUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
@@ -191,10 +199,11 @@ public class OpusContentAdapter extends RecyclerView.Adapter<OpusContentAdapter.
 
                 ImageButton like = holder.itemView.findViewById(R.id.btn_like);
                 ImageButton coin = holder.itemView.findViewById(R.id.btn_coin);
+                ImageButton fav = holder.itemView.findViewById(R.id.btn_fav);
+                ImageButton share = holder.itemView.findViewById(R.id.btn_share);
                 TextView likeLabel = holder.itemView.findViewById(R.id.like_label);
                 TextView coinLabel = holder.itemView.findViewById(R.id.coin_label);
                 TextView favLabel = holder.itemView.findViewById(R.id.fav_label);
-                ImageButton fav = holder.itemView.findViewById(R.id.btn_fav);
 
                 likeLabel.setText(StringUtil.toWan(article.stats.like));
                 coinLabel.setText(StringUtil.toWan(article.stats.coin));
@@ -258,32 +267,78 @@ public class OpusContentAdapter extends RecyclerView.Adapter<OpusContentAdapter.
 
                 fav.setOnClickListener(view1 -> CenterThreadPool.run(() -> {
                     try {
-                        if (article.stats.favoured) {
-                            if (ArticleApi.delFavorite(article.id) == 0) {
-                                context.runOnUiThread(() -> fav.setImageResource(R.drawable.icon_fav_0));
-                                article.stats.favorite--;
-                            }
-                        } else {
-                            if (ArticleApi.favorite(article.id) == 0) {
-                                context.runOnUiThread(() -> fav.setImageResource(R.drawable.icon_fav_1));
-                                article.stats.favorite++;
-                            }
+                        if (SharedPreferencesUtil.getLong(SharedPreferencesUtil.mid, 0) == 0) {
+                            context.runOnUiThread(() -> MsgUtil.showMsg("还没有登录喵~"));
+                            return;
                         }
-                        article.stats.favoured = !article.stats.favoured;
-                        context.runOnUiThread(() -> {
-                            favLabel.setText(StringUtil.toWan(article.stats.favorite));
-                            MsgUtil.showMsg("操作成功~");
-                        });
+                        boolean isFav = !article.stats.favoured;
+                        int result = isFav ? ArticleApi.favorite(article.id) : ArticleApi.delFavorite(article.id);
+                        if (result == 0) {
+                            article.stats.favoured = isFav;
+                            context.runOnUiThread(() -> {
+                                MsgUtil.showMsg(isFav ? "收藏成功" : "取消收藏成功");
+                                if (isFav) {
+                                    favLabel.setText(StringUtil.toWan(++article.stats.favorite));
+                                } else {
+                                    favLabel.setText(StringUtil.toWan(--article.stats.favorite));
+                                }
+                                fav.setImageResource(isFav ? R.drawable.icon_fav_1 : R.drawable.icon_fav_0);
+                            });
+                        } else {
+                            context.runOnUiThread(() -> MsgUtil.showMsg("操作失败: " + result));
+                        }
                     } catch (Exception e) {
                         context.runOnUiThread(() -> MsgUtil.err(e));
                     }
                 }));
 
-                if (article.type == Opus.TYPE_DYNAMIC){
+                share.setOnClickListener(v -> {
+                    if (context instanceof BaseActivity) {
+                        Dynamic dynamic = new Dynamic();
+                        dynamic.dynamicId = article.id;
+                        StringBuilder contentBuilder = new StringBuilder();
+                        if (article.paragraphs != null) {
+                            for (OpusParagraph p : article.paragraphs) {
+                                if (p.type >= OpusParagraph.TYPE_TEXT && p.type <= OpusParagraph.TYPE_LIST && p.content instanceof CharSequence) {
+                                    contentBuilder.append(p.content);
+                                }
+                            }
+                        }
+                        dynamic.content = contentBuilder.toString();
+                        dynamic.title = article.title;
+                        dynamic.userInfo = article.upInfo;
+                        dynamic.major_type = "MAJOR_TYPE_ARTICLE";
+                        ArticleCard articleCard = new ArticleCard();
+                        articleCard.id = article.id;
+                        articleCard.title = article.title;
+                        articleCard.cover = article.cover;
+                        articleCard.upName = article.upInfo.name;
+                        articleCard.view = StringUtil.toWan(article.stats.view);
+                        dynamic.major_object = articleCard;
+
+                        Intent intent = new Intent();
+                        intent.setClass(context, SendDynamicActivity.class);
+                        intent.putExtra("dynamicId", dynamic.dynamicId);
+                        TerminalContext.getInstance().setForwardContent(dynamic);
+                        ((BaseActivity) context).relayDynamicLauncher.launch(intent);
+                    }
+                });
+
+                share.setOnLongClickListener(v -> {
+                    ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData mClipData = ClipData.newPlainText("Label", "https://www.bilibili.com/read/cv" + article.id);
+                    cm.setPrimaryClip(mClipData);
+                    MsgUtil.showMsg("已复制到剪贴板");
+                    return true;
+                });
+
+                if (TextUtils.isEmpty(article.title)){
                     holder.itemView.findViewById(R.id.viewIcon).setVisibility(View.GONE);
                     viewCount.setVisibility(View.GONE);
                     holder.itemView.findViewById(R.id.cvidIcon).setVisibility(View.GONE);
                     cvidText.setVisibility(View.GONE);
+                    coin.setVisibility(View.GONE);
+                    coinLabel.setVisibility(View.GONE);
                 }
                 break;
 

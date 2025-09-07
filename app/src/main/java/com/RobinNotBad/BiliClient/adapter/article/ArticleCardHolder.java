@@ -36,12 +36,18 @@ public class ArticleCardHolder extends RecyclerView.ViewHolder {
     }
 
     public void showArticleCard(ArticleCard articleCard, Context context) {
-        title.setText(StringUtil.htmlToString(articleCard.title));
+        if (!TextUtils.isEmpty(articleCard.title)) {
+            title.setText(StringUtil.htmlToString(articleCard.title));
+        } else {
+            title.setText("");
+        }
         String upNameStr = articleCard.upName;
         if (upNameStr.isEmpty()) {
             upName.setVisibility(View.GONE);
             upIcon.setVisibility(View.GONE);
-        } else upName.setText(upNameStr);
+        } else {
+            upName.setText(upNameStr);
+        }
 
         if (articleCard.view.isEmpty()) {
             readIcon.setVisibility(View.GONE);

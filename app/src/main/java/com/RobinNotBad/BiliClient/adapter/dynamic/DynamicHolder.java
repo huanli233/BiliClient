@@ -268,7 +268,13 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                 break;
             }
             case "MAJOR_TYPE_ARTICLE": {
-                if (dynamic.major_object instanceof ArrayList) {
+                if (dynamic.major_object instanceof ArticleCard) {
+                    ArticleCard articleCard = (ArticleCard) dynamic.major_object;
+                    ArticleCardHolder article_holder = new ArticleCardHolder(cell_dynamic_article);
+                    article_holder.showArticleCard(articleCard, context);
+                    cell_dynamic_article.setOnClickListener(view -> TerminalContext.getInstance().enterArticleDetailPage(context, articleCard.id));
+                    cell_dynamic_article.setVisibility(View.VISIBLE);
+                } else if (dynamic.major_object instanceof ArrayList) {
                     ArrayList<String> pictureList = (ArrayList<String>) dynamic.major_object;
                     View imageCard = cell_dynamic_image;
                     ImageView imageView = imageCard.findViewById(R.id.imageView);
@@ -283,6 +289,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                                 .into(imageView);
                         TextView textView = imageCard.findViewById(R.id.imageCount);
                         textView.setText("共" + pictureList.size() + "张图片");
+                        textView.setVisibility(pictureList.size() > 1 ? View.VISIBLE : View.GONE);
                         cell_dynamic_image.setOnClickListener(view -> {
                             Intent intent = new Intent();
                             intent.setClass(context, ImageViewerActivity.class);
@@ -292,16 +299,6 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                         cell_dynamic_image.setVisibility(View.VISIBLE);
                     }
                     cell_dynamic_article.setVisibility(View.GONE);
-                } else if (dynamic.major_object instanceof ArticleCard) {
-                    if (TextUtils.isEmpty(dynamic.title)) {
-                        cell_dynamic_article.setVisibility(View.GONE);
-                    } else {
-                        ArticleCard articleCard = (ArticleCard) dynamic.major_object;
-                        ArticleCardHolder article_holder = new ArticleCardHolder(cell_dynamic_article);
-                        article_holder.showArticleCard(articleCard, context);
-                        cell_dynamic_article.setOnClickListener(view -> TerminalContext.getInstance().enterArticleDetailPage(context, articleCard.id));
-                        cell_dynamic_article.setVisibility(View.VISIBLE);
-                    }
                 }
                 break;
             }
@@ -326,6 +323,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
                             .into(imageView);
                     TextView textView = imageCard.findViewById(R.id.imageCount);
                     textView.setText("共" + pictureList.size() + "张图片");
+                    textView.setVisibility(pictureList.size() > 1 ? View.VISIBLE : View.GONE);
                     cell_dynamic_image.setOnClickListener(view -> {
                         Intent intent = new Intent();
                         intent.setClass(context, ImageViewerActivity.class);

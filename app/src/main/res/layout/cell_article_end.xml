@@ -105,7 +105,7 @@
                 android:id="@+id/layout_like"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_weight="0.3"
+                android:layout_weight="0.25"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -128,7 +128,7 @@
                 android:id="@+id/layout_coin"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_weight="0.3"
+                android:layout_weight="0.25"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -152,7 +152,7 @@
                 android:id="@+id/layout_fav"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_weight="0.3"
+                android:layout_weight="0.25"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -169,6 +169,30 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="收藏"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_share"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="0.25"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btn_share"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="#0000"
+                    android:src="@drawable/icon_share" />
+
+                <TextView
+                    android:id="@+id/share_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="转发"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
