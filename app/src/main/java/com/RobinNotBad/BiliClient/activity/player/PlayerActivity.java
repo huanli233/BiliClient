@@ -120,8 +120,7 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
     private ImageView img_loading;
     private AnimationDrawable anim_loading;
-    private ImageButton btn_control, btn_danmaku, btn_loop, btn_rotate, btn_menu, btn_subtitle, btn_danmaku_send;
-    private TextView btn_lock, btn_unlock;
+    private ImageButton btn_control, btn_danmaku, btn_loop, btn_rotate, btn_menu, btn_subtitle, btn_danmaku_send, btn_lock, btn_unlock;
     private SeekBar seekbar_progress, seekbar_speed;
     private TextView text_progress, text_online, text_volume, loading_text0, loading_text1, text_speed, text_newspeed;
     public TextView text_title, text_subtitle;
