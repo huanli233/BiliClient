@@ -9,6 +9,7 @@ import com.RobinNotBad.BiliClient.util.JsonUtil;
 import com.RobinNotBad.BiliClient.util.Logu;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
+import com.RobinNotBad.BiliClient.util.StringUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -369,12 +370,26 @@ public class OpusApi {
     }
     
     private static void addTextParagraphs(ArrayList<OpusParagraph> paragraphs, String htmlText) {
+        if (htmlText == null || htmlText.isEmpty()) {
+            return;
+        }
+
+        // 将常见的换行/段落标签转换为真实换行，避免整段文本挤在一行
+        String normalized = htmlText
+                .replaceAll("(?i)<br\\s*/?>", "\n")
+                .replaceAll("(?i)</p\\s*>", "\n")
+                .replaceAll("(?i)<p\\s*[^>]*>", "");
+
         // 移除HTML标签，保留纯文本
-        String cleanText = htmlText.replaceAll("<[^>]+>", "").trim();
+        String cleanText = normalized.replaceAll("<[^>]+>", "");
+        cleanText = StringUtil.htmlToString(cleanText)
+                .replace("\r\n", "\n")
+                .replace("\r", "\n")
+                .trim();
         if (cleanText.isEmpty()) {
             return;
         }
-        
+
         // 按换行分割文本
         String[] lines = cleanText.split("\n");
         for (String line : lines) {
