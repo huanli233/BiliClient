@@ -7,7 +7,6 @@ import com.RobinNotBad.BiliClient.model.Stats;
 import com.RobinNotBad.BiliClient.model.UserInfo;
 import com.RobinNotBad.BiliClient.util.JsonUtil;
 import com.RobinNotBad.BiliClient.util.Logu;
-import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.NetWorkUtil;
 import com.RobinNotBad.BiliClient.util.StringUtil;
 
@@ -16,7 +15,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -194,9 +195,6 @@ public class OpusApi {
                 opus.cover = "";
                 return opus; // 成功，返回结果
                 
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new IOException("线程被中断", e);
             } catch (IllegalArgumentException e) {
                 String errMsg = e.getMessage();
                 if (errMsg != null && errMsg.contains("URL")) {
@@ -232,9 +230,23 @@ public class OpusApi {
         opus.title = articleInfo.title;
         opus.cover = articleInfo.banner;
         opus.content = articleInfo.content;
-        opus.pubTime = String.valueOf(articleInfo.ctime);
+        
+        // 修复时间格式 - 将时间戳转换为可读格式
+        if (articleInfo.ctime > 0) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.SIMPLIFIED_CHINESE);
+            opus.pubTime = sdf.format(articleInfo.ctime * 1000);
+        } else {
+            opus.pubTime = "";
+        }
+        
         opus.upInfo = articleInfo.upInfo;
-        opus.stats = articleInfo.stats;
+        
+        // 确保stats对象存在
+        if (articleInfo.stats != null) {
+            opus.stats = articleInfo.stats;
+        } else {
+            opus.stats = new Stats();
+        }
         
         // 将HTML内容转换为段落（包含图片）
         if (articleInfo.content != null && !articleInfo.content.isEmpty()) {

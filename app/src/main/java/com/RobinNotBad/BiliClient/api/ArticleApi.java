@@ -53,7 +53,8 @@ public class ArticleApi {
         articleInfo.title = data.optString("title", "");
         articleInfo.summary = data.optString("summary", "");
         articleInfo.banner = data.optString("banner_url", "");
-        articleInfo.ctime = data.optLong("ctime", 0);
+        // 修复：正确获取发布时间（ctime或publish_time）
+        articleInfo.ctime = data.optLong("ctime", data.optLong("publish_time", 0));
 
         if (data.has("author") && !data.isNull("author")) {
             JSONObject author = data.getJSONObject("author");
@@ -68,16 +69,21 @@ public class ArticleApi {
             articleInfo.upInfo = new UserInfo();
         }
 
+        // 修复：正确解析stats数据
         if (data.has("stats") && !data.isNull("stats")) {
             JSONObject jsonStats = data.getJSONObject("stats");
             Stats stats = new Stats();
-            stats.view = jsonStats.optInt("view", 0);
-            stats.favorite = jsonStats.optInt("favorite", 0);
+            // 确保正确获取所有统计数据
+            stats.view = jsonStats.optInt("view", jsonStats.optInt("read", 0));
+            stats.favorite = jsonStats.optInt("favorite", jsonStats.optInt("collect", 0));
             stats.like = jsonStats.optInt("like", 0);
-            stats.reply = jsonStats.optInt("reply", 0);
+            stats.reply = jsonStats.optInt("reply", jsonStats.optInt("comment", 0));
             stats.share = jsonStats.optInt("share", 0);
             stats.coin = jsonStats.optInt("coin", 0);
+            // 获取用户交互状态
             stats.liked = data.optBoolean("is_like", false);
+            stats.favoured = data.optBoolean("is_favorite", false);
+            stats.coined = data.optInt("coin", 0);
             articleInfo.stats = stats;
         } else {
             articleInfo.stats = new Stats();
@@ -98,31 +104,53 @@ public class ArticleApi {
         String url = "https://api.bilibili.com/x/article/viewinfo?";
         url += "id=" + id + "&gaia_source=main_web&web_location=333.976&mobi_app=pc&from=web";
         JSONObject result = NetWorkUtil.getJson(ConfInfoApi.signWBI(url));
-        if (!result.has("data")) return null;
+        
+        if (result == null) {
+            return null;
+        }
+        
+        int code = result.optInt("code", -1);
+        if (code != 0 || !result.has("data")) {
+            return null;
+        }
+        
         JSONObject data = result.getJSONObject("data");
 
         ArticleInfo articleInfo = new ArticleInfo();
         articleInfo.id = id;
-        articleInfo.title = data.getString("title");
-        articleInfo.banner = data.getString("banner_url");
+        articleInfo.title = data.optString("title", "");
+        articleInfo.banner = data.optString("banner_url", "");
 
         UserInfo upInfo = new UserInfo();
-        upInfo.mid = data.getLong("mid");
-        upInfo.name = data.getString("author_name");
+        upInfo.mid = data.optLong("mid", 0);
+        upInfo.name = data.optString("author_name", "");
         articleInfo.upInfo = upInfo;
 
-        JSONObject jsonStats = data.getJSONObject("stats");
-        Stats stats = new Stats();
-        stats.view = jsonStats.getInt("view");
-        stats.favorite = jsonStats.getInt("favorite");
-        stats.like = jsonStats.getInt("like");
-        stats.reply = jsonStats.getInt("reply");
-        stats.share = jsonStats.getInt("share");
-        stats.coin = jsonStats.getInt("coin");
-        stats.liked = data.getInt("like") == 1;
-        stats.favoured = data.getBoolean("favorite");
-        stats.coined = data.getInt("coin");
-        articleInfo.stats = stats;
+        // 修复：正确解析stats和用户交互状态
+        if (data.has("stats") && !data.isNull("stats")) {
+            JSONObject jsonStats = data.getJSONObject("stats");
+            Stats stats = new Stats();
+            // 获取统计数据
+            stats.view = jsonStats.optInt("view", jsonStats.optInt("read", 0));
+            stats.favorite = jsonStats.optInt("favorite", jsonStats.optInt("collect", 0));
+            stats.like = jsonStats.optInt("like", 0);
+            stats.reply = jsonStats.optInt("reply", jsonStats.optInt("comment", 0));
+            stats.share = jsonStats.optInt("share", 0);
+            stats.coin = jsonStats.optInt("coin", 0);
+            
+            // 获取用户交互状态（从data根节点获取）
+            stats.liked = data.optInt("like", 0) == 1;
+            stats.favoured = data.optBoolean("favorite", false);
+            stats.coined = data.optInt("coin", 0);
+            
+            // 设置投币限制
+            stats.coin_limit = 2; // 专栏默认最多投2个币
+            
+            articleInfo.stats = stats;
+        } else {
+            articleInfo.stats = new Stats();
+        }
+        
         return articleInfo;
     }
 

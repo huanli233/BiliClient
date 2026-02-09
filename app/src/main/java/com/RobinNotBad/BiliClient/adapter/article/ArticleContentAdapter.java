@@ -77,13 +77,15 @@ public class ArticleContentAdapter extends RecyclerView.Adapter<ArticleContentAd
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ArticleLineHolder holder, int position) {
-        if (article == null || position < 0)
+        if (position < 0)
             return;
-        int realPosition = position - 1;
-        if (realPosition >= 0 && realPosition >= article.size())
+        int viewType = getItemViewType(position);
+        int realPosition = position - 1; // 头部占了position 0
+        // 只对内容段落检查越界，不影响头部(-1)和尾部(-2)
+        if (viewType >= 0 && article != null && realPosition >= 0 && realPosition >= article.size())
             return;
 
-        switch (getItemViewType(position)) {
+        switch (viewType) {
             case 1:
                 if (realPosition < 0 || realPosition >= article.size())
                     break;
