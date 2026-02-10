@@ -1926,6 +1926,14 @@ public class PlayerActivity extends Activity implements IjkMediaPlayer.OnPrepare
 
         layout_top.setOnClickListener(view -> finish());
 
+        // 提前根据设置隐藏按钮，避免在视频加载完成前显示
+        if (!SharedPreferencesUtil.getBoolean("player_ui_showPageBtn", true)) {
+            btn_page_selector.setVisibility(View.GONE);
+        }
+        if (!SharedPreferencesUtil.getBoolean("player_ui_showQualityBtn", true) || !isOnlineVideo) {
+            btn_quality.setVisibility(View.GONE);
+        }
+
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
         if (SharedPreferencesUtil.getBoolean("player_display", Build.VERSION.SDK_INT < 26)) {
