@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
+import com.RobinNotBad.BiliClient.adapter.article.ArticleCardHolder;
 import com.RobinNotBad.BiliClient.listener.OnItemLongClickListener;
 import com.RobinNotBad.BiliClient.model.VideoCard;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
@@ -20,7 +21,7 @@ import java.util.List;
 
 //2023-10-01 把一些公用代码移动到VideoCardHolder里了
 
-public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
+public class VideoCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     final Context context;
     final List<VideoCard> videoCardList;
@@ -35,22 +36,42 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
         this.longClickListener = listener;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (position < 0 || position >= videoCardList.size())
+            return 0;
+        VideoCard videoCard = videoCardList.get(position);
+        if (videoCard != null && "article".equals(videoCard.type)) {
+            return 1;
+        }
+        return 0;
+    }
+
     @NonNull
     @Override
-    public VideoCardHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.cell_video_list, parent, false);
-        return new VideoCardHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == 1) {
+            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_article_list_compact, parent, false);
+            return new ArticleCardHolder(view);
+        } else {
+            View view = LayoutInflater.from(this.context).inflate(R.layout.cell_video_list, parent, false);
+            return new VideoCardHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VideoCardHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (position < 0 || position >= videoCardList.size())
             return;
         VideoCard videoCard = videoCardList.get(position);
         if (videoCard == null)
             return;
 
-        holder.showVideoCard(videoCard, context);
+        if (holder instanceof ArticleCardHolder) {
+            ((ArticleCardHolder) holder).showArticleCard(videoCard, context);
+        } else if (holder instanceof VideoCardHolder) {
+            ((VideoCardHolder) holder).showVideoCard(videoCard, context);
+        }
 
         holder.itemView.setOnClickListener(view -> {
             try {

@@ -76,25 +76,21 @@ public class VideoCardHolder extends RecyclerView.ViewHolder {
                 sstr_live.setSpan(new ForegroundColorSpan(Color.rgb(207, 75, 95)), 0, 4,
                         Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 title.setText(sstr_live);
-                itemView.setBackgroundColor(Color.TRANSPARENT);
                 break;
             case "series":
                 SpannableString sstr_series = new SpannableString("[系列]" + StringUtil.htmlToString(videoCard.title));
                 sstr_series.setSpan(new ForegroundColorSpan(Color.rgb(207, 75, 95)), 0, 4,
                         Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 title.setText(sstr_series);
-                itemView.setBackgroundColor(Color.TRANSPARENT);
                 break;
             case "article":
                 SpannableString sstr_article = new SpannableString("[专栏]" + StringUtil.htmlToString(videoCard.title));
                 sstr_article.setSpan(new ForegroundColorSpan(Color.rgb(100, 181, 246)), 0, 4,
                         Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 title.setText(sstr_article);
-                itemView.setBackgroundColor(Color.TRANSPARENT);
                 break;
             default:
                 title.setText(StringUtil.htmlToString(videoCard.title));
-                itemView.setBackgroundColor(Color.TRANSPARENT);
         }
 
     }
