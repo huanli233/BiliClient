@@ -17,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.RobinNotBad.BiliClient.R;
 import com.RobinNotBad.BiliClient.adapter.article.OpusContentAdapter;
+import com.RobinNotBad.BiliClient.api.HistoryApi;
 import com.RobinNotBad.BiliClient.model.Opus;
 import com.RobinNotBad.BiliClient.ui.widget.recycler.CustomLinearManager;
+import com.RobinNotBad.BiliClient.util.CenterThreadPool;
 import com.RobinNotBad.BiliClient.util.MsgUtil;
 import com.RobinNotBad.BiliClient.util.SharedPreferencesUtil;
 import com.RobinNotBad.BiliClient.util.TerminalContext;
@@ -78,6 +80,7 @@ public class OpusInfoFragment extends Fragment {
         TerminalContext.getInstance().getOpusById(oid)
                 .observe(getViewLifecycleOwner(), (result) -> result.onSuccess((opus) -> {
                     if (!isAdded()) return;
+                    this.opus = opus;
                     OpusContentAdapter adapter = new OpusContentAdapter(requireActivity(), opus);
                     requireActivity().runOnUiThread(() -> {
                         recyclerView.setLayoutManager(new CustomLinearManager(requireContext()));
@@ -86,6 +89,18 @@ public class OpusInfoFragment extends Fragment {
                         recyclerView.setFocusable(true);
                         recyclerView.setFocusableInTouchMode(true);
                         recyclerView.requestFocus();
+                    });
+                    
+                    // 上报专栏观看历史记录
+                    // 参考PiliPlus: VideoHttp.historyReport(aid: commentId, type: 5)
+                    // type=5 用于专栏/图文类型的历史记录上报
+                    CenterThreadPool.run(() -> {
+                        try {
+                            long reportId = opus.commentId > 0 ? opus.commentId : oid;
+                            HistoryApi.reportArticleHistory(reportId, 5);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     });
                 }).onFailure(MsgUtil::err));
 

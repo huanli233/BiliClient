@@ -60,6 +60,9 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
                 case "media_bangumi":
                     TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, null, "media");
                     break;
+                case "article":
+                    TerminalContext.getInstance().enterArticleDetailPage(context, videoCard.aid);
+                    break;
             }
         });
 

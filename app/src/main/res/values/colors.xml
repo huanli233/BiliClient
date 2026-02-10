@@ -9,4 +9,6 @@
     <color name="low_pink">#99FB8799</color>
     <color name="light_green">#bfb</color>
     <color name="link">#66ccff</color>
+    <!-- Material Design 深蓝色，适配黑色背景 -->
+    <color name="article_background">#1A237E</color>
 </resources>

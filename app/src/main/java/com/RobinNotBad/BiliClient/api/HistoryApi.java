@@ -33,16 +33,32 @@ public class HistoryApi {
     }
 
     /**
-     * 获取视频历史记录
+     * 上传专栏历史记录
+     *
+     * @param aid  专栏cvid
+     * @param type 内容类型，3表示专栏
+     * @throws IOException
+     */
+    public static void reportArticleHistory(long aid, int type) throws IOException {
+        String url = "https://api.bilibili.com/x/v2/history/report";
+        String per = "aid=" + aid + "&type=" + type
+                + "&platform=pc"
+                + "&csrf=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.csrf, "");
+        NetWorkUtil.post(url, per, NetWorkUtil.webHeaders);
+    }
+
+    /**
+     * 获取历史记录（支持视频和专栏）
      *
      * @param lastResult 上一次获取返回的ApiResult，如果是第一次就传入新对象
      * @param videoList  已有的视频列表
+     * @param type       历史记录类型，"all"表示全部，"archive"表示视频，"article"表示专栏
      * @return 新的ApiResult，包含了返回码、文本信息以及翻页所需的offset
      * @throws IOException
      * @throws JSONException
      */
-    public static ApiResult getHistory(ApiResult lastResult, List<VideoCard> videoList) throws IOException, JSONException {
-        String url = "https://api.bilibili.com/x/web-interface/history/cursor?type=archive&view_at=" + lastResult.timestamp + "&business=" + lastResult.business + "&max=" + lastResult.offset;
+    public static ApiResult getHistory(ApiResult lastResult, List<VideoCard> videoList, String type) throws IOException, JSONException {
+        String url = "https://api.bilibili.com/x/web-interface/history/cursor?type=" + type + "&view_at=" + lastResult.timestamp + "&business=" + lastResult.business + "&max=" + lastResult.offset;
         JSONObject result = NetWorkUtil.getJson(url);
         ApiResult apiResult = new ApiResult(result);
         if (!result.isNull("data")) {
@@ -51,19 +67,36 @@ public class HistoryApi {
             for (int i = 0; i < list.length(); i++) {
                 JSONObject videoCard = list.getJSONObject(i);
                 String title = videoCard.getString("title");
-                String cover = videoCard.getString("cover");
+                String cover = videoCard.optString("cover", "");
                 String upName = videoCard.getString("author_name");
                 int progress = videoCard.getInt("progress");
 
                 JSONObject history = videoCard.getJSONObject("history");
                 long aid = history.getLong("oid");
-                String bvid = history.getString("bvid");
+                String bvid = history.optString("bvid", "");
+                String business = history.optString("business", "archive");
 
                 String viewStr;
-                if (progress == 0) viewStr = "还没看过";
-                else viewStr = "看到" + StringUtil.toTime(videoCard.getInt("progress"));
+                String contentType;
+                
+                // 根据business字段判断内容类型
+                if ("article".equals(business)) {
+                    contentType = "article";
+                    viewStr = progress > 0 ? "已阅读" : "还没看过";
+                    // 专栏的封面可能在covers数组中
+                    if (cover.isEmpty() && videoCard.has("covers") && !videoCard.isNull("covers")) {
+                        JSONArray covers = videoCard.getJSONArray("covers");
+                        if (covers.length() > 0) {
+                            cover = covers.getString(0);
+                        }
+                    }
+                } else {
+                    contentType = "video";
+                    if (progress == 0) viewStr = "还没看过";
+                    else viewStr = "看到" + StringUtil.toTime(videoCard.getInt("progress"));
+                }
 
-                videoList.add(new VideoCard(title, upName, viewStr, cover, aid, bvid));
+                videoList.add(new VideoCard(title, upName, viewStr, cover, aid, bvid, contentType));
             }
             if (list.length() == 0) apiResult.isBottom = true;
 
@@ -73,6 +106,19 @@ public class HistoryApi {
             apiResult.timestamp = cursor.optLong("view_at");
         }
         return apiResult;
+    }
+
+    /**
+     * 获取历史记录（默认获取全部类型）
+     *
+     * @param lastResult 上一次获取返回的ApiResult，如果是第一次就传入新对象
+     * @param videoList  已有的视频列表
+     * @return 新的ApiResult，包含了返回码、文本信息以及翻页所需的offset
+     * @throws IOException
+     * @throws JSONException
+     */
+    public static ApiResult getHistory(ApiResult lastResult, List<VideoCard> videoList) throws IOException, JSONException {
+        return getHistory(lastResult, videoList, "all");
     }
 
 }
