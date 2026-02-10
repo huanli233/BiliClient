@@ -344,7 +344,8 @@ public class DynamicApi {
     }
 
     public static Dynamic getDynamic(long id) throws IOException, JSONException {
-        String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/detail?id=" + id;
+        String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/detail?id=" + id
+                + "&features=itemOpusStyle";
 
         JSONObject all = NetWorkUtil.getJson(url);
         
@@ -541,10 +542,15 @@ public class DynamicApi {
                         }
 
                         JSONObject summary = opusJson.optJSONObject("summary");
-                        if (summary != null)
-                            dynamic.content = analyzeTextContent(summary.optJSONArray("rich_text_nodes"));
-                        else
-                            dynamic.content = "";
+                        if (summary != null) {
+                            CharSequence summaryText = analyzeTextContent(summary.optJSONArray("rich_text_nodes"));
+                            // 仅当desc为空时才使用summary作为内容，避免覆盖desc中的文字
+                            if (dynamic.content == null || TextUtils.isEmpty(dynamic.content)) {
+                                dynamic.content = summaryText;
+                            }
+                        }
+                        // 如果desc和summary都没有内容，保持dynamic.content不变
+                        if (dynamic.content == null) dynamic.content = "";
 
                         break;
 

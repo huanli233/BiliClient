@@ -65,13 +65,35 @@ public class DynamicInfoActivity extends BaseActivity {
                     if ((view = diFragment.getView()) != null) view.setVisibility(View.GONE);
                     if (seek_reply != -1) viewPager.setCurrentItem(1);
 
-                    AnimationUtils.crossFade(findViewById(R.id.loading), diFragment.getView());
-                    diFragment.getView().post(() -> {
-                        View scrollView = diFragment.getView().findViewById(R.id.scrollView);
-                        scrollView.setFocusable(true);
-                        scrollView.setFocusableInTouchMode(true);
-                        scrollView.requestFocus();
-                    });
+                    View fragmentView = diFragment.getView();
+                    if (fragmentView != null) {
+                        AnimationUtils.crossFade(findViewById(R.id.loading), fragmentView);
+                        fragmentView.post(() -> {
+                            View currentView = diFragment.getView();
+                            if (currentView != null) {
+                                View scrollView = currentView.findViewById(R.id.scrollView);
+                                if (scrollView != null) {
+                                    scrollView.setFocusable(true);
+                                    scrollView.setFocusableInTouchMode(true);
+                                    scrollView.requestFocus();
+                                }
+                            }
+                        });
+                    } else {
+                        // Fragment view还未创建，延迟处理
+                        findViewById(R.id.loading).post(() -> {
+                            View delayedView = diFragment.getView();
+                            if (delayedView != null) {
+                                AnimationUtils.crossFade(findViewById(R.id.loading), delayedView);
+                                View scrollView = delayedView.findViewById(R.id.scrollView);
+                                if (scrollView != null) {
+                                    scrollView.setFocusable(true);
+                                    scrollView.setFocusableInTouchMode(true);
+                                    scrollView.requestFocus();
+                                }
+                            }
+                        });
+                    }
                     TutorialHelper.showPagerTutorial(this, 2);
                 }).onFailure((e) -> {
                     MsgUtil.err(e);
