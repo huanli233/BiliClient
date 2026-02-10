@@ -15,6 +15,9 @@ public class VideoCard implements Parcelable, Serializable {
     public String bvid;
     public long cid = 0;
 
+    // 历史记录事件ID（history.kid），用于删除与去重
+    public long kid = 0;
+
     public VideoCard(String title, String upName, String view, String cover, long aid, String bvid, String type) {
         this.title = title;
         this.upName = upName;

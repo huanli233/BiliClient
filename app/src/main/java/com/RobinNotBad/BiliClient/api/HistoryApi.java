@@ -73,6 +73,7 @@ public class HistoryApi {
 
                 JSONObject history = videoCard.getJSONObject("history");
                 long aid = history.getLong("oid");
+                long kid = videoCard.optLong("kid", 0);
                 String bvid = history.optString("bvid", "");
                 String business = history.optString("business", "archive");
 
@@ -96,7 +97,9 @@ public class HistoryApi {
                     else viewStr = "看到" + StringUtil.toTime(videoCard.getInt("progress"));
                 }
 
-                videoList.add(new VideoCard(title, upName, viewStr, cover, aid, bvid, contentType));
+                VideoCard card = new VideoCard(title, upName, viewStr, cover, aid, bvid, contentType);
+                card.kid = kid;
+                videoList.add(card);
             }
             if (list.length() == 0) apiResult.isBottom = true;
 
@@ -119,6 +122,22 @@ public class HistoryApi {
      */
     public static ApiResult getHistory(ApiResult lastResult, List<VideoCard> videoList) throws IOException, JSONException {
         return getHistory(lastResult, videoList, "all");
+    }
+
+    /**
+     * 删除单条历史记录（基于事件ID kid）
+     *
+     * @param kid 历史事件ID
+     */
+    public static void deleteHistory(long kid) {
+        if (kid <= 0) return;
+        try {
+            String url = "https://api.bilibili.com/x/v2/history/delete";
+            String per = "kid=" + kid
+                    + "&csrf=" + SharedPreferencesUtil.getString(SharedPreferencesUtil.csrf, "");
+            NetWorkUtil.post(url, per, NetWorkUtil.webHeaders);
+        } catch (Exception ignored) {
+        }
     }
 
 }

@@ -94,9 +94,12 @@ public class OpusInfoFragment extends Fragment {
                     // 上报专栏观看历史记录
                     // 参考PiliPlus: VideoHttp.historyReport(aid: commentId, type: 5)
                     // type=5 用于专栏/图文类型的历史记录上报
+                    // 注意：这里必须使用opus.id（内容ID），而不是commentId（评论区ID）
+                    // 因为历史记录API返回的oid就是内容ID，使用commentId会导致ID不匹配
                     CenterThreadPool.run(() -> {
                         try {
-                            long reportId = opus.commentId > 0 ? opus.commentId : oid;
+                            // 优先使用opus.id，如果为0则使用oid作为后备
+                            long reportId = opus.id > 0 ? opus.id : oid;
                             HistoryApi.reportArticleHistory(reportId, 5);
                         } catch (Exception e) {
                             e.printStackTrace();

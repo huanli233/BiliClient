@@ -35,8 +35,19 @@ public class HistoryActivity extends RefreshListActivity {
 
         CenterThreadPool.run(() -> {
             try {
-                lastResult = HistoryApi.getHistory(lastResult, videoList);
+                List<VideoCard> rawList = new ArrayList<>();
+                lastResult = HistoryApi.getHistory(lastResult, rawList);
                 if (lastResult.code == 0) {
+                    // 按 type + aid 去重，只保留最新一条
+                    java.util.LinkedHashMap<String, VideoCard> dedup = new java.util.LinkedHashMap<>();
+                    for (VideoCard card : rawList) {
+                        String key = card.type + "_" + card.aid;
+                        if (!dedup.containsKey(key)) {
+                            dedup.put(key, card);
+                        }
+                    }
+                    videoList.addAll(dedup.values());
+
                     videoCardAdapter = new VideoCardAdapter(this, videoList);
                     setOnLoadMoreListener(this::continueLoading);
                     setRefreshing(false);
@@ -60,8 +71,16 @@ public class HistoryActivity extends RefreshListActivity {
                 lastResult = HistoryApi.getHistory(lastResult, list);
                 if (lastResult.code == 0) {
                     runOnUiThread(() -> {
-                        videoList.addAll(list);
-                        videoCardAdapter.notifyItemRangeInserted(videoList.size() - list.size(), list.size());
+                        java.util.LinkedHashMap<String, VideoCard> dedup = new java.util.LinkedHashMap<>();
+                        for (VideoCard card : list) {
+                            String key = card.type + "_" + card.aid;
+                            if (!dedup.containsKey(key)) {
+                                dedup.put(key, card);
+                            }
+                        }
+                        int start = videoList.size();
+                        videoList.addAll(dedup.values());
+                        videoCardAdapter.notifyItemRangeInserted(start, dedup.size());
                     });
                     if (lastResult.isBottom) {
                         setBottom(true);

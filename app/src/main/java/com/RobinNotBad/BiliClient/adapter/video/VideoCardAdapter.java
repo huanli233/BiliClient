@@ -53,16 +53,28 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardHolder> {
         holder.showVideoCard(videoCard, context);
 
         holder.itemView.setOnClickListener(view -> {
-            switch (videoCard.type) {
-                case "video":
-                    TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, videoCard.bvid, "video");
-                    break;
-                case "media_bangumi":
-                    TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, null, "media");
-                    break;
-                case "article":
-                    TerminalContext.getInstance().enterArticleDetailPage(context, videoCard.aid);
-                    break;
+            try {
+                switch (videoCard.type) {
+                    case "video":
+                        TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, videoCard.bvid, "video");
+                        break;
+                    case "media_bangumi":
+                        TerminalContext.getInstance().enterVideoDetailPage(context, videoCard.aid, null, "media");
+                        break;
+                    case "article":
+                        TerminalContext.getInstance().enterArticleDetailPage(context, videoCard.aid);
+                        break;
+                }
+            } catch (Exception e) {
+                // 自动清理失效的历史记录（事件级）
+                if (videoCard.kid > 0) {
+                    com.RobinNotBad.BiliClient.api.HistoryApi.deleteHistory(videoCard.kid);
+                }
+                int pos = holder.getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION) {
+                    videoCardList.remove(pos);
+                    notifyItemRemoved(pos);
+                }
             }
         });
 
