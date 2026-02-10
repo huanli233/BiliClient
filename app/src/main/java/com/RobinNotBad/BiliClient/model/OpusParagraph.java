@@ -261,7 +261,55 @@ public class OpusParagraph {
                     break;
                 case "RICH_TEXT_NODE_TYPE_TEXT":
                 default:
-                    stringBuilder.append(rich.getString("orig_text"));
+                    // 解析富文本样式（粗体、颜色、字体大小）
+                    String text = rich.getString("orig_text");
+                    stringBuilder.append(text);
+                    int endLength = stringBuilder.length();
+                    
+                    // 检查是否有 word 对象（包含样式信息）
+                    if (rich.has("word") && !rich.isNull("word")) {
+                        JSONObject word = rich.getJSONObject("word");
+                        
+                        // 粗体和斜体
+                        JSONObject style = word.optJSONObject("style");
+                        if (style != null) {
+                            boolean bold = style.optBoolean("bold");
+                            boolean italic = style.optBoolean("italic");
+                            int styleInt = (bold ? Typeface.BOLD : 0) + (italic ? Typeface.ITALIC : 0);
+                            if (styleInt != 0) {
+                                stringBuilder.setSpan(new StyleSpan(styleInt), startLength, endLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            }
+                        }
+                        
+                        // 字体大小
+                        int fontSize = word.optInt("font_size", FONT_SIZE_BILI_DEFAULT);
+                        if (fontSize != FONT_SIZE_BILI_DEFAULT) {
+                            float fontScale = fontSize * 1.0f / FONT_SIZE_BILI_DEFAULT;
+                            stringBuilder.setSpan(new RelativeSizeSpan(fontScale), startLength, endLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        
+                        // 字体颜色（黑色背景下做亮度保护，避免低对比度不可读）
+                        String color = word.optString("color", "#18191c");
+                        if (color.startsWith("#") && !color.equals("#18191c")) {
+                            try {
+                                int parsedColor = Color.parseColor(color);
+                                // 基于黑色背景的亮度阈值判断
+                                // luminance ∈ [0,1]，经验阈值 0.35 以下在黑底下可读性较差
+                                double luminance = Color.luminance(parsedColor);
+                                if (luminance >= 0.35) {
+                                    stringBuilder.setSpan(
+                                            new ForegroundColorSpan(parsedColor),
+                                            startLength,
+                                            endLength,
+                                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                                    );
+                                }
+                                // 否则不设置颜色，回退到 TextView 默认文字色（保证可读）
+                            } catch (Exception e) {
+                                Logu.e("color error in analyzeOpus", color);
+                            }
+                        }
+                    }
                     break;
             }
         }

@@ -26,21 +26,26 @@ public class OpusApi {
         
         // 首先尝试判断是专栏还是动态
         if (isArticleId(id)) {
-            // 专栏ID，使用ArticleApi获取数据
+            // 专栏ID，优先尝试 opus detail API 获取富文本数据
             opus.type = Opus.TYPE_ARTICLE;
             try {
-                ArticleInfo articleInfo = ArticleApi.getArticle(id);
-                if (articleInfo != null) {
-                    // 将ArticleInfo转换为Opus格式
-                    convertArticleInfoToOpus(opus, articleInfo);
-                    return opus;
-                } else {
-                    // ArticleApi.getArticle返回null，尝试opus detail API
-                    return getOpusByApi(id);
-                }
+                Logu.i("尝试通过 opus detail API 获取专栏富文本数据: cv" + id);
+                return getArticleOpusDetail(id);
             } catch (Exception e) {
-                Logu.e("通过ArticleApi获取专栏失败，尝试opus detail API: " + e.getMessage());
-                return getOpusByApi(id);
+                // opus detail API 失败，回退到传统 ArticleApi（HTML）
+                Logu.e("opus detail API 失败，回退到 HTML 方式: " + e.getMessage());
+                try {
+                    ArticleInfo articleInfo = ArticleApi.getArticle(id);
+                    if (articleInfo != null) {
+                        convertArticleInfoToOpus(opus, articleInfo);
+                        return opus;
+                    } else {
+                        throw new IOException("ArticleApi 返回 null");
+                    }
+                } catch (Exception e2) {
+                    Logu.e("HTML 方式也失败: " + e2.getMessage());
+                    throw new IOException("无法获取专栏数据: " + e2.getMessage());
+                }
             }
         } else {
             // 动态ID，使用API获取
@@ -52,6 +57,71 @@ public class OpusApi {
     private static boolean isArticleId(long id) {
         // 专栏ID通常小于100000000，且不以0开头
         return id > 0 && id < 100000000;
+    }
+    
+    /**
+     * 通过 opus detail API 获取专栏富文本数据
+     * API: /x/polymer/web-dynamic/v1/opus/detail
+     * 这个 API 返回的是结构化的 paragraphs 数据，包含富文本样式信息
+     */
+    private static Opus getArticleOpusDetail(long cvid) throws IOException, JSONException {
+        Opus opus = new Opus();
+        opus.id = cvid;
+        opus.type = Opus.TYPE_ARTICLE;
+        
+        // 首先需要将 cvid 转换为 opus_id
+        // 使用 ArticleApi 的转换方法
+        Opus opusIdInfo = ArticleApi.opusId2cvid(cvid);
+        if (opusIdInfo == null || opusIdInfo.id == 0) {
+            throw new IOException("无法将 cv" + cvid + " 转换为 opus_id");
+        }
+        
+        long opusId = opusIdInfo.id;
+        Logu.i("cv" + cvid + " 对应的 opus_id: " + opusId);
+        
+        // 使用 opus detail API 获取富文本数据
+        String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/opus/detail?id=" + opusId + "&timezone_offset=-480";
+        JSONObject result = NetWorkUtil.getJson(url);
+        
+        if (result.optBoolean("retry_failed", false)) {
+            throw new IOException(result.optString("message", "网络请求失败"));
+        }
+        
+        int code = result.optInt("code", -1);
+        if (code == 0 && result.has("data") && !result.isNull("data")) {
+            JSONObject data = result.getJSONObject("data");
+            
+            // 检查是否有 item 字段（opus detail 格式）
+            if (data.has("item") && !data.isNull("item")) {
+                JSONObject item = data.getJSONObject("item");
+                
+                // 解析 basic 信息
+                if (item.has("basic")) {
+                    JSONObject basic = item.getJSONObject("basic");
+                    opus.commentId = Long.parseLong(basic.optString("comment_id_str", String.valueOf(cvid)));
+                    opus.commentType = basic.optInt("comment_type", 12);
+                }
+                
+                // 解析 modules（数组格式）
+                if (item.has("modules") && !item.isNull("modules")) {
+                    Object modulesObj = item.get("modules");
+                    if (modulesObj instanceof JSONArray) {
+                        parseModulesArray(opus, (JSONArray) modulesObj);
+                    }
+                }
+                
+                // 确保必要字段不为null
+                if (opus.upInfo == null) opus.upInfo = new UserInfo();
+                if (opus.stats == null) opus.stats = new Stats();
+                if (opus.cover == null) opus.cover = "";
+                
+                Logu.i("成功通过 opus detail API 获取专栏富文本数据");
+                return opus;
+            }
+        }
+        
+        String message = result.optString("message", "未知错误");
+        throw new IOException("opus detail API 错误 (code=" + code + "): " + message);
     }
     
     /**
@@ -395,43 +465,52 @@ public class OpusApi {
     }
     
     private static OpusParagraph[] parseHtmlContent(String html) {
-        // 改进的HTML到段落转换，支持图片
         ArrayList<OpusParagraph> paragraphs = new ArrayList<>();
-        
-        // 使用更智能的HTML解析
-        // 首先处理图片
-        java.util.regex.Pattern imgPattern = java.util.regex.Pattern.compile("<img[^>]+src=\"([^\"]+)\"[^>]*>", java.util.regex.Pattern.CASE_INSENSITIVE);
-        java.util.regex.Matcher imgMatcher = imgPattern.matcher(html);
-        
+
+        java.util.regex.Pattern imgPattern =
+                java.util.regex.Pattern.compile("<figure[^>]*>(.*?)</figure>", java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL);
+        java.util.regex.Matcher figureMatcher = imgPattern.matcher(html);
+
         int lastIndex = 0;
-        while (imgMatcher.find()) {
-            // 添加图片前的文本
-            String textBefore = html.substring(lastIndex, imgMatcher.start()).trim();
-            if (!textBefore.isEmpty()) {
-                addTextParagraphs(paragraphs, textBefore);
+        while (figureMatcher.find()) {
+            String before = html.substring(lastIndex, figureMatcher.start()).trim();
+            if (!before.isEmpty()) {
+                addTextParagraphs(paragraphs, before, false);
             }
-            
-            // 添加图片
-            String imgUrl = imgMatcher.group(1);
-            if (imgUrl != null && !imgUrl.isEmpty()) {
-                // 修复图片URL格式
-                imgUrl = fixImageUrl(imgUrl);
-                
+
+            String figureHtml = figureMatcher.group(1);
+
+            java.util.regex.Matcher imgMatcher =
+                    java.util.regex.Pattern.compile("<img[^>]+src=\"([^\"]+)\"", java.util.regex.Pattern.CASE_INSENSITIVE)
+                            .matcher(figureHtml);
+
+            if (imgMatcher.find()) {
+                String imgUrl = fixImageUrl(imgMatcher.group(1));
                 OpusParagraph imgParagraph = new OpusParagraph();
                 imgParagraph.type = OpusParagraph.TYPE_PIC;
                 imgParagraph.content = new String[]{imgUrl};
                 paragraphs.add(imgParagraph);
             }
-            
-            lastIndex = imgMatcher.end();
+
+            java.util.regex.Matcher captionMatcher =
+                    java.util.regex.Pattern.compile("<figcaption[^>]*>(.*?)</figcaption>", java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL)
+                            .matcher(figureHtml);
+
+            if (captionMatcher.find()) {
+                String captionHtml = captionMatcher.group(1).trim();
+                if (!captionHtml.isEmpty()) {
+                    addTextParagraphs(paragraphs, captionHtml, true);
+                }
+            }
+
+            lastIndex = figureMatcher.end();
         }
-        
-        // 添加剩余的文本
-        String remainingText = html.substring(lastIndex).trim();
-        if (!remainingText.isEmpty()) {
-            addTextParagraphs(paragraphs, remainingText);
+
+        String remaining = html.substring(lastIndex).trim();
+        if (!remaining.isEmpty()) {
+            addTextParagraphs(paragraphs, remaining, false);
         }
-        
+
         return paragraphs.toArray(new OpusParagraph[0]);
     }
     
@@ -458,38 +537,53 @@ public class OpusApi {
         return imgUrl;
     }
     
-    private static void addTextParagraphs(ArrayList<OpusParagraph> paragraphs, String htmlText) {
+    private static void addTextParagraphs(ArrayList<OpusParagraph> paragraphs, String htmlText, boolean isCaption) {
         if (htmlText == null || htmlText.isEmpty()) {
             return;
         }
 
-        // 将常见的换行/段落标签转换为真实换行，避免整段文本挤在一行
-        String normalized = htmlText
-                .replaceAll("(?i)<br\\s*/?>", "\n")
-                .replaceAll("(?i)</p\\s*>", "\n")
-                .replaceAll("(?i)<p\\s*[^>]*>", "");
+        htmlText = htmlText
+                .replaceAll("class=\"color-green-02\"", "style=\"color:#60d837\"")
+                .replaceAll("class=\"color-blue-01\"", "style=\"color:#23ade5\"")
+                .replaceAll("class=\"color-pink-01\"", "style=\"color:#fb7299\"")
+                .replaceAll("class=\"color-gray-01\"", "style=\"color:#999999\"");
 
-        // 移除HTML标签，保留纯文本
-        String cleanText = normalized.replaceAll("<[^>]+>", "");
-        cleanText = StringUtil.htmlToString(cleanText)
-                .replace("\r\n", "\n")
-                .replace("\r", "\n")
-                .trim();
-        if (cleanText.isEmpty()) {
+        CharSequence spanned;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            spanned = android.text.Html.fromHtml(htmlText, android.text.Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            spanned = android.text.Html.fromHtml(htmlText);
+        }
+
+        if (!(spanned instanceof android.text.Spanned) || spanned.length() == 0) {
             return;
         }
 
-        // 按换行分割文本
-        String[] lines = cleanText.split("\n");
-        for (String line : lines) {
-            line = line.trim();
-            if (!line.isEmpty()) {
-                OpusParagraph paragraph = new OpusParagraph();
-                paragraph.type = OpusParagraph.TYPE_TEXT;
-                paragraph.content = line;
-                paragraphs.add(paragraph);
+        android.text.SpannableStringBuilder ssb = new android.text.SpannableStringBuilder(spanned);
+
+        android.text.style.ForegroundColorSpan[] colorSpans =
+                ssb.getSpans(0, ssb.length(), android.text.style.ForegroundColorSpan.class);
+
+        for (android.text.style.ForegroundColorSpan span : colorSpans) {
+            int color = span.getForegroundColor();
+            if (android.graphics.Color.luminance(color) < 0.35) {
+                ssb.removeSpan(span);
             }
         }
+
+        if (isCaption) {
+            ssb.setSpan(
+                    new android.text.style.AlignmentSpan.Standard(android.text.Layout.Alignment.ALIGN_CENTER),
+                    0,
+                    ssb.length(),
+                    android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            );
+        }
+
+        OpusParagraph paragraph = new OpusParagraph();
+        paragraph.type = OpusParagraph.TYPE_TEXT;
+        paragraph.content = ssb;
+        paragraphs.add(paragraph);
     }
 
     public static OpusParagraph[] analyzeParagraphs(JSONArray jsonArray) throws JSONException {

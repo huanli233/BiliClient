@@ -54,6 +54,7 @@ public class OpusInfoActivity extends BaseActivity {
 
         TerminalContext.getInstance().getOpusById(oid)
                 .observe(this, (result) -> result.onSuccess((opus) -> {
+
                     if (opus.type == Opus.TYPE_DYNAMIC_OLD_STYLE) {
                         Intent intent1 = new Intent(this, DynamicInfoActivity.class);
                         intent1.putExtra("id", oid);
