@@ -219,15 +219,20 @@ public class OpusParagraph {
         if (picsJson == null) return new String[0];
         String[] pics = new String[picsJson.length()];
         for (int i = 0; i < picsJson.length(); i++) {
-            String url = picsJson.getJSONObject(i).optString("url");
-            pics[i] = url.startsWith("http") ? url : "http:" + url;
+            String url = picsJson.getJSONObject(i).optString("url", "");
+            if (url == null || url.isEmpty()) {
+                pics[i] = "";
+            } else {
+                pics[i] = url.startsWith("http") ? url : "http:" + url;
+            }
         }
         return pics;
     }
 
     public String[] analyzeDivider(JSONObject allJson) throws JSONException {
         if (allJson == null) return new String[0];
-        String url = allJson.getJSONObject("pic").optString("url");
+        String url = allJson.getJSONObject("pic").optString("url", "");
+        if (url == null || url.isEmpty()) return new String[0];
         return new String[]{url.startsWith("http") ? url : "http:" + url};
     }
 

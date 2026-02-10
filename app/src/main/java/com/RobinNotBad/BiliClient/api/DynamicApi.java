@@ -280,7 +280,7 @@ public class DynamicApi {
      * @param name 名称
      * @return 用户UID，未找到返回-1
      */
-    public static long mentionAtFindUser(String name) throws JSONException, IOException {
+    public static long mentionAtFindUser(String name) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/mention/search?keyword=" + name;
 
         JSONObject resp = NetWorkUtil.getJson(url, NetWorkUtil.webHeaders);
@@ -309,7 +309,17 @@ public class DynamicApi {
 
 
         JSONObject all = NetWorkUtil.getJson(ConfInfoApi.signWBI(DmImgParamUtil.getDmImgParamsUrl(url)));
-        if (all.getInt("code") != 0) throw new JSONException(all.getString("message"));
+        
+        // 检查是否是网络错误返回的错误JSON
+        if (all.optBoolean("retry_failed", false)) {
+            throw new IOException(all.optString("message", "网络请求失败"));
+        }
+        
+        int code = all.optInt("code", -1);
+        if (code != 0) {
+            String message = all.optString("message", "未知错误");
+            throw new IOException("API错误 (code=" + code + "): " + message);
+        }
 
 
         JSONObject data = all.getJSONObject("data");
@@ -333,11 +343,21 @@ public class DynamicApi {
         return offset_new;
     }
 
-    public static Dynamic getDynamic(long id) throws JSONException, IOException {
+    public static Dynamic getDynamic(long id) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/detail?id=" + id;
 
         JSONObject all = NetWorkUtil.getJson(url);
-        if (all.getInt("code") != 0) throw new JSONException(all.getString("message"));
+        
+        // 检查是否是网络错误返回的错误JSON
+        if (all.optBoolean("retry_failed", false)) {
+            throw new IOException(all.optString("message", "网络请求失败"));
+        }
+        
+        int code = all.optInt("code", -1);
+        if (code != 0) {
+            String message = all.optString("message", "未知错误");
+            throw new IOException("API错误 (code=" + code + "): " + message);
+        }
 
         JSONObject data = all.getJSONObject("data");
         JSONObject item = data.getJSONObject("item");
@@ -347,7 +367,17 @@ public class DynamicApi {
     public static int checkDynamicUpdate(String type, long updateBaseline) throws IOException, JSONException {
         String url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/all/update?type=" + type + "&update_baseline=" + updateBaseline + "&web_location=333.1365";
         JSONObject result = NetWorkUtil.getJson(url, NetWorkUtil.webHeaders);
-        if (result.getInt("code") != 0) throw new JSONException(result.getString("message"));
+        
+        // 检查是否是网络错误返回的错误JSON
+        if (result.optBoolean("retry_failed", false)) {
+            throw new IOException(result.optString("message", "网络请求失败"));
+        }
+        
+        int code = result.optInt("code", -1);
+        if (code != 0) {
+            String message = result.optString("message", "未知错误");
+            throw new IOException("API错误 (code=" + code + "): " + message);
+        }
         if (result.has("data") && !result.isNull("data")) {
             JSONObject data = result.getJSONObject("data");
             return data.optInt("update_num", 0);
@@ -499,12 +529,15 @@ public class DynamicApi {
                             dynamic.title = title;
 
                         JSONArray pics = opusJson.optJSONArray("pics");
-                        if (pics != null) {
+                        if (pics != null && pics.length() > 0) {
                             ArrayList<String> opusPicList = new ArrayList<>();
                             for (int i = 0; i < pics.length(); i++)
                                 opusPicList.add(pics.getJSONObject(i).optString("url"));
 
                             dynamic.major_object = opusPicList;
+                        } else {
+                            // 纯文本动态，设置一个空列表避免后续处理出错
+                            dynamic.major_object = new ArrayList<String>();
                         }
 
                         JSONObject summary = opusJson.optJSONObject("summary");

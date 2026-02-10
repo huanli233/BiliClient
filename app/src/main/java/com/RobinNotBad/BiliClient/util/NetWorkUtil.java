@@ -123,11 +123,11 @@ public class NetWorkUtil {
         return okhttpBuilder;
     }
 
-    public static JSONObject getJson(String url) throws IOException, JSONException {
+    public static JSONObject getJson(String url) throws IOException {
         return getJson(url, webHeaders);
     }
 
-    public static JSONObject getJson(String url, ArrayList<String> headers) throws IOException, JSONException {
+    public static JSONObject getJson(String url, ArrayList<String> headers) throws IOException {
         // 添加重试机制
         int retryCount = 0;
         final int maxRetries = 3;
@@ -148,11 +148,13 @@ public class NetWorkUtil {
                             // 所有重试都失败，返回一个包含错误信息的JSONObject
                             // 而不是抛出异常，这样上层可以统一处理
                             JSONObject errorJson = new JSONObject();
-                            errorJson.put("code", -1000); // 自定义错误码
-                            errorJson.put("message", "网络请求失败，请检查网络连接后重试");
-                            errorJson.put("data", new JSONObject());
-                            errorJson.put("retry_failed", true);
-                            errorJson.put("original_url", url);
+                            try {
+                                errorJson.put("code", -1000); // 自定义错误码
+                                errorJson.put("message", "网络请求失败，请检查网络连接后重试");
+                                errorJson.put("data", new JSONObject());
+                                errorJson.put("retry_failed", true);
+                                errorJson.put("original_url", url);
+                            } catch (JSONException ignored) {}
                             return errorJson;
                         }
                     }
@@ -167,11 +169,13 @@ public class NetWorkUtil {
                         } else {
                             // 所有重试都失败，返回错误JSON
                             JSONObject errorJson = new JSONObject();
-                            errorJson.put("code", -1001);
-                            errorJson.put("message", "服务器响应异常，请稍后重试");
-                            errorJson.put("data", new JSONObject());
-                            errorJson.put("retry_failed", true);
-                            errorJson.put("original_url", url);
+                            try {
+                                errorJson.put("code", -1001);
+                                errorJson.put("message", "服务器响应异常，请稍后重试");
+                                errorJson.put("data", new JSONObject());
+                                errorJson.put("retry_failed", true);
+                                errorJson.put("original_url", url);
+                            } catch (JSONException ignored) {}
                             return errorJson;
                         }
                     }
@@ -197,11 +201,13 @@ public class NetWorkUtil {
                 } else {
                     // 响应体为空
                     JSONObject errorJson = new JSONObject();
-                    errorJson.put("code", -1002);
-                    errorJson.put("message", "服务器无响应，请检查网络连接");
-                    errorJson.put("data", new JSONObject());
-                    errorJson.put("retry_failed", true);
-                    errorJson.put("original_url", url);
+                    try {
+                        errorJson.put("code", -1002);
+                        errorJson.put("message", "服务器无响应，请检查网络连接");
+                        errorJson.put("data", new JSONObject());
+                        errorJson.put("retry_failed", true);
+                        errorJson.put("original_url", url);
+                    } catch (JSONException ignored) {}
                     return errorJson;
                 }
             } catch (InterruptedException e) {
@@ -222,12 +228,14 @@ public class NetWorkUtil {
                 } else {
                     // 所有重试都失败，返回错误JSON
                     JSONObject errorJson = new JSONObject();
-                    errorJson.put("code", -1003);
-                    errorJson.put("message", "数据解析失败，请稍后重试");
-                    errorJson.put("data", new JSONObject());
-                    errorJson.put("retry_failed", true);
-                    errorJson.put("original_url", url);
-                    errorJson.put("json_error", e.getMessage());
+                    try {
+                        errorJson.put("code", -1003);
+                        errorJson.put("message", "数据解析失败，请稍后重试");
+                        errorJson.put("data", new JSONObject());
+                        errorJson.put("retry_failed", true);
+                        errorJson.put("original_url", url);
+                        errorJson.put("json_error", e.getMessage());
+                    } catch (JSONException ignored) {}
                     return errorJson;
                 }
             } catch (Exception e) {
@@ -245,11 +253,13 @@ public class NetWorkUtil {
                 } else {
                     // 所有重试都失败，返回错误JSON
                     JSONObject errorJson = new JSONObject();
-                    errorJson.put("code", -1004);
-                    errorJson.put("message", "网络请求异常: " + e.getMessage());
-                    errorJson.put("data", new JSONObject());
-                    errorJson.put("retry_failed", true);
-                    errorJson.put("original_url", url);
+                    try {
+                        errorJson.put("code", -1004);
+                        errorJson.put("message", "网络请求异常: " + e.getMessage());
+                        errorJson.put("data", new JSONObject());
+                        errorJson.put("retry_failed", true);
+                        errorJson.put("original_url", url);
+                    } catch (JSONException ignored) {}
                     return errorJson;
                 }
             }
@@ -257,11 +267,13 @@ public class NetWorkUtil {
         
         // 理论上不会执行到这里，因为所有路径都有返回
         JSONObject errorJson = new JSONObject();
-        errorJson.put("code", -9999);
-        errorJson.put("message", "未知错误");
-        errorJson.put("data", new JSONObject());
-        errorJson.put("retry_failed", true);
-        errorJson.put("original_url", url);
+        try {
+            errorJson.put("code", -9999);
+            errorJson.put("message", "未知错误");
+            errorJson.put("data", new JSONObject());
+            errorJson.put("retry_failed", true);
+            errorJson.put("original_url", url);
+        } catch (JSONException ignored) {}
         return errorJson;
     }
 
