@@ -27,6 +27,7 @@ import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
+import android.text.style.URLSpan;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -164,6 +165,8 @@ public class StringUtil {
         if (!SharedPreferencesUtil.getBoolean(SharedPreferencesUtil.LINK_ENABLE, true)) return;
         if (TextUtils.isEmpty(spannableString)) return;
 
+        replaceUrlSpans(spannableString);
+
         String text = spannableString.toString();
 
         Pattern urlPattern = Pattern.compile("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]");
@@ -207,9 +210,24 @@ public class StringUtil {
         for (TextView textView : textViews) {
             if (TextUtils.isEmpty(textView.getText())) continue;
             SpannableStringBuilder spannableString = new SpannableStringBuilder(textView.getText());
+            replaceUrlSpans(spannableString);
             setLink(spannableString);
             textView.setText(spannableString);
             textView.setOnTouchListener(new ClickableSpanTouchListener());
+        }
+    }
+
+    private static void replaceUrlSpans(SpannableStringBuilder spannableString) {
+        URLSpan[] urlSpans = spannableString.getSpans(0, spannableString.length(), URLSpan.class);
+        for (URLSpan span : urlSpans) {
+            int start = spannableString.getSpanStart(span);
+            int end = spannableString.getSpanEnd(span);
+            int flags = spannableString.getSpanFlags(span);
+            String url = span.getURL();
+            spannableString.removeSpan(span);
+            if (!TextUtils.isEmpty(url)) {
+                spannableString.setSpan(new LinkClickableSpan(url, TYPE_WEB_URL, url), start, end, flags);
+            }
         }
     }
 
