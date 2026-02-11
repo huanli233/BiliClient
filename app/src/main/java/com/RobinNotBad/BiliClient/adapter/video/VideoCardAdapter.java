@@ -87,15 +87,8 @@ public class VideoCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         break;
                 }
             } catch (Exception e) {
-                // 自动清理失效的历史记录（事件级）
-                if (videoCard.kid > 0) {
-                    com.RobinNotBad.BiliClient.api.HistoryApi.deleteHistory(videoCard.kid);
-                }
-                int pos = holder.getAdapterPosition();
-                if (pos != RecyclerView.NO_POSITION) {
-                    videoCardList.remove(pos);
-                    notifyItemRemoved(pos);
-                }
+                // 改进的错误处理：自动清理失效的历史记录
+                handleInvalidRecord(videoCard, holder.getAdapterPosition(), e);
             }
         });
 
@@ -106,6 +99,34 @@ public class VideoCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             } else
                 return false;
         });
+    }
+
+    /**
+     * 处理无效的历史记录
+     * 当记录无法访问时，自动清理并从列表中移除
+     */
+    private void handleInvalidRecord(VideoCard videoCard, int position, Exception e) {
+        if (position == RecyclerView.NO_POSITION) {
+            return;
+        }
+        
+        // 自动清理失效的历史记录（事件级）
+        if (videoCard.kid > 0) {
+            com.RobinNotBad.BiliClient.util.CenterThreadPool.run(() -> {
+                com.RobinNotBad.BiliClient.api.HistoryApi.deleteHistory(videoCard.kid);
+            });
+        }
+        
+        // 从列表中移除
+        videoCardList.remove(position);
+        notifyItemRemoved(position);
+        
+        // 显示友好的错误提示
+        String errorMsg = "该内容已失效";
+        if (videoCard.type.equals("article")) {
+            errorMsg = "该专栏已失效或被删除";
+        }
+        com.RobinNotBad.BiliClient.util.MsgUtil.showMsg(errorMsg);
     }
 
     @Override

@@ -92,6 +92,14 @@ public class ArticleApi {
         articleInfo.wordCount = data.optInt("words", 0);
         articleInfo.content = data.optString("content", "");
         articleInfo.keywords = data.optString("keywords", "");
+        if (data.has("list") && !data.isNull("list")) {
+            JSONObject list = data.optJSONObject("list");
+            if (list != null) {
+                articleInfo.listId = list.optLong("id", 0);
+            }
+        } else {
+            articleInfo.listId = data.optLong("list_id", 0);
+        }
         return articleInfo;
     }
 

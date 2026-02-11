@@ -17,6 +17,7 @@ public class ArticleInfo implements Parcelable, Serializable {
     public int wordCount; //字数
     public String keywords;
     public String content; //文章内容
+    public long listId; //合集ID（article-list）
 
     public ArticleInfo() {
     }
@@ -33,6 +34,9 @@ public class ArticleInfo implements Parcelable, Serializable {
         wordCount = in.readInt();
         keywords = in.readString();
         content = in.readString();
+        if (in.dataAvail() >= 8) {
+            listId = in.readLong();
+        }
     }
 
     @Override
@@ -47,6 +51,7 @@ public class ArticleInfo implements Parcelable, Serializable {
         dest.writeInt(wordCount);
         dest.writeString(keywords);
         dest.writeString(content);
+        dest.writeLong(listId);
     }
 
     @Override

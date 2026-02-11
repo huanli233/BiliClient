@@ -15,6 +15,12 @@ public class VideoCard implements Parcelable, Serializable {
     public String bvid;
     public long cid = 0;
 
+    // 历史记录原始字段，用于识别异常形态
+    public String historyBusiness = "";
+    public long historyOid = 0;
+    public long historyCid = 0;
+    public boolean historyPlaceholder = false;
+
     // 历史记录事件ID（history.kid），用于删除与去重
     public long kid = 0;
 
@@ -59,6 +65,10 @@ public class VideoCard implements Parcelable, Serializable {
         aid = in.readLong();
         bvid = in.readString();
         cid = in.readLong();
+        historyBusiness = in.readString();
+        historyOid = in.readLong();
+        historyCid = in.readLong();
+        historyPlaceholder = in.readByte() != 0;
     }
 
     public static final Creator<VideoCard> CREATOR = new Creator<>() {
@@ -88,5 +98,9 @@ public class VideoCard implements Parcelable, Serializable {
         parcel.writeLong(aid);
         parcel.writeString(bvid);
         parcel.writeLong(cid);
+        parcel.writeString(historyBusiness);
+        parcel.writeLong(historyOid);
+        parcel.writeLong(historyCid);
+        parcel.writeByte((byte) (historyPlaceholder ? 1 : 0));
     }
 }

@@ -19,6 +19,7 @@ public class Opus {
     public Stats stats;
     public ArrayList<String> topImages;
     public OpusParagraph[] paragraphs;
+    public long listId;
 
 
     public long parsedId;

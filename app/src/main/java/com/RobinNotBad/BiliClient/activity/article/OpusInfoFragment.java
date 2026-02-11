@@ -91,16 +91,28 @@ public class OpusInfoFragment extends Fragment {
                         recyclerView.requestFocus();
                     });
                     
-                    // 上报专栏观看历史记录
-                    // 参考PiliPlus: VideoHttp.historyReport(aid: commentId, type: 5)
-                    // type=5 用于专栏/图文类型的历史记录上报
-                    // 注意：这里必须使用opus.id（内容ID），而不是commentId（评论区ID）
-                    // 因为历史记录API返回的oid就是内容ID，使用commentId会导致ID不匹配
+                    // 参考 PiliPlus：专栏统一按 article-list(type=5) 上报，aid 使用当前 cvid。
                     CenterThreadPool.run(() -> {
                         try {
-                            // 优先使用opus.id，如果为0则使用oid作为后备
-                            long reportId = opus.id > 0 ? opus.id : oid;
-                            HistoryApi.reportArticleHistory(reportId, 5);
+                            long reportId = opus.commentId > 0
+                                    ? opus.commentId
+                                    : (opus.id > 0 ? opus.id : oid);
+                            long listId = opus.listId;
+                            if (listId > 0) {
+                                com.RobinNotBad.BiliClient.util.Logu.i("OpusHistory",
+                                        "上报专栏合集历史: opus.id=" + opus.id
+                                                + ", oid=" + oid
+                                                + ", listId=" + listId
+                                                + ", commentId=" + opus.commentId);
+                                HistoryApi.reportArticleListHistory(reportId);
+                            } else {
+                                com.RobinNotBad.BiliClient.util.Logu.i("OpusHistory",
+                                        "上报普通专栏历史(按article-list): opus.id=" + opus.id
+                                                + ", oid=" + oid
+                                                + ", reportId=" + reportId
+                                                + ", commentId=" + opus.commentId);
+                                HistoryApi.reportArticleListHistory(reportId);
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

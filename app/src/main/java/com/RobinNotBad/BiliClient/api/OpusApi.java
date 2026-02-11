@@ -100,6 +100,7 @@ public class OpusApi {
                     JSONObject basic = item.getJSONObject("basic");
                     opus.commentId = Long.parseLong(basic.optString("comment_id_str", String.valueOf(cvid)));
                     opus.commentType = basic.optInt("comment_type", 12);
+                    opus.listId = extractListIdFromBasic(basic);
                 }
                 
                 // 解析 modules（数组格式）
@@ -107,6 +108,20 @@ public class OpusApi {
                     Object modulesObj = item.get("modules");
                     if (modulesObj instanceof JSONArray) {
                         parseModulesArray(opus, (JSONArray) modulesObj);
+                    }
+                }
+
+                if (opus.listId <= 0) {
+                    opus.listId = extractListIdFromItem(item);
+                }
+
+                if (opus.listId <= 0) {
+                    try {
+                        ArticleInfo listInfo = ArticleApi.getArticle(cvid);
+                        if (listInfo != null) {
+                            opus.listId = listInfo.listId;
+                        }
+                    } catch (Exception ignored) {
                     }
                 }
                 
@@ -377,6 +392,7 @@ public class OpusApi {
         opus.title = articleInfo.title;
         opus.cover = articleInfo.banner;
         opus.content = articleInfo.content;
+        opus.listId = articleInfo.listId;
         
         // 修复时间格式 - 将时间戳转换为可读格式
         if (articleInfo.ctime > 0) {
@@ -717,5 +733,150 @@ public class OpusApi {
                 stats.like = module_stat.getJSONObject("like").optInt("count", 0);
         }
         opus.stats = stats;
+    }
+
+    private static long extractListIdFromBasic(JSONObject basic) {
+        if (basic == null) {
+            return 0;
+        }
+        String[] keys = new String[]{
+                "list_id",
+                "list_id_str",
+                "collection_id",
+                "collection_id_str",
+                "article_list_id",
+                "article_list_id_str",
+                "listId",
+                "collectionId"
+        };
+        return findIdInJson(basic, keys);
+    }
+
+    private static long extractListIdFromItem(JSONObject item) {
+        if (item == null) {
+            return 0;
+        }
+        JSONObject list = item.optJSONObject("list");
+        if (list != null) {
+            long id = list.optLong("id", 0);
+            if (id > 0) {
+                return id;
+            }
+        }
+        Object modulesObj = item.opt("modules");
+        if (modulesObj instanceof JSONArray) {
+            JSONArray modules = (JSONArray) modulesObj;
+            for (int i = 0; i < modules.length(); i++) {
+                JSONObject module = modules.optJSONObject(i);
+                if (module == null) {
+                    continue;
+                }
+                long moduleId = extractListIdFromModule(module);
+                if (moduleId > 0) {
+                    return moduleId;
+                }
+            }
+        }
+        String[] keys = new String[]{
+                "list_id",
+                "list_id_str",
+                "collection_id",
+                "collection_id_str",
+                "article_list_id",
+                "article_list_id_str",
+                "listId",
+                "collectionId"
+        };
+        return findIdInJson(item, keys);
+    }
+
+    private static long extractListIdFromModule(JSONObject module) {
+        String moduleType = module.optString("module_type", "");
+        if (!moduleType.isEmpty()) {
+            String lower = moduleType.toLowerCase(Locale.ROOT);
+            if (lower.contains("list") || lower.contains("collect")) {
+                long id = findIdInJson(module, new String[]{
+                        "list_id",
+                        "list_id_str",
+                        "collection_id",
+                        "collection_id_str",
+                        "article_list_id",
+                        "article_list_id_str",
+                        "listId",
+                        "collectionId"
+                });
+                if (id > 0) {
+                    return id;
+                }
+            }
+        }
+        return 0;
+    }
+
+    private static long findIdInJson(Object node, String[] keys) {
+        java.util.HashSet<String> keySet = new java.util.HashSet<>();
+        for (String key : keys) {
+            keySet.add(key);
+        }
+        return findIdInJson(node, keySet);
+    }
+
+    private static long findIdInJson(Object node, java.util.Set<String> keySet) {
+        if (node == null) {
+            return 0;
+        }
+        if (node instanceof JSONObject) {
+            JSONObject jsonObject = (JSONObject) node;
+            java.util.Iterator<String> iterator = jsonObject.keys();
+            while (iterator.hasNext()) {
+                String key = iterator.next();
+                Object value = jsonObject.opt(key);
+                if (keySet.contains(key)) {
+                    long parsed = parseIdValue(value);
+                    if (parsed > 0) {
+                        return parsed;
+                    }
+                }
+                long nested = findIdInJson(value, keySet);
+                if (nested > 0) {
+                    return nested;
+                }
+            }
+        } else if (node instanceof JSONArray) {
+            JSONArray array = (JSONArray) node;
+            for (int i = 0; i < array.length(); i++) {
+                long nested = findIdInJson(array.opt(i), keySet);
+                if (nested > 0) {
+                    return nested;
+                }
+            }
+        }
+        return 0;
+    }
+
+    private static long parseIdValue(Object value) {
+        if (value == null) {
+            return 0;
+        }
+        if (value instanceof Number) {
+            return ((Number) value).longValue();
+        }
+        String raw = value.toString().trim();
+        if (raw.isEmpty()) {
+            return 0;
+        }
+        try {
+            return Long.parseLong(raw);
+        } catch (NumberFormatException ignored) {
+        }
+        String digits = raw.replaceAll("\\D+", "");
+        if (digits.isEmpty()) {
+            return 0;
+        }
+        try {
+            return Long.parseLong(digits);
+        } catch (NumberFormatException ignored) {
+            return 0;
+        }
     }
 }
